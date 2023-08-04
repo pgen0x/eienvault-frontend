@@ -16,7 +16,7 @@ export default function Search() {
     };
   }, []);
   return (
-    <div className="inline-flex h-10 w-96 items-center justify-start gap-2 rounded-xl border-0 bg-neutral-100 px-4 dark:bg-gray-800">
+    <div className="inline-flex h-10 items-center justify-start gap-2 rounded-xl border-0 bg-white px-4 dark:bg-gray-800 w-2/3">
       <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
         <FontAwesomeIcon icon={faSearch} />
       </div>

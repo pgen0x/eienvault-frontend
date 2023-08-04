@@ -12,28 +12,26 @@ export default function Navbar() {
   const isMounted = useIsMounted();
 
   return (
-    <nav
-      className={cn(
-        '3xl:h-24 sticky top-0 z-10 h-16 w-full max-w-full px-3 transition-all duration-300 sm:h-20 lg:px-16',
-        (isMounted && windowScroll.y) > 2
-          ? 'shadow-card dark:from-dark dark:to-dark/60 bg-gradient-to-b from-white to-white/60 backdrop-blur'
-          : '',
-      )}
-    >
-      <div className="flex h-full items-center justify-between">
-        <div className="flex items-center">
-          <Logo />
+    <div className="inline-flex w-full items-center justify-center px-10 pt-4">
+      <nav
+        className={cn(
+          '3xl:h-24 sticky top-0 z-10 h-16 w-full max-w-full rounded-2xl bg-white/70 px-3 backdrop-blur transition-all duration-300 sm:h-20',
+          (isMounted && windowScroll.y) > 2
+            ? 'shadow-card dark:from-dark dark:to-dark/60 bg-gradient-to-b from-white to-white/60 backdrop-blur'
+            : '',
+        )}
+      >
+        <div className="flex h-full items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Logo />
+            <Search />
+            <NavMenu />
+          </div>
+          <div className="flex items-center">
+            <RightArea />
+          </div>
         </div>
-        <div className="flex items-center">
-          <Search />
-        </div>
-        <div className="flex items-center">
-          <NavMenu />
-        </div>
-        <div className="flex items-center">
-          <RightArea />
-        </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 }

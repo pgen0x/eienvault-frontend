@@ -20,21 +20,21 @@ export default function RightArea() {
   return (
     <>
       <div className="inline-flex h-8 w-full items-center justify-start gap-4">
-        <div className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 ">
+        <button className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4">
           <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
             <FontAwesomeIcon icon={faWallet} />
           </div>
-          <div className="text-base font-bold leading-normal text-white">
+          <div className="text-base font-bold leading-normal ">
             Connect your wallet
           </div>
-        </div>
-        <div className="inline-flex flex-col items-center justify-center gap-2 rounded-xl">
+        </button>
+        <button className="inline-flex flex-col items-center justify-center gap-2 rounded-xl text-xl text-primary-500">
           <FontAwesomeIcon icon={faCartShopping} />
-        </div>
-        <Switch
+        </button>
+        {/* <Switch
           checked={enabled}
           onChange={toggleTheme}
-          className={`relative inline-flex h-7 w-20 items-center rounded-full bg-primary-50`}
+          className={`relative inline-flex h-7 w-20 items-center rounded-full bg-white`}
         >
           <span
             className={`${
@@ -49,7 +49,7 @@ export default function RightArea() {
               <FontAwesomeIcon className="h-3 w-3" icon={faSun} />
             )}
           </span>
-        </Switch>
+        </Switch> */}
       </div>
     </>
   );

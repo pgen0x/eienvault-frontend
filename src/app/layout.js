@@ -19,9 +19,7 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <Providers>
           <Navbar />
-          <main className="min-h-full px-4 pb-16 pt-4 sm:px-6 sm:pb-20 lg:px-16 xl:pb-24">
-            {children}
-          </main>
+          <main className="relative">{children}</main>
         </Providers>
       </body>
     </html>

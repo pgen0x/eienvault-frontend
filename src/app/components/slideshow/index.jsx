@@ -77,7 +77,7 @@ const Slideshow = () => {
           <SwiperSlide key={index}>
             <div className="inline-flex w-full flex-col items-center justify-center gap-2 p-2 lg:items-start lg:px-10 lg:pt-16">
               <div className="flex flex-row items-center rounded-lg bg-[#fff1d4] px-2 py-2">
-                <span class="mr-2 h-2 w-2 animate-ping rounded-full bg-red-400 opacity-90"></span>
+                <span className="mr-2 h-2 w-2 animate-ping rounded-full bg-red-400 opacity-90"></span>
                 <div className="w-24 whitespace-nowrap font-bold leading-[24px] text-[#ff6467]">
                   Live auction
                 </div>
@@ -127,7 +127,7 @@ const Slideshow = () => {
                             Ryuma
                           </div>
                           <div className="text-xs font-black leading-none text-sky-400">
-                            circle-check
+                            <FontAwesomeIcon icon={faCircleCheck} />
                           </div>
                         </div>
                       </div>
@@ -136,7 +136,7 @@ const Slideshow = () => {
                       </div>
                       <div className="flex items-start justify-start gap-2">
                         <div className="text-sm font-normal leading-tight text-neutral-700">
-                          ETHereum
+                          <Ethereum className="h-4 w-4" />
                         </div>
                         <div className="text-sm font-medium leading-tight text-neutral-700">
                           ETH
@@ -157,17 +157,17 @@ const Slideshow = () => {
                       </div>
                       <div className="inline-flex h-11 items-center justify-center gap-8 self-stretch rounded-xl bg-white p-1.5">
                         <div className="inline-flex h-6 w-6 flex-col items-center justify-center gap-1.5 rounded-lg p-1.5">
-                          <div className="text-xs font-black leading-tight text-sky-400">
-                            Minus
-                          </div>
+                          <button className="text-xs font-black leading-tight text-sky-400">
+                            <FontAwesomeIcon icon={faMinus} />
+                          </button>
                         </div>
                         <div className="text-xs font-normal leading-tight text-zinc-700">
                           1
                         </div>
                         <div className="inline-flex h-6 w-6 flex-col items-center justify-center gap-1.5 rounded-lg p-1.5">
-                          <div className="text-xs font-black leading-tight text-sky-400">
-                            Plus
-                          </div>
+                          <button className="text-xs font-black leading-tight text-sky-400">
+                            <FontAwesomeIcon icon={faPlus} />
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -184,9 +184,9 @@ const Slideshow = () => {
                         </span>
                       </div>
                       <div className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-lg bg-sky-400 px-4 py-2">
-                        <div className="text-center text-base font-bold leading-normal text-white">
+                        <button className="text-center text-base font-bold leading-normal text-white">
                           Mint
-                        </div>
+                        </button>
                       </div>
                     </div>
                   </div>

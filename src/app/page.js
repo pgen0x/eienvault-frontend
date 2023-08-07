@@ -14,24 +14,23 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex flex-col">
+      <div className="relative">
         <Auction />
-        {/* <section className="bg-red-500 relative flex h-full w-full text-red-100">
+        <section className="relative -mt-24 flex h-[632px] w-full flex-col gap-4 bg-neutral-100 text-black px-10">
           <Tab.Group>
             <Tab.List>
-              <Tab>Tab 1</Tab>
-              <Tab>Tab 2</Tab>
-              <Tab>Tab 3</Tab>
+              <Tab>Collections</Tab>
+              <Tab>Marketplace</Tab>
             </Tab.List>
             <Tab.Panels>
               <Tab.Panel>Content 1</Tab.Panel>
               <Tab.Panel>Content 2</Tab.Panel>
-              <Tab.Panel>Content 3</Tab.Panel>
             </Tab.Panels>
           </Tab.Group>
-        </section> */}
+        </section>
+      </div>
 
-        {/* <section className="absolute right-0 top-0 z-0 h-full w-full bg-gradient-to-b from-[#00B6D0] to-sky-50 dark:to-gray-900">
+      {/* <section className="absolute right-0 top-0 z-0 h-full w-full bg-gradient-to-b from-[#00B6D0] to-sky-50 dark:to-gray-900">
         <div className="z-10 flex flex-col">
           <div className="flex w-full flex-col gap-4 pl-3 pt-20 lg:flex-row lg:pb-6 lg:pl-16 lg:pt-32">
             <div className="h-full w-full basis-0 flex-col justify-center gap-4 py-2 lg:h-[444px] lg:w-1/2 lg:basis-auto">
@@ -57,7 +56,6 @@ export default function Home() {
           </div>
         </div>
       </section> */}
-      </div>
     </>
   );
 }

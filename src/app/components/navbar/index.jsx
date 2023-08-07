@@ -12,15 +12,8 @@ export default function Navbar() {
   const isMounted = useIsMounted();
 
   return (
-    <div className="inline-flex w-full items-center justify-center px-10 pt-4">
-      <nav
-        className={cn(
-          '3xl:h-24 sticky top-0 z-10 h-16 w-full max-w-full rounded-2xl bg-white/70 px-3 backdrop-blur transition-all duration-300 sm:h-20',
-          (isMounted && windowScroll.y) > 2
-            ? 'shadow-card dark:from-dark dark:to-dark/60 bg-gradient-to-b from-white to-white/60 backdrop-blur'
-            : '',
-        )}
-      >
+    <div className="sticky top-0 z-10 inline-flex w-full items-center justify-center  px-10 transition-all">
+      <nav className="3xl:h-24 dark:from-dark dark:to-dark/60 top-0 z-10 mt-4 h-16 w-full max-w-full rounded-2xl bg-gradient-to-b from-white to-white/60 px-3 backdrop-blur transition-all duration-300 sm:h-20">
         <div className="flex h-full items-center justify-between">
           <div className="flex items-center gap-4">
             <Logo />

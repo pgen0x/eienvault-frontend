@@ -9,6 +9,8 @@ import {
 import { useState } from 'react';
 import { Switch } from '@headlessui/react';
 import { useTheme } from 'next-themes';
+import { fetchData } from '../eth/wagmiConfig' 
+import { getEthersSigner } from '../eth/singer'
 
 export default function RightArea() {
   const { theme, setTheme } = useTheme();
@@ -17,20 +19,34 @@ export default function RightArea() {
     setEnabled(!enabled); // Toggle the state
     setTheme(enabled ? 'light' : 'dark'); // Update the theme
   };
+  const { isConnected, open, close, isOpen, accounts} = fetchData();
   return (
     <>
       <div className="inline-flex h-8 w-full items-center justify-start gap-4">
-        <button className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4">
-          <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
-            <FontAwesomeIcon icon={faWallet} />
-          </div>
-          <div className="text-base font-bold leading-normal ">
-            Connect your wallet
-          </div>
+        <>
+        {isConnected ? (
+          <button onClick={() => open()} className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4">
+            <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
+              <FontAwesomeIcon icon={faWallet} />
+            </div>
+            <div className="text-base font-bold leading-normal">
+              Connected 
+            </div>
+          </button>
+        ) : (
+          <button onClick={() => open()} className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4">
+            <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
+              <FontAwesomeIcon icon={faWallet} />
+            </div>
+            <div className="text-base font-bold leading-normal">
+               Connect your wallet
+            </div>
+          </button>
+        )}
+        <button onClick={() => close()} className="inline-flex flex-col items-center justify-center gap-2 rounded-xl text-xl text-primary-500">
+           <FontAwesomeIcon icon={faCartShopping} />
         </button>
-        <button className="inline-flex flex-col items-center justify-center gap-2 rounded-xl text-xl text-primary-500">
-          <FontAwesomeIcon icon={faCartShopping} />
-        </button>
+        </>
         {/* <Switch
           checked={enabled}
           onChange={toggleTheme}

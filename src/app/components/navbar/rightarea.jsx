@@ -10,7 +10,6 @@ import { useState } from 'react';
 import { Switch } from '@headlessui/react';
 import { useTheme } from 'next-themes';
 import { fetchData } from '../eth/wagmiConfig' 
-import { getEthersSigner } from '../eth/singer'
 
 export default function RightArea() {
   const { theme, setTheme } = useTheme();

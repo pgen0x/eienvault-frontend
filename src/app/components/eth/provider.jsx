@@ -17,7 +17,7 @@ export function publicClientToProvider(publicClient) {
 }
 
 /** Action to convert a viem Public Client to an ethers.js Provider. */
-export function getEthersProvider({ chainId } = {}) {
+export function getEthersProvider() {
   const publicClient = getPublicClient({ chainId });
   return publicClientToProvider(publicClient);
 }

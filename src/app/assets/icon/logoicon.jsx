@@ -13,9 +13,9 @@ const LogoIcon = () => {
       <path
         d="M35 11H23.9836V23.4628M23.9836 23.2479V37H14"
         stroke="#32A9FF"
-        stroke-width="4"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

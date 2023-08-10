@@ -28,7 +28,7 @@ module.exports = {
           900: '#194f8f',
           950: '#143057',
         },
-        'curious-blue': {
+        'primary-variant': {
           50: '#f1f8fe',
           100: '#e2effc',
           200: '#bfdff8',
@@ -41,7 +41,7 @@ module.exports = {
           900: '#133f67',
           950: '#0d2844',
         },
-        'electric-violet': {
+        secondary: {
           50: '#fcf4ff',
           100: '#f7e5ff',
           200: '#f0d0ff',
@@ -54,7 +54,7 @@ module.exports = {
           900: '#6e1093',
           950: '#4d006f',
         },
-        'royal-purple': {
+        'secondary-variant': {
           50: '#fbf6fd',
           100: '#f5ecfb',
           200: '#ead7f7',
@@ -67,7 +67,7 @@ module.exports = {
           900: '#572966',
           950: '#351042',
         },
-        'ship-gray': {
+        neutral: {
           50: '#f4f4f7',
           100: '#e4e4e9',
           200: '#cdcbd6',
@@ -80,7 +80,7 @@ module.exports = {
           900: '#36333c',
           950: '#24222a',
         },
-        'jungle-green': {
+        'semantic-green': {
           50: '#f0fdf2',
           100: '#ddfbe3',
           200: '#bdf5ca',
@@ -93,7 +93,7 @@ module.exports = {
           900: '#165126',
           950: '#062d11',
         },
-        malibu: {
+        'semantic-blue': {
           50: '#eff6ff',
           100: '#dbebfe',
           200: '#bedcff',
@@ -106,7 +106,7 @@ module.exports = {
           900: '#1d3b8b',
           950: '#162655',
         },
-        broom: {
+        'semantic-yellow': {
           50: '#fdfee8',
           100: '#fcffc2',
           200: '#fcff87',
@@ -119,7 +119,7 @@ module.exports = {
           900: '#734c10',
           950: '#432805',
         },
-        'sunset-orange': {
+        'semantic-red': {
           50: '#fff1f1',
           100: '#ffdfe0',
           200: '#ffc5c6',
@@ -132,7 +132,7 @@ module.exports = {
           900: '#881416',
           950: '#4b0405',
         },
-        'macaroni-and-cheese': {
+        'semantic-orange': {
           50: '#fff9ed',
           100: '#fff1d4',
           200: '#ffdfa9',

@@ -27,7 +27,7 @@ import Slideshow from '../slideshow';
 const Auction = () => {
   return (
     <>
-      <section className="relative -top-24 flex h-[632px] w-full items-center justify-center bg-macaroni-and-cheese-200">
+      <section className="relative -top-24 flex h-[632px] w-full items-center justify-center bg-semantic-orange-200">
         <div className="absolute right-0 top-0">
           <Line />
         </div>

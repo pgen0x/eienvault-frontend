@@ -96,19 +96,6 @@ const Slideshow = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="inline-flex items-center justify-start gap-2">
-                      <div className="text-sm font-medium leading-tight text-gray-600">
-                        5 minted
-                      </div>
-                      <div className="h-1 w-1 rounded-full bg-gray-600" />
-                      <div className="text-sm font-medium leading-tight text-gray-600">
-                        12 per wallet
-                      </div>
-                      <div className="h-1 w-1 rounded-full bg-gray-600" />
-                      <div className="text-sm font-medium leading-tight text-gray-600">
-                        1d 2h 32m 12s
-                      </div>
-                    </div>
                   </div>
                   <div className="flex flex-col items-start justify-start gap-1">
                     <div className="inline-flex items-start justify-start gap-1 self-stretch">
@@ -155,7 +142,7 @@ const Slideshow = () => {
                       <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
                         Buy amount
                       </div>
-                      <div className="inline-flex h-11 items-center justify-center gap-8 self-stretch rounded-xl bg-white p-1.5">
+                      <div className="inline-flex h-11 items-center justify-center gap-8 self-stretch rounded-full bg-white p-1.5">
                         <div className="inline-flex h-6 w-6 flex-col items-center justify-center gap-1.5 rounded-lg p-1.5">
                           <button className="text-xs font-black leading-tight text-sky-400">
                             <FontAwesomeIcon icon={faMinus} />
@@ -183,13 +170,26 @@ const Slideshow = () => {
                           0.3 ETH
                         </span>
                       </div>
-                      <div className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-lg bg-sky-400 px-4 py-2">
+                      <div className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-full bg-sky-400 px-4 py-2">
                         <button className="text-center text-base font-bold leading-normal text-white">
                           Mint
                         </button>
                       </div>
                     </div>
                   </div>
+                  <div className="inline-flex items-center justify-start gap-2">
+                      <div className="text-sm font-medium leading-tight text-gray-600">
+                        5 minted
+                      </div>
+                      <div className="h-1 w-1 rounded-full bg-gray-600" />
+                      <div className="text-sm font-medium leading-tight text-gray-600">
+                        12 per wallet
+                      </div>
+                      <div className="h-1 w-1 rounded-full bg-gray-600" />
+                      <div className="text-sm font-medium leading-tight text-gray-600">
+                        1d 2h 32m 12s
+                      </div>
+                    </div>
                 </div>
               </div>
             </div>

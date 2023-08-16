@@ -20,7 +20,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Line from '@/app/assets/icon/line';
-import Line2 from '@/app/assets/icon/line2';
+import Awan from '@/app/assets/icon/awan';
+import Awan2 from '@/app/assets/icon/awan2';
 import Dot from '@/app/assets/icon/dot';
 import Slideshow from '../slideshow';
 
@@ -31,12 +32,12 @@ const Auction = () => {
         <div className="absolute right-0 top-0">
           <Line />
         </div>
-        <div className="absolute bottom-0 left-[38%] h-[582px] w-[582px] translate-y-1/3 items-center justify-center rounded-full bg-red-400" />
-        <div className="absolute right-2/3 top-28">
-          <Line2 />
+        <div className="absolute bottom-28 right-[12%] h-[582px] w-[582px] translate-y-1/3 items-center justify-center rounded-full bg-red-400" />
+        <div className="absolute right-[29vw] top-32">
+          <Awan />
         </div>
-        <div className="absolute bottom-0 left-0 -translate-x-16 translate-y-4">
-          <Dot />
+        <div className="absolute bottom-3 right-0 -translate-x-16 translate-y-4">
+          <Awan2 />
         </div>
         <Slideshow />
       </section>

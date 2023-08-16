@@ -1,8 +1,10 @@
 'use client';
 import { useIsMounted } from '@/app/lib/hooks/use-is-mounted';
-import Slideshow from '@/app/components/slideshow';
+import SlideshowDiscover from '@/app/components/slideshow/discover';
+import SlideshowActivities from '@/app/components/slideshow/activities';
 import Avatar from '@/app/assets/images/avatar.jpg';
 import Image from 'next/image';
+import TrendingTop from '@/app/components/trading-top';
 import Auction from '@/app/components/auction';
 import { Tab } from '@headlessui/react';
 
@@ -14,19 +16,52 @@ export default function Home() {
 
   return (
     <>
-      <div className="relative">
+      <div className="relative homepage">
         <Auction />
-        <section className="relative -mt-24 flex h-[632px] w-full flex-col gap-4 bg-neutral-100 text-black px-10">
-          <Tab.Group>
-            <Tab.List>
-              <Tab>Collections</Tab>
-              <Tab>Marketplace</Tab>
-            </Tab.List>
-            <Tab.Panels>
-              <Tab.Panel>Content 1</Tab.Panel>
-              <Tab.Panel>Content 2</Tab.Panel>
-            </Tab.Panels>
-          </Tab.Group>
+        <section className="relative -mt-24 pt-10 flex h-[690px] w-full flex-col gap-4 bg-gray-100 text-black px-10">
+          <div className="container mx-auto">
+            <Tab.Group>
+              <Tab.List>
+                <Tab><strong className="pr-5">Collections</strong></Tab>
+                <Tab><strong className="text-neutral-400">Marketplace</strong></Tab>
+              </Tab.List>
+              <Tab.Panels className="pt-4">
+                <Tab.Panel>
+                  <TrendingTop />
+                </Tab.Panel>
+                <Tab.Panel>Content 2</Tab.Panel>
+              </Tab.Panels>
+            </Tab.Group>
+          </div>
+        </section>
+        <section>
+          <div className="w-full section-3 text-black">
+            <div className="container mx-auto flex items-center justify-center">
+              <div className="flex-initial w-[29%]">
+                <h2 className="text-3xl">Discover Our Best <br />Collections For you to buy.</h2>
+                <p>Eien vault is a marketplace for nft, a one of a kind digital asset that you can truly own.</p>
+                <div className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-full bg-sky-400 px-4 py-2 mt-5">
+                  <button className="text-center text-base font-bold leading-normal text-white">
+                    DIscover more
+                  </button>
+                </div>
+              </div>
+              <div className="flex-initial w-[69%] relative flex h-[632px] items-center justify-center">
+                <SlideshowDiscover />
+              </div>
+            </div>
+          </div>
+        </section>
+        <section>
+          <div className="w-full text-black bg-gray-100">
+            <div className="container mx-auto py-4 px-4">
+              <div className="flex items-center justify-between">
+                <h2 className="font-semibold text-xl">Recent Activities</h2>
+                <a href="#" title="See all" className="text-sky-400">See all</a>
+              </div>
+              <SlideshowActivities />
+            </div>
+          </div>
         </section>
       </div>
 

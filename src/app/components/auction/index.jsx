@@ -39,7 +39,11 @@ const Auction = () => {
         <div className="absolute bottom-3 right-0 -translate-x-16 translate-y-4">
           <Awan2 />
         </div>
-        <Slideshow />
+        <div className="container m-auto">
+          <div className="flex-initial w-full relative flex items-center justify-center mb-5">
+            <Slideshow />
+          </div>
+        </div>
       </section>
     </>
   );

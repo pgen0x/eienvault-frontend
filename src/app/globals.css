@@ -51,3 +51,8 @@
   background: url('/images/waveline.svg'), linear-gradient(90deg, #FFDFA9 0%, rgba(255, 100, 103, 0.2) 100%, rgba(255, 100, 103, 0.2) 100%, #F9D8D9 100%);
   background-repeat: no-repeat;
 }
+
+.swiper-pagination .swiper-pagination-bullet-active{
+  width: 30px;
+  border-radius: 10px;
+}

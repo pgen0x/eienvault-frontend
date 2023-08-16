@@ -6,7 +6,18 @@ import Avatar from '@/app/assets/images/avatar.jpg';
 import Image from 'next/image';
 import TrendingTop from '@/app/components/trading-top';
 import Auction from '@/app/components/auction';
+import UpcomingAuction from '@/app/components/auction/upcoming';
 import { Tab } from '@headlessui/react';
+import {
+  faCircleCheck,
+  faChevronRight,
+  faChevronLeft,
+  faMinus,
+  faPlus,
+  faEllipsis,
+  faCartPlus
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function Home() {
   const isMounted = useIsMounted();
@@ -46,7 +57,7 @@ export default function Home() {
                   </button>
                 </div>
               </div>
-              <div className="flex-initial w-[69%] relative flex h-[632px] items-center justify-center">
+              <div className="flex-initial w-[69%] relative flex items-center justify-center mb-5">
                 <SlideshowDiscover />
               </div>
             </div>
@@ -59,7 +70,20 @@ export default function Home() {
                 <h2 className="font-semibold text-xl">Recent Activities</h2>
                 <a href="#" title="See all" className="text-sky-400">See all</a>
               </div>
-              <SlideshowActivities />
+              <div className="flex-initial w-full relative flex items-center justify-center mb-5">
+                <SlideshowActivities />
+              </div>
+            </div>
+          </div>
+        </section>
+        <section>
+          <div className="w-full text-black bg-gray-100">
+            <div className="container mx-auto py-4 px-4">
+              <div className="flex items-center justify-between">
+                <h2 className="font-semibold text-xl">Upcoming auctions</h2>
+                <a href="#" title="See all" className="text-sky-400">See all</a>
+              </div>
+              <UpcomingAuction />
             </div>
           </div>
         </section>

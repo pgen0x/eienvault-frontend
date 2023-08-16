@@ -51,20 +51,25 @@ const Slideshow = () => {
   };
   return (
     <>
+      <button class="swiper-prev mr-2 px-4 py-2 rounded-full bg-sky-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
       <Swiper
-        className="pl-5"
+        className="!pl-5 !pb-5"
         slidesPerView={1}
         scrollbar={{ draggable: true }}
         breakpoints={sliderBreakPoints}
         observer={true}
+        navigation={{
+          nextEl: ".swiper-next",
+          prevEl: ".swiper-prev"
+        }}
         pagination={{
           dynamicBullets: true,
         }}
         modules={[Autoplay, Pagination]}
-        // autoplay={{
-        //   delay: 3000,
-        //   disableOnInteraction: false,
-        // }}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
@@ -123,6 +128,7 @@ const Slideshow = () => {
           </SwiperSlide>
         ))}
       </Swiper>
+      <button class="swiper-next ml-2 px-4 py-2 rounded-full bg-sky-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
     </>
   );
 };

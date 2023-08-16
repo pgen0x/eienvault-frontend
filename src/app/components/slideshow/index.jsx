@@ -8,7 +8,7 @@ import Cat from '@/app/assets/images/cat.png';
 import Hos from '@/app/assets/images/hos.jpg';
 import Avatar from '@/app/assets/images/avatar.jpg';
 
-import { Autoplay } from 'swiper/modules';
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
 import {
@@ -52,22 +52,21 @@ const Slideshow = () => {
   };
   return (
     <>
-      {/* <div className="absolute left-[498px] top-[1/2] inline-flex h-12 w-12 cursor-pointer flex-col items-center justify-center gap-2 rounded-3xl bg-sky-400 bg-opacity-50">
-          <div className="text-2xl font-black leading-9 text-white">
-            <FontAwesomeIcon icon={faChevronLeft} />
-          </div>
-        </div>
-        <div className="absolute right-[162px] top-[1/2] inline-flex h-12 w-12 cursor-pointer flex-col items-center justify-center gap-2 rounded-3xl bg-sky-400 bg-opacity-50">
-          <div className="text-2xl font-black leading-9 text-white">
-            <FontAwesomeIcon icon={faChevronRight} />
-          </div>
-        </div> */}
+      <button class="swiper-prev mr-2 px-4 py-2 rounded-full bg-sky-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
       <Swiper
+        className="!pb-5"
         slidesPerView={1}
         scrollbar={{ draggable: true }}
         breakpoints={sliderBreakPoints}
         observer={true}
-        modules={[Autoplay]}
+        navigation={{
+          nextEl: ".swiper-next",
+          prevEl: ".swiper-prev"
+        }}
+        pagination={{
+          dynamicBullets: true,
+        }}
+        modules={[Autoplay, Pagination, Navigation]}
         autoplay={{
           delay: 3000,
           disableOnInteraction: false,
@@ -196,6 +195,7 @@ const Slideshow = () => {
           </SwiperSlide>
         ))}
       </Swiper>
+      <button class="swiper-next ml-2 px-4 py-2 rounded-full bg-sky-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
     </>
   );
 };

@@ -76,9 +76,9 @@ const Slideshow = () => {
           <SwiperSlide key={index}>
             <div className="inline-flex w-full flex-col items-center justify-center gap-2 p-2 lg:items-start lg:px-10 lg:pt-16">
               <div className="flex flex-row items-center rounded-lg bg-[#fff1d4] px-2 py-2">
-                <span className="mr-2 h-2 w-2 animate-ping rounded-full bg-red-400 opacity-90"></span>
-                <div className="w-24 whitespace-nowrap font-bold leading-[24px] text-[#ff6467]">
-                  Live auction
+                <span className="mr-2 h-1 w-1 animate-ping rounded-full bg-red-400 opacity-90"></span>
+                <div className="whitespace-nowrap font-semibold text-xs text-gray-900 pl-2">
+                  Live mint and auction
                 </div>
               </div>
               <div className="relative flex h-96 w-96 flex-row">
@@ -97,12 +97,8 @@ const Slideshow = () => {
                     </div>
                   </div>
                   <div className="flex flex-col items-start justify-start gap-1">
-                    <div className="inline-flex items-start justify-start gap-1 self-stretch">
-                      <div className="shrink grow basis-0 text-sm font-normal leading-tight text-neutral-700">
-                        Creator
-                      </div>
-                    </div>
                     <div className="inline-flex items-center justify-start gap-4">
+                      <span className="text-gray-900">By</span>
                       <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2">
                         <img
                           className="h-4 w-4 rounded-2xl"

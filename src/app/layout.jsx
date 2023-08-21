@@ -5,6 +5,7 @@ import { Providers } from './provider';
 import 'react-slideshow-image/dist/styles.css';
 import 'swiper/css';
 import 'swiper/css/autoplay';
+import Footer from './components/footer/main';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,7 +20,8 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <Providers>
           <Navbar />
-          <main className="relative">{children}</main>
+          <main className="relative bg-gray-100">{children}</main>
+          <Footer />
         </Providers>
       </body>
     </html>

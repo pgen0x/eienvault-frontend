@@ -52,7 +52,7 @@ const Slideshow = () => {
   };
   return (
     <>
-      <button class="swiper-prev mr-2 px-4 py-2 rounded-full bg-sky-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
+      <button className="swiper-prev mr-2 px-4 py-2 rounded-full bg-sky-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
       <Swiper
         className="!pb-5"
         slidesPerView={1}
@@ -191,7 +191,7 @@ const Slideshow = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <button class="swiper-next ml-2 px-4 py-2 rounded-full bg-sky-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
+      <button className="swiper-next ml-2 px-4 py-2 rounded-full bg-sky-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
     </>
   );
 };

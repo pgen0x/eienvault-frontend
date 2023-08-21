@@ -28,8 +28,8 @@ import Slideshow from '../slideshow';
 const UpcomingAuction = () => {
   return (
     <>
-      <div class="flex gap-4 mt-5">
-        <div class="flex flex-col p-2 flex-1 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x700')] h-[650px]">
+      <div className="flex gap-4 mt-5">
+        <div className="flex flex-col p-2 flex-1 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x700')] h-[650px]">
           <div className="w-fit flex items-center justify-center gap-2 rounded-lg bg-white p-2">
             <img
               className="h-4 w-4 rounded-2xl"
@@ -65,8 +65,8 @@ const UpcomingAuction = () => {
             </div>
           </div>
         </div>
-        <div class="flex flex-col justify-between gap-4 flex-1">
-          <div class="flex flex-col p-2 flex-1 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')]">
+        <div className="flex flex-col justify-between gap-4 flex-1">
+          <div className="flex flex-col p-2 flex-1 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')]">
             <div className="w-fit flex items-center justify-center gap-2 rounded-lg bg-white p-2">
               <img className="h-4 w-4 rounded-2xl" src="https://via.placeholder.com/16x16" />
               <div className="flex items-start justify-start gap-2">
@@ -99,7 +99,7 @@ const UpcomingAuction = () => {
               </div>
             </div>
           </div>
-          <div class="flex flex-col p-2 flex-1 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')]">
+          <div className="flex flex-col p-2 flex-1 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')]">
             <div className="w-fit flex items-center justify-center gap-2 rounded-lg bg-white p-2">
               <img className="h-4 w-4 rounded-2xl" src="https://via.placeholder.com/16x16" />
               <div className="flex items-start justify-start gap-2">
@@ -133,8 +133,8 @@ const UpcomingAuction = () => {
             </div>
           </div>
         </div>
-        <div class="flex flex-col justify-between gap-4 flex-1">
-          <div class="flex flex-col p-2 flex-1 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')]">
+        <div className="flex flex-col justify-between gap-4 flex-1">
+          <div className="flex flex-col p-2 flex-1 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')]">
             <div className="w-fit flex items-center justify-center gap-2 rounded-lg bg-white p-2">
               <img className="h-4 w-4 rounded-2xl" src="https://via.placeholder.com/16x16" />
               <div className="flex items-start justify-start gap-2">
@@ -167,7 +167,7 @@ const UpcomingAuction = () => {
               </div>
             </div>
           </div>
-          <div class="flex flex-col p-2 flex-1 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')]">
+          <div className="flex flex-col p-2 flex-1 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')]">
             <div className="w-fit flex items-center justify-center gap-2 rounded-lg bg-white p-2">
               <img className="h-4 w-4 rounded-2xl" src="https://via.placeholder.com/16x16" />
               <div className="flex items-start justify-start gap-2">

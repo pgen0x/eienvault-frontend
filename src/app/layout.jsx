@@ -21,7 +21,6 @@ export default function RootLayout({ children }) {
         <Providers>
           <Navbar />
           <main className="relative bg-gray-100">{children}</main>
-          <Footer />
         </Providers>
       </body>
     </html>

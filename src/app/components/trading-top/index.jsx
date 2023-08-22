@@ -12,10 +12,9 @@ const servers = [
   'Katelyn Rohan',
 ]
 export default function TrandingTop() {
-  const [TrendingTop, setTrendingTop] = useState("");
-  const [Range, setRange] = useState("");
+  const [TrendingTop, setTrendingTop] = useState("trending");
+  const [Range, setRange] = useState("1h");
   const [selectedServer, setSelectedServer] = useState(servers[0])
-  const defaultCssRadio = "cursor-pointer w-full px-2.5 py-2 rounded-full text-sm font-medium leading-5 ";
 
   const handleTrendingTop = (event, target) => {
     setTrendingTop(target);
@@ -24,11 +23,6 @@ export default function TrandingTop() {
   const handleRange = (event, target) => {
     setRange(target);
   }
-
-  useEffect(() => {
-    setTrendingTop('trending');
-    setRange('1h');
-  }, []);
 
   const formatter = (num, digits) => {
     const lookup = [
@@ -48,6 +42,7 @@ export default function TrandingTop() {
   }
 
   const classRadio = (params, value) => {
+    const defaultCssRadio = "cursor-pointer w-full px-2.5 py-2 rounded-full text-sm font-medium leading-5 ";
     return defaultCssRadio + (params === value ? 'text-white bg-sky-500 shadow' : 'text-sky-500 hover:bg-sky-200')
   }
 

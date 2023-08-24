@@ -8,7 +8,7 @@ const Footer = () => {
     <>
       <section>
         <div className="w-full bg-white px-[50px] py-[20px] flex justify-between">
-          <div className="flex flex-between gap-6 items-center text-sky-400">
+          <div className="flex flex-between gap-6 items-center text-primary-600">
             <div className="w-fit flex">
               <div className="">
                 <LogoFooter />
@@ -22,15 +22,15 @@ const Footer = () => {
               2023  Snapft, inc
             </a>
             <div className="">
-              <div className="w-[5px] h-[5px] bg-sky-400 rounded-full"></div>
+              <div className="w-[5px] h-[5px] bg-primary-600 rounded-full"></div>
             </div>
             <a href="#" className="text-sm">Privacy policy</a>
             <div className="">
-              <div className="w-[5px] h-[5px] bg-sky-400 rounded-full"></div>
+              <div className="w-[5px] h-[5px] bg-primary-600 rounded-full"></div>
             </div>
             <a href="#" className="text-sm">Terms</a>
           </div>
-          <div className="flex flex-between gap-6 items-center text-sky-400">
+          <div className="flex flex-between gap-6 items-center text-primary-600">
             <a href="#" className="text-sm">
               Our Community
             </a>

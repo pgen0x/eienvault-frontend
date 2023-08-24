@@ -52,7 +52,7 @@ const Slideshow = () => {
   };
   return (
     <>
-      <button className="swiper-prev mr-2 px-4 py-2 rounded-full bg-sky-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
+      <button className="swiper-prev mr-2 px-4 py-2 rounded-full bg-primary-400 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
       <Swiper
         className="!pb-5"
         slidesPerView={1}
@@ -108,7 +108,7 @@ const Slideshow = () => {
                           <div className="text-xs font-medium leading-none text-neutral-700">
                             Ryuma
                           </div>
-                          <div className="text-xs font-black leading-none text-sky-400">
+                          <div className="text-xs font-black leading-none text-primary-600">
                             <FontAwesomeIcon icon={faCircleCheck} />
                           </div>
                         </div>
@@ -139,7 +139,7 @@ const Slideshow = () => {
                       </div>
                       <div className="inline-flex h-11 items-center justify-center gap-8 self-stretch rounded-full bg-white p-1.5">
                         <div className="inline-flex h-6 w-6 flex-col items-center justify-center gap-1.5 rounded-lg p-1.5">
-                          <button className="text-xs font-black leading-tight text-sky-400">
+                          <button className="text-xs font-black leading-tight text-primary-600">
                             <FontAwesomeIcon icon={faMinus} />
                           </button>
                         </div>
@@ -147,7 +147,7 @@ const Slideshow = () => {
                           1
                         </div>
                         <div className="inline-flex h-6 w-6 flex-col items-center justify-center gap-1.5 rounded-lg p-1.5">
-                          <button className="text-xs font-black leading-tight text-sky-400">
+                          <button className="text-xs font-black leading-tight text-primary-600">
                             <FontAwesomeIcon icon={faPlus} />
                           </button>
                         </div>
@@ -165,7 +165,7 @@ const Slideshow = () => {
                           0.3 ETH
                         </span>
                       </div>
-                      <div className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-full bg-sky-400 px-4 py-2">
+                      <div className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-full bg-primary-600 px-4 py-2">
                         <button className="text-center text-base font-bold leading-normal text-white">
                           Mint
                         </button>
@@ -191,7 +191,7 @@ const Slideshow = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <button className="swiper-next ml-2 px-4 py-2 rounded-full bg-sky-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
+      <button className="swiper-next ml-2 px-4 py-2 rounded-full bg-primary-400 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
     </>
   );
 };

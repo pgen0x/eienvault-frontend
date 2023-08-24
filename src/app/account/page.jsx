@@ -97,9 +97,9 @@ export default function AccountPage() {
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
               </div>
               <div className="flex gap-1 text-white font-semibold mt-2">
-                <button className="bg-sky-400 rounded-full py-2 px-4"><FontAwesomeIcon icon={faPenToSquare} /> Edit Profile</button>
-                <button className="bg-sky-400 rounded-full py-2 px-4">Sell</button>
-                <button className="bg-sky-400 rounded-full py-2 px-4"><FontAwesomeIcon icon={faShare} /></button>
+                <button className="bg-primary-600 rounded-full py-2 px-4"><FontAwesomeIcon icon={faPenToSquare} /> Edit Profile</button>
+                <button className="bg-primary-600 rounded-full py-2 px-4">Sell</button>
+                <button className="bg-primary-600 rounded-full py-2 px-4"><FontAwesomeIcon icon={faShare} /></button>
               </div>
             </div>
             <div className="flex flex-col">
@@ -156,9 +156,9 @@ export default function AccountPage() {
           </div>
         </section>
         <section>
-          <ul className="flex text-sky-400 border-b border-gray-200 my-5">
+          <ul className="flex text-primary-600 border-b border-gray-200 my-5">
             <li className="px-5 pb-3 cursor-pointer">Owned</li>
-            <li className="px-5 pb-3 border-b-4 border-sky-400 cursor-pointer">Collections <span className="bg-red-400 rounded-full text-white text-xs font-semibold px-1">2</span></li>
+            <li className="px-5 pb-3 border-b-4 border-primary-600 cursor-pointer">Collections <span className="bg-red-400 rounded-full text-white text-xs font-semibold px-1">2</span></li>
             <li className="px-5 pb-3 cursor-pointer">Bid received</li>
             <li className="px-5 pb-3 cursor-pointer">Collateral</li>
             <li className="px-5 pb-3 cursor-pointer">Created</li>
@@ -170,7 +170,7 @@ export default function AccountPage() {
         <section>
           <div className="grid grid-cols-12 gap-1 my-5">
             <div className="col-span-12 sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-              <button className="bg-sky-400 rounded-full py-2 px-4" onClick={handleOpenFilter}><FontAwesomeIcon icon={faSliders} /> Filter</button>
+              <button className="bg-primary-600 rounded-full py-2 px-4" onClick={handleOpenFilter}><FontAwesomeIcon icon={faSliders} /> Filter</button>
             </div>
             <div className="flex gap-2 col-span-12 sm:col-span-12 md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9">
               <div className="w-full border border-gray-200 inline-flex h-10 items-center justify-start gap-2 rounded-full border-0 bg-white px-4 dark:bg-gray-800 w-2/3">
@@ -293,7 +293,7 @@ export default function AccountPage() {
                               <div className="font-semibold leading-none text-neutral-700">
                                 {collection}
                               </div>
-                              <div className="items-center text-sky-400">
+                              <div className="items-center text-primary-600">
                                 <FontAwesomeIcon icon={faEllipsis} />
                               </div>
                             </div>
@@ -316,10 +316,10 @@ export default function AccountPage() {
                               </div>
                             </div>
                             <div className="flex mt-5 w-full gap-3">
-                              <button className="w-full text-center text-xs font-bold text-sky-400 bg-white rounded-full px-4 py-2">
+                              <button className="w-full text-center text-xs font-bold text-primary-600 bg-white rounded-full px-4 py-2">
                                 View detail
                               </button>
-                              <button className="w-full text-center text-xs font-bold text-white bg-sky-400 rounded-full px-4 py-2">
+                              <button className="w-full text-center text-xs font-bold text-white bg-primary-600 rounded-full px-4 py-2">
                                 List item
                               </button>
                             </div>

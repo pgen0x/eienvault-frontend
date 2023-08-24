@@ -51,7 +51,7 @@ const Slideshow = () => {
   };
   return (
     <>
-      <button className="swiper-prev mr-2 px-4 py-2 rounded-full bg-sky-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
+      <button className="swiper-prev mr-2 px-4 py-2 rounded-full bg-primary-400 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
       <Swiper
         className="!pl-5 !pb-5"
         slidesPerView={1}
@@ -89,7 +89,7 @@ const Slideshow = () => {
                             <div className="text-xs font-medium leading-none text-neutral-700">
                               Ryuma
                             </div>
-                            <div className="text-xs font-black leading-none text-sky-400">
+                            <div className="text-xs font-black leading-none text-primary-600">
                               <FontAwesomeIcon icon={faCircleCheck} />
                             </div>
                           </div>
@@ -117,8 +117,8 @@ const Slideshow = () => {
                         </div>
                       </div>
                       <div className="flex mt-5 w-full">
-                        <FontAwesomeIcon className="mr-5 py-3 text-sky-400" icon={faCartPlus} />
-                        <button className="w-full text-center text-base font-bold text-white bg-sky-400 rounded-full px-4 py-2">
+                        <FontAwesomeIcon className="mr-5 py-3 text-primary-600" icon={faCartPlus} />
+                        <button className="w-full text-center text-base font-bold text-white bg-primary-600 rounded-full px-4 py-2">
                           Buy Now
                         </button>
                       </div>
@@ -130,7 +130,7 @@ const Slideshow = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <button className="swiper-next ml-2 px-4 py-2 rounded-full bg-sky-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
+      <button className="swiper-next ml-2 px-4 py-2 rounded-full bg-primary-400 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
     </>
   );
 };

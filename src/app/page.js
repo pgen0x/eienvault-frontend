@@ -62,7 +62,7 @@ export default function Home() {
               <div className="flex-initial w-[29%]">
                 <h2 className="text-3xl">Discover Our Best <br />Collections For you to buy.</h2>
                 <p>Eien vault is a marketplace for nft, a one of a kind digital asset that you can truly own.</p>
-                <div className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-full bg-sky-400 px-4 py-2 mt-5">
+                <div className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-full bg-primary-600 px-4 py-2 mt-5">
                   <button className="text-center text-base font-bold leading-normal text-white">
                     DIscover more
                   </button>
@@ -79,7 +79,7 @@ export default function Home() {
             <div className="container mx-auto py-4 px-4">
               <div className="flex items-center justify-between">
                 <h2 className="font-semibold text-xl">Recent Activities</h2>
-                <a href="#" title="See all" className="text-sky-400">See all</a>
+                <a href="#" title="See all" className="text-primary-600">See all</a>
               </div>
               <div className="flex-initial w-full relative flex items-center justify-center mb-5">
                 <SlideshowActivities />
@@ -92,7 +92,7 @@ export default function Home() {
             <div className="container mx-auto py-4 px-4">
               <div className="flex items-center justify-between">
                 <h2 className="font-semibold text-xl">Upcoming auctions</h2>
-                <a href="#" title="See all" className="text-sky-400">See all</a>
+                <a href="#" title="See all" className="text-primary-600">See all</a>
               </div>
               <UpcomingAuction />
             </div>
@@ -111,7 +111,7 @@ export default function Home() {
                     <p>Subscribe to our real time newspaper and be the first to know<br /> about upcoming drops</p>
                     <form className="flex gap-2 w-full mt-5">
                       <input type="text" className="w-full px-5 py-2 rounded-full" placeholder="Your email address" />
-                      <button type="submit" className="bg-sky-400 px-5 py-2 rounded-full text-white">Subscribe</button>
+                      <button type="submit" className="bg-primary-600 px-5 py-2 rounded-full text-white">Subscribe</button>
                     </form>
                   </div>
                 </div>
@@ -129,7 +129,7 @@ export default function Home() {
             <div className="container mx-auto py-4 px-4">
               <div className="flex items-center justify-between">
                 <h2 className="font-semibold text-xl">Trending creator</h2>
-                <a href="#" title="See all" className="text-sky-400">See all</a>
+                <a href="#" title="See all" className="text-primary-600">See all</a>
               </div>
               <div className="flex-initial w-full relative flex items-center justify-center mb-5">
                 <SlideshowCreator />
@@ -149,7 +149,7 @@ export default function Home() {
                 <div className="w-full flex flex-col px-[150px]">
                   <h2 className="font-bold text-2xl">Discover hidden gems</h2>
                   <p className="my-3">Eien vault is your window into a world of unique and extraordinary digital art. Immerse yourself in a diverse collection of NFTs created by talented artists from around the globe.</p>
-                  <a href="#" className="text-center w-full rounded-full bg-sky-400 px-3 py-2 text-white">Learn more</a>
+                  <a href="#" className="text-center w-full rounded-full bg-primary-600 px-3 py-2 text-white">Learn more</a>
                 </div>
               </div>
             </div>
@@ -162,8 +162,8 @@ export default function Home() {
                 <h2 className="font-bold text-3xl">Use your NFTs to get a crypto <br />loan</h2>
                 <p className="mt-3 py-5 font-semibold">Use your NFT as collateral to borrow wETH, DAI, or USDC <br />from lenders. Repay your loan, and you get your NFT<br /> back. No auto-liquidations! 0% borrower fees!</p>
                 <div className="my-5">
-                  <button className="text-white bg-sky-400 font-bold rounded-full px-5 py-2">Get loan now</button>
-                  <button className="ml-1 bg-white text-sky-400 font-bold rounded-full px-5 py-2">I want to lend</button>
+                  <button className="text-white bg-primary-600 font-bold rounded-full px-5 py-2">Get loan now</button>
+                  <button className="ml-1 bg-white text-primary-600 font-bold rounded-full px-5 py-2">I want to lend</button>
                 </div>
                 <div className="flex w-full justify-between p-5">
                   <div className="">
@@ -195,7 +195,7 @@ export default function Home() {
                   <div className="">
                     <svg width="65" height="65" viewBox="0 0 65 65" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="65" height="65" rx="10.8333" fill="#32A9FF" /><path d="M47.3955 14.896H32.4775V31.7727M32.4775 31.4817V50.1043H18.958" stroke="white" stroke-width="5.41667" stroke-linecap="round" stroke-linejoin="round" /></svg>
                   </div>
-                  <div className="flex flex-col ml-2 text-sky-400 justify-between">
+                  <div className="flex flex-col ml-2 text-primary-600 justify-between">
                     <h2 className="text-3xl font-semibold">Snap</h2>
                     <h3 className="text-lg">Marketplace</h3>
                   </div>
@@ -203,7 +203,7 @@ export default function Home() {
                 <div className="text-gray-900 mt-5">
                   <p>SnapFT is at the forefront of the digital revolution in the art world. We invite you to embrace this exciting new era and discover the limitless possibilities that NFT art offers</p>
                 </div>
-                <div className="flex flex-col text-sky-400 py-5">
+                <div className="flex flex-col text-primary-600 py-5">
                   <h4 className="text-xl font-bold">Join our community</h4>
                   <ul className="flex justify-between w-fit gap-7 mt-3">
                     <li className="text-2xl"><FontAwesomeIcon icon={faTwitter} /></li>
@@ -215,7 +215,7 @@ export default function Home() {
               </div>
               <div className="flex justify-evenly w-full">
                 <div className="">
-                  <h2 className="text-sky-400 font-bold text-xl">Company</h2>
+                  <h2 className="text-primary-600 font-bold text-xl">Company</h2>
                   <ul className="text-gray-900 mt-5">
                     <li className="py-2">What is NFT ?</li>
                     <li className="py-2">Snap marketplace NFT</li>
@@ -225,7 +225,7 @@ export default function Home() {
                   </ul>
                 </div>
                 <div className="">
-                  <h2 className="text-sky-400 font-bold text-xl">Snapft</h2>
+                  <h2 className="text-primary-600 font-bold text-xl">Snapft</h2>
                   <ul className="text-gray-900 mt-5">
                     <li className="py-2">Displaying NFTs</li>
                     <li className="py-2">Report security issues</li>
@@ -233,7 +233,7 @@ export default function Home() {
                   </ul>
                 </div>
                 <div className="">
-                  <h2 className="text-sky-400 font-bold text-xl">Other</h2>
+                  <h2 className="text-primary-600 font-bold text-xl">Other</h2>
                   <ul className="text-gray-900 mt-5">
                     <li className="py-2">Get help</li>
                     <li className="py-2">Term of use</li>
@@ -242,7 +242,7 @@ export default function Home() {
                   </ul>
                 </div>
                 <div className="">
-                  <h2 className="text-sky-400 font-bold text-xl">Stats</h2>
+                  <h2 className="text-primary-600 font-bold text-xl">Stats</h2>
                   <ul className="text-gray-900 mt-5">
                     <li className="py-2">Ranking</li>
                     <li className="py-2">Activity</li>
@@ -250,7 +250,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="border-t border-sky-400 text-gray-900 py-5 mt-5">
+            <div className="border-t border-primary-600 text-gray-900 py-5 mt-5">
               2023  Snapft, inc
             </div>
           </div>

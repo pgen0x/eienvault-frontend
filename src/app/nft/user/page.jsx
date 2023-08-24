@@ -53,7 +53,7 @@ export default function NftUser() {
           <div className="flex w-full mt-5 gap-4 flex-col xl:flex-row 2xl:flex-row lg:flex-row md:flex-col sm:flex-col">
             <div className="w-full flex flex-col gap-4">
               <img src="https://via.placeholder.com/600x600" className="w-full h-auto rounded-xl" />
-              <div className="flex text-sky-400 bg-white rounded-lg px-5 py-2">
+              <div className="flex text-primary-600 bg-white rounded-lg px-5 py-2">
                 <div className="flex justify-around w-full">
                   <button className=""><FontAwesomeIcon icon={faHeart} /> <span className="font-semibold">7 likes</span></button>
                   <button className=""><FontAwesomeIcon icon={faShareFromSquare} /> <span className="font-semibold">Share</span></button>
@@ -61,11 +61,11 @@ export default function NftUser() {
                 </div>
                 <div><FontAwesomeIcon icon={faEllipsisVertical} /></div>
               </div>
-              <ul className="flex w-full justify-around text-sky-400 border-b border-gray-200 my-5">
+              <ul className="flex w-full justify-around text-primary-600 border-b border-gray-200 my-5">
                 <li className="px-5 pb-3 cursor-pointer">Overview</li>
                 <li className="px-5 pb-3 cursor-pointer">Bids</li>
                 <li className="px-5 pb-3 cursor-pointer">History</li>
-                <li className="px-5 pb-3 border-b-4 border-sky-400 cursor-pointer">Collateral</li>
+                <li className="px-5 pb-3 border-b-4 border-primary-600 cursor-pointer">Collateral</li>
               </ul>
               <div className="flex flex-col w-full text-gray-900 bg-white rounded-lg p-5 gap-4">
                 <div className="flex items-center justify-between">
@@ -78,7 +78,7 @@ export default function NftUser() {
                   </div>
                   <div>No owner proposal yet.</div>
                 </div>
-                <button className="w-full bg-sky-400 py-2 rounded-full text-white font-semibold">Propose a lending</button>
+                <button className="w-full bg-primary-600 py-2 rounded-full text-white font-semibold">Propose a lending</button>
                 <div>
                   <h3 className="text-lg font-semibold">Propose an ETH lend to the owner</h3>
                   <p>No owner lender proposes the offer yet.</p>
@@ -87,8 +87,8 @@ export default function NftUser() {
             </div>
             <div className="w-full">
               <div className="w-full flex justify-around">
-                <button className="bg-sky-400 rounded-full w-60 py-2"><FontAwesomeIcon icon={faPenToSquare} /> Edit detail item</button>
-                <button className="bg-sky-400 rounded-full w-60 py-2"><FontAwesomeIcon icon={faList} /> List item</button>
+                <button className="bg-primary-600 rounded-full w-60 py-2"><FontAwesomeIcon icon={faPenToSquare} /> Edit detail item</button>
+                <button className="bg-primary-600 rounded-full w-60 py-2"><FontAwesomeIcon icon={faList} /> List item</button>
               </div>
               <div className="text-gray-900 flex flex-col gap-4 mt-5">
                 <h2 className="text-2xl font-bold">Worriness #18</h2>
@@ -99,7 +99,7 @@ export default function NftUser() {
                       <div className="w-fit flex items-center justify-center gap-2">
                         <img className="h-7 w-7 rounded-2xl" src="https://via.placeholder.com/48x48" />
                         <div className="font-medium leading-none text-neutral-700">Ryuma</div>
-                        <div className="font-black leading-none text-sky-400">
+                        <div className="font-black leading-none text-primary-600">
                           <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle-check" className="svg-inline--fa fa-circle-check " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"></path></svg>
                         </div>
                       </div>
@@ -122,12 +122,12 @@ export default function NftUser() {
                   <div className="flex gap-2 items-center">
                     <FontAwesomeIcon icon={faFingerprint} />
                     <span className="font-semibold">Etherscan</span>
-                    <FontAwesomeIcon className="text-sky-400" icon={faUpRightFromSquare} />
+                    <FontAwesomeIcon className="text-primary-600" icon={faUpRightFromSquare} />
                   </div>
                   <div className="flex gap-2 items-center">
                     <FontAwesomeIcon icon={faEye} />
                     <span className="font-semibold">View original</span>
-                    <FontAwesomeIcon className="text-sky-400" icon={faUpRightFromSquare} />
+                    <FontAwesomeIcon className="text-primary-600" icon={faUpRightFromSquare} />
                   </div>
                 </div>
                 <div className="w-full bg-white rounded-xl p-5 text-gray-900">
@@ -140,7 +140,7 @@ export default function NftUser() {
                 <div className="w-full flex flex-col gap-4 bg-white rounded-xl p-5 text-gray-900">
                   <div className="flex gap-2">
                     <div>Auction starts in : <span className="font-bold">1d 1h 23m 40s</span></div>
-                    <div className="font-bold text-sky-400"><FontAwesomeIcon icon={faRotate} /> Refresh metadata</div>
+                    <div className="font-bold text-primary-600"><FontAwesomeIcon icon={faRotate} /> Refresh metadata</div>
                   </div>
                   <div className="flex gap-4">
                     <div className="bg-gray-100 rounded-lg flex-col justify-center w-full p-5 items-center">
@@ -159,13 +159,13 @@ export default function NftUser() {
                     </div>
                   </div>
                   <div className="flex mt-5 w-full gap-4">
-                    <button className="w-full text-center text-base font-bold text-white bg-sky-400 rounded-full px-4 py-2" onClick={handleModalBuy}>
+                    <button className="w-full text-center text-base font-bold text-white bg-primary-600 rounded-full px-4 py-2" onClick={handleModalBuy}>
                       Buy Now
                     </button>
-                    <FontAwesomeIcon className="mr-5 py-3 text-sky-400" icon={faCartPlus} />
+                    <FontAwesomeIcon className="mr-5 py-3 text-primary-600" icon={faCartPlus} />
                   </div>
                   <div>
-                    <button className="w-full text-center text-base font-bold text-sky-400 border border-sky-400 bg-white rounded-full px-4 py-2" onClick={handleModalBid}>
+                    <button className="w-full text-center text-base font-bold text-primary-600 border border-primary-600 bg-white rounded-full px-4 py-2" onClick={handleModalBid}>
                       Place a bid
                     </button>
                   </div>
@@ -196,7 +196,7 @@ export default function NftUser() {
             <div className="container mx-auto pt-[50px] px-4">
               <div className="flex items-center justify-between my-5">
                 <h2 className="font-semibold text-xl mt-5">NFTs you might like</h2>
-                <a href="#" title="See all" className="text-lg text-sky-400 font-semibold">View collection</a>
+                <a href="#" title="See all" className="text-lg text-primary-600 font-semibold">View collection</a>
               </div>
               <div className="flex-initial w-full relative flex items-center justify-center py-5">
                 <SlideshowActivities />
@@ -231,7 +231,7 @@ export default function NftUser() {
                     <section className="step-1 flex flex-col gap-3 p-5">
                       <div className="w-full flex justify-between">
                         <h3 className="font-semibold">Buy</h3>
-                        <button onClick={handleModalBuy} className="text-sky-400"><FontAwesomeIcon icon={faXmark} /></button>
+                        <button onClick={handleModalBuy} className="text-primary-600"><FontAwesomeIcon icon={faXmark} /></button>
                       </div>
                       <div className="w-full flex justify-center gap-3 items-center">
                         <img src="https://via.placeholder.com/192x100" className="w-full" />
@@ -243,12 +243,12 @@ export default function NftUser() {
                         </div>
                         <div className="flex gap-2 items-center">
                           <span className="text-gray-400">0.42 ETH</span>
-                          <FontAwesomeIcon icon={faChevronDown} className="text-sky-400" />
+                          <FontAwesomeIcon icon={faChevronDown} className="text-primary-600" />
                         </div>
                       </div>
                       <div className="flex justify-between p-3 rounded-lg border border-gray-200">
                         <div className="flex gap-2 items-center">
-                          <div className="bg-sky-400 text-white rounded-lg p-2">
+                          <div className="bg-primary-600 text-white rounded-lg p-2">
                             <Ethereum />
                           </div>
                           <div className="flex flex-col">
@@ -276,10 +276,10 @@ export default function NftUser() {
                         </div>
                       </div>
                       {(stepBuy == 1) && (
-                        <button className="bg-sky-400 w-full rounded-full py-3 text-white font-semibold" onClick={() => handleStepBuy(2)}>Approve</button>
+                        <button className="bg-primary-600 w-full rounded-full py-3 text-white font-semibold" onClick={() => handleStepBuy(2)}>Approve</button>
                       )}
                       {(stepBuy == 3) && (
-                        <button className="bg-sky-400 w-full rounded-full py-3 text-white font-semibold" onClick={() => handleStepBuy(4)}>Buy</button>
+                        <button className="bg-primary-600 w-full rounded-full py-3 text-white font-semibold" onClick={() => handleStepBuy(4)}>Buy</button>
                       )}
                     </section>
                   )}
@@ -296,8 +296,8 @@ export default function NftUser() {
                             <span>Proccessing the transactions</span>
                           )}
                         </div>
-                        <button className="text-sky-400 font-bold hover:text-sky-300" onClick={() => handleStepBuy(stepBuy - 1)}>Cancel</button>
-                        <button className="text-sky-400 font-bold hover:text-sky-300" onClick={() => handleStepBuy(stepBuy + 1)}>Next</button>
+                        <button className="text-primary-600 font-bold hover:text-primary-400" onClick={() => handleStepBuy(stepBuy - 1)}>Cancel</button>
+                        <button className="text-primary-600 font-bold hover:text-primary-400" onClick={() => handleStepBuy(stepBuy + 1)}>Next</button>
                       </div>
                     </section>
                   )}
@@ -313,7 +313,7 @@ export default function NftUser() {
                           <span>The asset now is yours!</span>
                           <span>check your profile to see the asset</span>
                         </div>
-                        <button className="rounded-full border border-sky-400 text-sky-400 font-bold px-5 py-1" onClick={() => handleModalBuy()}>View asset</button>
+                        <button className="rounded-full border border-primary-600 text-primary-600 font-bold px-5 py-1" onClick={() => handleModalBuy()}>View asset</button>
                       </div>
                     </section>
                   )}
@@ -334,7 +334,7 @@ export default function NftUser() {
                     <section className="step-1 flex flex-col gap-3 p-5">
                       <div className="w-full flex justify-between">
                         <h3 className="font-semibold">Bid</h3>
-                        <button onClick={handleModalBid} className="text-sky-400"><FontAwesomeIcon icon={faXmark} /></button>
+                        <button onClick={handleModalBid} className="text-primary-600"><FontAwesomeIcon icon={faXmark} /></button>
                       </div>
                       <div className="w-full flex justify-center gap-3 items-center">
                         <img src="https://via.placeholder.com/192x100" className="w-full" />
@@ -343,7 +343,7 @@ export default function NftUser() {
                       <div className="flex flex-col p-3 rounded-lg border border-gray-200 gap-2">
                         <div className="flex justify-between">
                           <div className="flex gap-2 items-center">
-                            <div className="bg-sky-400 text-white rounded-lg p-2">
+                            <div className="bg-primary-600 text-white rounded-lg p-2">
                               <Ethereum />
                             </div>
                             <div className="flex flex-col">
@@ -377,7 +377,7 @@ export default function NftUser() {
                       <div className="flex flex-col">
                         <label for="amount" className="block text-sm font-medium leading-6 text-gray-900">Enter amount of your bid</label>
                         <div className="mt-2">
-                          <div className="bg-gray-50 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-400">
+                          <div className="bg-gray-50 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-600">
                             <input type="number" name="amount" id="amount" autocomplete="amount" className="flex-1 border-0 bg-transparent py-3 pr-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="0" />
                             <span className="flex select-none items-center pr-3 text-gray-900 font-semibold">ETH</span>
                           </div>
@@ -386,15 +386,15 @@ export default function NftUser() {
                       <div className="flex flex-col">
                         <label for="duration_date" className="block text-sm font-medium leading-6 text-gray-900">Duration</label>
                         <div className="flex gap-2 mt-2">
-                          <input type="text" name="duration_date" id="duration_date" autocomplete="duration_date" className="flex-1 bg-gray-50 border-0 rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-400 py-3 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6" placeholder="10 - 08 - 2023, 10:00 AM" />
-                          <select className="bg-gray-50 border-0 rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-400 sm:max-w-md py-3 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6" placeholder="10 - 08 - 2023, 10:00 AM">
+                          <input type="text" name="duration_date" id="duration_date" autocomplete="duration_date" className="flex-1 bg-gray-50 border-0 rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-600 py-3 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6" placeholder="10 - 08 - 2023, 10:00 AM" />
+                          <select className="bg-gray-50 border-0 rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-600 sm:max-w-md py-3 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6" placeholder="10 - 08 - 2023, 10:00 AM">
                             <option>1 Day</option>
                             <option>2 Day</option>
                             <option>1 Week</option>
                           </select>
                         </div>
                       </div>
-                      <button className="bg-sky-400 w-full rounded-full py-3 text-white font-semibold" onClick={() => handleStepBid(2)}>Place a bid</button>
+                      <button className="bg-primary-600 w-full rounded-full py-3 text-white font-semibold" onClick={() => handleStepBid(2)}>Place a bid</button>
                     </section>
                   )}
                   {(stepBid == 2) && (
@@ -405,8 +405,8 @@ export default function NftUser() {
                           <h3 className="text-lg font-bold">Loading</h3>
                           <span>Sign your wallet to continue the transaction</span>
                         </div>
-                        <button className="text-sky-400 font-bold hover:text-sky-300" onClick={() => handleStepBid(1)}>Cancel</button>
-                        <button className="text-sky-400 font-bold hover:text-sky-300" onClick={() => handleStepBid(3)}>Next</button>
+                        <button className="text-primary-600 font-bold hover:text-primary-400" onClick={() => handleStepBid(1)}>Cancel</button>
+                        <button className="text-primary-600 font-bold hover:text-primary-400" onClick={() => handleStepBid(3)}>Next</button>
                       </div>
                     </section>
                   )}
@@ -421,7 +421,7 @@ export default function NftUser() {
                           <h3 className="text-xl font-bold">Congratulations</h3>
                           <span>Your bid has successfully placed!, check your bidding history by clicking the link below</span>
                         </div>
-                        <button className="rounded-full border border-sky-400 text-sky-400 font-bold px-5 py-1" onClick={() => handleModalBid()}>Your bid</button>
+                        <button className="rounded-full border border-primary-600 text-primary-600 font-bold px-5 py-1" onClick={() => handleModalBid()}>Your bid</button>
                       </div>
                     </section>
                   )}

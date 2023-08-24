@@ -51,7 +51,7 @@ const SlideshowCreator = () => {
   };
   return (
     <>
-      <button className="swiper-prev mr-2 px-4 py-2 rounded-full bg-sky-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
+      <button className="swiper-prev mr-2 px-4 py-2 rounded-full bg-primary-400 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
       <Swiper
         className="!pl-5 !pb-5"
         slidesPerView={1}
@@ -86,7 +86,7 @@ const SlideshowCreator = () => {
                         <div className="text-xl2 font-medium leading-tight text-gray-600">
                           Peluki Handal
                         </div>
-                        <div className="text-xs font-black leading-none text-sky-400">
+                        <div className="text-xs font-black leading-none text-primary-600">
                           <FontAwesomeIcon icon={faCircleCheck} />
                         </div>
                       </div>
@@ -110,11 +110,11 @@ const SlideshowCreator = () => {
                         </div>
                       </div>
                       <div className="flex w-full">
-                        <button className="w-full text-sm text-center font-semibold text-white bg-sky-400 rounded-full px-1 py-1">
+                        <button className="w-full text-sm text-center font-semibold text-white bg-primary-600 rounded-full px-1 py-1">
                           <FontAwesomeIcon icon={faPlus} />
                           <span className="ml-2 ">Follow</span>
                         </button>
-                        <button className="w-full text-sm text-center font-semibold text-sky-400 px-1 py-1">
+                        <button className="w-full text-sm text-center font-semibold text-primary-600 px-1 py-1">
                           Visit Profile
                         </button>
                       </div>
@@ -126,7 +126,7 @@ const SlideshowCreator = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <button className="swiper-next ml-2 px-4 py-2 rounded-full bg-sky-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
+      <button className="swiper-next ml-2 px-4 py-2 rounded-full bg-primary-400 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
     </>
   );
 };

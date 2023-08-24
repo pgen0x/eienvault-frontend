@@ -120,7 +120,7 @@ export default function TrandingTop() {
           </div>
         </div>
         <div className="flex items-end px-3">
-          <a href="#" className="text-sky-400">See all</a>
+          <a href="#" className="text-primary-600">See all</a>
         </div>
       </div>
       <ul role="list" className="mt-2 flex flex-col flex-wrap h-[520px]">

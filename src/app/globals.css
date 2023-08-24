@@ -56,3 +56,17 @@
   width: 30px;
   border-radius: 10px;
 }
+
+@keyframes graphicx {
+  50% {
+	animation-timing-function: cubic-bezier(0.3, 0.27, 0.07, 1.64);
+	transform: translateX(150px);
+  }
+}
+
+@keyframes graphicy {
+  50% {
+	animation-timing-function: cubic-bezier(0.02, 0.01, 0.21, 1);
+	transform: translateY(-50px);
+  }
+}

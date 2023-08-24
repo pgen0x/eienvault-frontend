@@ -77,7 +77,7 @@ const Slideshow = () => {
               <img className="w-full rounded-2xl z-10" src="https://via.placeholder.com/325x265" />
               <div className="w-full inline-flex flex-col items-center justify-center lg:items-start">
                 <div className="w-full px-5 relative flex flex-row">
-                  <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-br-2xl rounded-bl-2xl bg-white p-5">
+                  <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-br-2xl rounded-bl-2xl bg-white/60 backdrop-blur p-5">
                     <div className="w-full flex flex-col items-start justify-start">
                       <div className="inline-flex items-center justify-between self-stretch">
                         <div className="flex items-center justify-center gap-2 bg-white bg-opacity-70 ">

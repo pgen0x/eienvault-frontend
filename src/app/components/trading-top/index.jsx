@@ -61,25 +61,25 @@ export default function TrandingTop() {
           <div className="flex space-x-1 rounded-full bg-white py-2 px-1 mr-5">
             <div>
               <input className="hidden" type="radio" name="trendingTopOptions" id="optionTrending" onChange={(event) => handleTrendingTop(event, 'trending')} />
-              <label class={classRadio(TrendingTop, 'trending')} for="optionTrending">Trending</label>
+              <label className={classRadio(TrendingTop, 'trending')} for="optionTrending">Trending</label>
             </div>
             <div>
               <input className="hidden" type="radio" name="trendingTopOptions" id="optionTop" onChange={(event) => handleTrendingTop(event, 'top')} />
-              <label class={classRadio(TrendingTop, 'top')} for="optionTop">Top</label>
+              <label className={classRadio(TrendingTop, 'top')} for="optionTop">Top</label>
             </div>
           </div>
           <div className="flex space-x-1 rounded-full bg-white py-2 px-1 mr-5">
             <div>
               <input className="hidden" type="radio" name="rangeOptions" id="option1h" onChange={(event) => handleRange(event, '1h')} />
-              <label class={classRadio(Range, '1h')} for="option1h">1h</label>
+              <label className={classRadio(Range, '1h')} for="option1h">1h</label>
             </div>
             <div>
               <input className="hidden" type="radio" name="rangeOptions" id="option1d" onChange={(event) => handleRange(event, '1d')} />
-              <label class={classRadio(Range, '1d')} for="option1d">1d</label>
+              <label className={classRadio(Range, '1d')} for="option1d">1d</label>
             </div>
             <div>
               <input className="hidden" type="radio" name="rangeOptions" id="option7d" onChange={(event) => handleRange(event, '7d')} />
-              <label class={classRadio(Range, '7d')} for="option7d">7d</label>
+              <label className={classRadio(Range, '7d')} for="option7d">7d</label>
             </div>
           </div>
           <div className="flex-none w-52 space-x-1 px-1 mr-5">

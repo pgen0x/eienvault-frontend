@@ -227,11 +227,11 @@ export default function AccountPage() {
               <div className="flex space-x-1 rounded-full bg-white py-1 px-1 border border-gray-200">
                 <div>
                   <input className="hidden" type="radio" name="rangeOptions" id="optionGrid" onChange={(event) => handleGridList(event, 'grid')} />
-                  <label class={classRadio(gridList, 'grid')} for="optionGrid"><FontAwesomeIcon icon={faGrip} /></label>
+                  <label className={classRadio(gridList, 'grid')} for="optionGrid"><FontAwesomeIcon icon={faGrip} /></label>
                 </div>
                 <div>
                   <input className="hidden" type="radio" name="rangeOptions" id="optionList" onChange={(event) => handleGridList(event, 'list')} />
-                  <label class={classRadio(gridList, 'list')} for="optionList"><FontAwesomeIcon icon={faGripVertical} /></label>
+                  <label className={classRadio(gridList, 'list')} for="optionList"><FontAwesomeIcon icon={faGripVertical} /></label>
                 </div>
               </div>
             </div>
@@ -239,13 +239,13 @@ export default function AccountPage() {
           <div className="grid grid-cols-12 gap-6 my-5">
             {openFilter && (
               <div className="col-span-12 sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                <ul class="divide-y text-gray-900 bg-white p-5 rounded-xl font-bold">
+                <ul className="divide-y text-gray-900 bg-white p-5 rounded-xl font-bold">
                   <li>
                     <button className="w-full py-3 cursor-pointer items-center action flex justify-between" onClick={(event) => handleFilterCollapse('blockchain')}>
                       <span>Blockchain</span><FontAwesomeIcon icon={faChevronDown} />
                     </button>
                     <div className={`target py-5 ${filterCollapse.blockchain ? 'block' : 'hidden'}`}>
-                      <select id="country" name="country" autocomplete="country-name" class="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                      <select id="country" name="country" autocomplete="country-name" className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
                         <option>United States</option>
                         <option>Canada</option>
                         <option>Mexico</option>

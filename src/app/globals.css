@@ -55,6 +55,7 @@
 .swiper-pagination .swiper-pagination-bullet-active{
   width: 30px;
   border-radius: 10px;
+  background-color: #e22644;
 }
 
 @keyframes graphicx {

@@ -84,9 +84,9 @@ const SlideshowCreator = () => {
                       </div>
                       <div className="flex items-center justify-center gap-2 bg-white bg-opacity-70 mt-2">
                         <div className="text-xl2 font-medium leading-tight text-gray-600">
-                          Peluki Handal
+                          Pelukis Handal
                         </div>
-                        <div className="text-xs font-black leading-none text-primary-600">
+                        <div className="text-xs font-black leading-none text-primary-500">
                           <FontAwesomeIcon icon={faCircleCheck} />
                         </div>
                       </div>
@@ -110,11 +110,11 @@ const SlideshowCreator = () => {
                         </div>
                       </div>
                       <div className="flex w-full">
-                        <button className="w-full text-sm text-center font-semibold text-white bg-primary-600 rounded-full px-1 py-1">
+                        <button className="w-full text-sm text-center font-semibold text-white bg-primary-500 rounded-full px-1 py-1">
                           <FontAwesomeIcon icon={faPlus} />
                           <span className="ml-2 ">Follow</span>
                         </button>
-                        <button className="w-full text-sm text-center font-semibold text-primary-600 px-1 py-1">
+                        <button className="w-full text-sm text-center font-semibold text-primary-500 px-1 py-1">
                           Visit Profile
                         </button>
                       </div>

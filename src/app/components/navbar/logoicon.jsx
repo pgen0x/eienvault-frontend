@@ -8,7 +8,7 @@ const Logo = (props) => {
   return (
     <div className="flex w-1/6 cursor-pointer outline-none" {...props}>
       <div className="relative flex items-center">
-        <LogoIcon />
+        <img src="/logo.svg" className="w-32" />
       </div>
     </div>
   );

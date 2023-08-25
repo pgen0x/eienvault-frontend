@@ -50,7 +50,7 @@ export default function RightArea() {
               <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
                 <FontAwesomeIcon icon={faWallet} />
               </div>
-              <div className="text-base font-bold leading-normal">
+              <div className="text-base font-bold leading-normal text-white">
                 Connect your wallet
               </div>
             </button>

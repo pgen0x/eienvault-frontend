@@ -89,7 +89,7 @@ const Slideshow = () => {
                             <div className="text-xs font-medium leading-none text-neutral-700">
                               Ryuma
                             </div>
-                            <div className="text-xs font-black leading-none text-primary-600">
+                            <div className="text-xs font-black leading-none text-primary-500">
                               <FontAwesomeIcon icon={faCircleCheck} />
                             </div>
                           </div>
@@ -117,8 +117,8 @@ const Slideshow = () => {
                         </div>
                       </div>
                       <div className="flex mt-5 w-full">
-                        <FontAwesomeIcon className="mr-5 py-3 text-primary-600" icon={faCartPlus} />
-                        <button className="w-full text-center text-base font-bold text-white bg-primary-600 rounded-full px-4 py-2">
+                        <FontAwesomeIcon className="mr-5 py-3 text-primary-500" icon={faCartPlus} />
+                        <button className="w-full text-center text-base font-bold text-white bg-primary-500 rounded-full px-4 py-2">
                           Buy Now
                         </button>
                       </div>

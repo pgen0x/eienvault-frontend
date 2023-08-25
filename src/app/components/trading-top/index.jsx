@@ -43,7 +43,7 @@ export default function TrandingTop() {
 
   const classRadio = (params, value) => {
     const defaultCssRadio = "cursor-pointer w-full px-2.5 py-2 rounded-full text-sm font-medium leading-5 ";
-    return defaultCssRadio + (params === value ? 'text-white bg-sky-500 shadow' : 'text-sky-500 hover:bg-sky-200')
+    return defaultCssRadio + (params === value ? 'text-white bg-primary-500 shadow' : 'text-primary-500 hover:bg-sky-200')
   }
 
   const classFloor = (value) => {
@@ -120,7 +120,7 @@ export default function TrandingTop() {
           </div>
         </div>
         <div className="flex items-end px-3">
-          <a href="#" className="text-primary-600">See all</a>
+          <a href="#" className="text-primary-500">See all</a>
         </div>
       </div>
       <ul role="list" className="mt-2 flex flex-col flex-wrap h-[520px]">
@@ -128,7 +128,7 @@ export default function TrandingTop() {
           <li key={trade.email} className="gap-x-6 md:p-2 lg:py-2 md:w-4/12 lg:w-3/12">
             <div className="flex justify-between w-full px-5 py-2 bg-white rounded-md">
               <div className="flex min-w-0 gap-x-4 items-center">
-                <p className="text-sky-500 text-sm">{index + 1}.</p>
+                <p className="text-primary-500 text-sm">{index + 1}.</p>
                 <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={trade.imageUrl} alt="" />
                 <div className="min-w-0 flex-auto">
                   <p className="absolute text-sm font-semibold leading-6 text-gray-900">{trade.name}</p>

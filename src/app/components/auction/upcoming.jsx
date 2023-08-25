@@ -39,7 +39,7 @@ const UpcomingAuction = () => {
               <div className="text-xs font-medium leading-none text-neutral-700">
                 Ryuma
               </div>
-              <div className="text-xs font-black leading-none text-primary-600">
+              <div className="text-xs font-black leading-none text-primary-500">
                 <FontAwesomeIcon icon={faCircleCheck} />
               </div>
             </div>
@@ -73,7 +73,7 @@ const UpcomingAuction = () => {
                 <div className="text-xs font-medium leading-none text-neutral-700">
                   Ryuma
                 </div>
-                <div className="text-xs font-black leading-none text-primary-600">
+                <div className="text-xs font-black leading-none text-primary-500">
                   <FontAwesomeIcon icon={faCircleCheck} />
                 </div>
               </div>
@@ -106,7 +106,7 @@ const UpcomingAuction = () => {
                 <div className="text-xs font-medium leading-none text-neutral-700">
                   Ryuma
                 </div>
-                <div className="text-xs font-black leading-none text-primary-600">
+                <div className="text-xs font-black leading-none text-primary-500">
                   <FontAwesomeIcon icon={faCircleCheck} />
                 </div>
               </div>
@@ -141,7 +141,7 @@ const UpcomingAuction = () => {
                 <div className="text-xs font-medium leading-none text-neutral-700">
                   Ryuma
                 </div>
-                <div className="text-xs font-black leading-none text-primary-600">
+                <div className="text-xs font-black leading-none text-primary-500">
                   <FontAwesomeIcon icon={faCircleCheck} />
                 </div>
               </div>
@@ -174,7 +174,7 @@ const UpcomingAuction = () => {
                 <div className="text-xs font-medium leading-none text-neutral-700">
                   Ryuma
                 </div>
-                <div className="text-xs font-black leading-none text-primary-600">
+                <div className="text-xs font-black leading-none text-primary-500">
                   <FontAwesomeIcon icon={faCircleCheck} />
                 </div>
               </div>

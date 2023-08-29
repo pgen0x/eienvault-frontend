@@ -35,7 +35,7 @@ export function initializeApp() {
     },
   };
   const chains = [helachain, arbitrum, mainnet, polygon, polygonMumbai];
-  const projectId = '105cfd88ab227367c60a8c02319df236';
+  const projectId = process.env.NEXT_PUBLIC_PROJECTID;
   const { publicClient } = configureChains(chains, [
     w3mProvider({ projectId }),
   ]);

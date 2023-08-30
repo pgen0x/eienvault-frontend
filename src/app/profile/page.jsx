@@ -112,9 +112,9 @@ export default function ProfilePage() {
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
               </div>
               <div className="flex gap-1 text-white font-semibold mt-2">
-                <a className="bg-primary-500 rounded-full py-2 px-4" href="/profile/setting"><FontAwesomeIcon icon={faPenToSquare} /> Edit Profile</a>
-                <a className="bg-primary-500 rounded-full py-2 px-4" href="#">Sell</a>
-                <a className="bg-primary-500 rounded-full py-2 px-4" href="#"><FontAwesomeIcon icon={faShare} /></a>
+                <a className="bg-primary-500 hover:bg-primary-300 rounded-full py-2 px-4" href="/profile/setting"><FontAwesomeIcon icon={faPenToSquare} /> Edit Profile</a>
+                <a className="bg-primary-500 hover:bg-primary-300 rounded-full py-2 px-4" href="#">Sell</a>
+                <a className="bg-primary-500 hover:bg-primary-300 rounded-full py-2 px-4" href="#"><FontAwesomeIcon icon={faShare} /></a>
               </div>
             </div>
             <div className="flex flex-col">
@@ -257,13 +257,13 @@ export default function ProfilePage() {
               <div className="w-full grid grid-cols-12 gap-6 text-gray-900">
                 <div className="w-full col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-3 xl:col-span-3 2xl:col-span-3 mb-4">
                   <div className="flex flex-col border-2 border-gray-200 w-full h-full justify-center items-center rounded-2xl">
-                    <button className="bg-primary-500 w-fit text-white px-4 py-1 rounded-full" onClick={handleModalCreate}>Create a new collection</button>
-                    <button className="text-primary-500 font-semibold w-fit  px-4 py-1">Import existing collection</button>
+                    <button className="bg-primary-500 hover:bg-primary-300 w-fit text-white px-4 py-1 rounded-full" onClick={handleModalCreate}>Create a new collection</button>
+                    <button className="text-primary-500 hover:text-primary-300 font-semibold w-fit px-4 py-1">Import existing collection</button>
                   </div>
                 </div>
                 {collections.map((collection, index) => (
                   <div key={index} className="w-full group col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-3 xl:col-span-3 2xl:col-span-3 h-[300px]">
-                    <img className="w-full object-cover rounded-2xl relative z-10 group-hover:h-[150px] h-[200px] group-hover:transition-all ease-in-out duration-300" src="https://via.placeholder.com/325x175" />
+                    <img className="w-full object-cover rounded-2xl relative z-10 group-hover:h-[160px] h-[200px] group-hover:transition-all ease-in-out duration-300" src="https://via.placeholder.com/325x175" />
                     <div className="bg-white bg-opacity-50 rounded-tr-2xl rounded-tl-2xl w-fit flex gap-1 p-3 absolute -mt-[72px] ml-[20px] z-10">
                       <div className="w-fit">
                         <img src="https://via.placeholder.com/48x48" className="rounded-lg" />
@@ -286,7 +286,7 @@ export default function ProfilePage() {
                               <p className="font-bold">0.001 ETH</p>
                             </div>
                           </div>
-                          <a href="/collection" className="bg-white hover:bg-primary-50 text-primary-500 w-full mt-2 py-2 text-center rounded-full hidden group-hover:block group-hover:transition-all ease-in-out duration-300 delay-300">View Detail</a>
+                          <a href="/collection" className="bg-white hover:bg-primary-50 text-primary-500 w-full mt-2 text-center py-0 group-hover:py-2 overflow-hidden opacity-0 h-0 group-hover:h-auto group-hover:opacity-100 rounded-full group-hover:transition-all ease-in-out duration-800">View Detail</a>
                         </div>
                       </div>
                     </div>

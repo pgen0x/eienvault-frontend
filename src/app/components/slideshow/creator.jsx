@@ -51,7 +51,7 @@ const SlideshowCreator = () => {
   };
   return (
     <>
-      <button className="swiper-prev mr-2 px-4 py-2 rounded-full bg-primary-400 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
+      <button className="swiper-prev mr-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
       <Swiper
         className="!pl-5 !pb-5"
         slidesPerView={1}
@@ -126,7 +126,7 @@ const SlideshowCreator = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <button className="swiper-next ml-2 px-4 py-2 rounded-full bg-primary-400 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
+      <button className="swiper-next ml-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
     </>
   );
 };

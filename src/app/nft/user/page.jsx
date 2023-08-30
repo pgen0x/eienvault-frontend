@@ -115,6 +115,9 @@ export default function ProfileSetting() {
       </section>
       <div className="container m-auto mb-5">
         <section>
+          <div className="relative -mt-[5rem]">
+            <img className="w-36 rounded-lg shadow border-4 border-white" src="https://via.placeholder.com/100x100" />
+          </div>
           <div className="flex w-full mt-5 gap-4 flex-col xl:flex-row 2xl:flex-row lg:flex-row md:flex-col sm:flex-col">
             <div className="w-full flex flex-col gap-4">
               <img src="https://via.placeholder.com/600x600" className="w-full h-auto rounded-xl" />
@@ -147,7 +150,7 @@ export default function ProfileSetting() {
                   <h3 className="text-lg font-semibold">Propose an ETH lend to the owner</h3>
                   <p>No owner lender proposes the offer yet.</p>
                 </div>
-                <button onClick={handleModalPropose} className="w-full bg-primary-500 py-2 rounded-full text-white font-semibold">Propose an offer</button>
+                <button onClick={handleModalPropose} className="w-full bg-primary-500 hover:bg-primary-300 py-2 rounded-full text-white font-semibold">Propose an offer</button>
               </div>
             </div>
             <div className="w-full">
@@ -187,12 +190,16 @@ export default function ProfileSetting() {
                   <div className="flex gap-2 items-center">
                     <FontAwesomeIcon icon={faFingerprint} />
                     <span className="font-semibold">Etherscan</span>
-                    <FontAwesomeIcon className="text-primary-500" icon={faUpRightFromSquare} />
+                    <a href="#" className="flex justify-center items-center hover:bg-primary-300 w-8 h-8 rounded-full">
+                      <FontAwesomeIcon className="text-primary-500" icon={faUpRightFromSquare} />
+                    </a>
                   </div>
                   <div className="flex gap-2 items-center">
                     <FontAwesomeIcon icon={faEye} />
                     <span className="font-semibold">View original</span>
-                    <FontAwesomeIcon className="text-primary-500" icon={faUpRightFromSquare} />
+                    <a href="#" className="flex justify-center items-center hover:bg-primary-300 w-8 h-8 rounded-full">
+                      <FontAwesomeIcon className="text-primary-500" icon={faUpRightFromSquare} />
+                    </a>
                   </div>
                 </div>
                 <div className="w-full bg-white rounded-xl p-5 text-gray-900">
@@ -205,7 +212,7 @@ export default function ProfileSetting() {
                 <div className="w-full flex flex-col gap-4 bg-white rounded-xl p-5 text-gray-900">
                   <div className="flex gap-2">
                     <div>Auction starts in : <span className="font-bold">1d 1h 23m 40s</span></div>
-                    <div className="font-bold text-primary-500"><FontAwesomeIcon icon={faRotate} /> Refresh metadata</div>
+                    <a className="font-bold text-primary-500 hover:text-primary-300" href="#"><FontAwesomeIcon icon={faRotate} /> Refresh metadata</a>
                   </div>
                   <div className="flex gap-4">
                     <div className="bg-gray-100 rounded-lg flex-col justify-center w-full p-5 items-center">
@@ -223,14 +230,14 @@ export default function ProfileSetting() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex mt-5 w-full gap-4">
-                    <button className="w-full text-center text-base font-bold text-white bg-primary-500 rounded-full px-4 py-2" onClick={handleModalBuy}>
+                  <div className="flex mt-5 w-full items-center gap-4">
+                    <button className="w-full text-center text-base font-bold text-white bg-primary-500 rounded-full px-4 py-2 hover:bg-primary-300" onClick={handleModalBuy}>
                       Buy Now
                     </button>
-                    <FontAwesomeIcon className="mr-5 py-3 text-primary-500" icon={faCartPlus} />
+                    <FontAwesomeIcon className="mr-5 w-5 h-5 p-3 rounded-full text-primary-500 cursor-pointer hover:bg-primary-50 " icon={faCartPlus} />
                   </div>
                   <div>
-                    <button className="w-full text-center text-base font-bold text-primary-500 border border-primary-500 bg-white rounded-full px-4 py-2" onClick={handleModalBid}>
+                    <button className="w-full text-center text-base font-bold text-primary-500 hover:text-primary-300 border border-primary-500 bg-white rounded-full px-4 py-2" onClick={handleModalBid}>
                       Place a bid
                     </button>
                   </div>
@@ -597,10 +604,10 @@ export default function ProfileSetting() {
                         <div className="rounded-lg bg-primary-100 w-12 h-12 animate-ping"></div>
                         <div className="text-center">
                           <h3 className="text-lg font-bold">Loading</h3>
-                          {stepPropose == 2 &&(
+                          {stepPropose == 2 && (
                             <span>Proccesing your transactions</span>
                           )}
-                          {stepPropose == 4 &&(
+                          {stepPropose == 4 && (
                             <span>Sign your wallet to continue the transaction</span>
                           )}
                         </div>

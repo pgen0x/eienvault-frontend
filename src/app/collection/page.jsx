@@ -98,9 +98,9 @@ export default function AccountPage() {
                 <div>Address <span className="font-semibold">0x30756...Fb179</span></div>
               </div>
               <div className="flex gap-1 text-white font-semibold mt-2">
-                <button className="bg-primary-500 rounded-full py-2 px-4"><FontAwesomeIcon icon={faPenToSquare} /> Edit Collection</button>
-                <button className="bg-primary-500 rounded-full w-[40px] h-[40px]"><FontAwesomeIcon icon={faShare} /></button>
-                <button className="bg-primary-500 rounded-full w-[40px] h-[40px]"><FontAwesomeIcon icon={faEllipsisVertical} /></button>
+                <button className="bg-primary-500 hover:bg-primary-300 rounded-full py-2 px-4"><FontAwesomeIcon icon={faPenToSquare} /> Edit Collection</button>
+                <button className="bg-primary-500 hover:bg-primary-300 rounded-full w-[40px] h-[40px]"><FontAwesomeIcon icon={faShare} /></button>
+                <button className="bg-primary-500 hover:bg-primary-300 rounded-full w-[40px] h-[40px]"><FontAwesomeIcon icon={faEllipsisVertical} /></button>
               </div>
             </div>
             <div className="flex flex-col gap-2 rounded-lg border-2 border-gray-200 bg-white p-5 text-gray-900 w-96 text-sm">
@@ -140,7 +140,7 @@ export default function AccountPage() {
         <section>
           <div className="grid grid-cols-12 gap-1 my-5">
             <div className="col-span-12 sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-              <button className="bg-primary-500 rounded-full py-2 px-4" onClick={handleOpenFilter}><FontAwesomeIcon icon={faSliders} /> Filter</button>
+              <button className="bg-primary-500 hover:bg-primary-300 rounded-full py-2 px-4" onClick={handleOpenFilter}><FontAwesomeIcon icon={faSliders} /> Filter</button>
             </div>
             <div className="flex gap-2 col-span-12 sm:col-span-12 md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9">
               <div className="w-full border border-gray-200 inline-flex h-10 items-center justify-start gap-2 rounded-full border-0 bg-white px-4 dark:bg-gray-800 w-2/3">
@@ -253,8 +253,8 @@ export default function AccountPage() {
             <div className={`col-span-12 sm:col-span-12 ${openFilter ? 'md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9' : 'md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12'}`}>
               <div className="w-full grid grid-cols-12 gap-6 text-gray-900">
                 {collections.map((collection, index) => (
-                  <div key={index} className={`w-full group ${openFilter ? 'col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-4 2xl:col-span-4' : 'col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-3 xl:col-span-3 2xl:col-span-3'}`}>
-                    <img className="w-full object-cover rounded-2xl relative z-10 group-hover:h-[260px] h-[300px]" src="https://via.placeholder.com/325x265" />
+                  <div key={index} className={`w-full group h-[540px] ${openFilter ? 'col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-4 2xl:col-span-4' : 'col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-3 xl:col-span-3 2xl:col-span-3'}`}>
+                    <img className="w-full object-cover rounded-2xl relative z-10 group-hover:h-[250px] h-[300px] group-hover:transition-all ease-in-out duration-300" src="https://via.placeholder.com/325x265" />
                     <div className="w-full inline-flex flex-col relative -top-3 items-center justify-center lg:items-start">
                       <div className="w-full relative px-5 flex flex-row">
                         <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-br-2xl rounded-bl-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
@@ -301,7 +301,7 @@ export default function AccountPage() {
                                 Buy Now
                               </button>
                             </div>
-                            <a href="/nft/user" className="bg-white hover:bg-primary-50 text-primary-500 mt-2 w-full py-1 text-center rounded-full hidden group-hover:block">View Detail</a>
+                            <a href="/nft/user" className="bg-white hover:bg-primary-50 text-primary-500 mt-2 w-full py-0 text-center group-hover:py-2 overflow-hidden opacity-0 h-0 group-hover:h-auto group-hover:opacity-100 rounded-full group-hover:transition-all ease-in-out duration-800">View Detail</a>
                           </div>
                         </div>
                       </div>

@@ -51,7 +51,7 @@ const Slideshow = () => {
   };
   return (
     <>
-      <button className="swiper-prev mr-2 px-4 py-2 rounded-full bg-primary-400 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
+      <button className="swiper-prev mr-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
       <Swiper
         className="!pl-5 !pb-5"
         slidesPerView={1}
@@ -73,8 +73,8 @@ const Slideshow = () => {
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
-            <div className="w-full p-3 group">
-              <img className="w-full rounded-2xl z-10 group-hover:h-[210px] h-[250px]" src="https://via.placeholder.com/325x265" />
+            <div className="w-full p-3 group h-[494px]">
+              <img className="w-full rounded-2xl z-10 group-hover:h-[210px] h-[250px] group-hover:transition-all ease-in-out duration-300" src="https://via.placeholder.com/325x265" />
               <div className="w-full inline-flex flex-col items-center justify-center lg:items-start">
                 <div className="w-full px-5 relative flex flex-row">
                   <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-b-2xl bg-white/60 backdrop-blur p-3">
@@ -122,7 +122,7 @@ const Slideshow = () => {
                           Buy Now
                         </button>
                       </div>
-                      <a href="/nft/user" className="bg-white hover:bg-primary-50 text-primary-500 mt-2 w-full py-1 text-center rounded-full hidden group-hover:block">View Detail</a>
+                      <a href="/nft/user" className="bg-white hover:bg-primary-50 text-primary-500 mt-2 w-full py-0 text-center group-hover:py-2 overflow-hidden opacity-0 h-0 group-hover:h-auto group-hover:opacity-100 rounded-full group-hover:transition-all ease-in-out duration-800">View Detail</a>
                     </div>
                   </div>
                 </div>
@@ -131,7 +131,7 @@ const Slideshow = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <button className="swiper-next ml-2 px-4 py-2 rounded-full bg-primary-400 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
+      <button className="swiper-next ml-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
     </>
   );
 };

@@ -45,9 +45,9 @@ export default function Navbar() {
         }}
         tokenImages={{ HLUSD: '/helaicon.svg' }}
         themeVariables={{
-          '--w3m-accent-color': '#32A9ff',
+          '--w3m-accent-color': '#F34054',
           '--w3m-overlay-backdrop-filter': 'blur(8px)',
-          '--w3m-background-color': '#32A9ff',
+          '--w3m-background-color': '#F34054',
         }}
       />
     </>

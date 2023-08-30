@@ -1,7 +1,7 @@
 import Image from 'next/legacy/image';
-import { useIsMounted } from '@/app/lib/hooks/use-is-mounted';
-import { useIsDarkMode } from '@/app/lib/hooks/use-is-dark-mode';
-import LogoIcon from '@/app/assets/icon/logoicon';
+import { useIsMounted } from '@/hooks/use-is-mounted';
+import { useIsDarkMode } from '@/hooks/use-is-dark-mode';
+import LogoIcon from '@/assets/icon/logoicon';
 const Logo = (props) => {
   const isMounted = useIsMounted();
   const { isDarkMode } = useIsDarkMode();

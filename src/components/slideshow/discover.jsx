@@ -1,12 +1,12 @@
 // src/Slideshow.js
 import React, { useState, useEffect } from 'react';
 import { Slide } from 'react-slideshow-image';
-import Rightarrow from '@/app/assets/icon/rightarrow';
-import LeftArrow from '@/app/assets/icon/lefarrow';
-import Ethereum from '@/app/assets/icon/ethereum';
-import Cat from '@/app/assets/images/cat.png';
-import Hos from '@/app/assets/images/hos.jpg';
-import Avatar from '@/app/assets/images/avatar.jpg';
+import Rightarrow from '@/assets/icon/rightarrow';
+import LeftArrow from '@/assets/icon/lefarrow';
+import Ethereum from '@/assets/icon/ethereum';
+import Cat from '@/assets/images/cat.png';
+import Hos from '@/assets/images/hos.jpg';
+import Avatar from '@/assets/images/avatar.jpg';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -20,7 +20,7 @@ import {
   faMinus,
   faPlus,
   faEllipsis,
-  faCartPlus
+  faCartPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -53,16 +53,18 @@ const Slideshow = () => {
   };
   return (
     <>
-      <button className="swiper-prev mr-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
+      <button className="swiper-prev absolute -left-5 z-10 mr-2 rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300">
+        <FontAwesomeIcon icon={faChevronLeft} />
+      </button>
       <Swiper
-        className="!pl-5 !pb-5"
+        className="!pb-5 !pl-5"
         slidesPerView={1}
         scrollbar={{ draggable: true }}
         breakpoints={sliderBreakPoints}
         observer={true}
         navigation={{
-          nextEl: ".swiper-next",
-          prevEl: ".swiper-prev"
+          nextEl: '.swiper-next',
+          prevEl: '.swiper-prev',
         }}
         pagination={{
           dynamicBullets: true,
@@ -75,12 +77,15 @@ const Slideshow = () => {
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
-            <div className="w-full p-3 group h-[542px]">
-              <img className="w-full rounded-2xl z-10 group-hover:h-[250px] h-[290px] group-hover:transition-all ease-in-out duration-300" src="https://via.placeholder.com/325x265" />
-              <div className="w-full px-5 inline-flex flex-col items-center justify-center lg:items-start">
-                <div className="relative w-full flex flex-row">
-                  <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-br-2xl rounded-bl-2xl bg-white bg-opacity-50 p-3  backdrop-blur-xl">
-                    <div className="w-full flex flex-col items-start justify-start">
+            <div className="group h-[542px] w-full p-3">
+              <img
+                className="z-10 h-[290px] w-full rounded-2xl duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all"
+                src="https://via.placeholder.com/325x265"
+              />
+              <div className="inline-flex w-full flex-col items-center justify-center px-5 lg:items-start">
+                <div className="relative flex w-full flex-row">
+                  <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 p-3  backdrop-blur-xl">
+                    <div className="flex w-full flex-col items-start justify-start">
                       <div className="inline-flex items-center justify-between self-stretch">
                         <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2">
                           <img
@@ -100,7 +105,7 @@ const Slideshow = () => {
                           <FontAwesomeIcon icon={faEllipsis} />
                         </div>
                       </div>
-                      <div className="w-full inline-flex items-center justify-between gap-2 pt-1">
+                      <div className="inline-flex w-full items-center justify-between gap-2 pt-1">
                         <div className="text-xl2 font-medium leading-tight text-gray-600">
                           Sailing #215
                         </div>
@@ -108,23 +113,31 @@ const Slideshow = () => {
                           <Ethereum className="h-4 w-4" />
                         </div>
                       </div>
-                      <div className="flex justify-between w-full mt-5 px-2 py-2 bg-white rounded-md">
-                        <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-start truncate text-sm leading-5">
+                      <div className="mt-5 flex w-full justify-between rounded-md bg-white px-2 py-2">
+                        <div className="hidden shrink-0 truncate text-sm leading-5 sm:flex sm:flex-col sm:items-start">
                           <p>Price</p>
                           <p className="font-bold">0.39 ETH</p>
                         </div>
-                        <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-start truncate text-sm leading-5">
+                        <div className="hidden shrink-0 truncate text-sm leading-5 sm:flex sm:flex-col sm:items-start">
                           <p>Highest bid</p>
                           <p className="font-bold">No bids yet</p>
                         </div>
                       </div>
-                      <div className="flex mt-5 w-full items-center">
-                        <FontAwesomeIcon className="mr-5 w-5 h-5 p-3 rounded-full text-primary-500 cursor-pointer hover:bg-primary-50 " icon={faCartPlus} />
-                        <button className="w-full text-center text-base font-bold text-white bg-primary-500 rounded-full px-4 py-2 hover:bg-primary-300">
+                      <div className="mt-5 flex w-full items-center">
+                        <FontAwesomeIcon
+                          className="mr-5 h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 "
+                          icon={faCartPlus}
+                        />
+                        <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
                           Buy Now
                         </button>
                       </div>
-                      <a href="/nft/user" className="bg-white hover:bg-primary-50 text-primary-500 mt-2 w-full py-0 text-center group-hover:py-2 overflow-hidden opacity-0 h-0 group-hover:h-auto group-hover:opacity-100 rounded-full group-hover:transition-all ease-in-out duration-800">View Detail</a>
+                      <a
+                        href="/nft/user"
+                        className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all"
+                      >
+                        View Detail
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -133,7 +146,9 @@ const Slideshow = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <button className="swiper-next ml-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
+      <button className="swiper-next absolute -right-5 z-10 ml-2 rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300">
+        <FontAwesomeIcon icon={faChevronRight} />
+      </button>
     </>
   );
 };

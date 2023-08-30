@@ -1,12 +1,12 @@
-import Navbar from '@/app/components/navbar';
+import Navbar from '@/components/navbar';
 import './globals.css';
 import { Inter } from 'next/font/google';
 import { Providers } from './provider';
 import 'react-slideshow-image/dist/styles.css';
 import 'swiper/css';
 import 'swiper/css/autoplay';
-import Footer from './components/footer/main';
-import Sidebar from './components/sidebar';
+import Footer from '../components/footer/main';
+import Sidebar from '../components/sidebar';
 
 const inter = Inter({ subsets: ['latin'] });
 

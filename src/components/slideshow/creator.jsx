@@ -1,12 +1,12 @@
 // src/Slideshow.js
 import React, { useState, useEffect } from 'react';
 import { Slide } from 'react-slideshow-image';
-import Rightarrow from '@/app/assets/icon/rightarrow';
-import LeftArrow from '@/app/assets/icon/lefarrow';
-import Ethereum from '@/app/assets/icon/ethereum';
-import Cat from '@/app/assets/images/cat.png';
-import Hos from '@/app/assets/images/hos.jpg';
-import Avatar from '@/app/assets/images/avatar.jpg';
+import Rightarrow from '@/assets/icon/rightarrow';
+import LeftArrow from '@/assets/icon/lefarrow';
+import Ethereum from '@/assets/icon/ethereum';
+import Cat from '@/assets/images/cat.png';
+import Hos from '@/assets/images/hos.jpg';
+import Avatar from '@/assets/images/avatar.jpg';
 
 import { Autoplay, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -18,7 +18,7 @@ import {
   faMinus,
   faPlus,
   faEllipsis,
-  faCartPlus
+  faCartPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -51,16 +51,18 @@ const SlideshowCreator = () => {
   };
   return (
     <>
-      <button className="swiper-prev mr-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
+      <button className="swiper-prev absolute -left-5 z-10 mr-2 rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300">
+        <FontAwesomeIcon icon={faChevronLeft} />
+      </button>
       <Swiper
-        className="!pl-5 !pb-5"
+        className="!pb-5 !pl-5"
         slidesPerView={1}
         scrollbar={{ draggable: true }}
         breakpoints={sliderBreakPoints}
         observer={true}
         navigation={{
-          nextEl: ".swiper-next",
-          prevEl: ".swiper-prev"
+          nextEl: '.swiper-next',
+          prevEl: '.swiper-prev',
         }}
         pagination={{
           dynamicBullets: true,
@@ -73,16 +75,22 @@ const SlideshowCreator = () => {
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
-            <div className="w-[280px] inline-flex flex-col items-center justify-center lg:items-start">
+            <div className="inline-flex w-[280px] flex-col items-center justify-center lg:items-start">
               <div className="relative flex flex-row">
                 <div className="inline-flex flex-col items-start justify-start">
-                  <img className="w-full rounded-tr-2xl rounded-tl-2xl z-10" src="https://via.placeholder.com/287x149" />
-                  <div className="p-5 bg-white w-[280px] rounded-br-2xl rounded-bl-2xl gap-4">
-                    <div className="w-full flex flex-col items-start justify-start">
-                      <div className="flex items-center justify-center -mt-[70px] z-10">
-                        <img className="h-20 w-20 rounded-full border-[3px]" src="https://via.placeholder.com/70x70" />
+                  <img
+                    className="z-10 w-full rounded-tl-2xl rounded-tr-2xl"
+                    src="https://via.placeholder.com/287x149"
+                  />
+                  <div className="w-[280px] gap-4 rounded-bl-2xl rounded-br-2xl bg-white p-5">
+                    <div className="flex w-full flex-col items-start justify-start">
+                      <div className="z-10 -mt-[70px] flex items-center justify-center">
+                        <img
+                          className="h-20 w-20 rounded-full border-[3px]"
+                          src="https://via.placeholder.com/70x70"
+                        />
                       </div>
-                      <div className="flex items-center justify-center gap-2 bg-white bg-opacity-70 mt-2">
+                      <div className="mt-2 flex items-center justify-center gap-2 bg-white bg-opacity-70">
                         <div className="text-xl2 font-medium leading-tight text-gray-600">
                           Pelukis Handal
                         </div>
@@ -90,31 +98,32 @@ const SlideshowCreator = () => {
                           <FontAwesomeIcon icon={faCircleCheck} />
                         </div>
                       </div>
-                      <div className="inline-flex text-sm items-center justify-between self-stretch pt-5 text-ellipsis overflow-hidden h-14">
+                      <div className="inline-flex h-14 items-center justify-between self-stretch overflow-hidden text-ellipsis pt-5 text-sm">
                         <p>
-                          In our group, we specialize in creating awe-inspiring paintinng
+                          In our group, we specialize in creating awe-inspiring
+                          paintinng
                         </p>
                       </div>
-                      <div className="flex text-center text-sm justify-between my-2 w-full py-2 bg-white rounded-md">
-                        <div className="flex flex-col w-full">
+                      <div className="my-2 flex w-full justify-between rounded-md bg-white py-2 text-center text-sm">
+                        <div className="flex w-full flex-col">
                           <div className="font-semibold">$678M</div>
                           <div className="">Volume</div>
                         </div>
-                        <div className="flex flex-col w-full">
+                        <div className="flex w-full flex-col">
                           <div className="font-semibold">237</div>
                           <div className="">Drops</div>
                         </div>
-                        <div className="flex flex-col w-full">
+                        <div className="flex w-full flex-col">
                           <div className="font-semibold">128</div>
                           <div className="">Artist</div>
                         </div>
                       </div>
                       <div className="flex w-full gap-2">
-                        <button className="w-full text-sm text-center font-semibold text-white bg-primary-500 hover:bg-primary-300 rounded-full p-1">
+                        <button className="w-full rounded-full bg-primary-500 p-1 text-center text-sm font-semibold text-white hover:bg-primary-300">
                           <FontAwesomeIcon icon={faPlus} />
                           <span className="ml-2 ">Follow</span>
                         </button>
-                        <button className="w-full text-sm text-center font-semibold text-primary-500 px-1 py-1 hover:bg-primary-50 rounded-full p-1">
+                        <button className="w-full rounded-full p-1 px-1 py-1 text-center text-sm font-semibold text-primary-500 hover:bg-primary-50">
                           Visit Profile
                         </button>
                       </div>
@@ -126,7 +135,9 @@ const SlideshowCreator = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <button className="swiper-next ml-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
+      <button className="swiper-next absolute -right-5 z-10 ml-2 rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300">
+        <FontAwesomeIcon icon={faChevronRight} />
+      </button>
     </>
   );
 };

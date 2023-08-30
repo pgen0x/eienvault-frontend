@@ -9,15 +9,15 @@ import {
 import { useState, useEffect, Fragment } from 'react';
 import { Switch } from '@headlessui/react';
 import { useTheme } from 'next-themes';
-import { fetchData } from '../eth/wagmiConfig';
-import { Web3Button, useWeb3ModalEvents } from '@web3modal/react';
+import { Web3Button, useWeb3Modal, useWeb3ModalEvents } from '@web3modal/react';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { Menu, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import { useDisconnect } from 'wagmi';
 import axios from 'axios';
-import { useAuth } from '@/app/lib/hooks/AuthContext';
-import { useSidebar } from '../../lib/hooks/SidebarContext';
+import { useAuth } from '@/hooks/AuthContext';
+import { useSidebar } from '../../hooks/SidebarContext';
+import { useAccount } from 'wagmi';
 
 export default function RightArea() {
   const { theme, setTheme } = useTheme();
@@ -26,12 +26,13 @@ export default function RightArea() {
     setEnabled(!enabled); // Toggle the state
     setTheme(enabled ? 'light' : 'dark'); // Update the theme
   };
-  const { isConnected, open, close, isOpen, accounts, address } = fetchData();
   const { disconnect } = useDisconnect();
   const [isClient, setIsClient] = useState(false);
   const [isConnect, setIsConnect] = useState(false);
   const { token, login, logout } = useAuth();
   const { toggleSidebar } = useSidebar();
+  const { isConnected } = useAccount();
+  const { isOpen, open, close, setDefaultChain } = useWeb3Modal();
 
   useWeb3ModalEvents((event) => {
     console.log(event);
@@ -89,7 +90,7 @@ export default function RightArea() {
           ) : (
             <button
               onClick={() => open()}
-              className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 hover:bg-primary-300 px-4"
+              className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 hover:bg-primary-300"
             >
               <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
                 <FontAwesomeIcon icon={faWallet} />

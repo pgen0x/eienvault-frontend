@@ -1,16 +1,16 @@
 'use client';
-import { useIsMounted } from '@/app/lib/hooks/use-is-mounted';
-import SlideshowDiscover from '@/app/components/slideshow/discover';
-import SlideshowActivities from '@/app/components/slideshow/activities';
-import SlideshowCreator from '@/app/components/slideshow/creator';
-import Avatar from '@/app/assets/images/avatar.jpg';
+import { useIsMounted } from '@/hooks/use-is-mounted';
+import SlideshowDiscover from '@/components/slideshow/discover';
+import SlideshowActivities from '@/components/slideshow/activities';
+import SlideshowCreator from '@/components/slideshow/creator';
+import Avatar from '@/assets/images/avatar.jpg';
 import Image from 'next/image';
-import TrendingTop from '@/app/components/trading-top';
-import Auction from '@/app/components/auction';
-import UpcomingAuction from '@/app/components/auction/upcoming';
+import TrendingTop from '@/components/trading-top';
+import Auction from '@/components/auction';
+import UpcomingAuction from '@/components/auction/upcoming';
 import { Tab } from '@headlessui/react';
-import Line from '@/app/assets/icon/line3';
-import LineRound from '@/app/assets/icon/line4';
+import Line from '@/assets/icon/line3';
+import LineRound from '@/assets/icon/line4';
 import {
   faCircleCheck,
   faChevronRight,
@@ -19,15 +19,14 @@ import {
   faPlus,
   faEllipsis,
   faCartPlus,
-  faEnvelope
+  faEnvelope,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faDiscord,
   faMedium,
-  faTwitter
+  faTwitter,
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import LogoIcon from './assets/icon/logoicon';
 
 export default function Home() {
   const isMounted = useIsMounted();
@@ -37,14 +36,18 @@ export default function Home() {
 
   return (
     <>
-      <div className="relative homepage">
+      <div className="homepage relative">
         <Auction />
-        <section className="relative -mt-24 pt-10 flex h-[690px] w-full flex-col gap-4 bg-gray-100 text-black px-10">
+        <section className="relative -mt-24 flex h-[690px] w-full flex-col gap-4 bg-gray-100 px-10 pt-10 text-black">
           <div className="container mx-auto">
             <Tab.Group>
               <Tab.List>
-                <Tab><strong className="pr-5">Collections</strong></Tab>
-                <Tab><strong className="text-neutral-400">Marketplace</strong></Tab>
+                <Tab>
+                  <strong className="pr-5">Collections</strong>
+                </Tab>
+                <Tab>
+                  <strong className="text-neutral-400">Marketplace</strong>
+                </Tab>
               </Tab.List>
               <Tab.Panels className="pt-4">
                 <Tab.Panel>
@@ -58,65 +61,90 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="w-full section-discover text-black">
+          <div className="section-discover w-full text-black">
             <div className="container mx-auto flex items-center justify-center">
-              <div className="flex-initial w-[29%]">
-                <h2 className="text-3xl">Discover Our Best <br />Collections For you to buy.</h2>
-                <p>Eien vault is a marketplace for nft, a one of a kind digital asset that you can truly own.</p>
-                <button className="text-center text-base font-bold text-white rounded-full bg-primary-500 px-4 py-2 mt-5 hover:bg-primary-300">
+              <div className="w-[29%] flex-initial">
+                <h2 className="text-3xl">
+                  Discover Our Best <br />
+                  Collections For you to buy.
+                </h2>
+                <p>
+                  Eien vault is a marketplace for nft, a one of a kind digital
+                  asset that you can truly own.
+                </p>
+                <button className="mt-5 rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
                   DIscover more
                 </button>
               </div>
-              <div className="flex-initial w-[69%] relative flex items-center justify-center mb-5">
+              <div className="relative mb-5 flex w-[69%] flex-initial items-center justify-center">
                 <SlideshowDiscover />
               </div>
             </div>
           </div>
         </section>
         <section>
-          <div className="w-full text-black bg-gray-100">
-            <div className="container mx-auto py-4 px-4">
+          <div className="w-full bg-gray-100 text-black">
+            <div className="container mx-auto px-4 py-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-semibold text-xl">Recent Activities</h2>
-                <a href="#" title="See all" className="text-primary-500">See all</a>
+                <h2 className="text-xl font-semibold">Recent Activities</h2>
+                <a href="#" title="See all" className="text-primary-500">
+                  See all
+                </a>
               </div>
-              <div className="flex-initial w-full relative flex items-center justify-center mb-5">
+              <div className="relative mb-5 flex w-full flex-initial items-center justify-center">
                 <SlideshowActivities />
               </div>
             </div>
           </div>
         </section>
         <section>
-          <div className="w-full text-black bg-gray-100">
-            <div className="container mx-auto py-4 px-4">
+          <div className="w-full bg-gray-100 text-black">
+            <div className="container mx-auto px-4 py-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-semibold text-xl">Upcoming auctions</h2>
-                <a href="#" title="See all" className="text-primary-500">See all</a>
+                <h2 className="text-xl font-semibold">Upcoming auctions</h2>
+                <a href="#" title="See all" className="text-primary-500">
+                  See all
+                </a>
               </div>
               <UpcomingAuction />
             </div>
           </div>
         </section>
         <section>
-          <div className="flex justify-between text-black bg-gray-100 bg-orange-100 h-[400px] block overflow-hidden">
-            <div className="w-max-full w-full relative left-0 -bottom-[6rem]">
+          <div className="block flex h-[400px] justify-between overflow-hidden bg-gray-100 bg-orange-100 text-black">
+            <div className="w-max-full relative -bottom-[6rem] left-0 w-full">
               {/* <Line /> */}
             </div>
             <div className="flex-2 w-full">
-              <div className="relative block rounded-full w-[40vw] h-[40vw] -top-[50px] bg-red-400">
-                <div className="w-[90%] flex relative top-[130px] mx-auto justify-center items-center">
-                  <div className="w-full text-center text-gray-800 bg-white/60 px-3 backdrop-blur rounded-lg p-10">
-                    <h2 className="text-2xl font-bold">Don't miss a drop</h2>
-                    <p>Subscribe to our real time newspaper and be the first to know<br /> about upcoming drops</p>
-                    <form className="flex gap-2 w-full mt-5">
-                      <input type="text" className="w-full rounded-full bg-white border-0 focus:ring-primary-500 mt-2" placeholder="Your email address" />
-                      <button type="submit" className="bg-primary-500 hover:bg-primary-300 px-5 py-2 rounded-full text-white">Subscribe</button>
+              <div className="relative -top-[50px] block h-[40vw] w-[40vw] rounded-full bg-red-400">
+                <div className="relative top-[130px] mx-auto flex w-[90%] items-center justify-center">
+                  <div className="w-full rounded-lg bg-white/60 p-10 px-3 text-center text-gray-800 backdrop-blur">
+                    <h2 className="text-2xl font-bold">
+                      Don`&lsquo;`t miss a drop
+                    </h2>
+                    <p>
+                      Subscribe to our real time newspaper and be the first to
+                      know
+                      <br /> about upcoming drops
+                    </p>
+                    <form className="mt-5 flex w-full gap-2">
+                      <input
+                        type="text"
+                        className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500"
+                        placeholder="Your email address"
+                      />
+                      <button
+                        type="submit"
+                        className="rounded-full bg-primary-500 px-5 py-2 text-white hover:bg-primary-300"
+                      >
+                        Subscribe
+                      </button>
                     </form>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="w-full flex flex-wrap self-end">
+            <div className="flex w-full flex-wrap self-end">
               <div className="relative -left-[100px]">
                 <LineRound />
               </div>
@@ -124,108 +152,162 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="w-full text-black bg-gray-100">
-            <div className="container mx-auto py-4 px-4">
+          <div className="w-full bg-gray-100 text-black">
+            <div className="container mx-auto px-4 py-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-semibold text-xl">Trending creator</h2>
-                <a href="#" title="See all" className="text-primary-500">See all</a>
+                <h2 className="text-xl font-semibold">Trending creator</h2>
+                <a href="#" title="See all" className="text-primary-500">
+                  See all
+                </a>
               </div>
-              <div className="flex-initial w-full relative flex items-center justify-center mb-5">
+              <div className="relative mb-5 flex w-full flex-initial items-center justify-center">
                 <SlideshowCreator />
               </div>
             </div>
           </div>
         </section>
         <section>
-          <div className="w-full h-[480px] text-black bg-gray-100">
-            <div className="container mx-auto py-4 px-4">
+          <div className="h-[480px] w-full bg-gray-100 text-black">
+            <div className="container mx-auto px-4 py-4">
               <div className="flex items-center justify-between">
-                <div className="w-full h-fit relative">
-                  <img className="rounded-2xl shadow" src="https://via.placeholder.com/344x344" />
-                  <img className="left-[127px] top-[172px] absolute rounded-2xl shadow" src="https://via.placeholder.com/243x245" />
-                  <img className="left-[297px] top-[34px] absolute rounded-2xl shadow" src="https://via.placeholder.com/243x327" />
+                <div className="relative h-fit w-full">
+                  <img
+                    className="rounded-2xl shadow"
+                    src="https://via.placeholder.com/344x344"
+                  />
+                  <img
+                    className="absolute left-[127px] top-[172px] rounded-2xl shadow"
+                    src="https://via.placeholder.com/243x245"
+                  />
+                  <img
+                    className="absolute left-[297px] top-[34px] rounded-2xl shadow"
+                    src="https://via.placeholder.com/243x327"
+                  />
                 </div>
-                <div className="w-full flex flex-col px-[150px]">
-                  <h2 className="font-bold text-2xl">Discover hidden gems</h2>
-                  <p className="my-3">Eien vault is your window into a world of unique and extraordinary digital art. Immerse yourself in a diverse collection of NFTs created by talented artists from around the globe.</p>
-                  <a href="#" className="text-center w-full rounded-full bg-primary-500 hover:bg-primary-300 px-3 py-2 text-white">Learn more</a>
+                <div className="flex w-full flex-col px-[150px]">
+                  <h2 className="text-2xl font-bold">Discover hidden gems</h2>
+                  <p className="my-3">
+                    Eien vault is your window into a world of unique and
+                    extraordinary digital art. Immerse yourself in a diverse
+                    collection of NFTs created by talented artists from around
+                    the globe.
+                  </p>
+                  <a
+                    href="#"
+                    className="w-full rounded-full bg-primary-500 px-3 py-2 text-center text-white hover:bg-primary-300"
+                  >
+                    Learn more
+                  </a>
                 </div>
               </div>
             </div>
           </div>
         </section>
         <section>
-          <div className="w-full bg-amber-100 pt-5 h-[550px]">
-            <div className="relative flex justify-between container mx-auto bg-white bg-opacity-50 rounded-2xl backdrop-blur-xl p-5 z-[1]">
-              <div className="text-slate-600 flex-1">
-                <h2 className="font-bold text-3xl">Use your NFTs to get a crypto <br />loan</h2>
-                <p className="mt-3 py-5 font-semibold">Use your NFT as collateral to borrow wETH, DAI, or USDC <br />from lenders. Repay your loan, and you get your NFT<br /> back. No auto-liquidations! 0% borrower fees!</p>
+          <div className="h-[550px] w-full bg-amber-100 pt-5">
+            <div className="container relative z-[1] mx-auto flex justify-between rounded-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
+              <div className="flex-1 text-slate-600">
+                <h2 className="text-3xl font-bold">
+                  Use your NFTs to get a crypto <br />
+                  loan
+                </h2>
+                <p className="mt-3 py-5 font-semibold">
+                  Use your NFT as collateral to borrow wETH, DAI, or USDC <br />
+                  from lenders. Repay your loan, and you get your NFT
+                  <br /> back. No auto-liquidations! 0% borrower fees!
+                </p>
                 <div className="my-5">
-                  <button className="text-white bg-primary-500 hover:bg-primary-300 font-bold rounded-full px-5 py-2">Get loan now</button>
-                  <button className="ml-1 bg-white hover:bg-primary-50 text-primary-500 font-bold rounded-full px-5 py-2">I want to lend</button>
+                  <button className="rounded-full bg-primary-500 px-5 py-2 font-bold text-white hover:bg-primary-300">
+                    Get loan now
+                  </button>
+                  <button className="ml-1 rounded-full bg-white px-5 py-2 font-bold text-primary-500 hover:bg-primary-50">
+                    I want to lend
+                  </button>
                 </div>
                 <div className="flex w-full justify-between p-5">
                   <div className="">
-                    <h3 className="text-3xl font-bold text-center">$450M+</h3>
+                    <h3 className="text-center text-3xl font-bold">$450M+</h3>
                     <p className="">Total volume loan (USD)</p>
                   </div>
                   <div className="">
-                    <h3 className="text-3xl font-bold text-center">20k+</h3>
+                    <h3 className="text-center text-3xl font-bold">20k+</h3>
                     <p className="">Total member of loan</p>
                   </div>
                   <div className="">
-                    <h3 className="text-3xl font-bold text-center">$8k</h3>
+                    <h3 className="text-center text-3xl font-bold">$8k</h3>
                     <p className="">Average loan size</p>
                   </div>
                 </div>
               </div>
-              <div className="text-black flex-1">
-                <img className="w-full" src="https://via.placeholder.com/720x405" />
+              <div className="flex-1 text-black">
+                <img
+                  className="w-full"
+                  src="https://via.placeholder.com/720x405"
+                />
               </div>
             </div>
-            <div className="relative -left-[30px] bottom-[200px] bg-red-400 rounded-full w-64 h-64"></div>
+            <div className="relative -left-[30px] bottom-[200px] h-64 w-64 rounded-full bg-red-400"></div>
           </div>
         </section>
-        <section className="w-full relative -mt-[50px] px-[50px]">
-          <div className="bg-white rounded-tl-2xl rounded-tr-2xl p-[30px]">
+        <section className="relative -mt-[50px] w-full px-[50px]">
+          <div className="rounded-tl-2xl rounded-tr-2xl bg-white p-[30px]">
             <div className="flex">
               <div className="w-[40vw]">
                 <div className="w-64">
                   <img src="logo.svg" className="w-36" />
                 </div>
-                <div className="text-gray-900 mt-5">
-                  <p>EienVault is at the forefront of the digital revolution in the art world. We invite you to embrace this exciting new era and discover the limitless possibilities that NFT art offers</p>
+                <div className="mt-5 text-gray-900">
+                  <p>
+                    EienVault is at the forefront of the digital revolution in
+                    the art world. We invite you to embrace this exciting new
+                    era and discover the limitless possibilities that NFT art
+                    offers
+                  </p>
                 </div>
-                <div className="flex flex-col text-primary-500 py-5">
+                <div className="flex flex-col py-5 text-primary-500">
                   <h4 className="text-xl font-bold">Join our community</h4>
-                  <ul className="flex justify-between w-fit gap-2 mt-3">
+                  <ul className="mt-3 flex w-fit justify-between gap-2">
                     <li className="text-2xl">
-                      <a href="#" className="flex hover:bg-primary-100 rounded-full w-11 h-11 items-center justify-center">
+                      <a
+                        href="#"
+                        className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100"
+                      >
                         <FontAwesomeIcon icon={faTwitter} />
                       </a>
                     </li>
                     <li className="text-2xl">
-                      <a href="#" className="flex hover:bg-primary-100 rounded-full w-11 h-11 items-center justify-center">
+                      <a
+                        href="#"
+                        className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100"
+                      >
                         <FontAwesomeIcon icon={faDiscord} />
                       </a>
                     </li>
                     <li className="text-2xl">
-                      <a href="#" className="flex hover:bg-primary-100 rounded-full w-11 h-11 items-center justify-center">
+                      <a
+                        href="#"
+                        className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100"
+                      >
                         <FontAwesomeIcon icon={faMedium} />
                       </a>
                     </li>
                     <li className="text-2xl">
-                      <a href="#" className="flex hover:bg-primary-100 rounded-full w-11 h-11 items-center justify-center">
+                      <a
+                        href="#"
+                        className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100"
+                      >
                         <FontAwesomeIcon icon={faEnvelope} />
                       </a>
                     </li>
                   </ul>
                 </div>
               </div>
-              <div className="flex justify-evenly w-full">
+              <div className="flex w-full justify-evenly">
                 <div className="">
-                  <h2 className="text-primary-500 font-bold text-xl">Company</h2>
-                  <ul className="text-gray-900 mt-5">
+                  <h2 className="text-xl font-bold text-primary-500">
+                    Company
+                  </h2>
+                  <ul className="mt-5 text-gray-900">
                     <li className="py-2">What is NFT ?</li>
                     <li className="py-2">EienVault</li>
                     <li className="py-2">Publish an NFT with us</li>
@@ -234,16 +316,18 @@ export default function Home() {
                   </ul>
                 </div>
                 <div className="">
-                  <h2 className="text-primary-500 font-bold text-xl">EienVault</h2>
-                  <ul className="text-gray-900 mt-5">
+                  <h2 className="text-xl font-bold text-primary-500">
+                    EienVault
+                  </h2>
+                  <ul className="mt-5 text-gray-900">
                     <li className="py-2">Displaying NFTs</li>
                     <li className="py-2">Report security issues</li>
                     <li className="py-2">Career</li>
                   </ul>
                 </div>
                 <div className="">
-                  <h2 className="text-primary-500 font-bold text-xl">Other</h2>
-                  <ul className="text-gray-900 mt-5">
+                  <h2 className="text-xl font-bold text-primary-500">Other</h2>
+                  <ul className="mt-5 text-gray-900">
                     <li className="py-2">Get help</li>
                     <li className="py-2">Term of use</li>
                     <li className="py-2">Creator term of services</li>
@@ -251,16 +335,16 @@ export default function Home() {
                   </ul>
                 </div>
                 <div className="">
-                  <h2 className="text-primary-500 font-bold text-xl">Stats</h2>
-                  <ul className="text-gray-900 mt-5">
+                  <h2 className="text-xl font-bold text-primary-500">Stats</h2>
+                  <ul className="mt-5 text-gray-900">
                     <li className="py-2">Ranking</li>
                     <li className="py-2">Activity</li>
                   </ul>
                 </div>
               </div>
             </div>
-            <div className="border-t border-primary-500 text-gray-900 py-5 mt-5">
-              2023  EienVault, inc
+            <div className="mt-5 border-t border-primary-500 py-5 text-gray-900">
+              2023 EienVault, inc
             </div>
           </div>
         </section>

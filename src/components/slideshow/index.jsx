@@ -1,12 +1,12 @@
 // src/Slideshow.js
 import React, { useState, useEffect } from 'react';
 import { Slide } from 'react-slideshow-image';
-import Rightarrow from '@/app/assets/icon/rightarrow';
-import LeftArrow from '@/app/assets/icon/lefarrow';
-import Ethereum from '@/app/assets/icon/ethereum';
-import Cat from '@/app/assets/images/cat.png';
-import Hos from '@/app/assets/images/hos.jpg';
-import Avatar from '@/app/assets/images/avatar.jpg';
+import Rightarrow from '@/assets/icon/rightarrow';
+import LeftArrow from '@/assets/icon/lefarrow';
+import Ethereum from '@/assets/icon/ethereum';
+import Cat from '@/assets/images/cat.png';
+import Hos from '@/assets/images/hos.jpg';
+import Avatar from '@/assets/images/avatar.jpg';
 
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -52,7 +52,9 @@ const Slideshow = () => {
   };
   return (
     <>
-      <button className="swiper-prev mr-2 px-4 py-2 rounded-full bg-primary-400 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
+      <button className="swiper-prev absolute -left-5 z-10 mr-2 rounded-full bg-primary-400 px-4 py-2 text-white">
+        <FontAwesomeIcon icon={faChevronLeft} />
+      </button>
       <Swiper
         className="!pb-5"
         slidesPerView={1}
@@ -60,8 +62,8 @@ const Slideshow = () => {
         breakpoints={sliderBreakPoints}
         observer={true}
         navigation={{
-          nextEl: ".swiper-next",
-          prevEl: ".swiper-prev"
+          nextEl: '.swiper-next',
+          prevEl: '.swiper-prev',
         }}
         pagination={{
           dynamicBullets: true,
@@ -77,7 +79,7 @@ const Slideshow = () => {
             <div className="inline-flex w-full flex-col items-center justify-center gap-2 p-2 lg:items-start lg:px-10 lg:pt-16">
               <div className="flex flex-row items-center rounded-lg bg-[#fff1d4] px-2 py-2">
                 <span className="mr-2 h-1 w-1 animate-ping rounded-full bg-red-400 opacity-90"></span>
-                <div className="whitespace-nowrap font-semibold text-xs text-gray-900">
+                <div className="whitespace-nowrap text-xs font-semibold text-gray-900">
                   Live mint and auction
                 </div>
               </div>
@@ -173,25 +175,27 @@ const Slideshow = () => {
                     </div>
                   </div>
                   <div className="inline-flex items-center justify-start gap-2">
-                      <div className="text-sm font-medium leading-tight text-gray-600">
-                        5 minted
-                      </div>
-                      <div className="h-1 w-1 rounded-full bg-gray-600" />
-                      <div className="text-sm font-medium leading-tight text-gray-600">
-                        12 per wallet
-                      </div>
-                      <div className="h-1 w-1 rounded-full bg-gray-600" />
-                      <div className="text-sm font-medium leading-tight text-gray-600">
-                        1d 2h 32m 12s
-                      </div>
+                    <div className="text-sm font-medium leading-tight text-gray-600">
+                      5 minted
                     </div>
+                    <div className="h-1 w-1 rounded-full bg-gray-600" />
+                    <div className="text-sm font-medium leading-tight text-gray-600">
+                      12 per wallet
+                    </div>
+                    <div className="h-1 w-1 rounded-full bg-gray-600" />
+                    <div className="text-sm font-medium leading-tight text-gray-600">
+                      1d 2h 32m 12s
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </SwiperSlide>
         ))}
       </Swiper>
-      <button className="swiper-next ml-2 px-4 py-2 rounded-full bg-primary-400 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
+      <button className="swiper-next absolute -right-5 z-10 ml-2 rounded-full bg-primary-400 px-4 py-2 text-white">
+        <FontAwesomeIcon icon={faChevronRight} />
+      </button>
     </>
   );
 };

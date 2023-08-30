@@ -65,7 +65,7 @@ export default function AccountPage() {
 
   const classRadio = (params, value) => {
     const defaultCssRadio = "cursor-pointer flex w-8 h-8 justify-center items-center rounded-full text-sm font-medium leading-5 ";
-    return defaultCssRadio + (params === value ? 'text-white bg-primary-500 shadow' : 'text-primary-500 hover:bg-primary-200')
+    return defaultCssRadio + (params === value ? 'text-white bg-primary-500 shadow' : 'text-primary-500 hover:bg-primary-300')
   }
 
   const handleGridList = (event, target) => {

@@ -150,7 +150,7 @@ export default function RightArea() {
           ) : (
             <button
               onClick={() => open()}
-              className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4"
+              className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 hover:bg-primary-300 px-4"
             >
               <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
                 <FontAwesomeIcon icon={faWallet} />

@@ -595,7 +595,7 @@ export default function ProfileSetting() {
                         <div>Annual percentage rate</div>
                         <div>8.2%</div>
                       </div>
-                      <button disabled={stepPropose == 3 ? !agreePropose : false} className="disabled:bg-primary-200 bg-primary-500 w-full rounded-full py-3 text-white font-semibold" onClick={() => handleStepPropose(stepPropose + 1)}>Propose an offer</button>
+                      <button disabled={stepPropose == 3 ? !agreePropose : false} className="disabled:bg-primary-00 bg-primary-500 w-full rounded-full py-3 text-white font-semibold" onClick={() => handleStepPropose(stepPropose + 1)}>Propose an offer</button>
                     </section>
                   )}
                   {(stepPropose == 2 || stepPropose == 4) && (

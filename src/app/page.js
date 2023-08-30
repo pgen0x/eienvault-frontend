@@ -63,11 +63,9 @@ export default function Home() {
               <div className="flex-initial w-[29%]">
                 <h2 className="text-3xl">Discover Our Best <br />Collections For you to buy.</h2>
                 <p>Eien vault is a marketplace for nft, a one of a kind digital asset that you can truly own.</p>
-                <div className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-full bg-primary-500 px-4 py-2 mt-5">
-                  <button className="text-center text-base font-bold leading-normal text-white">
-                    DIscover more
-                  </button>
-                </div>
+                <button className="text-center text-base font-bold text-white rounded-full bg-primary-500 px-4 py-2 mt-5 hover:bg-primary-300">
+                  DIscover more
+                </button>
               </div>
               <div className="flex-initial w-[69%] relative flex items-center justify-center mb-5">
                 <SlideshowDiscover />

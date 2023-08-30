@@ -63,7 +63,7 @@ const UpcomingAuction = () => {
               </div>
             </div>
           </div>
-          <div className="hidden group-hover:block">
+          <div className="hidden group-hover:block px-3">
             <div className="flex flex-col gap-2 bg-white rounded-b-xl p-3">
               <div className="flex justify-between gap-5">
                 <div className="w-full bg-gray-200 rounded-xl p-3 grid grid-flow-col justify-stretch">
@@ -117,7 +117,7 @@ const UpcomingAuction = () => {
                 </div>
               </div>
             </div>
-            <div className="hidden group-hover:block px-5">
+            <div className="hidden group-hover:block px-3">
               <div className="flex flex-col gap-2 bg-white rounded-b-xl p-3">
                 <div className="flex justify-between gap-5">
                   <div className="w-full bg-gray-200 rounded-xl p-3 grid grid-flow-col justify-stretch">
@@ -170,7 +170,7 @@ const UpcomingAuction = () => {
                 </div>
               </div>
             </div>
-            <div className="hidden group-hover:block px-5">
+            <div className="hidden group-hover:block px-3">
               <div className="flex flex-col gap-2 bg-white rounded-b-xl p-3">
                 <div className="flex justify-between gap-5">
                   <div className="w-full bg-gray-200 rounded-xl p-3 grid grid-flow-col justify-stretch">
@@ -191,7 +191,7 @@ const UpcomingAuction = () => {
           </div>
         </div>
         <div className="flex flex-col justify-between gap-4 flex-1">
-        <div className="group flex-1">
+          <div className="group flex-1">
             <div className="flex flex-col gap-1 p-2 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')] h-[325px] group-hover:h-[189px]">
               <div className="w-fit flex items-center justify-center gap-2 rounded-lg bg-white p-2">
                 <img className="h-4 w-4 rounded-2xl" src="https://via.placeholder.com/16x16" />
@@ -225,7 +225,7 @@ const UpcomingAuction = () => {
                 </div>
               </div>
             </div>
-            <div className="hidden group-hover:block px-5">
+            <div className="hidden group-hover:block px-3">
               <div className="flex flex-col gap-2 bg-white rounded-b-xl p-3">
                 <div className="flex justify-between gap-5">
                   <div className="w-full bg-gray-200 rounded-xl p-3 grid grid-flow-col justify-stretch">
@@ -278,7 +278,7 @@ const UpcomingAuction = () => {
                 </div>
               </div>
             </div>
-            <div className="hidden group-hover:block px-5">
+            <div className="hidden group-hover:block px-3">
               <div className="flex flex-col gap-2 bg-white rounded-b-xl p-3">
                 <div className="flex justify-between gap-5">
                   <div className="w-full bg-gray-200 rounded-xl p-3 grid grid-flow-col justify-stretch">

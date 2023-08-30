@@ -78,7 +78,7 @@ const Slideshow = () => {
             <div className="group h-[494px] w-full p-3">
               <img
                 className="z-10 h-[250px] w-full rounded-2xl duration-300 ease-in-out group-hover:h-[210px] group-hover:transition-all"
-                src="https://via.placeholder.com/325x265"
+                src="https://fakeimg.pl/325x265"
               />
               <div className="inline-flex w-full flex-col items-center justify-center lg:items-start">
                 <div className="relative flex w-full flex-row px-5">
@@ -88,7 +88,7 @@ const Slideshow = () => {
                         <div className="flex items-center justify-center gap-2 bg-white bg-opacity-70 ">
                           <img
                             className="h-4 w-4 rounded-2xl"
-                            src="https://via.placeholder.com/16x16"
+                            src="https://fakeimg.pl/16x16"
                           />
                           <div className="flex items-start justify-start gap-2">
                             <div className="text-xs font-medium leading-none text-neutral-700">

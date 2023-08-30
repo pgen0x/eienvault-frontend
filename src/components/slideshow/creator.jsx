@@ -80,14 +80,14 @@ const SlideshowCreator = () => {
                 <div className="inline-flex flex-col items-start justify-start">
                   <img
                     className="z-10 w-full rounded-tl-2xl rounded-tr-2xl"
-                    src="https://via.placeholder.com/287x149"
+                    src="https://fakeimg.pl/287x149"
                   />
                   <div className="w-[280px] gap-4 rounded-bl-2xl rounded-br-2xl bg-white p-5">
                     <div className="flex w-full flex-col items-start justify-start">
                       <div className="z-10 -mt-[70px] flex items-center justify-center">
                         <img
                           className="h-20 w-20 rounded-full border-[3px]"
-                          src="https://via.placeholder.com/70x70"
+                          src="https://fakeimg.pl/70x70"
                         />
                       </div>
                       <div className="mt-2 flex items-center justify-center gap-2 bg-white bg-opacity-70">

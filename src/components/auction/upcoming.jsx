@@ -30,11 +30,11 @@ const UpcomingAuction = () => {
     <>
       <div className="mt-5 flex gap-4">
         <div className="group h-[666px] flex-1 overflow-hidden">
-          <div className="flex h-[666px] flex-col justify-end rounded-lg bg-[url('https://via.placeholder.com/500x700')] bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[514px] group-hover:transition-all">
+          <div className="flex h-[666px] flex-col justify-end rounded-lg bg-[url('https://fakeimg.pl/500x700')] bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[514px] group-hover:transition-all">
             <div className="flex w-fit items-center justify-center gap-2 rounded-lg bg-white p-2">
               <img
                 className="h-4 w-4 rounded-2xl"
-                src="https://via.placeholder.com/16x16"
+                src="https://fakeimg.pl/16x16"
               />
               <div className="flex items-start justify-start gap-2">
                 <div className="text-xs font-medium leading-none text-neutral-700">
@@ -97,11 +97,11 @@ const UpcomingAuction = () => {
         </div>
         <div className="flex h-[666px] flex-1 flex-col justify-between gap-4">
           <div className="group h-[325px] flex-1 overflow-hidden">
-            <div className="flex h-[325px] flex-col justify-end gap-1 rounded-lg bg-[url('https://via.placeholder.com/500x350')] bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[189px] group-hover:transition-all">
+            <div className="flex h-[325px] flex-col justify-end gap-1 rounded-lg bg-[url('https://fakeimg.pl/500x350')] bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[189px] group-hover:transition-all">
               <div className="flex w-fit items-center justify-center gap-2 rounded-lg bg-white p-2">
                 <img
                   className="h-4 w-4 rounded-2xl"
-                  src="https://via.placeholder.com/16x16"
+                  src="https://fakeimg.pl/16x16"
                 />
                 <div className="flex items-start justify-start gap-2">
                   <div className="text-xs font-medium leading-none text-neutral-700">
@@ -163,11 +163,11 @@ const UpcomingAuction = () => {
             </div>
           </div>
           <div className="group h-[325px] flex-1 overflow-hidden">
-            <div className="flex h-[325px] flex-col justify-end gap-1 rounded-lg bg-[url('https://via.placeholder.com/500x350')] bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[189px] group-hover:transition-all">
+            <div className="flex h-[325px] flex-col justify-end gap-1 rounded-lg bg-[url('https://fakeimg.pl/500x350')] bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[189px] group-hover:transition-all">
               <div className="flex w-fit items-center justify-center gap-2 rounded-lg bg-white p-2">
                 <img
                   className="h-4 w-4 rounded-2xl"
-                  src="https://via.placeholder.com/16x16"
+                  src="https://fakeimg.pl/16x16"
                 />
                 <div className="flex items-start justify-start gap-2">
                   <div className="text-xs font-medium leading-none text-neutral-700">
@@ -231,11 +231,11 @@ const UpcomingAuction = () => {
         </div>
         <div className="flex h-[666px] flex-1 flex-col justify-between gap-4">
           <div className="group h-[325px] flex-1 overflow-hidden">
-            <div className="flex h-[325px] flex-col justify-end gap-1 rounded-lg bg-[url('https://via.placeholder.com/500x350')] bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[189px] group-hover:transition-all">
+            <div className="flex h-[325px] flex-col justify-end gap-1 rounded-lg bg-[url('https://fakeimg.pl/500x350')] bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[189px] group-hover:transition-all">
               <div className="flex w-fit items-center justify-center gap-2 rounded-lg bg-white p-2">
                 <img
                   className="h-4 w-4 rounded-2xl"
-                  src="https://via.placeholder.com/16x16"
+                  src="https://fakeimg.pl/16x16"
                 />
                 <div className="flex items-start justify-start gap-2">
                   <div className="text-xs font-medium leading-none text-neutral-700">
@@ -297,11 +297,11 @@ const UpcomingAuction = () => {
             </div>
           </div>
           <div className="group h-[325px] flex-1 overflow-hidden">
-            <div className="flex h-[325px] flex-col justify-end gap-1 rounded-lg bg-[url('https://via.placeholder.com/500x350')] bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[189px] group-hover:transition-all">
+            <div className="flex h-[325px] flex-col justify-end gap-1 rounded-lg bg-[url('https://fakeimg.pl/500x350')] bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[189px] group-hover:transition-all">
               <div className="flex w-fit items-center justify-center gap-2 rounded-lg bg-white p-2">
                 <img
                   className="h-4 w-4 rounded-2xl"
-                  src="https://via.placeholder.com/16x16"
+                  src="https://fakeimg.pl/16x16"
                 />
                 <div className="flex items-start justify-start gap-2">
                   <div className="text-xs font-medium leading-none text-neutral-700">

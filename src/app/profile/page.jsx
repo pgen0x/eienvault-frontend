@@ -114,7 +114,7 @@ export default function ProfilePage() {
     <>
       <section>
         <div className="w-full">
-          <img src="https://via.placeholder.com/1920x266" />
+          <img src="https://fakeimg.pl/1920x266" />
         </div>
       </section>
       <div className="container m-auto">
@@ -124,7 +124,7 @@ export default function ProfilePage() {
               <div className="relative -mt-[5rem]">
                 <img
                   className="w-36 rounded-full border-4 border-white shadow"
-                  src="https://via.placeholder.com/100x100"
+                  src="https://fakeimg.pl/100x100"
                 />
               </div>
               <div className="mt-3 text-xl font-semibold text-gray-900">
@@ -375,12 +375,12 @@ export default function ProfilePage() {
                   >
                     <img
                       className="relative z-10 h-[200px] w-full rounded-2xl object-cover duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all"
-                      src="https://via.placeholder.com/325x175"
+                      src="https://fakeimg.pl/325x175"
                     />
                     <div className="absolute z-10 -mt-[72px] ml-[20px] flex w-fit gap-1 rounded-tl-2xl rounded-tr-2xl bg-white bg-opacity-50 p-3">
                       <div className="w-fit">
                         <img
-                          src="https://via.placeholder.com/48x48"
+                          src="https://fakeimg.pl/48x48"
                           className="rounded-lg"
                         />
                       </div>
@@ -619,7 +619,7 @@ export default function ProfilePage() {
                     <section className="step-2 flex flex-col gap-3 bg-gray-100 p-5">
                       <div className="flex flex-col items-center gap-5">
                         <img
-                          src="https://via.placeholder.com/84x84"
+                          src="https://fakeimg.pl/84x84"
                           className="h-20 w-20 rounded-lg"
                         />
                         <div className="text-center">

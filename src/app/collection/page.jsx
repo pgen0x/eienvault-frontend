@@ -107,7 +107,7 @@ export default function AccountPage() {
     <>
       <section>
         <div className="w-full">
-          <img src="https://via.placeholder.com/1920x266" />
+          <img src="https://fakeimg.pl/1920x266" />
         </div>
       </section>
       <div className="container m-auto">
@@ -117,7 +117,7 @@ export default function AccountPage() {
               <div className="relative -mt-[5rem]">
                 <img
                   className="w-36 rounded-lg border-4 border-white shadow"
-                  src="https://via.placeholder.com/100x100"
+                  src="https://fakeimg.pl/100x100"
                 />
               </div>
               <div className="mt-3 text-xl font-semibold text-gray-900">
@@ -387,7 +387,7 @@ export default function AccountPage() {
                   >
                     <img
                       className="relative z-10 h-[300px] w-full rounded-2xl object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all"
-                      src="https://via.placeholder.com/325x265"
+                      src="https://fakeimg.pl/325x265"
                     />
                     <div className="relative -top-3 inline-flex w-full flex-col items-center justify-center lg:items-start">
                       <div className="relative flex w-full flex-row px-5">
@@ -398,7 +398,7 @@ export default function AccountPage() {
                                 <div className="flex items-center justify-center gap-2 rounded-md bg-primary-50 p-1">
                                   <img
                                     className="h-4 w-4 rounded-2xl"
-                                    src="https://via.placeholder.com/16x16"
+                                    src="https://fakeimg.pl/16x16"
                                   />
                                   <div className="flex items-start justify-start gap-2">
                                     <div className="text-xs font-medium leading-none text-neutral-700">

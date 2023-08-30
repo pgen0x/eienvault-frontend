@@ -173,15 +173,15 @@ export default function Home() {
                 <div className="relative h-fit w-full">
                   <img
                     className="rounded-2xl shadow"
-                    src="https://via.placeholder.com/344x344"
+                    src="https://fakeimg.pl/344x344"
                   />
                   <img
                     className="absolute left-[127px] top-[172px] rounded-2xl shadow"
-                    src="https://via.placeholder.com/243x245"
+                    src="https://fakeimg.pl/243x245"
                   />
                   <img
                     className="absolute left-[297px] top-[34px] rounded-2xl shadow"
-                    src="https://via.placeholder.com/243x327"
+                    src="https://fakeimg.pl/243x327"
                   />
                 </div>
                 <div className="flex w-full flex-col px-[150px]">
@@ -240,10 +240,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex-1 text-black">
-                <img
-                  className="w-full"
-                  src="https://via.placeholder.com/720x405"
-                />
+                <img className="w-full" src="https://fakeimg.pl/720x405" />
               </div>
             </div>
             <div className="relative -left-[30px] bottom-[200px] h-64 w-64 rounded-full bg-red-400"></div>

@@ -28,7 +28,7 @@ export default function NftDetail() {
     <>
       <section>
         <div className="w-full">
-          <img src="https://via.placeholder.com/1920x266" />
+          <img src="https://fakeimg.pl/1920x266" />
         </div>
       </section>
       <div className="container m-auto mb-5">
@@ -36,7 +36,7 @@ export default function NftDetail() {
           <div className="mt-5 flex w-full flex-col gap-4 sm:flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row">
             <div className="flex w-full flex-col gap-4">
               <img
-                src="https://via.placeholder.com/600x600"
+                src="https://fakeimg.pl/600x600"
                 className="h-auto w-full rounded-xl"
               />
               <div className="flex rounded-lg bg-white px-5 py-2 text-primary-500">
@@ -73,7 +73,7 @@ export default function NftDetail() {
                     <div className="flex w-fit items-center justify-center gap-2">
                       <img
                         className="h-7 w-7 rounded-2xl"
-                        src="https://via.placeholder.com/48x48"
+                        src="https://fakeimg.pl/48x48"
                       />
                       <div className="font-medium leading-none text-neutral-700">
                         Ron31
@@ -111,7 +111,7 @@ export default function NftDetail() {
                       <div className="flex w-fit items-center justify-center gap-2">
                         <img
                           className="h-7 w-7 rounded-2xl"
-                          src="https://via.placeholder.com/48x48"
+                          src="https://fakeimg.pl/48x48"
                         />
                         <div className="font-medium leading-none text-neutral-700">
                           Ryuma
@@ -142,7 +142,7 @@ export default function NftDetail() {
                     <div className="flex w-fit items-center justify-center gap-2">
                       <img
                         className="h-7 w-7 rounded-2xl"
-                        src="https://via.placeholder.com/48x48"
+                        src="https://fakeimg.pl/48x48"
                       />
                       <div className="font-medium leading-none text-neutral-700">
                         Ron31
@@ -213,7 +213,7 @@ export default function NftDetail() {
                         <span>by</span>
                         <img
                           className="h-7 w-7 rounded-2xl"
-                          src="https://via.placeholder.com/48x48"
+                          src="https://fakeimg.pl/48x48"
                         />
                         <span>Gigachad</span>
                       </div>

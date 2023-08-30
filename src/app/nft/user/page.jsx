@@ -125,7 +125,7 @@ export default function ProfileSetting() {
     <>
       <section>
         <div className="w-full">
-          <img src="https://via.placeholder.com/1920x266" />
+          <img src="https://fakeimg.pl/1920x266" />
         </div>
       </section>
       <div className="container m-auto mb-5">
@@ -133,13 +133,13 @@ export default function ProfileSetting() {
           <div className="relative -mt-[5rem]">
             <img
               className="w-36 rounded-lg border-4 border-white shadow"
-              src="https://via.placeholder.com/100x100"
+              src="https://fakeimg.pl/100x100"
             />
           </div>
           <div className="mt-5 flex w-full flex-col gap-4 sm:flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row">
             <div className="flex w-full flex-col gap-4">
               <img
-                src="https://via.placeholder.com/600x600"
+                src="https://fakeimg.pl/600x600"
                 className="h-auto w-full rounded-xl"
               />
               <div className="flex rounded-lg bg-white px-5 py-2 text-primary-500">
@@ -176,7 +176,7 @@ export default function ProfileSetting() {
                     <div className="flex w-fit items-center justify-center gap-2">
                       <img
                         className="h-7 w-7 rounded-2xl"
-                        src="https://via.placeholder.com/48x48"
+                        src="https://fakeimg.pl/48x48"
                       />
                       <div className="font-medium leading-none text-neutral-700">
                         Ron31
@@ -217,7 +217,7 @@ export default function ProfileSetting() {
                       <div className="flex w-fit items-center justify-center gap-2">
                         <img
                           className="h-7 w-7 rounded-2xl"
-                          src="https://via.placeholder.com/48x48"
+                          src="https://fakeimg.pl/48x48"
                         />
                         <div className="font-medium leading-none text-neutral-700">
                           Ryuma
@@ -248,7 +248,7 @@ export default function ProfileSetting() {
                     <div className="flex w-fit items-center justify-center gap-2">
                       <img
                         className="h-7 w-7 rounded-2xl"
-                        src="https://via.placeholder.com/48x48"
+                        src="https://fakeimg.pl/48x48"
                       />
                       <div className="font-medium leading-none text-neutral-700">
                         Ron31
@@ -332,7 +332,7 @@ export default function ProfileSetting() {
                         <span>by</span>
                         <img
                           className="h-7 w-7 rounded-2xl"
-                          src="https://via.placeholder.com/48x48"
+                          src="https://fakeimg.pl/48x48"
                         />
                         <span>Gigachad</span>
                       </div>
@@ -442,7 +442,7 @@ export default function ProfileSetting() {
                       </div>
                       <div className="flex w-full items-center justify-center gap-3">
                         <img
-                          src="https://via.placeholder.com/192x100"
+                          src="https://fakeimg.pl/192x100"
                           className="w-full"
                         />
                         <div className="font w-full text-2xl text-gray-400">
@@ -598,7 +598,7 @@ export default function ProfileSetting() {
                       </div>
                       <div className="flex w-full items-center justify-center gap-3">
                         <img
-                          src="https://via.placeholder.com/192x100"
+                          src="https://fakeimg.pl/192x100"
                           className="w-full"
                         />
                         <div className="font w-full text-2xl text-gray-400">
@@ -642,7 +642,7 @@ export default function ProfileSetting() {
                             <span className="flex w-full items-center gap-1">
                               by{' '}
                               <img
-                                src="https://via.placeholder.com/16x16"
+                                src="https://fakeimg.pl/16x16"
                                 className="h-6 w-6 rounded-full"
                               />{' '}
                               Gigachad
@@ -783,7 +783,7 @@ export default function ProfileSetting() {
                       </div>
                       <div className="flex w-full items-center justify-center gap-3">
                         <img
-                          src="https://via.placeholder.com/192x100"
+                          src="https://fakeimg.pl/192x100"
                           className="w-full"
                         />
                         <div className="font w-full text-2xl text-gray-400">

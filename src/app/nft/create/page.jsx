@@ -457,7 +457,7 @@ export default function ProfileSetting() {
                   <div className="flex w-fit items-center gap-2 rounded-lg bg-primary-50 p-2">
                     <img
                       className="h-4 w-4 rounded-2xl"
-                      src="https://via.placeholder.com/16x16"
+                      src="https://fakeimg.pl/16x16"
                     />
                     <div className="text-xs font-medium leading-none text-neutral-700">
                       Ryuma
@@ -698,7 +698,7 @@ export default function ProfileSetting() {
                     <section className="step-2 flex flex-col gap-3 bg-gray-100 p-5">
                       <div className="flex flex-col items-center gap-5">
                         <img
-                          src="https://via.placeholder.com/84x84"
+                          src="https://fakeimg.pl/84x84"
                           className="h-20 w-20 rounded-lg"
                         />
                         <div className="text-center">

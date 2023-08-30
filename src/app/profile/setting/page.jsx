@@ -29,7 +29,7 @@ export default function ProfileSetting() {
             <div className="col-span-12 sm:col-span-8 md:col-span-10 lg:col-span-10 xl:col-span-10 2xl:col-span-10">
               <div className="w-full">
                 <img
-                  src="https://via.placeholder.com/1920x266"
+                  src="https://fakeimg.pl/1920x266"
                   className="rounded-2xl"
                 />
               </div>
@@ -38,7 +38,7 @@ export default function ProfileSetting() {
                   <div className="relative -mt-[7.5rem] ml-[2.5rem]">
                     <img
                       className="w-36 rounded-full border-4 border-white shadow"
-                      src="https://via.placeholder.com/100x100"
+                      src="https://fakeimg.pl/100x100"
                     />
                   </div>
                 </div>
@@ -99,7 +99,7 @@ export default function ProfileSetting() {
                 <div className="col-span-12 flex h-fit flex-col gap-4 rounded-xl bg-white p-5 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4">
                   <img
                     className="rounded-xl"
-                    src="https://via.placeholder.com/290x130"
+                    src="https://fakeimg.pl/290x130"
                   />
                   <h3 className="text-lg font-bold">Verify your account</h3>
                   <p>

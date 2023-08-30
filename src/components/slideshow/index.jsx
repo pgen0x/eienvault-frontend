@@ -86,7 +86,7 @@ const Slideshow = () => {
               <div className="relative flex h-96 w-96 flex-row">
                 <img
                   className="h-96 w-96 rounded-2xl "
-                  src="https://via.placeholder.com/275x404"
+                  src="https://fakeimg.pl/275x404"
                 />
                 <div className="my-3 inline-flex flex-col items-start justify-start gap-4 rounded-br-2xl rounded-tr-2xl bg-white bg-opacity-50 p-5  backdrop-blur-xl">
                   <div className="flex flex-col items-start justify-start">
@@ -104,7 +104,7 @@ const Slideshow = () => {
                       <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2">
                         <img
                           className="h-4 w-4 rounded-2xl"
-                          src="https://via.placeholder.com/16x16"
+                          src="https://fakeimg.pl/16x16"
                         />
                         <div className="flex items-start justify-start gap-2">
                           <div className="text-xs font-medium leading-none text-neutral-700">

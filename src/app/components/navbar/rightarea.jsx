@@ -17,6 +17,7 @@ import classNames from 'classnames';
 import { useDisconnect } from 'wagmi';
 import axios from 'axios';
 import { useAuth } from '@/app/lib/hooks/AuthContext';
+import { useSidebar } from '../../lib/hooks/SidebarContext';
 
 export default function RightArea() {
   const { theme, setTheme } = useTheme();
@@ -30,6 +31,7 @@ export default function RightArea() {
   const [isClient, setIsClient] = useState(false);
   const [isConnect, setIsConnect] = useState(false);
   const { token, login, logout } = useAuth();
+  const { toggleSidebar } = useSidebar();
 
   useWeb3ModalEvents((event) => {
     console.log(event);
@@ -75,78 +77,15 @@ export default function RightArea() {
     <>
       {isClient && (
         <div className="inline-flex h-8 w-full items-center justify-start gap-4">
-          {isConnect ? (
-            <Menu as="div" className="relative inline-block text-left">
-              <div>
-                <Menu.Button className="inline-flex w-full justify-center rounded-full bg-primary-500 px-3 py-3 text-sm font-semibold">
-                  <FontAwesomeIcon icon={faUserAlt} />
-                </Menu.Button>
-              </div>
-
-              <Transition
-                as={Fragment}
-                enter="transition ease-out duration-100"
-                enterFrom="transform opacity-0 scale-95"
-                enterTo="transform opacity-100 scale-100"
-                leave="transition ease-in duration-75"
-                leaveFrom="transform opacity-100 scale-100"
-                leaveTo="transform opacity-0 scale-95"
+          {isConnect || isConnected ? (
+            <div as="div" className="relative inline-block text-left">
+              <button
+                className="inline-flex w-full justify-center rounded-full bg-primary-500 px-3 py-3 text-sm font-semibold"
+                onClick={toggleSidebar}
               >
-                <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-gradient-to-b from-white to-white/70 shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur focus:outline-none">
-                  <div className="py-1">
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          onClick={open}
-                          className={classNames(
-                            active
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-700',
-                            'text-md block px-4 py-2',
-                          )}
-                        >
-                          My NFTs
-                        </a>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          className={classNames(
-                            active
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-700',
-                            'text-md block px-4 py-2',
-                          )}
-                        >
-                          My Collections
-                        </a>
-                      )}
-                    </Menu.Item>
-                    <form method="POST" action="#">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            type="submit"
-                            onClick={() => disconnect()}
-                            className={classNames(
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'text-md block w-full px-4 py-2 text-left',
-                            )}
-                          >
-                            Sign out
-                          </button>
-                        )}
-                      </Menu.Item>
-                    </form>
-                  </div>
-                </Menu.Items>
-              </Transition>
-            </Menu>
+                <FontAwesomeIcon icon={faUserAlt} />
+              </button>
+            </div>
           ) : (
             <button
               onClick={() => open()}

@@ -29,8 +29,8 @@ const UpcomingAuction = () => {
   return (
     <>
       <div className="flex gap-4 mt-5">
-        <div className="group flex-1">
-          <div className="flex flex-col p-2 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x700')] h-[666px] group-hover:h-[514px]">
+        <div className="group flex-1 h-[666px] overflow-hidden">
+          <div className="flex flex-col p-2 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x700')] bg-cover bg-center h-[666px] group-hover:h-[514px] group-hover:transition-all ease-in-out duration-300">
             <div className="w-fit flex items-center justify-center gap-2 rounded-lg bg-white p-2">
               <img className="h-4 w-4 rounded-2xl" src="https://via.placeholder.com/16x16" />
               <div className="flex items-start justify-start gap-2">
@@ -63,7 +63,7 @@ const UpcomingAuction = () => {
               </div>
             </div>
           </div>
-          <div className="hidden group-hover:block px-3">
+          <div className="overflow-hidden opacity-0 h-0 group-hover:h-auto group-hover:opacity-100 group-hover:transition-all ease-in-out duration-800">
             <div className="flex flex-col gap-2 bg-white rounded-b-xl p-3">
               <div className="flex justify-between gap-5">
                 <div className="w-full bg-gray-200 rounded-xl p-3 grid grid-flow-col justify-stretch">
@@ -82,9 +82,9 @@ const UpcomingAuction = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col justify-between gap-4 flex-1">
-          <div className="group flex-1">
-            <div className="flex flex-col gap-1 p-2 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')] h-[325px] group-hover:h-[189px]">
+        <div className="flex flex-col justify-between gap-4 flex-1 h-[666px]">
+          <div className="group flex-1 h-[325px] overflow-hidden">
+            <div className="flex flex-col gap-1 p-2 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')] bg-cover bg-center h-[325px] group-hover:h-[189px] group-hover:transition-all ease-in-out duration-300">
               <div className="w-fit flex items-center justify-center gap-2 rounded-lg bg-white p-2">
                 <img className="h-4 w-4 rounded-2xl" src="https://via.placeholder.com/16x16" />
                 <div className="flex items-start justify-start gap-2">
@@ -117,9 +117,9 @@ const UpcomingAuction = () => {
                 </div>
               </div>
             </div>
-            <div className="hidden group-hover:block px-3">
+            <div className="px-3 overflow-hidden opacity-0 h-0 group-hover:h-auto group-hover:opacity-100 group-hover:transition-all ease-in-out duration-800">
               <div className="flex flex-col gap-2 bg-white rounded-b-xl p-3">
-                <div className="flex justify-between gap-5">
+                <div className="flex gap-2">
                   <div className="w-full bg-gray-200 rounded-xl p-3 grid grid-flow-col justify-stretch">
                     <div className="flex flex-col">
                       <span>Price</span>
@@ -136,8 +136,8 @@ const UpcomingAuction = () => {
               </div>
             </div>
           </div>
-          <div className="group flex-1">
-            <div className="flex flex-col gap-1 p-2 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')] h-[325px] group-hover:h-[189px]">
+          <div className="group flex-1 h-[325px] overflow-hidden">
+            <div className="flex flex-col gap-1 p-2 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')] bg-cover bg-center h-[325px] group-hover:h-[189px] group-hover:transition-all ease-in-out duration-300">
               <div className="w-fit flex items-center justify-center gap-2 rounded-lg bg-white p-2">
                 <img className="h-4 w-4 rounded-2xl" src="https://via.placeholder.com/16x16" />
                 <div className="flex items-start justify-start gap-2">
@@ -170,7 +170,7 @@ const UpcomingAuction = () => {
                 </div>
               </div>
             </div>
-            <div className="hidden group-hover:block px-3">
+            <div className="px-3 overflow-hidden opacity-0 h-0 group-hover:h-auto group-hover:opacity-100 group-hover:transition-all ease-in-out duration-800">
               <div className="flex flex-col gap-2 bg-white rounded-b-xl p-3">
                 <div className="flex justify-between gap-5">
                   <div className="w-full bg-gray-200 rounded-xl p-3 grid grid-flow-col justify-stretch">
@@ -190,9 +190,9 @@ const UpcomingAuction = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col justify-between gap-4 flex-1">
-          <div className="group flex-1">
-            <div className="flex flex-col gap-1 p-2 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')] h-[325px] group-hover:h-[189px]">
+        <div className="flex flex-col justify-between gap-4 flex-1 h-[666px]">
+          <div className="group flex-1 h-[325px] overflow-hidden">
+            <div className="flex flex-col gap-1 p-2 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')] bg-cover bg-center h-[325px] group-hover:h-[189px] group-hover:transition-all ease-in-out duration-300">
               <div className="w-fit flex items-center justify-center gap-2 rounded-lg bg-white p-2">
                 <img className="h-4 w-4 rounded-2xl" src="https://via.placeholder.com/16x16" />
                 <div className="flex items-start justify-start gap-2">
@@ -225,7 +225,7 @@ const UpcomingAuction = () => {
                 </div>
               </div>
             </div>
-            <div className="hidden group-hover:block px-3">
+            <div className="px-3 overflow-hidden opacity-0 h-0 group-hover:h-auto group-hover:opacity-100 group-hover:transition-all ease-in-out duration-800">
               <div className="flex flex-col gap-2 bg-white rounded-b-xl p-3">
                 <div className="flex justify-between gap-5">
                   <div className="w-full bg-gray-200 rounded-xl p-3 grid grid-flow-col justify-stretch">
@@ -244,8 +244,8 @@ const UpcomingAuction = () => {
               </div>
             </div>
           </div>
-          <div className="group flex-1">
-            <div className="flex flex-col gap-1 p-2 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')] h-[325px] group-hover:h-[189px]">
+          <div className="group flex-1 h-[325px] overflow-hidden">
+            <div className="flex flex-col gap-1 p-2 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x350')] bg-cover bg-center h-[325px] group-hover:h-[189px] group-hover:transition-all ease-in-out duration-300">
               <div className="w-fit flex items-center justify-center gap-2 rounded-lg bg-white p-2">
                 <img className="h-4 w-4 rounded-2xl" src="https://via.placeholder.com/16x16" />
                 <div className="flex items-start justify-start gap-2">
@@ -278,7 +278,7 @@ const UpcomingAuction = () => {
                 </div>
               </div>
             </div>
-            <div className="hidden group-hover:block px-3">
+            <div className="px-3 overflow-hidden opacity-0 h-0 group-hover:h-auto group-hover:opacity-100 group-hover:transition-all ease-in-out duration-800">
               <div className="flex flex-col gap-2 bg-white rounded-b-xl p-3">
                 <div className="flex justify-between gap-5">
                   <div className="w-full bg-gray-200 rounded-xl p-3 grid grid-flow-col justify-stretch">

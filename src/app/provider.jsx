@@ -2,6 +2,7 @@
 
 import { ThemeProvider } from 'next-themes';
 import { AuthProvider } from '@/app/lib/hooks/AuthContext';
+import { SidebarProvider } from './lib/hooks/SidebarContext';
 
 export function Providers({ children }) {
   return (
@@ -11,7 +12,7 @@ export function Providers({ children }) {
         enableSystem={false}
         defaultTheme="light"
       >
-        {children}
+        <SidebarProvider>{children}</SidebarProvider>
       </ThemeProvider>
     </AuthProvider>
   );

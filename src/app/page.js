@@ -109,8 +109,8 @@ export default function Home() {
                     <h2 className="text-2xl font-bold">Don't miss a drop</h2>
                     <p>Subscribe to our real time newspaper and be the first to know<br /> about upcoming drops</p>
                     <form className="flex gap-2 w-full mt-5">
-                      <input type="text" className="w-full px-5 py-2 rounded-full" placeholder="Your email address" />
-                      <button type="submit" className="bg-primary-500 px-5 py-2 rounded-full text-white">Subscribe</button>
+                      <input type="text" className="w-full rounded-full bg-white border-0 focus:ring-primary-500 mt-2" placeholder="Your email address" />
+                      <button type="submit" className="bg-primary-500 hover:bg-primary-300 px-5 py-2 rounded-full text-white">Subscribe</button>
                     </form>
                   </div>
                 </div>
@@ -148,7 +148,7 @@ export default function Home() {
                 <div className="w-full flex flex-col px-[150px]">
                   <h2 className="font-bold text-2xl">Discover hidden gems</h2>
                   <p className="my-3">Eien vault is your window into a world of unique and extraordinary digital art. Immerse yourself in a diverse collection of NFTs created by talented artists from around the globe.</p>
-                  <a href="#" className="text-center w-full rounded-full bg-primary-500 px-3 py-2 text-white">Learn more</a>
+                  <a href="#" className="text-center w-full rounded-full bg-primary-500 hover:bg-primary-300 px-3 py-2 text-white">Learn more</a>
                 </div>
               </div>
             </div>
@@ -161,8 +161,8 @@ export default function Home() {
                 <h2 className="font-bold text-3xl">Use your NFTs to get a crypto <br />loan</h2>
                 <p className="mt-3 py-5 font-semibold">Use your NFT as collateral to borrow wETH, DAI, or USDC <br />from lenders. Repay your loan, and you get your NFT<br /> back. No auto-liquidations! 0% borrower fees!</p>
                 <div className="my-5">
-                  <button className="text-white bg-primary-500 font-bold rounded-full px-5 py-2">Get loan now</button>
-                  <button className="ml-1 bg-white text-primary-500 font-bold rounded-full px-5 py-2">I want to lend</button>
+                  <button className="text-white bg-primary-500 hover:bg-primary-300 font-bold rounded-full px-5 py-2">Get loan now</button>
+                  <button className="ml-1 bg-white hover:bg-primary-50 text-primary-500 font-bold rounded-full px-5 py-2">I want to lend</button>
                 </div>
                 <div className="flex w-full justify-between p-5">
                   <div className="">
@@ -198,11 +198,27 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col text-primary-500 py-5">
                   <h4 className="text-xl font-bold">Join our community</h4>
-                  <ul className="flex justify-between w-fit gap-7 mt-3">
-                    <li className="text-2xl"><FontAwesomeIcon icon={faTwitter} /></li>
-                    <li className="text-2xl"><FontAwesomeIcon icon={faDiscord} /></li>
-                    <li className="text-2xl"><FontAwesomeIcon icon={faMedium} /></li>
-                    <li className="text-2xl"><FontAwesomeIcon icon={faEnvelope} /></li>
+                  <ul className="flex justify-between w-fit gap-2 mt-3">
+                    <li className="text-2xl">
+                      <a href="#" className="flex hover:bg-primary-100 rounded-full w-11 h-11 items-center justify-center">
+                        <FontAwesomeIcon icon={faTwitter} />
+                      </a>
+                    </li>
+                    <li className="text-2xl">
+                      <a href="#" className="flex hover:bg-primary-100 rounded-full w-11 h-11 items-center justify-center">
+                        <FontAwesomeIcon icon={faDiscord} />
+                      </a>
+                    </li>
+                    <li className="text-2xl">
+                      <a href="#" className="flex hover:bg-primary-100 rounded-full w-11 h-11 items-center justify-center">
+                        <FontAwesomeIcon icon={faMedium} />
+                      </a>
+                    </li>
+                    <li className="text-2xl">
+                      <a href="#" className="flex hover:bg-primary-100 rounded-full w-11 h-11 items-center justify-center">
+                        <FontAwesomeIcon icon={faEnvelope} />
+                      </a>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -211,7 +227,7 @@ export default function Home() {
                   <h2 className="text-primary-500 font-bold text-xl">Company</h2>
                   <ul className="text-gray-900 mt-5">
                     <li className="py-2">What is NFT ?</li>
-                    <li className="py-2">Snap marketplace NFT</li>
+                    <li className="py-2">EienVault</li>
                     <li className="py-2">Publish an NFT with us</li>
                     <li className="py-2">About us</li>
                     <li className="py-2">Advisory devices</li>
@@ -244,7 +260,7 @@ export default function Home() {
               </div>
             </div>
             <div className="border-t border-primary-500 text-gray-900 py-5 mt-5">
-              2023  Snapft, inc
+              2023  EienVault, inc
             </div>
           </div>
         </section>

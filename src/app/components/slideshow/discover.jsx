@@ -79,7 +79,7 @@ const Slideshow = () => {
               <img className="w-full rounded-2xl z-10 group-hover:h-[250px] h-[290px]" src="https://via.placeholder.com/325x265" />
               <div className="w-full px-5 inline-flex flex-col items-center justify-center lg:items-start">
                 <div className="relative w-full flex flex-row">
-                  <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-br-2xl rounded-bl-2xl bg-white bg-opacity-50 p-5  backdrop-blur-xl">
+                  <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-br-2xl rounded-bl-2xl bg-white bg-opacity-50 p-3  backdrop-blur-xl">
                     <div className="w-full flex flex-col items-start justify-start">
                       <div className="inline-flex items-center justify-between self-stretch">
                         <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2">

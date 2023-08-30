@@ -13,7 +13,7 @@ const Footer = () => {
               <img src="/logo.svg" className="w-24" />
             </div>
             <a href="#" className="text-sm">
-              2023  Snapft, inc
+              2023 EienVault, inc
             </a>
             <div className="">
               <div className="w-[5px] h-[5px] bg-primary-500 rounded-full"></div>
@@ -24,20 +24,20 @@ const Footer = () => {
             </div>
             <a href="#" className="text-sm">Terms</a>
           </div>
-          <div className="flex flex-between gap-6 items-center text-primary-500">
+          <div className="flex flex-between gap-2 items-center text-primary-500">
             <a href="#" className="text-sm">
               Our Community
             </a>
-            <a href="#">
+            <a href="#" className="flex hover:bg-primary-100 rounded-full w-9 h-9 items-center justify-center">
               <FontAwesomeIcon icon={faTwitter} />
             </a>
-            <a href="#">
+            <a href="#" className="flex hover:bg-primary-100 rounded-full w-9 h-9 items-center justify-center">
               <FontAwesomeIcon icon={faDiscord} />
             </a>
-            <a href="#">
+            <a href="#" className="flex hover:bg-primary-100 rounded-full w-9 h-9 items-center justify-center">
               <FontAwesomeIcon icon={faMedium} />
             </a>
-            <a href="#">
+            <a href="#" className="flex hover:bg-primary-100 rounded-full w-9 h-9 items-center justify-center">
               <FontAwesomeIcon icon={faEnvelope} />
             </a>
           </div>

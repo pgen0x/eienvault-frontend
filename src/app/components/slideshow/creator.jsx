@@ -109,12 +109,12 @@ const SlideshowCreator = () => {
                           <div className="">Artist</div>
                         </div>
                       </div>
-                      <div className="flex w-full">
-                        <button className="w-full text-sm text-center font-semibold text-white bg-primary-500 rounded-full px-1 py-1">
+                      <div className="flex w-full gap-2">
+                        <button className="w-full text-sm text-center font-semibold text-white bg-primary-500 hover:bg-primary-300 rounded-full p-1">
                           <FontAwesomeIcon icon={faPlus} />
                           <span className="ml-2 ">Follow</span>
                         </button>
-                        <button className="w-full text-sm text-center font-semibold text-primary-500 px-1 py-1">
+                        <button className="w-full text-sm text-center font-semibold text-primary-500 px-1 py-1 hover:bg-primary-50 rounded-full p-1">
                           Visit Profile
                         </button>
                       </div>

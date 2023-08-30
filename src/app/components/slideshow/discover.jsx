@@ -75,8 +75,8 @@ const Slideshow = () => {
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
-            <div className="w-full p-3">
-              <img className="w-full rounded-2xl z-10" src="https://via.placeholder.com/325x265" />
+            <div className="w-full p-3 group">
+              <img className="w-full rounded-2xl z-10 group-hover:h-[250px] h-[290px]" src="https://via.placeholder.com/325x265" />
               <div className="w-full px-5 inline-flex flex-col items-center justify-center lg:items-start">
                 <div className="relative w-full flex flex-row">
                   <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-br-2xl rounded-bl-2xl bg-white bg-opacity-50 p-5  backdrop-blur-xl">
@@ -118,12 +118,13 @@ const Slideshow = () => {
                           <p className="font-bold">No bids yet</p>
                         </div>
                       </div>
-                      <div className="flex mt-5 w-full">
-                        <FontAwesomeIcon className="mr-5 py-3 text-primary-500" icon={faCartPlus} />
-                        <button className="w-full text-center text-base font-bold text-white bg-primary-500 rounded-full px-4 py-2">
+                      <div className="flex mt-5 w-full items-center">
+                        <FontAwesomeIcon className="mr-5 w-5 h-5 p-3 rounded-full text-primary-500 cursor-pointer hover:bg-primary-50 " icon={faCartPlus} />
+                        <button className="w-full text-center text-base font-bold text-white bg-primary-500 rounded-full px-4 py-2 hover:bg-primary-300">
                           Buy Now
                         </button>
                       </div>
+                      <a href="/nft/user" className="bg-white hover:bg-primary-50 text-primary-500 mt-2 w-full py-1 text-center rounded-full hidden group-hover:block">View Detail</a>
                     </div>
                   </div>
                 </div>

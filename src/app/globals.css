@@ -71,3 +71,23 @@
 	transform: translateY(-50px);
   }
 }
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.awan-3{
+  animation: graphicx 10s infinite cubic-bezier(0.3, 0.27, 0.07, 1.04);
+}
+
+.awan-4{
+  animation: graphicy 10s infinite cubic-bezier(0.3, 0.27, 0.07, 1.04);
+}

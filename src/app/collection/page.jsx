@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import Footer from "../components/footer/main";
 import { Listbox } from '@headlessui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartPlus, faChevronDown, faCircleCheck, faEllipsis, faGrip, faGripVertical, faPenToSquare, faSearch, faShare, faSliders } from '@fortawesome/free-solid-svg-icons';
+import { faCartPlus, faChevronDown, faCircleCheck, faEllipsis, faEllipsisVertical, faGrip, faGripVertical, faPenToSquare, faSearch, faShare, faSliders } from '@fortawesome/free-solid-svg-icons';
 import { Trykker } from 'next/font/google';
 import Search from '../components/navbar/search';
 import Ethereum from '../assets/icon/ethereum';
@@ -65,7 +65,7 @@ export default function AccountPage() {
 
   const classRadio = (params, value) => {
     const defaultCssRadio = "cursor-pointer flex w-8 h-8 justify-center items-center rounded-full text-sm font-medium leading-5 ";
-    return defaultCssRadio + (params === value ? 'text-white bg-primary-500 shadow' : 'text-primary-500 hover:bg-sky-200')
+    return defaultCssRadio + (params === value ? 'text-white bg-primary-500 shadow' : 'text-primary-500 hover:bg-primary-200')
   }
 
   const handleGridList = (event, target) => {
@@ -86,85 +86,55 @@ export default function AccountPage() {
       <div className="container m-auto">
         <section>
           <div className="flex justify-between mt-5">
-            <div className="flex flex-col max-w-xs">
+            <div className="flex flex-col w-full">
               <div className="relative -mt-[5rem]">
-                <img className="w-36 rounded-full shadow border-4 border-white" src="https://via.placeholder.com/100x100" />
+                <img className="w-36 rounded-lg shadow border-4 border-white" src="https://via.placeholder.com/100x100" />
               </div>
               <div className="text-xl text-gray-900 font-semibold mt-3">
-                John Doe
+                Ship collections
               </div>
-              <div className="text-lg text-gray-900 mt-3 block h-[40px] overflow-hidden text-ellipsis text-sm">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+              <div className="text-gray-900 mt-3 block h-[40px] flex gap-4 w-full justify-start">
+                <div>Created by <span className="font-semibold">John doe</span></div>
+                <div>Address <span className="font-semibold">0x30756...Fb179</span></div>
               </div>
               <div className="flex gap-1 text-white font-semibold mt-2">
-                <button className="bg-primary-500 rounded-full py-2 px-4"><FontAwesomeIcon icon={faPenToSquare} /> Edit Profile</button>
-                <button className="bg-primary-500 rounded-full py-2 px-4">Sell</button>
-                <button className="bg-primary-500 rounded-full py-2 px-4"><FontAwesomeIcon icon={faShare} /></button>
+                <button className="bg-primary-500 rounded-full py-2 px-4"><FontAwesomeIcon icon={faPenToSquare} /> Edit Collection</button>
+                <button className="bg-primary-500 rounded-full w-[40px] h-[40px]"><FontAwesomeIcon icon={faShare} /></button>
+                <button className="bg-primary-500 rounded-full w-[40px] h-[40px]"><FontAwesomeIcon icon={faEllipsisVertical} /></button>
               </div>
             </div>
-            <div className="flex flex-col">
-              <div className="flex rounded-xl bg-white p-5 text-gray-900 w-56 divide-x divide-gray-200">
-                <div className="text-center w-full">
-                  <h2>2</h2>
-                  <p>Followers</p>
-                </div>
-                <div className="text-center w-full">
-                  <h2>129</h2>
-                  <p>Following</p>
-                </div>
+            <div className="flex flex-col gap-2 rounded-lg border-2 border-gray-200 bg-white p-5 text-gray-900 w-96 text-sm">
+              <div className="flex justify-between">
+                <span className="font-semibold">Floor</span>
+                <span>0.01 ETH</span>
               </div>
-              <div className="mt-5 rounded-xl bg-white p-5 text-gray-900 w-56 justify-between">
-                <p>Address</p>
-                <div>
-                  <Listbox value={selectedServer} onChange={setSelectedServer}>
-                    <div className="relative z-30">
-                      <Listbox.Button className="relative w-full cursor-default rounded-full bg-white py-2 pl-3 pr-10 text-left border border-gray-200 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                        <span className="block truncate text-gray-600">{selectedServer}</span>
-                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                          <svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8 9C7.71875 9 7.46875 8.90625 7.28125 8.71875L1.28125 2.71875C0.875 2.34375 0.875 1.6875 1.28125 1.3125C1.65625 0.90625 2.3125 0.90625 2.6875 1.3125L8 6.59375L13.2812 1.3125C13.6562 0.90625 14.3125 0.90625 14.6875 1.3125C15.0938 1.6875 15.0938 2.34375 14.6875 2.71875L8.6875 8.71875C8.5 8.90625 8.25 9 8 9Z" fill="#7D778A" />
-                          </svg>
-                        </span>
-                      </Listbox.Button>
-                      <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                        {servers.map((server, index) => (
-                          <Listbox.Option
-                            key={index}
-                            className={({ active }) =>
-                              `relative cursor-default select-none py-2 px-4 ${active ? 'bg-sky-600 text-white' : 'text-gray-900'
-                              }`
-                            }
-                            value={server}>
-                            {({ selectedServer }) => (
-                              <>
-                                <span
-                                  className={`block truncate ${selectedServer ? 'font-medium' : 'font-normal'
-                                    }`}
-                                >
-                                  {server}
-                                </span>
-                              </>
-                            )}
-                          </Listbox.Option>
-                        ))}
-                      </Listbox.Options>
-                    </div>
-                  </Listbox>
-                </div>
+              <div className="flex justify-between">
+                <span className="font-semibold">Volumes</span>
+                <span>0.01 ETH</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-semibold">Items</span>
+                <span>4</span>
+              </div>
+              <div className="flex justify-between border-b-2 pb-2">
+                <span className="font-semibold">Owner</span>
+                <span>4</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-semibold">Royalties</span>
+                <span>10%</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-semibold">Blockchain</span>
+                <span>Ethereum</span>
               </div>
             </div>
           </div>
         </section>
         <section>
           <ul className="flex text-primary-500 border-b border-gray-200 my-5">
-            <li className="px-5 pb-3 cursor-pointer">Owned</li>
-            <li className="px-5 pb-3 border-b-4 border-primary-500 cursor-pointer">Collections <span className="bg-red-400 rounded-full text-white text-xs font-semibold px-1">2</span></li>
-            <li className="px-5 pb-3 cursor-pointer">Bid received</li>
-            <li className="px-5 pb-3 cursor-pointer">Collateral</li>
-            <li className="px-5 pb-3 cursor-pointer">Created</li>
-            <li className="px-5 pb-3 cursor-pointer">On sale <div className="flex items-center justify-center bg-red-400 w-4 h-4 rounded-full text-white text-xs font-semibold text-center">1</div></li>
-            <li className="px-5 pb-3 cursor-pointer">Sold</li>
-            <li className="px-5 pb-3 cursor-pointer">Liked</li>
+            <li className="px-5 pb-3 cursor-pointer border-b-4 border-primary-500">Items</li>
+            <li className="px-5 pb-3 cursor-pointer">Activity</li>
           </ul>
         </section>
         <section>
@@ -205,7 +175,7 @@ export default function AccountPage() {
                       <Listbox.Option
                         key={index}
                         className={({ active }) =>
-                          `relative cursor-default select-none py-2 px-4 ${active ? 'bg-sky-600 text-white' : 'text-gray-900'
+                          `relative cursor-default select-none py-2 px-4 ${active ? 'bg-primary-500 text-white' : 'text-gray-900'
                           }`
                         }
                         value={server}>
@@ -283,15 +253,25 @@ export default function AccountPage() {
             <div className={`col-span-12 sm:col-span-12 ${openFilter ? 'md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9' : 'md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12'}`}>
               <div className="w-full grid grid-cols-12 gap-6 text-gray-900">
                 {collections.map((collection, index) => (
-                  <div key={index} className={`w-full ${openFilter ? 'col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-4 2xl:col-span-4' : 'col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-3 xl:col-span-3 2xl:col-span-3'}`}>
-                    <img className="w-full rounded-2xl relative z-10" src="https://via.placeholder.com/325x265" />
+                  <div key={index} className={`w-full group ${openFilter ? 'col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-4 2xl:col-span-4' : 'col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-3 xl:col-span-3 2xl:col-span-3'}`}>
+                    <img className="w-full object-cover rounded-2xl relative z-10 group-hover:h-[260px] h-[300px]" src="https://via.placeholder.com/325x265" />
                     <div className="w-full inline-flex flex-col relative -top-3 items-center justify-center lg:items-start">
                       <div className="w-full relative px-5 flex flex-row">
                         <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-br-2xl rounded-bl-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
                           <div className="w-full flex flex-col items-start justify-start">
                             <div className="inline-flex items-center justify-between self-stretch pt-2">
                               <div className="font-semibold leading-none text-neutral-700">
-                                {collection}
+                                <div className="flex items-center justify-center gap-2 bg-primary-50 p-1 rounded-md">
+                                  <img className="h-4 w-4 rounded-2xl" src="https://via.placeholder.com/16x16" />
+                                  <div className="flex items-start justify-start gap-2">
+                                    <div className="text-xs font-medium leading-none text-neutral-700">
+                                      Ryuma
+                                    </div>
+                                    <div className="text-xs font-black leading-none text-primary-500">
+                                      <FontAwesomeIcon icon={faCircleCheck} />
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                               <div className="items-center text-primary-500">
                                 <FontAwesomeIcon icon={faEllipsis} />
@@ -299,7 +279,7 @@ export default function AccountPage() {
                             </div>
                             <div className="w-full inline-flex items-center justify-between gap-2 pt-1">
                               <div className="text-sm font-medium leading-tight text-gray-600">
-                                {collection} Collection
+                                {collection}
                               </div>
                               <div className="text-sm font-normal leading-tight text-neutral-700">
                                 <Ethereum className="h-4 w-4" />
@@ -315,14 +295,13 @@ export default function AccountPage() {
                                 <p className="font-bold">No bids yet</p>
                               </div>
                             </div>
-                            <div className="flex mt-5 w-full gap-3">
-                              <button className="w-full text-center text-xs font-bold text-primary-500 bg-white rounded-full px-4 py-2">
-                                View detail
-                              </button>
-                              <button className="w-full text-center text-xs font-bold text-white bg-primary-500 rounded-full px-4 py-2">
-                                List item
+                            <div className="flex mt-5 w-full items-center">
+                              <FontAwesomeIcon className="mr-5 w-5 h-5 p-3 rounded-full text-primary-500 cursor-pointer hover:bg-primary-50 " icon={faCartPlus} />
+                              <button className="w-full text-center text-base font-bold text-white bg-primary-500 rounded-full px-4 py-2 hover:bg-primary-300">
+                                Buy Now
                               </button>
                             </div>
+                            <a href="/nft/user" className="bg-white hover:bg-primary-50 text-primary-500 mt-2 w-full py-1 text-center rounded-full hidden group-hover:block">View Detail</a>
                           </div>
                         </div>
                       </div>

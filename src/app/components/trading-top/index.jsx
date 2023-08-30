@@ -43,7 +43,7 @@ export default function TrandingTop() {
 
   const classRadio = (params, value) => {
     const defaultCssRadio = "cursor-pointer w-full px-2.5 py-2 rounded-full text-sm font-medium leading-5 ";
-    return defaultCssRadio + (params === value ? 'text-white bg-primary-500 shadow' : 'text-primary-500 hover:bg-sky-200')
+    return defaultCssRadio + (params === value ? 'text-white bg-primary-500 shadow' : 'text-primary-500 hover:bg-primary-200')
   }
 
   const classFloor = (value) => {
@@ -98,7 +98,7 @@ export default function TrandingTop() {
                     <Listbox.Option
                       key={index}
                       className={({ active }) =>
-                        `relative cursor-default select-none py-2 px-4 ${active ? 'bg-sky-600 text-white' : 'text-gray-900'
+                        `relative cursor-default select-none py-2 px-4 ${active ? 'bg-primary-500 text-white' : 'text-gray-900'
                         }`
                       }
                       value={server}>

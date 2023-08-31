@@ -11,7 +11,7 @@ import {
   faUserAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next-nprogress-bar';
 import { disconnect } from '@wagmi/core';
 
 const Sidebar = () => {
@@ -76,16 +76,16 @@ const Sidebar = () => {
                     username
                   </div>
                   <button
-                    className="text-center text-sm font-light leading-tight text-black hover:text-black/60"
+                    className="text-center text-sm font-light leading-tight text-black"
                     onClick={handleViewProfileClick}
                   >
-                    View Profile
+                    view profile
                   </button>
                 </div>
               </div>
               <div className="relative h-10 w-10">
                 <button
-                  className="h-10 w-10 rounded-full text-primary-500 hover:bg-primary-200 hover:text-primary-400"
+                  className="h-10 w-10 rounded-full text-rose-500"
                   onClick={() => closeSidebar()}
                 >
                   <FontAwesomeIcon icon={faClose} />
@@ -226,19 +226,19 @@ const Sidebar = () => {
                   </div>
                 </div>
               </div>
-              <button
-                className="inline-flex items-start justify-start gap-2 self-stretch rounded-lg hover:bg-primary-50"
-                onClick={handleDisconnect}
-              >
-                <div className="flex h-8 shrink grow basis-0 items-center justify-center gap-2  px-4 py-2">
-                  <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
+              <div className="inline-flex items-start justify-start gap-2 self-stretch">
+                <div className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-lg px-4 py-2">
+                  <div className="h-4 w-4 text-center text-base font-black leading-none text-rose-500">
                     <FontAwesomeIcon icon={faPlugCircleXmark} />
                   </div>
-                  <span className="text-base font-bold leading-normal text-primary-500">
+                  <button
+                    className="text-base font-bold leading-normal text-rose-500"
+                    onClick={handleDisconnect}
+                  >
                     Disconnect wallet
-                  </span>
+                  </button>
                 </div>
-              </button>
+              </div>
             </div>
           </div>
         </div>

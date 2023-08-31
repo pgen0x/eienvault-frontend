@@ -129,6 +129,11 @@ export default function Create({ chains }) {
                           }`
                         }
                         value={chain.chainId}
+                        disabled={
+                          chain.chainId === 666888 || chain.chainId === 8668
+                            ? false
+                            : true
+                        }
                       >
                         {({ selectedAccount }) => (
                           <>

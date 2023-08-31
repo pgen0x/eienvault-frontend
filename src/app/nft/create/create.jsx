@@ -23,16 +23,56 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Listbox, Switch } from '@headlessui/react';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useAccount } from 'wagmi';
 
 export default function Create({ chains }) {
-  const [selectedAccount, setSelectedAccount] = useState(chains[0].chainId);
+  const [selectedAccount, setSelectedAccount] = useState(666888);
   const [stepCreate, setStepCreate] = useState(1);
   const [modalCreate, setModalCreate] = useState(false);
-  const [selectedBlockchain, setSelectedBlockchain] = useState(chains[0].name);
+  const [selectedBlockchain, setSelectedBlockchain] = useState(666888);
   const [enableMinting, setEnableMinting] = useState(true);
   const [enableUnlockable, setEnableUnlockable] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
   const [name, setName] = useState('Untitled');
+  const [selectedOption, setSelectedOption] = useState('fixed');
+  const { address } = useAccount();
+  const [selectedOptionDate, setSelectedOptionDate] = useState('1 Day');
+  const [customValueDate, setCustomValueDate] = useState('');
+
+  const handleSelectChange = (event) => {
+    const selectedValue = event.target.value;
+    setSelectedOptionDate(selectedValue);
+
+    if (selectedValue === 'Custom') {
+      // Open modal or show date picker for custom date selection
+      // You can implement your modal or date picker logic here
+    } else {
+      // Calculate the date based on selected option
+      const currentDate = new Date();
+      let calculatedDate = new Date(currentDate);
+
+      if (selectedValue === '1 Day') {
+        calculatedDate.setDate(currentDate.getDate() + 1);
+      } else if (selectedValue === '7 Day') {
+        calculatedDate.setDate(currentDate.getDate() + 7);
+      } else if (selectedValue === '1 Week') {
+        calculatedDate.setDate(currentDate.getDate() + 7);
+      } else if (selectedValue === '1 Month') {
+        calculatedDate.setMonth(currentDate.getMonth() + 1);
+      }
+
+      // Set the calculated date as custom value
+      setCustomValueDate(calculatedDate.toISOString().substr(0, 16)); // Format as 'YYYY-MM-DD'
+    }
+  };
+
+  const handleCustomInputChange = (event) => {
+    setCustomValueDate(event.target.value);
+  };
+
+  const handleRadioChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
 
   const handleModalCreate = () => {
     if (modalCreate) {
@@ -58,7 +98,7 @@ export default function Create({ chains }) {
                   <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none sm:text-sm">
                     <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
                       {selectedAccount === 1 || selectedAccount === 11155111 ? (
-                        <Ethereum  />
+                        <Ethereum />
                       ) : (
                         ''
                       )}
@@ -95,9 +135,20 @@ export default function Create({ chains }) {
                             <span
                               className={`block truncate ${
                                 selectedAccount ? 'font-medium' : 'font-normal'
+                              } ${
+                                chain.chainId === 666888 ||
+                                chain.chainId === 8668
+                                  ? ''
+                                  : 'text-gray-400'
                               }`}
                             >
-                              {chain.name}
+                              {chain.name}{' '}
+                              <span className="text-sm ">
+                                {chain.chainId === 666888 ||
+                                chain.chainId === 8668
+                                  ? ''
+                                  : '[currently not supported]'}
+                              </span>
                             </span>
                           </>
                         )}
@@ -220,12 +271,18 @@ export default function Create({ chains }) {
                     id="fixed-method"
                     name="method"
                     value="fixed"
-                    class="peer hidden"
+                    className="peer hidden"
+                    onChange={handleRadioChange}
+                    checked={selectedOption === 'fixed'}
                     required
                   />
                   <label
-                    for="fixed-method"
-                    class="flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-500 peer-checked:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500"
+                    htmlFor="fixed-method"
+                    className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-primary-50 hover:text-gray-600 ${
+                      selectedOption === 'fixed'
+                        ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
+                        : 'dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300'
+                    }`}
                   >
                     <FontAwesomeIcon icon={faMoneyBill} className="text-5xl" />
                     <span>
@@ -241,11 +298,17 @@ export default function Create({ chains }) {
                     id="time-method"
                     name="method"
                     value="time"
-                    class="peer hidden"
+                    className="peer hidden"
+                    onChange={handleRadioChange}
+                    checked={selectedOption === 'time'}
                   />
                   <label
-                    for="time-method"
-                    class="flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-500 peer-checked:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500"
+                    htmlFor="time-method"
+                    className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-primary-50 hover:text-gray-600 ${
+                      selectedOption === 'time'
+                        ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
+                        : 'dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300'
+                    }`}
                   >
                     <FontAwesomeIcon icon={faHourglass} className="text-5xl" />
                     <span>
@@ -266,6 +329,7 @@ export default function Create({ chains }) {
                     type="number"
                     className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
                     placeholder="0"
+                    min="0"
                   />
                   <span className="pr-3 text-gray-500">
                     <Ethereum />
@@ -293,20 +357,24 @@ export default function Create({ chains }) {
               </label>
               <div className="mt-2 flex gap-2">
                 <input
-                  type="text"
+                  type="datetime-local"
                   name="duration_date"
                   id="duration_date"
                   autocomplete="duration_date"
                   className="flex-1 rounded-md border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:text-sm sm:leading-6"
-                  placeholder="10 - 08 - 2023, 10:00 AM"
+                  value={customValueDate}
+                  disabled={selectedOptionDate === 'Custom' ? false : true}
                 />
                 <select
                   className="rounded-md border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:max-w-md sm:text-sm sm:leading-6"
-                  placeholder="10 - 08 - 2023, 10:00 AM"
+                  onChange={handleSelectChange}
+                  value={selectedOptionDate}
                 >
                   <option>1 Day</option>
-                  <option>2 Day</option>
+                  <option>7 Day</option>
                   <option>1 Week</option>
+                  <option>1 Month</option>
+                  <option>Custom</option>
                 </select>
               </div>
             </div>
@@ -467,19 +535,21 @@ export default function Create({ chains }) {
             )}
 
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 rounded-lg bg-primary-50 p-2">
+              <div className="flex w-1/3 items-center gap-2 rounded-lg bg-primary-50 p-2">
                 <img
                   className="h-4 w-4 rounded-2xl"
                   src="https://fakeimg.pl/16x16"
                 />
-                <div className="text-xs font-medium leading-none text-neutral-700">
-                  Ryuma
+                <div className="truncate text-xs font-medium leading-none text-neutral-700">
+                  {address}
                 </div>
               </div>
               <FontAwesomeIcon icon={faEllipsis} className="text-primary-500" />
             </div>
             <div className="flex items-center justify-between">
-              <h4 className="font-semibold">{name}</h4>
+              <h4 className="font-semibold">
+                {name === '' ? 'Untitled' : name}
+              </h4>
               <Ethereum className="text-gray-400" />
             </div>
 

@@ -44,6 +44,16 @@ const Sidebar = () => {
     router.push('/profile'); // Navigate to the profile page
   };
 
+  const handleNftCreate = () => {
+    closeSidebar();
+    router.push('/nft/create'); // Navigate to the profile page
+  };
+
+  const handleCollectionCreate = () => {
+    closeSidebar();
+    router.push('/collection/create'); // Navigate to the profile page
+  };
+
   const handleDisconnect = () => {
     closeSidebar();
     disconnect();
@@ -121,13 +131,19 @@ const Sidebar = () => {
                 <div className="flex h-20 flex-col items-start justify-start gap-2 self-stretch px-6">
                   <div className="inline-flex items-center justify-start gap-2 self-stretch">
                     <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
-                    <div className="shrink grow basis-0 text-2xl font-medium leading-9 text-black">
+                    <div
+                      className="shrink grow basis-0 cursor-pointer text-2xl font-medium leading-9 text-black"
+                      onClick={() => handleNftCreate()}
+                    >
                       NFT
                     </div>
                   </div>
                   <div className="inline-flex items-center justify-start gap-2">
                     <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
-                    <div className="w-48 text-2xl font-medium leading-9 text-black">
+                    <div
+                      className="w-48 cursor-pointer text-2xl font-medium leading-9 text-black"
+                      nClick={() => handleCollectionCreate()}
+                    >
                       Collections
                     </div>
                   </div>

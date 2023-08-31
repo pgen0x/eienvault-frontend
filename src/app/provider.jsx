@@ -9,6 +9,7 @@ import { config } from '@/hooks/eth/wagmiConfig';
 import { initializeApp } from '@/hooks/eth/wagmiConfig';
 import { Web3Modal } from '@web3modal/react';
 import { useIsDarkMode } from '@/hooks/use-is-dark-mode';
+import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
 
 export function Providers({ children }) {
   const [mounted, setMounted] = useState(false);
@@ -23,6 +24,12 @@ export function Providers({ children }) {
         enableSystem={false}
         defaultTheme="light"
       >
+        <ProgressBar
+          height="4px"
+          color="#f34054"
+          options={{ showSpinner: false }}
+          shallowRouting
+        />
         <SidebarProvider>
           <WagmiConfig config={wagmiConfig}>{mounted && children}</WagmiConfig>
           <Web3Modal

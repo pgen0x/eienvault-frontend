@@ -1,4 +1,3 @@
-'use client'
 import Navbar from '@/components/navbar';
 import './globals.css';
 import { Inter } from 'next/font/google';
@@ -8,7 +7,6 @@ import 'swiper/css';
 import 'swiper/css/autoplay';
 import Footer from '../components/footer/main';
 import Sidebar from '../components/sidebar';
-import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,12 +19,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className + ' bg-gray-100'}>
-        <ProgressBar
-          height="4px"
-          color="#f34054"
-          options={{ showSpinner: true }}
-          shallowRouting
-        />
+        
         <Providers>
           <Navbar />
           <Sidebar />

@@ -11,7 +11,8 @@ const servers = [
   'Benedict Kessler',
   'Katelyn Rohan',
 ]
-export default function TrandingTop() {
+
+const Main = () => {
   const [TrendingTop, setTrendingTop] = useState("trending");
   const [Range, setRange] = useState("1h");
   const [selectedServer, setSelectedServer] = useState(servers[0])
@@ -24,38 +25,12 @@ export default function TrandingTop() {
     setRange(target);
   }
 
-  const formatter = (num, digits) => {
-    const lookup = [
-      { value: 1, symbol: "" },
-      { value: 1e3, symbol: "K" },
-      { value: 1e6, symbol: "M" },
-      { value: 1e9, symbol: "G" },
-      { value: 1e12, symbol: "T" },
-      { value: 1e15, symbol: "P" },
-      { value: 1e18, symbol: "E" }
-    ];
-    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-    var item = lookup.slice().reverse().find(function (item) {
-      return num >= item.value;
-    });
-    return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
-  }
-
   const classRadio = (params, value) => {
     const defaultCssRadio = "cursor-pointer w-full px-2.5 py-2 rounded-full text-sm font-medium leading-5 ";
     return defaultCssRadio + (params === value ? 'text-white bg-primary-500 shadow' : 'text-primary-500 hover:bg-primary-200')
   }
-
-  const classFloor = (value) => {
-    return Number(value) < 0 ? "rounded-full font-semibold bg-red-500 text-center text-white px-2" : "rounded-full font-semibold bg-green-500 text-center text-white px-2";
-  }
-
-  const classMovement = (value) => {
-    return Number(value) < 0 ? "text-center font-semibold text-red-500 px-2" : "text-center font-semibold text-green-500 px-2";
-  }
-
   return (
-    <div>
+    <>
       <div className="flex justify-between items-center">
         <div className="flex max-w-min">
           <div className="flex space-x-1 rounded-full bg-white py-2 px-1 mr-5">
@@ -123,16 +98,50 @@ export default function TrandingTop() {
           <a href="#" className="text-primary-500">See all</a>
         </div>
       </div>
+    </>
+  );
+}
+
+export const TrendingTop = () => {
+
+  const formatter = (num, digits) => {
+    const lookup = [
+      { value: 1, symbol: "" },
+      { value: 1e3, symbol: "K" },
+      { value: 1e6, symbol: "M" },
+      { value: 1e9, symbol: "G" },
+      { value: 1e12, symbol: "T" },
+      { value: 1e15, symbol: "P" },
+      { value: 1e18, symbol: "E" }
+    ];
+    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+    var item = lookup.slice().reverse().find(function (item) {
+      return num >= item.value;
+    });
+    return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
+  }
+
+  const classFloor = (value) => {
+    return Number(value) < 0 ? "rounded-full font-semibold bg-red-500 text-center text-white px-2" : "rounded-full font-semibold bg-green-500 text-center text-white px-2";
+  }
+
+  const classMovement = (value) => {
+    return Number(value) < 0 ? "text-center font-semibold text-red-500 px-2" : "text-center font-semibold text-green-500 px-2";
+  }
+
+  return (
+    <>
+      <Main />
       <ul role="list" className="mt-2 flex flex-col flex-wrap h-[520px]">
         {trading.map((trade, index) => (
-          <li key={trade.email} className="gap-x-6 md:p-2 lg:py-2 md:w-4/12 lg:w-3/12">
+          <li key={index} className="gap-x-6 md:p-2 lg:py-2 md:w-4/12 lg:w-3/12">
             <div className="flex justify-between w-full px-5 py-2 bg-white rounded-md">
               <div className="flex min-w-0 gap-x-4 items-center">
                 <p className="text-primary-500 text-sm">{index + 1}.</p>
                 <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={trade.imageUrl} alt="" />
                 <div className="min-w-0 flex-auto">
-                  <p className="absolute text-sm font-semibold leading-6 text-gray-900">{trade.name}</p>
-                  <div className="mt-5 truncate text-xs leading-5">
+                  <p className="text-sm font-semibold leading-6 text-gray-900">{trade.name}</p>
+                  <div className="truncate text-xs leading-5">
                     <p>Floor</p>
                   </div>
                   <div className="w-30 truncate text-xs leading-5 text-gray-500">
@@ -160,6 +169,45 @@ export default function TrandingTop() {
           </li>
         ))}
       </ul>
-    </div>
+    </>
   )
 }
+
+export const TrendingTopSkeleton = () => {
+  return (
+    <>
+      <Main />
+      <ul role="list" className="mt-2 flex flex-col flex-wrap h-[520px]">
+        {[...Array(20)].map((x, i) => (
+          <li key={i} className="gap-x-6 md:p-2 lg:py-2 md:w-4/12 lg:w-3/12">
+            <div className="flex justify-between w-full px-5 py-2 bg-white rounded-md">
+              <div className="flex min-w-0 gap-x-4 items-center">
+                <div className="w-3 h-3 bg-gray-300 animate-pulse rounded-full"></div>
+                <div className="h-12 w-12 bg-gray-300 animate-pulse rounded-full" />
+                <div className="min-w-0 flex-auto">
+                  <div className="w-36 h-4 bg-gray-300 animate-pulse rounded-full mb-2" />
+                  <div className="truncate text-xs leading-5">
+                    <div className="w-24 h-3 bg-gray-300 animate-pulse rounded-full mb-1" />
+                  </div>
+                  <div className="w-30 truncate text-xs leading-5 text-gray-500">
+                    <div className="w-24 h-3 bg-gray-300 animate-pulse rounded-full mb-1" />
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col items-end">
+                <div className="mt-[1.9rem] w-10 h-2 bg-gray-300 animate-pulse rounded-full mb-2" />
+                <div className="w-10 h-2 bg-gray-300 animate-pulse rounded-full mb-2 mt-1" />
+              </div>
+              <div className="flex flex-col items-end">
+                <div className="mt-[1.9rem] w-10 h-2 bg-gray-300 animate-pulse rounded-full mb-2" />
+                <div className="w-10 h-2 bg-gray-300 animate-pulse rounded-full mb-2 mt-1" />
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
+export default TrendingTop;

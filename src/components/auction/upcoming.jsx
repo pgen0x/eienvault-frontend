@@ -1,11 +1,10 @@
-// src/Slideshow.js
 import { useRouter } from 'next-nprogress-bar';
 import {
   faCircleCheck,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const UpcomingAuction = () => {
+export const UpcomingAuction = () => {
   const router = useRouter();
 
   return (
@@ -284,5 +283,117 @@ const UpcomingAuction = () => {
     </>
   );
 };
+
+export const UpcomingAuctionSkeleton = () => {
+  return (
+    <>
+      <div className="flex gap-4 mt-5">
+
+        <div className="group flex-1 h-[666px] overflow-hidden">
+          <div className="flex flex-col p-2 justify-end rounded-lg bg-gray-400 animate-pulse bg-cover bg-center h-[666px]">
+            <div className="flex items-center justify-start gap-2 rounded-lg bg-opacity-70 py-2">
+              <div className="h-4 w-4 rounded-2xl animate-pulse bg-gray-300" />
+              <div className="flex items-start justify-start gap-2">
+                <div className="bg-gray-300 animate-pulse w-16 h-4 rounded-lg" />
+              </div>
+            </div>
+            <div className="bg-gray-300 animate-pulse w-48 h-8 rounded-lg p-2 mt-2" />
+            <div className="bg-gray-300 animate-pulse w-40 h-8 rounded-lg p-2 mt-2" />
+            <div className="w-fit flex gap-2 justify-between items-center mt-2 text-center">
+              <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+              <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+              <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+              <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col justify-between gap-4 flex-1 h-[666px]">
+          <div className="group flex-1 h-[325px] overflow-hidden">
+            <div className="flex-1 h-[325px] overflow-hidden">
+              <div className="flex flex-col gap-1 p-2 justify-end rounded-lg bg-gray-400 animate-pulse bg-cover bg-center h-[325px]">
+                <div className="w-fit flex items-center justify-center gap-2 rounded-lg p-2">
+                  <div className="h-4 w-4 rounded-2xl animate-pulse bg-gray-300" />
+                  <div className="flex items-start justify-start gap-2">
+                    <div className="bg-gray-300 animate-pulse w-16 h-4 rounded-lg" />
+                  </div>
+                </div>
+                <div className="bg-gray-300 animate-pulse w-48 h-8 rounded-lg p-2 mt-2" />
+                <div className="bg-gray-300 animate-pulse w-40 h-8 rounded-lg p-2 mt-2" />
+                <div className="w-fit flex gap-2 justify-between items-center mt-2 text-center">
+                  <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+                  <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+                  <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+                  <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="group flex-1 h-[325px] overflow-hidden">
+            <div className="flex-1 h-[325px] overflow-hidden">
+              <div className="flex flex-col gap-1 p-2 justify-end rounded-lg bg-gray-400 animate-pulse bg-cover bg-center h-[325px]">
+                <div className="w-fit flex items-center justify-center gap-2 rounded-lg p-2">
+                  <div className="h-4 w-4 rounded-2xl animate-pulse bg-gray-300" />
+                  <div className="flex items-start justify-start gap-2">
+                    <div className="bg-gray-300 animate-pulse w-16 h-4 rounded-lg" />
+                  </div>
+                </div>
+                <div className="bg-gray-300 animate-pulse w-48 h-8 rounded-lg p-2 mt-2" />
+                <div className="bg-gray-300 animate-pulse w-40 h-8 rounded-lg p-2 mt-2" />
+                <div className="w-fit flex gap-2 justify-between items-center mt-2 text-center">
+                  <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+                  <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+                  <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+                  <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col justify-between gap-4 flex-1 h-[666px]">
+        <div className="group flex-1 h-[325px] overflow-hidden">
+            <div className="flex-1 h-[325px] overflow-hidden">
+              <div className="flex flex-col gap-1 p-2 justify-end rounded-lg bg-gray-400 animate-pulse bg-cover bg-center h-[325px]">
+                <div className="w-fit flex items-center justify-center gap-2 rounded-lg p-2">
+                  <div className="h-4 w-4 rounded-2xl animate-pulse bg-gray-300" />
+                  <div className="flex items-start justify-start gap-2">
+                    <div className="bg-gray-300 animate-pulse w-16 h-4 rounded-lg" />
+                  </div>
+                </div>
+                <div className="bg-gray-300 animate-pulse w-48 h-8 rounded-lg p-2 mt-2" />
+                <div className="bg-gray-300 animate-pulse w-40 h-8 rounded-lg p-2 mt-2" />
+                <div className="w-fit flex gap-2 justify-between items-center mt-2 text-center">
+                  <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+                  <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+                  <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+                  <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="group flex-1 h-[325px] overflow-hidden">
+            <div className="flex-1 h-[325px] overflow-hidden">
+              <div className="flex flex-col gap-1 p-2 justify-end rounded-lg bg-gray-400 animate-pulse bg-cover bg-center h-[325px]">
+                <div className="w-fit flex items-center justify-center gap-2 rounded-lg p-2">
+                  <div className="h-4 w-4 rounded-2xl animate-pulse bg-gray-300" />
+                  <div className="flex items-start justify-start gap-2">
+                    <div className="bg-gray-300 animate-pulse w-16 h-4 rounded-lg" />
+                  </div>
+                </div>
+                <div className="bg-gray-300 animate-pulse w-48 h-8 rounded-lg p-2 mt-2" />
+                <div className="bg-gray-300 animate-pulse w-40 h-8 rounded-lg p-2 mt-2" />
+                <div className="w-fit flex gap-2 justify-between items-center mt-2 text-center">
+                  <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+                  <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+                  <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+                  <div className="bg-gray-300 animate-pulse w-12 h-12 rounded-lg py-3" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
 
 export default UpcomingAuction;

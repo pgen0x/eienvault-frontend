@@ -1,13 +1,13 @@
 'use client';
 import { useIsMounted } from '@/hooks/use-is-mounted';
-import SlideshowDiscover from '@/components/slideshow/discover';
-import SlideshowActivities from '@/components/slideshow/activities';
-import SlideshowCreator from '@/components/slideshow/creator';
+import { SlideshowDiscover, SlideshowDiscoverSkeleton } from '@/components/slideshow/discover';
+import { SlideshowActivities, SlideshowActivitiesSkeleton } from '@/components/slideshow/activities';
+import { SlideshowCreator, SlideshowCreatorSkeleton } from '@/components/slideshow/creator';
 import Avatar from '@/assets/images/avatar.jpg';
 import Image from 'next/image';
-import TrendingTop from '@/components/trading-top';
+import { TrendingTop, TrendingTopSkeleton } from '@/components/treding-top';
 import Auction from '@/components/auction';
-import UpcomingAuction from '@/components/auction/upcoming';
+import { UpcomingAuction, UpcomingAuctionSkeleton } from '@/components/auction/upcoming';
 import { Tab } from '@headlessui/react';
 import Line from '@/assets/icon/line3';
 import LineRound from '@/assets/icon/line4';
@@ -76,8 +76,9 @@ export default function Home() {
                   DIscover more
                 </button>
               </div>
-              <div className="relative mb-5 flex w-[69%] flex-initial items-center justify-center">
+              <div className="relative my-5 flex w-[69%] flex-initial items-center justify-center">
                 <SlideshowDiscover />
+                {/* <SlideshowDiscoverSkeleton /> */}
               </div>
             </div>
           </div>
@@ -91,8 +92,9 @@ export default function Home() {
                   See all
                 </a>
               </div>
-              <div className="relative mb-5 flex w-full flex-initial items-center justify-center">
+              <div className="relative my-5 flex w-full flex-initial items-center justify-center">
                 <SlideshowActivities />
+                {/* <SlideshowActivitiesSkeleton /> */}
               </div>
             </div>
           </div>
@@ -107,6 +109,7 @@ export default function Home() {
                 </a>
               </div>
               <UpcomingAuction />
+              {/* <UpcomingAuctionSkeleton /> */}
             </div>
           </div>
         </section>
@@ -120,7 +123,7 @@ export default function Home() {
                 <div className="relative top-[130px] mx-auto flex w-[90%] items-center justify-center">
                   <div className="w-full rounded-lg bg-white/60 p-10 px-3 text-center text-gray-800 backdrop-blur">
                     <h2 className="text-2xl font-bold">
-                      Don`&lsquo;`t miss a drop
+                      Don&lsquo;t miss a drop
                     </h2>
                     <p>
                       Subscribe to our real time newspaper and be the first to
@@ -160,8 +163,9 @@ export default function Home() {
                   See all
                 </a>
               </div>
-              <div className="relative mb-5 flex w-full flex-initial items-center justify-center">
+              <div className="relative my-5 flex w-full flex-initial items-center justify-center gap-5">
                 <SlideshowCreator />
+                {/* <SlideshowCreatorSkeleton /> */}
               </div>
             </div>
           </div>

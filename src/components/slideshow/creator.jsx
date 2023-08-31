@@ -24,7 +24,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
-const SlideshowCreator = () => {
+export const SlideshowCreator = () => {
   const sliderBreakPoints = {
     640: {
       slidesPerView: 2,
@@ -55,7 +55,7 @@ const SlideshowCreator = () => {
         <FontAwesomeIcon icon={faChevronLeft} />
       </button>
       <Swiper
-        className="!pb-5 !pl-5"
+        className="!pb-5 !pl-10"
         slidesPerView={1}
         scrollbar={{ draggable: true }}
         breakpoints={sliderBreakPoints}
@@ -141,5 +141,51 @@ const SlideshowCreator = () => {
     </>
   );
 };
+
+export const SlideshowCreatorSkeleton = () => {
+  return (
+    <>
+      {[...Array(5)].map((x, i) => (
+        <div className="inline-flex w-[280px]  flex-col items-center justify-center lg:items-start">
+          <div className="relative flex flex-row">
+            <div className="inline-flex flex-col items-start justify-start">
+              <div className="w-[280px] h-[145px] bg-gray-300 animate-pulse z-10 w-full rounded-t-2xl" />
+              <div className="w-[280px] gap-4 rounded-bl-2xl rounded-br-2xl bg-white p-5">
+                <div className="flex w-full flex-col items-start justify-start">
+                  <div className="z-10 -mt-[70px] flex items-center justify-center">
+                    <div className="h-20 w-20 bg-gray-300 animate-pulse rounded-full border-[3px]" />
+                  </div>
+                  <div className="mt-2 w-[132px] h-3 bg-gray-300 animate-pulse rounded-full" />
+                  <div className="mt-5 w-[90%] h-2 bg-gray-300 animate-pulse rounded-full" />
+                  <div className="mt-2 w-[95%] h-2 bg-gray-300 animate-pulse rounded-full" />
+                  <div className="mt-2 w-full h-2 bg-gray-300 animate-pulse rounded-full" />
+                  <div className="my-2 flex w-full gap-5 justify-between rounded-md bg-white py-2 text-center text-sm">
+                    <div className="flex w-full flex-col">
+                      <div className="w-full h-2 mt-2 bg-gray-300 animate-pulse rounded-full" />
+                      <div className="w-full h-2 mt-3 bg-gray-300 animate-pulse rounded-full" />
+                    </div>
+                    <div className="flex w-full flex-col">
+                      <div className="w-full h-2 mt-2 bg-gray-300 animate-pulse rounded-full" />
+                      <div className="w-full h-2 mt-3 bg-gray-300 animate-pulse rounded-full" />
+                    </div>
+                    <div className="flex w-full flex-col">
+                      <div className="w-full h-2 mt-2 bg-gray-300 animate-pulse rounded-full" />
+                      <div className="w-full h-2 mt-3 bg-gray-300 animate-pulse rounded-full" />
+                    </div>
+                  </div>
+                  <div className="flex w-full gap-5">
+                    <div className="w-full h-8 mt-1 bg-gray-300 animate-pulse rounded-full" />
+                    <div className="w-full h-8 mt-1 bg-gray-300 animate-pulse rounded-full" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+      )}
+    </>
+  );
+}
 
 export default SlideshowCreator;

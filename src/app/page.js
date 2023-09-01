@@ -111,7 +111,7 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="block flex h-[400px] justify-between overflow-hidden bg-gray-100 bg-orange-100 text-black">
+          <div className="flex h-[400px] justify-between overflow-hidden bg-orange-100 text-black">
             <div className="w-max-full relative -bottom-[6rem] left-0 w-full">
               {/* <Line /> */}
             </div>
@@ -120,7 +120,7 @@ export default function Home() {
                 <div className="relative top-[130px] mx-auto flex w-[90%] items-center justify-center">
                   <div className="w-full rounded-lg bg-white/60 p-10 px-3 text-center text-gray-800 backdrop-blur">
                     <h2 className="text-2xl font-bold">
-                      Don`&lsquo;`t miss a drop
+                      Don&lsquo;t miss a drop
                     </h2>
                     <p>
                       Subscribe to our real time newspaper and be the first to

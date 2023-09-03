@@ -29,7 +29,7 @@ import moment from 'moment';
 import { ErrorMessage } from '@hookform/error-message';
 
 export default function Create({ chains }) {
-  const [selectedAccount, setSelectedAccount] = useState(666888);
+  const [selectedChain, setSelectedChain] = useState('Select Chain');
   const [stepCreate, setStepCreate] = useState(1);
   const [modalCreate, setModalCreate] = useState(false);
   const [selectedBlockchain, setSelectedBlockchain] = useState(666888);
@@ -48,6 +48,7 @@ export default function Create({ chains }) {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
 
@@ -93,7 +94,7 @@ export default function Create({ chains }) {
     // Handle form submission here
     console.log(data);
   };
-  
+
   return (
     <>
       <div className="my-5 flex flex-row justify-center gap-5 text-gray-900">
@@ -108,15 +109,15 @@ export default function Create({ chains }) {
               <div className="w-full">
                 <label className="font-semibold">Blockchain</label>
                 <Listbox
-                  value={selectedAccount}
-                  onChange={setSelectedAccount}
+                  value={selectedChain}
+                  onChange={setSelectedChain}
                   className="mt-2"
                 >
                   <div className="relative z-20">
                     <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none sm:text-sm">
-                      <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                        {selectedAccount === 1 ||
-                        selectedAccount === 11155111 ? (
+                      {/* <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                        {selectedChain.chainId === 1 ||
+                        selectedChain.chainId === 11155111 ? (
                           <Ethereum />
                         ) : (
                           ''
@@ -125,7 +126,7 @@ export default function Create({ chains }) {
                       <span className="block truncate pl-5 text-gray-600">
                         {
                           chains.find(
-                            (chain) => chain.chainId === selectedAccount,
+                            (chain) => chain.chainId === selectedChain.chainId,
                           )?.name
                         }
                       </span>
@@ -134,7 +135,8 @@ export default function Create({ chains }) {
                           icon={faChevronDown}
                           className="text-gray-600"
                         />
-                      </span>
+                      </span> */}
+                      {selectedChain.name}
                     </Listbox.Button>
                     <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                       {chains.map((chain) => (
@@ -147,20 +149,18 @@ export default function Create({ chains }) {
                                 : 'text-gray-900'
                             }`
                           }
-                          value={chain.chainId}
+                          value={chain}
                           disabled={
                             chain.chainId === 666888 || chain.chainId === 8668
                               ? false
                               : true
                           }
                         >
-                          {({ selectedAccount }) => (
+                          {({ selectedChain }) => (
                             <>
                               <span
                                 className={`block truncate ${
-                                  selectedAccount
-                                    ? 'font-medium'
-                                    : 'font-normal'
+                                  selectedChain ? 'font-medium' : 'font-normal'
                                 } ${
                                   chain.chainId === 666888 ||
                                   chain.chainId === 8668
@@ -295,7 +295,7 @@ export default function Create({ chains }) {
                   placeholder="E.g, Mickey mouse riding a car"
                   {...register('name', { required: 'Name is required.' })}
                 />
-                <div className="text-sm text-primary-500 mt-1">
+                <div className="mt-1 text-sm text-primary-500">
                   <ErrorMessage errors={errors} name="name" />
                 </div>
               </div>
@@ -384,6 +384,7 @@ export default function Create({ chains }) {
                     className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
                     placeholder="0"
                     min="0"
+                    {...register('price', { required: 'Price is required.' })}
                   />
                   <span className="pr-3 text-gray-500">
                     <Ethereum />
@@ -393,12 +394,14 @@ export default function Create({ chains }) {
               <div className="mt-2 w-full px-2">
                 <div className="flex w-full justify-between">
                   <span>Price</span>
-                  <span className="font-semibold">- ETH</span>
+                  <span className="font-semibold">
+                    {watch('price')} {selectedChain.name}
+                  </span>
                 </div>
-                <div className="mb-2 flex w-full justify-between border-b-2 pb-2">
+                {/* <div className="mb-2 flex w-full justify-between border-b-2 pb-2">
                   <span>Snap charge fee</span>
                   <span className="font-semibold">0%</span>
-                </div>
+                </div> */}
                 <div className="flex w-full justify-between">
                   <span>You will receive</span>
                   <span className="font-semibold">- ETH</span>

@@ -1,13 +1,13 @@
 'use client';
 import { useIsMounted } from '@/hooks/use-is-mounted';
-import SlideshowDiscover from '@/components/slideshow/discover';
-import SlideshowActivities from '@/components/slideshow/activities';
-import SlideshowCreator from '@/components/slideshow/creator';
+import { SlideshowDiscover, SlideshowDiscoverSkeleton } from '@/components/slideshow/discover';
+import { SlideshowActivities, SlideshowActivitiesSkeleton } from '@/components/slideshow/activities';
+import { SlideshowCreator, SlideshowCreatorSkeleton } from '@/components/slideshow/creator';
 import Avatar from '@/assets/images/avatar.jpg';
 import Image from 'next/image';
-import TrendingTop from '@/components/trading-top';
+import { TrendingTop, TrendingTopSkeleton, TrendingTopMobile } from '@/components/treding-top';
 import Auction from '@/components/auction';
-import UpcomingAuction from '@/components/auction/upcoming';
+import { UpcomingAuction, UpcomingAuctionMobile, UpcomingAuctionSkeleton } from '@/components/auction/upcoming';
 import { Tab } from '@headlessui/react';
 import Line from '@/assets/icon/line3';
 import LineRound from '@/assets/icon/line4';
@@ -38,7 +38,7 @@ export default function Home() {
     <>
       <div className="homepage relative">
         <Auction />
-        <section className="relative -mt-24 flex h-[690px] w-full flex-col gap-4 bg-gray-100 px-10 pt-10 text-black">
+        <section className="relative -mt-24 flex h-auto sm:h-auto md:h-[690px] lg:h-[690px] my-5 xl:h-[690px] 2xl:h-[690px] w-full flex-col gap-4 bg-gray-100 px-10 pt-10 text-black">
           <div className="container mx-auto">
             <Tab.Group>
               <Tab.List>
@@ -51,10 +51,15 @@ export default function Home() {
               </Tab.List>
               <Tab.Panels className="pt-4">
                 <Tab.Panel>
-                  <TrendingTop />
+                  <div className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
+                    <TrendingTop />
+                  </div>
+                  <div className="block sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
+                    <TrendingTopMobile />
+                  </div>
                 </Tab.Panel>
                 <Tab.Panel>
-                  <TrendingTop />
+                  <TrendingTopSkeleton />
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>
@@ -62,8 +67,8 @@ export default function Home() {
         </section>
         <section>
           <div className="section-discover w-full text-black">
-            <div className="container mx-auto flex items-center justify-center">
-              <div className="w-[29%] flex-initial">
+            <div className="container mx-auto flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row items-center justify-center">
+              <div className="w-full sm:w-full md:w-[29%] lg:w-[29%] xl:w-[29%] 2xl:w-[29%] flex-initial p-5">
                 <h2 className="text-3xl">
                   Discover Our Best <br />
                   Collections For you to buy.
@@ -76,8 +81,9 @@ export default function Home() {
                   DIscover more
                 </button>
               </div>
-              <div className="relative mb-5 flex w-[69%] flex-initial items-center justify-center">
+              <div className="relative my-5 flex w-full sm:w-full md:w-[69%] lg:w-[69%] xl:w-[69%] 2xl:w-[69%] flex-initial items-center justify-center">
                 <SlideshowDiscover />
+                {/* <SlideshowDiscoverSkeleton /> */}
               </div>
             </div>
           </div>
@@ -91,8 +97,9 @@ export default function Home() {
                   See all
                 </a>
               </div>
-              <div className="relative mb-5 flex w-full flex-initial items-center justify-center">
+              <div className="relative my-5 flex w-full flex-initial items-center justify-center">
                 <SlideshowActivities />
+                {/* <SlideshowActivitiesSkeleton /> */}
               </div>
             </div>
           </div>
@@ -106,7 +113,13 @@ export default function Home() {
                   See all
                 </a>
               </div>
-              <UpcomingAuction />
+              <div className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
+                <UpcomingAuction />
+              </div>
+              <div className="block sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
+                <UpcomingAuctionMobile />
+              </div>
+              {/* <UpcomingAuctionSkeleton /> */}
             </div>
           </div>
         </section>
@@ -116,8 +129,8 @@ export default function Home() {
               {/* <Line /> */}
             </div>
             <div className="flex-2 w-full">
-              <div className="relative -top-[50px] block h-[40vw] w-[40vw] rounded-full bg-red-400">
-                <div className="relative top-[130px] mx-auto flex w-[90%] items-center justify-center">
+              <div className="relative top-0 sm:top-0 md:-top-[50px] lg:-top-[50px] xl:-top-[50px] 2xl:-top-[50px] block h-[30rem] w-[30rem] max-w-full max-h-full rounded-full bg-red-400">
+                <div className="relative top-[50px] sm:top-[50px] md:top-[130px] lg:top-[130px] xl:top-[130px] 2xl:top-[130px] mx-auto flex w-[90%] items-center justify-center">
                   <div className="w-full rounded-lg bg-white/60 p-10 px-3 text-center text-gray-800 backdrop-blur">
                     <h2 className="text-2xl font-bold">
                       Don&lsquo;t miss a drop
@@ -160,31 +173,32 @@ export default function Home() {
                   See all
                 </a>
               </div>
-              <div className="relative mb-5 flex w-full flex-initial items-center justify-center">
+              <div className="relative my-5 flex w-full flex-initial items-center justify-center gap-5">
                 <SlideshowCreator />
+                {/* <SlideshowCreatorSkeleton /> */}
               </div>
             </div>
           </div>
         </section>
         <section>
-          <div className="h-[480px] w-full bg-gray-100 text-black">
+          <div className="h-auto sm:h-auto md:h-[480px] lg:h-[480px] xl:h-[480px] 2xl:h-[480px] w-full bg-gray-100 text-black">
             <div className="container mx-auto px-4 py-4">
-              <div className="flex items-center justify-between">
-                <div className="relative h-fit w-full">
+              <div className="flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row items-center justify-between gap-5">
+                <div className="relative h-fit w-full py-5">
                   <img
                     className="rounded-2xl shadow"
                     src="https://fakeimg.pl/344x344"
                   />
                   <img
-                    className="absolute left-[127px] top-[172px] rounded-2xl shadow"
+                    className="absolute left-[37px] top-[172px] rounded-2xl shadow"
                     src="https://fakeimg.pl/243x245"
                   />
                   <img
-                    className="absolute left-[297px] top-[34px] rounded-2xl shadow"
+                    className="absolute left-[127px] top-[24px] rounded-2xl shadow"
                     src="https://fakeimg.pl/243x327"
                   />
                 </div>
-                <div className="flex w-full flex-col px-[150px]">
+                <div className="flex w-full flex-col py-5">
                   <h2 className="text-2xl font-bold">Discover hidden gems</h2>
                   <p className="my-3">
                     Eien vault is your window into a world of unique and
@@ -204,9 +218,9 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="h-[550px] w-full bg-amber-100 pt-5">
-            <div className="container relative z-[1] mx-auto flex justify-between rounded-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
-              <div className="flex-1 text-slate-600">
+          <div className="h-auto sm:h-auto md:h-[550px] lg:h-[550px] xl:h-[550px] 2xl:h-[550px] w-full bg-amber-100 p-5">
+            <div className="container relative z-[1] mx-auto flex gap-5 flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row justify-between rounded-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
+              <div className="text-slate-600">
                 <h2 className="text-3xl font-bold">
                   Use your NFTs to get a crypto <br />
                   loan
@@ -216,11 +230,11 @@ export default function Home() {
                   from lenders. Repay your loan, and you get your NFT
                   <br /> back. No auto-liquidations! 0% borrower fees!
                 </p>
-                <div className="my-5">
-                  <button className="rounded-full bg-primary-500 px-5 py-2 font-bold text-white hover:bg-primary-300">
+                <div className="flex flex-col sm:flex-col md:flex-col lg:flex-col xl:flex-col 2xl:flex-col gap-5 justify-between my-5">
+                  <button className="w-full rounded-full bg-primary-500 px-5 py-2 font-bold text-white hover:bg-primary-300">
                     Get loan now
                   </button>
-                  <button className="ml-1 rounded-full bg-white px-5 py-2 font-bold text-primary-500 hover:bg-primary-50">
+                  <button className="w-full ml-1 rounded-full bg-white px-5 py-2 font-bold text-primary-500 hover:bg-primary-50">
                     I want to lend
                   </button>
                 </div>
@@ -239,17 +253,17 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="flex-1 text-black">
+              <div className="text-black">
                 <img className="w-full" src="https://fakeimg.pl/720x405" />
               </div>
             </div>
-            <div className="relative -left-[30px] bottom-[200px] h-64 w-64 rounded-full bg-red-400"></div>
+            <div className="absolute -left-[30px] -mt-[240px] h-64 w-64 rounded-full bg-red-400"></div>
           </div>
         </section>
-        <section className="relative -mt-[50px] w-full px-[50px]">
+        <section className="relative mt-[30px] w-full px-[10px] sm:px-[10px] md:px-[50px] lg:px-[50px] xl:px-[50px] 2xl:px-[50px]">
           <div className="rounded-tl-2xl rounded-tr-2xl bg-white p-[30px]">
-            <div className="flex">
-              <div className="w-[40vw]">
+            <div className="flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
+              <div className="w-full sm:w-full md:w-[40vw] lg:w-[40vw] xl:w-[40vw] 2xl:w-[40vw]">
                 <div className="w-64">
                   <img src="logo.svg" className="w-36" />
                 </div>
@@ -261,7 +275,7 @@ export default function Home() {
                     offers
                   </p>
                 </div>
-                <div className="flex flex-col py-5 text-primary-500">
+                <div className="flex flex-col py-5 text-primary-500 hidden sm:hidden md:block lg:block xl:block 2xl:block">
                   <h4 className="text-xl font-bold">Join our community</h4>
                   <ul className="mt-3 flex w-fit justify-between gap-2">
                     <li className="text-2xl">
@@ -299,45 +313,86 @@ export default function Home() {
                   </ul>
                 </div>
               </div>
-              <div className="flex w-full justify-evenly">
-                <div className="">
-                  <h2 className="text-xl font-bold text-primary-500">
-                    Company
-                  </h2>
-                  <ul className="mt-5 text-gray-900">
-                    <li className="py-2">What is NFT ?</li>
-                    <li className="py-2">EienVault</li>
-                    <li className="py-2">Publish an NFT with us</li>
-                    <li className="py-2">About us</li>
-                    <li className="py-2">Advisory devices</li>
-                  </ul>
+              <div className="flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row w-full justify-evenly">
+                <div className="flex w-full gap-5">
+                  <div className="w-full">
+                    <h2 className="text-xl font-bold text-primary-500">
+                      Company
+                    </h2>
+                    <ul className="mt-5 text-gray-900">
+                      <li className="py-2">What is NFT ?</li>
+                      <li className="py-2">EienVault</li>
+                      <li className="py-2">Publish an NFT with us</li>
+                      <li className="py-2">About us</li>
+                      <li className="py-2">Advisory devices</li>
+                    </ul>
+                  </div>
+                  <div className="w-full">
+                    <h2 className="text-xl font-bold text-primary-500">
+                      EienVault
+                    </h2>
+                    <ul className="mt-5 text-gray-900">
+                      <li className="py-2">Displaying NFTs</li>
+                      <li className="py-2">Report security issues</li>
+                      <li className="py-2">Career</li>
+                    </ul>
+                  </div>
                 </div>
-                <div className="">
-                  <h2 className="text-xl font-bold text-primary-500">
-                    EienVault
-                  </h2>
-                  <ul className="mt-5 text-gray-900">
-                    <li className="py-2">Displaying NFTs</li>
-                    <li className="py-2">Report security issues</li>
-                    <li className="py-2">Career</li>
-                  </ul>
+                <div className="flex w-full gap-5">
+                  <div className="w-full">
+                    <h2 className="text-xl font-bold text-primary-500">Other</h2>
+                    <ul className="mt-5 text-gray-900">
+                      <li className="py-2">Get help</li>
+                      <li className="py-2">Term of use</li>
+                      <li className="py-2">Creator term of services</li>
+                      <li className="py-2">Privacy policy</li>
+                    </ul>
+                  </div>
+                  <div className="w-full">
+                    <h2 className="text-xl font-bold text-primary-500">Stats</h2>
+                    <ul className="mt-5 text-gray-900">
+                      <li className="py-2">Ranking</li>
+                      <li className="py-2">Activity</li>
+                    </ul>
+                  </div>
                 </div>
-                <div className="">
-                  <h2 className="text-xl font-bold text-primary-500">Other</h2>
-                  <ul className="mt-5 text-gray-900">
-                    <li className="py-2">Get help</li>
-                    <li className="py-2">Term of use</li>
-                    <li className="py-2">Creator term of services</li>
-                    <li className="py-2">Privacy policy</li>
-                  </ul>
-                </div>
-                <div className="">
-                  <h2 className="text-xl font-bold text-primary-500">Stats</h2>
-                  <ul className="mt-5 text-gray-900">
-                    <li className="py-2">Ranking</li>
-                    <li className="py-2">Activity</li>
-                  </ul>
-                </div>
+              </div>
+              <div className="w-full flex flex-col py-5 text-primary-500 block sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
+                <h4 className="text-xl font-bold">Join our community</h4>
+                <ul className="mt-3 flex w-fit justify-between gap-2">
+                  <li className="text-2xl">
+                    <a
+                      href="#"
+                      className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100"
+                    >
+                      <FontAwesomeIcon icon={faTwitter} />
+                    </a>
+                  </li>
+                  <li className="text-2xl">
+                    <a
+                      href="#"
+                      className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100"
+                    >
+                      <FontAwesomeIcon icon={faDiscord} />
+                    </a>
+                  </li>
+                  <li className="text-2xl">
+                    <a
+                      href="#"
+                      className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100"
+                    >
+                      <FontAwesomeIcon icon={faMedium} />
+                    </a>
+                  </li>
+                  <li className="text-2xl">
+                    <a
+                      href="#"
+                      className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100"
+                    >
+                      <FontAwesomeIcon icon={faEnvelope} />
+                    </a>
+                  </li>
+                </ul>
               </div>
             </div>
             <div className="mt-5 border-t border-primary-500 py-5 text-gray-900">

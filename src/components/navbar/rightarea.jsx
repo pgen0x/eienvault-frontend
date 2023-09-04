@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faBars,
   faCartShopping,
   faMoon,
   faSun,
@@ -78,33 +79,31 @@ export default function RightArea() {
     <>
       {isClient && (
         <div className="inline-flex h-8 w-full items-center justify-start gap-4">
-          {isConnect || isConnected ? (
-            <div as="div" className="relative inline-block text-left">
+          <div className="hidden sm:hidden md:hidden lg:block xl:block 2xl:block">
+            {isConnect || isConnected ? (
+              <div as="div" className="relative inline-block text-left">
+                <button
+                  className="inline-flex w-full justify-center rounded-full bg-primary-500 px-3 py-3 text-sm font-semibold"
+                  onClick={toggleSidebar}
+                >
+                  <FontAwesomeIcon icon={faUserAlt} />
+                </button>
+              </div>
+            ) : (
               <button
-                className="inline-flex w-full justify-center rounded-full bg-primary-500 px-3 py-3 text-sm font-semibold"
-                onClick={toggleSidebar}
+                onClick={() => open()}
+                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 hover:bg-primary-300"
               >
-                <FontAwesomeIcon icon={faUserAlt} />
+                <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
+                  <FontAwesomeIcon icon={faWallet} />
+                </div>
+                <div className="text-base font-bold leading-normal text-white">
+                  Connect your wallet
+                </div>
               </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => open()}
-              className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 hover:bg-primary-300"
-            >
-              <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
-                <FontAwesomeIcon icon={faWallet} />
-              </div>
-              <div className="text-base font-bold leading-normal text-white">
-                Connect your wallet
-              </div>
-            </button>
-          )}
-
-          <button
-            onClick={() => close()}
-            className="inline-flex flex-col items-center justify-center gap-2 rounded-xl text-xl text-primary-500"
-          >
+            )}
+          </div>
+          <button onClick={() => close()} className="inline-flex flex-col items-center justify-center rounded-xl text-xl text-primary-500">
             <FontAwesomeIcon icon={faCartShopping} />
           </button>
 

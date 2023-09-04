@@ -1,4 +1,3 @@
-// src/Slideshow.js
 import React, { useState, useEffect } from 'react';
 import { Slide } from 'react-slideshow-image';
 import Rightarrow from '@/assets/icon/rightarrow';
@@ -24,7 +23,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
-const Slideshow = () => {
+export const SlideshowActivities = () => {
   const router = useRouter();
   const sliderBreakPoints = {
     640: {
@@ -52,9 +51,9 @@ const Slideshow = () => {
   };
   return (
     <>
-      <button className="swiper-prev mr-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
+      <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-prev mr-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
       <Swiper
-        className="!pl-5 !pb-5"
+        className="!pb-5"
         slidesPerView={1}
         scrollbar={{ draggable: true }}
         breakpoints={sliderBreakPoints}
@@ -132,9 +131,58 @@ const Slideshow = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <button className="swiper-next ml-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
+      <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-next ml-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
     </>
   );
 };
 
-export default Slideshow;
+export const SlideshowActivitiesSkeleton = () => {
+  return (
+    <>
+      {[...Array(5)].map((x, i) => (
+        <div className="w-full p-3 group h-[494px]">
+          <div className="w-full h-[250px] bg-gray-300 animate-pulse rounded-2xl" />
+          <div className="w-full inline-flex flex-col items-center justify-center lg:items-start">
+            <div className="w-full px-5 relative flex flex-row">
+              <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-b-2xl bg-white/60 backdrop-blur p-3">
+                <div className="w-full flex flex-col items-start justify-start">
+                  <div className="inline-flex items-center justify-between self-stretch mt-2">
+                    <div className="flex items-center justify-center gap-2 rounded-lg p-2">
+                      <div className="h-4 w-4 rounded-2xl animate-pulse bg-gray-300" />
+                      <div className="flex items-start justify-start gap-2">
+                        <div className="bg-gray-300 animate-pulse w-16 h-4 rounded-lg" />
+                      </div>
+                    </div>
+                    <div className="items-center">
+                      <div className="w-6 h-2 bg-gray-300 animate-pulse rounded-full" />
+                    </div>
+                  </div>
+                  <div className="mt-3 w-full inline-flex items-center justify-between gap-2 pt-1">
+                    <div className="w-24 h-3 bg-gray-300 animate-pulse rounded-full" />
+                    <div className="h-4 w-4 rounded-2xl animate-pulse bg-gray-300" />
+                  </div>
+                  <div className="flex justify-between w-full mt-3 py-2">
+                    <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-start truncate text-sm leading-5">
+                      <div className="mt-1 w-24 h-3 bg-gray-300 animate-pulse rounded-full" />
+                      <div className="mt-1 w-24 h-3 bg-gray-300 animate-pulse rounded-full" />
+                    </div>
+                    <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-start truncate text-sm leading-5">
+                      <div className="mt-1 w-24 h-3 bg-gray-300 animate-pulse rounded-full" />
+                      <div className="mt-1 w-24 h-3 bg-gray-300 animate-pulse rounded-full" />
+                    </div>
+                  </div>
+                  <div className="flex mt-5 w-full items-center">
+                    <div className="mr-5 w-16 h-12 p-3 rounded-full bg-gray-300 animate-pulse" />
+                    <div className="w-full h-12 p-3 rounded-full bg-gray-300 animate-pulse" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </>
+  );
+};
+
+export default SlideshowActivities;

@@ -22,13 +22,14 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Listbox, Switch } from '@headlessui/react';
 import Image from 'next/legacy/image';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import { useAccount } from 'wagmi';
 import moment from 'moment';
 import { ErrorMessage } from '@hookform/error-message';
 import HelaIcon from '@/assets/icon/hela';
 import axios from 'axios';
+import ModalUploadDFile from '@/components/modal/uploadFile';
 
 export default function Create({ chains }) {
   const [selectedChain, setSelectedChain] = useState({
@@ -38,9 +39,8 @@ export default function Create({ chains }) {
   const [stepCreate, setStepCreate] = useState(1);
   const [modalCreate, setModalCreate] = useState(false);
   const [selectedBlockchain, setSelectedBlockchain] = useState(666888);
-  const [enableMinting, setEnableMinting] = useState(true);
   const [enableUnlockable, setEnableUnlockable] = useState(true);
-  const [selectedImage, setSelectedImage] = useState(null);
+  // const [selectedImage, setSelectedImage] = useState(null);
   const [name, setName] = useState('Untitled');
   const [selectedOptionMarket, setSelectedOptionMarket] = useState('fixed');
   const [selectedOptionEdition, setSelectedOptionEdition] = useState('single');
@@ -49,13 +49,51 @@ export default function Create({ chains }) {
   const { address } = useAccount();
   const [selectedOptionDate, setSelectedOptionDate] = useState('1 Day');
   const [customValueDate, setCustomValueDate] = useState('');
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState({
+    ipfs: false,
+    mint: false,
+    approve: false,
+    putonsale: false,
+  });
+  const [isErrorIPFS, setErrorIPFS] = useState({
+    isError: false,
+    message: '',
+  });
+  const [isErrorMint, setErrorMint] = useState({
+    isError: false,
+    message: '',
+  });
+  const [isErrorApprove, setErrorApprove] = useState({
+    isError: false,
+    message: '',
+  });
+  const [isErrorPutonsale, setErrorPutonsale] = useState({
+    isError: false,
+    message: '',
+  });
 
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
+    setValue,
+    getValues,
   } = useForm();
+  const selectedImage = watch('file');
+
+  useEffect(() => {
+    // Calculate the date 1 day from now using Moment.js
+    const currentDate = moment();
+    const nextDay = moment(currentDate).add(1, 'days');
+
+    // Format the calculated date in 'YYYY-MM-DDTHH:mm' format
+    const formattedDate = nextDay.format('YYYY-MM-DDTHH:mm');
+
+    // Set the formatted date as the default value
+    setCustomValueDate(formattedDate);
+  }, []);
 
   const handleDateSelectChange = (event) => {
     const selectedValue = event.target.value;
@@ -97,9 +135,16 @@ export default function Create({ chains }) {
   };
 
   const onSubmit = async (data) => {
+    setIsSubmit(true);
     try {
+      setIsLoading({
+        ipfs: true,
+        mint: false,
+        approve: false,
+        putonsale: false,
+      });
       const form = new FormData();
-      form.append('file', selectedImage);
+      // form.append('file', selectedImage);
       form.append('cidVersion', '0');
       form.append('wrapWithDirectory', 'false');
       const pinataMetadata = JSON.stringify({
@@ -124,16 +169,41 @@ export default function Create({ chains }) {
 
       // Handle the error
       if (!res.ok) {
-        throw new Error(await res.text());
+        const errorMessage = await res.text();
+        const errorObject = JSON.parse(errorMessage);
+        setErrorIPFS({
+          isError: true,
+          message: errorObject,
+        });
+        throw new Error(errorMessage);
+      } else {
+        const response = await res.json();
+        setIsLoading({
+          ipfs: false,
+          mint: true,
+          approve: false,
+          putonsale: false,
+        });
       }
-
-      const response = await res.json();
-      console.log(response);
     } catch (e) {
       // Handle errors here
       console.error(e);
+      setIsLoading({
+        ipfs: false,
+        mint: false,
+        approve: false,
+        putonsale: false,
+      });
     }
   };
+
+  const closeModal = () => {
+    setIsSubmit(false);
+    setErrorIPFS({ isError: false, message: '' });
+  };
+
+  console.log(getValues('file'));
+  console.log(selectedImage, 'selectedImage');
 
   return (
     <>
@@ -290,16 +360,19 @@ export default function Create({ chains }) {
                   item
                 </label>
                 <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-5 text-center">
-                  {selectedImage ? (
+                  {selectedImage && selectedImage.length > 0 ? (
                     <>
                       <button
                         className="absolute right-1.5 top-1.5 h-10 w-10 rounded-full text-rose-500 hover:bg-primary-50"
-                        onClick={() => setSelectedImage(null)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setValue('file', null);
+                        }}
                       >
                         <FontAwesomeIcon icon={faClose} />
                       </button>
                       <Image
-                        src={URL.createObjectURL(selectedImage)}
+                        src={URL.createObjectURL(getValues('file')[0])}
                         alt="Selected Preview"
                         width={413}
                         height={288}
@@ -317,18 +390,27 @@ export default function Create({ chains }) {
                         <input
                           type="file"
                           className="hidden"
-                          onChange={(e) => setSelectedImage(e.target.files[0])}
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            setValue('file', file); // Set the value of 'file' field using setValue
+                          }}
+                          {...register('file', {
+                            required: 'File is required.',
+                          })}
                         />
                       </label>
-                      <div
+                      {/* <div
                         className={`${
                           selectedImage !== null ? 'hidden' : 'block'
                         } mt-1 text-sm text-primary-500`}
                       >
                         File is required
-                      </div>
+                      </div> */}
                     </>
                   )}
+                </div>
+                <div className="mt-1 text-sm text-primary-500">
+                  <ErrorMessage errors={errors} name="file" />
                 </div>
               </div>
               <div className="mt-4 w-full ">
@@ -432,7 +514,11 @@ export default function Create({ chains }) {
                     className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
                     placeholder="0"
                     min="0"
-                    {...register('price', { required: 'Price is required.' })}
+                    {...register('price', {
+                      required: 'Price is required.',
+                      validate: (value) =>
+                        parseFloat(value) > 0 || 'Price must be greater than 0',
+                    })}
                   />
                   <span className="pr-3 text-gray-500">
                     <Ethereum />
@@ -489,8 +575,16 @@ export default function Create({ chains }) {
                   </select>
                 </div>
               </div>
+
+              <div className="mt-1 text-sm text-primary-500">
+                {!customValueDate && 'Duration date is required'}
+              </div>
+
               <div className="mt-4 w-full">
-                <label className="font-semibold">Choose collection</label>
+                <label className="font-semibold">
+                  <span className="text-semantic-red-500">*</span> Choose
+                  collection
+                </label>
                 <ul className="mt-2 grid w-full gap-6 text-center md:grid-cols-3">
                   <li>
                     <button
@@ -647,9 +741,9 @@ export default function Create({ chains }) {
             looks like in the marketplace
           </p>
           <div className="flex flex-col gap-3 rounded-xl bg-white p-5">
-            {selectedImage ? (
+            {selectedImage && selectedImage.length > 0 ? (
               <Image
-                src={URL.createObjectURL(selectedImage)}
+                src={URL.createObjectURL(getValues('file')[0])}
                 alt="Selected Preview"
                 width={375}
                 height={375}
@@ -706,6 +800,16 @@ export default function Create({ chains }) {
           </div>
         </div>
       </div>
+      <ModalUploadDFile
+        isOpen={isSubmit}
+        onClose={closeModal}
+        isLoading={isLoading}
+        isErrorIPFS={isErrorIPFS}
+        isErrorMint={isErrorMint}
+        isErrorApprove={isErrorApprove}
+        isErrorPutonsale={isErrorPutonsale}
+        onModalClose={closeModal}
+      />
       {modalCreate && (
         <div
           className="relative z-[100]"

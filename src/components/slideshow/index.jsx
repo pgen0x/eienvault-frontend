@@ -52,7 +52,7 @@ const Slideshow = () => {
   };
   return (
     <>
-      <button className="swiper-prev absolute -left-5 z-10 mr-2 rounded-full bg-primary-400 px-4 py-2 text-white">
+      <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-prev absolute -left-5 z-10 mr-2 rounded-full bg-primary-400 px-4 py-2 text-white">
         <FontAwesomeIcon icon={faChevronLeft} />
       </button>
       <Swiper
@@ -193,7 +193,7 @@ const Slideshow = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <button className="swiper-next absolute -right-5 z-10 ml-2 rounded-full bg-primary-400 px-4 py-2 text-white">
+      <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-next absolute -right-5 z-10 ml-2 rounded-full bg-primary-400 px-4 py-2 text-white">
         <FontAwesomeIcon icon={faChevronRight} />
       </button>
     </>

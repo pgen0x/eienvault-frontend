@@ -29,33 +29,33 @@ export const SlideshowCreator = () => {
     640: {
       slidesPerView: 2,
       spaceBetween: 5,
-      width: 350,
+      width: 280,
     },
     1024: {
-      width: 495,
+      width: 280,
     },
     1280: {
-      width: 350,
+      width: 280,
     },
     1536: {
-      width: 350,
+      width: 280,
     },
     1700: {
-      width: 350,
+      width: 280,
       spaceBetween: 5,
     },
     2200: {
-      width: 350,
+      width: 280,
       spaceBetween: 5,
     },
   };
   return (
     <>
-      <button className="swiper-prev absolute -left-5 z-10 mr-2 rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300">
+      <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-prev absolute -left-5 z-10 mr-2 rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300">
         <FontAwesomeIcon icon={faChevronLeft} />
       </button>
       <Swiper
-        className="!pb-5 !pl-10"
+        className="!pb-10"
         slidesPerView={1}
         scrollbar={{ draggable: true }}
         breakpoints={sliderBreakPoints}
@@ -75,14 +75,14 @@ export const SlideshowCreator = () => {
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
-            <div className="inline-flex w-[280px] flex-col items-center justify-center lg:items-start">
+            <div className="inline-flex w-full flex-col items-center justify-center lg:items-start">
               <div className="relative flex flex-row">
-                <div className="inline-flex flex-col items-start justify-start">
+                <div className="inline-flex px-3 flex-col items-start justify-start">
                   <img
                     className="z-10 w-full rounded-tl-2xl rounded-tr-2xl"
                     src="https://fakeimg.pl/287x149"
                   />
-                  <div className="w-[280px] gap-4 rounded-bl-2xl rounded-br-2xl bg-white p-5">
+                  <div className="w-full gap-4 rounded-bl-2xl rounded-br-2xl bg-white p-5">
                     <div className="flex w-full flex-col items-start justify-start">
                       <div className="z-10 -mt-[70px] flex items-center justify-center">
                         <img
@@ -135,7 +135,7 @@ export const SlideshowCreator = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <button className="swiper-next absolute -right-5 z-10 ml-2 rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300">
+      <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-next absolute -right-5 z-10 ml-2 rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300">
         <FontAwesomeIcon icon={faChevronRight} />
       </button>
     </>

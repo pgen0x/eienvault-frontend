@@ -118,45 +118,5 @@
     "movement_floor": "-0.29",
     "movement_volume": "-2.98",
     "imageUrl": "https://fakeimg.pl/73x73"
-  },
-  {
-    "name": "Shadow fiend",
-    "floor": "9500",
-    "volume": "1670000",
-    "movement_floor": "0.18",
-    "movement_volume": "3.22",
-    "imageUrl": "https://fakeimg.pl/73x73"
-  },
-  {
-    "name": "Pyrameed",
-    "floor": "5820",
-    "volume": "3300000",
-    "movement_floor": "0.98",
-    "movement_volume": "2.78",
-    "imageUrl": "https://fakeimg.pl/73x73"
-  },
-  {
-    "name": "Abs-tract",
-    "floor": "4200",
-    "volume": "210000",
-    "movement_floor": "1.18",
-    "movement_volume": "4.28",
-    "imageUrl": "https://fakeimg.pl/73x73"
-  },
-  {
-    "name": "Robotofield",
-    "floor": "7100",
-    "volume": "569000",
-    "movement_floor": "0.88",
-    "movement_volume": "2.28",
-    "imageUrl": "https://fakeimg.pl/73x73"
-  },
-  {
-    "name": "Abs-tract",
-    "floor": "4200",
-    "volume": "210000",
-    "movement_floor": "1.18",
-    "movement_volume": "4.28",
-    "imageUrl": "https://fakeimg.pl/73x73"
   }
 ]

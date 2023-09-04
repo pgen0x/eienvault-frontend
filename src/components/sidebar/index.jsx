@@ -142,7 +142,7 @@ const Sidebar = () => {
                     <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
                     <div
                       className="w-48 cursor-pointer text-2xl font-medium leading-9 text-black"
-                      nClick={() => handleCollectionCreate()}
+                      onClick={() => handleCollectionCreate()}
                     >
                       Collections
                     </div>

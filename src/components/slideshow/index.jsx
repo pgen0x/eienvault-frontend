@@ -261,7 +261,7 @@ export const SlideshowMobile = () => {
               <div className="relative flex flex-col w-[375px]">
                 <img className="h-96 w-96 rounded-2xl object-cover" src="https://fakeimg.pl/275x404" />
                 <div className="w-full px-5">
-                  <div className="w-full inline-flex flex-col items-center justify-center gap-4 rounded-br-2xl rounded-bl-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
+                  <div className="w-full inline-flex flex-col justify-center gap-4 rounded-br-2xl rounded-bl-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
                     <div className="flex flex-col items-start justify-start">
                       <div className="inline-flex items-center justify-start self-stretch">
                         <div className="flex h-full shrink grow basis-0 items-end justify-start gap-2">

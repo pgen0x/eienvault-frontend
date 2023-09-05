@@ -6,6 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faCartPlus } from '@fortawesome/free-solid-svg-icons';
 import Ethereum from '@/assets/icon/ethereum';
 import { useRouter } from 'next-nprogress-bar';
+import Bitcoin from '@/assets/icon/bitcoin';
+import Ggtoken from '@/assets/icon/ggtoken';
+import Monero from '@/assets/icon/monero';
 
 const servers = [
   'All Mainnet',
@@ -213,7 +216,7 @@ export const TrendingTopSkeleton = () => {
 const MainMobile = () => {
   const [TrendingTop, setTrendingTop] = useState("trending");
   const [Range, setRange] = useState("1h");
-  const [selectedServer, setSelectedServer] = useState(servers[0])
+  const [Coin, setCoin] = useState("ethereum");
 
   const handleTrendingTop = (event, target) => {
     setTrendingTop(target);
@@ -223,8 +226,12 @@ const MainMobile = () => {
     setRange(target);
   }
 
+  const handleCoin = (event, target) => {
+    setCoin(target);
+  }
+
   const classRadio = (params, value) => {
-    const defaultCssRadio = "cursor-pointer w-full px-2.5 py-2 rounded-full text-sm font-medium leading-5 text-center ";
+    const defaultCssRadio = "cursor-pointer w-full px-2.5 py-2 rounded-full text-sm font-medium leading-5 text-center flex items-center justify-center ";
     return defaultCssRadio + (params === value ? 'text-white bg-primary-500 shadow' : 'text-primary-500 hover:bg-primary-200')
   }
   return (
@@ -250,41 +257,19 @@ const MainMobile = () => {
               <input className="hidden" type="radio" name="rangeOptions" onChange={(event) => handleRange(event, '7d')} />
             </label>
           </div>
-          <div className="flex-none w-52 space-x-1 px-1">
-            <Listbox value={selectedServer} onChange={setSelectedServer}>
-              <div className="relative">
-                <Listbox.Button className="relative w-full cursor-default rounded-full bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                  <span className="block truncate text-gray-600">{selectedServer}</span>
-                  <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                    <svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M8 9C7.71875 9 7.46875 8.90625 7.28125 8.71875L1.28125 2.71875C0.875 2.34375 0.875 1.6875 1.28125 1.3125C1.65625 0.90625 2.3125 0.90625 2.6875 1.3125L8 6.59375L13.2812 1.3125C13.6562 0.90625 14.3125 0.90625 14.6875 1.3125C15.0938 1.6875 15.0938 2.34375 14.6875 2.71875L8.6875 8.71875C8.5 8.90625 8.25 9 8 9Z" fill="#7D778A" />
-                    </svg>
-                  </span>
-                </Listbox.Button>
-                <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                  {servers.map((server, index) => (
-                    <Listbox.Option
-                      key={index}
-                      className={({ active }) =>
-                        `relative cursor-default select-none py-2 px-4 ${active ? 'bg-primary-500 text-white' : 'text-gray-900'
-                        }`
-                      }
-                      value={server}>
-                      {({ selectedServer }) => (
-                        <>
-                          <span
-                            className={`block truncate ${selectedServer ? 'font-medium' : 'font-normal'
-                              }`}
-                          >
-                            {server}
-                          </span>
-                        </>
-                      )}
-                    </Listbox.Option>
-                  ))}
-                </Listbox.Options>
-              </div>
-            </Listbox>
+          <div className="flex space-x-1 rounded-full bg-white py-2 px-1">
+            <label className={classRadio(Coin, 'ethereum')}><Ethereum />
+              <input className="hidden" type="radio" name="rangeOptions" onChange={(event) => handleCoin(event, 'ethereum')} />
+            </label>
+            <label className={classRadio(Coin, 'bitcoin')}><Bitcoin />
+              <input className="hidden" type="radio" name="rangeOptions" onChange={(event) => handleCoin(event, 'bitcoin')} />
+            </label>
+            <label className={classRadio(Coin, 'ggtoken')}><Ggtoken />
+              <input className="hidden" type="radio" name="rangeOptions" onChange={(event) => handleCoin(event, 'ggtoken')} />
+            </label>
+            <label className={classRadio(Coin, 'monero')}><Monero />
+              <input className="hidden" type="radio" name="rangeOptions" onChange={(event) => handleCoin(event, 'monero')} />
+            </label>
           </div>
         </div>
         <div className="hidden sm:hidden md:flex lg:flex xl:flex 2xl:flex items-end px-3">

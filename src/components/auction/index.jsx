@@ -23,12 +23,12 @@ import Line from '@/assets/icon/line';
 import Awan from '@/assets/icon/awan';
 import Awan2 from '@/assets/icon/awan2';
 import Dot from '@/assets/icon/dot';
-import Slideshow from '../slideshow';
+import { Slideshow, SlideshowMobile } from '../slideshow';
 
 const Auction = () => {
   return (
     <>
-      <section className="relative -top-24 flex h-[632px] w-full items-center justify-center bg-semantic-orange-200">
+      <section className="relative -top-24 flex w-full items-center justify-center bg-semantic-orange-200">
         <div className="absolute right-0 top-0">
           <Line />
         </div>
@@ -40,9 +40,12 @@ const Auction = () => {
           <Awan2 />
         </div>
         <div className="container m-auto">
-          <div className="relative mb-5 flex w-full flex-initial items-center justify-center">
-            <Slideshow />
+          <div className="relative mb-5 hidden sm:hidden md:flex lg:flex xl:flex 2xl:flex w-full flex-initial items-center justify-center">
+              <Slideshow />
           </div>
+          <div className="relative mb-5 flex sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden w-full flex-initial items-center justify-center">
+              <SlideshowMobile />
+            </div>
         </div>
       </section>
     </>

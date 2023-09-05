@@ -83,7 +83,7 @@ export default function RightArea() {
     <>
       {isClient && (
         <div className="inline-flex h-8 w-full items-center justify-start gap-4">
-          {chain?.id !== 666888 ? (
+          {(isConnect || isConnected) && chain?.id !== 666888 ? (
             <div className="flex flex-row items-center">
               <div className="flex-1 rounded-l-lg  bg-primary-500 py-2 pl-3">
                 <span className="border-r-2 pr-3 text-sm">Wrong network!</span>
@@ -101,6 +101,7 @@ export default function RightArea() {
           ) : (
             ''
           )}
+
           {isConnect || isConnected ? (
             <div as="div" className="relative inline-block text-left">
               <button
@@ -123,13 +124,6 @@ export default function RightArea() {
               </div>
             </button>
           )}
-
-          <button
-            onClick={() => close()}
-            className="inline-flex flex-col items-center justify-center gap-2 rounded-xl text-xl text-primary-500"
-          >
-            <FontAwesomeIcon icon={faCartShopping} />
-          </button>
 
           {/* <Switch
             checked={enabled}

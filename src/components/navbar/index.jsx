@@ -10,7 +10,7 @@ import RightArea from './rightarea';
 //web3 Modal libs
 import { Web3Modal } from '@web3modal/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faChevronDown, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 
 export default function Navbar() {
@@ -35,15 +35,34 @@ export default function Navbar() {
         </nav>
       </div>
       <section className={`bg-white/10 backdrop-blur-sm backdrop-opacity-60 fixed top-0 w-full transition-all max-w-full h-screen z-40 ${openMenu ? 'left-0 right-0' : '-right-[100%]'}`}>
-        <div className={`h-screen grid place-items-center w-80 max-w-full bg-white fixed z-40 transition-all duration-500 top-0 ${openMenu ? 'right-0' : '-right-[100%]'}`}>
-          <button className="fixed top-5 right-5 text-2xl text-primary-500" onClick={() => setOpenMenu(!openMenu)}>
-            <FontAwesomeIcon icon={faXmark} />
-          </button>
-          <div className="">
-
-          </div>
-        </div>
-      </section>
+        <div className={`h-screen grid place-items-top w-80 max-w-full bg-white fixed z-40 transition-all duration-500 top-0 ${openMenu ? 'right-0' : '-right-[100%]'}`}>
+          <div className="mt-5">
+            <button className="absolute right-5 text-2xl text-primary-500" onClick={() => setOpenMenu(!openMenu)}>
+              <FontAwesomeIcon icon={faXmark} />
+            </button>
+            <nav className="px-4 flex flex-col flex-grow pb-4 md:pb-0 justify-start mt-5">
+              <span className="py-2 mt-2 text-sm font-semibold text-primary-500 hover:text-primary-300">Home</span>
+              <div className="mt-2 group">
+                <span className="py-2 text-sm font-semibold text-primary-500 hover:text-primary-300 flex justify-between"><span>Trending</span> <FontAwesomeIcon icon={faChevronDown} /></span>
+                <ul className="hidden group-hover:flex flex-col gap-4 px-4 mt-2">
+                  <li className="text-sm font-semibold text-primary-500 hover:text-primary-300"><span>Trending</span></li>
+                  <li className="text-sm font-semibold text-primary-500 hover:text-primary-300"><span>Status</span></li>
+                  <li className="text-sm font-semibold text-primary-500 hover:text-primary-300"><span>Marketplace</span></li>
+                </ul>
+              </div>
+              <div className="mt-2 group">
+                <span className="py-2 text-sm font-semibold text-primary-500 hover:text-primary-300 flex justify-between"><span>Status</span> <FontAwesomeIcon icon={faChevronDown} /></span>
+                <ul className="hidden group-hover:flex flex-col gap-4 px-4 mt-2">
+                  <li className="text-sm font-semibold text-primary-500 hover:text-primary-300"><span>Trending</span></li>
+                  <li className="text-sm font-semibold text-primary-500 hover:text-primary-300"><span>Status</span></li>
+                  <li className="text-sm font-semibold text-primary-500 hover:text-primary-300"><span>Marketplace</span></li>
+                </ul>
+              </div>
+              <span className="py-2 mt-2 text-sm font-semibold text-primary-500 hover:text-primary-300">Marketplace</span>
+            </nav>
+          </div >
+        </div >
+      </section >
     </>
   );
 }

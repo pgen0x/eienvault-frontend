@@ -19,6 +19,7 @@ import axios from 'axios';
 import { useAuth } from '@/hooks/AuthContext';
 import { useSidebar } from '../../hooks/SidebarContext';
 import { useAccount } from 'wagmi';
+import { useNetwork, useSwitchNetwork } from 'wagmi';
 
 export default function RightArea() {
   const { theme, setTheme } = useTheme();
@@ -34,6 +35,9 @@ export default function RightArea() {
   const { toggleSidebar } = useSidebar();
   const { isConnected } = useAccount();
   const { isOpen, open, close, setDefaultChain } = useWeb3Modal();
+  const { chain } = useNetwork();
+  const { chains, error, isLoading, pendingChainId, switchNetwork } =
+    useSwitchNetwork();
 
   useWeb3ModalEvents((event) => {
     console.log(event);
@@ -79,31 +83,51 @@ export default function RightArea() {
     <>
       {isClient && (
         <div className="inline-flex h-8 w-full items-center justify-start gap-4">
-          <div className="hidden sm:hidden md:hidden lg:block xl:block 2xl:block">
-            {isConnect || isConnected ? (
-              <div as="div" className="relative inline-block text-left">
+          {chain?.id !== 666888 ? (
+            <div className="flex flex-row items-center">
+              <div className="flex-1 rounded-l-lg  bg-primary-500 py-2 pl-3">
+                <span className="border-r-2 pr-3 text-sm">Wrong network!</span>
+              </div>
+              <div className="flex flex-shrink-0 flex-col">
                 <button
-                  className="inline-flex w-full justify-center rounded-full bg-primary-500 px-3 py-3 text-sm font-semibold"
-                  onClick={toggleSidebar}
+                  type="button"
+                  className="rounded-r-lg bg-primary-500 px-3 py-2"
+                  onClick={() => switchNetwork?.(666888)}
                 >
-                  <FontAwesomeIcon icon={faUserAlt} />
+                  <span className="text-md">Switch</span>
                 </button>
               </div>
-            ) : (
+            </div>
+          ) : (
+            ''
+          )}
+          {isConnect || isConnected ? (
+            <div as="div" className="relative inline-block text-left">
               <button
-                onClick={() => open()}
-                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 hover:bg-primary-300"
+                className="inline-flex w-full justify-center rounded-full bg-primary-500 px-3 py-3 text-sm font-semibold"
+                onClick={toggleSidebar}
               >
-                <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
-                  <FontAwesomeIcon icon={faWallet} />
-                </div>
-                <div className="text-base font-bold leading-normal text-white">
-                  Connect your wallet
-                </div>
+                <FontAwesomeIcon icon={faUserAlt} />
               </button>
-            )}
-          </div>
-          <button onClick={() => close()} className="inline-flex flex-col items-center justify-center rounded-xl text-xl text-primary-500">
+            </div>
+          ) : (
+            <button
+              onClick={() => open()}
+              className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 hover:bg-primary-300"
+            >
+              <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
+                <FontAwesomeIcon icon={faWallet} />
+              </div>
+              <div className="text-base font-bold leading-normal text-white">
+                Connect your wallet
+              </div>
+            </button>
+          )}
+
+          <button
+            onClick={() => close()}
+            className="inline-flex flex-col items-center justify-center gap-2 rounded-xl text-xl text-primary-500"
+          >
             <FontAwesomeIcon icon={faCartShopping} />
           </button>
 

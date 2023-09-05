@@ -21,36 +21,79 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Listbox, Switch } from '@headlessui/react';
-import Image from 'next/image';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import Image from 'next/legacy/image';
+import { useEffect, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import { useAccount } from 'wagmi';
 import moment from 'moment';
 import { ErrorMessage } from '@hookform/error-message';
+import HelaIcon from '@/assets/icon/hela';
+import axios from 'axios';
+import ModalUploadDFile from '@/components/modal/uploadFile';
 
 export default function Create({ chains }) {
-  const [selectedChain, setSelectedChain] = useState('Select Chain');
+  const [selectedChain, setSelectedChain] = useState({
+    chainId: 666888,
+    symbol: 'HLUSD',
+  });
   const [stepCreate, setStepCreate] = useState(1);
   const [modalCreate, setModalCreate] = useState(false);
   const [selectedBlockchain, setSelectedBlockchain] = useState(666888);
-  const [enableMinting, setEnableMinting] = useState(true);
   const [enableUnlockable, setEnableUnlockable] = useState(true);
-  const [selectedImage, setSelectedImage] = useState(null);
+  // const [selectedImage, setSelectedImage] = useState(null);
   const [name, setName] = useState('Untitled');
   const [selectedOptionMarket, setSelectedOptionMarket] = useState('fixed');
   const [selectedOptionEdition, setSelectedOptionEdition] = useState('single');
   const [selectedOptionCollection, setSelectedOptionCollection] =
     useState('snap');
-
   const { address } = useAccount();
   const [selectedOptionDate, setSelectedOptionDate] = useState('1 Day');
   const [customValueDate, setCustomValueDate] = useState('');
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState({
+    ipfs: false,
+    mint: false,
+    approve: false,
+    putonsale: false,
+  });
+  const [isErrorIPFS, setErrorIPFS] = useState({
+    isError: false,
+    message: '',
+  });
+  const [isErrorMint, setErrorMint] = useState({
+    isError: false,
+    message: '',
+  });
+  const [isErrorApprove, setErrorApprove] = useState({
+    isError: false,
+    message: '',
+  });
+  const [isErrorPutonsale, setErrorPutonsale] = useState({
+    isError: false,
+    message: '',
+  });
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
+    setValue,
+    getValues,
   } = useForm();
+  const selectedImage = watch('file');
+
+  useEffect(() => {
+    // Calculate the date 1 day from now using Moment.js
+    const currentDate = moment();
+    const nextDay = moment(currentDate).add(1, 'days');
+
+    // Format the calculated date in 'YYYY-MM-DDTHH:mm' format
+    const formattedDate = nextDay.format('YYYY-MM-DDTHH:mm');
+
+    // Set the formatted date as the default value
+    setCustomValueDate(formattedDate);
+  }, []);
 
   const handleDateSelectChange = (event) => {
     const selectedValue = event.target.value;
@@ -79,7 +122,8 @@ export default function Create({ chains }) {
     }
   };
 
-  const handleModalCreate = () => {
+  const handleModalCreate = (e) => {
+    e.preventDefault();
     if (modalCreate) {
       handleStepCreate(1);
     }
@@ -90,14 +134,80 @@ export default function Create({ chains }) {
     setStepCreate(Create);
   };
 
-  const onSubmit = (data) => {
-    // Handle form submission here
-    console.log(data);
+  const onSubmit = async (data) => {
+    setIsSubmit(true);
+    try {
+      setIsLoading({
+        ipfs: true,
+        mint: false,
+        approve: false,
+        putonsale: false,
+      });
+      const form = new FormData();
+      // form.append('file', selectedImage);
+      form.append('cidVersion', '0');
+      form.append('wrapWithDirectory', 'false');
+      const pinataMetadata = JSON.stringify({
+        name: data.name,
+      });
+      form.append('pinataMetadata', pinataMetadata);
+
+      const options = {
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          authorization: `Bearer ${process.env.NEXT_PUBLIC_JWTPINATA}`,
+        },
+      };
+
+      options.body = form;
+
+      const res = await fetch(
+        'https://api.pinata.cloud/pinning/pinFileToIPFS',
+        options,
+      );
+
+      // Handle the error
+      if (!res.ok) {
+        const errorMessage = await res.text();
+        const errorObject = JSON.parse(errorMessage);
+        setErrorIPFS({
+          isError: true,
+          message: errorObject,
+        });
+        throw new Error(errorMessage);
+      } else {
+        const response = await res.json();
+        setIsLoading({
+          ipfs: false,
+          mint: true,
+          approve: false,
+          putonsale: false,
+        });
+      }
+    } catch (e) {
+      // Handle errors here
+      console.error(e);
+      setIsLoading({
+        ipfs: false,
+        mint: false,
+        approve: false,
+        putonsale: false,
+      });
+    }
   };
+
+  const closeModal = () => {
+    setIsSubmit(false);
+    setErrorIPFS({ isError: false, message: '' });
+  };
+
+  console.log(getValues('file'));
+  console.log(selectedImage, 'selectedImage');
 
   return (
     <>
-      <div className="my-5 flex flex-row justify-center gap-5 text-gray-900">
+      <div className="my-5 flex flex-row justify-center gap-5 p-4 text-gray-900">
         <div className="flex flex-col">
           <h2 className="text-2xl font-semibold">Create New NFT</h2>
           <p>
@@ -105,7 +215,7 @@ export default function Create({ chains }) {
             filled
           </p>
           <div className="mt-6 flex flex-col gap-4">
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form>
               <div className="w-full">
                 <label className="font-semibold">Blockchain</label>
                 <Listbox
@@ -115,15 +225,18 @@ export default function Create({ chains }) {
                 >
                   <div className="relative z-20">
                     <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none sm:text-sm">
-                      {/* <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                      <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
                         {selectedChain.chainId === 1 ||
                         selectedChain.chainId === 11155111 ? (
                           <Ethereum />
+                        ) : selectedChain.chainId === 8668 ||
+                          selectedChain.chainId === 666888 ? (
+                          <HelaIcon className="h-5 w-5" />
                         ) : (
                           ''
                         )}
                       </span>
-                      <span className="block truncate pl-5 text-gray-600">
+                      <span className="block truncate pl-6 text-gray-600">
                         {
                           chains.find(
                             (chain) => chain.chainId === selectedChain.chainId,
@@ -135,8 +248,7 @@ export default function Create({ chains }) {
                           icon={faChevronDown}
                           className="text-gray-600"
                         />
-                      </span> */}
-                      {selectedChain.name}
+                      </span>
                     </Listbox.Button>
                     <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                       {chains.map((chain) => (
@@ -243,18 +355,24 @@ export default function Create({ chains }) {
               </div>
 
               <div className="mt-4 w-full">
-                <label className="mt-2 font-semibold">Upload your item</label>
+                <label className="mt-2 font-semibold">
+                  <span className="text-semantic-red-500">*</span> Upload your
+                  item
+                </label>
                 <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-5 text-center">
-                  {selectedImage ? (
+                  {selectedImage && selectedImage.length > 0 ? (
                     <>
                       <button
                         className="absolute right-1.5 top-1.5 h-10 w-10 rounded-full text-rose-500 hover:bg-primary-50"
-                        onClick={() => setSelectedImage(null)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setValue('file', null);
+                        }}
                       >
                         <FontAwesomeIcon icon={faClose} />
                       </button>
                       <Image
-                        src={selectedImage}
+                        src={URL.createObjectURL(getValues('file')[0])}
                         alt="Selected Preview"
                         width={413}
                         height={288}
@@ -272,15 +390,27 @@ export default function Create({ chains }) {
                         <input
                           type="file"
                           className="hidden"
-                          onChange={(e) =>
-                            setSelectedImage(
-                              URL.createObjectURL(e.target.files[0]),
-                            )
-                          }
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            setValue('file', file); // Set the value of 'file' field using setValue
+                          }}
+                          {...register('file', {
+                            required: 'File is required.',
+                          })}
                         />
                       </label>
+                      {/* <div
+                        className={`${
+                          selectedImage !== null ? 'hidden' : 'block'
+                        } mt-1 text-sm text-primary-500`}
+                      >
+                        File is required
+                      </div> */}
                     </>
                   )}
+                </div>
+                <div className="mt-1 text-sm text-primary-500">
+                  <ErrorMessage errors={errors} name="file" />
                 </div>
               </div>
               <div className="mt-4 w-full ">
@@ -311,7 +441,7 @@ export default function Create({ chains }) {
               <div className="mt-2 w-full">
                 <label className="mt-2 font-semibold">Put on marketplace</label>
                 <p>Select one of the selling method option below</p>
-                <ul class="mt-2 grid w-full gap-6 text-center md:grid-cols-2">
+                <ul className="mt-2 grid w-full gap-6 text-center md:grid-cols-2">
                   <li>
                     <input
                       type="radio"
@@ -384,18 +514,25 @@ export default function Create({ chains }) {
                     className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
                     placeholder="0"
                     min="0"
-                    {...register('price', { required: 'Price is required.' })}
+                    {...register('price', {
+                      required: 'Price is required.',
+                      validate: (value) =>
+                        parseFloat(value) > 0 || 'Price must be greater than 0',
+                    })}
                   />
                   <span className="pr-3 text-gray-500">
                     <Ethereum />
                   </span>
+                </div>
+                <div className="mt-1 text-sm text-primary-500">
+                  <ErrorMessage errors={errors} name="price" />
                 </div>
               </div>
               <div className="mt-2 w-full px-2">
                 <div className="flex w-full justify-between">
                   <span>Price</span>
                   <span className="font-semibold">
-                    {watch('price')} {selectedChain.name}
+                    {watch('price')} {selectedChain.symbol}
                   </span>
                 </div>
                 {/* <div className="mb-2 flex w-full justify-between border-b-2 pb-2">
@@ -404,7 +541,9 @@ export default function Create({ chains }) {
                 </div> */}
                 <div className="flex w-full justify-between">
                   <span>You will receive</span>
-                  <span className="font-semibold">- ETH</span>
+                  <span className="font-semibold">
+                    {watch('price')} {selectedChain.symbol}
+                  </span>
                 </div>
               </div>
               <div className="mt-4 flex w-full flex-col rounded-xl bg-white p-5">
@@ -417,7 +556,7 @@ export default function Create({ chains }) {
                     type="datetime-local"
                     name="duration_date"
                     id="duration_date"
-                    autocomplete="duration_date"
+                    autoComplete="duration_date"
                     className="flex-1 rounded-xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:text-sm sm:leading-6"
                     value={customValueDate}
                     disabled={selectedOptionDate !== 'Custom'}
@@ -436,13 +575,21 @@ export default function Create({ chains }) {
                   </select>
                 </div>
               </div>
+
+              <div className="mt-1 text-sm text-primary-500">
+                {!customValueDate && 'Duration date is required'}
+              </div>
+
               <div className="mt-4 w-full">
-                <label className="font-semibold">Choose collection</label>
-                <ul class="mt-2 grid w-full gap-6 text-center md:grid-cols-3">
+                <label className="font-semibold">
+                  <span className="text-semantic-red-500">*</span> Choose
+                  collection
+                </label>
+                <ul className="mt-2 grid w-full gap-6 text-center md:grid-cols-3">
                   <li>
                     <button
                       onClick={handleModalCreate}
-                      class="flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 focus:border-primary-500 focus:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:text-primary-500"
+                      className="flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 focus:border-primary-500 focus:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:text-primary-500"
                     >
                       <FontAwesomeIcon
                         icon={faPlusCircle}
@@ -461,15 +608,15 @@ export default function Create({ chains }) {
                       id="piggy-collection"
                       name="collection"
                       value="piggy"
-                      class="peer hidden"
+                      className="peer hidden"
                       onChange={(e) =>
                         setSelectedOptionCollection(e.target.value)
                       }
                       checked={selectedOptionCollection === 'piggy'}
                     />
                     <label
-                      for="piggy-collection"
-                      class="flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-500 peer-checked:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500"
+                      htmlFor="piggy-collection"
+                      className="flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-500 peer-checked:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500"
                     >
                       <FontAwesomeIcon
                         icon={faPiggyBank}
@@ -488,15 +635,15 @@ export default function Create({ chains }) {
                       id="snap-collection"
                       name="collection"
                       value="snap"
-                      class="peer hidden"
+                      className="peer hidden"
                       onChange={(e) =>
                         setSelectedOptionCollection(e.target.value)
                       }
                       checked={selectedOptionCollection === 'snap'}
                     />
                     <label
-                      for="snap-collection"
-                      class="flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-500 peer-checked:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500"
+                      htmlFor="snap-collection"
+                      className="flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-500 peer-checked:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500"
                     >
                       <FontAwesomeIcon icon={faZ} className="text-5xl" />
                       <span>
@@ -579,6 +726,7 @@ export default function Create({ chains }) {
                 <button
                   className="w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300"
                   type="submit"
+                  onClick={handleSubmit(onSubmit)}
                 >
                   Create Item
                 </button>
@@ -593,9 +741,9 @@ export default function Create({ chains }) {
             looks like in the marketplace
           </p>
           <div className="flex flex-col gap-3 rounded-xl bg-white p-5">
-            {selectedImage ? (
+            {selectedImage && selectedImage.length > 0 ? (
               <Image
-                src={selectedImage}
+                src={URL.createObjectURL(getValues('file')[0])}
                 alt="Selected Preview"
                 width={375}
                 height={375}
@@ -652,6 +800,16 @@ export default function Create({ chains }) {
           </div>
         </div>
       </div>
+      <ModalUploadDFile
+        isOpen={isSubmit}
+        onClose={closeModal}
+        isLoading={isLoading}
+        isErrorIPFS={isErrorIPFS}
+        isErrorMint={isErrorMint}
+        isErrorApprove={isErrorApprove}
+        isErrorPutonsale={isErrorPutonsale}
+        onModalClose={closeModal}
+      />
       {modalCreate && (
         <div
           className="relative z-[100]"
@@ -681,6 +839,7 @@ export default function Create({ chains }) {
                       </div>
                       <div className="w-full">
                         <label className="block text-sm font-bold leading-6 text-gray-900">
+                          <span className="text-semantic-red-500">*</span>{' '}
                           Upload your item
                         </label>
                         <div className="flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-5 text-center">

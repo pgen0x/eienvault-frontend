@@ -40,6 +40,7 @@ const { publicClient, webSocketPublicClient } = configureChains(chains, [
 
 //Web3Modal Config
 export function initializeApp() {
+  
   const wagmiConfig = createConfig({
     autoConnect: true,
     connectors: w3mConnectors({ projectId, chains }),
@@ -55,5 +56,6 @@ export function initializeApp() {
     publicClient,
     wagmiConfig,
     ethereumClient,
+    helachain,
   };
 }

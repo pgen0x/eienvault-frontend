@@ -10,9 +10,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Listbox, Transition } from '@headlessui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import Image from 'next/legacy/image';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
-import { useAccount, useWalletClient } from 'wagmi';
+import {
+  useAccount,
+  useNetwork,
+  useWaitForTransaction,
+  useWalletClient,
+} from 'wagmi';
 import { useWeb3Modal } from '@web3modal/react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/hooks/AuthContext';
@@ -29,8 +34,16 @@ export default function ModalCreateCollection({
   const { token } = useAuth();
   const [isSubmit, setIsSubmit] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [isWait, setIsWait] = useState(false);
+  const [hash, setHash] = useState();
+  const [isErrorDeploy, setIsErrorDeploy] = useState();
   const { data: walletClient } = useWalletClient();
   const { address, isConnected } = useAccount();
+  const { chain } = useNetwork();
+  const { data, isError, isLoading } = useWaitForTransaction({
+    hash,
+  });
+
   const {
     register,
     handleSubmit,
@@ -40,26 +53,92 @@ export default function ModalCreateCollection({
     getValues,
   } = useForm();
   const selectedImage = watch('file');
+  const name = watch('name');
+  const symbol = watch('symbol');
+  const description = watch('description');
 
-  const onSubmit = async (data) => {
+  const onUpload = async (file, filename) => {
+    try {
+      // Create a new FormData object
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('filename', filename);
+
+      // Use the fetch API to send the FormData to the server
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        // File was successfully uploaded
+        console.log('File uploaded successfully.');
+        return filename;
+      } else {
+        // Handle the error here
+        console.error('File upload failed:', response.statusText);
+      }
+    } catch (error) {
+      // Handle any unexpected errors
+      console.error('Error during file upload:', error);
+    }
+  };
+
+  const onSave = async (data) => {
+    try {
+      const payload = {
+        name: data.name,
+        tokenSymbol: data.symbol,
+        description: data.description,
+        chainId: chain?.id,
+        logo: data.logo,
+        tokenAddress: data.tokenAddress,
+      };
+
+      const options = {
+        method: 'POST',
+        body: JSON.stringify(payload), // Convert the payload to JSON
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json', // Set the content type to JSON
+        },
+      };
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/collection/create`,
+        options,
+      );
+
+      if (response.ok) {
+        // Data was saved successfully
+        console.log('Data saved successfully.');
+      } else {
+        // Handle the error here
+        console.error('Data saved failed:', response.statusText);
+      }
+    } catch (error) {
+      // Handle any unexpected errors
+      console.error('Error during data save:', error);
+    }
+  };
+
+  const onSubmit = async (dataForm) => {
     if (!isConnected) {
       open();
       return;
     }
     setIsSubmit(true);
     closeModal();
+
     try {
       const hash = await walletClient.deployContract({
         ...NftContract,
         address,
-        args: [data.name, data.symbol, 'https://snapinnovations.com'],
+        args: [dataForm.name, dataForm.symbol, ''],
       });
-      
-      if (hash) {
-        console.log(hash);
-        
-      }
-      setIsCompleted(true);
+      console.log(hash);
+      setHash(hash);
     } catch (error) {
       closeModal();
       setIsSubmit(false);
@@ -67,7 +146,41 @@ export default function ModalCreateCollection({
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (hash) {
+        if (isLoading) {
+          setIsSubmit(false);
+          setIsWait(true);
+        }
+        if (isError) {
+          setIsErrorDeploy(true);
+        }
+        if (data) {
+          const filename = await onUpload(
+            selectedImage[0],
+            data.contractAddress,
+          );
+          const onSaveData = await onSave({
+            name: name,
+            tokenSymbol: symbol,
+            description: description,
+            chainId: chain?.id,
+            logo: filename,
+            tokenAddress: data.contractAddress,
+          });
+          console.log(onSaveData, 'onSaveData');
+          setIsWait(false);
+          setIsCompleted(true);
+        }
+      }
+    };
+
+    fetchData();
+  }, [hash, data, isLoading, isError]);
+
   function closeModal() {
+    setIsCompleted(false);
     onClose(false);
     onModalClose();
   }
@@ -310,7 +423,6 @@ export default function ModalCreateCollection({
                             </div>
                             <div className="mt-2 w-full">
                               <label className="block text-sm font-bold leading-6 text-gray-900">
-                                <span className="text-semantic-red-500">*</span>{' '}
                                 Description
                               </label>
                               <div className="flex w-full items-center rounded-2xl border border-gray-200 bg-white">
@@ -318,7 +430,11 @@ export default function ModalCreateCollection({
                                   className="w-full rounded-2xl border-0 bg-transparent focus:outline-none focus:ring-primary-500"
                                   placeholder="Description of your NFT collection"
                                   {...register('description', {
-                                    required: 'Description is required.',
+                                    maxLength: {
+                                      value: 1500,
+                                      message:
+                                        'Description must not exceed 1500 characters.',
+                                    },
                                   })}
                                 />
                               </div>
@@ -472,6 +588,65 @@ export default function ModalCreateCollection({
           </div>
         </Dialog>
       </Transition>
+      <Transition appear show={isWait} as={Fragment}>
+        <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-100 p-3 text-left align-middle shadow-xl transition-all">
+                  <div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
+                    <div className="relative mt-2 transform overflow-hidden text-left transition-all sm:w-full sm:max-w-lg">
+                      <div className="text-gray-900">
+                        <section className="step-2 flex flex-col gap-3 bg-gray-100 p-5">
+                          <div className="flex flex-col items-center gap-5">
+                            <div className="h-12 w-12 animate-ping rounded-lg bg-primary-100"></div>
+                            <div className="text-center">
+                              <h3 className="text-lg font-bold">
+                                Your contract has been deploying
+                              </h3>
+                              <span>Wait a moment, deploying on progress.</span>
+                            </div>
+                            {hash && (
+                              <a
+                                target="_blank"
+                                className="w-full rounded-full bg-white py-2 text-center font-bold text-primary-500 hover:text-primary-400"
+                                href={`https://testnet-blockexplorer.helachain.com/tx/${hash}`}
+                                rel="noopener noreferrer"
+                              >
+                                View on explorer
+                              </a>
+                            )}
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
       <Transition appear show={isCompleted} as={Fragment}>
         <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
           <Transition.Child
@@ -497,29 +672,33 @@ export default function ModalCreateCollection({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-xl font-bold text-gray-900"
-                  >
-                    Deploy Your Contract
-                  </Dialog.Title>
-
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-100 p-3 text-left align-middle shadow-xl transition-all">
                   <div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
                     <div className="relative mt-2 transform overflow-hidden text-left transition-all sm:w-full sm:max-w-lg">
                       <div className="text-gray-900">
                         <section className="step-2 flex flex-col gap-3 bg-gray-100 p-5">
                           <div className="flex flex-col items-center gap-5">
-                            <div className="h-12 w-12 animate-ping rounded-lg bg-primary-100"></div>
+                            <img
+                              src="https://fakeimg.pl/84x84"
+                              className="h-20 w-20 rounded-lg"
+                            />
                             <div className="text-center">
                               <h3 className="text-lg font-bold">
-                                Your contract has been deploying
+                                Your collections is now created!
                               </h3>
-                              <span>Wait a moment, deploying on progress.</span>
+                              <span>
+                                Clik the customize button to adjust your
+                                collections setting.
+                              </span>
                             </div>
-                            <button className="w-full rounded-full bg-white py-2 font-bold text-primary-500 hover:text-primary-400">
-                              View on etherscan
-                            </button>
+                            <div className="justiry-between flex w-full gap-2">
+                              <button className="w-full rounded-full bg-primary-500 py-2 font-bold text-white hover:text-primary-400">
+                                Customize
+                              </button>
+                              <button className="w-full rounded-full bg-white py-2 font-bold text-primary-500 hover:text-primary-400">
+                                Later
+                              </button>
+                            </div>
                           </div>
                         </section>
                       </div>

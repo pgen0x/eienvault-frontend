@@ -3,8 +3,14 @@ import {
   w3mConnectors,
   w3mProvider,
 } from '@web3modal/ethereum';
-import { arbitrum, mainnet, polygon, polygonMumbai } from 'wagmi/chains';
-import { configureChains, createConfig } from 'wagmi';
+import {
+  arbitrum,
+  goerli,
+  mainnet,
+  polygon,
+  polygonMumbai,
+} from 'wagmi/chains';
+import { configureChains, createConfig, sepolia } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/react';
 import { useAccount, useConnect } from 'wagmi';
 
@@ -32,7 +38,15 @@ const helachain = {
     },
   },
 };
-const chains = [helachain, arbitrum, mainnet, polygon, polygonMumbai];
+const chains = [
+  helachain,
+  arbitrum,
+  mainnet,
+  polygon,
+  polygonMumbai,
+  goerli,
+  sepolia,
+];
 const projectId = process.env.NEXT_PUBLIC_PROJECTID;
 const { publicClient, webSocketPublicClient } = configureChains(chains, [
   w3mProvider({ projectId }),
@@ -40,7 +54,6 @@ const { publicClient, webSocketPublicClient } = configureChains(chains, [
 
 //Web3Modal Config
 export function initializeApp() {
-  
   const wagmiConfig = createConfig({
     autoConnect: true,
     connectors: w3mConnectors({ projectId, chains }),

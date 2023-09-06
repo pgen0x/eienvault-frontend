@@ -139,7 +139,7 @@ export default function ProfileSetting() {
           </div>
         </div>
       </section>
-      <div className="container m-auto mb-5">
+      <div className="container m-auto mb-5 p-3">
         <section>
           <div className="mt-5 flex w-full flex-col gap-4 sm:flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row">
             <div className="flex w-full flex-col gap-4">
@@ -227,22 +227,22 @@ export default function ProfileSetting() {
                     </div>
                   </div>
                 </div>
-                <div className="flex w-full justify-around gap-4 rounded-xl bg-white p-5 text-gray-900">
-                  <div className="flex items-center gap-2">
+                <div className="grid grid-cols-12 w-full justify-around gap-4 rounded-xl bg-white p-5 text-gray-900">
+                  <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex items-center gap-2">
                     <Ethereum className="h-4 w-4" />
                     <span className="font-semibold">
                       Ethereum <br />
                       (ERC-721)
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex items-center gap-2">
                     <FontAwesomeIcon icon={faFingerprint} />
                     <span className="font-semibold">Etherscan</span>
                     <a href="#" className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-primary-300">
                       <FontAwesomeIcon className="text-primary-500" icon={faUpRightFromSquare} />
                     </a>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex items-center gap-2">
                     <FontAwesomeIcon icon={faEye} />
                     <span className="font-semibold">View original</span>
                     <a href="#" className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-primary-300">

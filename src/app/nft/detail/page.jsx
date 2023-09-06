@@ -34,7 +34,7 @@ export default function NftDetail() {
           <img src="https://via.placeholder.com/1920x266" />
         </div>
       </section>
-      <div className="container m-auto mb-5">
+      <div className="container m-auto mb-5 p-3">
         <section>
           <div className="flex w-full mt-5 gap-4 flex-col xl:flex-row 2xl:flex-row lg:flex-row md:flex-col sm:flex-col">
             <div className="w-full flex flex-col gap-4">
@@ -104,19 +104,19 @@ export default function NftDetail() {
                     </div>
                   </div>
                 </div>
-                <div className="w-full justify-around flex gap-4 bg-white rounded-xl p-5 text-gray-900">
-                  <div className="flex items-center gap-2">
+                <div className="grid grid-cols-12 w-full justify-around flex gap-4 bg-white rounded-xl p-5 text-gray-900">
+                  <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex items-center gap-2">
                     <Ethereum className="h-4 w-4" />
                     <span className="font-semibold">Ethereum <br />(ERC-721)</span>
                   </div>
-                  <div className="flex gap-2 items-center">
+                  <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex gap-2 items-center">
                     <FontAwesomeIcon icon={faFingerprint} />
                     <span className="font-semibold">Etherscan</span>
                     <a href="#" className="flex justify-center items-center hover:bg-primary-300 w-8 h-8 rounded-full">
                       <FontAwesomeIcon className="text-primary-500" icon={faUpRightFromSquare} />
                     </a>
                   </div>
-                  <div className="flex gap-2 items-center">
+                  <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex gap-2 items-center">
                     <FontAwesomeIcon icon={faEye} />
                     <span className="font-semibold">View original</span>
                     <a href="#" className="flex justify-center items-center hover:bg-primary-300 w-8 h-8 rounded-full">

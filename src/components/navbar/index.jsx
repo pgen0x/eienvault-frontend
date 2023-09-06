@@ -118,21 +118,20 @@ export default function Navbar() {
               </ul>
             </div>
             <span className="py-2 mt-2 text-xl font-semibold text-primary-500 hover:text-primary-300">Marketplace</span>
-            <span className="py-2 mt-2 text-xl font-semibold text-primary-500 hover:text-primary-300" onClick={toggleSidebar}>Account</span>
             {isClient && (
-              <div className="flex justify-between border-t-2 flex-row items-center py-2 mt-2 text-xl font-semibold text-primary-500">
-                {(chain?.id !== 666888) ? (
-                  <>
+              <>
+                {(isConnect || isConnected) && chain?.id !== 666888 && (
+                  <div className="flex justify-between border-t-2 flex-row items-center py-2 mt-2 text-xl font-semibold text-primary-500">
                     <span className="text-md text-xl hover:text-primary-300">Wrong network!</span>
                     <span className="text-md px-3 py-2 cursor-pointer hover:text-primary-300" onClick={() => switchNetwork?.(666888)}>Switch</span>
-                  </>
+                  </div>
+                )}
+                {isConnect || isConnected ? (
+                  <span className="py-2 mt-2 text-xl font-semibold text-primary-500 hover:text-primary-300" onClick={toggleSidebar}>Account</span>
                 ) : (
-                  ''
+                  <span onClick={() => open()} className="py-2 mt-2 text-xl font-semibold text-primary-500 hover:text-primary-300"><FontAwesomeIcon icon={faWallet} /> Connect your wallet</span>
                 )}
-                {!isConnect || !isConnected && (
-                  <span onClick={() => open()} className="py-2 mt-2 text-sm font-semibold text-primary-500 hover:text-primary-300"><FontAwesomeIcon icon={faWallet} /> Connect your wallet</span>
-                )}
-              </div>
+              </>
             )}
           </nav>
         </div >

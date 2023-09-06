@@ -109,11 +109,11 @@ export const SlideshowDiscover = () => {
                         </div>
                       </div>
                       <div className="flex justify-between w-full mt-5 px-2 py-2 bg-white rounded-md">
-                        <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-start truncate text-sm leading-5">
+                        <div className="flex flex-col items-start truncate text-sm leading-5">
                           <p>Price</p>
                           <p className="font-bold">0.39 ETH</p>
                         </div>
-                        <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-start truncate text-sm leading-5">
+                        <div className="flex flex-col items-start truncate text-sm leading-5">
                           <p>Highest bid</p>
                           <p className="font-bold">No bids yet</p>
                         </div>

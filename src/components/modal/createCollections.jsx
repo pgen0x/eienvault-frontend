@@ -2,29 +2,35 @@
 import Ethereum from '@/assets/icon/ethereum';
 import HelaIcon from '@/assets/icon/hela';
 import {
-  faCheckCircle,
   faChevronDown,
-  faCircleXmark,
   faClose,
-  faCross,
   faImage,
-  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Listbox, Transition } from '@headlessui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import Image from 'next/legacy/image';
 import { Fragment, useState } from 'react';
+import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
+import { useAccount, useWalletClient } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/react';
 import { useForm } from 'react-hook-form';
+import { useAuth } from '@/hooks/AuthContext';
 
 export default function ModalCreateCollection({
-  isOpen,
+  isOpenModal,
   onClose,
   selectedChain,
   setSelectedChain,
   chains,
   onModalClose,
 }) {
+  const { open } = useWeb3Modal();
+  const { token } = useAuth();
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const { data: walletClient } = useWalletClient();
+  const { address, isConnected } = useAccount();
   const {
     register,
     handleSubmit,
@@ -34,21 +40,41 @@ export default function ModalCreateCollection({
     getValues,
   } = useForm();
   const selectedImage = watch('file');
-  const [isSubmit, setIsSubmit] = useState(false);
+
+  const onSubmit = async (data) => {
+    if (!isConnected) {
+      open();
+      return;
+    }
+    setIsSubmit(true);
+    closeModal();
+    try {
+      const hash = await walletClient.deployContract({
+        ...NftContract,
+        address,
+        args: [data.name, data.symbol, 'https://snapinnovations.com'],
+      });
+      
+      if (hash) {
+        console.log(hash);
+        
+      }
+      setIsCompleted(true);
+    } catch (error) {
+      closeModal();
+      setIsSubmit(false);
+      console.error('Error deploying NFT contract:', error);
+    }
+  };
 
   function closeModal() {
     onClose(false);
     onModalClose();
   }
 
-  const onSubmit = async (data) => {
-    console.log(data);
-    setIsSubmit(true);
-  };
-
   return (
     <>
-      <Transition appear show={isOpen} as={Fragment}>
+      <Transition appear show={isOpenModal} as={Fragment}>
         <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
@@ -95,7 +121,7 @@ export default function ModalCreateCollection({
                                 <span className="text-semantic-red-500">*</span>{' '}
                                 Upload your item
                               </label>
-                              <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-5 text-center">
+                              <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-3 text-center">
                                 {selectedImage && selectedImage.length > 0 ? (
                                   <>
                                     <button
@@ -284,6 +310,7 @@ export default function ModalCreateCollection({
                             </div>
                             <div className="mt-2 w-full">
                               <label className="block text-sm font-bold leading-6 text-gray-900">
+                                <span className="text-semantic-red-500">*</span>{' '}
                                 Description
                               </label>
                               <div className="flex w-full items-center rounded-2xl border border-gray-200 bg-white">
@@ -293,6 +320,12 @@ export default function ModalCreateCollection({
                                   {...register('description', {
                                     required: 'Description is required.',
                                   })}
+                                />
+                              </div>
+                              <div className="mt-1 text-sm text-primary-500">
+                                <ErrorMessage
+                                  errors={errors}
+                                  name="description"
                                 />
                               </div>
                             </div>
@@ -339,35 +372,7 @@ export default function ModalCreateCollection({
                             </section>
                           )}
                           {stepCreate == 3 && (
-                            <section className="step-2 flex flex-col gap-3 bg-gray-100 p-5">
-                              <div className="flex flex-col items-center gap-5">
-                                <div className="h-12 w-12 animate-ping rounded-lg bg-primary-100"></div>
-                                <div className="text-center">
-                                  <h3 className="text-lg font-bold">
-                                    Your contract has been deploying
-                                  </h3>
-                                  <span>
-                                    Wait a moment, deploying on progress.
-                                  </span>
-                                </div>
-                                <button
-                                  className="w-full rounded-full bg-white py-2 font-bold text-primary-500 hover:text-primary-400"
-                                  onClick={() =>
-                                    handleStepCreate(stepCreate + 1)
-                                  }
-                                >
-                                  View on etherscan
-                                </button>
-                                <button
-                                  className="font-bold text-primary-500 hover:text-primary-400"
-                                  onClick={() =>
-                                    handleStepCreate(stepCreate - 1)
-                                  }
-                                >
-                                  Cancel
-                                </button>
-                              </div>
-                            </section>
+                            
                           )}
                           {stepCreate == 4 && (
                             <section className="step-2 flex flex-col gap-3 bg-gray-100 p-5">
@@ -402,6 +407,121 @@ export default function ModalCreateCollection({
                               </div>
                             </section>
                           )} */}
+                      </div>
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+      <Transition appear show={isSubmit} as={Fragment}>
+        <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-100 p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-center text-xl font-bold text-gray-900"
+                  >
+                    Deploying your contract
+                  </Dialog.Title>
+
+                  <div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
+                    <div className="relative mt-2 transform overflow-hidden text-left transition-all sm:w-full sm:max-w-lg">
+                      <div className="text-gray-900">
+                        <section className="step-2 flex flex-col gap-3 bg-gray-100 p-5">
+                          <div className="flex flex-col items-center gap-5">
+                            <div className="h-10 w-10 animate-ping rounded-lg bg-primary-100"></div>
+                            <div className="text-center text-base leading-6">
+                              <span>
+                                Check your wallet and do an approvement to
+                                continue deploying your contract
+                              </span>
+                            </div>
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+      <Transition appear show={isCompleted} as={Fragment}>
+        <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-xl font-bold text-gray-900"
+                  >
+                    Deploy Your Contract
+                  </Dialog.Title>
+
+                  <div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
+                    <div className="relative mt-2 transform overflow-hidden text-left transition-all sm:w-full sm:max-w-lg">
+                      <div className="text-gray-900">
+                        <section className="step-2 flex flex-col gap-3 bg-gray-100 p-5">
+                          <div className="flex flex-col items-center gap-5">
+                            <div className="h-12 w-12 animate-ping rounded-lg bg-primary-100"></div>
+                            <div className="text-center">
+                              <h3 className="text-lg font-bold">
+                                Your contract has been deploying
+                              </h3>
+                              <span>Wait a moment, deploying on progress.</span>
+                            </div>
+                            <button className="w-full rounded-full bg-white py-2 font-bold text-primary-500 hover:text-primary-400">
+                              View on etherscan
+                            </button>
+                          </div>
+                        </section>
                       </div>
                     </div>
                   </div>

@@ -10,7 +10,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 
 export default function ModalUploadDFile({
-  isOpen,
+  isOpenModal,
   onClose,
   isLoading,
   isErrorIPFS,
@@ -26,7 +26,7 @@ export default function ModalUploadDFile({
 
   return (
     <>
-      <Transition appear show={isOpen} as={Fragment}>
+      <Transition appear show={isOpenModal} as={Fragment}>
         <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
           <Transition.Child
             as={Fragment}

@@ -1,10 +1,10 @@
-import Footer from '../../../components/footer/main';
+import Footer from '@/components/footer/main';
 import Create from './create';
-
-const accounts = ['0x30756...Fb179', '0x30756...Zi57G', '0x30756...Gy352'];
+import { notFound } from 'next/navigation';
 
 export default async function Page() {
-  let data = [];
+  let dataChain = [];
+
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/chain/getall`,
@@ -17,18 +17,23 @@ export default async function Page() {
       throw new Error('Network response was not ok');
     }
 
-    data = await res.json();
+    dataChain = await res.json();
 
     // Continue with your code
   } catch (error) {
     console.error('Fetch failed:', error);
     // Handle the error gracefully, e.g., show an error message to the user
   }
+
+  if (dataChain.length <= 0) {
+    notFound();
+  }
+
   return (
     <>
       <div className="container m-auto mb-5">
         <section>
-          <Create chains={data} blockchains={accounts} />
+          <Create chains={dataChain} />
         </section>
       </div>
       <Footer />

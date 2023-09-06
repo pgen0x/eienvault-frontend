@@ -36,12 +36,12 @@ export default function Create({ chains }) {
   const { open } = useWeb3Modal();
   const { chain } = useNetwork();
   const [selectedChain, setSelectedChain] = useState({
-    chainId: chain?.id || 666888,
-    symbol: chain?.nativeCurrency.symbol || 'HLUSD',
+    chainId: chain.id || 666888,
+    symbol: chain.nativeCurrency.symbol || 'HLUSD',
   });
   const [selectedBlockchain, setSelectedBlockchain] = useState({
-    chainId: chain?.id || 666888,
-    symbol: chain?.nativeCurrency.symbol || 'HLUSD',
+    chainId: chain.id || 666888,
+    symbol: chain.nativeCurrency.symbol || 'HLUSD',
   });
   const [enableUnlockable, setEnableUnlockable] = useState(true);
   const [name, setName] = useState('Untitled');
@@ -633,6 +633,7 @@ export default function Create({ chains }) {
                   {isLoadingCollection ? (
                     <Loading />
                   ) : (
+                    dataCollections.length > 0 &&
                     dataCollections.map((collection) => (
                       <li key={collection.id}>
                         <input

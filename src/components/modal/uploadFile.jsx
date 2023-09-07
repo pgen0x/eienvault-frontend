@@ -12,7 +12,7 @@ import { Fragment, useState } from 'react';
 export default function ModalUploadDFile({
   isOpenModal,
   onClose,
-  isLoading,
+  isLoadingModal,
   isErrorIPFS,
   isErrorMint,
   isErrorApprove,
@@ -27,7 +27,7 @@ export default function ModalUploadDFile({
   return (
     <>
       <Transition appear show={isOpenModal} as={Fragment}>
-        <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
+        <Dialog as="div" className="relative z-[80]" onClose={() => {}}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -61,11 +61,11 @@ export default function ModalUploadDFile({
                   <div className="mx-5 flex flex-col text-sm text-gray-900">
                     <div className="mt-4 flex max-w-full shrink-0 flex-row items-center gap-4">
                       <div className="flex max-w-full shrink-0 flex-col items-center">
-                        {isLoading.ipfs ? (
+                        {isLoadingModal.ipfs ? (
                           <div role="status">
                             <svg
                               aria-hidden="true"
-                              class="h-8 w-8 animate-spin fill-primary-600 text-gray-200 dark:text-gray-600"
+                              className="h-8 w-8 animate-spin fill-primary-600 text-gray-200 dark:text-gray-600"
                               viewBox="0 0 100 101"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
@@ -107,11 +107,11 @@ export default function ModalUploadDFile({
                     </div>
                     <div className="mt-4 flex max-w-full shrink-0 flex-row items-center gap-4">
                       <div className="flex max-w-full shrink-0 flex-col items-center">
-                        {isLoading.mint ? (
+                        {isLoadingModal.mint ? (
                           <div role="status">
                             <svg
                               aria-hidden="true"
-                              class="h-8 w-8 animate-spin fill-primary-600 text-gray-200 dark:text-gray-600"
+                              className="h-8 w-8 animate-spin fill-primary-600 text-gray-200 dark:text-gray-600"
                               viewBox="0 0 100 101"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
@@ -150,11 +150,11 @@ export default function ModalUploadDFile({
                     </div>
                     <div className="mt-4 flex max-w-full shrink-0 flex-row items-center gap-4">
                       <div className="flex max-w-full shrink-0 flex-col items-center">
-                        {isLoading.approve ? (
+                        {isLoadingModal.approve ? (
                           <div role="status">
                             <svg
                               aria-hidden="true"
-                              class="h-8 w-8 animate-spin fill-primary-600 text-gray-200 dark:text-gray-600"
+                              className="h-8 w-8 animate-spin fill-primary-600 text-gray-200 dark:text-gray-600"
                               viewBox="0 0 100 101"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
@@ -196,11 +196,11 @@ export default function ModalUploadDFile({
                     </div>
                     <div className="mt-4 flex max-w-full shrink-0 flex-row items-center gap-4">
                       <div className="flex max-w-full shrink-0 flex-col items-center">
-                        {isLoading.putonsale ? (
+                        {isLoadingModal.putonsale ? (
                           <div role="status">
                             <svg
                               aria-hidden="true"
-                              class="h-8 w-8 animate-spin fill-primary-600 text-gray-200 dark:text-gray-600"
+                              className="h-8 w-8 animate-spin fill-primary-600 text-gray-200 dark:text-gray-600"
                               viewBox="0 0 100 101"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"

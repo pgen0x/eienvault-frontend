@@ -87,12 +87,12 @@ export const Slideshow = () => {
                   Live mint and auction
                 </div>
               </div>
-              <div className="relative flex h-96 w-96 flex-row">
+              <div className="relative flex h-96 md:w-full lg:w-96 flex-row">
                 <img
-                  className="h-96 w-96 rounded-2xl "
+                  className="h-96 w-full lg:w-96 rounded-2xl object-cover"
                   src="https://fakeimg.pl/275x404"
                 />
-                <div className="my-3 inline-flex flex-col items-start justify-start gap-4 rounded-br-2xl rounded-tr-2xl bg-white bg-opacity-50 p-5  backdrop-blur-xl">
+                <div className="w-full my-3 inline-flex flex-col items-start justify-start gap-4 rounded-br-2xl rounded-tr-2xl bg-white bg-opacity-50 p-5  backdrop-blur-xl">
                   <div className="flex flex-col items-start justify-start">
                     <div className="inline-flex items-center justify-start self-stretch">
                       <div className="flex h-full shrink grow basis-0 items-end justify-start gap-2">

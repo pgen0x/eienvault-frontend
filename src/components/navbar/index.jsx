@@ -6,44 +6,43 @@ import Logo from '@/components/navbar/logoicon';
 import Search from '@/components/navbar/search';
 import NavMenu from './navmenu';
 import RightArea from './rightarea';
-
-//web3 Modal libs
-import { Web3Modal } from '@web3modal/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faChevronDown, faChevronRight, faUserAlt, faWallet, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { Web3Button, useWeb3Modal, useWeb3ModalEvents } from '@web3modal/react';
-import { faUser } from '@fortawesome/free-regular-svg-icons';
-import { Menu, Transition } from '@headlessui/react';
-import classNames from 'classnames';
-import { useDisconnect } from 'wagmi';
-import axios from 'axios';
-import { useAuth } from '@/hooks/AuthContext';
+import {
+  faBars,
+  faChevronDown,
+  faChevronRight,
+  faUserAlt,
+  faWallet,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
+import { useWeb3Modal, useWeb3ModalEvents } from '@web3modal/react';
 import { useSidebar } from '../../hooks/SidebarContext';
-import { useAccount } from 'wagmi';
+import { useAccount, useDisconnect } from 'wagmi';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { useState, useEffect, Fragment } from 'react';
 import { Switch } from '@headlessui/react';
 import { useRouter } from 'next-nprogress-bar';
+import { useAuth } from '@/hooks/AuthContext';
 
 export default function Navbar() {
   const router = useRouter();
+  const { logout } = useAuth();
+  const { disconnectAsync } = useDisconnect();
   const [openMenu, setOpenMenu] = useState(false);
-  const { disconnect } = useDisconnect();
   const [isClient, setIsClient] = useState(false);
   const [isConnect, setIsConnect] = useState(false);
-  const { token, login, logout } = useAuth();
   const { toggleSidebar } = useSidebar();
   const { isConnected } = useAccount();
-  const { isOpen, open, close, setDefaultChain } = useWeb3Modal();
+  const { open } = useWeb3Modal();
   const { chain } = useNetwork();
-  const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork();
+  const { switchNetwork } = useSwitchNetwork();
 
   useWeb3ModalEvents((event) => {
-    console.log(event);
     if (event.name === 'ACCOUNT_CONNECTED') {
       setIsConnect(true);
     }
     if (event.name === 'ACCOUNT_DISCONNECTED') {
+      disconnectAsync();
       setIsConnect(false);
       logout();
     }
@@ -53,30 +52,6 @@ export default function Navbar() {
     setIsClient(true);
   }, []);
 
-  useEffect(() => {
-    if (isConnect) {
-      handleLogin(); // Call the handleLogin function when isConnect or isConnected is true
-      console.log(token);
-    }
-  }, [isConnect, token]);
-
-  const handleLogin = async () => {
-    try {
-      // Perform your login logic here, for example:
-      if (isConnect) {
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/user/login`,
-          {
-            walletAddress: address,
-          },
-        );
-        login(response.data.token);
-      }
-    } catch (error) {
-      logout();
-      console.error('Login error:', error.message);
-    }
-  };
   return (
     <>
       <div className="sticky group top-0 z-40 inline-flex w-full items-center justify-center md:px-10 lg:px-10 xl:px-10 2xl:px-10 transition-all">
@@ -96,27 +71,68 @@ export default function Navbar() {
           </div>
         </nav>
       </div>
-      <section className={`h-screen grid place-items-top w-full max-w-full bg-neutral-100 fixed z-40 transition-all duration-500 top-0 ${openMenu ? 'right-0' : '-right-[100%]'}`}>
+      <section
+        className={`place-items-top fixed top-0 z-40 grid h-screen w-full max-w-full bg-neutral-100 transition-all duration-500 ${
+          openMenu ? 'right-0' : '-right-[100%]'
+        }`}
+      >
         <div className="mt-5">
-          <button className="absolute right-5 text-2xl text-primary-500" onClick={() => setOpenMenu(!openMenu)}>
+          <button
+            className="absolute right-5 text-2xl text-primary-500"
+            onClick={() => setOpenMenu(!openMenu)}
+          >
             <FontAwesomeIcon className="text-sm" icon={faXmark} />
           </button>
-          <nav className="px-4 flex flex-col flex-grow pb-4 md:pb-0 justify-start mt-5">
-            <button className="py-2 mt-2 text-xl font-semibold text-primary-500 hover:text-primary-300 text-left" onClick={() => router.push("/")}>Home</button>
-            <div className="mt-2 group">
-              <span className="py-2 text-xl font-semibold text-primary-500 hover:text-primary-300 flex justify-between"><span>Trending</span> <FontAwesomeIcon className="hidden group-hover:block" icon={faChevronDown} /><FontAwesomeIcon className="block group-hover:hidden" icon={faChevronRight} /></span>
-              <ul className="hidden group-hover:flex flex-col gap-4 px-4 mt-2">
-                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300"><span>Trending</span></li>
-                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300"><span>Status</span></li>
-                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300"><span>Marketplace</span></li>
+          <nav className="mt-5 flex flex-grow flex-col justify-start px-4 pb-4 md:pb-0">
+            <span className="mt-2 py-2 text-xl font-semibold text-primary-500 hover:text-primary-300">
+              Home
+            </span>
+            <div className="group mt-2">
+              <span className="flex justify-between py-2 text-xl font-semibold text-primary-500 hover:text-primary-300">
+                <span>Trending</span>{' '}
+                <FontAwesomeIcon
+                  className="hidden group-hover:block"
+                  icon={faChevronDown}
+                />
+                <FontAwesomeIcon
+                  className="block group-hover:hidden"
+                  icon={faChevronRight}
+                />
+              </span>
+              <ul className="mt-2 hidden flex-col gap-4 px-4 group-hover:flex">
+                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300">
+                  <span>Trending</span>
+                </li>
+                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300">
+                  <span>Status</span>
+                </li>
+                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300">
+                  <span>Marketplace</span>
+                </li>
               </ul>
             </div>
-            <div className="mt-2 group">
-              <span className="py-2 text-xl font-semibold text-primary-500 hover:text-primary-300 flex justify-between"><span>Status</span> <FontAwesomeIcon className="hidden group-hover:block" icon={faChevronDown} /><FontAwesomeIcon className="block group-hover:hidden" icon={faChevronRight} /></span>
-              <ul className="hidden group-hover:flex flex-col gap-4 px-4 mt-2">
-                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300"><span>Trending</span></li>
-                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300"><span>Status</span></li>
-                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300"><span>Marketplace</span></li>
+            <div className="group mt-2">
+              <span className="flex justify-between py-2 text-xl font-semibold text-primary-500 hover:text-primary-300">
+                <span>Status</span>{' '}
+                <FontAwesomeIcon
+                  className="hidden group-hover:block"
+                  icon={faChevronDown}
+                />
+                <FontAwesomeIcon
+                  className="block group-hover:hidden"
+                  icon={faChevronRight}
+                />
+              </span>
+              <ul className="mt-2 hidden flex-col gap-4 px-4 group-hover:flex">
+                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300">
+                  <span>Trending</span>
+                </li>
+                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300">
+                  <span>Status</span>
+                </li>
+                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300">
+                  <span>Marketplace</span>
+                </li>
               </ul>
             </div>
             <span className="py-2 mt-2 text-xl font-semibold text-primary-500 hover:text-primary-300">Marketplace</span>
@@ -136,8 +152,8 @@ export default function Navbar() {
               </>
             )}
           </nav>
-        </div >
-      </section >
+        </div>
+      </section>
     </>
   );
 }

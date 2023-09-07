@@ -12,13 +12,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { useRouter } from 'next-nprogress-bar';
-import { disconnect } from '@wagmi/core';
+import { useDisconnect } from 'wagmi';
 
 const Sidebar = () => {
   const { isSidebarOpen, closeSidebar } = useSidebar();
   const sidebarRef = useRef();
   const sidebarContentRef = useRef();
   const router = useRouter();
+  const { disconnectAsync } = useDisconnect();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -56,7 +57,7 @@ const Sidebar = () => {
 
   const handleDisconnect = () => {
     closeSidebar();
-    disconnect();
+    disconnectAsync();
   };
 
   return (

@@ -1,12 +1,10 @@
 'use client';
 import Ethereum from '@/assets/icon/ethereum';
-import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
 import {
   faCartPlus,
   faChevronDown,
   faClose,
-  faCoins,
   faEllipsis,
   faHourglass,
   faImage,
@@ -16,35 +14,36 @@ import {
   faPlusCircle,
   faUser,
   faUsers,
-  faXmark,
   faZ,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Listbox, Switch } from '@headlessui/react';
 import Image from 'next/legacy/image';
 import { useEffect, useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { useAccount } from 'wagmi';
+import { useForm } from 'react-hook-form';
+import { useAccount, useNetwork } from 'wagmi';
 import moment from 'moment';
 import { ErrorMessage } from '@hookform/error-message';
 import HelaIcon from '@/assets/icon/hela';
-import axios from 'axios';
 import ModalUploadDFile from '@/components/modal/uploadFile';
 import ModalCreateCollection from '@/components/modal/createCollections';
+import { useWeb3Modal } from '@web3modal/react';
+import { useAuth } from '@/hooks/AuthContext';
+import Loading from './loading';
 
 export default function Create({ chains }) {
+  const { token } = useAuth();
+  const { open } = useWeb3Modal();
+  const { chain } = useNetwork();
   const [selectedChain, setSelectedChain] = useState({
-    chainId: 666888,
-    symbol: 'HLUSD',
+    chainId: chain.id || 666888,
+    symbol: chain.nativeCurrency.symbol || 'HLUSD',
   });
   const [selectedBlockchain, setSelectedBlockchain] = useState({
-    chainId: 666888,
-    symbol: 'HLUSD',
+    chainId: chain.id || 666888,
+    symbol: chain.nativeCurrency.symbol || 'HLUSD',
   });
-  const [stepCreate, setStepCreate] = useState(1);
-  const [modalCreate, setModalCreate] = useState(false);
   const [enableUnlockable, setEnableUnlockable] = useState(true);
-  // const [selectedImage, setSelectedImage] = useState(null);
   const [name, setName] = useState('Untitled');
   const [selectedOptionMarket, setSelectedOptionMarket] = useState('fixed');
   const [selectedOptionEdition, setSelectedOptionEdition] = useState('single');
@@ -55,7 +54,8 @@ export default function Create({ chains }) {
   const [customValueDate, setCustomValueDate] = useState('');
   const [isSubmit, setIsSubmit] = useState(false);
   const [isCreateCollection, setIsCreateCollection] = useState(false);
-
+  const [dataCollections, setDataCollections] = useState([]);
+  const [isLoadingCollection, setIsLoadingCollection] = useState(true);
   const [isLoading, setIsLoading] = useState({
     ipfs: false,
     mint: false,
@@ -78,7 +78,6 @@ export default function Create({ chains }) {
     isError: false,
     message: '',
   });
-
   const {
     register,
     handleSubmit,
@@ -100,7 +99,6 @@ export default function Create({ chains }) {
     // Set the formatted date as the default value
     setCustomValueDate(formattedDate);
   }, []);
-
   const handleDateSelectChange = (event) => {
     const selectedValue = event.target.value;
     setSelectedOptionDate(selectedValue);
@@ -128,12 +126,44 @@ export default function Create({ chains }) {
     }
   };
 
-  const handleModalCreate = () => {
-    setIsCreateCollection(true);
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/user/collections`,
+          {
+            cache: 'force-cache',
+            headers: {
+              'Content-Type': 'application/json',
+              'API-Key': process.env.DATA_API_KEY,
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
 
-  const handleStepCreate = (Create) => {
-    setStepCreate(Create);
+        if (!res.ok) {
+          console.error('Fetch failed:', res);
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await res.json();
+        setDataCollections(responseData);
+      } catch (error) {
+        console.error('Fetch failed:', error);
+      } finally {
+        setIsLoadingCollection(false); // Set isLoading to false after fetching data
+      }
+    };
+
+    fetchData();
+  }, [token]);
+
+  const handleModalCreate = () => {
+    if (!token) {
+      open();
+    } else {
+      setIsCreateCollection(true);
+    }
   };
 
   const onSubmit = async (data) => {
@@ -205,9 +235,6 @@ export default function Create({ chains }) {
     setErrorIPFS({ isError: false, message: '' });
   };
 
-  console.log(getValues('file'));
-  console.log(selectedImage, 'selectedImage');
-
   return (
     <>
       <div className="my-5 flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row justify-center gap-5 p-4 text-gray-900">
@@ -265,11 +292,6 @@ export default function Create({ chains }) {
                             }`
                           }
                           value={chain}
-                          disabled={
-                            chain.chainId === 666888 || chain.chainId === 8668
-                              ? false
-                              : true
-                          }
                         >
                           {({ selectedChain }) => (
                             <>
@@ -405,14 +427,14 @@ export default function Create({ chains }) {
                       {/* <div
                         className={`${
                           selectedImage !== null ? 'hidden' : 'block'
-                        } mt-1 text-sm text-primary-500`}
+                        } mt-1 font-semibold text-sm text-primary-500`}
                       >
                         File is required
                       </div> */}
                     </>
                   )}
                 </div>
-                <div className="mt-1 text-sm text-primary-500">
+                <div className="mt-1 text-sm font-semibold text-primary-500">
                   <ErrorMessage errors={errors} name="file" />
                 </div>
               </div>
@@ -428,7 +450,7 @@ export default function Create({ chains }) {
                   placeholder="E.g, Mickey mouse riding a car"
                   {...register('name', { required: 'Name is required.' })}
                 />
-                <div className="mt-1 text-sm text-primary-500">
+                <div className="mt-1 text-sm font-semibold text-primary-500">
                   <ErrorMessage errors={errors} name="name" />
                 </div>
               </div>
@@ -527,7 +549,7 @@ export default function Create({ chains }) {
                     <Ethereum />
                   </span>
                 </div>
-                <div className="mt-1 text-sm text-primary-500">
+                <div className="mt-1 text-sm font-semibold text-primary-500">
                   <ErrorMessage errors={errors} name="price" />
                 </div>
               </div>
@@ -579,7 +601,7 @@ export default function Create({ chains }) {
                 </div>
               </div>
 
-              <div className="mt-1 text-sm text-primary-500">
+              <div className="mt-1 text-sm font-semibold text-primary-500">
                 {!customValueDate && 'Duration date is required'}
               </div>
 
@@ -588,7 +610,7 @@ export default function Create({ chains }) {
                   <span className="text-semantic-red-500">*</span> Choose
                   collection
                 </label>
-                <ul className="mt-2 grid w-full gap-6 text-center md:grid-cols-3">
+                <ul className="mt-2 grid w-full gap-x-6 gap-y-2 text-center md:grid-cols-3">
                   <li>
                     <button
                       onClick={(e) => {
@@ -608,58 +630,45 @@ export default function Create({ chains }) {
                       </span>
                     </button>
                   </li>
-                  <li>
-                    <input
-                      type="radio"
-                      id="piggy-collection"
-                      name="collection"
-                      value="piggy"
-                      className="peer hidden"
-                      onChange={(e) =>
-                        setSelectedOptionCollection(e.target.value)
-                      }
-                      checked={selectedOptionCollection === 'piggy'}
-                    />
-                    <label
-                      htmlFor="piggy-collection"
-                      className="flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-500 peer-checked:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500"
-                    >
-                      <FontAwesomeIcon
-                        icon={faPiggyBank}
-                        className="text-5xl"
-                      />
-                      <span>
-                        Piggy
-                        <br />
-                        Collection
-                      </span>
-                    </label>
-                  </li>
-                  <li>
-                    <input
-                      type="radio"
-                      id="snap-collection"
-                      name="collection"
-                      value="snap"
-                      className="peer hidden"
-                      onChange={(e) =>
-                        setSelectedOptionCollection(e.target.value)
-                      }
-                      checked={selectedOptionCollection === 'snap'}
-                    />
-                    <label
-                      htmlFor="snap-collection"
-                      className="flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-500 peer-checked:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500"
-                    >
-                      <FontAwesomeIcon icon={faZ} className="text-5xl" />
-                      <span>
-                        Snap
-                        <br />
-                        Collection
-                      </span>
-                    </label>
-                  </li>
+                  {isLoadingCollection ? (
+                    <Loading />
+                  ) : (
+                    dataCollections.length > 0 &&
+                    dataCollections.map((collection) => (
+                      <li key={collection.id}>
+                        <input
+                          type="radio"
+                          name={collection.name}
+                          value={collection.name}
+                          className="peer hidden"
+                          onChange={(e) =>
+                            setSelectedOptionCollection(e.target.value)
+                          }
+                          checked={selectedOptionCollection === 'piggy'}
+                        />
+                        <label
+                          htmlFor="piggy-collection"
+                          className="flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-500 peer-checked:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500"
+                        >
+                          <FontAwesomeIcon
+                            icon={faPiggyBank}
+                            className="text-5xl"
+                          />
+                          <span>
+                            {collection.name}
+                            <br />
+                            Collection
+                          </span>
+                        </label>
+                      </li>
+                    ))
+                  )}
                 </ul>
+                {dataCollections.length <= 0 && (
+                  <div className="mt-1 text-sm font-semibold text-primary-500">
+                    You need to create collections before you can create nfts
+                  </div>
+                )}
               </div>
               {/* <div className="mt-4 w-full rounded-xl bg-white p-5">
                 <div className="flex w-full items-center justify-between">
@@ -742,7 +751,7 @@ export default function Create({ chains }) {
         </div>
         <div className="sticky top-24 w-full self-start pt-3">
           <h3 className="text-xl font-semibold">Preview</h3>
-          <p>
+          <p className="pb-5 pt-1">
             Input the NFT Data field to see the preview of how your NFT product
             looks like in the marketplace
           </p>
@@ -807,7 +816,7 @@ export default function Create({ chains }) {
         </div>
       </div>
       <ModalUploadDFile
-        isOpen={isSubmit}
+        isOpenModal={isSubmit}
         onClose={closeModal}
         isLoading={isLoading}
         isErrorIPFS={isErrorIPFS}
@@ -816,10 +825,9 @@ export default function Create({ chains }) {
         isErrorPutonsale={isErrorPutonsale}
         onModalClose={closeModal}
       />
-
       <ModalCreateCollection
         chains={chains}
-        isOpen={isCreateCollection}
+        isOpenModal={isCreateCollection}
         selectedChain={selectedBlockchain}
         setSelectedChain={setSelectedBlockchain}
         onClose={closeModal}

@@ -164,7 +164,7 @@ export default function ProfilePage() {
                   <div className="mt-3 text-xl font-semibold text-gray-900">
                     John Doe
                   </div>
-                  <div className="mt-3 block h-[34px] overflow-hidden text-ellipsis text-lg  text-gray-900">
+                  <div className="mt-3 line-clamp-2 text-lg  text-gray-900">
                     Lorem Ipsum is simply dummy text of the printing and typesetting
                     industry. Lorem Ipsum has been the industry`&lsquo;`s standard
                     dummy text ever since the 1500s, when an unknown printer took a

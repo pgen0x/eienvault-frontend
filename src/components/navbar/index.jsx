@@ -71,87 +71,83 @@ export default function Navbar() {
           </div>
         </nav>
       </div>
-      <section
-        className={`place-items-top fixed top-0 z-40 grid h-screen w-full max-w-full bg-neutral-100 transition-all duration-500 ${
-          openMenu ? 'right-0' : '-right-[100%]'
-        }`}
-      >
-        <div className="mt-5">
-          <button
-            className="absolute right-5 text-2xl text-primary-500"
-            onClick={() => setOpenMenu(!openMenu)}
-          >
-            <FontAwesomeIcon className="text-sm" icon={faXmark} />
-          </button>
-          <nav className="mt-5 flex flex-grow flex-col justify-start px-4 pb-4 md:pb-0">
-            <span className="mt-2 py-2 text-xl font-semibold text-primary-500 hover:text-primary-300">
-              Home
-            </span>
-            <div className="group mt-2">
-              <span className="flex justify-between py-2 text-xl font-semibold text-primary-500 hover:text-primary-300">
-                <span>Trending</span>{' '}
-                <FontAwesomeIcon
-                  className="hidden group-hover:block"
-                  icon={faChevronDown}
-                />
-                <FontAwesomeIcon
-                  className="block group-hover:hidden"
-                  icon={faChevronRight}
-                />
+      <section>
+        <div className={`bg-black/30 backdrop-blur-sm backdrop-opacity-60 fixed top-0 w-full transition-all max-w-full h-screen z-40 ${openMenu ? 'left-0 right-0' : '-right-[100%]'}`} onClick={() => setOpenMenu(!openMenu)} />
+        <div className={`h-screen grid place-items-top w-[418px] max-w-full bg-white fixed z-40 transition-all duration-500 top-0 ${openMenu ? 'right-0' : '-right-[100%]'}`}>
+          <div className="w-full flex flex-col justify-end items-end bg-neutral-100">
+            <button className="w-fit mt-10 mr-10 text-2xl text-black" onClick={() => setOpenMenu(!openMenu)}>
+              <FontAwesomeIcon icon={faXmark} />
+            </button>
+            <nav className="w-full max-w-[418px] text-2xl flex flex-grow flex-col justify-start px-10 pb-4 md:pb-0 bg-neutral-100 transition-all delay-1000 duration-500">
+              <span className="mt-2 py-2 font-semibold text-primary-500 hover:text-primary-300">
+                Home
               </span>
-              <ul className="mt-2 hidden flex-col gap-4 px-4 group-hover:flex">
-                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300">
-                  <span>Trending</span>
-                </li>
-                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300">
-                  <span>Status</span>
-                </li>
-                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300">
-                  <span>Marketplace</span>
-                </li>
-              </ul>
-            </div>
-            <div className="group mt-2">
-              <span className="flex justify-between py-2 text-xl font-semibold text-primary-500 hover:text-primary-300">
-                <span>Status</span>{' '}
-                <FontAwesomeIcon
-                  className="hidden group-hover:block"
-                  icon={faChevronDown}
-                />
-                <FontAwesomeIcon
-                  className="block group-hover:hidden"
-                  icon={faChevronRight}
-                />
-              </span>
-              <ul className="mt-2 hidden flex-col gap-4 px-4 group-hover:flex">
-                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300">
-                  <span>Trending</span>
-                </li>
-                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300">
-                  <span>Status</span>
-                </li>
-                <li className="text-xl font-semibold text-primary-500 hover:text-primary-300">
-                  <span>Marketplace</span>
-                </li>
-              </ul>
-            </div>
-            <span className="py-2 mt-2 text-xl font-semibold text-primary-500 hover:text-primary-300">Marketplace</span>
-            {isClient && (
-              <>
-                {(isConnect || isConnected) && chain?.id !== 666888 && (
-                  <div className="flex justify-between border-t-2 flex-row items-center py-2 mt-2 text-xl font-semibold text-primary-500">
-                    <span className="text-md text-xl hover:text-primary-300">Wrong network!</span>
-                    <span className="text-md px-3 py-2 cursor-pointer hover:text-primary-300" onClick={() => switchNetwork?.(666888)}>Switch</span>
-                  </div>
-                )}
-                {isConnect || isConnected ? (
-                  <span className="py-2 mt-2 text-xl font-semibold text-primary-500 hover:text-primary-300" onClick={toggleSidebar}>Account</span>
-                ) : (
-                  <span onClick={() => open()} className="py-2 mt-2 text-xl font-semibold text-primary-500 hover:text-primary-300"><FontAwesomeIcon icon={faWallet} /> Connect your wallet</span>
-                )}
-              </>
-            )}
-          </nav>
+              <div className="group mt-2">
+                <span className="flex justify-between py-2 font-semibold text-primary-500 hover:text-primary-300">
+                  <span>Trending</span>{' '}
+                  <FontAwesomeIcon
+                    className="hidden group-hover:block"
+                    icon={faChevronDown}
+                  />
+                  <FontAwesomeIcon
+                    className="block group-hover:hidden"
+                    icon={faChevronRight}
+                  />
+                </span>
+                <ul className="mt-2 hidden flex-col gap-4 px-4 group-hover:flex">
+                  <li className="font-semibold text-primary-500 hover:text-primary-300">
+                    <span>Trending</span>
+                  </li>
+                  <li className="font-semibold text-primary-500 hover:text-primary-300">
+                    <span>Status</span>
+                  </li>
+                  <li className="font-semibold text-primary-500 hover:text-primary-300">
+                    <span>Marketplace</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="group mt-2">
+                <span className="flex justify-between py-2 font-semibold text-primary-500 hover:text-primary-300">
+                  <span>Status</span>{' '}
+                  <FontAwesomeIcon
+                    className="hidden group-hover:block"
+                    icon={faChevronDown}
+                  />
+                  <FontAwesomeIcon
+                    className="block group-hover:hidden"
+                    icon={faChevronRight}
+                  />
+                </span>
+                <ul className="mt-2 hidden flex-col gap-4 px-4 group-hover:flex">
+                  <li className="font-semibold text-primary-500 hover:text-primary-300">
+                    <span>Trending</span>
+                  </li>
+                  <li className="font-semibold text-primary-500 hover:text-primary-300">
+                    <span>Status</span>
+                  </li>
+                  <li className="font-semibold text-primary-500 hover:text-primary-300">
+                    <span>Marketplace</span>
+                  </li>
+                </ul>
+              </div>
+              <span className="py-2 mt-2 font-semibold text-primary-500 hover:text-primary-300">Marketplace</span>
+              {isClient && (
+                <>
+                  {(isConnect || isConnected) && chain?.id !== 666888 && (
+                    <div className="flex justify-between border-t-2 flex-row items-center py-2 mt-2 text-xl font-semibold text-primary-500">
+                      <span className="text-md text-xl hover:text-primary-300">Wrong network!</span>
+                      <span className="text-md px-3 py-2 cursor-pointer hover:text-primary-300" onClick={() => switchNetwork?.(666888)}>Switch</span>
+                    </div>
+                  )}
+                  {isConnect || isConnected ? (
+                    <span className="py-2 mt-2 font-semibold text-primary-500 hover:text-primary-300" onClick={toggleSidebar}>Account</span>
+                  ) : (
+                    <span onClick={() => open()} className="py-2 mt-2 font-semibold text-primary-500 hover:text-primary-300"><FontAwesomeIcon icon={faWallet} /> Connect your wallet</span>
+                  )}
+                </>
+              )}
+            </nav>
+          </div>
         </div>
       </section>
     </>

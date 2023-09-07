@@ -144,7 +144,7 @@ export const SlideshowActivitiesSkeleton = () => {
   return (
     <>
       {[...Array(5)].map((x, i) => (
-        <div className="w-full p-3 group h-[494px]">
+        <div key={i} className="w-full p-3 group h-[494px]">
           <div className="w-full h-[250px] bg-gray-300 animate-pulse rounded-2xl" />
           <div className="w-full inline-flex flex-col items-center justify-center lg:items-start">
             <div className="w-full px-5 relative flex flex-row">

@@ -145,7 +145,7 @@ export const SlideshowDiscoverSkeleton = () => {
   return (
     <>
       {[...Array(3)].map((x, i) => (
-        <div className="w-full p-3 h-[542px]">
+        <div key={i} className="w-full p-3 h-[542px]">
           <div className="w-full h-[290px] bg-gray-300 animate-pulse rounded-2xl" />
           <div className="w-full px-5 inline-flex flex-col items-center justify-center lg:items-start">
             <div className="relative w-full flex flex-row">

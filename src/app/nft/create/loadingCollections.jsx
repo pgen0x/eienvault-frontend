@@ -1,4 +1,4 @@
-export default function Loading() {
+export default function loadingCollections() {
   // You can add any UI inside Loading, including a Skeleton.
   return (
     <>

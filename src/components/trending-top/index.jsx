@@ -342,7 +342,7 @@ export const TrendingTopMobile = () => {
       <MainMobile />
       <div className="flex flex-col gap-5 mt-5">
         {trading.slice(trading.length - 3).map((trade, index) => (
-          <div className="bg-white rounded-xl p-5 flex flex-col gap-3">
+          <div key={index} className="bg-white rounded-xl p-5 flex flex-col gap-3">
             <div className="flex w-full items-center gap-3 border-b border-gray-300 pb-2">
               <img className="h-10 w-10 flex-none rounded-full bg-gray-50" src={trade.imageUrl} alt="" />
               <h3 className="w-full">{trade.name}</h3>

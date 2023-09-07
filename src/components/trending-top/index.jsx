@@ -106,7 +106,7 @@ const Main = () => {
 }
 
 export const TrendingTop = () => {
-
+  const [limit, setLimit] = useState(0);
   const formatter = (num, digits) => {
     const lookup = [
       { value: 1, symbol: "" },
@@ -125,47 +125,57 @@ export const TrendingTop = () => {
   }
 
   const classFloor = (value) => {
-    return Number(value) < 0 ? "rounded-full font-semibold bg-red-500 text-center text-white px-2" : "rounded-full font-semibold bg-green-500 text-center text-white px-2";
+    return Number(value) < 0 ? "w-fit rounded-full font-semibold bg-red-500 text-center text-white px-2" : "w-fit rounded-full font-semibold bg-green-500 text-center text-white px-2";
   }
 
   const classMovement = (value) => {
-    return Number(value) < 0 ? "text-center font-semibold text-red-500 px-2" : "text-center font-semibold text-green-500 px-2";
+    return Number(value) < 0 ? "w-fit text-center font-semibold text-red-500 px-2" : "w-fit text-center font-semibold text-green-500 px-2";
   }
+
+  const handleResize = () => {
+    const screen = window.innerWidth
+    if(screen > 768 && screen < 1280){
+      setLimit(10)
+    }else if(screen > 1280 && screen < 1440){
+      setLimit(15)
+    }else{
+      setLimit(20)
+    }
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <>
       <Main />
-      <ul role="list" className="w-full mt-2 flex flex-col flex-wrap h-[520px]">
-        {trading.map((trade, index) => (
-          <li key={index} className="gap-x-6 p-2 w-12/12 sm:w-12/12 md:w-4/12 lg:w-4/12 xl:w-4/12 2xl:w-4/12">
+      <ul role="list" className="w-full mt-2 grid grid-rows-5 grid-flow-col gap-3">
+        {trading.slice(0, limit).map((trade, index) => (
+          <li key={index} className="w-full">
             <div className="flex justify-between w-full px-5 py-2 bg-white rounded-md">
-              <div className="flex min-w-0 gap-x-4 items-center">
+              <div className="flex w-full gap-x-4 items-center">
                 <p className="text-primary-500 text-sm">{index + 1}.</p>
                 <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={trade.imageUrl} alt="" />
-                <div className="min-w-0 flex-auto">
-                  <p className="text-md font-semibold leading-6 text-gray-900">{trade.name}</p>
-                  <div className="truncate leading-5">
-                    <p>Floor</p>
+                <div className="w-full flex flex-col">
+                  <p className="w-full text-md font-semibold leading-6 text-gray-900">{trade.name}</p>
+                  <div className="w-full flex flex-col gap-2">
+                    <div className="w-full flex gap-2">
+                      <p className="w-full">Floor</p>
+                      <p className="w-full">${formatter(trade.floor)}</p>
+                      <p className={classFloor(trade.movement_floor)}>{trade.movement_floor}%</p>
+                    </div>
+                    <div className="w-full flex gap-2">
+                      <span className="w-full">Volume</span>
+                      <p className="w-full">${formatter(trade.volume)}</p>
+                      <p className={classMovement(trade.movement_volume)}>{trade.movement_volume}%</p>
+                    </div>
                   </div>
-                  <div className="w-30 truncate leading-5 text-gray-500">
-                    <span className="w-12">Volume</span>
-                  </div>
-                </div>
-              </div>
-              <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                <div className="mt-[1.6rem] truncate leading-5">
-                  <p>${formatter(trade.floor)}</p>
-                </div>
-                <div className="truncate leading-5 text-gray-500">
-                  <p>${formatter(trade.volume)}</p>
-                </div>
-              </div>
-              <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                <div className="mt-[1.6rem] truncate text-sm leading-5 text-gray-500">
-                  <p className={classFloor(trade.movement_floor)}>{trade.movement_floor}%</p>
-                </div>
-                <div className="truncate text-sm leading-5 text-gray-500">
-                  <p className={classMovement(trade.movement_volume)}>{trade.movement_volume}%</p>
                 </div>
               </div>
             </div>
@@ -177,12 +187,32 @@ export const TrendingTop = () => {
 }
 
 export const TrendingTopSkeleton = () => {
+  const [limit, setLimit] = useState(0);
+  const handleResize = () => {
+    const screen = window.innerWidth
+    if(screen > 768 && screen < 1280){
+      setLimit(10)
+    }else if(screen > 1280 && screen < 1440){
+      setLimit(15)
+    }else{
+      setLimit(20)
+    }
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   return (
     <>
       <Main />
-      <ul role="list" className="mt-2 flex flex-col flex-wrap h-[520px]">
-        {[...Array(15)].map((x, i) => (
-          <li key={i} className="gap-x-6 md:p-2 lg:py-2 w-12/12 sm:w-12/12 md:w-4/12 lg:w-4/12 xl:w-4/12 2xl:w-4/12">
+      <ul role="list" className="w-full mt-2 grid grid-rows-5 grid-flow-col gap-3">
+        {[...Array(limit)].map((x, i) => (
+          <li key={i} className="w-full">
             <div className="flex justify-between w-full px-5 py-2 bg-white rounded-md">
               <div className="flex min-w-0 gap-x-4 items-center">
                 <div className="w-3 h-3 bg-gray-300 animate-pulse rounded-full"></div>
@@ -311,7 +341,7 @@ export const TrendingTopMobile = () => {
     <>
       <MainMobile />
       <div className="flex flex-col gap-5 mt-5">
-        {tradingMobile.map((trade, index) => (
+        {trading.slice(trading.length - 3).map((trade, index) => (
           <div className="bg-white rounded-xl p-5 flex flex-col gap-3">
             <div className="flex w-full items-center gap-3 border-b border-gray-300 pb-2">
               <img className="h-10 w-10 flex-none rounded-full bg-gray-50" src={trade.imageUrl} alt="" />

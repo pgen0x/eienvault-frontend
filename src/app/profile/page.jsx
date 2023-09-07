@@ -76,6 +76,16 @@ const collections = [
   'Kokoakoci',
 ];
 
+const listCollections = [
+  { name: 'Owned', badge: 0 },
+  { name: 'Collections', badge: 2 },
+  { name: 'Bid received', badge: 0 },
+  { name: 'Collateral', badge: 0 },
+  { name: 'Created', badge: 0 },
+  { name: 'On sale', badge: 1 },
+  { name: 'Sold', badge: 0 },
+  { name: 'Liked', badge: 0 }
+]
 export default function ProfilePage() {
   const router = useRouter();
   const [selectedServer, setSelectedServer] = useState(servers[0]);
@@ -85,6 +95,7 @@ export default function ProfilePage() {
   const [stepCreate, setStepCreate] = useState(1);
   const [modalCreate, setModalCreate] = useState(false);
   const [selectedBlockchain, setSelectedBlockchain] = useState(blockchains[0]);
+  const [limitCollection, setLimitCollection] = useState(listCollections.length)
 
   const classRadio = (params, value) => {
     const defaultCssRadio =
@@ -111,6 +122,28 @@ export default function ProfilePage() {
   const handleStepCreate = (Create) => {
     setStepCreate(Create);
   };
+
+  const handleResize = () => {
+    const screen = window.innerWidth
+    if (screen < 640) {
+      setLimitCollection(2)
+    } else if (screen > 768 && screen < 1280) {
+      setLimitCollection(5)
+    } else if (screen > 1280 && screen < 1440) {
+      setLimitCollection(listCollections.length)
+    } else {
+      setLimitCollection(listCollections.length)
+    }
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <>
@@ -219,46 +252,27 @@ export default function ProfilePage() {
             </div>
           </div>
         </section>
-        <section className="flex">
-          <ul className="my-5 flex border-b border-gray-200 text-primary-500">
-            <li className="cursor-pointer px-5 pb-3">Owned</li>
-            <li className="cursor-pointer border-b-4 border-primary-500 px-5 pb-3">
-              Collections{' '}
-              <span className="rounded-full bg-red-400 px-1 text-xs font-semibold text-white">
-                2
-              </span>
-            </li>
-          </ul>
-          <ul className="my-5 border-b border-gray-200 text-primary-500 hidden sm:hidden md:flex lg:flex xl:flex 2xl:flex">
-            <li className="cursor-pointer px-5 pb-3">Bid received</li>
-            <li className="cursor-pointer px-5 pb-3">Collateral</li>
-            <li className="cursor-pointer px-5 pb-3">Created</li>
-            <li className="cursor-pointer px-5 pb-3">
-              On sale{' '}
-              <span className="rounded-full bg-red-400 px-1 text-xs font-semibold text-white">
-                1
-              </span>
-            </li>
-            <li className="cursor-pointer px-5 pb-3">Sold</li>
-            <li className="cursor-pointer px-5 pb-3">Liked</li>
-          </ul>
-          <ul className="my-5 border-b border-gray-200 text-primary-500 flex sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden">
-            <li className="cursor-pointer group">
-              <span className="px-5 pb-3">More</span> <FontAwesomeIcon icon={faChevronDown} />
-              <ul className="border-b border-gray-200 text-primary-500 hidden group-hover:flex flex-col absolute mt-3 z-30 bg-white rounded-b-xl">
-                <li className="cursor-pointer px-5 py-3">Bid received</li>
-                <li className="cursor-pointer px-5 pb-3">Collateral</li>
-                <li className="cursor-pointer px-5 pb-3">Created</li>
-                <li className="cursor-pointer px-5 pb-3">
-                  On sale{' '}
-                  <span className="rounded-full bg-red-400 px-1 text-xs font-semibold text-white">
-                    1
-                  </span>
-                </li>
-                <li className="cursor-pointer px-5 pb-3">Sold</li>
-                <li className="cursor-pointer px-5 pb-3">Liked</li>
-              </ul>
-            </li>
+        <section className="inline">
+          <ul className="w-full my-5 flex border-b border-gray-200 text-primary-500 gap-10">
+            {listCollections.slice(0, limitCollection).map((collection, index) => (
+              <li className="cursor-pointer pb-3 flex gap-2">
+                <span>{collection.name}</span>
+                {collection.badge > 0 && (<span className="rounded-full bg-red-400 h-4 w-4 text-center text-xs font-semibold text-white">{collection.badge}</span>)}
+              </li>
+            ))}
+            {(limitCollection != listCollections.length) ? (
+              <li className="cursor-pointer group">
+                <span className="pb-3">More</span> <FontAwesomeIcon icon={faChevronDown} />
+                <ul className="border-b border-gray-200 text-primary-500 hidden group-hover:flex flex-col absolute gap-3 py-3 mt-3 z-30 bg-white rounded-b-xl">
+                  {listCollections.slice(limitCollection).map((collection, index) => (
+                    <li className="cursor-pointer px-5 flex gap-2">
+                      <span>{collection.name}</span>
+                      {collection.badge > 0 && (<span className="rounded-full bg-red-400 h-4 w-4 text-center text-xs font-semibold text-white">{collection.badge}</span>)}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ) : ''}
           </ul>
         </section>
         <section>
@@ -282,17 +296,8 @@ export default function ProfilePage() {
                       {selectedFilter}
                     </span>
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                      <svg
-                        width="16"
-                        height="9"
-                        viewBox="0 0 16 9"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M8 9C7.71875 9 7.46875 8.90625 7.28125 8.71875L1.28125 2.71875C0.875 2.34375 0.875 1.6875 1.28125 1.3125C1.65625 0.90625 2.3125 0.90625 2.6875 1.3125L8 6.59375L13.2812 1.3125C13.6562 0.90625 14.3125 0.90625 14.6875 1.3125C15.0938 1.6875 15.0938 2.34375 14.6875 2.71875L8.6875 8.71875C8.5 8.90625 8.25 9 8 9Z"
-                          fill="#7D778A"
-                        />
+                      <svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 9C7.71875 9 7.46875 8.90625 7.28125 8.71875L1.28125 2.71875C0.875 2.34375 0.875 1.6875 1.28125 1.3125C1.65625 0.90625 2.3125 0.90625 2.6875 1.3125L8 6.59375L13.2812 1.3125C13.6562 0.90625 14.3125 0.90625 14.6875 1.3125C15.0938 1.6875 15.0938 2.34375 14.6875 2.71875L8.6875 8.71875C8.5 8.90625 8.25 9 8 9Z" fill="#7D778A" />
                       </svg>
                     </span>
                   </Listbox.Button>
@@ -342,7 +347,7 @@ export default function ProfilePage() {
           <div className="my-5 grid grid-cols-12 gap-6">
             <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12">
               <div className="grid w-full grid-cols-12 gap-6 text-gray-900">
-                <div className="col-span-12 mb-4 w-full h-[280px] sm:col-span-12 md:col-span-6 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                <div className="col-span-12 mb-4 w-full h-[280px] sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                   <div className="flex h-full w-full flex-col items-center justify-center rounded-2xl border-2 border-gray-200">
                     <button className="w-fit rounded-full bg-primary-500 px-4 py-1 text-white hover:bg-primary-300" onClick={handleModalCreate}>
                       Create a new collection
@@ -353,10 +358,10 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 {collections.map((collection, index) => (
-                  <div key={index} className="group col-span-6 h-[320px] sm:h-[320px] md:h-[300px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px] w-full sm:col-span-6 md:col-span-6 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                  <div key={index} className="group col-span-6 h-[320px] sm:h-[320px] md:h-[300px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px] w-full sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                     <img className="relative z-10 h-[200px] w-full rounded-2xl object-cover duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all" src="https://fakeimg.pl/325x175" />
                     <div className="grid grid-cols-12 p-3">
-                      <div className="col-span-12 sm:col-span-12 md:col-span-8 lg:col-span-8 xl:col-span-8 2xl:col-span-8 relative z-10 -top-[60px] flex gap-1 rounded-tl-2xl rounded-tr-2xl bg-white bg-opacity-50 p-2">
+                      <div className="col-span-12 sm:col-span-12 md:col-span-10 lg:col-span-8 xl:col-span-8 2xl:col-span-8 relative z-10 -top-[60px] flex gap-1 rounded-tl-2xl rounded-tr-2xl bg-white bg-opacity-50 p-2">
                         <div className="w-fit">
                           <img src="https://fakeimg.pl/48x48" className="rounded-lg" />
                         </div>

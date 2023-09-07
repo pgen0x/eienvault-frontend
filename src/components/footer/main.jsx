@@ -33,7 +33,7 @@ const Footer = () => {
             </a>
           </div>
           <div className="flex-between flex items-center gap-2 text-primary-500">
-            <a href="#" className="text-sm">
+            <a href="#" className="text-sm md:hidden lg:block">
               Our Community
             </a>
             <a href="#" className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-primary-100">

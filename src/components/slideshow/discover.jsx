@@ -33,6 +33,10 @@ export const SlideshowDiscover = () => {
       spaceBetween: 5,
       width: 400,
     },
+    768: {
+      slidesPerView: 1,
+      spaceBetween: 5,
+    },
     1024: {
       width: 545,
     },

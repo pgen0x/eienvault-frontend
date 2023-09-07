@@ -29,6 +29,10 @@ export const Slideshow = () => {
       spaceBetween: 5,
       width: 400,
     },
+    768: {
+      slidesPerView: 1,
+      spaceBetween: 5,
+    },
     1024: {
       spaceBetween: 24,
       width: 545,
@@ -69,15 +73,15 @@ export const Slideshow = () => {
           dynamicBullets: true,
         }}
         modules={[Autoplay, Pagination, Navigation]}
-        autoplay={{
-          delay: 3000,
-          disableOnInteraction: false,
-        }}
+        // autoplay={{
+        //   delay: 3000,
+        //   disableOnInteraction: false,
+        // }}
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
-            <div className="inline-flex w-full flex-col items-center justify-center gap-2 p-2 lg:items-start lg:px-10 lg:pt-16">
-              <div className="flex flex-row items-center rounded-lg bg-[#fff1d4] px-2 py-2">
+            <div className="inline-flex w-full flex-col justify-center gap-2 p-2 lg:items-start lg:pt-16">
+              <div className="w-fit flex flex-row items-center rounded-lg bg-[#fff1d4] px-2 py-2">
                 <span className="mr-2 h-1 w-1 animate-ping rounded-full bg-red-400 opacity-90"></span>
                 <div className="whitespace-nowrap text-xs font-semibold text-gray-900">
                   Live mint and auction

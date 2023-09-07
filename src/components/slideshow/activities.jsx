@@ -31,6 +31,10 @@ export const SlideshowActivities = () => {
       spaceBetween: 5,
       width: 350,
     },
+    768: {
+      slidesPerView: 2,
+      spaceBetween: 5,
+    },
     1024: {
       width: 495,
     },

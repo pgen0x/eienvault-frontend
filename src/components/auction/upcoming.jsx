@@ -15,7 +15,7 @@ export const UpcomingAuction = () => {
   return (
     <>
       <div className="flex gap-4 mt-5">
-        <div className="group flex-1 h-[666px] overflow-hidden">
+        <div className="group flex-1 h-[666px] overflow-hidden md:hidden lg:block">
           <div className="flex flex-col p-2 justify-end rounded-lg bg-[url('https://via.placeholder.com/500x700')] bg-cover bg-center h-[666px] group-hover:h-[514px] group-hover:transition-all ease-in-out duration-300">
             <div className="w-fit flex items-center justify-center gap-2 rounded-lg bg-white p-2">
               <img className="h-4 w-4 rounded-2xl" src="https://via.placeholder.com/16x16" />

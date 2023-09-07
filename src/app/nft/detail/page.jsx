@@ -29,14 +29,14 @@ export default function NftDetail() {
 
   return (
     <>
-      <section className="hidden sm:hidden md:hidden lg:block xl:block 2xl:block">
+      <section className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
         <div className="w-full">
-          <img src="https://via.placeholder.com/1920x266" />
+          <img src="https://via.placeholder.com/1920x266" className="h-[266px] object-cover" />
         </div>
       </section>
       <div className="container m-auto mb-5 p-3">
         <section>
-          <div className="flex w-full mt-5 gap-4 flex-col xl:flex-row 2xl:flex-row lg:flex-row md:flex-col sm:flex-col">
+          <div className="flex w-full mt-5 gap-4 flex-col xl:flex-row 2xl:flex-row lg:flex-row md:flex-row sm:flex-col">
             <div className="w-full flex flex-col gap-4">
               <img src="https://via.placeholder.com/600x600" className="w-full h-auto rounded-xl" />
               <div className="relative -mt-16 px-5">
@@ -76,9 +76,9 @@ export default function NftDetail() {
               </div>
             </div>
             <div className="w-full">
-              <div className="w-full flex justify-around">
-                <button className="bg-primary-500 rounded-full w-60 py-2 hover:bg-primary-300"><FontAwesomeIcon icon={faPenToSquare} /> Edit detail item</button>
-                <button className="bg-primary-500 rounded-full w-60 py-2 hover:bg-primary-300"><FontAwesomeIcon icon={faList} /> List item</button>
+              <div className="w-full flex gap-4 justify-around">
+                <button className="bg-primary-500 rounded-full w-full py-2 hover:bg-primary-300"><FontAwesomeIcon icon={faPenToSquare} /> Edit detail item</button>
+                <button className="bg-primary-500 rounded-full w-full py-2 hover:bg-primary-300"><FontAwesomeIcon icon={faList} /> List item</button>
               </div>
               <div className="text-gray-900 flex flex-col gap-4 mt-5">
                 <h2 className="text-2xl font-bold">Worriness #18</h2>

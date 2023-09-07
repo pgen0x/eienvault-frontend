@@ -125,10 +125,10 @@ export default function ProfileSetting() {
 
   return (
     <>
-      <section className="hidden sm:hidden md:hidden lg:block xl:block 2xl:block">
+      <section className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
         <div className="w-full">
-          <img src="https://via.placeholder.com/1920x266" />
-          <div className="container m-auto">
+          <img src="https://via.placeholder.com/1920x266" className="h-[266px] object-cover" />
+          <div className="container m-auto md:hidden lg:block">
             <div className="flex flex-col gap-2 relative -mt-[9rem] bg-white/50 backdrop-blur-lg rounded-lg w-60 p-5">
               <p>Upcoming Auction</p>
               <h3 className="text-lg">Dropping tommorow</h3>
@@ -141,7 +141,7 @@ export default function ProfileSetting() {
       </section>
       <div className="container m-auto mb-5 p-3">
         <section>
-          <div className="mt-5 flex w-full flex-col gap-4 sm:flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row">
+          <div className="mt-5 flex w-full flex-col gap-4 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
             <div className="flex w-full flex-col gap-4">
               <img src="https://via.placeholder.com/600x600" className="h-auto w-full rounded-xl" />
               <div className="relative -mt-16 px-5">
@@ -189,11 +189,11 @@ export default function ProfileSetting() {
               </div>
             </div>
             <div className="w-full">
-              <div className="flex w-full justify-around text-white">
-                <button className="w-60 rounded-full bg-primary-500 py-2 hover:bg-primary-300">
+              <div className="flex w-full justify-around text-white gap-4">
+                <button className="w-full rounded-full bg-primary-500 py-2 hover:bg-primary-300">
                   <FontAwesomeIcon icon={faPenToSquare} /> Edit detail item
                 </button>
-                <button className="w-60 rounded-full bg-primary-500 py-2 hover:bg-primary-300">
+                <button className="w-full rounded-full bg-primary-500 py-2 hover:bg-primary-300">
                   <FontAwesomeIcon icon={faList} /> List item
                 </button>
               </div>

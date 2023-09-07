@@ -328,12 +328,12 @@ export default function AccountPage() {
                     key={index}
                     className={`group h-[300px] sm:h-[300px] md:h-[540px] lg:h-[540px] xl:h-[540px] 2xl:h-[540px] w-full ${openFilter
                       ? 'col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-4 2xl:col-span-4'
-                      : 'col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-3 xl:col-span-3 2xl:col-span-3'
+                      : 'col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3'
                       }`}
                   >
                     <img className="relative z-10 h-[150px] sm:h-[150px] md:h-[300px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px] w-full rounded-2xl object-cover duration-300 ease-in-out md:group-hover:h-[250px] md:group-hover:transition-all" src="https://via.placeholder.com/325x265" />
                     <div className="relative -top-3 inline-flex w-full flex-col items-center justify-center lg:items-start">
-                      <div className="relative flex w-full flex-row px-2 sm:px-2 md:px-5 lg:px-5 xl:px-5 2xl:px-5">
+                      <div className="relative flex w-full flex-row px-2 sm:px-2 md:px-2 lg:px-5 xl:px-5 2xl:px-5">
                         <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
                           <div className="flex w-full flex-col items-start justify-start">
                             <div className="inline-flex items-center justify-between self-stretch pt-2">
@@ -373,8 +373,8 @@ export default function AccountPage() {
                               </div>
                             </div>
                             <div className="hidden sm:hidden md:block lg:block xl:block 2xl:block w-full">
-                              <div className="mt-5 flex w-full items-center">
-                                <FontAwesomeIcon className="mr-5 h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 " icon={faCartPlus} />
+                              <div className="mt-5 flex gap-3 w-full items-center">
+                                <FontAwesomeIcon className="h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 " icon={faCartPlus} />
                                 <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
                                   Buy Now
                                 </button>

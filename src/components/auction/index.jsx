@@ -40,7 +40,7 @@ const Auction = () => {
           <Awan2 />
         </div>
         <div className="container m-auto">
-          <div className="relative mb-5 hidden sm:hidden md:flex lg:flex xl:flex 2xl:flex w-full flex-initial items-center justify-center">
+          <div className="relative md: pt-24 lg:pt-10 mb-5 hidden sm:hidden md:flex lg:flex xl:flex 2xl:flex w-full flex-initial items-center justify-center">
               <Slideshow />
           </div>
           <div className="relative mb-5 flex sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden w-full flex-initial items-center justify-center">

@@ -36,12 +36,12 @@ export default function Create({ chains }) {
   const { open } = useWeb3Modal();
   const { chain } = useNetwork();
   const [selectedChain, setSelectedChain] = useState({
-    chainId: chain.id || 666888,
-    symbol: chain.nativeCurrency.symbol || 'HLUSD',
+    chainId: chain?.id || 666888,
+    symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
   const [selectedBlockchain, setSelectedBlockchain] = useState({
-    chainId: chain.id || 666888,
-    symbol: chain.nativeCurrency.symbol || 'HLUSD',
+    chainId: chain?.id || 666888,
+    symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
   const [enableUnlockable, setEnableUnlockable] = useState(true);
   const [name, setName] = useState('Untitled');
@@ -55,6 +55,7 @@ export default function Create({ chains }) {
   const [isSubmit, setIsSubmit] = useState(false);
   const [isCreateCollection, setIsCreateCollection] = useState(false);
   const [dataCollections, setDataCollections] = useState([]);
+  const [isDataCollections, setIsDataCollections] = useState(false);
   const [isLoadingCollection, setIsLoadingCollection] = useState(true);
   const [isLoading, setIsLoading] = useState({
     ipfs: false,
@@ -132,7 +133,8 @@ export default function Create({ chains }) {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/user/collections`,
           {
-            cache: 'force-cache',
+            next: { revalidate: 60 },
+            cache: 'no-store',
             headers: {
               'Content-Type': 'application/json',
               'API-Key': process.env.DATA_API_KEY,
@@ -167,7 +169,12 @@ export default function Create({ chains }) {
   };
 
   const onSubmit = async (data) => {
-    setIsSubmit(true);
+    if (dataCollections.length <= 0) {
+      setIsDataCollections(true);
+      return;
+    } else {
+      setIsSubmit(true);
+    }
     try {
       setIsLoading({
         ipfs: true,
@@ -664,7 +671,7 @@ export default function Create({ chains }) {
                     ))
                   )}
                 </ul>
-                {dataCollections.length <= 0 && (
+                {isDataCollections && (
                   <div className="mt-1 text-sm font-semibold text-primary-500">
                     You need to create collections before you can create nfts
                   </div>
@@ -696,7 +703,7 @@ export default function Create({ chains }) {
                   feature
                 </p>
               </div> */}
-              <div className="mt-4 w-full rounded-xl bg-white p-5">
+              {/* <div className="mt-4 w-full rounded-xl bg-white p-5">
                 <div className="flex w-full items-center justify-between">
                   <div className="flex items-center gap-2">
                     <label className="font-semibold">Unlockable content</label>
@@ -720,7 +727,7 @@ export default function Create({ chains }) {
                   Include unlockable content that can only be revealed by the
                   owner of the item.
                 </p>
-              </div>
+              </div> */}
               <div className="mt-4 w-full">
                 <label>
                   <span className="font-semibold">Royalties</span>

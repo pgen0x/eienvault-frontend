@@ -12,7 +12,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { useRouter } from 'next-nprogress-bar';
-import { useDisconnect } from 'wagmi';
+import { useAccount, useDisconnect } from 'wagmi';
+import { useAuth } from '@/hooks/AuthContext';
+import { truncateAddress } from '@/utils/truncateAddress';
+import { useWeb3Modal } from '@web3modal/react';
+import HelaIcon from '@/assets/icon/hela';
 
 const Sidebar = () => {
   const { isSidebarOpen, closeSidebar } = useSidebar();
@@ -20,6 +24,9 @@ const Sidebar = () => {
   const sidebarContentRef = useRef();
   const router = useRouter();
   const { disconnectAsync } = useDisconnect();
+  const { dataUser } = useAuth();
+  const { address, isConnected } = useAccount();
+  const { open } = useWeb3Modal();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -83,8 +90,10 @@ const Sidebar = () => {
                   <FontAwesomeIcon icon={faUserAlt} />
                 </button>
                 <div className="inline-flex flex-col items-start justify-start">
-                  <div className="text-center text-xl font-medium leading-loose text-black">
-                    username
+                  <div className="truncate text-center text-xl font-medium leading-loose text-black">
+                    {isConnected && dataUser.username === null
+                      ? truncateAddress(address)
+                      : dataUser.username}
                   </div>
                   <button
                     className="text-center text-sm font-light leading-tight text-black"
@@ -168,37 +177,31 @@ const Sidebar = () => {
                 Connected wallet
               </div>
               <div className="flex h-5 shrink grow basis-0 items-center justify-center gap-2 rounded-lg py-2">
-                <div className="shrink grow basis-0 text-right text-sm font-bold leading-tight text-rose-500">
+                <button
+                  className="shrink grow basis-0 text-right text-sm font-bold leading-tight text-rose-500"
+                  onClick={open}
+                >
                   Manage wallet
-                </div>
+                </button>
               </div>
             </div>
             <div className="flex h-72 w-full flex-col items-start justify-start gap-4 rounded-2xl bg-white bg-opacity-50 p-4">
               <div className="flex h-12 flex-col items-start justify-start gap-2 self-stretch">
                 <div className="inline-flex items-center justify-start gap-2 self-stretch">
                   <div className="flex h-12 shrink grow basis-0 items-center justify-start gap-2">
-                    <div className="relative h-12 w-12">
-                      <div className="absolute left-[3px] top-[5px] h-10 w-10">
-                        <div className="absolute left-[0.35px] top-[-0px] h-9 w-10"></div>
-                        <div className="absolute left-[12.34px] top-[31.57px] h-1.5 w-4"></div>
-                        <div className="absolute left-[7.99px] top-[20.46px] h-3.5 w-7"></div>
-                        <div className="absolute left-[9.24px] top-[20.46px] h-2.5 w-6"></div>
-                        <div className="absolute left-0 top-0 h-5 w-10"></div>
+                    <div className="inline-flex flex-row items-center justify-between gap-4">
+                      <div className="font-light leading-normal text-black">
+                        <HelaIcon className="h-12 w-12" />
                       </div>
-                    </div>
-                    <div className="inline-flex flex-col items-start justify-start">
-                      <div className="text-center text-base font-light leading-normal text-black">
-                        Ethereum
-                      </div>
-                      <div className="text-center text-base font-medium leading-normal text-black">
-                        0x8wa21...72na
+                      <div className="font-medium leading-normal text-black">
+                        {isConnected && truncateAddress(address)}
                       </div>
                     </div>
                   </div>
                   <div className="inline-flex h-8 w-8 flex-col items-center justify-center gap-2 rounded-3xl bg-rose-500 p-2">
-                    <div className="text-sm font-black leading-tight text-white">
+                    <button className="text-sm font-black leading-tight text-white">
                       <FontAwesomeIcon icon={faCopy} />
-                    </div>
+                    </button>
                   </div>
                 </div>
               </div>

@@ -5,7 +5,7 @@ import { SlideshowActivities, SlideshowActivitiesSkeleton } from '@/components/s
 import { SlideshowCreator, SlideshowCreatorSkeleton } from '@/components/slideshow/creator';
 import Avatar from '@/assets/images/avatar.jpg';
 import Image from 'next/image';
-import { TrendingTop, TrendingTopSkeleton, TrendingTopMobile } from '@/components/treding-top';
+import { TrendingTop, TrendingTopSkeleton, TrendingTopMobile } from '@/components/trending-top';
 import Auction from '@/components/auction';
 import { UpcomingAuction, UpcomingAuctionMobile, UpcomingAuctionSkeleton } from '@/components/auction/upcoming';
 import { Tab } from '@headlessui/react';
@@ -41,12 +41,12 @@ export default function Home() {
         <section className="relative -mt-24 flex h-auto sm:h-auto md:h-[690px] lg:h-[690px] my-5 xl:h-[690px] 2xl:h-[690px] w-full flex-col gap-4 bg-gray-100 px-10 pt-10 text-black">
           <div className="container mx-auto">
             <Tab.Group>
-              <Tab.List>
-                <Tab>
-                  <strong className="pr-5">Collections</strong>
+              <Tab.List className="flex gap-5">
+                <Tab className={({ selected }) => selected ? 'text-black font-bold' : 'text-neutral-400 font-bold'}>
+                  Collections
                 </Tab>
-                <Tab>
-                  <strong className="text-neutral-400">Marketplace</strong>
+                <Tab className={({ selected }) => selected ? 'text-black font-bold' : 'text-neutral-400 font-bold'}>
+                  Marketplace
                 </Tab>
               </Tab.List>
               <Tab.Panels className="pt-4">
@@ -68,7 +68,7 @@ export default function Home() {
         <section>
           <div className="section-discover w-full text-black">
             <div className="container mx-auto flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row items-center justify-center">
-              <div className="w-full sm:w-full md:w-[29%] lg:w-[29%] xl:w-[29%] 2xl:w-[29%] flex-initial p-5">
+              <div className="w-full sm:w-full md:w-[50%] lg:w-[29%] xl:w-[29%] 2xl:w-[29%] flex-initial p-5">
                 <h2 className="text-3xl">
                   Discover Our Best <br />
                   Collections For you to buy.
@@ -81,7 +81,7 @@ export default function Home() {
                   DIscover more
                 </button>
               </div>
-              <div className="relative my-5 flex w-full sm:w-full md:w-[69%] lg:w-[69%] xl:w-[69%] 2xl:w-[69%] flex-initial items-center justify-center">
+              <div className="relative my-5 flex w-full sm:w-full md:w-[50%] lg:w-[69%] xl:w-[69%] 2xl:w-[69%] flex-initial items-center justify-center">
                 <SlideshowDiscover />
                 {/* <SlideshowDiscoverSkeleton /> */}
               </div>
@@ -124,44 +124,28 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="flex h-[400px] justify-between overflow-hidden bg-orange-100 text-black">
-            <div className="w-max-full relative -bottom-[6rem] left-0 w-full">
-              {/* <Line /> */}
-            </div>
-            <div className="flex-2 w-full">
-              <div className="relative top-0 sm:top-0 md:-top-[50px] lg:-top-[50px] xl:-top-[50px] 2xl:-top-[50px] block h-[30rem] w-[30rem] max-w-full max-h-full rounded-full bg-red-400">
-                <div className="relative top-[50px] sm:top-[50px] md:top-[130px] lg:top-[130px] xl:top-[130px] 2xl:top-[130px] mx-auto flex w-[90%] items-center justify-center">
-                  <div className="w-full rounded-lg bg-white/60 p-10 px-3 text-center text-gray-800 backdrop-blur">
-                    <h2 className="text-2xl font-bold">
-                      Don&lsquo;t miss a drop
-                    </h2>
-                    <p>
-                      Subscribe to our real time newspaper and be the first to
-                      know
-                      <br /> about upcoming drops
-                    </p>
-                    <form className="mt-5 flex w-full gap-2">
-                      <input
-                        type="text"
-                        className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500"
-                        placeholder="Your email address"
-                      />
-                      <button
-                        type="submit"
-                        className="rounded-full bg-primary-500 px-5 py-2 text-white hover:bg-primary-300"
-                      >
-                        Subscribe
-                      </button>
-                    </form>
-                  </div>
+          <div className="w-full flex h-[400px] justify-between overflow-hidden bg-orange-100 text-black">
+            <div className="w-full mx-auto relative top-0 sm:top-0 md:-top-[50px] lg:-top-[50px] xl:-top-[50px] 2xl:-top-[50px] block h-[30rem] w-[30rem] max-w-full max-h-full md:max-h-[30rem] md:max-w-[30rem] rounded-full bg-red-400">
+              <div className="relative top-[50px] sm:top-[50px] md:top-[130px] lg:top-[130px] xl:top-[130px] 2xl:top-[130px] mx-auto flex w-[90%] items-center justify-center">
+                <div className="w-full rounded-lg bg-white/60 p-10 px-3 text-center text-gray-800 backdrop-blur z-10">
+                  <h2 className="text-2xl font-bold">
+                    Don&lsquo;t miss a drop
+                  </h2>
+                  <p>
+                    Subscribe to our real time newspaper and be the first to
+                    know
+                    <br /> about upcoming drops
+                  </p>
+                  <form className="mt-5 flex w-full gap-2">
+                    <input type="text" className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="Your email address" />
+                    <button type="submit" className="rounded-full bg-primary-500 px-5 py-2 text-white hover:bg-primary-300">
+                      Subscribe
+                    </button>
+                  </form>
                 </div>
               </div>
             </div>
-            <div className="flex w-full flex-wrap self-end">
-              <div className="relative -left-[100px]">
-                <LineRound />
-              </div>
-            </div>
+            {/* <BgSubscribe className="relative w-full max-h-[30rem] object-cover" /> */}
           </div>
         </section>
         <section>
@@ -218,8 +202,8 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="h-auto sm:h-auto md:h-[550px] lg:h-[550px] xl:h-[550px] 2xl:h-[550px] w-full bg-amber-100 p-5">
-            <div className="container relative z-[1] mx-auto flex gap-5 flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row justify-between rounded-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
+          <div className="h-auto sm:h-auto md:h-auto lg:h-[550px] xl:h-[550px] 2xl:h-[550px] w-full bg-amber-100 p-5">
+            <div className="container relative z-[1] mx-auto flex gap-5 flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row justify-between rounded-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
               <div className="text-slate-600">
                 <h2 className="text-3xl font-bold">
                   Use your NFTs to get a crypto <br />

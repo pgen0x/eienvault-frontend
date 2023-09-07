@@ -21,9 +21,11 @@ import { useAccount, useDisconnect } from 'wagmi';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { useState, useEffect, Fragment } from 'react';
 import { Switch } from '@headlessui/react';
+import { useRouter } from 'next-nprogress-bar';
 import { useAuth } from '@/hooks/AuthContext';
 
 export default function Navbar() {
+  const router = useRouter();
   const { logout } = useAuth();
   const { disconnectAsync } = useDisconnect();
   const [openMenu, setOpenMenu] = useState(false);
@@ -52,8 +54,8 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="group sticky top-0 z-40 inline-flex w-full items-center justify-center px-10 transition-all">
-        <nav className="3xl:h-24 dark:from-dark dark:to-dark/60 top-0 z-10 mt-4 h-16 w-full max-w-full rounded-2xl bg-gradient-to-b from-white to-white/60 px-4 backdrop-blur transition-all duration-300 sm:h-20">
+      <div className="sticky group top-0 z-40 inline-flex w-full items-center justify-center md:px-10 lg:px-10 xl:px-10 2xl:px-10 transition-all">
+        <nav className="3xl:h-24 dark:from-dark dark:to-dark/60 top-0 z-10 mt-4 h-16 w-full max-w-full md:rounded-2xl lg:rounded-2xl xl:rounded-2xl 2xl:rounded-2xl bg-gradient-to-b from-white to-white/60 px-4 backdrop-blur transition-all duration-300 sm:h-20">
           <div className="flex h-full items-center justify-between px-4">
             <div className="flex items-center gap-4">
               <Logo />
@@ -62,10 +64,7 @@ export default function Navbar() {
             </div>
             <div className="flex items-center">
               <RightArea suppressHydrationWarning />
-              <button
-                onClick={() => setOpenMenu(!openMenu)}
-                className="ml-3 block inline-flex flex-col items-center justify-center rounded-xl text-xl text-primary-500 sm:block md:hidden lg:hidden xl:hidden 2xl:hidden"
-              >
+              <button onClick={() => setOpenMenu(!openMenu)} className="ml-3 inline-flex flex-col items-center justify-center rounded-xl text-xl text-primary-500 block sm:block md:block lg:hidden xl:hidden 2xl:hidden">
                 <FontAwesomeIcon icon={faBars} />
               </button>
             </div>
@@ -136,42 +135,21 @@ export default function Navbar() {
                 </li>
               </ul>
             </div>
-            <span className="mt-2 py-2 text-xl font-semibold text-primary-500 hover:text-primary-300">
-              Marketplace
-            </span>
-            <span
-              className="mt-2 py-2 text-xl font-semibold text-primary-500 hover:text-primary-300"
-              onClick={toggleSidebar}
-            >
-              Account
-            </span>
+            <span className="py-2 mt-2 text-xl font-semibold text-primary-500 hover:text-primary-300">Marketplace</span>
             {isClient && (
-              <div className="mt-2 flex flex-row items-center justify-between border-t-2 py-2 text-xl font-semibold text-primary-500">
-                {chain?.id !== 666888 ? (
-                  <>
-                    <span className="text-md text-xl hover:text-primary-300">
-                      Wrong network!
-                    </span>
-                    <span
-                      className="text-md cursor-pointer px-3 py-2 hover:text-primary-300"
-                      onClick={() => switchNetwork?.(666888)}
-                    >
-                      Switch
-                    </span>
-                  </>
-                ) : (
-                  ''
+              <>
+                {(isConnect || isConnected) && chain?.id !== 666888 && (
+                  <div className="flex justify-between border-t-2 flex-row items-center py-2 mt-2 text-xl font-semibold text-primary-500">
+                    <span className="text-md text-xl hover:text-primary-300">Wrong network!</span>
+                    <span className="text-md px-3 py-2 cursor-pointer hover:text-primary-300" onClick={() => switchNetwork?.(666888)}>Switch</span>
+                  </div>
                 )}
-                {!isConnect ||
-                  (!isConnected && (
-                    <span
-                      onClick={() => open()}
-                      className="mt-2 py-2 text-sm font-semibold text-primary-500 hover:text-primary-300"
-                    >
-                      <FontAwesomeIcon icon={faWallet} /> Connect your wallet
-                    </span>
-                  ))}
-              </div>
+                {isConnect || isConnected ? (
+                  <span className="py-2 mt-2 text-xl font-semibold text-primary-500 hover:text-primary-300" onClick={toggleSidebar}>Account</span>
+                ) : (
+                  <span onClick={() => open()} className="py-2 mt-2 text-xl font-semibold text-primary-500 hover:text-primary-300"><FontAwesomeIcon icon={faWallet} /> Connect your wallet</span>
+                )}
+              </>
             )}
           </nav>
         </div>

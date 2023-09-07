@@ -31,6 +31,9 @@ export const SlideshowCreator = () => {
       spaceBetween: 5,
       width: 280,
     },
+    768: {
+      slidesPerView: 2,
+    },
     1024: {
       width: 280,
     },

@@ -9,7 +9,7 @@ export default function NavMenu() {
   }
 
   return (
-    <div className="items-center justify-start w-1/6 hidden sm:hidden md:inline-flex lg:inline-flex xl:inline-flex 2xl:inline-flex">
+    <div className="items-center justify-start w-1/6 hidden sm:hidden md:hidden lg:inline-flex xl:inline-flex 2xl:inline-flex">
       <div className="flex w-28 items-center justify-center gap-2 rounded-lg px-4 py-2">
         <div className="relative">
           <button type="button" className="flex items-center gap-x-1 text-sm font-bold leading-tight text-primary-500" aria-expanded="false" onClick={() => handleOpenMenu('trending')}>

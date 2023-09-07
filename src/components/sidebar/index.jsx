@@ -166,7 +166,7 @@ const Sidebar = () => {
                 Following
               </div>
               <div className="self-stretch text-3xl font-medium leading-10 text-black">
-                Setting
+                <button onClick={() => router.push('/profile/setting')}>Setting</button>
               </div>
             </div>
           </div>

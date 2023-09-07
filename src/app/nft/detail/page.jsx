@@ -29,52 +29,56 @@ export default function NftDetail() {
 
   return (
     <>
-      <section>
+      <section className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
         <div className="w-full">
-          <img src="https://via.placeholder.com/1920x266" />
+          <img src="https://via.placeholder.com/1920x266" className="h-[266px] object-cover" />
         </div>
       </section>
-      <div className="container m-auto mb-5">
+      <div className="container m-auto mb-5 p-3">
         <section>
-          <div className="flex w-full mt-5 gap-4 flex-col xl:flex-row 2xl:flex-row lg:flex-row md:flex-col sm:flex-col">
+          <div className="flex w-full mt-5 gap-4 flex-col xl:flex-row 2xl:flex-row lg:flex-row md:flex-row sm:flex-col">
             <div className="w-full flex flex-col gap-4">
               <img src="https://via.placeholder.com/600x600" className="w-full h-auto rounded-xl" />
-              <div className="flex text-primary-500 bg-white rounded-lg px-5 py-2">
-                <div className="flex justify-around w-full">
-                  <button className=""><FontAwesomeIcon icon={faHeart} /> <span className="font-semibold">7 likes</span></button>
-                  <button className=""><FontAwesomeIcon icon={faShareFromSquare} /> <span className="font-semibold">Share</span></button>
-                  <button className=""><FontAwesomeIcon icon={faFlag} /> <span className="font-semibold">Report</span></button>
-                </div>
-                <div><FontAwesomeIcon icon={faEllipsisVertical} /></div>
-              </div>
-              <ul className="flex w-full justify-around text-primary-500 border-b border-gray-200 my-5">
-                <li className="px-5 pb-3 cursor-pointer">Overview</li>
-                <li className="px-5 pb-3 cursor-pointer">Bids</li>
-                <li className="px-5 pb-3 cursor-pointer">History</li>
-                <li className="px-5 pb-3 border-b-4 border-primary-500 cursor-pointer">Collateral</li>
-              </ul>
-              <div className="flex flex-col w-full text-gray-900 bg-white rounded-lg p-5 gap-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-lg">Current Owner</h3>
-                    <div className="w-fit flex items-center justify-center gap-2">
-                      <img className="h-7 w-7 rounded-2xl" src="https://via.placeholder.com/48x48" />
-                      <div className="font-medium leading-none text-neutral-700">Ron31</div>
-                    </div>
+              <div className="relative -mt-16 px-5">
+                <div className="flex text-gray-900 sm:text-gray-900 md:text-gray-900 lg:text-primary-500 xl:text-primary-500 2xl:text-primary-500 bg-white/50 backdrop-blur-sm rounded-lg px-5 py-2">
+                  <div className="flex justify-around w-full">
+                    <button className=""><FontAwesomeIcon icon={faHeart} className="text-primary-500" /> <span className="font-semibold">7 likes</span></button>
+                    <button className=""><FontAwesomeIcon icon={faShareFromSquare} className="text-primary-500" /> <span className="font-semibold">Share</span></button>
+                    <button className=""><FontAwesomeIcon icon={faFlag} className="text-primary-500" /> <span className="font-semibold">Report</span></button>
                   </div>
-                  <div>No owner proposal yet.</div>
+                  <div><FontAwesomeIcon icon={faEllipsisVertical} className="text-primary-500" /></div>
                 </div>
-                <button className="w-full bg-primary-500 hover:bg-primary-300 py-2 rounded-full text-white font-semibold">Propose a lending</button>
-                <div>
-                  <h3 className="text-lg font-semibold">Propose an ETH lend to the owner</h3>
-                  <p>No owner lender proposes the offer yet.</p>
+              </div>
+              <div className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
+                <ul className="flex w-full justify-around text-gray-900 border-b border-gray-200 my-5">
+                  <li className="px-5 pb-3 cursor-pointer">Overview</li>
+                  <li className="px-5 pb-3 cursor-pointer">Bids</li>
+                  <li className="px-5 pb-3 cursor-pointer">History</li>
+                  <li className="px-5 pb-3 border-b-4 text-primary-500 border-primary-500 cursor-pointer">Collateral</li>
+                </ul>
+                <div className="flex flex-col w-full text-gray-900 bg-white rounded-lg p-5 gap-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg">Current Owner</h3>
+                      <div className="w-fit flex items-center justify-center gap-2">
+                        <img className="h-7 w-7 rounded-2xl" src="https://via.placeholder.com/48x48" />
+                        <div className="font-medium leading-none text-neutral-700">Ron31</div>
+                      </div>
+                    </div>
+                    <div>No owner proposal yet.</div>
+                  </div>
+                  <button className="w-full bg-primary-500 hover:bg-primary-300 py-2 rounded-full text-white font-semibold">Propose a lending</button>
+                  <div>
+                    <h3 className="text-lg font-semibold">Propose an ETH lend to the owner</h3>
+                    <p>No owner lender proposes the offer yet.</p>
+                  </div>
                 </div>
               </div>
             </div>
             <div className="w-full">
-              <div className="w-full flex justify-around">
-                <button className="bg-primary-500 rounded-full w-60 py-2 hover:bg-primary-300"><FontAwesomeIcon icon={faPenToSquare} /> Edit detail item</button>
-                <button className="bg-primary-500 rounded-full w-60 py-2 hover:bg-primary-300"><FontAwesomeIcon icon={faList} /> List item</button>
+              <div className="w-full flex gap-4 justify-around">
+                <button className="bg-primary-500 rounded-full w-full py-2 hover:bg-primary-300"><FontAwesomeIcon icon={faPenToSquare} /> Edit detail item</button>
+                <button className="bg-primary-500 rounded-full w-full py-2 hover:bg-primary-300"><FontAwesomeIcon icon={faList} /> List item</button>
               </div>
               <div className="text-gray-900 flex flex-col gap-4 mt-5">
                 <h2 className="text-2xl font-bold">Worriness #18</h2>
@@ -100,19 +104,19 @@ export default function NftDetail() {
                     </div>
                   </div>
                 </div>
-                <div className="w-full justify-around flex gap-4 bg-white rounded-xl p-5 text-gray-900">
-                  <div className="flex items-center gap-2">
+                <div className="grid grid-cols-12 w-full justify-around flex gap-4 bg-white rounded-xl p-5 text-gray-900">
+                  <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex items-center gap-2">
                     <Ethereum className="h-4 w-4" />
                     <span className="font-semibold">Ethereum <br />(ERC-721)</span>
                   </div>
-                  <div className="flex gap-2 items-center">
+                  <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex gap-2 items-center">
                     <FontAwesomeIcon icon={faFingerprint} />
                     <span className="font-semibold">Etherscan</span>
                     <a href="#" className="flex justify-center items-center hover:bg-primary-300 w-8 h-8 rounded-full">
                       <FontAwesomeIcon className="text-primary-500" icon={faUpRightFromSquare} />
                     </a>
                   </div>
-                  <div className="flex gap-2 items-center">
+                  <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex gap-2 items-center">
                     <FontAwesomeIcon icon={faEye} />
                     <span className="font-semibold">View original</span>
                     <a href="#" className="flex justify-center items-center hover:bg-primary-300 w-8 h-8 rounded-full">
@@ -149,15 +153,40 @@ export default function NftDetail() {
                     </div>
                   </div>
                 </div>
+                <div className="block sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
+                  <ul className="flex w-full justify-around text-gray-900 border-b border-gray-200 my-5">
+                    <li className="px-5 pb-3 cursor-pointer">Overview</li>
+                    <li className="px-5 pb-3 cursor-pointer">Bids</li>
+                    <li className="px-5 pb-3 cursor-pointer">History</li>
+                    <li className="px-5 pb-3 border-b-4 text-primary-500 border-primary-500 cursor-pointer">Collateral</li>
+                  </ul>
+                  <div className="flex flex-col w-full text-gray-900 bg-white rounded-lg p-5 gap-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg">Current Owner</h3>
+                        <div className="w-fit flex items-center justify-center gap-2">
+                          <img className="h-7 w-7 rounded-2xl" src="https://via.placeholder.com/48x48" />
+                          <div className="font-medium leading-none text-neutral-700">Ron31</div>
+                        </div>
+                      </div>
+                      <div>No owner proposal yet.</div>
+                    </div>
+                    <button className="w-full bg-primary-500 hover:bg-primary-300 py-2 rounded-full text-white font-semibold">Propose a lending</button>
+                    <div>
+                      <h3 className="text-lg font-semibold">Propose an ETH lend to the owner</h3>
+                      <p>No owner lender proposes the offer yet.</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
       </div>
       <div className="bg-gradient-to-r from-semantic-orange-100 to-semantic-red-200">
-        <div className="absolute" Style="animation: graphicx 10s infinite cubic-bezier(0.3, 0.27, 0.07, 1.04);">
+        {/* <div className="absolute" Style="animation: graphicx 10s infinite cubic-bezier(0.3, 0.27, 0.07, 1.04);">
           <Awan3 />
-        </div>
+        </div> */}
         <div className="absolute right-0 mt-[50px]" Style="animation: graphicy 10s infinite cubic-bezier(0.3, 0.27, 0.07, 1.04);">
           <Awan4 />
         </div>
@@ -170,16 +199,21 @@ export default function NftDetail() {
         <div className="absolute mt-[140px] right-[20%] animate-spin">
           <Flower />
         </div>
-        <section className="container mx-auto relative z-10">
+        <section className="container mx-auto relative z-10 pb-5">
           <div className="w-full text-black">
             <div className="container mx-auto pt-[50px] px-4">
               <div className="flex items-center justify-between my-5">
                 <h2 className="font-semibold text-xl mt-5">NFTs you might like</h2>
-                <button onClick={() => router.push('/collection')} title="See all" className="text-lg text-primary-500 font-semibold bg-white hover:bg-primary-50 rounded-full px-4 py-2">View collection</button>
+                <button onClick={() => router.push('/collection')} title="See all" className="hidden sm:hidden md:block lg:block xl:block 2xl:block text-lg text-primary-500 font-semibold bg-white hover:bg-primary-50 rounded-full px-4 py-2">
+                  View collection
+                </button>
               </div>
-              <div className="flex-initial w-full relative flex items-center justify-center py-5">
+              <div className="flex-initial w-full relative flex items-center justify-center">
                 <SlideshowActivities />
               </div>
+              <button onClick={() => router.push('/collection')} title="See all" className="block sm:block md:hidden lg:hidden xl:hidden 2xl:hidden text-lg text-primary-500 font-semibold bg-white hover:bg-primary-50 rounded-full px-4 py-2 w-full">
+                View collection
+              </button>
             </div>
           </div>
         </section>

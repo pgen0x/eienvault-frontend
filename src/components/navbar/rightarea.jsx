@@ -160,10 +160,7 @@ export default function RightArea() {
           </Switch> */}
         </div>
       )}
-      <button
-        onClick={() => close()}
-        className="ml-2 inline-flex flex-col items-center justify-center gap-2 rounded-xl text-xl text-primary-500"
-      >
+      <button onClick={() => close()} className="ml-2 inline-flex flex-col items-center justify-center gap-2 rounded-xl text-xl text-primary-500">
         <FontAwesomeIcon icon={faCartShopping} />
       </button>
     </>

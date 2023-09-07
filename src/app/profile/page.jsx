@@ -77,14 +77,14 @@ const collections = [
 ];
 
 const listCollections = [
-  { name: 'Owned', badge: 0 },
-  { name: 'Collections', badge: 2 },
-  { name: 'Bid received', badge: 0 },
-  { name: 'Collateral', badge: 0 },
-  { name: 'Created', badge: 0 },
-  { name: 'On sale', badge: 1 },
-  { name: 'Sold', badge: 0 },
-  { name: 'Liked', badge: 0 }
+  { name: 'Owned', badge: 0, active: false },
+  { name: 'Collections', badge: 2, active: true },
+  { name: 'Bid received', badge: 0, active: false },
+  { name: 'Collateral', badge: 0, active: false },
+  { name: 'Created', badge: 0, active: false },
+  { name: 'On sale', badge: 1, active: false },
+  { name: 'Sold', badge: 0, active: false },
+  { name: 'Liked', badge: 0, active: false }
 ]
 export default function ProfilePage() {
   const router = useRouter();
@@ -255,7 +255,7 @@ export default function ProfilePage() {
         <section className="inline">
           <ul className="w-full my-5 flex border-b border-gray-200 text-primary-500 gap-10">
             {listCollections.slice(0, limitCollection).map((collection, index) => (
-              <li className="cursor-pointer pb-3 flex gap-2">
+              <li className={`cursor-pointer pb-3 flex gap-2 ${collection.active === true ? "border-b-4 border-primary-500" : ""}`}>
                 <span>{collection.name}</span>
                 {collection.badge > 0 && (<span className="rounded-full bg-red-400 h-4 w-4 text-center text-xs font-semibold text-white">{collection.badge}</span>)}
               </li>
@@ -265,7 +265,7 @@ export default function ProfilePage() {
                 <span className="pb-3">More</span> <FontAwesomeIcon icon={faChevronDown} />
                 <ul className="border-b border-gray-200 text-primary-500 hidden group-hover:flex flex-col absolute gap-3 py-3 mt-3 z-30 bg-white rounded-b-xl">
                   {listCollections.slice(limitCollection).map((collection, index) => (
-                    <li className="cursor-pointer px-5 flex gap-2">
+                    <li className={`cursor-pointer px-5 flex gap-2 ${collection.active === true ? "border-b-4 border-primary-500" : ""}`}>
                       <span>{collection.name}</span>
                       {collection.badge > 0 && (<span className="rounded-full bg-red-400 h-4 w-4 text-center text-xs font-semibold text-white">{collection.badge}</span>)}
                     </li>

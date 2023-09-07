@@ -11,15 +11,16 @@ export async function POST(request) {
   }
 
   const fileExtension = file.name.split('.').pop();
-  const newFileName = `${fileName}.${fileExtension}`;
 
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
+  const newFileNameBase64 = Buffer.from(fileName).toString('base64');
 
-  // With the file data in the buffer, you can do whatever you want with it.
-  // For this, we'll just write it to the filesystem in a new location
-  const path = `./public/uploads/collections/${newFileName}`;
+  const path = `./public/uploads/collections/${newFileNameBase64}.${fileExtension}`;
   await writeFile(path, buffer);
 
-  return NextResponse.json({ success: true, newFileName });
+  return NextResponse.json({
+    success: true,
+    filename: `${newFileNameBase64}.${fileExtension}`,
+  });
 }

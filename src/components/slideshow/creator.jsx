@@ -149,7 +149,7 @@ export const SlideshowCreatorSkeleton = () => {
   return (
     <>
       {[...Array(5)].map((x, i) => (
-        <div className="inline-flex w-[280px]  flex-col items-center justify-center lg:items-start">
+        <div key={i} className="inline-flex w-[280px]  flex-col items-center justify-center lg:items-start">
           <div className="relative flex flex-row">
             <div className="inline-flex flex-col items-start justify-start">
               <div className="w-[280px] h-[145px] bg-gray-300 animate-pulse z-10 w-full rounded-t-2xl" />

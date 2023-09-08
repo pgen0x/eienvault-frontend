@@ -12,11 +12,12 @@ import { Fragment, useState } from 'react';
 export default function ModalUploadDFile({
   isOpenModal,
   onClose,
-  isLoading,
+  isLoadingModal,
   isErrorIPFS,
   isErrorMint,
   isErrorApprove,
   isErrorPutonsale,
+  isProcessing,
   onModalClose,
 }) {
   function closeModal() {
@@ -27,7 +28,7 @@ export default function ModalUploadDFile({
   return (
     <>
       <Transition appear show={isOpenModal} as={Fragment}>
-        <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
+        <Dialog as="div" className="relative z-[80]" onClose={() => {}}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -61,11 +62,11 @@ export default function ModalUploadDFile({
                   <div className="mx-5 flex flex-col text-sm text-gray-900">
                     <div className="mt-4 flex max-w-full shrink-0 flex-row items-center gap-4">
                       <div className="flex max-w-full shrink-0 flex-col items-center">
-                        {isLoading.ipfs ? (
+                        {isLoadingModal.ipfs ? (
                           <div role="status">
                             <svg
                               aria-hidden="true"
-                              class="h-8 w-8 animate-spin fill-primary-600 text-gray-200 dark:text-gray-600"
+                              className="h-8 w-8 animate-spin fill-primary-600 text-gray-200 dark:text-gray-600"
                               viewBox="0 0 100 101"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
@@ -107,11 +108,11 @@ export default function ModalUploadDFile({
                     </div>
                     <div className="mt-4 flex max-w-full shrink-0 flex-row items-center gap-4">
                       <div className="flex max-w-full shrink-0 flex-col items-center">
-                        {isLoading.mint ? (
+                        {isLoadingModal.mint ? (
                           <div role="status">
                             <svg
                               aria-hidden="true"
-                              class="h-8 w-8 animate-spin fill-primary-600 text-gray-200 dark:text-gray-600"
+                              className="h-8 w-8 animate-spin fill-primary-600 text-gray-200 dark:text-gray-600"
                               viewBox="0 0 100 101"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
@@ -143,18 +144,18 @@ export default function ModalUploadDFile({
                         <span>Initiate a transaction to generate your NFT</span>
                         {isErrorMint.isError && (
                           <div className="text-primary-500">
-                            {isErrorMint.message.error}
+                            {isErrorMint.message}
                           </div>
                         )}
                       </div>
                     </div>
                     <div className="mt-4 flex max-w-full shrink-0 flex-row items-center gap-4">
                       <div className="flex max-w-full shrink-0 flex-col items-center">
-                        {isLoading.approve ? (
+                        {isLoadingModal.approve ? (
                           <div role="status">
                             <svg
                               aria-hidden="true"
-                              class="h-8 w-8 animate-spin fill-primary-600 text-gray-200 dark:text-gray-600"
+                              className="h-8 w-8 animate-spin fill-primary-600 text-gray-200 dark:text-gray-600"
                               viewBox="0 0 100 101"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
@@ -196,11 +197,11 @@ export default function ModalUploadDFile({
                     </div>
                     <div className="mt-4 flex max-w-full shrink-0 flex-row items-center gap-4">
                       <div className="flex max-w-full shrink-0 flex-col items-center">
-                        {isLoading.putonsale ? (
+                        {isLoadingModal.putonsale ? (
                           <div role="status">
                             <svg
                               aria-hidden="true"
-                              class="h-8 w-8 animate-spin fill-primary-600 text-gray-200 dark:text-gray-600"
+                              className="h-8 w-8 animate-spin fill-primary-600 text-gray-200 dark:text-gray-600"
                               viewBox="0 0 100 101"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
@@ -245,8 +246,9 @@ export default function ModalUploadDFile({
                     <div className="mt-4 inline-flex ">
                       <button
                         type="button"
-                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-1"
+                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:bg-primary-50"
                         onClick={closeModal}
+                        disabled={isProcessing}
                       >
                         Cancel
                       </button>

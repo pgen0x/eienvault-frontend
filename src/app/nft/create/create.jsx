@@ -12,6 +12,7 @@ import {
   faPercent,
   faPiggyBank,
   faPlusCircle,
+  faRemove,
   faUser,
   faUsers,
   faZ,
@@ -21,7 +22,17 @@ import { Listbox, Switch } from '@headlessui/react';
 import Image from 'next/legacy/image';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useAccount, useNetwork } from 'wagmi';
+import {
+  erc721ABI,
+  readContracts,
+  useAccount,
+  useContractWrite,
+  useNetwork,
+  usePrepareContractWrite,
+  usePublicClient,
+  useWaitForTransaction,
+  useWalletClient,
+} from 'wagmi';
 import moment from 'moment';
 import { ErrorMessage } from '@hookform/error-message';
 import HelaIcon from '@/assets/icon/hela';
@@ -29,12 +40,17 @@ import ModalUploadDFile from '@/components/modal/uploadFile';
 import ModalCreateCollection from '@/components/modal/createCollections';
 import { useWeb3Modal } from '@web3modal/react';
 import { useAuth } from '@/hooks/AuthContext';
-import Loading from './loading';
+import LoadingCollections from './loadingCollections';
+import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { getContract, hexToNumber, parseEther, zeroAddress } from 'viem';
 
 export default function Create({ chains }) {
   const { token } = useAuth();
   const { open } = useWeb3Modal();
   const { chain } = useNetwork();
+  const { data: walletClient } = useWalletClient();
+  const publicClient = usePublicClient();
   const [selectedChain, setSelectedChain] = useState({
     chainId: chain?.id || 666888,
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
@@ -43,6 +59,23 @@ export default function Create({ chains }) {
     chainId: chain?.id || 666888,
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
+  const [inputFields, setInputFields] = useState([
+    { trait_type: '', value: '' },
+  ]);
+  const handleInputChange = (index, e) => {
+    const { name, value } = e.target;
+    const updatedInputFields = [...inputFields];
+    updatedInputFields[index][name] = value;
+    setInputFields(updatedInputFields);
+  };
+  const addInputField = () => {
+    setInputFields([...inputFields, { trait_type: '', value: '' }]);
+  };
+  const removeInputField = (index) => {
+    const updatedInputFields = [...inputFields];
+    updatedInputFields.splice(index, 1);
+    setInputFields(updatedInputFields);
+  };
   const [enableUnlockable, setEnableUnlockable] = useState(true);
   const [name, setName] = useState('Untitled');
   const [selectedOptionMarket, setSelectedOptionMarket] = useState('fixed');
@@ -53,11 +86,19 @@ export default function Create({ chains }) {
   const [selectedOptionDate, setSelectedOptionDate] = useState('1 Day');
   const [customValueDate, setCustomValueDate] = useState('');
   const [isSubmit, setIsSubmit] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [isCreateCollection, setIsCreateCollection] = useState(false);
   const [dataCollections, setDataCollections] = useState([]);
   const [isDataCollections, setIsDataCollections] = useState(false);
   const [isLoadingCollection, setIsLoadingCollection] = useState(true);
-  const [isLoading, setIsLoading] = useState({
+  const [mintHash, setMintHash] = useState();
+  const [approveHash, setApproveHash] = useState();
+  const [putOnSaleHash, setPutOnSaleHash] = useState();
+  const [tokenId, setTokenId] = useState();
+  const [imageUri, setImageUri] = useState('');
+  const [ipfsHash, setIpfsHash] = useState('');
+
+  const [isLoadingModal, setIsLoadingModal] = useState({
     ipfs: false,
     mint: false,
     approve: false,
@@ -88,6 +129,9 @@ export default function Create({ chains }) {
     getValues,
   } = useForm();
   const selectedImage = watch('file');
+  const price = watch('price');
+  const royalties = watch('royalties');
+  const description = watch('description');
 
   useEffect(() => {
     // Calculate the date 1 day from now using Moment.js
@@ -100,6 +144,7 @@ export default function Create({ chains }) {
     // Set the formatted date as the default value
     setCustomValueDate(formattedDate);
   }, []);
+
   const handleDateSelectChange = (event) => {
     const selectedValue = event.target.value;
     setSelectedOptionDate(selectedValue);
@@ -127,17 +172,24 @@ export default function Create({ chains }) {
     }
   };
 
+  const getListingPrice = async () => {
+    const ListingPrice = await publicClient.readContract({
+      ...marketplaceABI,
+      functionName: 'listingPrice',
+    });
+    return ListingPrice;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
+      console.log('fetchDataCollections');
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/user/collections`,
           {
-            next: { revalidate: 60 },
             cache: 'no-store',
             headers: {
               'Content-Type': 'application/json',
-              'API-Key': process.env.DATA_API_KEY,
               Authorization: `Bearer ${token}`,
             },
           },
@@ -149,7 +201,9 @@ export default function Create({ chains }) {
         }
 
         const responseData = await res.json();
+        console.log(responseData);
         setDataCollections(responseData);
+        setSelectedOptionCollection(responseData[0].tokenAddress);
       } catch (error) {
         console.error('Fetch failed:', error);
       } finally {
@@ -158,7 +212,7 @@ export default function Create({ chains }) {
     };
 
     fetchData();
-  }, [token]);
+  }, [token, address]);
 
   const handleModalCreate = () => {
     if (!token) {
@@ -168,71 +222,351 @@ export default function Create({ chains }) {
     }
   };
 
-  const onSubmit = async (data) => {
-    if (dataCollections.length <= 0) {
-      setIsDataCollections(true);
-      return;
-    } else {
-      setIsSubmit(true);
+  const { data, isError, isLoading } = useWaitForTransaction({
+    hash: mintHash,
+  });
+  const {
+    data: dataApprove,
+    isError: isErrorApp,
+    isLoading: isLoadingApprove,
+  } = useWaitForTransaction({
+    hash: approveHash,
+  });
+  const {
+    data: dataPutonsale,
+    isError: isErrorPutsale,
+    isLoading: isLoadingPutonsale,
+  } = useWaitForTransaction({
+    hash: putOnSaleHash,
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (mintHash) {
+        if (isLoading) {
+          setIsLoadingModal({
+            ipfs: false,
+            mint: true,
+            approve: false,
+            putonsale: false,
+          });
+        }
+        if (isError) {
+          setErrorMint({
+            isError: true,
+            message: isError,
+          });
+        }
+
+        if (data) {
+          setIsLoadingModal({
+            ipfs: false,
+            mint: false,
+            approve: true,
+            putonsale: false,
+          });
+          setTokenId(hexToNumber(data.logs[0].topics[3]));
+          await approve(data.logs[0].topics[3]);
+        }
+      }
+    };
+
+    fetchData();
+  }, [mintHash, data, isLoading, isError]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (approveHash) {
+        if (isLoadingApprove) {
+          setIsLoadingModal({
+            ipfs: false,
+            mint: false,
+            approve: true,
+            putonsale: false,
+          });
+        }
+        if (isErrorApp) {
+          setErrorApprove({
+            isError: true,
+            message: isError,
+          });
+        }
+
+        if (dataApprove) {
+          setIsLoadingModal({
+            ipfs: false,
+            mint: false,
+            approve: false,
+            putonsale: true,
+          });
+          await putOnSale();
+        }
+      }
+    };
+
+    fetchData();
+  }, [approveHash, dataApprove, isLoadingApprove, isErrorApp]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (putOnSaleHash) {
+        if (isLoadingPutonsale) {
+          setIsLoadingModal({
+            ipfs: false,
+            mint: false,
+            approve: false,
+            putonsale: true,
+          });
+        }
+        if (isErrorPutsale) {
+          setErrorPutonsale({
+            isError: true,
+            message: isErrorPutsale,
+          });
+        }
+
+        if (dataPutonsale) {
+          setIsLoadingModal({
+            ipfs: false,
+            mint: false,
+            approve: false,
+            putonsale: false,
+          });
+          await onSave();
+          setIsProcessing(false);
+        }
+      }
+    };
+
+    fetchData();
+  }, [putOnSaleHash, dataPutonsale, isErrorPutsale, isLoadingPutonsale]);
+
+  const pinFileToIPFS = async (file, data) => {
+    const form = new FormData();
+    form.append('file', file);
+    form.append('cidVersion', '0');
+    form.append('wrapWithDirectory', 'false');
+    const pinataMetadata = JSON.stringify({
+      name: data,
+    });
+    form.append('pinataMetadata', pinataMetadata);
+
+    const options = {
+      method: 'POST',
+      headers: {
+        accept: 'application/json',
+        authorization: `Bearer ${process.env.NEXT_PUBLIC_JWTPINATA}`,
+      },
+      body: form,
+    };
+
+    const response = await fetch(
+      'https://api.pinata.cloud/pinning/pinFileToIPFS',
+      options,
+    );
+
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      const errorObject = JSON.parse(errorMessage);
+      throw new Error(errorObject, 'error pin file');
     }
+
+    return await response.json();
+  };
+
+  const pinJSONToIPFS = async (data, imageIPFSHash, attributes) => {
+    const pinData = {
+      name: data.name,
+      description: data.description,
+      external_url: `https://eienvault.codermatter.com/collection/${selectedOptionCollection}/`,
+      image: `ipfs://${imageIPFSHash}`,
+      attributes,
+    };
+
+    const options = {
+      method: 'POST',
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json',
+        authorization: `Bearer ${process.env.NEXT_PUBLIC_JWTPINATA}`,
+      },
+      body: JSON.stringify(pinData),
+    };
+
+    const response = await fetch(
+      'https://api.pinata.cloud/pinning/pinJSONToIPFS',
+      options,
+    );
+
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      const errorObject = JSON.parse(errorMessage);
+      throw new Error(errorObject, 'error pin json');
+    }
+
+    return await response.json();
+  };
+
+  const approve = async (tokenId) => {
     try {
-      setIsLoading({
+      const hash = await walletClient.writeContract({
+        address: selectedOptionCollection,
+        abi: NftContract.abi,
+        functionName: 'approve',
+        args: [marketplaceABI.address, hexToNumber(tokenId)],
+        account: address,
+      });
+      setApproveHash(hash);
+      return hash;
+    } catch (error) {
+      console.error('Error Approve', error);
+    }
+  };
+
+  const putOnSale = async () => {
+    const listingPrice = await getListingPrice();
+    const currentTime = moment().unix();
+    const isAuction = selectedOptionMarket === 'fixed' ? false : true;
+    const parsePrice = parseEther(price);
+
+    try {
+      const hash = await walletClient.writeContract({
+        ...marketplaceABI,
+        functionName: 'list',
+        args: [
+          isAuction,
+          selectedOptionCollection,
+          zeroAddress,
+          tokenId,
+          parsePrice,
+          currentTime,
+          moment(customValueDate).unix(),
+        ],
+        account: address,
+        value: listingPrice,
+      });
+      setPutOnSaleHash(hash);
+      return hash;
+    } catch (error) {
+      console.error('Error Listing', error);
+    }
+  };
+
+  const mintNFT = async (ipfs, royalties) => {
+    const hash = await walletClient.writeContract({
+      address: selectedOptionCollection,
+      abi: NftContract.abi,
+      functionName: 'mint',
+      args: [address, ipfs, royalties],
+      account: address,
+    });
+    setMintHash(hash);
+    return hash;
+  };
+
+  const onSave = async () => {
+    try {
+      const filteredInputFields = inputFields.filter(
+        (field) => field.trait_type !== '' && field.value !== '',
+      );
+      const payload = {
+        chainid: chain?.id,
+        ContractType: selectedOptionEdition ? 'ERC721' : 'ERC1155',
+        imageUri: imageUri,
+        name: name,
+        description: description,
+        isFixedPrice: selectedOptionMarket === 'fixed' ? false : true,
+        price: price,
+        listingExpiration: moment(customValueDate),
+        startDate: moment(),
+        endDate: moment(customValueDate),
+        collectionAddress: selectedOptionCollection,
+        tokenId: tokenId,
+        ipfsHash: ipfsHash,
+        royalties: royalties,
+        properties: filteredInputFields.length > 0 ? filteredInputFields : null,
+      };
+
+      const options = {
+        method: 'POST',
+        body: JSON.stringify(payload), // Convert the payload to JSON
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json', // Set the content type to JSON
+        },
+      };
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/create`,
+        options,
+      );
+
+      if (response.ok) {
+        // Data was saved successfully
+        console.log('Data saved successfully.');
+      } else {
+        // Handle the error here
+        console.error('Data saved failed:', response.statusText);
+      }
+    } catch (error) {
+      // Handle any unexpected errors
+      console.error('Error during data save:', error);
+    }
+  };
+
+  const onSubmit = async (data) => {
+    try {
+      if (dataCollections.length <= 0) {
+        setIsDataCollections(true);
+        return;
+      }
+
+      setIsSubmit(true);
+      setIsLoadingModal({
         ipfs: true,
         mint: false,
         approve: false,
         putonsale: false,
       });
-      const form = new FormData();
-      // form.append('file', selectedImage);
-      form.append('cidVersion', '0');
-      form.append('wrapWithDirectory', 'false');
-      const pinataMetadata = JSON.stringify({
-        name: data.name,
-      });
-      form.append('pinataMetadata', pinataMetadata);
+      setIsProcessing(true);
 
-      const options = {
-        method: 'POST',
-        headers: {
-          accept: 'application/json',
-          authorization: `Bearer ${process.env.NEXT_PUBLIC_JWTPINATA}`,
-        },
-      };
+      const fileResponse = await pinFileToIPFS(selectedImage[0], data.name);
+      console.log('Success pin file', fileResponse);
+      setImageUri(fileResponse.IpfsHash);
 
-      options.body = form;
-
-      const res = await fetch(
-        'https://api.pinata.cloud/pinning/pinFileToIPFS',
-        options,
+      const jsonResponse = await pinJSONToIPFS(
+        data,
+        fileResponse.IpfsHash,
+        inputFields,
       );
+      console.log('Success pin json', jsonResponse);
 
-      // Handle the error
-      if (!res.ok) {
-        const errorMessage = await res.text();
-        const errorObject = JSON.parse(errorMessage);
-        setErrorIPFS({
-          isError: true,
-          message: errorObject,
-        });
-        throw new Error(errorMessage);
-      } else {
-        const response = await res.json();
-        setIsLoading({
-          ipfs: false,
-          mint: true,
-          approve: false,
-          putonsale: false,
-        });
-      }
+      const bpValue = parseFloat(data.royalties) * 100;
+      const ipfsLink = `https://ipfs.io/ipfs/${jsonResponse.IpfsHash}`;
+      setIpfsHash(ipfsLink);
+
+      setIsLoadingModal({
+        ipfs: false,
+        mint: true,
+        approve: false,
+        putonsale: false,
+      });
+
+      const hash = await mintNFT(ipfsLink, bpValue);
+      setMintHash(hash);
     } catch (e) {
       // Handle errors here
       console.error(e);
-      setIsLoading({
+      setIsLoadingModal({
         ipfs: false,
         mint: false,
         approve: false,
         putonsale: false,
       });
+      setErrorIPFS({ isError: false, message: e });
+      setErrorMint({ isError: true, message: e.message });
+      setIsProcessing(false);
     }
   };
 
@@ -240,12 +574,14 @@ export default function Create({ chains }) {
     setIsSubmit(false);
     setIsCreateCollection(false);
     setErrorIPFS({ isError: false, message: '' });
+    setErrorMint({ isError: false, message: '' });
+    setIsProcessing(false);
   };
 
   return (
     <>
-      <div className="my-5 flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row justify-center gap-5 p-4 text-gray-900">
-        <div className="w-full flex flex-col">
+      <div className="my-5 flex flex-col justify-center gap-5 p-4 text-gray-900 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
+        <div className="flex w-full flex-col">
           <h2 className="text-2xl font-semibold">Create New NFT</h2>
           <p>
             <span className="text-semantic-red-500">*</span> requires to be
@@ -385,7 +721,6 @@ export default function Create({ chains }) {
                   </li>
                 </ul>
               </div>
-
               <div className="mt-4 w-full">
                 <label className="mt-2 font-semibold">
                   <span className="text-semantic-red-500">*</span> Upload your
@@ -468,7 +803,16 @@ export default function Create({ chains }) {
                 <textarea
                   className="mt-2 w-full rounded-2xl border-0 bg-white focus:ring-primary-500"
                   placeholder="e. g. This art is created by handraw without any help from ai"
+                  {...register('description', {
+                    maxLength: {
+                      value: 500,
+                      message: 'Description must not exceed 500 characters.',
+                    },
+                  })}
                 />
+                <div className="mt-1 text-sm font-semibold text-primary-500">
+                  <ErrorMessage errors={errors} name="description" />
+                </div>
               </div>
               <div className="mt-2 w-full">
                 <label className="mt-2 font-semibold">Put on marketplace</label>
@@ -607,11 +951,9 @@ export default function Create({ chains }) {
                   </select>
                 </div>
               </div>
-
               <div className="mt-1 text-sm font-semibold text-primary-500">
                 {!customValueDate && 'Duration date is required'}
               </div>
-
               <div className="mt-4 w-full">
                 <label className="font-semibold">
                   <span className="text-semantic-red-500">*</span> Choose
@@ -624,7 +966,7 @@ export default function Create({ chains }) {
                         e.preventDefault();
                         handleModalCreate();
                       }}
-                      className="flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 focus:border-primary-500 focus:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:text-primary-500"
+                      className="flex h-full w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 focus:border-primary-500 focus:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:text-primary-500"
                     >
                       <FontAwesomeIcon
                         icon={faPlusCircle}
@@ -638,28 +980,33 @@ export default function Create({ chains }) {
                     </button>
                   </li>
                   {isLoadingCollection ? (
-                    <Loading />
+                    <LoadingCollections />
                   ) : (
                     dataCollections.length > 0 &&
                     dataCollections.map((collection) => (
-                      <li key={collection.id}>
+                      <li key={collection.tokenAddress}>
                         <input
                           type="radio"
-                          name={collection.name}
-                          value={collection.name}
+                          id={`collection-${collection.tokenAddress}`} // Unique ID
+                          name="collection" // Set a common name for all radio inputs
+                          value={collection.tokenAddress}
                           className="peer hidden"
                           onChange={(e) =>
                             setSelectedOptionCollection(e.target.value)
                           }
-                          checked={selectedOptionCollection === 'piggy'}
+                          checked={
+                            selectedOptionCollection === collection.tokenAddress
+                          }
                         />
                         <label
-                          htmlFor="piggy-collection"
-                          className="flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-500 peer-checked:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500"
+                          htmlFor={`collection-${collection.tokenAddress}`} // Match the input's ID
+                          className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-500 peer-checked:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500`}
                         >
-                          <FontAwesomeIcon
-                            icon={faPiggyBank}
-                            className="text-5xl"
+                          <Image
+                            src={`/uploads/collections/${collection.logo}`}
+                            height={56}
+                            width={56}
+                            className="rounded-full"
                           />
                           <span>
                             {collection.name}
@@ -671,6 +1018,7 @@ export default function Create({ chains }) {
                     ))
                   )}
                 </ul>
+
                 {isDataCollections && (
                   <div className="mt-1 text-sm font-semibold text-primary-500">
                     You need to create collections before you can create nfts
@@ -737,12 +1085,69 @@ export default function Create({ chains }) {
                       className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
                       placeholder="0"
                       min={0}
+                      step={1}
+                      {...register('royalties', {
+                        required: 'Royalties is required.',
+                        validate: (value) =>
+                          parseFloat(value) > 0 ||
+                          'Royalties must be greater than 0',
+                      })}
                     />
                     <span className="pr-3 text-gray-500">
                       <FontAwesomeIcon icon={faPercent} />
                     </span>
                   </div>
                 </label>
+                <div className="mt-1 text-sm font-semibold text-primary-500">
+                  <ErrorMessage errors={errors} name="royalties" />
+                </div>
+              </div>
+              <div className="mt-4 w-full">
+                <div className="flex flex-row items-center justify-between">
+                  <label>
+                    <span className="font-semibold">Properties (optional)</span>
+                  </label>
+                  <button type="button" onClick={addInputField}>
+                    <FontAwesomeIcon
+                      icon={faPlusCircle}
+                      className="mr-5 h-5 w-5 cursor-pointer rounded-full text-primary-500 hover:bg-primary-50"
+                    />
+                  </button>
+                </div>
+                <div className="mt-2 w-full">
+                  {inputFields.map((field, index) => (
+                    <div
+                      className="flex w-full flex-row items-center gap-4"
+                      key={index}
+                    >
+                      <input
+                        type="text"
+                        name="trait_type"
+                        placeholder="Trait Type"
+                        className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500"
+                        value={field.trait_type}
+                        onChange={(e) => handleInputChange(index, e)}
+                      />
+                      <input
+                        type="text"
+                        name="value"
+                        placeholder="Value"
+                        className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500"
+                        value={field.value}
+                        onChange={(e) => handleInputChange(index, e)}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeInputField(index)}
+                      >
+                        <FontAwesomeIcon
+                          icon={faRemove}
+                          className="mr-5 h-5 w-5 cursor-pointer rounded-full text-primary-500 hover:bg-primary-50"
+                        />
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div className="mt-4 w-full">
                 <button
@@ -822,15 +1227,17 @@ export default function Create({ chains }) {
           </div>
         </div>
       </div>
+
       <ModalUploadDFile
         isOpenModal={isSubmit}
         onClose={closeModal}
-        isLoading={isLoading}
+        isLoadingModal={isLoadingModal}
         isErrorIPFS={isErrorIPFS}
         isErrorMint={isErrorMint}
         isErrorApprove={isErrorApprove}
         isErrorPutonsale={isErrorPutonsale}
         onModalClose={closeModal}
+        isProcessing={isProcessing}
       />
       <ModalCreateCollection
         chains={chains}

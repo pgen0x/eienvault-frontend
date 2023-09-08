@@ -127,12 +127,15 @@ export default function ProfileSetting() {
     <>
       <section className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
         <div className="w-full">
-          <img src="https://via.placeholder.com/1920x266" className="h-[266px] object-cover" />
+          <img
+            src="https://via.placeholder.com/1920x266"
+            className="h-[266px] object-cover"
+          />
           <div className="container m-auto md:hidden lg:block">
-            <div className="flex flex-col gap-2 relative -mt-[9rem] bg-white/50 backdrop-blur-lg rounded-lg w-60 p-5">
+            <div className="relative -mt-[9rem] flex w-60 flex-col gap-2 rounded-lg bg-white/50 p-5 backdrop-blur-lg">
               <p>Upcoming Auction</p>
               <h3 className="text-lg">Dropping tommorow</h3>
-              <button className="bg-primary-500 text-white text-center font-semibold px-4 py-1 rounded-full">
+              <button className="rounded-full bg-primary-500 px-4 py-1 text-center font-semibold text-white">
                 <FontAwesomeIcon icon={faBell} /> Notify me
               </button>
             </div>
@@ -143,15 +146,41 @@ export default function ProfileSetting() {
         <section>
           <div className="mt-5 flex w-full flex-col gap-4 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
             <div className="flex w-full flex-col gap-4">
-              <img src="https://via.placeholder.com/600x600" className="h-auto w-full rounded-xl" />
+              <img
+                src="https://via.placeholder.com/600x600"
+                className="h-auto w-full rounded-xl"
+              />
               <div className="relative -mt-16 px-5">
-                <div className="flex text-gray-900 sm:text-gray-900 md:text-gray-900 lg:text-primary-500 xl:text-primary-500 2xl:text-primary-500 bg-white/50 backdrop-blur-sm rounded-lg px-5 py-2">
-                  <div className="flex justify-around w-full">
-                    <button className=""><FontAwesomeIcon icon={faHeart} className="text-primary-500" /> <span className="font-semibold">7 likes</span></button>
-                    <button className=""><FontAwesomeIcon icon={faShareFromSquare} className="text-primary-500" /> <span className="font-semibold">Share</span></button>
-                    <button className=""><FontAwesomeIcon icon={faFlag} className="text-primary-500" /> <span className="font-semibold">Report</span></button>
+                <div className="flex rounded-lg bg-white/50 px-5 py-2 text-gray-900 backdrop-blur-sm sm:text-gray-900 md:text-gray-900 lg:text-primary-500 xl:text-primary-500 2xl:text-primary-500">
+                  <div className="flex w-full justify-around">
+                    <button className="">
+                      <FontAwesomeIcon
+                        icon={faHeart}
+                        className="text-primary-500"
+                      />{' '}
+                      <span className="font-semibold">7 likes</span>
+                    </button>
+                    <button className="">
+                      <FontAwesomeIcon
+                        icon={faShareFromSquare}
+                        className="text-primary-500"
+                      />{' '}
+                      <span className="font-semibold">Share</span>
+                    </button>
+                    <button className="">
+                      <FontAwesomeIcon
+                        icon={faFlag}
+                        className="text-primary-500"
+                      />{' '}
+                      <span className="font-semibold">Report</span>
+                    </button>
                   </div>
-                  <div><FontAwesomeIcon icon={faEllipsisVertical} className="text-primary-500" /></div>
+                  <div>
+                    <FontAwesomeIcon
+                      icon={faEllipsisVertical}
+                      className="text-primary-500"
+                    />
+                  </div>
                 </div>
               </div>
               <div className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
@@ -168,7 +197,10 @@ export default function ProfileSetting() {
                     <div>
                       <h3 className="text-lg">Current Owner</h3>
                       <div className="flex w-fit items-center justify-center gap-2">
-                        <img className="h-7 w-7 rounded-2xl" src="https://via.placeholder.com/48x48" />
+                        <img
+                          className="h-7 w-7 rounded-2xl"
+                          src="https://via.placeholder.com/48x48"
+                        />
                         <div className="font-medium leading-none text-neutral-700">
                           Ron31
                         </div>
@@ -182,14 +214,17 @@ export default function ProfileSetting() {
                     </h3>
                     <p>No owner lender proposes the offer yet.</p>
                   </div>
-                  <button onClick={handleModalPropose} className="w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300">
+                  <button
+                    onClick={handleModalPropose}
+                    className="w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300"
+                  >
                     Propose an offer
                   </button>
                 </div>
               </div>
             </div>
             <div className="w-full">
-              <div className="flex w-full justify-around text-white gap-4">
+              <div className="flex w-full justify-around gap-4 text-white">
                 <button className="w-full rounded-full bg-primary-500 py-2 hover:bg-primary-300">
                   <FontAwesomeIcon icon={faPenToSquare} /> Edit detail item
                 </button>
@@ -204,13 +239,28 @@ export default function ProfileSetting() {
                     <h3 className="text-lg font-semibold">Creator</h3>
                     <div className="flex">
                       <div className="flex w-fit items-center justify-center gap-2">
-                        <img className="h-7 w-7 rounded-2xl" src="https://via.placeholder.com/48x48" />
+                        <img
+                          className="h-7 w-7 rounded-2xl"
+                          src="https://via.placeholder.com/48x48"
+                        />
                         <div className="font-medium leading-none text-neutral-700">
                           Ryuma
                         </div>
                         <div className="font-black leading-none text-primary-500">
-                          <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle-check" className="svg-inline--fa fa-circle-check " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                            <path fill="currentColor" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"></path>
+                          <svg
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="circle-check"
+                            className="svg-inline--fa fa-circle-check "
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                            ></path>
                           </svg>
                         </div>
                       </div>
@@ -220,32 +270,44 @@ export default function ProfileSetting() {
                   <div className="px-5">
                     <h3 className="text-lg font-semibold">Current Owner</h3>
                     <div className="flex w-fit items-center justify-center gap-2">
-                      <img className="h-7 w-7 rounded-2xl" src="https://via.placeholder.com/48x48" />
+                      <img
+                        className="h-7 w-7 rounded-2xl"
+                        src="https://via.placeholder.com/48x48"
+                      />
                       <div className="font-medium leading-none text-neutral-700">
                         Ron31
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-12 w-full justify-around gap-4 rounded-xl bg-white p-5 text-gray-900">
-                  <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex items-center gap-2">
+                <div className="grid w-full grid-cols-12 justify-around gap-4 rounded-xl bg-white p-5 text-gray-900">
+                  <div className="col-span-6 flex items-center gap-2 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4">
                     <Ethereum className="h-4 w-4" />
                     <span className="font-semibold">
                       Ethereum <br />
                       (ERC-721)
                     </span>
                   </div>
-                  <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex items-center gap-2">
+                  <div className="col-span-6 flex items-center gap-2 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4">
                     <FontAwesomeIcon icon={faFingerprint} />
                     <span className="font-semibold">Etherscan</span>
-                    <a href="#" className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-primary-300">
-                      <FontAwesomeIcon className="text-primary-500" icon={faUpRightFromSquare} />
+                    <a
+                      href="#"
+                      className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-primary-300"
+                    >
+                      <FontAwesomeIcon
+                        className="text-primary-500"
+                        icon={faUpRightFromSquare}
+                      />
                     </a>
                   </div>
-                  <div className="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex items-center gap-2">
+                  <div className="col-span-6 flex items-center gap-2 sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4">
                     <FontAwesomeIcon icon={faEye} />
                     <span className="font-semibold">View original</span>
-                    <a href="#" className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-primary-300">
+                    <a
+                      href="#"
+                      className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-primary-300"
+                    >
                       <FontAwesomeIcon
                         className="text-primary-500"
                         icon={faUpRightFromSquare}
@@ -262,7 +324,7 @@ export default function ProfileSetting() {
                   </div>
                   <p>
                     Split royalties are automatically deposited into each
-                    recipient's wallet.
+                    recipient&lsquo;s wallet.
                   </p>
                 </div>
                 <div className="flex w-full flex-col gap-4 rounded-xl bg-white p-5 text-gray-900">
@@ -289,36 +351,53 @@ export default function ProfileSetting() {
                       </h4>
                       <div className="flex w-full gap-1">
                         <span>by</span>
-                        <img className="h-7 w-7 rounded-2xl" src="https://via.placeholder.com/48x48" />
+                        <img
+                          className="h-7 w-7 rounded-2xl"
+                          src="https://via.placeholder.com/48x48"
+                        />
                         <span>Gigachad</span>
                       </div>
                     </div>
                   </div>
                   <div className="mt-5 flex w-full items-center gap-4">
-                    <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300" onClick={handleModalBuy}>
+                    <button
+                      className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
+                      onClick={handleModalBuy}
+                    >
                       Buy Now
                     </button>
-                    <FontAwesomeIcon className="mr-5 h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 " icon={faCartPlus} />
+                    <FontAwesomeIcon
+                      className="mr-5 h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 "
+                      icon={faCartPlus}
+                    />
                   </div>
                   <div>
-                    <button className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:text-primary-300" onClick={handleModalBid}>
+                    <button
+                      className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:text-primary-300"
+                      onClick={handleModalBid}
+                    >
                       Place a bid
                     </button>
                   </div>
                 </div>
                 <div className="block sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
-                  <ul className="flex w-full justify-around text-gray-900 border-b border-gray-200 my-5">
-                    <li className="px-5 pb-3 cursor-pointer">Overview</li>
-                    <li className="px-5 pb-3 cursor-pointer">Bids</li>
-                    <li className="px-5 pb-3 cursor-pointer">History</li>
-                    <li className="px-5 pb-3 border-b-4 text-primary-500 border-primary-500 cursor-pointer">Collateral</li>
+                  <ul className="my-5 flex w-full justify-around border-b border-gray-200 text-gray-900">
+                    <li className="cursor-pointer px-5 pb-3">Overview</li>
+                    <li className="cursor-pointer px-5 pb-3">Bids</li>
+                    <li className="cursor-pointer px-5 pb-3">History</li>
+                    <li className="cursor-pointer border-b-4 border-primary-500 px-5 pb-3 text-primary-500">
+                      Collateral
+                    </li>
                   </ul>
                   <div className="flex w-full flex-col gap-4 rounded-lg bg-white p-5 text-gray-900">
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="text-lg">Current Owner</h3>
                         <div className="flex w-fit items-center justify-center gap-2">
-                          <img className="h-7 w-7 rounded-2xl" src="https://via.placeholder.com/48x48" />
+                          <img
+                            className="h-7 w-7 rounded-2xl"
+                            src="https://via.placeholder.com/48x48"
+                          />
                           <div className="font-medium leading-none text-neutral-700">
                             Ron31
                           </div>
@@ -332,7 +411,10 @@ export default function ProfileSetting() {
                       </h3>
                       <p>No owner lender proposes the offer yet.</p>
                     </div>
-                    <button onClick={handleModalPropose} className="w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300">
+                    <button
+                      onClick={handleModalPropose}
+                      className="w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300"
+                    >
                       Propose an offer
                     </button>
                   </div>
@@ -365,14 +447,22 @@ export default function ProfileSetting() {
                 <h2 className="mt-5 text-xl font-semibold">
                   NFTs you might like
                 </h2>
-                <button onClick={() => router.push('/collection')} title="See all" className="hidden sm:hidden md:block lg:block xl:block 2xl:block text-lg text-primary-500 font-semibold bg-white hover:bg-primary-50 rounded-full px-4 py-2">
+                <button
+                  onClick={() => router.push('/collection')}
+                  title="See all"
+                  className="hidden rounded-full bg-white px-4 py-2 text-lg font-semibold text-primary-500 hover:bg-primary-50 sm:hidden md:block lg:block xl:block 2xl:block"
+                >
                   View collection
                 </button>
               </div>
               <div className="relative flex w-full flex-initial items-center justify-center">
                 <SlideshowActivities />
               </div>
-              <button onClick={() => router.push('/collection')} title="See all" className="block sm:block md:hidden lg:hidden xl:hidden 2xl:hidden text-lg text-primary-500 font-semibold bg-white hover:bg-primary-50 rounded-full px-4 py-2 w-full">
+              <button
+                onClick={() => router.push('/collection')}
+                title="See all"
+                className="block w-full rounded-full bg-white px-4 py-2 text-lg font-semibold text-primary-500 hover:bg-primary-50 sm:block md:hidden lg:hidden xl:hidden 2xl:hidden"
+              >
                 View collection
               </button>
             </div>
@@ -395,7 +485,12 @@ export default function ProfileSetting() {
         </div>
       </div>
       {modalBuy && (
-        <div className="relative z-[100]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div
+          className="relative z-[100]"
+          aria-labelledby="modal-title"
+          role="dialog"
+          aria-modal="true"
+        >
           <div className="fixed inset-0 bg-gray-200 bg-opacity-75 transition-opacity"></div>
           <div className="fixed inset-0 z-10 overflow-y-auto">
             <div className="flex min-h-full items-start justify-center p-4 text-center sm:items-center sm:p-0">
@@ -405,12 +500,18 @@ export default function ProfileSetting() {
                     <section className="step-1 flex flex-col gap-3 p-5">
                       <div className="flex w-full justify-between">
                         <h3 className="font-semibold">Buy</h3>
-                        <button onClick={handleModalBuy} className="text-primary-500">
+                        <button
+                          onClick={handleModalBuy}
+                          className="text-primary-500"
+                        >
                           <FontAwesomeIcon icon={faXmark} />
                         </button>
                       </div>
                       <div className="flex w-full items-center justify-center gap-3">
-                        <img src="https://via.placeholder.com/192x100" className="w-full" />
+                        <img
+                          src="https://via.placeholder.com/192x100"
+                          className="w-full"
+                        />
                         <div className="font w-full text-2xl text-gray-400">
                           #18
                           <br />
@@ -424,7 +525,10 @@ export default function ProfileSetting() {
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-gray-400">0.42 ETH</span>
-                          <FontAwesomeIcon icon={faChevronDown} className="text-primary-500" />
+                          <FontAwesomeIcon
+                            icon={faChevronDown}
+                            className="text-primary-500"
+                          />
                         </div>
                       </div>
                       <div className="flex justify-between rounded-lg border border-gray-200 p-3">
@@ -457,12 +561,18 @@ export default function ProfileSetting() {
                         </div>
                       </div>
                       {stepBuy == 1 && (
-                        <button className="w-full rounded-full bg-primary-500 py-3 font-semibold text-white" onClick={() => handleStepBuy(2)}>
+                        <button
+                          className="w-full rounded-full bg-primary-500 py-3 font-semibold text-white"
+                          onClick={() => handleStepBuy(2)}
+                        >
                           Approve
                         </button>
                       )}
                       {stepBuy == 3 && (
-                        <button className="w-full rounded-full bg-primary-500 py-3 font-semibold text-white" onClick={() => handleStepBuy(4)}>
+                        <button
+                          className="w-full rounded-full bg-primary-500 py-3 font-semibold text-white"
+                          onClick={() => handleStepBuy(4)}
+                        >
                           Buy
                         </button>
                       )}
@@ -483,10 +593,16 @@ export default function ProfileSetting() {
                             <span>Proccessing the transactions</span>
                           )}
                         </div>
-                        <button className="font-bold text-primary-500 hover:text-primary-400" onClick={() => handleStepBuy(stepBuy - 1)}>
+                        <button
+                          className="font-bold text-primary-500 hover:text-primary-400"
+                          onClick={() => handleStepBuy(stepBuy - 1)}
+                        >
                           Cancel
                         </button>
-                        <button className="font-bold text-primary-500 hover:text-primary-400" onClick={() => handleStepBuy(stepBuy + 1)}>
+                        <button
+                          className="font-bold text-primary-500 hover:text-primary-400"
+                          onClick={() => handleStepBuy(stepBuy + 1)}
+                        >
                           Next
                         </button>
                       </div>
@@ -497,7 +613,10 @@ export default function ProfileSetting() {
                       <div className="mt-5 flex flex-col items-center gap-5">
                         <span className="absolute -mt-4 ml-4 h-32 w-32 rounded-full border bg-green-200"></span>
                         <span className="relative z-10 flex h-32 w-32 items-center justify-center rounded-full border border-[10px] border-green-400">
-                          <FontAwesomeIcon icon={faCheck} className="text-6xl font-bold text-green-400" />
+                          <FontAwesomeIcon
+                            icon={faCheck}
+                            className="text-6xl font-bold text-green-400"
+                          />
                         </span>
                         <div className="flex flex-col gap-1 text-center">
                           <h3 className="text-xl font-bold">
@@ -506,7 +625,10 @@ export default function ProfileSetting() {
                           <span>The asset now is yours!</span>
                           <span>check your profile to see the asset</span>
                         </div>
-                        <button className="rounded-full border border-primary-500 px-5 py-1 font-bold text-primary-500" onClick={() => handleModalBuy()}>
+                        <button
+                          className="rounded-full border border-primary-500 px-5 py-1 font-bold text-primary-500"
+                          onClick={() => handleModalBuy()}
+                        >
                           View asset
                         </button>
                       </div>
@@ -519,7 +641,12 @@ export default function ProfileSetting() {
         </div>
       )}
       {modalBid && (
-        <div className="relative z-[100]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div
+          className="relative z-[100]"
+          aria-labelledby="modal-title"
+          role="dialog"
+          aria-modal="true"
+        >
           <div className="fixed inset-0 bg-gray-200 bg-opacity-75 transition-opacity"></div>
           <div className="fixed inset-0 z-10 overflow-y-auto">
             <div className="flex min-h-full items-start justify-center p-4 text-center sm:items-center sm:p-0">
@@ -529,12 +656,18 @@ export default function ProfileSetting() {
                     <section className="step-1 flex flex-col gap-3 p-5">
                       <div className="flex w-full justify-between">
                         <h3 className="font-semibold">Bid</h3>
-                        <button onClick={handleModalBid} className="text-primary-500">
+                        <button
+                          onClick={handleModalBid}
+                          className="text-primary-500"
+                        >
                           <FontAwesomeIcon icon={faXmark} />
                         </button>
                       </div>
                       <div className="flex w-full items-center justify-center gap-3">
-                        <img src="https://via.placeholder.com/192x100" className="w-full" />
+                        <img
+                          src="https://via.placeholder.com/192x100"
+                          className="w-full"
+                        />
                         <div className="font w-full text-2xl text-gray-400">
                           #18
                           <br />
@@ -574,7 +707,11 @@ export default function ProfileSetting() {
                           <span className="flex flex-col items-end font-semibold">
                             <span>0.41 ETH</span>
                             <span className="flex w-full items-center gap-1">
-                              by{' '} <img src="https://via.placeholder.com/16x16" className="h-6 w-6 rounded-full" />{' '}
+                              by{' '}
+                              <img
+                                src="https://via.placeholder.com/16x16"
+                                className="h-6 w-6 rounded-full"
+                              />{' '}
                               Gigachad
                             </span>
                           </span>
@@ -759,9 +896,10 @@ export default function ProfileSetting() {
                                 <Listbox.Option
                                   key={index}
                                   className={({ active }) =>
-                                    `relative cursor-default select-none px-4 py-2 ${active
-                                      ? 'bg-primary-500 text-white'
-                                      : 'text-gray-900'
+                                    `relative cursor-default select-none px-4 py-2 ${
+                                      active
+                                        ? 'bg-primary-500 text-white'
+                                        : 'text-gray-900'
                                     }`
                                   }
                                   value={account}
@@ -769,10 +907,11 @@ export default function ProfileSetting() {
                                   {({ selectedAccount }) => (
                                     <>
                                       <span
-                                        className={`block truncate ${selectedAccount
-                                          ? 'font-medium'
-                                          : 'font-normal'
-                                          }`}
+                                        className={`block truncate ${
+                                          selectedAccount
+                                            ? 'font-medium'
+                                            : 'font-normal'
+                                        }`}
                                       >
                                         {account}
                                       </span>
@@ -789,8 +928,9 @@ export default function ProfileSetting() {
                           Lend amount for this nft
                         </label>
                         <div
-                          className={`flex w-full items-center rounded-full border border-gray-200 ${stepPropose == 3 ? 'bg-gray-200' : 'bg-white'
-                            }`}
+                          className={`flex w-full items-center rounded-full border border-gray-200 ${
+                            stepPropose == 3 ? 'bg-gray-200' : 'bg-white'
+                          }`}
                         >
                           <input
                             type="number"
@@ -808,8 +948,9 @@ export default function ProfileSetting() {
                           Repayment value
                         </label>
                         <div
-                          className={`flex w-full items-center rounded-full border border-gray-200 ${stepPropose == 3 ? 'bg-gray-200' : 'bg-white'
-                            }`}
+                          className={`flex w-full items-center rounded-full border border-gray-200 ${
+                            stepPropose == 3 ? 'bg-gray-200' : 'bg-white'
+                          }`}
                         >
                           <input
                             type="number"
@@ -833,8 +974,9 @@ export default function ProfileSetting() {
                           setShow={handleCloseDueDate}
                         >
                           <div
-                            className={`flex w-full items-center rounded-full border border-gray-200 ${stepPropose == 3 ? 'bg-gray-200' : 'bg-white'
-                              }`}
+                            className={`flex w-full items-center rounded-full border border-gray-200 ${
+                              stepPropose == 3 ? 'bg-gray-200' : 'bg-white'
+                            }`}
                           >
                             <input
                               type="text"

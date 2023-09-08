@@ -54,7 +54,7 @@ export default function ModalCreateCollection({
   } = useForm();
   const selectedImage = watch('file');
   const name = watch('name');
-  const symbol = watch('symbol');
+  const tokenSymbol = watch('tokenSymbol');
   const description = watch('description');
 
   const onUpload = async (file, filename) => {
@@ -71,9 +71,7 @@ export default function ModalCreateCollection({
       });
 
       if (response.ok) {
-        // File was successfully uploaded
-        console.log('File uploaded successfully.');
-        return filename;
+        return await response.json();
       } else {
         // Handle the error here
         console.error('File upload failed:', response.statusText);
@@ -88,7 +86,7 @@ export default function ModalCreateCollection({
     try {
       const payload = {
         name: data.name,
-        tokenSymbol: data.symbol,
+        tokenSymbol: data.tokenSymbol,
         description: data.description,
         chainId: chain?.id,
         logo: data.logo,
@@ -135,7 +133,7 @@ export default function ModalCreateCollection({
       const hash = await walletClient.deployContract({
         ...NftContract,
         address,
-        args: [dataForm.name, dataForm.symbol, ''],
+        args: [dataForm.name, dataForm.tokenSymbol, ''],
       });
       console.log(hash);
       setHash(hash);
@@ -157,19 +155,19 @@ export default function ModalCreateCollection({
           setIsErrorDeploy(true);
         }
         if (data) {
-          const filename = await onUpload(
+          const filenameBase64 = await onUpload(
             selectedImage[0],
             data.contractAddress,
           );
           const onSaveData = await onSave({
             name: name,
-            tokenSymbol: symbol,
+            tokenSymbol: tokenSymbol,
             description: description,
             chainId: chain?.id,
-            logo: filename,
+            logo: filenameBase64.filename,
             tokenAddress: data.contractAddress,
           });
-          console.log(onSaveData, 'onSaveData');
+
           setIsWait(false);
           setIsCompleted(true);
         }
@@ -412,13 +410,16 @@ export default function ModalCreateCollection({
                                   type="text"
                                   className="w-full rounded-full border-0 bg-transparent focus:outline-none focus:ring-primary-500"
                                   placeholder="AAA"
-                                  {...register('symbol', {
-                                    required: 'Symbol is required.',
+                                  {...register('tokenSymbol', {
+                                    required: 'Token Symbol is required.',
                                   })}
                                 />
                               </div>
                               <div className="mt-1 text-sm text-primary-500">
-                                <ErrorMessage errors={errors} name="symbol" />
+                                <ErrorMessage
+                                  errors={errors}
+                                  name="tokenSymbol"
+                                />
                               </div>
                             </div>
                             <div className="mt-2 w-full">
@@ -431,9 +432,9 @@ export default function ModalCreateCollection({
                                   placeholder="Description of your NFT collection"
                                   {...register('description', {
                                     maxLength: {
-                                      value: 1500,
+                                      value: 500,
                                       message:
-                                        'Description must not exceed 1500 characters.',
+                                        'Description must not exceed 500 characters.',
                                     },
                                   })}
                                 />

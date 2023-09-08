@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 export default function Search() {
   const inputRef = useRef(null);
   const handleKeyDown = (event) => {
-    if (event.keyCode === 191) {
+    if (event.keyCode === 191 && event.ctrlKey) {
       event.preventDefault();
       inputRef.current.focus();
     }
@@ -29,8 +29,8 @@ export default function Search() {
       />
       <div className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
         <div className="inline-flex flex-col items-center justify-center gap-2 rounded-md bg-zinc-200 px-2">
-          <div className="text-base font-light leading-normal text-zinc-500">
-            /
+          <div className="text-xs font-light leading-normal text-zinc-500">
+            CTRL+/
           </div>
         </div>
       </div>

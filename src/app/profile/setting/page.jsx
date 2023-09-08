@@ -3,12 +3,41 @@ import { useState } from 'react';
 import Footer from '@/components/footer/main';
 import Ethereum from '@/assets/icon/ethereum';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCopy, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { faBatteryEmpty, faCopy, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import Bitcoin from '@/assets/icon/bitcoin';
 import Ggtoken from '@/assets/icon/ggtoken';
+import { useAuth } from '@/hooks/AuthContext';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
-export default function ProfileSetting() {
+const ProfileSetting = () => {
+  const { token } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
+  const [profile, setProfile] = useState({});
+  useEffect(() => {
+    if (token) {
+      getProfile(token);
+    }
+  }, [token]);
+
+  const getProfile = async (token) => {
+    await axios.request({
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `${process.env.NEXT_PUBLIC_API_URL}/api/user/me`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then((response) => {
+        setProfile(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
     <>
       <div className="container m-auto p-3 mb-5 text-gray-900">
@@ -31,7 +60,7 @@ export default function ProfileSetting() {
               </ul>
             </div>
             <div className="col-span-12 sm:col-span-8 md:col-span-10 lg:col-span-10 xl:col-span-10 2xl:col-span-10">
-              {activeTab == "profile" && <Profile />}
+              {activeTab == "profile" && <Profile profile={profile} setProfile={setProfile} token={token} />}
               {activeTab == "account" && <Account />}
               {activeTab == "wallets" && <Wallets />}
             </div>
@@ -43,7 +72,40 @@ export default function ProfileSetting() {
   );
 }
 
-const Profile = () => {
+const Profile = ({ profile, setProfile, token }) => {
+  const handleChangeProfile = (event, attribute) => {
+    setProfile((oldProfile) => {
+      oldProfile[attribute] = event.target.value;
+      console.log(oldProfile);
+      return oldProfile;
+    });
+  }
+
+  const saveProfile = async () => {
+    await axios.request({
+      method: 'put',
+      maxBodyLength: Infinity,
+      url: `${process.env.NEXT_PUBLIC_API_URL}/api/user/update`,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      data: profile
+    })
+      .then((response) => {
+        if(response.data.hasOwnProperty('success')){
+          toast.success(response.data.success.messages);
+        }
+        if(response.data.hasOwnProperty('error')){
+          toast.error(response.data.error.messages);
+        }
+      })
+      .catch((error) => {
+        toast.error(JSON.stringify(error));
+      });
+
+  }
+
   return (
     <>
       <div className="w-full">
@@ -58,17 +120,21 @@ const Profile = () => {
       </div>
       <div className="my-5 grid grid-cols-12 gap-5">
         <div className="col-span-12 flex flex-col gap-4 sm:col-span-6 md:col-span-8 lg:col-span-8 xl:col-span-8 2xl:col-span-8">
-          <label>
+          {/* <label>
             Display name
-            <input type="text" className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="Search any specific nft of yours" />
-          </label>
+            <input type="text" value={profile?.displayName} onChange={(event) => handleChangeProfile(event, 'displayName')} className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="Search any specific nft of yours" />
+          </label> */}
           <label>
             Username
-            <input type="text" className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="Enter your username" />
+            <input type="text" defaultValue={profile?.username} onChange={(event) => handleChangeProfile(event, 'username')} className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="Enter your username" />
+          </label>
+          <label>
+            Email
+            <input type="text" defaultValue={profile?.email} onChange={(event) => handleChangeProfile(event, 'email')} className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="you@domain.com" />
           </label>
           <label>
             Your Bio
-            <input type="text" className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="Tell about yourself" />
+            <input type="text" defaultValue={profile?.bio} onChange={(event) => handleChangeProfile(event, 'bio')} className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="Tell about yourself" />
           </label>
           <div>
             <h3 className="text-lg font-semibold">Social Links</h3>
@@ -79,13 +145,29 @@ const Profile = () => {
           </div>
           <label>
             Your Website
-            <input type="text" className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="https://" />
+            <input type="text" defaultValue={profile?.websiteUrl} onChange={(event) => handleChangeProfile(event, 'websiteUrl')} className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="https://domain.com" />
           </label>
           <label>
-            Your Twitter username
-            <input type="text" className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="Enter your twitter username" />
+            Your Twitter
+            <input type="text" defaultValue={profile?.twitterUrl} onChange={(event) => handleChangeProfile(event, 'twitterUrl')} className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="https://twitter.com/username" />
           </label>
-          <button className="mt-2 w-full rounded-full bg-primary-500 py-2 text-white hover:bg-primary-300">
+          <label>
+            Your Medium
+            <input type="text" defaultValue={profile?.mediumUrl} onChange={(event) => handleChangeProfile(event, 'mediumUrl')} className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="https://medium.com/@username" />
+          </label>
+          <label>
+            Your Telegram
+            <input type="text" defaultValue={profile?.telegramUrl} onChange={(event) => handleChangeProfile(event, 'telegramUrl')} className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="https://t.me/username" />
+          </label>
+          <label>
+            Your Discord
+            <input type="text" defaultValue={profile?.discordUrl} onChange={(event) => handleChangeProfile(event, 'discordUrl')} className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="https://discordapp.com/users/username" />
+          </label>
+          <label>
+            Your Instagram
+            <input type="text" defaultValue={profile?.instagramUrl} onChange={(event) => handleChangeProfile(event, 'instagramUrl')} className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="https://instagram.com/username" />
+          </label>
+          <button className="mt-2 w-full rounded-full bg-primary-500 py-2 text-white hover:bg-primary-300" onClick={() => saveProfile()}>
             Save Setting
           </button>
         </div>
@@ -178,3 +260,5 @@ const Wallets = () => {
     </div>
   );
 }
+
+export default ProfileSetting;

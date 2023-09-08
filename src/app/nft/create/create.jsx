@@ -581,7 +581,7 @@ export default function Create({ chains }) {
   return (
     <>
       <div className="my-5 flex flex-col justify-center gap-5 p-4 text-gray-900 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
-        <div className="flex w-full flex-col">
+        <div className="flex w-1/2 flex-col">
           <h2 className="text-2xl font-semibold">Create New NFT</h2>
           <p>
             <span className="text-semantic-red-500">*</span> requires to be
@@ -1161,7 +1161,7 @@ export default function Create({ chains }) {
             </form>
           </div>
         </div>
-        <div className="sticky top-24 w-full self-start pt-3">
+        <div className="sticky w-1/3 top-24 self-start pt-3">
           <h3 className="text-xl font-semibold">Preview</h3>
           <p className="pb-5 pt-1">
             Input the NFT Data field to see the preview of how your NFT product

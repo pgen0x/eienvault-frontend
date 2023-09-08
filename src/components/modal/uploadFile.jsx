@@ -17,6 +17,7 @@ export default function ModalUploadDFile({
   isErrorMint,
   isErrorApprove,
   isErrorPutonsale,
+  isProcessing,
   onModalClose,
 }) {
   function closeModal() {
@@ -143,7 +144,7 @@ export default function ModalUploadDFile({
                         <span>Initiate a transaction to generate your NFT</span>
                         {isErrorMint.isError && (
                           <div className="text-primary-500">
-                            {isErrorMint.message.error}
+                            {isErrorMint.message}
                           </div>
                         )}
                       </div>
@@ -245,8 +246,9 @@ export default function ModalUploadDFile({
                     <div className="mt-4 inline-flex ">
                       <button
                         type="button"
-                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-1"
+                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:bg-primary-50"
                         onClick={closeModal}
+                        disabled={isProcessing}
                       >
                         Cancel
                       </button>

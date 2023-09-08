@@ -1,5 +1,5 @@
 export const marketplaceABI = {
-  contract: '0xd46f72B57c7A8f52b18FcA078a8d8C9f692e2894',
+  address: '0xeD3788084E4D20c32ed4EdC6d1871E3ed1d87506',
   abi: [
     {
       inputs: [

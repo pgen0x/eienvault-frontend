@@ -24,7 +24,7 @@ export function AuthProvider({ children }) {
     if (!isConnected) {
       logout();
     }
-  }, [isConnected, token]);
+  }, [isConnected, token, address]);
 
   const handleLogin = async () => {
     try {

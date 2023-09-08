@@ -380,7 +380,7 @@ export default function Create({ chains }) {
       name: data.name,
       description: data.description,
       external_url: `https://eienvault.codermatter.com/collection/${selectedOptionCollection}/`,
-      image: `ipfs://${imageIPFSHash}`,
+      image: `https://ipfs.io/ipfs/${imageIPFSHash}`,
       attributes,
     };
 

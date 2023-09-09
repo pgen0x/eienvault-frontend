@@ -17,7 +17,7 @@ import HelaIcon from '@/assets/icon/hela';
 import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import Countdown from './countdown';
 
-const images = [1, 2, 3, 4]; 
+const images = [1, 2, 3, 4];
 
 export const Slideshow = () => {
   const sliderBreakPoints = {
@@ -128,6 +128,8 @@ export const Slideshow = () => {
                   className="h-96 w-full rounded-2xl object-cover lg:w-96"
                   width={500}
                   height={404}
+                  placeholder="blur"
+                  blurDataURL={auction.nftDetails.imageUri}
                   src={auction.nftDetails.imageUri}
                 />
                 <div className="my-3 inline-flex h-[357px] w-full flex-col items-start justify-start gap-4 rounded-br-2xl rounded-tr-2xl bg-white bg-opacity-50  p-5 backdrop-blur-xl">
@@ -148,6 +150,8 @@ export const Slideshow = () => {
                           className="h-full w-full rounded-2xl "
                           width={15}
                           height={15}
+                          placeholder="blur"
+                          blurDataURL={auction.collectionData.logo}
                           src={`/uploads/collections/${auction.collectionData.logo}`}
                         />
                         <div className="flex items-start justify-start gap-2">

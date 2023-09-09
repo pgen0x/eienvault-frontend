@@ -2,16 +2,41 @@ import Image from 'next/legacy/image';
 import { useEffect, useState } from 'react';
 import { JazzIcon } from '../jazzicon';
 
-export const ImageWithFallback = ({ address, alt, src, diameter, ...props }) => {
-  const [error, setError] = useState(null);
+export const ImageWithFallback = ({
+  address,
+  alt,
+  src: initialSrc,
+  diameter,
+  ...props
+}) => {
+  const [isValidImage, setIsValidImage] = useState(true);
+  const src = initialSrc || ''; // Provide a default value for src
 
   useEffect(() => {
-    setError(null);
+    if (src) {
+      // Check if the file extension indicates an image
+      const fileExtension = src.split('.').pop().toLowerCase();
+      const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg']; // Add more if needed
+
+      if (!validExtensions.includes(fileExtension)) {
+        setIsValidImage(false);
+      }
+    }
   }, [src]);
 
-  return error ? (
-    <JazzIcon diameter={diameter} seed={address} useGradientFallback={true} />
-  ) : (
-    <Image alt={alt} onError={setError} src={src} {...props} />
+  if (!isValidImage) {
+    return (
+      <JazzIcon diameter={diameter} seed={address} useGradientFallback={true} />
+    );
+  }
+
+  return (
+    <Image
+      alt={alt}
+      src={src}
+      placeholder="blur"
+      blurDataURL={src}
+      {...props}
+    />
   );
 };

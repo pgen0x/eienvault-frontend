@@ -164,13 +164,9 @@ const Main = () => {
   );
 };
 
-export const TrendingTop = () => {
+export const TrendingTop = ({ dataCollections }) => {
   const [limit, setLimit] = useState(0);
-  const { token } = useAuth();
-  const { address } = useAccount();
-  const [dataCollections, setDataCollections] = useState([]);
-  const [errorCollections, setErrorCollections] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+
 
   const formatter = (num, digits) => {
     const lookup = [
@@ -226,46 +222,12 @@ export const TrendingTop = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/collection/get`,
-          {
-            cache: 'no-store',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          },
-        );
-
-        if (!res.ok) {
-          setErrorCollections(true);
-          console.error('Fetch failed:', res);
-          throw new Error('Network response was not ok');
-        }
-
-        const responseData = await res.json();
-        console.log(responseData);
-        setDataCollections(responseData);
-      } catch (error) {
-        setErrorCollections(true);
-        console.error('Fetch failed:', error);
-      } finally {
-        setIsLoading(false);
-        setErrorCollections(false);
-      }
-    };
-
-    fetchData();
-  }, [token, address]);
-
   return (
     <>
       <Main />
       <ul
         role="list"
-        className="mt-2 grid w-full grid-flow-col grid-rows-5 gap-3"
+        className="mt-4 grid w-full grid-flow-col grid-rows-5 gap-3"
       >
         {dataCollections.slice(0, limit).map((trade, index) => (
           <li key={index} className="w-full">
@@ -343,7 +305,7 @@ export const TrendingTopSkeleton = () => {
       <Main />
       <ul
         role="list"
-        className="mt-2 grid w-full grid-flow-col grid-rows-5 gap-3"
+        className="mt-4 grid w-full grid-flow-col grid-rows-5 gap-3"
       >
         {[...Array(limit)].map((x, i) => (
           <li key={i} className="w-full">

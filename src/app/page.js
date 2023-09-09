@@ -1,13 +1,30 @@
 'use client';
 import { useIsMounted } from '@/hooks/use-is-mounted';
-import { SlideshowDiscover, SlideshowDiscoverSkeleton } from '@/components/slideshow/discover';
-import { SlideshowActivities, SlideshowActivitiesSkeleton } from '@/components/slideshow/activities';
-import { SlideshowCreator, SlideshowCreatorSkeleton } from '@/components/slideshow/creator';
+import {
+  SlideshowDiscover,
+  SlideshowDiscoverSkeleton,
+} from '@/components/slideshow/discover';
+import {
+  SlideshowActivities,
+  SlideshowActivitiesSkeleton,
+} from '@/components/slideshow/activities';
+import {
+  SlideshowCreator,
+  SlideshowCreatorSkeleton,
+} from '@/components/slideshow/creator';
 import Avatar from '@/assets/images/avatar.jpg';
 import Image from 'next/image';
-import { TrendingTop, TrendingTopSkeleton, TrendingTopMobile } from '@/components/trending-top';
+import {
+  TrendingTop,
+  TrendingTopSkeleton,
+  TrendingTopMobile,
+} from '@/components/trending-top';
 import Auction from '@/components/auction';
-import { UpcomingAuction, UpcomingAuctionMobile, UpcomingAuctionSkeleton } from '@/components/auction/upcoming';
+import {
+  UpcomingAuction,
+  UpcomingAuctionMobile,
+  UpcomingAuctionSkeleton,
+} from '@/components/auction/upcoming';
 import { Tab } from '@headlessui/react';
 import Line from '@/assets/icon/line3';
 import LineRound from '@/assets/icon/line4';
@@ -27,9 +44,52 @@ import {
   faTwitter,
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Suspense, useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/AuthContext';
+import { useAccount } from 'wagmi';
 
 export default function Home() {
   const isMounted = useIsMounted();
+  const { token } = useAuth();
+  const { address } = useAccount();
+
+  const [dataCollections, setDataCollections] = useState([]);
+  const [errorCollections, setErrorCollections] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/collection/get`,
+          {
+            cache: 'no-store',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+
+        if (!res.ok) {
+          setErrorCollections(true);
+          console.error('Fetch failed:', res);
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await res.json();
+        console.log(responseData);
+        setDataCollections(responseData);
+      } catch (error) {
+        setErrorCollections(true);
+        console.error('Fetch failed:', error);
+      } finally {
+        setIsLoading(false);
+        setErrorCollections(false);
+      }
+    };
+
+    fetchData();
+  }, [token, address]);
+
   if (!isMounted) {
     return null;
   }
@@ -38,37 +98,53 @@ export default function Home() {
     <>
       <div className="homepage relative">
         <Auction />
-        <section className="relative -mt-24 flex h-auto sm:h-auto md:h-[690px] lg:h-[690px] my-5 xl:h-[690px] 2xl:h-[690px] w-full flex-col gap-4 bg-gray-100 px-10 pt-10 text-black">
+        <section className="relative my-5 -mt-24 flex h-auto w-full flex-col gap-4 bg-gray-100 px-10 pt-10 text-black sm:h-auto md:h-[690px] lg:h-[690px] xl:h-[690px] 2xl:h-[690px]">
           <div className="container mx-auto">
             <Tab.Group>
               <Tab.List className="flex gap-5">
-                <Tab className={({ selected }) => selected ? 'text-black font-bold' : 'text-neutral-400 font-bold'}>
+                <Tab
+                  className={({ selected }) =>
+                    selected
+                      ? 'font-bold text-black'
+                      : 'font-bold text-neutral-400'
+                  }
+                >
                   Collections
                 </Tab>
-                <Tab className={({ selected }) => selected ? 'text-black font-bold' : 'text-neutral-400 font-bold'}>
+                {/* <Tab
+                  className={({ selected }) =>
+                    selected
+                      ? 'font-bold text-black'
+                      : 'font-bold text-neutral-400'
+                  }
+                >
                   Marketplace
-                </Tab>
+                </Tab> */}
               </Tab.List>
               <Tab.Panels className="pt-4">
                 <Tab.Panel>
                   <div className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
-                    <TrendingTop />
+                    {isLoading ? (
+                      <TrendingTopSkeleton />
+                    ) : (
+                      <TrendingTop dataCollections={dataCollections} />
+                    )}
                   </div>
                   <div className="block sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
                     <TrendingTopMobile />
                   </div>
                 </Tab.Panel>
-                <Tab.Panel>
+                {/* <Tab.Panel>
                   <TrendingTopSkeleton />
-                </Tab.Panel>
+                </Tab.Panel> */}
               </Tab.Panels>
             </Tab.Group>
           </div>
         </section>
         <section>
           <div className="section-discover w-full text-black">
-            <div className="container mx-auto flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row items-center justify-center">
-              <div className="w-full sm:w-full md:w-[50%] lg:w-[29%] xl:w-[29%] 2xl:w-[29%] flex-initial p-5">
+            <div className="container mx-auto flex flex-col items-center justify-center sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
+              <div className="w-full flex-initial p-5 sm:w-full md:w-[50%] lg:w-[29%] xl:w-[29%] 2xl:w-[29%]">
                 <h2 className="text-3xl">
                   Discover Our Best <br />
                   Collections For you to buy.
@@ -81,7 +157,7 @@ export default function Home() {
                   DIscover more
                 </button>
               </div>
-              <div className="relative my-5 flex w-full sm:w-full md:w-[50%] lg:w-[69%] xl:w-[69%] 2xl:w-[69%] flex-initial items-center justify-center">
+              <div className="relative my-5 flex w-full flex-initial items-center justify-center sm:w-full md:w-[50%] lg:w-[69%] xl:w-[69%] 2xl:w-[69%]">
                 <SlideshowDiscover />
                 {/* <SlideshowDiscoverSkeleton /> */}
               </div>
@@ -124,10 +200,10 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="w-full flex h-[400px] justify-between overflow-hidden bg-orange-100 text-black">
-            <div className="w-full mx-auto relative top-0 sm:top-0 md:-top-[50px] lg:-top-[50px] xl:-top-[50px] 2xl:-top-[50px] block h-[30rem] w-[30rem] max-w-full max-h-full md:max-h-[30rem] md:max-w-[30rem] rounded-full bg-red-400">
-              <div className="relative top-[50px] sm:top-[50px] md:top-[130px] lg:top-[130px] xl:top-[130px] 2xl:top-[130px] mx-auto flex w-[90%] items-center justify-center">
-                <div className="w-full rounded-lg bg-white/60 p-10 px-3 text-center text-gray-800 backdrop-blur z-10">
+          <div className="flex h-[400px] w-full justify-between overflow-hidden bg-orange-100 text-black">
+            <div className="relative top-0 mx-auto block h-[30rem] max-h-full w-[30rem] w-full max-w-full rounded-full bg-red-400 sm:top-0 md:-top-[50px] md:max-h-[30rem] md:max-w-[30rem] lg:-top-[50px] xl:-top-[50px] 2xl:-top-[50px]">
+              <div className="relative top-[50px] mx-auto flex w-[90%] items-center justify-center sm:top-[50px] md:top-[130px] lg:top-[130px] xl:top-[130px] 2xl:top-[130px]">
+                <div className="z-10 w-full rounded-lg bg-white/60 p-10 px-3 text-center text-gray-800 backdrop-blur">
                   <h2 className="text-2xl font-bold">
                     Don&lsquo;t miss a drop
                   </h2>
@@ -137,8 +213,15 @@ export default function Home() {
                     <br /> about upcoming drops
                   </p>
                   <form className="mt-5 flex w-full gap-2">
-                    <input type="text" className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="Your email address" />
-                    <button type="submit" className="rounded-full bg-primary-500 px-5 py-2 text-white hover:bg-primary-300">
+                    <input
+                      type="text"
+                      className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500"
+                      placeholder="Your email address"
+                    />
+                    <button
+                      type="submit"
+                      className="rounded-full bg-primary-500 px-5 py-2 text-white hover:bg-primary-300"
+                    >
                       Subscribe
                     </button>
                   </form>
@@ -165,9 +248,9 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="h-auto sm:h-auto md:h-[480px] lg:h-[480px] xl:h-[480px] 2xl:h-[480px] w-full bg-gray-100 text-black">
+          <div className="h-auto w-full bg-gray-100 text-black sm:h-auto md:h-[480px] lg:h-[480px] xl:h-[480px] 2xl:h-[480px]">
             <div className="container mx-auto px-4 py-4">
-              <div className="flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row items-center justify-between gap-5">
+              <div className="flex flex-col items-center justify-between gap-5 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
                 <div className="relative h-fit w-full py-5">
                   <img
                     className="rounded-2xl shadow"
@@ -202,8 +285,8 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="h-auto sm:h-auto md:h-auto lg:h-[550px] xl:h-[550px] 2xl:h-[550px] w-full bg-amber-100 p-5">
-            <div className="container relative z-[1] mx-auto flex gap-5 flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row justify-between rounded-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
+          <div className="h-auto w-full bg-amber-100 p-5 sm:h-auto md:h-auto lg:h-[550px] xl:h-[550px] 2xl:h-[550px]">
+            <div className="container relative z-[1] mx-auto flex flex-col justify-between gap-5 rounded-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl sm:flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row">
               <div className="text-slate-600">
                 <h2 className="text-3xl font-bold">
                   Use your NFTs to get a crypto <br />
@@ -214,11 +297,11 @@ export default function Home() {
                   from lenders. Repay your loan, and you get your NFT
                   <br /> back. No auto-liquidations! 0% borrower fees!
                 </p>
-                <div className="flex flex-col sm:flex-col md:flex-col lg:flex-col xl:flex-col 2xl:flex-col gap-5 justify-between my-5">
+                <div className="my-5 flex flex-col justify-between gap-5 sm:flex-col md:flex-col lg:flex-col xl:flex-col 2xl:flex-col">
                   <button className="w-full rounded-full bg-primary-500 px-5 py-2 font-bold text-white hover:bg-primary-300">
                     Get loan now
                   </button>
-                  <button className="w-full ml-1 rounded-full bg-white px-5 py-2 font-bold text-primary-500 hover:bg-primary-50">
+                  <button className="ml-1 w-full rounded-full bg-white px-5 py-2 font-bold text-primary-500 hover:bg-primary-50">
                     I want to lend
                   </button>
                 </div>
@@ -259,7 +342,7 @@ export default function Home() {
                     offers
                   </p>
                 </div>
-                <div className="flex flex-col py-5 text-primary-500 hidden sm:hidden md:block lg:block xl:block 2xl:block">
+                <div className="flex hidden flex-col py-5 text-primary-500 sm:hidden md:block lg:block xl:block 2xl:block">
                   <h4 className="text-xl font-bold">Join our community</h4>
                   <ul className="mt-3 flex w-fit justify-between gap-2">
                     <li className="text-2xl">
@@ -297,7 +380,7 @@ export default function Home() {
                   </ul>
                 </div>
               </div>
-              <div className="flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row w-full justify-evenly">
+              <div className="flex w-full flex-col justify-evenly sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
                 <div className="flex w-full gap-5">
                   <div className="w-full">
                     <h2 className="text-xl font-bold text-primary-500">
@@ -324,7 +407,9 @@ export default function Home() {
                 </div>
                 <div className="flex w-full gap-5">
                   <div className="w-full">
-                    <h2 className="text-xl font-bold text-primary-500">Other</h2>
+                    <h2 className="text-xl font-bold text-primary-500">
+                      Other
+                    </h2>
                     <ul className="mt-5 text-gray-900">
                       <li className="py-2">Get help</li>
                       <li className="py-2">Term of use</li>
@@ -333,7 +418,9 @@ export default function Home() {
                     </ul>
                   </div>
                   <div className="w-full">
-                    <h2 className="text-xl font-bold text-primary-500">Stats</h2>
+                    <h2 className="text-xl font-bold text-primary-500">
+                      Stats
+                    </h2>
                     <ul className="mt-5 text-gray-900">
                       <li className="py-2">Ranking</li>
                       <li className="py-2">Activity</li>
@@ -341,7 +428,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="w-full flex flex-col py-5 text-primary-500 block sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
+              <div className="block flex w-full flex-col py-5 text-primary-500 sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
                 <h4 className="text-xl font-bold">Join our community</h4>
                 <ul className="mt-3 flex w-fit justify-between gap-2">
                   <li className="text-2xl">

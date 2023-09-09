@@ -12,8 +12,7 @@ import Monero from '@/assets/icon/monero';
 import { useAuth } from '@/hooks/AuthContext';
 import { useAccount } from 'wagmi';
 import { formatEther, parseEther } from 'viem';
-import Image from 'next/legacy/image';
-import { JazzIcon } from '../jazzicon';
+import { ImageWithFallback } from '../imagewithfallback';
 
 const servers = [
   'All Mainnet',
@@ -273,22 +272,15 @@ export const TrendingTop = () => {
             <div className="flex w-full justify-between rounded-md bg-white px-5 py-2">
               <div className="flex w-full items-center gap-x-4">
                 <p className="text-sm text-primary-500">{index + 1}.</p>
-                {trade.logo !== null ? (
-                  <Image
-                    className="h-12 w-12 flex-none rounded-full bg-gray-50"
-                    width={48}
-                    height={48}
-                    src={`/uploads/collections/${trade.logo}`}
-                    alt=""
-                  />
-                ) : (
-                  <JazzIcon
-                    diameter={48}
-                    seed={trade.tokenAddress}
-                    useGradientFallback={true}
-                  />
-                )}
-
+                <ImageWithFallback
+                  src={`/uploads/collections/${trade.logo}`}
+                  alt={trade.name}
+                  width={48}
+                  height={48}
+                  diameter={48}
+                  address={trade.tokenAddress}
+                  className="rounded-full"
+                />
                 <div className="flex w-full flex-col">
                   <p className="text-md w-full font-semibold leading-6 text-gray-900">
                     {trade.name}

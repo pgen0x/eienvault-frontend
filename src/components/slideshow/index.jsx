@@ -124,14 +124,19 @@ export const Slideshow = () => {
                 </div>
               </div>
               <div className="relative flex h-full flex-row md:w-full lg:w-full">
-                <Image
-                  className="h-96 w-full rounded-2xl object-cover lg:w-96"
-                  width={500}
-                  height={404}
-                  placeholder="blur"
-                  blurDataURL={auction.nftDetails.imageUri}
-                  src={auction.nftDetails.imageUri}
-                />
+                {auction.nftDetails.imageUri !== null ? (
+                  <Image
+                    className="h-96 w-full rounded-2xl object-cover lg:w-96"
+                    width={500}
+                    height={404}
+                    placeholder="blur"
+                    blurDataURL={auction.nftDetails.imageUri}
+                    src={auction.nftDetails.imageUri}
+                  />
+                ) : (
+                  <div className="h-96 w-[500px] animate-pulse rounded-2xl bg-gray-300" />
+                )}
+
                 <div className="my-3 inline-flex h-[357px] w-full flex-col items-start justify-start gap-4 rounded-br-2xl rounded-tr-2xl bg-white bg-opacity-50  p-5 backdrop-blur-xl">
                   <div className="flex flex-col items-start justify-start">
                     <div className="inline-flex items-center justify-start self-stretch">

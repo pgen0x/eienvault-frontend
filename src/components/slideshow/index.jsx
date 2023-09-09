@@ -1,13 +1,5 @@
-// src/Slideshow.js
 import React, { useState, useEffect } from 'react';
-import { Slide } from 'react-slideshow-image';
-import Rightarrow from '@/assets/icon/rightarrow';
-import LeftArrow from '@/assets/icon/lefarrow';
 import Ethereum from '@/assets/icon/ethereum';
-import Cat from '@/assets/images/cat.png';
-import Hos from '@/assets/images/hos.jpg';
-import Avatar from '@/assets/images/avatar.jpg';
-
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/legacy/image';
@@ -21,12 +13,11 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth } from '@/hooks/AuthContext';
 import { useAccount } from 'wagmi';
-import { truncateAddress } from '@/utils/truncateAddress';
 import HelaIcon from '@/assets/icon/hela';
 import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import Countdown from './countdown';
 
-const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
+const images = [1, 2, 3, 4]; 
 
 export const Slideshow = () => {
   const sliderBreakPoints = {
@@ -128,7 +119,7 @@ export const Slideshow = () => {
             <div className="inline-flex w-full flex-col justify-center gap-2 p-2 lg:items-start lg:pt-16">
               <div className="flex w-fit flex-row items-center rounded-lg bg-[#fff1d4] px-2 py-2">
                 <span className="mr-2 h-1 w-1 animate-ping rounded-full bg-red-400 opacity-90"></span>
-                <div className="whitespace-nowrap text-xs font-semibold text-gray-900">
+                <div className="whitespace-nowrap text-sm font-semibold text-gray-900">
                   Live mint and auction
                 </div>
               </div>
@@ -232,119 +223,41 @@ export const Slideshow = () => {
               <div className="inline-flex w-full flex-col justify-center gap-2 p-2 lg:items-start lg:pt-16">
                 <div className="flex w-fit flex-row items-center rounded-lg bg-[#fff1d4] px-2 py-2">
                   <span className="mr-2 h-1 w-1 animate-ping rounded-full bg-red-400 opacity-90"></span>
-                  <div className="whitespace-nowrap text-xs font-semibold text-gray-900">
+                  <div className="whitespace-nowrap text-sm font-semibold text-gray-900">
                     Live mint and auction
                   </div>
                 </div>
 
                 <div className="relative flex h-full flex-row md:w-full lg:w-full">
-                  <Image
-                    className="h-96 w-full rounded-2xl object-cover lg:w-96"
-                    width={500}
-                    height={404}
-                    src={
-                      '/uploads/collections/MHgwODkzMTRjMDk1Mjg5REExQUU0N2EwMTE4MTg0ZTAxNjhDYTBjRjFk.png'
-                    }
-                  />
+                  <div className="h-96 w-[500px] animate-pulse rounded-2xl bg-gray-300" />
                   <div className="my-3 inline-flex w-full flex-col items-start justify-start gap-4 rounded-br-2xl rounded-tr-2xl bg-white bg-opacity-50 p-5  backdrop-blur-xl">
                     <div className="flex flex-col items-start justify-start">
                       <div className="inline-flex items-center justify-start self-stretch">
                         <div className="flex h-full shrink grow basis-0 items-end justify-start gap-2">
-                          <div className="text-2xl font-bold leading-9 text-neutral-700">
-                            Kaido ryu
-                          </div>
+                          <div className="h-4 w-20 animate-pulse rounded-lg bg-gray-300 text-2xl font-bold leading-9"></div>
                         </div>
                       </div>
                     </div>
                     <div className="flex flex-col items-start justify-start gap-1">
-                      <div className="inline-flex items-center justify-start gap-4">
-                        <span className="text-gray-900">By</span>
-                        <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2">
-                          <img
-                            className="h-4 w-4 rounded-2xl"
-                            src="https://fakeimg.pl/16x16"
-                          />
-                          <div className="flex items-start justify-start gap-2">
-                            <div className="text-xs font-medium leading-none text-neutral-700">
-                              Ryuma
-                            </div>
-                            <div className="text-xs font-black leading-none text-primary-500">
-                              <FontAwesomeIcon icon={faCircleCheck} />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-sm font-normal leading-tight text-neutral-700">
-                          On{' '}
-                        </div>
-                        <div className="flex items-start justify-start gap-2">
-                          <div className="text-sm font-normal leading-tight text-neutral-700">
-                            <Ethereum className="h-4 w-4" />
-                          </div>
-                          <div className="text-sm font-medium leading-tight text-neutral-700">
-                            ETH
-                          </div>
-                        </div>
-                      </div>
-                      <div className="h-full w-72 text-sm font-light leading-tight text-neutral-700">
-                        Dive into the enchanting world of Dragon Art, where myth
-                        and fantasy collide with extraordinary creativity. Our
-                        collection of captivating dragon-themed artwork brings
-                        these majestic creatures to life.
-                      </div>
+                      <div className="mb-5 inline-flex h-3 w-40 animate-pulse items-center justify-start gap-4 rounded-lg bg-gray-300"></div>
+                      <div className="h-3 w-72 animate-pulse rounded-lg bg-gray-300 text-sm font-light leading-tight"></div>
+                      <div className="h-3 w-60 animate-pulse rounded-lg bg-gray-300 text-sm font-light leading-tight"></div>
+                      <div className="h-3 w-64 animate-pulse rounded-lg bg-gray-300 text-sm font-light leading-tight"></div>
+                      <div className="h-3 w-56 animate-pulse rounded-lg bg-gray-300 text-sm font-light leading-tight"></div>
+                      <div className="h-3 w-60 animate-pulse rounded-lg bg-gray-300 text-sm font-light leading-tight"></div>
+                      <div className="h-3 w-44 animate-pulse rounded-lg bg-gray-300 text-sm font-light leading-tight"></div>
                     </div>
-                    <div className="inline-flex items-start justify-start gap-4 self-stretch">
+                    <div className="mt-4 inline-flex items-start justify-start gap-4 self-stretch">
                       <div className="inline-flex shrink grow basis-0 flex-col items-start justify-center gap-2">
-                        <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
-                          Buy amount
-                        </div>
-                        <div className="inline-flex h-11 items-center justify-center gap-8 self-stretch rounded-full bg-white p-1.5">
-                          <div className="inline-flex h-6 w-6 flex-col items-center justify-center gap-1.5 rounded-lg p-1.5">
-                            <button className="text-xs font-black leading-tight text-primary-500">
-                              <FontAwesomeIcon icon={faMinus} />
-                            </button>
-                          </div>
-                          <div className="text-xs font-normal leading-tight text-zinc-700">
-                            1
-                          </div>
-                          <div className="inline-flex h-6 w-6 flex-col items-center justify-center gap-1.5 rounded-lg p-1.5">
-                            <button className="text-xs font-black leading-tight text-primary-500">
-                              <FontAwesomeIcon icon={faPlus} />
-                            </button>
-                          </div>
-                        </div>
+                        <div className="h-4 w-36 animate-pulse self-stretch rounded-lg bg-gray-300 text-sm font-normal leading-tight text-gray-300"></div>
+                        <div className="h-11 w-36 animate-pulse self-stretch rounded-full bg-gray-300 text-sm font-normal leading-tight text-gray-300"></div>
                       </div>
-                      <div className="inline-flex shrink grow basis-0 flex-col items-start justify-start gap-2">
-                        <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
-                          <span className="text-sm font-normal leading-tight text-neutral-700">
-                            Mint for
-                          </span>
-                          <span className="text-sm font-light leading-tight text-neutral-700">
-                            {' '}
-                          </span>
-                          <span className="text-sm font-bold leading-tight text-neutral-700">
-                            0.3 ETH
-                          </span>
-                        </div>
-                        <div className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-full bg-primary-500 px-4 py-2">
-                          <button className="text-center text-base font-bold leading-normal text-white">
-                            Mint
-                          </button>
-                        </div>
+                      <div className="inline-flex shrink grow basis-0 flex-col items-start justify-center gap-2">
+                        <div className="h-4 w-36 animate-pulse self-stretch rounded-lg bg-gray-300 text-sm font-normal leading-tight text-gray-300"></div>
+                        <div className="h-11 w-36 animate-pulse self-stretch rounded-full bg-gray-300 text-sm font-normal leading-tight text-gray-300"></div>
                       </div>
                     </div>
-                    <div className="inline-flex items-center justify-start gap-2">
-                      <div className="text-sm font-medium leading-tight text-gray-600">
-                        5 minted
-                      </div>
-                      <div className="h-1 w-1 rounded-full bg-gray-600" />
-                      <div className="text-sm font-medium leading-tight text-gray-600">
-                        12 per wallet
-                      </div>
-                      <div className="h-1 w-1 rounded-full bg-gray-600" />
-                      <div className="text-sm font-medium leading-tight text-gray-600">
-                        1d 2h 32m 12s
-                      </div>
-                    </div>
+                    <div className="mt-4 inline-flex h-3 w-80 animate-pulse items-center justify-center gap-2 self-center rounded-lg bg-gray-300 text-sm font-light leading-tight"></div>
                   </div>
                 </div>
               </div>

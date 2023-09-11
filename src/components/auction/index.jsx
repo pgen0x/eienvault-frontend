@@ -4,7 +4,7 @@ import Line from '@/assets/icon/line';
 import Awan from '@/assets/icon/awan';
 import Awan2 from '@/assets/icon/awan2';
 import { Slideshow, SlideshowMobile } from '../slideshow';
-import { useAccount,  useWalletClient } from 'wagmi';
+import { useAccount, useWalletClient } from 'wagmi';
 import { useAuth } from '@/hooks/AuthContext';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 
@@ -14,7 +14,7 @@ const Auction = () => {
   const [auctions, setAuctions] = useState([]);
   const [isErrorAuctions, setErrorAuctions] = useState(false);
   const [placeBidHash, setPlaceBidHash] = useState();
-  
+  const [refreshMetada, setRefreshMetadata] = useState();
 
   const { data: walletClient } = useWalletClient();
 
@@ -39,7 +39,7 @@ const Auction = () => {
         }
 
         const responseData = await res.json();
-        console.log(responseData);
+
         setAuctions(responseData);
       } catch (error) {
         setErrorAuctions(true);
@@ -50,7 +50,7 @@ const Auction = () => {
     };
 
     fetchData();
-  }, [token, address]);
+  }, [token, address, refreshMetada]);
 
   const placeBid = async (marketId, price) => {
     try {
@@ -68,7 +68,38 @@ const Auction = () => {
     }
   };
 
-  
+  async function refreshMetadata(collectionAddress, tokenId) {
+    const bodyData = {
+      collectionAddress,
+      tokenId,
+    };
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/refreshmetadata`,
+        {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          method: 'POST',
+          body: JSON.stringify(bodyData),
+        },
+      );
+
+      if (!res.ok) {
+        console.error('Refresh metadata failed:', res);
+        throw new Error('Network response was not ok');
+      }
+
+      const responseData = await res.json();
+
+      setRefreshMetadata(true);
+    } catch (error) {
+      console.log(error);
+      throw new Error('Refresh metadata failed:');
+    }
+  }
 
   return (
     <>
@@ -88,12 +119,14 @@ const Auction = () => {
             <Slideshow
               auctions={auctions}
               placeBid={placeBid}
+              refreshMetadata={refreshMetadata}
             />
           </div>
           <div className="relative mb-5 flex w-full flex-initial items-center justify-center sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden">
             <SlideshowMobile
               auctions={auctions}
               placeBid={placeBid}
+              refreshMetadata={refreshMetadata}
             />
           </div>
         </div>

@@ -23,12 +23,10 @@ import { useRouter } from 'next-nprogress-bar';
 
 const images = [1, 2, 3, 4];
 
-export const Slideshow = ({ auctions, placeBid }) => {
+export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
   const router = useRouter();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [auctionData, setAcutionData] = useState({});
-  const [highestBid, setHighestBid] = useState(0);
-  const [lowestBid, setLowestBid] = useState(0);
 
   const sliderBreakPoints = {
     640: {
@@ -172,17 +170,26 @@ export const Slideshow = ({ auctions, placeBid }) => {
                 </div>
               </div>
               <div className="relative flex h-full flex-row md:w-full lg:w-full">
-                {auction.nftDetails.imageUri !== null ? (
+                {auction.nftDetails?.imageUri !== null ? (
                   <Image
                     className="h-96 w-full rounded-2xl object-cover lg:w-96"
                     width={500}
                     height={404}
                     placeholder="blur"
-                    blurDataURL={auction.nftDetails.imageUri}
-                    src={auction.nftDetails.imageUri}
+                    blurDataURL={auction.nftDetails?.imageUri}
+                    src={auction.nftDetails?.imageUri}
                   />
                 ) : (
-                  <div className="h-96 w-[500px] animate-pulse rounded-2xl bg-gray-300" />
+                  <div className="flex h-96 w-[500px]  flex-col justify-end rounded-2xl bg-gray-300">
+                    <button
+                      className="mb-4 inline-flex justify-center gap-2 self-center rounded-full border border-primary-500 bg-transparent px-2 py-2 text-sm font-semibold text-primary-500 hover:border-primary-300 hover:text-primary-300"
+                      onClick={() =>
+                        refreshMetadata(auction.collection, auction.tokenId)
+                      }
+                    >
+                      Refresh Metadata
+                    </button>
+                  </div>
                 )}
 
                 <div className="my-3 inline-flex h-[357px] w-full flex-col items-start justify-start gap-4 rounded-br-2xl rounded-tr-2xl bg-white bg-opacity-50  p-5 backdrop-blur-xl">
@@ -191,9 +198,13 @@ export const Slideshow = ({ auctions, placeBid }) => {
                       <div className="flex h-full shrink grow basis-0 items-end justify-start gap-2">
                         <div
                           className="cursor-pointer text-2xl font-bold leading-9 text-neutral-700"
-                          onClick={() => router.push('/nft/user')}
+                          onClick={() =>
+                            router.push(
+                              `/nft/${auction.collection}/${auction.tokenId}`,
+                            )
+                          }
                         >
-                          {auction.nftDetails.name}
+                          {auction.nftDetails?.name}
                         </div>
                       </div>
                     </div>
@@ -207,18 +218,18 @@ export const Slideshow = ({ auctions, placeBid }) => {
                           width={15}
                           height={15}
                           placeholder="blur"
-                          blurDataURL={auction.collectionData.logo}
-                          src={`/uploads/collections/${auction.collectionData.logo}`}
+                          blurDataURL={auction.collectionData?.logo}
+                          src={`/uploads/collections/${auction.collectionData?.logo}`}
                         />
                         <div className="flex items-start justify-start gap-2">
                           <div className="text-xs font-medium leading-none text-neutral-700">
-                            {auction.collectionData.User.username
-                              ? auction.collectionData.User.username
+                            {auction.collectionData?.User.username
+                              ? auction.collectionData?.User.username
                               : truncateAddress4char(
-                                  auction.collectionData.userAddress,
+                                  auction.collectionData?.userAddress,
                                 )}
                           </div>
-                          {auction.collectionData.User.isVerified && (
+                          {auction.collectionData?.User.isVerified && (
                             <div className="text-xs font-black leading-none text-primary-500">
                               <FontAwesomeIcon icon={faCircleCheck} />
                             </div>
@@ -230,18 +241,18 @@ export const Slideshow = ({ auctions, placeBid }) => {
                       </div>
                       <div className="flex items-start justify-start gap-2">
                         <div className="text-sm font-normal leading-tight text-neutral-700">
-                          {(auction.collectionData.chainId === 666888 ||
-                            auction.collectionData.chainId === 8668) && (
+                          {(auction.collectionData?.chainId === 666888 ||
+                            auction.collectionData?.chainId === 8668) && (
                             <HelaIcon className="h-4 w-4" />
                           )}
                         </div>
                         <div className="text-sm font-medium leading-tight text-neutral-700">
-                          {auction.collectionData.Chain.symbol}
+                          {auction.collectionData?.Chain.symbol}
                         </div>
                       </div>
                     </div>
                     <div className="line-clamp-6 w-72 text-sm font-light leading-tight text-neutral-700">
-                      {auction.collectionData.description}
+                      {auction.collectionData?.description}
                     </div>
                   </div>
                   <div className="inline-flex items-start justify-start gap-4 self-stretch">
@@ -273,10 +284,10 @@ export const Slideshow = ({ auctions, placeBid }) => {
                       handleOpenModalBid(
                         auction.marketId,
                         auction.listingPrice,
-                        auction.nftDetails.imageUri,
-                        auction.nftDetails.tokenId,
+                        auction.nftDetails?.imageUri,
+                        auction.nftDetails?.tokenId,
                         auction.price,
-                        auction.nftDetails.name,
+                        auction.nftDetails?.name,
                         auction.collectionData,
                       )
                     }
@@ -360,7 +371,10 @@ export const Slideshow = ({ auctions, placeBid }) => {
   );
 };
 
-export const SlideshowMobile = ({ auctions, placeBid }) => {
+export const SlideshowMobile = ({ auctions, placeBid, refreshMetadata }) => {
+  const router = useRouter();
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [auctionData, setAcutionData] = useState({});
   const sliderBreakPoints = {
     640: {
       slidesPerView: 1,
@@ -388,6 +402,81 @@ export const SlideshowMobile = ({ auctions, placeBid }) => {
       width: 400,
     },
   };
+  const publicClient = usePublicClient();
+
+  async function getHighestBid(marketId) {
+    const bids = await publicClient.readContract({
+      ...marketplaceABI,
+      functionName: 'getOffers',
+      args: [marketId],
+    });
+
+    if (bids.length === 0) {
+      return null; // No bids found
+    }
+
+    let highestBid = bids[0]; // Initialize with the first bid
+
+    for (let i = 1; i < bids.length; i++) {
+      if (bids[i].offer > highestBid.offer) {
+        highestBid = bids[i];
+      }
+    }
+
+    return highestBid;
+  }
+
+  async function getLowestBid(marketId) {
+    const bids = await publicClient.readContract({
+      ...marketplaceABI,
+      functionName: 'getOffers',
+      args: [marketId],
+    });
+
+    if (bids.length === 0) {
+      return null; // No bids found
+    }
+
+    let lowestBid = bids[0]; // Initialize with the first bid
+
+    for (let i = 1; i < bids.length; i++) {
+      if (bids[i].offer < lowestBid.offer) {
+        lowestBid = bids[i];
+      }
+    }
+
+    return lowestBid;
+  }
+
+  const handleOpenModalBid = async (
+    marketId,
+    listingPrice,
+    imageUri,
+    tokenId,
+    price,
+    name,
+    collectionData,
+  ) => {
+    const highestBid = await getHighestBid(marketId);
+    const lowestBid = await getLowestBid(marketId);
+
+    setAcutionData({
+      marketId,
+      listingPrice,
+      imageUri,
+      tokenId,
+      price,
+      name,
+      collectionData,
+      highestBid,
+      lowestBid,
+    });
+    setIsOpenModal(true);
+  };
+
+  function closeModal() {
+    setIsOpenModal(false);
+  }
   return (
     <>
       <Swiper
@@ -419,25 +508,41 @@ export const SlideshowMobile = ({ auctions, placeBid }) => {
                 </div>
               </div>
               <div className="relative flex w-[340px] flex-col">
-                {auction.nftDetails.imageUri !== null ? (
+                {auction.nftDetails?.imageUri !== null ? (
                   <Image
                     className="h-96 w-full rounded-2xl object-cover lg:w-96"
                     width={500}
                     height={404}
                     placeholder="blur"
-                    blurDataURL={auction.nftDetails.imageUri}
-                    src={auction.nftDetails.imageUri}
+                    blurDataURL={auction.nftDetails?.imageUri}
+                    src={auction.nftDetails?.imageUri}
                   />
                 ) : (
-                  <div className="h-96 w-[340px] animate-pulse rounded-2xl bg-gray-300" />
+                  <div className="flex h-96 w-[340px]  flex-col justify-end rounded-2xl bg-gray-300">
+                    <button
+                      className="mb-4 inline-flex justify-center gap-2 self-center rounded-full border border-primary-500 bg-transparent px-2 py-2 text-sm font-semibold text-primary-500 hover:border-primary-300 hover:text-primary-300"
+                      onClick={() =>
+                        refreshMetadata(auction.collection, auction.tokenId)
+                      }
+                    >
+                      Refresh Metadadata
+                    </button>
+                  </div>
                 )}
                 <div className="w-full px-5">
                   <div className="inline-flex w-full flex-col justify-center gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
                     <div className="flex flex-col items-start justify-start">
                       <div className="inline-flex items-center justify-start self-stretch">
                         <div className="flex h-full shrink grow basis-0 items-end justify-start gap-2">
-                          <div className="text-2xl font-bold leading-9 text-neutral-700">
-                            {auction.collectionData.name}
+                          <div
+                            className="text-2xl font-bold leading-9 text-neutral-700"
+                            onClick={() =>
+                              router.push(
+                                `/nft/${auction.collection}/${auction.tokenId}`,
+                              )
+                            }
+                          >
+                            {auction.nftDetails?.name}
                           </div>
                         </div>
                       </div>
@@ -451,18 +556,18 @@ export const SlideshowMobile = ({ auctions, placeBid }) => {
                             width={15}
                             height={15}
                             placeholder="blur"
-                            blurDataURL={auction.collectionData.logo}
-                            src={`/uploads/collections/${auction.collectionData.logo}`}
+                            blurDataURL={auction.collectionData?.logo}
+                            src={`/uploads/collections/${auction.collectionData?.logo}`}
                           />
                           <div className="flex items-start justify-start gap-2">
                             <div className="text-xs font-medium leading-none text-neutral-700">
-                              {auction.collectionData.User.username
-                                ? auction.collectionData.User.username
+                              {auction.collectionData?.User.username
+                                ? auction.collectionData?.User.username
                                 : truncateAddress4char(
-                                    auction.collectionData.userAddress,
+                                    auction.collectionData?.userAddress,
                                   )}
                             </div>
-                            {auction.collectionData.User.isVerified && (
+                            {auction.collectionData?.User.isVerified && (
                               <div className="text-xs font-black leading-none text-primary-500">
                                 <FontAwesomeIcon icon={faCircleCheck} />
                               </div>
@@ -474,18 +579,18 @@ export const SlideshowMobile = ({ auctions, placeBid }) => {
                         </div>
                         <div className="flex items-start justify-start gap-2">
                           <div className="text-sm font-normal leading-tight text-neutral-700">
-                            {(auction.collectionData.chainId === 666888 ||
-                              auction.collectionData.chainId === 8668) && (
+                            {(auction.collectionData?.chainId === 666888 ||
+                              auction.collectionData?.chainId === 8668) && (
                               <HelaIcon className="h-4 w-4" />
                             )}
                           </div>
                           <div className="text-sm font-medium leading-tight text-neutral-700">
-                            {auction.collectionData.Chain.symbol}
+                            {auction.collectionData?.Chain.symbol}
                           </div>
                         </div>
                       </div>
                       <div className="line-clamp-6 h-full w-full text-sm font-light leading-tight text-neutral-700">
-                        {auction.collectionData.description}
+                        {auction.collectionData?.description}
                       </div>
                     </div>
                     <div className="inline-flex items-start justify-start gap-4 self-stretch">
@@ -511,11 +616,21 @@ export const SlideshowMobile = ({ auctions, placeBid }) => {
                         </div>
                       </div>
                     </div>
-                    <button className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300">
-                      <span
-                        className="text-center text-base font-bold leading-normal text-white"
-                        onClick={placeBid}
-                      >
+                    <button
+                      className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
+                      onClick={() =>
+                        handleOpenModalBid(
+                          auction.marketId,
+                          auction.listingPrice,
+                          auction.nftDetails?.imageUri,
+                          auction.nftDetails?.tokenId,
+                          auction.price,
+                          auction.nftDetails?.name,
+                          auction.collectionData,
+                        )
+                      }
+                    >
+                      <span className="text-center text-base font-bold leading-normal text-white">
                         Place Bid
                       </span>
                     </button>
@@ -533,6 +648,13 @@ export const SlideshowMobile = ({ auctions, placeBid }) => {
           </SwiperSlide>
         ))}
       </Swiper>
+      <ModalBid
+        isOpenModal={isOpenModal}
+        onClose={closeModal}
+        auction={auctionData}
+        placeBid={placeBid}
+        onModalClose={closeModal}
+      />
     </>
   );
 };

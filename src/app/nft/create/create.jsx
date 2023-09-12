@@ -77,7 +77,7 @@ export default function Create({ chains }) {
     setInputFields(updatedInputFields);
   };
   const [enableUnlockable, setEnableUnlockable] = useState(true);
-  const [name, setName] = useState('Untitled');
+
   const [selectedOptionMarket, setSelectedOptionMarket] = useState('fixed');
   const [selectedOptionEdition, setSelectedOptionEdition] = useState('single');
   const [selectedOptionCollection, setSelectedOptionCollection] =
@@ -132,6 +132,7 @@ export default function Create({ chains }) {
   const price = watch('price');
   const royalties = watch('royalties');
   const description = watch('description');
+  const name = watch('name');
 
   useEffect(() => {
     // Calculate the date 1 day from now using Moment.js
@@ -379,7 +380,7 @@ export default function Create({ chains }) {
       name: data.name,
       description: data.description,
       external_url: `https://eienvault.codermatter.com/collection/${selectedOptionCollection}/`,
-      image: `ipfs://${imageIPFSHash}`,
+      image: `https://ipfs.io/ipfs/${imageIPFSHash}`,
       attributes,
     };
 
@@ -581,7 +582,7 @@ export default function Create({ chains }) {
   return (
     <>
       <div className="my-5 flex flex-col justify-center gap-5 p-4 text-gray-900 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
-        <div className="flex w-full flex-col">
+        <div className="flex w-1/2 flex-col">
           <h2 className="text-2xl font-semibold">Create New NFT</h2>
           <p>
             <span className="text-semantic-red-500">*</span> requires to be
@@ -679,19 +680,29 @@ export default function Create({ chains }) {
                     />
                     <label
                       htmlFor="single-edition"
-                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 ${
+                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-t-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 ${
                         selectedOptionEdition === 'single'
                           ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
                           : 'dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500'
                       }`}
                     >
                       <FontAwesomeIcon icon={faUsers} className="text-5xl" />
+
                       <span>
                         Single
                         <br />
                         Edition
                       </span>
                     </label>
+                    <div
+                      className={`rounded-b-lg border border-gray-200 px-2 text-sm ${
+                        selectedOptionEdition === 'single'
+                          ? 'bg-primary-500 text-white peer-checked:border-primary-500 '
+                          : 'bg-white text-gray-500'
+                      }`}
+                    >
+                      ERC-721
+                    </div>
                   </li>
                   <li>
                     <input
@@ -705,7 +716,7 @@ export default function Create({ chains }) {
                     />
                     <label
                       htmlFor="community-edition"
-                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 ${
+                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-t-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 ${
                         selectedOptionEdition === 'community'
                           ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
                           : 'dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500'
@@ -718,6 +729,15 @@ export default function Create({ chains }) {
                         Edition
                       </span>
                     </label>
+                    <div
+                      className={`rounded-b-lg border border-gray-200 px-2 text-sm ${
+                        selectedOptionEdition === 'community'
+                          ? 'bg-primary-500 text-white peer-checked:border-primary-500 '
+                          : 'bg-white text-gray-500'
+                      }`}
+                    >
+                      ERC-1155 [not supported]
+                    </div>
                   </li>
                 </ul>
               </div>
@@ -1161,7 +1181,7 @@ export default function Create({ chains }) {
             </form>
           </div>
         </div>
-        <div className="sticky top-24 w-full self-start pt-3">
+        <div className="sticky top-24 w-1/3 self-start pt-3">
           <h3 className="text-xl font-semibold">Preview</h3>
           <p className="pb-5 pt-1">
             Input the NFT Data field to see the preview of how your NFT product
@@ -1202,13 +1222,23 @@ export default function Create({ chains }) {
               <h4 className="font-semibold">
                 {name === '' ? 'Untitled' : name}
               </h4>
-              <Ethereum className="text-gray-400" />
+              {selectedChain.chainId === 1 ||
+              selectedChain.chainId === 11155111 ? (
+                <Ethereum className="text-gray-500" />
+              ) : selectedChain.chainId === 8668 ||
+                selectedChain.chainId === 666888 ? (
+                <HelaIcon className="h-5 w-5" />
+              ) : (
+                ''
+              )}
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col">
                 <div className="font-semibold">Price</div>
-                <div className="font-semibold text-primary-500">0.0 ETH</div>
+                <div className="font-semibold text-primary-500">
+                  {price === '' ? '0.0' : price} {selectedChain.symbol}
+                </div>
               </div>
               <div className="flex flex-col">
                 <div className="font-semibold">Highest bid</div>

@@ -29,7 +29,6 @@ import { useAuth } from '@/hooks/AuthContext';
 import axios from 'axios';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { formatEther } from 'viem';
-import { toast } from 'react-toastify';
 
 const servers = [
   'All Mainnet',
@@ -128,9 +127,9 @@ export default function AccountPage({ params }) {
     }
   }, [collection.tokenAddress, collection.chainId, collection.userAddress])
 
-  const getCollection = async (collectionToken=false) => {
+  const getCollection = async (collectionToken = false) => {
     let targetUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/collection/get/${params.slug}`;
-    if(collectionToken){
+    if (collectionToken) {
       targetUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/collection/getbycollection/${params.slug}`
     }
     await axios.request({
@@ -142,13 +141,13 @@ export default function AccountPage({ params }) {
         setCollection(response.data);
       })
       .catch((error) => {
-        if(collectionToken){
+        if (collectionToken) {
           toast.error(JSON.stringify(error));
-        }else{
+        } else {
           getCollection(true);
         }
       });
-  }
+  };
 
   const getProfile = async (userAddress) => {
     await axios.request({
@@ -162,7 +161,7 @@ export default function AccountPage({ params }) {
       .catch((error) => {
         toast.error(JSON.stringify(error));
       });
-  }
+  };
 
   const getNfts = async (collectionAddress) => {
     await axios.request({
@@ -176,8 +175,7 @@ export default function AccountPage({ params }) {
       .catch((error) => {
         toast.error(JSON.stringify(error));
       });
-
-  }
+  };
 
   const getChain = async (chainId) => {
     await axios.request({
@@ -229,10 +227,22 @@ export default function AccountPage({ params }) {
                   </div>
                   <div className="block flex w-full justify-start gap-4 text-gray-900">
                     <div>
-                      Created by <span className="font-semibold">{profile.username ? profile.username : collection.userAddress ? truncateAddress(collection.userAddress) : ''}</span>
+                      Created by{' '}
+                      <span className="font-semibold">
+                        {profile.username
+                          ? profile.username
+                          : collection.userAddress
+                            ? truncateAddress(collection.userAddress)
+                            : ''}
+                      </span>
                     </div>
                     <div>
-                      Address <span className="font-semibold">{profile.walletAddress ? truncateAddress(profile.walletAddress) : ''}</span>
+                      Address{' '}
+                      <span className="font-semibold">
+                        {profile.walletAddress
+                          ? truncateAddress(profile.walletAddress)
+                          : ''}
+                      </span>
                     </div>
                   </div>
                   {collection.description && (
@@ -291,8 +301,11 @@ export default function AccountPage({ params }) {
         </section>
         <section>
           <div className="grid grid-cols-12 gap-3">
-            <div className="col-span-12 sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3 hidden sm:hidden md:block lg:block xl:block 2xl:block">
-              <button className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" onClick={handleOpenFilter}>
+            <div className="col-span-12 hidden sm:col-span-12 sm:hidden md:col-span-4 md:block lg:col-span-3 lg:block xl:col-span-3 xl:block 2xl:col-span-3 2xl:block">
+              <button
+                className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
+                onClick={handleOpenFilter}
+              >
                 <FontAwesomeIcon icon={faSliders} /> Filter
               </button>
             </div>
@@ -301,21 +314,37 @@ export default function AccountPage({ params }) {
                 <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
                   <FontAwesomeIcon icon={faSearch} />
                 </div>
-                <input ref={inputRef} className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500" type="text" placeholder="Search ..." aria-label="Search" />
+                <input
+                  ref={inputRef}
+                  className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  type="text"
+                  placeholder="Search ..."
+                  aria-label="Search"
+                />
                 <div className="inline-flex flex-col items-center justify-center gap-2 rounded-md bg-zinc-200 px-2">
                   <div className="text-base font-light leading-normal text-zinc-500">
                     /
                   </div>
                 </div>
               </div>
-              <Listbox value={selectedFilter} onChange={setSelectedFilter} className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
+              <Listbox
+                value={selectedFilter}
+                onChange={setSelectedFilter}
+                className="hidden sm:hidden md:block lg:block xl:block 2xl:block"
+              >
                 <div className="relative z-20">
                   <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
                     <span className="block truncate text-gray-600">
                       {selectedFilter}
                     </span>
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                      <svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <svg
+                        width="16"
+                        height="9"
+                        viewBox="0 0 16 9"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
                         <path
                           d="M8 9C7.71875 9 7.46875 8.90625 7.28125 8.71875L1.28125 2.71875C0.875 2.34375 0.875 1.6875 1.28125 1.3125C1.65625 0.90625 2.3125 0.90625 2.6875 1.3125L8 6.59375L13.2812 1.3125C13.6562 0.90625 14.3125 0.90625 14.6875 1.3125C15.0938 1.6875 15.0938 2.34375 14.6875 2.71875L8.6875 8.71875C8.5 8.90625 8.25 9 8 9Z"
                           fill="#7D778A"
@@ -350,23 +379,44 @@ export default function AccountPage({ params }) {
                   </Listbox.Options>
                 </div>
               </Listbox>
-              <div className="space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 hidden sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+              <div className="hidden space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
                 <div>
-                  <input className="hidden" type="radio" name="rangeOptions" id="optionGrid" onChange={(event) => handleGridList(event, 'grid')} />
-                  <label className={classRadio(gridList, 'grid')} htmlFor="optionGrid">
+                  <input
+                    className="hidden"
+                    type="radio"
+                    name="rangeOptions"
+                    id="optionGrid"
+                    onChange={(event) => handleGridList(event, 'grid')}
+                  />
+                  <label
+                    className={classRadio(gridList, 'grid')}
+                    htmlFor="optionGrid"
+                  >
                     <FontAwesomeIcon icon={faGrip} />
                   </label>
                 </div>
                 <div>
-                  <input className="hidden" type="radio" name="rangeOptions" id="optionList" onChange={(event) => handleGridList(event, 'list')} />
-                  <label className={classRadio(gridList, 'list')} htmlFor="optionList">
+                  <input
+                    className="hidden"
+                    type="radio"
+                    name="rangeOptions"
+                    id="optionList"
+                    onChange={(event) => handleGridList(event, 'list')}
+                  />
+                  <label
+                    className={classRadio(gridList, 'list')}
+                    htmlFor="optionList"
+                  >
                     <FontAwesomeIcon icon={faGripVertical} />
                   </label>
                 </div>
               </div>
             </div>
-            <div className="col-span-12 sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3 block sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
-              <button className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" onClick={handleOpenFilter}>
+            <div className="col-span-12 block sm:col-span-12 sm:block md:col-span-4 md:hidden lg:col-span-3 lg:hidden xl:col-span-3 xl:hidden 2xl:col-span-3 2xl:hidden">
+              <button
+                className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
+                onClick={handleOpenFilter}
+              >
                 <FontAwesomeIcon icon={faSliders} /> Filter
               </button>
             </div>
@@ -376,12 +426,23 @@ export default function AccountPage({ params }) {
               <div className="col-span-12 sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                 <ul className="divide-y rounded-xl bg-white p-5 font-bold text-gray-900">
                   <li>
-                    <button className="action flex w-full cursor-pointer items-center justify-between py-3" onClick={(event) => handleFilterCollapse('blockchain')}>
+                    <button
+                      className="action flex w-full cursor-pointer items-center justify-between py-3"
+                      onClick={(event) => handleFilterCollapse('blockchain')}
+                    >
                       <span>Blockchain</span>
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
-                    <div className={`target py-5 ${filterCollapse.blockchain ? 'block' : 'hidden'}`}>
-                      <select id="country" name="country" autoComplete="country-name" className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                    <div
+                      className={`target py-5 ${filterCollapse.blockchain ? 'block' : 'hidden'
+                        }`}
+                    >
+                      <select
+                        id="country"
+                        name="country"
+                        autoComplete="country-name"
+                        className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                      >
                         <option>United States</option>
                         <option>Canada</option>
                         <option>Mexico</option>
@@ -389,31 +450,46 @@ export default function AccountPage({ params }) {
                     </div>
                   </li>
                   <li>
-                    <button className="action flex w-full cursor-pointer items-center justify-between py-3" onClick={(event) => handleFilterCollapse('category')}>
+                    <button
+                      className="action flex w-full cursor-pointer items-center justify-between py-3"
+                      onClick={(event) => handleFilterCollapse('category')}
+                    >
                       <span>Category</span>
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
                   </li>
                   <li>
-                    <button className="action flex w-full cursor-pointer items-center justify-between py-3" onClick={(event) => handleFilterCollapse('price')}>
+                    <button
+                      className="action flex w-full cursor-pointer items-center justify-between py-3"
+                      onClick={(event) => handleFilterCollapse('price')}
+                    >
                       <span>Floor price</span>
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
                   </li>
                   <li>
-                    <button className="action flex w-full cursor-pointer items-center justify-between py-3" onClick={(event) => handleFilterCollapse('status')}>
+                    <button
+                      className="action flex w-full cursor-pointer items-center justify-between py-3"
+                      onClick={(event) => handleFilterCollapse('status')}
+                    >
                       <span>Status</span>
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
                   </li>
                   <li>
-                    <button className="action flex w-full cursor-pointer items-center justify-between py-3" onClick={(event) => handleFilterCollapse('currency')}>
+                    <button
+                      className="action flex w-full cursor-pointer items-center justify-between py-3"
+                      onClick={(event) => handleFilterCollapse('currency')}
+                    >
                       <span>Currency</span>
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
                   </li>
                   <li>
-                    <button className="action flex w-full cursor-pointer items-center justify-between py-3" onClick={(event) => handleFilterCollapse('collection')}>
+                    <button
+                      className="action flex w-full cursor-pointer items-center justify-between py-3"
+                      onClick={(event) => handleFilterCollapse('collection')}
+                    >
                       <span>Collection</span>
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
@@ -423,8 +499,8 @@ export default function AccountPage({ params }) {
             )}
             <div
               className={`col-span-12 sm:col-span-12 ${openFilter
-                ? 'md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9'
-                : 'md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12'
+                  ? 'md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9'
+                  : 'md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12'
                 }`}
             >
               <div className="grid w-full grid-cols-12 gap-6 text-gray-900">

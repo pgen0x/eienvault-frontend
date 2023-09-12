@@ -250,7 +250,7 @@ export default function ModalUploadDFile({
                         onClick={closeModal}
                         disabled={isProcessing}
                       >
-                        Cancel
+                        {isProcessing ? 'Cancel' : 'Completed'} 
                       </button>
                     </div>
                   </div>

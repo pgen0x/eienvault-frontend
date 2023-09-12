@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Slide } from 'react-slideshow-image';
 import Rightarrow from '@/assets/icon/rightarrow';
 import LeftArrow from '@/assets/icon/lefarrow';
@@ -7,7 +7,7 @@ import Cat from '@/assets/images/cat.png';
 import Hos from '@/assets/images/hos.jpg';
 import Avatar from '@/assets/images/avatar.jpg';
 import { useRouter } from 'next-nprogress-bar';
-import { Autoplay, Pagination } from 'swiper/modules';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
 import {
@@ -20,11 +20,15 @@ import {
   faCartPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
 export const SlideshowActivities = () => {
   const router = useRouter();
+  const [nfts, setNfts] = useState([]);
+
   const sliderBreakPoints = {
     640: {
       slidesPerView: 2,
@@ -53,9 +57,27 @@ export const SlideshowActivities = () => {
       spaceBetween: 5,
     },
   };
+
+  useEffect(() => {
+    getNfts();
+  }, []);
+
+  const getNfts = async () => {
+    await axios.request({
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/items?limit=10`,
+    })
+      .then((response) => {
+        setNfts(response.data);
+      })
+      .catch((error) => {
+        toast.error(JSON.stringify(error));
+      });
+  }
   return (
     <>
-      <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-prev mr-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
+      <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-prev-activities mr-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
       <Swiper
         className="!pb-5"
         slidesPerView={1}
@@ -63,35 +85,48 @@ export const SlideshowActivities = () => {
         breakpoints={sliderBreakPoints}
         observer={true}
         navigation={{
-          nextEl: ".swiper-next",
-          prevEl: ".swiper-prev"
+          nextEl: ".swiper-next-activities",
+          prevEl: ".swiper-prev-activities"
         }}
         pagination={{
           dynamicBullets: true,
         }}
-        modules={[Autoplay, Pagination]}
+        modules={[Autoplay, Pagination, Navigation]}
         autoplay={{
           delay: 3000,
           disableOnInteraction: false,
         }}
       >
-        {images.map((image, index) => (
+        {nfts && nfts.map((nft, index) => (
           <SwiperSlide key={index}>
             <div className="w-full p-3 group h-[494px]">
-              <img className="w-full rounded-2xl z-10 group-hover:h-[210px] h-[250px] group-hover:transition-all ease-in-out duration-300" src="https://via.placeholder.com/325x265" />
+              <Suspense fallback={<div className="w-full h-[250px] bg-gray-300 animate-pulse rounded-2xl" />}>
+                <Image
+                  className="w-full rounded-2xl z-10 group-hover:h-[210px] h-[250px] group-hover:transition-all ease-in-out duration-300 object-cover"
+                  src={nft.nftDetails.imageUri ? nft.nftDetails.imageUri : 'https://placehold.co/325x265.png'}
+                  alt={nft.nftDetails.name ? nft.nftDetails.name : ''}
+                  width={325}
+                  height={265}
+                  objectFit="cover"
+                />
+              </Suspense>
               <div className="w-full inline-flex flex-col items-center justify-center lg:items-start">
                 <div className="w-full px-5 relative flex flex-row">
                   <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-b-2xl bg-white/60 backdrop-blur p-3">
                     <div className="w-full flex flex-col items-start justify-start">
                       <div className="inline-flex items-center justify-between self-stretch">
                         <div className="flex items-center justify-center gap-2 bg-white bg-opacity-70 ">
-                          <img
-                            className="h-4 w-4 rounded-2xl"
-                            src="https://via.placeholder.com/16x16"
+                          <Image
+                            src={nft.collectionData.logo ? `/uploads/collections/${nft.collectionData.logo}` : 'https://placehold.co/16x16'}
+                            alt={nft.collectionData.name ? nft.collectionData.name : (nft.collectionData.tokenAddress ? nft.collectionData.tokenAddress : '')}
+                            width={16}
+                            height={16}
+                            className="rounded-2xl"
+                            objectFit="cover"
                           />
                           <div className="flex items-start justify-start gap-2">
                             <div className="text-xs font-medium leading-none text-neutral-700">
-                              Ryuma
+                              {nft.collectionData.name ? nft.collectionData.name : (nft.collectionData.tokenAddress ? nft.collectionData.tokenAddress : '')}
                             </div>
                             <div className="text-xs font-black leading-none text-primary-500">
                               <FontAwesomeIcon icon={faCircleCheck} />
@@ -104,7 +139,7 @@ export const SlideshowActivities = () => {
                       </div>
                       <div className="w-full inline-flex items-center justify-between gap-2 pt-1">
                         <div className="text-xl2 font-medium leading-tight text-gray-600">
-                          Sailing #215
+                          {nft.nftDetails.name ? nft.nftDetails.name : ''} #{nft.nftDetails.tokenId ? nft.nftDetails.tokenId : ''}
                         </div>
                         <div className="text-sm font-normal leading-tight text-neutral-700">
                           <Ethereum className="h-4 w-4" />
@@ -113,7 +148,7 @@ export const SlideshowActivities = () => {
                       <div className="flex justify-between w-full mt-5 py-2">
                         <div className="flex flex-col items-start truncate text-sm leading-5">
                           <p>Price</p>
-                          <p className="font-bold">0.39 ETH</p>
+                          <p className="font-bold">{nft.nftDetails.price ? formatEther(Number(nft.nftDetails.price)) : '0.00'} {nft.collectionData.Chain.symbol ? nft.collectionData.Chain.symbol : '-'}</p>
                         </div>
                         <div className="flex flex-col items-start truncate text-sm leading-5">
                           <p>Highest bid</p>
@@ -135,7 +170,7 @@ export const SlideshowActivities = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-next ml-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
+      <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-next-activities ml-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
     </>
   );
 };

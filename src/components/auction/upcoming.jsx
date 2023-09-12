@@ -49,7 +49,7 @@ export const UpcomingAuction = () => {
               </div>
             </div>
           </div>
-          <div className="overflow-hidden opacity-0 h-0 group-hover:h-auto group-hover:opacity-100 group-hover:transition-all ease-in-out duration-800">
+          <div className="px-3 overflow-hidden opacity-0 h-0 group-hover:h-auto group-hover:opacity-100 group-hover:transition-all ease-in-out duration-800">
             <div className="flex flex-col gap-2 bg-white rounded-b-xl p-3">
               <div className="flex justify-between gap-5">
                 <div className="w-4/6 bg-gray-200 rounded-xl p-3 grid grid-flow-col justify-stretch">

@@ -57,7 +57,7 @@ export const SlideshowDiscover = () => {
   };
   return (
     <>
-      <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-prev mr-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
+      <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-prev-discover mr-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
       <Swiper
         className="!pb-5"
         slidesPerView={1}
@@ -65,8 +65,8 @@ export const SlideshowDiscover = () => {
         breakpoints={sliderBreakPoints}
         observer={true}
         navigation={{
-          nextEl: ".swiper-next",
-          prevEl: ".swiper-prev"
+          nextEl: ".swiper-next-discover",
+          prevEl: ".swiper-prev-discover"
         }}
         pagination={{
           dynamicBullets: true,
@@ -137,7 +137,7 @@ export const SlideshowDiscover = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-next ml-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
+      <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-next-discover ml-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
     </>
   );
 };

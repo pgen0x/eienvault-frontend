@@ -48,7 +48,8 @@
 }
 
 .homepage .section-discover{
-  background: url('/images/waveline-white.svg'), linear-gradient(90deg, #FFDFA9 0%, rgba(255, 100, 103, 0.2) 100%, rgba(255, 100, 103, 0.2) 100%, #F9D8D9 100%);
+  /* background: url('/images/waveline-white.svg'), linear-gradient(90deg, #FFDFA9 0%, rgba(255, 100, 103, 0.2) 100%, rgba(255, 100, 103, 0.2) 100%, #F9D8D9 100%); */
+  background: linear-gradient(90deg, #FFDFA9 0%, rgba(255, 100, 103, 0.2) 100%, rgba(255, 100, 103, 0.2) 100%, #F9D8D9 100%);
   background-repeat: no-repeat;
 }
 

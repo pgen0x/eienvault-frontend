@@ -28,24 +28,24 @@ import { Slideshow, SlideshowMobile } from '../slideshow';
 const Auction = () => {
   return (
     <>
-      <section className="relative -top-24 flex w-full items-center justify-center bg-semantic-orange-200">
-        <div className="absolute right-0 top-0">
-          <Line />
+      <section className="h-auto md:h-[600px] relative -top-24 flex w-full items-center justify-center bg-[url('/images/hero-section-background.png')] bg-cover bg-bottom">
+        <div className="absolute bottom-28 right-[12%] h-[532px] w-[532px] translate-y-1/3 items-center justify-center rounded-full bg-red-400" />
+        <div className="absolute right-[2vw] top-32">
+          <Image width={398} height={121} objectFit="cover" src="/images/cloud-hero-1.png" className="h-full" />
         </div>
-        <div className="absolute bottom-28 right-[12%] h-[582px] w-[582px] translate-y-1/3 items-center justify-center rounded-full bg-red-400" />
-        <div className="absolute right-[29vw] top-32">
-          <Awan />
+        <div className="absolute right-[45vw] bottom-20">
+          <Image width={500} height={151} objectFit="cover" src="/images/cloud-hero-3.png" className="h-full" />
         </div>
-        <div className="absolute bottom-3 right-0 -translate-x-16 translate-y-4">
-          <Awan2 />
+        <div className="absolute bottom-60 left-0 -translate-x-16 translate-y-4">
+          <Image width={270} height={76} objectFit="cover" src="/images/cloud-hero-2.png" className="h-full" />
         </div>
         <div className="container m-auto">
           <div className="relative md: pt-24 lg:pt-10 mb-5 hidden sm:hidden md:flex lg:flex xl:flex 2xl:flex w-full flex-initial items-center justify-center">
-              <Slideshow />
+            <Slideshow />
           </div>
           <div className="relative mb-5 flex sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden w-full flex-initial items-center justify-center">
-              <SlideshowMobile />
-            </div>
+            <SlideshowMobile />
+          </div>
         </div>
       </section>
     </>

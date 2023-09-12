@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCartPlus,
   faChevronDown,
+  faChevronUp,
   faCircleCheck,
   faEllipsis,
   faEllipsisVertical,
@@ -27,6 +28,8 @@ import { useRouter } from 'next-nprogress-bar';
 import { useAuth } from '@/hooks/AuthContext';
 import axios from 'axios';
 import { truncateAddress } from '@/utils/truncateAddress';
+import { formatEther } from 'viem';
+import { toast } from 'react-toastify';
 
 const servers = [
   'All Mainnet',
@@ -71,6 +74,8 @@ export default function AccountPage({ params }) {
   const [collection, setCollection] = useState({});
   const [profile, setProfile] = useState({});
   const [nfts, setNfts] = useState({});
+  const [showDescription, setShowDescription] = useState(false);
+  const [collectionChain, setCollectionChain] = useState({});
   const [selectedServer, setSelectedServer] = useState(servers[0]);
   const [selectedFilter, setSelectedFilter] = useState(filters[0]);
   const [filterCollapse, setFilterCollapse] = useState({
@@ -84,11 +89,6 @@ export default function AccountPage({ params }) {
   const [openFilter, setOpenFilter] = useState(true);
   const inputRef = useRef(null);
   const [gridList, setGridList] = useState('grid');
-  {
-    /*
-  This made for an example
-  */
-  }
   const handleFilterCollapse = (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
   };
@@ -113,48 +113,48 @@ export default function AccountPage({ params }) {
   };
 
   useEffect(() => {
-    if (token) {
-      getCollection(token);
-    }
-  }, [token]);
+    getCollection();
+  }, []);
 
   useEffect(() => {
+    if (collection.tokenAddress) {
+      getNfts(collection.tokenAddress);
+    }
+    if (collection.chainId) {
+      getChain(collection.chainId);
+    }
     if (collection.userAddress) {
-      getProfile(token, collection.userAddress);
+      getProfile(collection.userAddress);
     }
-  }, [collection.userAddress]);
+  }, [collection.tokenAddress, collection.chainId, collection.userAddress])
 
-  useEffect(() => {
-    if(collection.tokenAddress){
-      getNfts(token, collection.tokenAddress);
+  const getCollection = async (collectionToken=false) => {
+    let targetUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/collection/get/${params.slug}`;
+    if(collectionToken){
+      targetUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/collection/getbycollection/${params.slug}`
     }
-  }, [collection.tokenAddress])
-
-  const getCollection = async (token) => {
-    axios.request({
+    await axios.request({
       method: 'get',
       maxBodyLength: Infinity,
-      url: `${process.env.NEXT_PUBLIC_API_URL}/api/collection/get/${params.slug}`,
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
+      url: targetUrl,
     })
       .then((response) => {
         setCollection(response.data);
       })
       .catch((error) => {
-        toast.error(JSON.stringify(error));
+        if(collectionToken){
+          toast.error(JSON.stringify(error));
+        }else{
+          getCollection(true);
+        }
       });
   }
 
-  const getProfile = async (token, userAddress) => {
+  const getProfile = async (userAddress) => {
     await axios.request({
       method: 'get',
       maxBodyLength: Infinity,
       url: `${process.env.NEXT_PUBLIC_API_URL}/api/user/get/${userAddress}`,
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
     })
       .then((response) => {
         setProfile(response.data);
@@ -164,17 +164,29 @@ export default function AccountPage({ params }) {
       });
   }
 
-  const getNfts = async (token, collectionAddress) => {
-    axios.request({
+  const getNfts = async (collectionAddress) => {
+    await axios.request({
       method: 'get',
       maxBodyLength: Infinity,
       url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbycollection/${collectionAddress}`,
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
     })
       .then((response) => {
         setNfts(response.data);
+      })
+      .catch((error) => {
+        toast.error(JSON.stringify(error));
+      });
+
+  }
+
+  const getChain = async (chainId) => {
+    await axios.request({
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `${process.env.NEXT_PUBLIC_API_URL}/api/chain/get/${chainId}`,
+    })
+      .then((response) => {
+        setCollectionChain(response.data);
       })
       .catch((error) => {
         toast.error(JSON.stringify(error));
@@ -186,7 +198,14 @@ export default function AccountPage({ params }) {
     <>
       <section>
         <div className="w-full">
-          <img src="https://via.placeholder.com/1920x266" />
+          <Image
+            src={collection.banner ? `/uploads/collections/${collection.banner}` : 'https://placehold.co/1920x266.png'}
+            alt={collection.name ? collection.name : ''}
+            width={1920}
+            height={266}
+            objectFit="cover"
+            className="h-[266px] object-cover"
+          />
         </div>
       </section>
       <div className="container m-auto p-3">
@@ -194,14 +213,21 @@ export default function AccountPage({ params }) {
           <div className="mt-5 flex justify-between">
             <div className="flex w-full flex-col">
               <div className="grid grid-cols-12 gap-4">
-                <div className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
+                <div className="flex flex-col gap-3 col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
                   <div className="relative -mt-[5rem]">
-                    <img className="w-36 rounded-lg border-4 border-white shadow" src="https://via.placeholder.com/100x100" />
+                    <Image
+                      className="w-36 rounded-lg border-4 border-white shadow"
+                      src={collection.logo ? `/uploads/collections/${collection.logo}` : 'https://placehold.co/100x100.png'}
+                      alt={collection.name ? collection.name : ''}
+                      width={100}
+                      height={100}
+                      objectFit="cover"
+                    />
                   </div>
-                  <div className="mt-3 text-xl font-semibold text-gray-900">
+                  <div className="text-xl font-semibold text-gray-900">
                     {collection.name ? collection.name : ''}
                   </div>
-                  <div className="mt-3 block flex w-full justify-start gap-4 text-gray-900">
+                  <div className="block flex w-full justify-start gap-4 text-gray-900">
                     <div>
                       Created by <span className="font-semibold">{profile.username ? profile.username : collection.userAddress ? truncateAddress(collection.userAddress) : ''}</span>
                     </div>
@@ -209,32 +235,34 @@ export default function AccountPage({ params }) {
                       Address <span className="font-semibold">{profile.walletAddress ? truncateAddress(profile.walletAddress) : ''}</span>
                     </div>
                   </div>
+                  {collection.description && (
+                    <div>
+                      <p className={`text-black text-ellipsis block ${showDescription ? '' : 'overflow-hidden whitespace-nowrap'}`}>{collection.description ? collection.description : ''}</p>
+                      <button onClick={() => setShowDescription(!showDescription)} className="text-gray-900 text-left">See {showDescription ? 'less' : 'more'} <FontAwesomeIcon icon={showDescription ? faChevronUp : faChevronDown} /></button>
+                    </div>
+                  )}
                 </div>
-                <div className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6 flex justify-end">
+                <div className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6 flex justify-end h-fit">
                   <div className="flex w-96 flex-col gap-2 rounded-lg border-2 border-gray-200 bg-white p-5 text-sm text-gray-900">
                     <div className="flex justify-between">
                       <span className="font-semibold">Floor</span>
-                      <span>0.01 ETH</span>
+                      <span>{collection.floorPrice ? formatEther(Number(collection.floorPrice)) : '0.00'} {collectionChain.symbol ? collectionChain.symbol : '-'}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="font-semibold">Volumes</span>
-                      <span>0.01 ETH</span>
+                      <span>{collection.volume ? collection.volume : '0.00'} {collectionChain.symbol ? collectionChain.symbol : '-'}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="font-semibold">Items</span>
-                      <span>4</span>
+                      <span>0</span>
                     </div>
                     <div className="flex justify-between border-b-2 pb-2">
                       <span className="font-semibold">Owner</span>
-                      <span>4</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-semibold">Royalties</span>
-                      <span>10%</span>
+                      <span>0</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="font-semibold">Blockchain</span>
-                      <span>Ethereum</span>
+                      <span>{collectionChain.symbol ? collectionChain.symbol : '-'}</span>
                     </div>
                   </div>
                 </div>
@@ -408,7 +436,14 @@ export default function AccountPage({ params }) {
                       : 'col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3'
                       }`}
                   >
-                    <img className="relative z-10 h-[150px] sm:h-[150px] md:h-[300px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px] w-full rounded-2xl object-cover duration-300 ease-in-out md:group-hover:h-[250px] md:group-hover:transition-all" src="https://via.placeholder.com/325x265" />
+                    <Image
+                      className="relative z-10 h-[150px] sm:h-[150px] md:h-[300px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px] w-full rounded-2xl object-cover duration-300 ease-in-out md:group-hover:h-[250px] md:group-hover:transition-all"
+                      src={nft.imageUri ? nft.imageUri : 'https://placehold.co/325x265.png'}
+                      alt={nft.name ? nft.name : ''}
+                      width={325}
+                      height={265}
+                      objectFit="cover"
+                    />
                     <div className="relative -top-3 inline-flex w-full flex-col items-center justify-center lg:items-start">
                       <div className="relative flex w-full flex-row px-2 sm:px-2 md:px-2 lg:px-5 xl:px-5 2xl:px-5">
                         <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
@@ -416,10 +451,18 @@ export default function AccountPage({ params }) {
                             <div className="inline-flex items-center justify-between self-stretch pt-2">
                               <div className="font-semibold leading-none text-neutral-700">
                                 <div className="flex items-center justify-center gap-2 rounded-md bg-primary-50 p-1">
-                                  <img className="h-4 w-4 rounded-2xl" src="https://via.placeholder.com/16x16" />
+                                  <Image
+                                    // src={profile.avatar ? `/uploads/users/${profile.avatar}` : 'https://placehold.co/16x16'}
+                                    src="https://placehold.co/16x16.png"
+                                    alt="Selected Preview"
+                                    width={16}
+                                    height={16}
+                                    className="rounded-2xl"
+                                    objectFit="cover"
+                                  />
                                   <div className="flex items-start justify-start gap-2">
                                     <div className="text-xs font-medium leading-none text-neutral-700">
-                                      Ryuma
+                                      {profile.username ? profile.username : ''}
                                     </div>
                                     <div className="text-xs font-black leading-none text-primary-500">
                                       <FontAwesomeIcon icon={faCircleCheck} />
@@ -442,7 +485,7 @@ export default function AccountPage({ params }) {
                             <div className="flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row justify-between w-full mt-5 py-2">
                               <div className="flex flex-row sm:flex-row md:flex-col lg:flex-col xl:flex-col 2xl:flex-col items-start truncate text-sm leading-5 justify-between">
                                 <p>Price</p>
-                                <p className="font-bold">0.39 ETH</p>
+                                <p className="font-bold">{nft.price ? formatEther(Number(nft.price)) : '0.00'} {collectionChain.symbol ? collectionChain.symbol : '-'}</p>
                               </div>
                               <div className="hidden flex-col sm:hidden md:flex lg:flex xl:flex 2xl:flex items-start truncate text-sm leading-5 justify-between">
                                 <p>Highest bid</p>

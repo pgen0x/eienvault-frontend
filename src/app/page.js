@@ -124,7 +124,7 @@ export default function Home() {
               <Tab.Panels className="pt-4">
                 <Tab.Panel>
                   <div className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
-                    {isLoading ? (
+                    {isLoading || dataCollections.length <= 0 ? (
                       <TrendingTopSkeleton />
                     ) : (
                       <TrendingTop dataCollections={dataCollections} />

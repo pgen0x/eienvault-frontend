@@ -162,7 +162,7 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
               <div className="flex w-fit flex-row items-center rounded-lg bg-[#fff1d4] px-2 py-2">
                 <span className="mr-2 h-1 w-1 animate-ping rounded-full bg-red-400 opacity-90"></span>
                 <div className="whitespace-nowrap text-sm font-semibold text-gray-900">
-                  Live mint and auction
+                  Live auction
                 </div>
               </div>
               <div className="relative flex h-full flex-row md:w-full lg:w-full">
@@ -321,7 +321,7 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                 <div className="flex w-fit flex-row items-center rounded-lg bg-[#fff1d4] px-2 py-2">
                   <span className="mr-2 h-1 w-1 animate-ping rounded-full bg-red-400 opacity-90"></span>
                   <div className="whitespace-nowrap text-sm font-semibold text-gray-900">
-                    Live mint and auction
+                    Live auction
                   </div>
                 </div>
 
@@ -447,6 +447,8 @@ export const SlideshowMobile = ({ auctions, placeBid, refreshMetadata }) => {
 
     return lowestBid.toString(); // Convert the lowestBid back to a string
   }
+
+  console.log('auctions', auctions);
 
   const handleOpenModalBid = async (
     marketId,
@@ -612,7 +614,9 @@ export const SlideshowMobile = ({ auctions, placeBid, refreshMetadata }) => {
                           </span>
 
                           <span className="text-sm font-bold leading-tight text-neutral-700">
-                            {truncateAddress4char(getHighestBid(auction).highestBidder)}
+                            {truncateAddress4char(
+                              getHighestBid(auction).highestBidder,
+                            )}
                           </span>
                         </div>
                       </div>

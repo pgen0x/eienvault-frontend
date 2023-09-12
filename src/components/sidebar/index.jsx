@@ -12,7 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { useRouter } from 'next-nprogress-bar';
-import { useAccount, useDisconnect } from 'wagmi';
+import { useAccount, useBalance, useDisconnect } from 'wagmi';
 import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { useWeb3Modal } from '@web3modal/react';
@@ -27,6 +27,9 @@ const Sidebar = () => {
   const { dataUser } = useAuth();
   const { address, isConnected } = useAccount();
   const { open } = useWeb3Modal();
+  const { data } = useBalance({
+    address: address,
+  });
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -55,6 +58,11 @@ const Sidebar = () => {
   const handleNftCreate = () => {
     closeSidebar();
     router.push('/nft/create'); // Navigate to the profile page
+  };
+
+  const handleMyBidandListiong = () => {
+    closeSidebar();
+    router.push('/orders'); // Navigate to the profile page
   };
 
   const handleCollectionCreate = () => {
@@ -105,7 +113,7 @@ const Sidebar = () => {
               </div>
               <div className="relative h-10 w-10">
                 <button
-                  className="h-10 w-10 rounded-full text-rose-500"
+                  className="h-10 w-10 rounded-full text-rose-500 hover:bg-primary-300"
                   onClick={() => closeSidebar()}
                 >
                   <FontAwesomeIcon icon={faClose} />
@@ -113,27 +121,30 @@ const Sidebar = () => {
               </div>
             </div>
             <div className="ml-8 inline-flex flex-col items-start justify-start gap-2">
-              <div className="self-stretch text-3xl font-medium leading-10 text-black">
+              <div className="self-stretch text-xl font-medium leading-10 text-black">
                 My NFTs
               </div>
-              <div className="self-stretch text-3xl font-medium leading-10 text-black">
+              <div className="self-stretch text-xl font-medium leading-10 text-black">
                 My Collections
               </div>
-              <div className="self-stretch text-3xl font-medium leading-10 text-black">
+              <div
+                className="cursor-pointer self-stretch text-xl font-medium leading-10 text-black"
+                onClick={() => handleMyBidandListiong()}
+              >
                 My Bid and Listings
               </div>
-              <div className="self-stretch text-3xl font-medium leading-10 text-black">
+              <div className="self-stretch text-xl font-medium leading-10 text-black">
                 My activity
               </div>
               <div className="flex h-32 flex-col items-start justify-start gap-2 self-stretch">
                 <div className="inline-flex items-center justify-start gap-3 self-stretch">
                   <div className="flex items-start justify-start gap-4">
-                    <div className="text-center text-3xl font-medium leading-10 text-black">
+                    <div className="text-center text-xl font-medium leading-10 text-black">
                       Create
                     </div>
                   </div>
                   <div className="flex h-6 w-6 items-center justify-center">
-                    <div className="h-6 w-6 text-center text-xl font-black leading-normal text-black">
+                    <div className="text-md h-6 w-6 text-center font-black leading-normal text-black">
                       <FontAwesomeIcon icon={faChevronDown} />
                     </div>
                   </div>
@@ -142,7 +153,7 @@ const Sidebar = () => {
                   <div className="inline-flex items-center justify-start gap-2 self-stretch">
                     <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
                     <div
-                      className="shrink grow basis-0 cursor-pointer text-2xl font-medium leading-9 text-black"
+                      className="text-md shrink grow basis-0 cursor-pointer font-medium leading-9 text-black"
                       onClick={() => handleNftCreate()}
                     >
                       NFT
@@ -151,7 +162,7 @@ const Sidebar = () => {
                   <div className="inline-flex items-center justify-start gap-2">
                     <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
                     <div
-                      className="w-48 cursor-pointer text-2xl font-medium leading-9 text-black"
+                      className="text-md w-48 cursor-pointer font-medium leading-9 text-black"
                       onClick={() => handleCollectionCreate()}
                     >
                       Collections
@@ -159,14 +170,16 @@ const Sidebar = () => {
                   </div>
                 </div>
               </div>
-              <div className="self-stretch text-3xl font-medium leading-10 text-black">
+              <div className="self-stretch text-xl font-medium leading-10 text-black">
                 Sell
               </div>
-              <div className="self-stretch text-3xl font-medium leading-10 text-black">
+              <div className="self-stretch text-xl font-medium leading-10 text-black">
                 Following
               </div>
-              <div className="self-stretch text-3xl font-medium leading-10 text-black">
-                <button onClick={() => router.push('/profile/setting')}>Setting</button>
+              <div className="self-stretch text-xl font-medium leading-10 text-black">
+                <button onClick={() => router.push('/profile/setting')}>
+                  Setting
+                </button>
               </div>
             </div>
           </div>
@@ -205,24 +218,23 @@ const Sidebar = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex h-20 flex-col items-start justify-start gap-2 self-stretch rounded-lg bg-neutral-100 p-2">
+              <div className="flex h-20 flex-col items-center justify-center gap-2 self-stretch rounded-lg bg-neutral-100 p-2">
                 <div className="inline-flex items-center justify-start self-stretch">
                   <div className="flex h-8 shrink grow basis-0 items-center justify-start gap-2">
-                    <div className="flex items-start justify-start gap-1">
-                      <div className="h-8 w-8 rounded-full bg-zinc-200" />
+                    <div className="flex items-center justify-start gap-1">
                       <div className="h-6 w-6 text-center text-sm font-normal leading-snug text-zinc-500">
-                        <FontAwesomeIcon icon={faEthereum} />
+                        <HelaIcon className="h-6 w-6" />
                       </div>
                     </div>
                     <div className="text-center text-base font-normal leading-normal text-black">
-                      0.191 ETH
+                      {data?.formatted} {data?.symbol}
                     </div>
                   </div>
                   <div className="text-center text-base font-normal leading-normal text-black">
-                    $315.1
+                    ${data?.formatted}
                   </div>
                 </div>
-                <div className="inline-flex items-center justify-start self-stretch">
+                {/* <div className="inline-flex items-center justify-start self-stretch">
                   <div className="flex h-8 shrink grow basis-0 items-center justify-start gap-2">
                     <div className="flex items-start justify-start gap-1">
                       <div className="h-8 w-8 rounded-full bg-red-50" />
@@ -237,27 +249,30 @@ const Sidebar = () => {
                   <div className="text-center text-base font-normal leading-normal text-black">
                     $0
                   </div>
-                </div>
+                </div> */}
               </div>
-              <div className="inline-flex items-start justify-start gap-2 self-stretch">
-                <div className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl bg-rose-500 px-4 py-2">
+              <button
+                className="inline-flex items-start justify-start gap-2 self-stretch rounded-3xl bg-primary-500 hover:bg-primary-300"
+                onClick={open}
+              >
+                <div className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 px-4 py-2">
                   <div className="text-center text-base font-bold leading-normal text-white">
-                    Swap WETH
+                    Manage Wallet
                   </div>
                 </div>
-              </div>
+              </button>
               <div className="inline-flex items-start justify-start gap-2 self-stretch">
-                <div className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-lg px-4 py-2">
-                  <div className="h-4 w-4 text-center text-base font-black leading-none text-rose-500">
+                <button
+                  className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl px-4 py-2 hover:bg-primary-200 hover:text-primary-200"
+                  onClick={handleDisconnect}
+                >
+                  <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500 ">
                     <FontAwesomeIcon icon={faPlugCircleXmark} />
                   </div>
-                  <button
-                    className="text-base font-bold leading-normal text-rose-500"
-                    onClick={handleDisconnect}
-                  >
+                  <span className="text-base font-bold leading-normal text-primary-500 ">
                     Disconnect wallet
-                  </button>
-                </div>
+                  </span>
+                </button>
               </div>
             </div>
           </div>

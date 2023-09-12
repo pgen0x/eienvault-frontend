@@ -2,20 +2,13 @@ import Ethereum from '@/assets/icon/ethereum';
 import HelaIcon from '@/assets/icon/hela';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { truncateAddress4char } from '@/utils/truncateAddress4char';
-import {
-  faCheck,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
 import Image from 'next/legacy/image';
 import { Fragment, useEffect, useState } from 'react';
 import { formatEther, parseEther } from 'viem';
-import {
-  useAccount,
-  useBalance,
-  useWaitForTransaction,
-} from 'wagmi';
+import { useAccount, useBalance, useWaitForTransaction } from 'wagmi';
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { useWeb3Modal } from '@web3modal/react';
@@ -26,6 +19,8 @@ export default function ModalBid({
   auction,
   placeBid,
   onModalClose,
+  getLowestBid,
+  getHighestBid,
 }) {
   const { address, isConnected } = useAccount();
   const [isSubmit, setIsSubmit] = useState(false);
@@ -77,6 +72,7 @@ export default function ModalBid({
       console.error('Error Place a Bid:', error);
     }
   };
+  console.log(auction);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -170,7 +166,7 @@ export default function ModalBid({
                             </div>
                             <div className="flex flex-col">
                               <span className="text-xl">
-                                {auction.collectionData?.Chain.symbol}
+                                {auction.collectionData?.Chain?.symbol}
                               </span>
                               <span className="text-xs">
                                 {auction.collectionData?.Chain.name}
@@ -179,7 +175,9 @@ export default function ModalBid({
                           </div>
                           <div className="flex items-center gap-2">
                             <span className="text-gray-400">
-                              {truncateAddress(address)}
+                              {address
+                                ? truncateAddress(address)
+                                : 'Please Login'}
                             </span>
                           </div>
                         </div>
@@ -194,12 +192,8 @@ export default function ModalBid({
                         <div className="flex justify-between">
                           <span>Floor price</span>
                           <span className="font-semibold">
-                            {auction.lowestBid.offer
-                              ? formatEther(Number(auction?.lowestBid.offer))
-                              : formatEther(
-                                  Number(auction.collectionData?.floorPrice),
-                                )}{' '}
-                            {auction.collectionData?.Chain.symbol}
+                            {auction.lowestBid}{' '}
+                            {auction.collectionData?.Chain?.symbol}
                           </span>
                         </div>
                         <hr />
@@ -207,24 +201,16 @@ export default function ModalBid({
                           <span>Highest bid</span>
                           <span className="flex flex-col items-end font-semibold">
                             <span>
-                              {formatEther(Number(auction?.highestBid.offer))}{' '}
-                              {auction.collectionData?.Chain.symbol}
+                              {formatEther(
+                                Number(auction.highestBid.highestBid),
+                              )}{' '}
+                              {auction.collectionData?.Chain?.symbol}
                             </span>
                             <span className="flex w-full items-center gap-1">
                               by{' '}
-                              <Image
-                                className="h-full w-full rounded-2xl "
-                                width={15}
-                                height={15}
-                                placeholder="blur"
-                                blurDataURL={`/uploads/collections/${auction.collectionData?.logo}`}
-                                src={`/uploads/collections/${auction.collectionData?.logo}`}
-                              />
-                              {auction.collectionData?.User.username
-                                ? auction.collectionData?.User.username
-                                : truncateAddress4char(
-                                    auction.collectionData?.userAddress,
-                                  )}
+                              {truncateAddress4char(
+                                auction.highestBid.highestBidder,
+                              )}
                             </span>
                           </span>
                         </div>
@@ -259,7 +245,7 @@ export default function ModalBid({
                                 })}
                               />
                               <span className="flex select-none items-center pr-3 font-semibold text-gray-900">
-                                {auction.collectionData?.Chain.symbol}
+                                {auction.collectionData?.Chain?.symbol}
                               </span>
                             </div>
                           </div>
@@ -270,7 +256,7 @@ export default function ModalBid({
                       </form>
 
                       <button
-                        className="w-full rounded-full bg-primary-500 py-3 font-semibold text-white hover:bg-primary-300"
+                        className="w-full rounded-full bg-primary-500 py-3 font-semibold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-300"
                         onClick={handleSubmit(onSubmit)}
                       >
                         Place a bid

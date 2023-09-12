@@ -20,6 +20,7 @@ import ModalBid from '../modal/bid';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { formatEther } from 'viem';
 import { useRouter } from 'next-nprogress-bar';
+import { ImageWithFallback } from '../imagewithfallback';
 
 const images = [1, 2, 3, 4];
 
@@ -62,48 +63,44 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
 
   const publicClient = usePublicClient();
 
-  async function getHighestBid(marketId) {
-    const bids = await publicClient.readContract({
-      ...marketplaceABI,
-      functionName: 'getOffers',
-      args: [marketId],
-    });
-
-    if (bids.length === 0) {
-      return null; // No bids found
+  function getHighestBid(auctionData) {
+    if (!auctionData.listOffers || auctionData.listOffers.length === 0) {
+      return { message: 'No bids', highestBid: '0', highestBidder: null }; // Return a message if there are no bids or if listOffers is null/undefined
     }
 
-    let highestBid = bids[0]; // Initialize with the first bid
+    let highestBid = BigInt(0);
+    let highestBidder = null;
 
-    for (let i = 1; i < bids.length; i++) {
-      if (bids[i].offer > highestBid.offer) {
-        highestBid = bids[i];
+    for (const offer of auctionData.listOffers) {
+      const bidValue = BigInt(offer.value); // Convert the value to a BigInt for precision
+      if (bidValue > highestBid) {
+        highestBid = bidValue;
+        highestBidder = offer.address;
       }
     }
 
-    return highestBid;
+    return {
+      message: 'Highest bid found',
+      highestBid: highestBid.toString(),
+      highestBidder,
+    };
   }
 
-  async function getLowestBid(marketId) {
-    const bids = await publicClient.readContract({
-      ...marketplaceABI,
-      functionName: 'getOffers',
-      args: [marketId],
-    });
-
-    if (bids.length === 0) {
-      return null; // No bids found
+  function getLowestBid(auctionData) {
+    if (auctionData.listOffers.length === 0) {
+      return 'No bids'; // Return a message if there are no bids
     }
 
-    let lowestBid = bids[0]; // Initialize with the first bid
+    let lowestBid = Infinity; // Initialize to a large number
 
-    for (let i = 1; i < bids.length; i++) {
-      if (bids[i].offer < lowestBid.offer) {
-        lowestBid = bids[i];
+    for (const offer of auctionData.listOffers) {
+      const bidValue = BigInt(offer.value); // Convert the value to a BigInt for precision
+      if (bidValue < lowestBid) {
+        lowestBid = bidValue;
       }
     }
 
-    return lowestBid;
+    return lowestBid.toString(); // Convert the lowestBid back to a string
   }
 
   const handleOpenModalBid = async (
@@ -114,10 +111,9 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
     price,
     name,
     collectionData,
+    highestBid,
+    lowestBid,
   ) => {
-    const highestBid = await getHighestBid(marketId);
-    const lowestBid = await getLowestBid(marketId);
-
     setAcutionData({
       marketId,
       listingPrice,
@@ -176,8 +172,8 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                     width={500}
                     height={404}
                     placeholder="blur"
-                    blurDataURL={auction.nftDetails?.imageUri}
-                    src={auction.nftDetails?.imageUri}
+                    blurDataURL={auction.nftDetails.imageUri}
+                    src={auction.nftDetails.imageUri}
                   />
                 ) : (
                   <div className="flex h-96 w-[500px]  flex-col justify-end rounded-2xl bg-gray-300">
@@ -213,12 +209,13 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                     <div className="inline-flex items-center justify-start gap-4">
                       <span className="text-gray-900">By</span>
                       <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2 ">
-                        <Image
+                        <ImageWithFallback
                           className="h-full w-full rounded-2xl "
                           width={15}
                           height={15}
-                          placeholder="blur"
-                          blurDataURL={auction.collectionData?.logo}
+                          alt={auction.collectionData.name}
+                          diameter={15}
+                          address={auction.collectionData?.tokenAddress}
                           src={`/uploads/collections/${auction.collectionData?.logo}`}
                         />
                         <div className="flex items-start justify-start gap-2">
@@ -247,33 +244,38 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                           )}
                         </div>
                         <div className="text-sm font-medium leading-tight text-neutral-700">
-                          {auction.collectionData?.Chain.symbol}
+                          {auction.collectionData?.Chain?.symbol}
                         </div>
                       </div>
                     </div>
-                    <div className="line-clamp-6 w-72 text-sm font-light leading-tight text-neutral-700">
-                      {auction.collectionData?.description}
+                    <div className="line-clamp-5 w-72 text-sm font-light leading-tight text-neutral-700">
+                      {auction.collectionData?.description
+                        ? auction.collectionData?.description
+                        : `Welcome to our ${auction.collectionData.name} collection! Explore a world of digital art and assets that represent unique and exclusive tokens on the blockchain. You'll find something special in our collection. Each NFT is a one-of-a-kind piece, verified and secured on the blockchain, making it a valuable addition to your digital asset portfolio. Join us on this journey of innovation and creativity in the world of non-fungible tokens. Start collecting, trading, and owning a piece of the digital future with our NFTs!`}
                     </div>
                   </div>
-                  <div className="inline-flex items-start justify-start gap-4 self-stretch">
+                  <div className="inline-flex items-center justify-start gap-4 self-stretch">
                     <div className="inline-flex shrink grow basis-0 flex-col items-start justify-center gap-2">
-                      <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
+                      <div className="flex flex-col self-stretch text-sm font-normal leading-tight text-neutral-700">
                         Highest Bid{' '}
                         <span className="text-sm font-bold leading-tight text-neutral-700">
-                          -
+                          {formatEther(
+                            Number(getHighestBid(auction).highestBid),
+                          )}{' '}
+                          {auction.collectionData?.Chain?.symbol}
                         </span>
                       </div>
                     </div>
-                    <div className="inline-flex shrink grow basis-0 flex-col items-start justify-start gap-2">
+                    <div className="inline-flex shrink grow basis-0 flex-col items-center justify-center gap-2">
                       <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
                         <span className="mr-2 text-sm font-normal leading-tight text-neutral-700">
                           By
                         </span>
 
                         <span className="text-sm font-bold leading-tight text-neutral-700">
-                          {auction.sellerData.username
-                            ? auction.sellerData.username
-                            : truncateAddress4char(auction.seller)}
+                          {truncateAddress4char(
+                            getHighestBid(auction).highestBidder,
+                          )}
                         </span>
                       </div>
                     </div>
@@ -289,6 +291,8 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                         auction.price,
                         auction.nftDetails?.name,
                         auction.collectionData,
+                        getHighestBid(auction),
+                        formatEther(getLowestBid(auction)),
                       )
                     }
                   >
@@ -404,48 +408,44 @@ export const SlideshowMobile = ({ auctions, placeBid, refreshMetadata }) => {
   };
   const publicClient = usePublicClient();
 
-  async function getHighestBid(marketId) {
-    const bids = await publicClient.readContract({
-      ...marketplaceABI,
-      functionName: 'getOffers',
-      args: [marketId],
-    });
-
-    if (bids.length === 0) {
-      return null; // No bids found
+  function getHighestBid(auctionData) {
+    if (!auctionData.listOffers || auctionData.listOffers.length === 0) {
+      return { message: 'No bids', highestBid: '0', highestBidder: null }; // Return a message if there are no bids or if listOffers is null/undefined
     }
 
-    let highestBid = bids[0]; // Initialize with the first bid
+    let highestBid = BigInt(0);
+    let highestBidder = null;
 
-    for (let i = 1; i < bids.length; i++) {
-      if (bids[i].offer > highestBid.offer) {
-        highestBid = bids[i];
+    for (const offer of auctionData.listOffers) {
+      const bidValue = BigInt(offer.value); // Convert the value to a BigInt for precision
+      if (bidValue > highestBid) {
+        highestBid = bidValue;
+        highestBidder = offer.address;
       }
     }
 
-    return highestBid;
+    return {
+      message: 'Highest bid found',
+      highestBid: highestBid.toString(),
+      highestBidder,
+    };
   }
 
-  async function getLowestBid(marketId) {
-    const bids = await publicClient.readContract({
-      ...marketplaceABI,
-      functionName: 'getOffers',
-      args: [marketId],
-    });
-
-    if (bids.length === 0) {
-      return null; // No bids found
+  function getLowestBid(auctionData) {
+    if (auctionData.listOffers.length === 0) {
+      return 'No bids'; // Return a message if there are no bids
     }
 
-    let lowestBid = bids[0]; // Initialize with the first bid
+    let lowestBid = Infinity; // Initialize to a large number
 
-    for (let i = 1; i < bids.length; i++) {
-      if (bids[i].offer < lowestBid.offer) {
-        lowestBid = bids[i];
+    for (const offer of auctionData.listOffers) {
+      const bidValue = BigInt(offer.value); // Convert the value to a BigInt for precision
+      if (bidValue < lowestBid) {
+        lowestBid = bidValue;
       }
     }
 
-    return lowestBid;
+    return lowestBid.toString(); // Convert the lowestBid back to a string
   }
 
   const handleOpenModalBid = async (
@@ -456,10 +456,9 @@ export const SlideshowMobile = ({ auctions, placeBid, refreshMetadata }) => {
     price,
     name,
     collectionData,
+    highestBid,
+    lowestBid,
   ) => {
-    const highestBid = await getHighestBid(marketId);
-    const lowestBid = await getLowestBid(marketId);
-
     setAcutionData({
       marketId,
       listingPrice,
@@ -551,12 +550,13 @@ export const SlideshowMobile = ({ auctions, placeBid, refreshMetadata }) => {
                       <div className="inline-flex items-center justify-start gap-4">
                         <span className="text-gray-900">By</span>
                         <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2">
-                          <Image
+                          <ImageWithFallback
                             className="h-full w-full rounded-2xl "
                             width={15}
                             height={15}
-                            placeholder="blur"
-                            blurDataURL={auction.collectionData?.logo}
+                            alt={auction.collectionData.name}
+                            diameter={15}
+                            address={auction.collectionData?.tokenAddress}
                             src={`/uploads/collections/${auction.collectionData?.logo}`}
                           />
                           <div className="flex items-start justify-start gap-2">
@@ -585,20 +585,23 @@ export const SlideshowMobile = ({ auctions, placeBid, refreshMetadata }) => {
                             )}
                           </div>
                           <div className="text-sm font-medium leading-tight text-neutral-700">
-                            {auction.collectionData?.Chain.symbol}
+                            {auction.collectionData?.Chain?.symbol}
                           </div>
                         </div>
                       </div>
-                      <div className="line-clamp-6 h-full w-full text-sm font-light leading-tight text-neutral-700">
+                      <div className="line-clamp-5 h-full w-full text-sm font-light leading-tight text-neutral-700">
                         {auction.collectionData?.description}
                       </div>
                     </div>
-                    <div className="inline-flex items-start justify-start gap-4 self-stretch">
+                    <div className="inline-flex items-center justify-start gap-4 self-stretch">
                       <div className="inline-flex shrink grow basis-0 flex-col items-start justify-center gap-2">
                         <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
                           Highest Bid{' '}
-                          <span className="text-sm font-bold leading-tight text-neutral-700">
-                            -
+                          <span className="flex flex-col text-sm font-bold leading-tight text-neutral-700">
+                            {formatEther(
+                              Number(getHighestBid(auction).highestBid),
+                            )}{' '}
+                            {auction.collectionData?.Chain?.symbol}
                           </span>
                         </div>
                       </div>
@@ -609,9 +612,7 @@ export const SlideshowMobile = ({ auctions, placeBid, refreshMetadata }) => {
                           </span>
 
                           <span className="text-sm font-bold leading-tight text-neutral-700">
-                            {auction.sellerData.username
-                              ? auction.sellerData.username
-                              : truncateAddress4char(auction.seller)}
+                            {truncateAddress4char(getHighestBid(auction).highestBidder)}
                           </span>
                         </div>
                       </div>
@@ -627,6 +628,8 @@ export const SlideshowMobile = ({ auctions, placeBid, refreshMetadata }) => {
                           auction.price,
                           auction.nftDetails?.name,
                           auction.collectionData,
+                          getHighestBid(auction),
+                          formatEther(Number(getLowestBid(auction))),
                         )
                       }
                     >

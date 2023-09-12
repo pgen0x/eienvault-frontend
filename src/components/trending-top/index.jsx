@@ -54,7 +54,7 @@ const Main = () => {
           <div className="flex space-x-1 rounded-full bg-white px-1">
             <label
               className={classRadio(TrendingTop, 'trending')}
-              for="optionTrending"
+              htmlFor="optionTrending"
             >
               Trending
               <input

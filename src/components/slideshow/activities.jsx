@@ -24,6 +24,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import ModalBid from '@/components/modal/bid';
 import { formatEther } from 'viem';
+import { useAccount, useWalletClient } from 'wagmi';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
@@ -33,6 +35,9 @@ export const SlideshowActivities = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [auctionData, setAcutionData] = useState({});
   const [placeBidHash, setPlaceBidHash] = useState();
+  const { address } = useAccount();
+
+  const { data: walletClient } = useWalletClient();
 
   const sliderBreakPoints = {
     640: {
@@ -248,7 +253,7 @@ export const SlideshowActivities = () => {
                           <p className="font-bold">No bids yet</p>
                         </div>
                       </div>
-                      {nft.isAuctioned && (
+                      {!nft.isAuctioned && (
                         <div className="flex mt-5 w-full items-center">
                           <FontAwesomeIcon className="mr-5 w-5 h-5 p-3 rounded-full text-primary-500 cursor-pointer hover:bg-primary-50 " icon={faCartPlus} />
                           <button className="w-full text-center text-base font-bold text-white bg-primary-500 rounded-full px-4 py-2 hover:bg-primary-300">
@@ -256,7 +261,7 @@ export const SlideshowActivities = () => {
                           </button>
                         </div>
                       )}
-                      {!nft.isAuctioned && (
+                      {nft.isAuctioned && (
                         <div className="flex mt-5 w-full items-center">
                           <button
                             className="w-full text-center text-base font-bold text-white bg-primary-500 rounded-full px-4 py-2 hover:bg-primary-300"

@@ -22,12 +22,17 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import ModalBid from '@/components/modal/bid';
+import { formatEther } from 'viem';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
 export const SlideshowActivities = () => {
   const router = useRouter();
   const [nfts, setNfts] = useState([]);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [auctionData, setAcutionData] = useState({});
+  const [placeBidHash, setPlaceBidHash] = useState();
 
   const sliderBreakPoints = {
     640: {
@@ -75,6 +80,92 @@ export const SlideshowActivities = () => {
         toast.error(JSON.stringify(error));
       });
   }
+
+  const handleOpenModalBid = async (
+    marketId,
+    listingPrice,
+    imageUri,
+    tokenId,
+    price,
+    name,
+    collectionData,
+    highestBid,
+    lowestBid,
+  ) => {
+    setAcutionData({
+      marketId,
+      listingPrice,
+      imageUri,
+      tokenId,
+      price,
+      name,
+      collectionData,
+      highestBid,
+      lowestBid,
+    });
+    setIsOpenModal(true);
+  };
+
+  function closeModal() {
+    setIsOpenModal(false);
+  }
+
+  function getHighestBid(auctionData) {
+    if (!auctionData.listOffers || auctionData.listOffers.length === 0) {
+      return { message: 'No bids', highestBid: '0', highestBidder: null }; // Return a message if there are no bids or if listOffers is null/undefined
+    }
+
+    let highestBid = BigInt(0);
+    let highestBidder = null;
+
+    for (const offer of auctionData.listOffers) {
+      const bidValue = BigInt(offer.value); // Convert the value to a BigInt for precision
+      if (bidValue > highestBid) {
+        highestBid = bidValue;
+        highestBidder = offer.address;
+      }
+    }
+
+    return {
+      message: 'Highest bid found',
+      highestBid: highestBid.toString(),
+      highestBidder,
+    };
+  }
+
+  function getLowestBid(auctionData) {
+    if (auctionData.listOffers.length === 0) {
+      return 'No bids'; // Return a message if there are no bids
+    }
+
+    let lowestBid = Infinity; // Initialize to a large number
+
+    for (const offer of auctionData.listOffers) {
+      const bidValue = BigInt(offer.value); // Convert the value to a BigInt for precision
+      if (bidValue < lowestBid) {
+        lowestBid = bidValue;
+      }
+    }
+
+    return lowestBid.toString(); // Convert the lowestBid back to a string
+  }
+
+  const placeBid = async (marketId, price) => {
+    try {
+      const hash = await walletClient.writeContract({
+        ...marketplaceABI,
+        functionName: 'makeAnOfferNative',
+        args: [marketId, price],
+        account: address,
+        value: price,
+      });
+      setPlaceBidHash(hash);
+      return hash;
+    } catch (error) {
+      console.error('Error Make an Offer', error);
+    }
+  };
+
   return (
     <>
       <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-prev-activities mr-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
@@ -157,12 +248,36 @@ export const SlideshowActivities = () => {
                           <p className="font-bold">No bids yet</p>
                         </div>
                       </div>
-                      <div className="flex mt-5 w-full items-center">
-                        <FontAwesomeIcon className="mr-5 w-5 h-5 p-3 rounded-full text-primary-500 cursor-pointer hover:bg-primary-50 " icon={faCartPlus} />
-                        <button className="w-full text-center text-base font-bold text-white bg-primary-500 rounded-full px-4 py-2 hover:bg-primary-300">
-                          Buy Now
-                        </button>
-                      </div>
+                      {nft.isAuctioned && (
+                        <div className="flex mt-5 w-full items-center">
+                          <FontAwesomeIcon className="mr-5 w-5 h-5 p-3 rounded-full text-primary-500 cursor-pointer hover:bg-primary-50 " icon={faCartPlus} />
+                          <button className="w-full text-center text-base font-bold text-white bg-primary-500 rounded-full px-4 py-2 hover:bg-primary-300">
+                            Buy Now
+                          </button>
+                        </div>
+                      )}
+                      {!nft.isAuctioned && (
+                        <div className="flex mt-5 w-full items-center">
+                          <button
+                            className="w-full text-center text-base font-bold text-white bg-primary-500 rounded-full px-4 py-2 hover:bg-primary-300"
+                            onClick={() =>
+                              handleOpenModalBid(
+                                nft.marketId,
+                                nft.listingPrice,
+                                nft.nftDetails?.imageUri,
+                                nft.nftDetails?.tokenId,
+                                nft.price,
+                                nft.nftDetails?.name,
+                                nft.collectionData,
+                                getHighestBid(nft),
+                                formatEther(getLowestBid(nft)),
+                              )
+                            }
+                          >
+                            Place a bid
+                          </button>
+                        </div>
+                      )}
                       <button onClick={() => router.push('/nft/user')} className="bg-white hover:bg-primary-50 text-primary-500 mt-2 w-full py-0 text-center group-hover:py-2 overflow-hidden opacity-0 h-0 group-hover:h-auto group-hover:opacity-100 rounded-full group-hover:transition-all ease-in-out duration-800">View Detail</button>
                     </div>
                   </div>
@@ -173,6 +288,13 @@ export const SlideshowActivities = () => {
         ))}
       </Swiper>
       <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-next-activities ml-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -right-5 z-10"><FontAwesomeIcon icon={faChevronRight} /></button>
+      <ModalBid
+        isOpenModal={isOpenModal}
+        onClose={closeModal}
+        auction={auctionData}
+        placeBid={placeBid}
+        onModalClose={closeModal}
+      />
     </>
   );
 };

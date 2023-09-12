@@ -124,8 +124,12 @@ const Auction = () => {
             />
           </div>
           <div className="relative mb-5 flex sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden w-full flex-initial items-center justify-center">
-              <SlideshowMobile />
-            </div>
+            <SlideshowMobile
+              auctions={auctions}
+              placeBid={placeBid}
+              refreshMetadata={refreshMetadata}
+            />
+          </div>
         </div>
       </section>
     </>

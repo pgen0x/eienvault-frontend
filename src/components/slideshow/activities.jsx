@@ -104,9 +104,11 @@ export const SlideshowActivities = () => {
                 <Image
                   className="w-full rounded-2xl z-10 group-hover:h-[210px] h-[250px] group-hover:transition-all ease-in-out duration-300 object-cover"
                   src={nft.nftDetails.imageUri ? nft.nftDetails.imageUri : 'https://placehold.co/325x265.png'}
+                  blurDataURL={nft.nftDetails.imageUri ? nft.nftDetails.imageUri : 'https://placehold.co/325x265.png'}
                   alt={nft.nftDetails.name ? nft.nftDetails.name : ''}
                   width={325}
                   height={265}
+                  placeholder="blur"
                   objectFit="cover"
                 />
               </Suspense>

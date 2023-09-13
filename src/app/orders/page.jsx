@@ -450,79 +450,59 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
             const timeDifference = endDate.diff(currentDate);
             const isEndDateInFuture = timeDifference > 0;
             return (
-              <>
-                <div
-                  className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex"
-                  key={index}
-                >
-                  <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                    <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
-                      <div className="inline-flex h-14 w-12 flex-col py-0.5">
-                        <div className="h-12 w-12 rounded-full bg-gray-300">
-                          <Image
-                            className="w-full rounded-2xl object-cover lg:w-96"
-                            width={48}
-                            height={48}
-                            placeholder="blur"
-                            blurDataURL={data.nftDetails?.imageUri}
-                            src={data.nftDetails?.imageUri}
-                          />
-                        </div>
-                      </div>
-                      <div className="text-md shrink grow basis-0 font-medium leading-loose">
-                        {data.nftDetails?.name}
+              <div
+                className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex"
+                key={index}
+              >
+                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
+                    <div className="inline-flex h-14 w-12 flex-col py-0.5">
+                      <div className="h-12 w-12 rounded-full bg-gray-300">
+                        <Image
+                          className="w-full rounded-2xl object-cover lg:w-96"
+                          width={48}
+                          height={48}
+                          placeholder="blur"
+                          blurDataURL={data.nftDetails?.imageUri}
+                          src={data.nftDetails?.imageUri}
+                        />
                       </div>
                     </div>
+                    <div className="text-md shrink grow basis-0 font-medium leading-loose">
+                      {data.nftDetails?.name}
+                    </div>
                   </div>
-                  <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                    {formatEther(data.price)} {data.collectionData.Chain.symbol}
-                  </div>
-                  <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                    {data?.isAuctioned ? 'Yes' : 'No'}
-                  </div>
-                  <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                    {isEndDateInFuture ? (
-                      moment
+                </div>
+                <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
+                  {formatEther(data.price)} {data.collectionData.Chain.symbol}
+                </div>
+                <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
+                  {data?.isAuctioned ? 'Yes' : 'No'}
+                </div>
+                <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
+                  {data?.isAuctioned && isEndDateInFuture
+                    ? moment
                         .unix(data?.endDate)
                         .format('Do MMM YYYY, h:mm:ss A')
-                    ) : (
-                      <span className="rounded-2xl bg-primary-500 px-3 py-2 text-sm font-bold leading-normal text-white">
-                        Expired
-                      </span>
-                    )}
-                  </div>
-                  {isEndDateInFuture ? (
-                    <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                      <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
-                        <button
-                          onClick={() => removeListing(data.marketId)}
-                          className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl px-4 py-2 hover:bg-primary-200 hover:text-primary-200"
-                        >
-                          <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
-                            <FontAwesomeIcon icon={faXmark} />
-                          </div>
-                          <span className="text-base font-bold leading-normal text-primary-500">
-                            Remove Listing
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                      <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
-                        <button className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl bg-primary-500 px-4 py-2 hover:bg-primary-200 hover:text-primary-200">
-                          <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
-                            <FontAwesomeIcon icon={faCartPlus} />
-                          </div>
-                          <span className="text-base font-bold leading-normal text-white">
-                            Put On Sale
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                    : '-'}
                 </div>
-              </>
+
+                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
+                    <button
+                      onClick={() => removeListing(data.marketId)}
+                      className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl px-4 py-2 hover:bg-primary-200 hover:text-primary-200"
+                    >
+                      <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
+                        <FontAwesomeIcon icon={faXmark} />
+                      </div>
+                      <span className="text-base font-bold leading-normal text-primary-500">
+                        Remove Listing
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
             );
           })
         ) : (

@@ -56,6 +56,7 @@ export default function Home() {
   const [dataCollections, setDataCollections] = useState([]);
   const [errorCollections, setErrorCollections] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -77,7 +78,7 @@ export default function Home() {
 
         const responseData = await res.json();
         console.log(responseData);
-        setDataCollections(responseData);
+        setDataCollections(responseData.collections);
       } catch (error) {
         setErrorCollections(true);
         console.error('Fetch failed:', error);
@@ -88,7 +89,7 @@ export default function Home() {
     };
 
     fetchData();
-  }, [token, address]);
+  }, [token, address, dataCollections]);
 
   if (!isMounted) {
     return null;
@@ -98,7 +99,7 @@ export default function Home() {
     <>
       <div className="homepage relative">
         <Auction />
-        <section className="relative z-10 -mt-24 flex pb-10 h-auto sm:h-auto md:h-[690px] lg:h-[690px] xl:h-[690px] 2xl:h-[690px] w-full flex-col gap-4 bg-gray-100 pt-10 text-black">
+        <section className="relative z-10 -mt-24 flex h-auto w-full flex-col gap-4 bg-gray-100 pb-10 pt-10 text-black sm:h-auto md:h-[690px] lg:h-[690px] xl:h-[690px] 2xl:h-[690px]">
           <div className="container mx-auto">
             <Tab.Group>
               <Tab.List className="flex gap-5">
@@ -142,17 +143,35 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="bg-[url('/images/discover-section-background.png')] bg-cover bg-left-bottom w-full text-black">
-            <div className="absolute -mt-[20]md:ml-[20px] md:mt-20">
-              <Image width={398} height={121} objectFit="cover" src="/images/cloud-discover-1.png" className="h-full" />
+          <div className="w-full bg-[url('/images/discover-section-background.png')] bg-cover bg-left-bottom text-black">
+            <div className="-mt-[20]md:ml-[20px] absolute md:mt-20">
+              <Image
+                width={398}
+                height={121}
+                objectFit="cover"
+                src="/images/cloud-discover-1.png"
+                className="h-full"
+              />
             </div>
-            <div className="absolute hidden md:block md:ml-[350px] lg:ml-[450px] -mt-[90px]">
-              <Image width={326} height={207} objectFit="cover" src="/images/cloud-discover-3.png" className="h-full" />
+            <div className="absolute -mt-[90px] hidden md:ml-[350px] md:block lg:ml-[450px]">
+              <Image
+                width={326}
+                height={207}
+                objectFit="cover"
+                src="/images/cloud-discover-3.png"
+                className="h-full"
+              />
             </div>
-            <div className="absolute hidden md:block md:ml-[340px] lg:ml-[500px] mt-[190px] -translate-x-16 translate-y-4">
-              <Image width={354} height={99} objectFit="cover" src="/images/cloud-discover-2.png" className="h-full" />
+            <div className="absolute mt-[190px] hidden -translate-x-16 translate-y-4 md:ml-[340px] md:block lg:ml-[500px]">
+              <Image
+                width={354}
+                height={99}
+                objectFit="cover"
+                src="/images/cloud-discover-2.png"
+                className="h-full"
+              />
             </div>
-            <div className="z-20 relative container mx-auto flex flex-col items-center justify-center sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
+            <div className="container relative z-20 mx-auto flex flex-col items-center justify-center sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
               <div className="w-full flex-initial p-5 sm:w-full md:w-[50%] lg:w-[29%] xl:w-[29%] 2xl:w-[29%]">
                 <h2 className="text-3xl">
                   Discover Our Best <br />
@@ -187,7 +206,7 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="w-full bg-gray-100 text-black relative z-20">
+          <div className="relative z-20 w-full bg-gray-100 text-black">
             <div className="container mx-auto px-4 py-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold">Upcoming auctions</h2>
@@ -206,15 +225,33 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="flex h-[400px] w-full justify-between overflow-hidden text-black bg-[url('/images/subscribe-section-background.png')] bg-cover bg-bottom">
-            <div className="hidden md:block absolute md:-left-[8vw] lg:left-[23vw] mt-20 z-10">
-              <Image width={518} height={156} objectFit="cover" src="/images/cloud-subscribe-1.png" className="h-full" />
+          <div className="flex h-[400px] w-full justify-between overflow-hidden bg-[url('/images/subscribe-section-background.png')] bg-cover bg-bottom text-black">
+            <div className="absolute z-10 mt-20 hidden md:-left-[8vw] md:block lg:left-[23vw]">
+              <Image
+                width={518}
+                height={156}
+                objectFit="cover"
+                src="/images/cloud-subscribe-1.png"
+                className="h-full"
+              />
             </div>
-            <div className="absolute left-[44vw] mt-[310px] z-10">
-              <Image width={210} height={60} objectFit="cover" src="/images/cloud-subscribe-2.png" className="h-full" />
+            <div className="absolute left-[44vw] z-10 mt-[310px]">
+              <Image
+                width={210}
+                height={60}
+                objectFit="cover"
+                src="/images/cloud-subscribe-2.png"
+                className="h-full"
+              />
             </div>
-            <div className="absolute md: right-[8vw] lg:right-[28vw] -mt-[10px] z-10">
-              <Image width={326} height={207} objectFit="cover" src="/images/cloud-subscribe-3.png" className="h-full" />
+            <div className="md: absolute right-[8vw] z-10 -mt-[10px] lg:right-[28vw]">
+              <Image
+                width={326}
+                height={207}
+                objectFit="cover"
+                src="/images/cloud-subscribe-3.png"
+                className="h-full"
+              />
             </div>
             <div className="relative top-0 mx-auto block h-[30rem] max-h-full w-[30rem] w-full max-w-full rounded-full bg-red-400 sm:top-0 md:-top-[50px] md:max-h-[30rem] md:max-w-[30rem] lg:-top-[50px] xl:-top-[50px] 2xl:-top-[50px]">
               <div className="relative top-[50px] mx-auto flex w-[90%] items-center justify-center sm:top-[50px] md:top-[130px] lg:top-[130px] xl:top-[130px] 2xl:top-[130px]">
@@ -300,7 +337,7 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="h-auto w-full bg-amber-100 p-5 sm:h-auto md:h-auto lg:h-[550px] xl:h-[550px] 2xl:h-[550px] bg-[url('/images/nft-lending-section-background.png')] bg-cover bg-right-bottom">
+          <div className="h-auto w-full bg-amber-100 bg-[url('/images/nft-lending-section-background.png')] bg-cover bg-right-bottom p-5 sm:h-auto md:h-auto lg:h-[550px] xl:h-[550px] 2xl:h-[550px]">
             <div className="container relative z-[1] mx-auto flex flex-col justify-between gap-5 rounded-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl sm:flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row">
               <div className="text-slate-600">
                 <h2 className="text-3xl font-bold">

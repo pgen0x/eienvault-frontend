@@ -215,7 +215,7 @@ export const SlideshowActivities = () => {
                       <div className="inline-flex items-center justify-between self-stretch">
                         <div className="flex items-center justify-center gap-2 bg-white bg-opacity-70 ">
                           <Image
-                            src={nft.collectionData.logo ? `/uploads/collections/${nft.collectionData.logo}` : 'https://placehold.co/16x16'}
+                            src={nft.collectionData.logo ? `/uploads/collections/${nft.collectionData.logo}` : 'https://placehold.co/16x16.png'}
                             alt={nft.collectionData.name ? nft.collectionData.name : (nft.collectionData.tokenAddress ? nft.collectionData.tokenAddress : '')}
                             width={16}
                             height={16}

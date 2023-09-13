@@ -239,14 +239,14 @@ export default function ModalBid({
                           <span className="flex flex-col items-end font-semibold">
                             <span>
                               {formatEther(
-                                Number(auction.highestBid.highestBid),
+                                Number(auction?.highestBid?.highestBid),
                               )}{' '}
                               {auction.collectionData?.Chain?.symbol}
                             </span>
                             <span className="flex w-full items-center gap-1">
                               by{' '}
                               {truncateAddress4char(
-                                auction.highestBid.highestBidder,
+                                auction.highestBid?.highestBidder,
                               )}
                             </span>
                           </span>
@@ -272,7 +272,7 @@ export default function ModalBid({
                                     if (
                                       parseFloat(value) <=
                                       formatEther(
-                                        Number(auction.highestBid.highestBid),
+                                        Number(auction?.highestBid?.highestBid),
                                       )
                                     ) {
                                       return 'Price must be greater than highest bid';

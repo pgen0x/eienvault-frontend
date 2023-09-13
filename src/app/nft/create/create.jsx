@@ -477,7 +477,7 @@ export default function Create({ chains }) {
         name: name,
         description: description,
         isFixedPrice: selectedOptionMarket === 'fixed' ? false : true,
-        price: price,
+        price: parseEther(price),
         listingExpiration: moment(customValueDate),
         startDate: moment(),
         endDate: moment(customValueDate),

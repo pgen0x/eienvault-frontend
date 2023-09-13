@@ -89,7 +89,7 @@ export default function Home() {
     };
 
     fetchData();
-  }, [token, address, dataCollections]);
+  }, []);
 
   if (!isMounted) {
     return null;

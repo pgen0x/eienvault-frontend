@@ -19,8 +19,6 @@ export default function ModalBid({
   auction,
   placeBid,
   onModalClose,
-  getLowestBid,
-  getHighestBid,
 }) {
   const { address, isConnected } = useAccount();
   const [isSubmit, setIsSubmit] = useState(false);
@@ -72,7 +70,46 @@ export default function ModalBid({
       console.error('Error Place a Bid:', error);
     }
   };
-  console.log(auction);
+
+  // TODO: Integration place bid to API
+  const onSave = async () => {
+    try {
+      const payload = {
+        collectionAddress: 'any',
+        tokenId: 'any',
+        bidAmount: 'any',
+        chainId: '',
+        marketId: '',
+        txHash: '',
+      };
+
+      const options = {
+        method: 'POST',
+        body: JSON.stringify(payload), // Convert the payload to JSON
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json', // Set the content type to JSON
+        },
+      };
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/create`,
+        options,
+      );
+
+      if (response.ok) {
+        // Data was saved successfully
+        console.log('Data saved successfully.');
+      } else {
+        // Handle the error here
+        console.error('Data saved failed:', response.statusText);
+      }
+    } catch (error) {
+      // Handle any unexpected errors
+      console.error('Error during data save:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -235,7 +272,7 @@ export default function ModalBid({
                                     if (
                                       parseFloat(value) <=
                                       formatEther(
-                                        Number(auction?.highestBid.offer),
+                                        Number(auction.highestBid.highestBid),
                                       )
                                     ) {
                                       return 'Price must be greater than highest bid';

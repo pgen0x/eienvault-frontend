@@ -53,11 +53,14 @@ export default function Home() {
   const { token } = useAuth();
   const { address } = useAccount();
 
+  const [dataActivities, setDataActivities] = useState([]);
   const [dataCollections, setDataCollections] = useState([]);
   const [errorCollections, setErrorCollections] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [errorActivities, setErrorActivities] = useState(false);
+  const [isLoadingCollections, setIsLoadingCollections] = useState(true);
+  const [isLoadingActivities, setIsLoadingActivities] = useState(true);
   useEffect(() => {
-    const fetchData = async () => {
+    const getCollections = async () => {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/collection/get`,
@@ -82,12 +85,43 @@ export default function Home() {
         setErrorCollections(true);
         console.error('Fetch failed:', error);
       } finally {
-        setIsLoading(false);
+        setIsLoadingCollections(false);
         setErrorCollections(false);
       }
     };
 
-    fetchData();
+    const getNfts = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/market/items?limit=10`,
+          {
+            cache: 'no-store',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+
+        if (!res.ok) {
+          setErrorActivities(true);
+          console.error('Fetch failed:', res);
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await res.json();
+        console.log(responseData);
+        setDataActivities(responseData);
+      } catch (error) {
+        setErrorActivities(true);
+        console.error('Fetch failed:', error);
+      } finally {
+        setIsLoadingActivities(false);
+        setErrorActivities(false);
+      }
+    };
+
+    getNfts();
+    getCollections();
   }, [token, address]);
 
   if (!isMounted) {
@@ -124,7 +158,7 @@ export default function Home() {
               <Tab.Panels className="pt-4">
                 <Tab.Panel>
                   <div className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
-                    {isLoading || dataCollections.length <= 0 ? (
+                    {isLoadingCollections || dataCollections.length <= 0 ? (
                       <TrendingTopSkeleton />
                     ) : (
                       <TrendingTop dataCollections={dataCollections} />
@@ -180,8 +214,11 @@ export default function Home() {
                 <h2 className="text-xl font-semibold">Recent Activities</h2>
               </div>
               <div className="relative my-5 flex w-full flex-initial items-center justify-center">
-                <SlideshowActivities />
-                {/* <SlideshowActivitiesSkeleton /> */}
+                {isLoadingActivities || dataActivities.length <= 0 ? (
+                  <SlideshowActivitiesSkeleton />
+                ) : (
+                  <SlideshowActivities dataActivities={dataActivities} />
+                )}
               </div>
             </div>
           </div>
@@ -230,12 +267,12 @@ export default function Home() {
                   <form className="mt-5 flex w-full gap-2">
                     <input
                       type="text"
-                      className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500"
+                      className="w-full rounded-full border-0 bg-white focus:ring-primary-500"
                       placeholder="Your email address"
                     />
                     <button
                       type="submit"
-                      className="rounded-full bg-primary-500 px-5 py-2 text-white hover:bg-primary-300"
+                      className="rounded-full bg-primary-500 px-5 text-white hover:bg-primary-300"
                     >
                       Subscribe
                     </button>

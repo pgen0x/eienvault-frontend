@@ -29,9 +29,8 @@ import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
-export const SlideshowActivities = () => {
+export const SlideshowActivities = ({ dataActivities }) => {
   const router = useRouter();
-  const [nfts, setNfts] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [auctionData, setAcutionData] = useState({});
   const [placeBidHash, setPlaceBidHash] = useState();
@@ -67,24 +66,6 @@ export const SlideshowActivities = () => {
       spaceBetween: 5,
     },
   };
-
-  useEffect(() => {
-    getNfts();
-  }, []);
-
-  const getNfts = async () => {
-    await axios.request({
-      method: 'get',
-      maxBodyLength: Infinity,
-      url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/items?limit=10`,
-    })
-      .then((response) => {
-        setNfts(response.data);
-      })
-      .catch((error) => {
-        toast.error(JSON.stringify(error));
-      });
-  }
 
   const handleOpenModalBid = async (
     marketId,
@@ -193,7 +174,7 @@ export const SlideshowActivities = () => {
           disableOnInteraction: false,
         }}
       >
-        {nfts && nfts.map((nft, index) => (
+        {dataActivities && dataActivities.map((nft, index) => (
           <SwiperSlide key={index}>
             <div className="w-full p-3 group h-[494px]">
               <Suspense fallback={<div className="w-full h-[250px] bg-gray-300 animate-pulse rounded-2xl" />}>
@@ -307,7 +288,7 @@ export const SlideshowActivities = () => {
 export const SlideshowActivitiesSkeleton = () => {
   return (
     <>
-      {[...Array(5)].map((x, i) => (
+      {[...Array(4)].map((x, i) => (
         <div key={i} className="w-full p-3 group h-[494px]">
           <div className="w-full h-[250px] bg-gray-300 animate-pulse rounded-2xl" />
           <div className="w-full inline-flex flex-col items-center justify-center lg:items-start">

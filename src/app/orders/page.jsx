@@ -297,17 +297,17 @@ export default function OrdersPage() {
           <div className="my-5 grid grid-cols-12 gap-1">
             <div className="col-span-12 sm:col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 2xl:col-span-2">
               <ul className="flex flex-row gap-2 text-xl sm:flex-row md:flex-col lg:flex-col xl:flex-col 2xl:flex-col">
-                <li className={activeTab == 'listings' && 'font-semibold'}>
+                <li className={activeTab == 'listings' ? 'font-semibold' : ''}>
                   <button onClick={() => setActiveTab('listings')}>
                     Listings
                   </button>
                 </li>
-                <li className={activeTab == 'made' && 'font-semibold'}>
+                <li className={activeTab == 'made' ? 'font-semibold' : ''}>
                   <button onClick={() => setActiveTab('made')}>
                     Bids made
                   </button>
                 </li>
-                <li className={activeTab == 'received' && 'font-semibold'}>
+                <li className={activeTab == 'received' ? 'font-semibold' : ''}>
                   <button onClick={() => setActiveTab('received')}>
                     Bids received
                   </button>
@@ -630,13 +630,13 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
                           width={48}
                           height={48}
                           placeholder="blur"
-                          blurDataURL={data.itemsDetails.nftDetails?.imageUri}
-                          src={data.itemsDetails.nftDetails?.imageUri}
+                          blurDataURL={data.nftDetails?.imageUri}
+                          src={data.nftDetails?.imageUri}
                         />
                       </div>
                     </div>
                     <div className="text-md shrink grow basis-0 font-medium leading-loose">
-                      {data.itemsDetails.nftDetails?.name}
+                      {data.nftDetails?.name}
                     </div>
                   </div>
                 </div>

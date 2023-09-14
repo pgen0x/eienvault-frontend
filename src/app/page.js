@@ -338,21 +338,23 @@ export default function Home() {
         <section>
           <div className="h-auto w-full bg-gray-100 text-black sm:h-auto md:h-[480px] lg:h-[480px] xl:h-[480px] 2xl:h-[480px]">
             <div className="container mx-auto px-4 py-4">
-              <div className="flex flex-col items-center justify-between gap-5 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
-                <div className="relative h-fit w-full py-5">
-                  <img
-                    className="rounded-2xl shadow"
-                    src="https://fakeimg.pl/344x344"
-                  />
-                  <img
-                    className="absolute left-[37px] top-[172px] rounded-2xl shadow"
-                    src="https://fakeimg.pl/243x245"
-                  />
-                  <img
-                    className="absolute left-[127px] top-[24px] rounded-2xl shadow"
-                    src="https://fakeimg.pl/243x327"
-                  />
+              <div className="flex flex-col-reverse items-center justify-between gap-5 lg:flex-row">
+                <div className="relative h-full w-full py-5">
+                  <div className="flex h-[229px] w-[192px] rounded-2xl md:h-full md:w-full">
+                    <Image width={344} height={344} src="/images/macan.png" />
+                  </div>
+                  <div className="absolute left-[83px] top-[141px] h-[163px] w-[136px] rounded-2xl md:left-[123px] md:top-[191px] md:h-full md:w-full">
+                    <Image width={243} height={245} src="/images/marmer.png" />
+                  </div>
+                  <div className="absolute left-[153px] top-[64px] h-[217px] w-[135px] rounded-2xl md:left-[303px] md:top-[44px] md:h-full md:w-full">
+                    <Image
+                      src="/images/monalisa.png"
+                      width={243}
+                      height={327}
+                    />
+                  </div>
                 </div>
+
                 <div className="flex w-full flex-col py-5">
                   <h2 className="text-2xl font-bold">Discover hidden gems</h2>
                   <p className="my-3">
@@ -375,7 +377,7 @@ export default function Home() {
         <section>
           <div className="h-auto w-full bg-amber-100 bg-[url('/images/nft-lending-section-background.png')] bg-cover bg-right-bottom p-5 sm:h-auto md:h-auto lg:h-[550px] xl:h-[550px] 2xl:h-[550px]">
             <div className="container relative z-[1] mx-auto flex flex-col justify-between gap-5 rounded-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl sm:flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row">
-              <div className="text-slate-600">
+              <div className="w-1/2 text-slate-600">
                 <h2 className="text-3xl font-bold">
                   Use your NFTs to get a crypto <br />
                   loan
@@ -408,8 +410,12 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="text-black">
-                <img className="w-full" src="https://fakeimg.pl/720x405" />
+              <div className="flex w-full items-center justify-center text-black">
+                <Image
+                  width={660}
+                  height={365}
+                  src="/images/watchformore.png"
+                />
               </div>
             </div>
             <div className="absolute -left-[30px] -mt-[240px] h-64 w-64 rounded-full bg-red-400"></div>

@@ -1,9 +1,10 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSidebar } from '../../hooks/SidebarContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronDown,
+  faChevronUp,
   faClose,
   faCopy,
   faPlugCircleXmark,
@@ -20,6 +21,7 @@ import HelaIcon from '@/assets/icon/hela';
 
 const Sidebar = () => {
   const { isSidebarOpen, closeSidebar } = useSidebar();
+  const [showDropdown, setShowDropdown] = useState(false);
   const sidebarRef = useRef();
   const sidebarContentRef = useRef();
   const router = useRouter();
@@ -70,6 +72,21 @@ const Sidebar = () => {
     router.push('/collection/create'); // Navigate to the profile page
   };
 
+  const handleMyNft = () => {
+    closeSidebar();
+    router.push('/profile?view=owned'); // Navigate to the profile page
+  };
+
+  const handleMyCollection = () => {
+    closeSidebar();
+    router.push('/profile?view=collection'); // Navigate to the profile page
+  };
+
+  const handleMyActivity = () => {
+    closeSidebar();
+    router.push('/profile/activity'); // Navigate to the profile page
+  };
+
   const handleDisconnect = () => {
     closeSidebar();
     disconnectAsync();
@@ -98,13 +115,13 @@ const Sidebar = () => {
                   <FontAwesomeIcon icon={faUserAlt} />
                 </button>
                 <div className="inline-flex flex-col items-start justify-start">
-                  <div className="truncate text-center text-xl font-medium leading-loose text-black">
+                  <div className="truncate text-center text-xl font-medium leading-loose text-gray-900 hover:text-gray-500">
                     {isConnected && dataUser.username === null
                       ? truncateAddress(address)
                       : dataUser.username}
                   </div>
                   <button
-                    className="text-center text-sm font-light leading-tight text-black"
+                    className="text-center text-sm font-light leading-tight text-gray-900 hover:text-gray-500"
                     onClick={handleViewProfileClick}
                   >
                     view profile
@@ -121,62 +138,74 @@ const Sidebar = () => {
               </div>
             </div>
             <div className="ml-8 inline-flex flex-col items-start justify-start gap-2">
-              <div className="self-stretch text-xl font-medium leading-10 text-black">
+              <div
+                className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500"
+                onClick={() => handleMyNft()}
+              >
                 My NFTs
               </div>
-              <div className="self-stretch text-xl font-medium leading-10 text-black">
+              <div
+                className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500"
+                onClick={() => handleMyCollection()}
+              >
                 My Collections
               </div>
               <div
-                className="cursor-pointer self-stretch text-xl font-medium leading-10 text-black"
+                className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500"
                 onClick={() => handleMyBidandListiong()}
               >
                 My Bid and Listings
               </div>
-              <div className="self-stretch text-xl font-medium leading-10 text-black">
+              <div
+                className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500"
+                onClick={() => handleMyActivity()}
+              >
                 My activity
               </div>
-              <div className="flex h-32 flex-col items-start justify-start gap-2 self-stretch">
-                <div className="inline-flex items-center justify-start gap-3 self-stretch">
+              <div className="flex h-full flex-col items-start justify-start gap-2 self-stretch">
+                <div
+                  className="inline-flex cursor-pointer items-center justify-start gap-3 self-stretch"
+                  onClick={() => setShowDropdown(!showDropdown)}
+                >
                   <div className="flex items-start justify-start gap-4">
-                    <div className="text-center text-xl font-medium leading-10 text-black">
+                    <div className="text-center text-xl font-medium leading-8 text-gray-900 hover:text-gray-500">
                       Create
                     </div>
                   </div>
                   <div className="flex h-6 w-6 items-center justify-center">
-                    <div className="text-md h-6 w-6 text-center font-black leading-normal text-black">
-                      <FontAwesomeIcon icon={faChevronDown} />
+                    <div className="text-md h-6 w-6 text-center font-black leading-normal text-gray-900 hover:text-gray-500">
+                      {showDropdown ? (
+                        <FontAwesomeIcon icon={faChevronUp} />
+                      ) : (
+                        <FontAwesomeIcon icon={faChevronDown} />
+                      )}
                     </div>
                   </div>
                 </div>
-                <div className="flex h-20 flex-col items-start justify-start gap-2 self-stretch px-6">
-                  <div className="inline-flex items-center justify-start gap-2 self-stretch">
-                    <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
-                    <div
-                      className="text-md shrink grow basis-0 cursor-pointer font-medium leading-9 text-black"
-                      onClick={() => handleNftCreate()}
-                    >
-                      NFT
+                {showDropdown && (
+                  <div className="flex h-full flex-col items-start justify-start gap-2 self-stretch px-6">
+                    <div className="inline-flex items-center justify-start gap-2 self-stretch">
+                      <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
+                      <div
+                        className="shrink grow basis-0 cursor-pointer text-xl font-medium leading-5 text-gray-900 hover:text-gray-500"
+                        onClick={() => handleNftCreate()}
+                      >
+                        NFT
+                      </div>
+                    </div>
+                    <div className="inline-flex items-center justify-start gap-2">
+                      <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
+                      <div
+                        className="w-48 cursor-pointer text-xl font-medium leading-5 text-gray-900 hover:text-gray-500"
+                        onClick={() => handleCollectionCreate()}
+                      >
+                        Collections
+                      </div>
                     </div>
                   </div>
-                  <div className="inline-flex items-center justify-start gap-2">
-                    <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
-                    <div
-                      className="text-md w-48 cursor-pointer font-medium leading-9 text-black"
-                      onClick={() => handleCollectionCreate()}
-                    >
-                      Collections
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
-              <div className="self-stretch text-xl font-medium leading-10 text-black">
-                Sell
-              </div>
-              <div className="self-stretch text-xl font-medium leading-10 text-black">
-                Following
-              </div>
-              <div className="self-stretch text-xl font-medium leading-10 text-black">
+              <div className="self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500">
                 <button onClick={() => router.push('/profile/setting')}>
                   Setting
                 </button>
@@ -186,7 +215,7 @@ const Sidebar = () => {
 
           <div className="bottom-10 m-8 mb-8 inline-flex h-80 flex-col items-start justify-start gap-2">
             <div className="inline-flex h-5 w-full items-center justify-center">
-              <div className="shrink grow basis-0 text-sm font-bold leading-tight text-black">
+              <div className="shrink grow basis-0 text-sm font-bold leading-tight text-gray-900 hover:text-gray-500">
                 Connected wallet
               </div>
               <div className="flex h-5 shrink grow basis-0 items-center justify-center gap-2 rounded-lg py-2">
@@ -203,10 +232,10 @@ const Sidebar = () => {
                 <div className="inline-flex items-center justify-start gap-2 self-stretch">
                   <div className="flex h-12 shrink grow basis-0 items-center justify-start gap-2">
                     <div className="inline-flex flex-row items-center justify-between gap-4">
-                      <div className="font-light leading-normal text-black">
+                      <div className="font-light leading-normal text-gray-900 hover:text-gray-500">
                         <HelaIcon className="h-12 w-12" />
                       </div>
-                      <div className="font-medium leading-normal text-black">
+                      <div className="font-medium leading-normal text-gray-900 hover:text-gray-500">
                         {isConnected && truncateAddress(address)}
                       </div>
                     </div>
@@ -226,12 +255,12 @@ const Sidebar = () => {
                         <HelaIcon className="h-6 w-6" />
                       </div>
                     </div>
-                    <div className="text-center text-base font-normal leading-normal text-black">
-                      {data?.formatted} {data?.symbol}
+                    <div className="text-center text-base font-normal leading-normal text-gray-900 hover:text-gray-500">
+                      {Number(data?.formatted).toFixed()} {data?.symbol}
                     </div>
                   </div>
-                  <div className="text-center text-base font-normal leading-normal text-black">
-                    ${data?.formatted}
+                  <div className="text-center text-base font-normal leading-normal text-gray-900 hover:text-gray-500">
+                    ${Number(data?.formatted).toFixed()}
                   </div>
                 </div>
                 {/* <div className="inline-flex items-center justify-start self-stretch">
@@ -242,11 +271,11 @@ const Sidebar = () => {
                         <FontAwesomeIcon icon={faEthereum} />
                       </div>
                     </div>
-                    <div className="text-center text-base font-normal leading-normal text-black">
+                    <div className="text-center text-base font-normal leading-normal text-gray-900 hover:text-gray-500">
                       0 WETH
                     </div>
                   </div>
-                  <div className="text-center text-base font-normal leading-normal text-black">
+                  <div className="text-center text-base font-normal leading-normal text-gray-900 hover:text-gray-500">
                     $0
                   </div>
                 </div> */}

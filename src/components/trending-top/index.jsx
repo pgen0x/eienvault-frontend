@@ -210,24 +210,30 @@ export const TrendingTop = () => {
             <div className="flex w-full justify-between rounded-md bg-white px-5 py-2">
               <div className="flex w-full items-center gap-x-4">
                 <p className="text-sm text-primary-500">{index + 1}.</p>
-                <ImageWithFallback
-                  src={`/uploads/collections/${trade.logo}`}
-                  alt={trade.name}
-                  width={48}
-                  height={48}
-                  diameter={48}
-                  address={trade.tokenAddress}
-                  className="rounded-full"
-                />
+                <div className="h-11 w-11">
+                  <ImageWithFallback
+                    src={`/uploads/collections/${trade.logo}`}
+                    alt={trade.name}
+                    width={48}
+                    height={48}
+                    diameter={48}
+                    address={trade.tokenAddress}
+                    className="rounded-full"
+                  />
+                </div>
+
                 <div className="flex w-full flex-col">
-                  <p className="text-md w-full font-semibold leading-6 text-gray-900 leading-[20px] h-[20px] text-ellipsis overflow-hidden">
+                  <p className="text-md h-[20px] w-full overflow-hidden text-ellipsis font-semibold leading-6 leading-[20px] text-gray-900">
                     {trade.name}
                   </p>
                   <div className="flex w-full flex-col gap-2">
                     <div className="flex w-full gap-2">
                       <p className="w-full">Floor</p>
                       <p className="w-full">
-                        ${Number(formatEther(Number(trade.floorPrice))).toFixed(2)}
+                        $
+                        {Number(formatEther(Number(trade.floorPrice))).toFixed(
+                          2,
+                        )}
                       </p>
                       <p className={classFloor(trade.priceChangePercentage1h)}>
                         {trade.priceChangePercentage1h}%

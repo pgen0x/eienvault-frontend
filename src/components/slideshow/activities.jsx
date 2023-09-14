@@ -48,27 +48,29 @@ export const SlideshowActivities = ({ dataActivities }) => {
     640: {
       slidesPerView: 2,
       spaceBetween: 5,
-      width: 350,
     },
     768: {
       slidesPerView: 2,
       spaceBetween: 5,
     },
     1024: {
-      width: 495,
+      slidesPerView: 3,
+      spaceBetween: 5,
     },
     1280: {
-      width: 350,
+      slidesPerView: 4,
+      spaceBetween: 5,
     },
     1536: {
-      width: 350,
+      slidesPerView: 5,
+      spaceBetween: 5,
     },
     1700: {
-      width: 350,
+      slidesPerView: 6,
       spaceBetween: 5,
     },
     2200: {
-      width: 350,
+      slidesPerView: 7,
       spaceBetween: 5,
     },
   };
@@ -254,7 +256,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
           pauseOnMouseEnter: true,
         }}
       >
-        { dataActivities &&
+        {dataActivities &&
           dataActivities.map((nft, index) => (
             <SwiperSlide key={index}>
               <div className="group h-[494px] w-full p-3">

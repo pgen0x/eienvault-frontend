@@ -67,7 +67,7 @@ const collections = [
   'Pyrameed',
 ];
 
-export default function AccountPage({ params }) {
+export default function CollectionDetail({ params }) {
   const router = useRouter();
   const { token } = useAuth();
   const [collection, setCollection] = useState({});

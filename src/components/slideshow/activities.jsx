@@ -32,9 +32,8 @@ import ModalBuy from '../modal/buy';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
-export const SlideshowActivities = () => {
+export const SlideshowActivities = ({ dataActivities }) => {
   const router = useRouter();
-  const [nfts, setNfts] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const [auctionData, setAcutionData] = useState({});
@@ -78,19 +77,18 @@ export const SlideshowActivities = () => {
   }, []);
 
   const getNfts = async () => {
-    await axios
-      .request({
-        method: 'get',
-        maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/items?limit=10`,
-      })
+    await axios.request({
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/items?limit=10`,
+    })
       .then((response) => {
         setNfts(response.data);
       })
       .catch((error) => {
         toast.error(JSON.stringify(error));
       });
-  };
+  }
 
   const handleOpenModalBid = async (
     marketId,
@@ -254,76 +252,41 @@ export const SlideshowActivities = () => {
           pauseOnMouseEnter: true,
         }}
       >
-        {nfts &&
-          nfts.map((nft, index) => (
-            <SwiperSlide key={index}>
-              <div className="group h-[494px] w-full p-3">
-                <Suspense
-                  fallback={
-                    <div className="h-[250px] w-full animate-pulse rounded-2xl bg-gray-300" />
-                  }
-                >
-                  <Image
-                    className="z-10 h-[250px] w-full rounded-2xl object-cover duration-300 ease-in-out group-hover:h-[210px] group-hover:transition-all"
-                    src={
-                      nft.nftDetails.imageUri
-                        ? nft.nftDetails.imageUri
-                        : 'https://placehold.co/325x265.png'
-                    }
-                    blurDataURL={
-                      nft.nftDetails.imageUri
-                        ? nft.nftDetails.imageUri
-                        : 'https://placehold.co/325x265.png'
-                    }
-                    alt={nft.nftDetails.name ? nft.nftDetails.name : ''}
-                    width={325}
-                    height={265}
-                    placeholder="blur"
-                    objectFit="cover"
-                  />
-                </Suspense>
-                <div className="inline-flex w-full flex-col items-center justify-center lg:items-start">
-                  <div className="relative flex w-full flex-row px-5">
-                    <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-b-2xl bg-white/60 p-3 backdrop-blur">
-                      <div className="flex w-full flex-col items-start justify-start">
-                        <div className="inline-flex items-center justify-between self-stretch">
-                          <div className="flex items-center justify-center gap-2 bg-white bg-opacity-70 ">
-                            <ImageWithFallback
-                              className="h-full w-full rounded-2xl "
-                              width={16}
-                              height={16}
-                              alt={
-                                nft.collectionData.name
-                                  ? nft.collectionData.name
-                                  : nft.collectionData.tokenAddress
-                                  ? nft.collectionData.tokenAddress
-                                  : ''
-                              }
-                              diameter={16}
-                              address={nft.collectionData?.tokenAddress}
-                              src={`/uploads/collections/${nft.collectionData.logo}`}
-                            />
-
-                            <div className="flex items-start justify-start gap-2">
-                              <div
-                                className="cursor-pointer text-xs font-medium leading-none text-neutral-700"
-                                onClick={() =>
-                                  router.push(
-                                    `/collection/${nft.collectionData.tokenAddress}`,
-                                  )
-                                }
-                              >
-                                {nft.collectionData.name
-                                  ? nft.collectionData.name
-                                  : nft.collectionData.tokenAddress
-                                  ? nft.collectionData.tokenAddress
-                                  : ''}
-                              </div>
-                              <div className="text-xs font-black leading-none text-primary-500">
-                                {nft.collectionData.User.isVerified && (
-                                  <FontAwesomeIcon icon={faCircleCheck} />
-                                )}
-                              </div>
+        {nfts && nfts.map((nft, index) => (
+          <SwiperSlide key={index}>
+            <div className="w-full p-3 group h-[494px]">
+              <Suspense fallback={<div className="w-full h-[250px] bg-gray-300 animate-pulse rounded-2xl" />}>
+                <Image
+                  className="w-full rounded-2xl z-10 group-hover:h-[210px] h-[250px] group-hover:transition-all ease-in-out duration-300 object-cover"
+                  src={nft.nftDetails.imageUri ? nft.nftDetails.imageUri : 'https://placehold.co/325x265.png'}
+                  blurDataURL={nft.nftDetails.imageUri ? nft.nftDetails.imageUri : 'https://placehold.co/325x265.png'}
+                  alt={nft.nftDetails.name ? nft.nftDetails.name : ''}
+                  width={325}
+                  height={265}
+                  placeholder="blur"
+                  objectFit="cover"
+                />
+              </Suspense>
+              <div className="w-full inline-flex flex-col items-center justify-center lg:items-start">
+                <div className="w-full px-5 relative flex flex-row">
+                  <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-b-2xl bg-white/60 backdrop-blur p-3">
+                    <div className="w-full flex flex-col items-start justify-start">
+                      <div className="inline-flex items-center justify-between self-stretch">
+                        <div className="flex items-center justify-center gap-2 bg-white bg-opacity-70 ">
+                          <Image
+                            src={nft.collectionData.logo ? `/uploads/collections/${nft.collectionData.logo}` : 'https://placehold.co/16x16.png'}
+                            alt={nft.collectionData.name ? nft.collectionData.name : (nft.collectionData.tokenAddress ? nft.collectionData.tokenAddress : '')}
+                            width={16}
+                            height={16}
+                            className="rounded-2xl"
+                            objectFit="cover"
+                          />
+                          <div className="flex items-start justify-start gap-2">
+                            <div className="text-xs font-medium leading-none text-neutral-700">
+                              {nft.collectionData.name ? nft.collectionData.name : (nft.collectionData.tokenAddress ? nft.collectionData.tokenAddress : '')}
+                            </div>
+                            <div className="text-xs font-black leading-none text-primary-500">
+                              <FontAwesomeIcon icon={faCircleCheck} />
                             </div>
                           </div>
                           {/* <div className="items-center">
@@ -347,8 +310,8 @@ export const SlideshowActivities = () => {
                           <div className="text-sm font-normal leading-tight text-neutral-700">
                             {(nft.collectionData?.chainId === 666888 ||
                               nft.collectionData?.chainId === 8668) && (
-                              <HelaIcon className="h-5 w-5" />
-                            )}
+                                <HelaIcon className="h-5 w-5" />
+                              )}
                           </div>
                         </div>
                         <div className="mt-5 flex w-full justify-between py-2">
@@ -382,8 +345,8 @@ export const SlideshowActivities = () => {
                                 <p className="font-bold">
                                   {nft.collectionData.floorPrice
                                     ? formatEther(
-                                        Number(nft.collectionData.floorPrice),
-                                      )
+                                      Number(nft.collectionData.floorPrice),
+                                    )
                                     : '0.00'}{' '}
                                   {nft.collectionData.Chain.symbol
                                     ? nft.collectionData.Chain.symbol
@@ -450,8 +413,8 @@ export const SlideshowActivities = () => {
                   </div>
                 </div>
               </div>
-            </SwiperSlide>
-          ))}
+          </SwiperSlide>
+        ))}
       </Swiper>
       <button className="swiper-next-activities absolute -right-5 z-10 ml-2 hidden rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronRight} />

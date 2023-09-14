@@ -13,6 +13,8 @@ import { useAuth } from '@/hooks/AuthContext';
 import { useAccount } from 'wagmi';
 import { formatEther, parseEther } from 'viem';
 import { ImageWithFallback } from '../imagewithfallback';
+import dataCollections from '../../app/collection/MOCK_DATA.json';
+import formatter from '@/utils/shortNumberFormatter';
 
 const servers = [
   'All Mainnet',
@@ -52,10 +54,7 @@ const Main = () => {
       <div className="flex items-center justify-between">
         <div className="flex max-w-min flex-col gap-3 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
           <div className="flex space-x-1 rounded-full bg-white px-1">
-            <label
-              className={classRadio(TrendingTop, 'trending')}
-              htmlFor="optionTrending"
-            >
+            <label className={classRadio(TrendingTop, 'trending')}>
               Trending
               <input
                 className="hidden"
@@ -164,31 +163,8 @@ const Main = () => {
   );
 };
 
-export const TrendingTop = ({ dataCollections }) => {
+export const TrendingTop = () => {
   const [limit, setLimit] = useState(0);
-
-
-  const formatter = (num, digits) => {
-    const lookup = [
-      { value: 1, symbol: '' },
-      { value: 1e3, symbol: 'K' },
-      { value: 1e6, symbol: 'M' },
-      { value: 1e9, symbol: 'G' },
-      { value: 1e12, symbol: 'T' },
-      { value: 1e15, symbol: 'P' },
-      { value: 1e18, symbol: 'E' },
-    ];
-    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-    var item = lookup
-      .slice()
-      .reverse()
-      .find(function (item) {
-        return num >= item.value;
-      });
-    return item
-      ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol
-      : '0';
-  };
 
   const classFloor = (value) => {
     return Number(value) < 0
@@ -244,14 +220,14 @@ export const TrendingTop = ({ dataCollections }) => {
                   className="rounded-full"
                 />
                 <div className="flex w-full flex-col">
-                  <p className="text-md w-full font-semibold leading-6 text-gray-900">
+                  <p className="text-md w-full font-semibold leading-6 text-gray-900 leading-[20px] h-[20px] text-ellipsis overflow-hidden">
                     {trade.name}
                   </p>
                   <div className="flex w-full flex-col gap-2">
                     <div className="flex w-full gap-2">
                       <p className="w-full">Floor</p>
                       <p className="w-full">
-                        ${formatEther(Number(trade.floorPrice))}
+                        ${Number(formatEther(Number(trade.floorPrice))).toFixed(2)}
                       </p>
                       <p className={classFloor(trade.priceChangePercentage1h)}>
                         {trade.priceChangePercentage1h}%
@@ -470,27 +446,6 @@ const MainMobile = () => {
 
 export const TrendingTopMobile = () => {
   const router = useRouter();
-  const formatter = (num, digits) => {
-    const lookup = [
-      { value: 1, symbol: '' },
-      { value: 1e3, symbol: 'K' },
-      { value: 1e6, symbol: 'M' },
-      { value: 1e9, symbol: 'G' },
-      { value: 1e12, symbol: 'T' },
-      { value: 1e15, symbol: 'P' },
-      { value: 1e18, symbol: 'E' },
-    ];
-    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-    var item = lookup
-      .slice()
-      .reverse()
-      .find(function (item) {
-        return num >= item.value;
-      });
-    return item
-      ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol
-      : '0';
-  };
 
   const classFloor = (value) => {
     return Number(value) < 0

@@ -310,10 +310,7 @@ export default function ModalBuy({
                       <button
                         className="w-full rounded-full bg-primary-500 py-3 font-semibold text-white"
                         onClick={() =>
-                          BuyNative(
-                            dataBuyNFT.itemDetails.marketId,
-                            dataBuyNFT.itemDetails.price,
-                          )
+                          BuyNative(dataBuy.marketId, dataBuy.price)
                         }
                       >
                         Buy Now
@@ -437,7 +434,7 @@ export default function ModalBuy({
                           <span>check your profile to see the asset</span>
                         </div>
                         <button
-                          onClick={() => router.push('/profile')}
+                          onClick={() => router.push('/profile?view=owned')}
                           className="rounded-full border border-primary-500 px-5 py-1 font-bold text-primary-500 hover:border-primary-400 hover:text-primary-400"
                         >
                           View asset

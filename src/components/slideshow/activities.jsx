@@ -28,6 +28,7 @@ import { useAccount, useWalletClient } from 'wagmi';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import HelaIcon from '@/assets/icon/hela';
 import { ImageWithFallback } from '../imagewithfallback';
+import ModalBuy from '../modal/buy';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
@@ -35,11 +36,13 @@ export const SlideshowActivities = () => {
   const router = useRouter();
   const [nfts, setNfts] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
+
   const [auctionData, setAcutionData] = useState({});
   const [placeBidHash, setPlaceBidHash] = useState();
   const { address } = useAccount();
-
   const { data: walletClient } = useWalletClient();
+  const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
+  const [buyData, setBuyData] = useState({});
 
   const sliderBreakPoints = {
     640: {
@@ -195,6 +198,35 @@ export const SlideshowActivities = () => {
       highestBid: highestBid.toString(),
       highestBidder,
     };
+  }
+
+  const handleOpenModalBuy = async (marketId, price, dataNFT) => {
+    setBuyData({
+      marketId,
+      price,
+      dataNFT,
+    });
+    setisOpenModalBuy(true);
+  };
+
+  const buyAction = async (marketId, price) => {
+    try {
+      const hash = await walletClient.writeContract({
+        ...marketplaceABI,
+        functionName: 'makeAnOfferNative',
+        args: [marketId, price],
+        account: address,
+        value: price,
+      });
+
+      return hash;
+    } catch (error) {
+      console.error('Error Make an Offer', error);
+    }
+  };
+
+  function closeModalBuy() {
+    setisOpenModalBuy(false);
   }
 
   return (
@@ -367,7 +399,16 @@ export const SlideshowActivities = () => {
                               className="mr-5 h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 "
                               icon={faCartPlus}
                             /> */}
-                            <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
+                            <button
+                              className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
+                              onClick={() =>
+                                handleOpenModalBuy(
+                                  nft?.marketId,
+                                  nft?.price,
+                                  nft,
+                                )
+                              }
+                            >
                               Buy Now
                             </button>
                           </div>
@@ -415,6 +456,13 @@ export const SlideshowActivities = () => {
       <button className="swiper-next-activities absolute -right-5 z-10 ml-2 hidden rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronRight} />
       </button>
+      <ModalBuy
+        isOpenModal={isOpenModalBuy}
+        onClose={closeModalBuy}
+        dataBuy={buyData}
+        buyAction={buyAction}
+        onModalClose={closeModalBuy}
+      />
       <ModalBid
         isOpenModal={isOpenModal}
         onClose={closeModal}

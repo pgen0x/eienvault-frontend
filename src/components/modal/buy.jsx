@@ -239,8 +239,8 @@ export default function ModalBuy({
                             width={192}
                             height={100}
                             placeholder="blur"
-                            blurDataURL={dataBuy.dataNFT?.imageUri}
-                            src={dataBuy.dataNFT?.imageUri}
+                            blurDataURL={dataBuy.dataNFT?.nftDetails?.imageUri}
+                            src={dataBuy.dataNFT?.nftDetails?.imageUri}
                           />
                         ) : (
                           <div className="h-96 w-[192px] animate-pulse rounded-2xl bg-gray-300" />

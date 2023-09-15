@@ -51,6 +51,9 @@ import ModalBuy from '@/components/modal/buy';
 import LiveCountdown from '@/components/slideshow/countdown';
 import { useAuth } from '@/hooks/AuthContext';
 import { toast } from 'react-toastify';
+import RelatedNFTs, {
+  RelatedNFTsSkeleton,
+} from '@/components/slideshow/relatednfts';
 
 export default function NFTDetails({ dataNFTs }) {
   const router = useRouter();
@@ -59,6 +62,8 @@ export default function NFTDetails({ dataNFTs }) {
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [countLikes, setCountLikes] = useState(dataNFTs.likeCount);
+  const [dataRelatedNFTs, setDataRelatedNFTs] = useState([]);
+  const [isLoadingRelatedNFTs, setIsLoadingRelatedNFTs] = useState(true);
 
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
@@ -246,6 +251,38 @@ export default function NFTDetails({ dataNFTs }) {
       console.error('error likes:', error);
     }
   }
+
+  useEffect(() => {
+    const getRelatedNFTs = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/market/items?limit=10`,
+          {
+            cache: 'no-store',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+
+        if (!res.ok) {
+          setErrorActivities(true);
+          console.error('Fetch failed:', res);
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await res.json();
+        console.log(responseData);
+        setDataRelatedNFTs(responseData);
+      } catch (error) {
+        console.error('Fetch failed:', error);
+      } finally {
+        setIsLoadingRelatedNFTs(false);
+      }
+    };
+
+    getRelatedNFTs();
+  }, [token, address]);
 
   return (
     <>
@@ -773,7 +810,11 @@ export default function NFTDetails({ dataNFTs }) {
                 </button>
               </div>
               <div className="relative flex w-full flex-initial items-center justify-center">
-                <SlideshowActivities />
+                {isLoadingRelatedNFTs || dataRelatedNFTs.length <= 0 ? (
+                  <RelatedNFTsSkeleton />
+                ) : (
+                  <RelatedNFTs dataRelatedNFTs={dataRelatedNFTs} />
+                )}
               </div>
               <button
                 onClick={() => router.push('/collection')}

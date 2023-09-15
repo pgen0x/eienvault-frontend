@@ -260,34 +260,39 @@ export default function NFTDetails({ dataNFTs }) {
             <div className="mt-5 flex w-full flex-col gap-4 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
               <div className="flex w-full flex-col gap-4">
                 <Image
-                  className="w-full rounded-2xl object-fill lg:w-96"
+                  className="w-full rounded-2xl object-contain lg:w-96"
                   width={600}
                   height={600}
                   placeholder="blur"
                   blurDataURL={dataNFTs?.imageUri}
                   src={dataNFTs?.imageUri}
                 />
-                <div className="relative -mt-16 px-5">
-                  <div className="flex rounded-lg bg-white/50 px-5 py-2 text-gray-900 backdrop-blur-sm sm:text-gray-900 md:text-gray-900 lg:text-primary-500 xl:text-primary-500 2xl:text-primary-500">
-                    <div className="flex w-full justify-around ">
-                      <button
-                        className="text-primary-500 hover:text-primary-300"
-                        onClick={() =>
-                          likes(dataNFTs.collectionAddress, dataNFTs.tokenId)
-                        }
-                      >
-                        <FontAwesomeIcon icon={faHeart} />{' '}
-                        <span className="font-semibold">
-                          {countLikes} likes
-                        </span>
-                      </button>
-                      <button className="text-primary-500 hover:text-primary-300">
-                        <FontAwesomeIcon icon={faShareFromSquare} />{' '}
-                        <span className="font-semibold">Share</span>
-                      </button>
-                      <button className="text-primary-500 hover:text-primary-300">
-                        <FontAwesomeIcon icon={faFlag} />{' '}
-                        <span className="font-semibold">Report</span>
+                <div className="relative -mt-16 sm:-mt-16 md:mt-5 lg:mt-5 xl:mt-5 2xl:mt-5 px-5">
+                  <div className="flex rounded-lg bg-white/50 sm:bg-white/50 md:bg-white lg:bg-white xl:bg-white 2xl:bg-white px-5 py-2 text-gray-900 backdrop-blur-sm sm:text-gray-900 md:text-gray-900 lg:text-primary-500 xl:text-primary-500 2xl:text-primary-500">
+                    <div className="flex w-full justify-between">
+                      <div className="flex w-full justify-around">
+                        <button
+                          className="group text-primary-500 sm:text-primary-500 hover:text-primary-300"
+                          onClick={() =>
+                            likes(dataNFTs.collectionAddress, dataNFTs.tokenId)
+                          }
+                        >
+                          <FontAwesomeIcon icon={faHeart} />{' '}
+                          <span className="font-semibold md:text-black lg:text-black 2xl-text-black group-hover:text-primary-300">
+                            {countLikes} likes
+                          </span>
+                        </button>
+                        <button className="group text-primary-500 hover:text-primary-300">
+                          <FontAwesomeIcon icon={faShareFromSquare} />{' '}
+                          <span className="font-semibold md:text-black lg:text-black 2xl-text-black group-hover:text-primary-300">Share</span>
+                        </button>
+                        <button className="group text-primary-500 hover:text-primary-300">
+                          <FontAwesomeIcon icon={faFlag} />{' '}
+                          <span className="font-semibold md:text-black lg:text-black 2xl-text-black group-hover:text-primary-300">Report</span>
+                        </button>
+                      </div>
+                      <button className="text-primary-500 hover:text-primary-300 hidden sm:hidden md:block lg:block xl:block 2xl:block px-2 hover:bg-primary-50 rounded-full">
+                        <FontAwesomeIcon icon={faEllipsisVertical} />{' '}
                       </button>
                     </div>
                   </div>
@@ -319,8 +324,8 @@ export default function NFTDetails({ dataNFTs }) {
                             {dataNFTs.sellerData?.username
                               ? dataNFTs.sellerData?.username
                               : truncateAddress4char(
-                                  dataNFTs.sellerData?.walletAddress,
-                                )}
+                                dataNFTs.sellerData?.walletAddress,
+                              )}
                           </div>
                         </div>
                       </div>
@@ -376,8 +381,8 @@ export default function NFTDetails({ dataNFTs }) {
                             {dataNFTs.collectionData?.User?.username
                               ? dataNFTs.collectionData?.User?.username
                               : truncateAddress4char(
-                                  dataNFTs.collectionData?.userAddress,
-                                )}
+                                dataNFTs.collectionData?.userAddress,
+                              )}
                           </div>
 
                           {dataNFTs.collectionData?.User?.isVerified && (
@@ -407,8 +412,8 @@ export default function NFTDetails({ dataNFTs }) {
                           {dataNFTs.sellerData?.username
                             ? dataNFTs.sellerData?.username
                             : truncateAddress4char(
-                                dataNFTs.sellerData?.walletAddress,
-                              )}
+                              dataNFTs.sellerData?.walletAddress,
+                            )}
                         </div>
                       </div>
                     </div>
@@ -417,8 +422,8 @@ export default function NFTDetails({ dataNFTs }) {
                     <div className="flex items-center gap-2 self-stretch sm:w-full md:w-full lg:w-1/4 xl:w-1/4 2xl:w-1/4">
                       {(dataNFTs.collectionData?.chainId === 666888 ||
                         dataNFTs.collectionData?.chainId === 8668) && (
-                        <HelaIcon className="h-6 w-6" />
-                      )}
+                          <HelaIcon className="h-6 w-6" />
+                        )}
                       <span className="text-sm font-semibold md:text-base">
                         {dataNFTs.collectionData.Chain.name} (
                         {dataNFTs?.ContractType})
@@ -557,8 +562,8 @@ export default function NFTDetails({ dataNFTs }) {
                                 {dataNFTs.sellerData?.username
                                   ? dataNFTs.sellerData?.username
                                   : truncateAddress4char(
-                                      dataNFTs.sellerData?.walletAddress,
-                                    )}
+                                    dataNFTs.sellerData?.walletAddress,
+                                  )}
                               </span>
                             </div>
                           </div>{' '}
@@ -631,8 +636,8 @@ export default function NFTDetails({ dataNFTs }) {
                               {dataNFTs.sellerData?.username
                                 ? dataNFTs.sellerData?.username
                                 : truncateAddress4char(
-                                    dataNFTs.sellerData?.walletAddress,
-                                  )}
+                                  dataNFTs.sellerData?.walletAddress,
+                                )}
                             </div>
                           </div>
                         </div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Collection from "../collection/page";
-import { useSearchParams } from 'next/navigation';
+import NftPage from "../nft/page";
 
 const searchPage = () => {
   const [groupOptions, setGroupOptions] = useState("collection");
@@ -28,7 +28,10 @@ const searchPage = () => {
           </ul>
         </section>
         <section>
-          {groupOptions && <Collection />}
+          {groupOptions == "collection" && <Collection />}
+        </section>
+        <section>
+          {groupOptions == "nft" && <NftPage />}
         </section>
       </div>
     </>

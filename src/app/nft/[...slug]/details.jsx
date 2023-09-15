@@ -506,10 +506,10 @@ export default function NFTDetails({ dataNFTs }) {
                           <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5">
                             <h3 className="md:text-lg">Floor Price</h3>
                             <h4 className="text-sm font-bold md:text-lg">
-                              {formatEther(dataNFTs.itemDetails?.price)}{' '}
+                              {formatEther(dataNFTs.itemDetails?.price ? dataNFTs.itemDetails.price : 0)}{' '}
                               {dataNFTs.collectionData.Chain.symbol}
                             </h4>
-                            <h5>${formatEther(dataNFTs.itemDetails?.price)}</h5>
+                            <h5>${formatEther(dataNFTs.itemDetails?.price ? dataNFTs.itemDetails.price : 0)}</h5>
                           </div>
                           <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5">
                             <h3 className="md:text-lg">Bid</h3>
@@ -541,17 +541,17 @@ export default function NFTDetails({ dataNFTs }) {
                           <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5">
                             <h3 className="md:text-lg">Floor Price</h3>
                             <h4 className="text-sm font-bold md:text-lg">
-                              {formatEther(dataNFTs.itemDetails?.price)}{' '}
+                              {formatEther(dataNFTs.itemDetails?.price ? dataNFTs.itemDetails.price : 0)}{' '}
                               {dataNFTs.collectionData.Chain.symbol}
                             </h4>
-                            <h5>${formatEther(dataNFTs.itemDetails?.price)}</h5>
+                            <h5>${formatEther(dataNFTs.itemDetails?.price ? dataNFTs.itemDetails.price : 0)}</h5>
                           </div>
                           <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5">
                             <h3 className="md:text-lg">Price</h3>
                             <h4 className="text-sm md:text-lg">
                               Listing price at{' '}
                               <span className="font-bold">
-                                {formatEther(dataNFTs.itemDetails?.price)}{' '}
+                                {formatEther(dataNFTs.itemDetails?.price ? dataNFTs.itemDetails.price : 0)}{' '}
                                 {dataNFTs.collectionData.Chain.symbol}
                               </span>
                             </h4>

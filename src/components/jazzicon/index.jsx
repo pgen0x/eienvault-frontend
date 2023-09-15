@@ -44,7 +44,7 @@ export function JazzIcon({ diameter, seed, useGradientFallback }) {
   };
 
   // Function to generate a color based on seed, index, saturation, and lightness
-  const generateColor = (seed, index, saturation = 50, lightness = 50) => {
+  const generateColor = (seed = 0, index = 0, saturation = 50, lightness = 50) => {
     const hue = (seed * 1000 + index * 100) % 360; // Use the seed to generate hue
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   };

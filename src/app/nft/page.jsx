@@ -57,7 +57,7 @@ const filters = [
   'Recently received',
 ];
 
-export default function Collection() {
+export default function NftPage() {
   const router = useRouter();
   const filterQuery = useSearchParams();
   const [filterCollapse, setFilterCollapse] = useState({
@@ -69,21 +69,11 @@ export default function Collection() {
     collection: false,
   });
   const [openFilter, setOpenFilter] = useState(true);
-  const [collections, setCollections] = useState([]);
-  const [collectionPage, setCollectionPage] = useState(1);
-  const [TrendingTop, setTrendingTop] = useState('trending');
-  const [Range, setRange] = useState('1h');
-  const [collectionLast, setCollectionLast] = useState(false);
+  const [nfts, setNfts] = useState([]);
+  const [nftPage, setNftPage] = useState(1);
+  const [nftLast, setNftLast] = useState(false);
   const [search, setSearch] = useState(filterQuery.get('search') === null ? "" : filterQuery.get('search'));
-
-  const handleTrendingTop = (target) => {
-    console.log(target);
-    setTrendingTop(target);
-  };
-
-  const handleRange = (target) => {
-    setRange(target);
-  };
+  const [gridList, setGridList] = useState('grid');
 
   const handleFilterCollapse = (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
@@ -104,18 +94,6 @@ export default function Collection() {
     setOpenFilter(!openFilter);
   };
 
-  const classFloor = (value) => {
-    return Number(value) < 0
-      ? 'w-fit rounded-full font-semibold bg-red-500 text-center text-white px-2 text-xs'
-      : 'w-fit rounded-full font-semibold bg-green-500 text-center text-white px-2 text-xs';
-  };
-
-  const classMovement = (value) => {
-    return Number(value) < 0
-      ? 'w-fit text-center font-semibold text-red-500 px-2 text-xs'
-      : 'w-fit text-center font-semibold text-green-500 px-2 text-xs';
-  };
-
   const handleScroll = () => {
     const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
     const body = document.body;
@@ -123,8 +101,8 @@ export default function Collection() {
     const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
     const windowBottom = windowHeight + window.pageYOffset;
     if ((windowBottom >= docHeight)) {
-      if (collectionLast === false) {
-        setCollectionPage((oldPage) => oldPage + 1);
+      if (nftLast === false) {
+        setNftPage((oldPage) => oldPage + 1);
       }
     }
   }
@@ -134,37 +112,38 @@ export default function Collection() {
   }, []);
 
   const handleSearch = (event) => {
-    setCollectionPage(1);
-    if(search === ""){
-      setCollections([]);
-    }else{
-      setCollectionPage(1);
+    setNftPage(1);
+    setNftLast(false);
+    if (search === "") {
+      setNfts([]);
+    } else {
+      setNftPage(1);
     }
 
     router.push(`?search=${search}`)
-    getCollections();
+    getNfts();
     event.preventDefault();
   }
 
   useEffect(() => {
-      getCollections();
-  }, [collectionPage]);
+    getNfts();
+  }, [nftPage]);
 
-  const getCollections = async () => {
-    if (collectionLast === true) return;
+  const getNfts = async () => {
+    if (nftLast === true) return;
 
     if (search === "") {
       await axios.request({
         method: 'get',
         maxBodyLength: Infinity,
-        // url: `${process.env.NEXT_PUBLIC_API_URL}/api/collection/get?page=${collectionPage}`,
-        url: `http://192.168.1.8/labs/dummy-data/collections.php?page=${collectionPage}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getall?page=${nftPage}`,
+        // url: `http://192.168.1.8/labs/dummy-data/collections.php?page=${nftPage}`,
       })
         .then((response) => {
-          if (response.data.collections.length > 0) {
-            setCollections((oldCollections) => [...oldCollections, ...response.data.collections]);
+          if (response.data.nfts.length > 0) {
+            setNfts((oldNfts) => [...oldNfts, ...response.data.nfts]);
           } else {
-            setCollectionLast(true);
+            setNftLast(true);
           }
         })
         .catch((error) => {
@@ -174,40 +153,36 @@ export default function Collection() {
       await axios.request({
         method: 'post',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/collection/search?query=${search}&page=${collectionPage}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/search?query=${search}&page=${nftPage}`,
       })
         .then((response) => {
-          if (response.data.collections.length > 0) {
-            if (collectionPage > 1) {
-              setCollections((oldCollections) => [...oldCollections, ...response.data.collections]);
+          if (response.data.nfts.length > 0) {
+            if (nftPage > 1) {
+              setNfts((oldNft) => [...oldNft, ...response.data.nfts]);
             } else {
-              setCollections([...response.data.collections]);
+              setNfts([...response.data.nfts]);
             }
           } else {
-            setCollectionLast(true);
+            setNftLast(true);
           }
         })
         .catch((error) => {
-          if(error.response.status == 404){
-            if(collectionPage > 1){
-              setCollectionLast(true);
+          if (error.response.status == 404) {
+            if(nftPage > 1){
+              setNftLast(true);
             }else{
-              setCollections([])
+              setNfts([])
             }
-          }else{
+          } else {
             toast.error(error.message);
           }
         });
     }
   };
 
-  const volumeChangePercentage = (collection) => {
-    return collection['volumeChangePercentage' + Range];
-  }
-
-  const priceChangePercentage = (collection) => {
-    return collection['priceChangePercentage' + Range];
-  }
+  const handleGridList = (event, target) => {
+    setGridList(target);
+  };
 
   return (
     <>
@@ -215,60 +190,11 @@ export default function Collection() {
         <section>
           <div className="grid grid-cols-12 gap-3">
             <div className="col-span-12 flex flex-col md:flex-row gap-2">
-              <div className="w-fit flex gap-1">
+              <div className="w-4/12 flex gap-1">
                 <div className="w-fit">
                   <button className={`flex items-center gap-1 rounded-full px-4 py-2 hover:bg-primary-300 ${openFilter ? 'bg-primary-500' : 'bg-white text-primary-500'}`} onClick={handleOpenFilter}>
                     <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
                   </button>
-                </div>
-                <div className="w-fit space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 flex">
-                  <label className={`px-3 ${classRadio(TrendingTop, 'trending')}`}>
-                    Trending
-                    <input
-                      className="hidden"
-                      type="radio"
-                      name="trendingTopOptions"
-                      onChange={(event) => handleTrendingTop('trending')}
-                    />
-                  </label>
-                  <label className={`px-3 ${classRadio(TrendingTop, 'top')}`}>
-                    Top
-                    <input
-                      className="hidden"
-                      type="radio"
-                      name="trendingTopOptions"
-                      onChange={(event) => handleTrendingTop('top')}
-                    />
-                  </label>
-                </div>
-                <div className="w-fit space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 flex">
-                  <label className={classRadio(Range, '1h')}>
-                    1h
-                    <input
-                      className="hidden"
-                      type="radio"
-                      name="rangeOptions"
-                      onChange={(event) => handleRange('1h')}
-                    />
-                  </label>
-                  <label className={classRadio(Range, '1d')}>
-                    1d
-                    <input
-                      className="hidden"
-                      type="radio"
-                      name="rangeOptions"
-                      onChange={(event) => handleRange('1d')}
-                    />
-                  </label>
-                  <label className={classRadio(Range, '7d')}>
-                    7d
-                    <input
-                      className="hidden"
-                      type="radio"
-                      name="rangeOptions"
-                      onChange={(event) => handleRange('7d')}
-                    />
-                  </label>
                 </div>
               </div>
               <form onSubmit={(event) => handleSearch(event)} className="w-full">
@@ -290,6 +216,20 @@ export default function Collection() {
                   </div>
                 </div>
               </form>
+              <div className="space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 hidden sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+                <div>
+                  <input className="hidden" type="radio" name="rangeOptions" id="optionGrid" onChange={(event) => handleGridList(event, 'grid')} />
+                  <label className={classRadio(gridList, 'grid')} htmlFor="optionGrid">
+                    <FontAwesomeIcon icon={faGrip} />
+                  </label>
+                </div>
+                <div>
+                  <input className="hidden" type="radio" name="rangeOptions" id="optionList" onChange={(event) => handleGridList(event, 'list')} />
+                  <label className={classRadio(gridList, 'list')} htmlFor="optionList">
+                    <FontAwesomeIcon icon={faGripVertical} />
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
           <div className="my-5 grid grid-cols-12 gap-6">
@@ -348,53 +288,100 @@ export default function Collection() {
                 : 'md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12'
                 }`}
             >
-              <div className="min-w-[720px] grid w-full grid-cols-12 gap-7 text-gray-900">
-                <div className="grid grid-cols-12 gap-4 col-span-12 bg-primary-500 text-white rounded-2xl px-10 py-4">
-                  <div className="grid col-span-1">Rank</div>
-                  <div className="grid col-span-5">Collection</div>
-                  <div className="grid col-span-2">Floor price</div>
-                  <div className="grid col-span-2">Volume</div>
-                  <div className="grid col-span-1">Items</div>
-                  <div className="grid col-span-1">Owner</div>
-                </div>
-                {collections.length == 0 && <div className="w-full col-span-12 text-black text-center font-semibold">Collection not found</div>}
-                {collections.length > 0 && collections.map((collection, index) => (
-                  <div
-                    key={index}
-                    className={`group w-full hover:bg-white/70 py-2 px-5 rounded-xl col-span-12 grid grid-cols-12 cursor-pointer`}
-                    onClick={() => router.push(`/collection/${collection?.slug ? collection.slug : collection?.tokenAddress}`)}
-                  >
-                    <div className="col-span-1 text-primary-500 font-bold flex items-center justify-center">{index + 1}.</div>
-                    <div className="col-span-5 flex-items-center flex gap-3">
-                      <div className="w-full flex-1">
-                        <div className="w-[48px] h-[48px]">
-                          <ImageWithFallback
-                            src={`/uploads/collections/${collection.logo}`}
-                            alt={collection?.name}
-                            width={48}
-                            height={48}
-                            diameter={48}
-                            address={collection?.tokenAddress}
-                            className="rounded-full"
-                          />
+              <div className="grid w-full grid-cols-12 gap-7 text-gray-900">
+                {nfts.length == 0 && <div className="w-full col-span-12 text-black text-center font-semibold">NFT not found</div>}
+                {nfts.length > 0 && nfts.map((nft, index) => (
+                  <div key={index} className={`group col-span-12 h-[542px] sm:h-[542px] md:h-[542px] lg:h-[542px] xl:h-[542px] 2xl:h-[542px] w-full sm:col-span-6 ${gridList === 'grid'
+                    ? (openFilter ? 'md:col-span-4 xl:col-span-4 2xl:col-span-4' : 'md:col-span-6 xl:col-span-3 2xl:col-span-3')
+                    : (openFilter ? 'md:col-span-6 xl:col-span-2 2xl:col-span-3' : 'md:col-span-4 xl:col-span-2 2xl:col-span-2')
+                    }`}>
+                    <div className="w-full group h-[542px]">
+                      <Image
+                        className="w-full rounded-2xl z-10 group-hover:h-[250px] h-[290px] group-hover:transition-all ease-in-out duration-300 object-cover"
+                        width={600}
+                        height={600}
+                        placeholder="blur"
+                        blurDataURL={`https://via.placeholder.com/600x600`}
+                        src={nft?.imageUri}
+                      />
+                      <div className="w-full px-3 inline-flex flex-col items-center justify-center lg:items-start">
+                        <div className="relative w-full flex flex-row">
+                          <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-br-2xl rounded-bl-2xl bg-white bg-opacity-50 p-3  backdrop-blur-xl">
+                            <div className="w-full flex flex-col items-start justify-start">
+                              <div
+                                className="inline-flex items-center justify-between self-stretch cursor-pointer"
+                                onClick={() =>
+                                  router.push(
+                                    `/collection/${nft.collectionAddress}`,
+                                  )
+                                }
+                              >
+                                <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2">
+                                  <ImageWithFallback
+                                    className="h-full w-full rounded-2xl "
+                                    width={16}
+                                    height={16}
+                                    alt={
+                                      nft.Collection?.name
+                                        ? nft.Collection?.name
+                                        : nft.collectionAddress
+                                          ? nft.collectionAddress
+                                          : ''
+                                    }
+                                    diameter={16}
+                                    address={nft?.collectionAddress}
+                                    src={`/uploads/collections/${nft.Collection?.logo}`}
+                                  />
+                                  <div className="flex items-start justify-start gap-2">
+                                    <div className="text-xs font-medium leading-none text-neutral-700">
+                                      {nft.Collection?.name
+                                        ? nft.Collection.name
+                                        : nft.collectionAddress
+                                          ? nft.collectionAddress
+                                          : ''}
+                                    </div>
+                                    <div className="text-xs font-black leading-none text-primary-500">
+                                      <FontAwesomeIcon icon={faCircleCheck} />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="items-center">
+                                  <FontAwesomeIcon icon={faEllipsis} />
+                                </div>
+                              </div>
+                              <div className="w-full inline-flex items-center justify-between gap-2 pt-1">
+                                <div className="font-medium leading-tight text-gray-600 leading-[20px] h-[40px] line-clamp-2" title={`${nft?.name} #${nft?.tokenId}`}>
+                                  {nft?.name} #{nft?.tokenId}
+                                </div>
+                                <div className="text-sm font-normal leading-tight text-neutral-700">
+                                  <Ethereum className="h-4 w-4" />
+                                </div>
+                              </div>
+                              <div className="flex justify-between w-full mt-5 px-2 py-2 bg-white rounded-md">
+                                <div className="flex flex-col items-start truncate text-sm leading-5">
+                                  <p>Price</p>
+                                  <p className="font-bold">
+                                    {nft.price === null ? "0.00" : formatEther(Number(nft?.price))}{' '}
+                                    {nft.Collection?.Chain.symbol}
+                                  </p>
+                                </div>
+                                <div className="flex flex-col items-start truncate text-sm leading-5">
+                                  <p>Highest bid</p>
+                                  <p className="font-bold">No bids yet</p>
+                                </div>
+                              </div>
+                              <div className="flex mt-5 gap-2 w-full items-center">
+                                <FontAwesomeIcon className="w-5 h-5 p-3 rounded-full text-primary-500 cursor-pointer hover:bg-primary-50 " icon={faCartPlus} />
+                                <button className="w-full text-center text-base font-bold text-white bg-primary-500 rounded-full px-4 py-2 hover:bg-primary-300 text-xs">
+                                  Buy Now
+                                </button>
+                              </div>
+                              <button onClick={() => router.push(`/nft/${nft.collectionAddress}/${nft.tokenId}`)} className="bg-white hover:bg-primary-50 text-primary-500 mt-2 w-full py-0 text-center group-hover:py-2 overflow-hidden opacity-0 h-0 group-hover:h-auto group-hover:opacity-100 rounded-full group-hover:transition-all ease-in-out duration-800">View Detail</button>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <span className="w-full flex items-center">{collection.name ? collection.name : collection?.userAddress}</span>
                     </div>
-                    <div className="col-span-2 flex items-center flex gap-2">
-                      {collection.floorPrice ? Number(formatEther(Number(collection.floorPrice))).toFixed(2) : "0.00"}
-                      <p className={classFloor(priceChangePercentage(collection))}>
-                        {priceChangePercentage(collection)}%
-                      </p>
-                    </div>
-                    <div className="col-span-2 flex items-center">
-                      ${formatter(collection.volume)}
-                      <p className={classMovement(volumeChangePercentage(collection))}>
-                        {volumeChangePercentage(collection)}%
-                      </p>
-                    </div>
-                    <div className="col-span-1 flex items-center">1000</div>
-                    <div className="col-span-1 flex items-center">{collection.floorPrice ? Number(formatEther(Number(collection.floorPrice))).toFixed(2) : "0.00"}</div>
                   </div>
                 ))}
               </div>

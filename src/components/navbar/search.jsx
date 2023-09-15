@@ -30,12 +30,12 @@ export default function Search() {
   }, []);
 
   const handleSearch = (event) => {
-    router.push(`?search=${search}`)
+    router.push(`/search/?search=${search}`)
     // event.preventDefault();
   }
 
   return (
-    <form onSubmit={(event) => handleSearch(event)} className="w-2/4">
+    <form action="/search" onSubmit={(event) => handleSearch(event)} className="w-2/4">
       <div className="w-full inline-flex h-10 items-center justify-start gap-2 rounded-xl border-0 px-4 dark:bg-gray-800 md:bg-white lg:bg-white xl:bg-white 2xl:bg-white">
         <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
           <FontAwesomeIcon icon={faSearch} />

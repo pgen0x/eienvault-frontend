@@ -30,6 +30,7 @@ const Main = () => {
   const [TrendingTop, setTrendingTop] = useState('trending');
   const [Range, setRange] = useState('1h');
   const [selectedServer, setSelectedServer] = useState(servers[0]);
+  const router = useRouter();
 
   const handleTrendingTop = (event, target) => {
     setTrendingTop(target);
@@ -154,9 +155,9 @@ const Main = () => {
           </div>
         </div>
         <div className="flex items-end px-3">
-          <a href="#" className="text-primary-500">
+          <button onClick={() => router.push(`/collection`)} className="text-primary-500">
             See all
-          </a>
+          </button>
         </div>
       </div>
     </>
@@ -441,9 +442,9 @@ const MainMobile = () => {
           </div>
         </div>
         <div className="hidden items-end px-3 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
-          <a href="#" className="text-primary-500">
+          <button onClick={() => router.push(`/collection`)} className="text-primary-500">
             See all
-          </a>
+          </button>
         </div>
       </div>
     </>

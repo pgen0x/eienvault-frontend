@@ -31,6 +31,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
+import { useAccount } from 'wagmi';
 
 const servers = [
   'All Mainnet',
@@ -102,6 +103,7 @@ export default function ProfilePage({ params }) {
   const [selectedBlockchain, setSelectedBlockchain] = useState(blockchains[0]);
   const [limitCollection, setLimitCollection] = useState(listCollections.length);
   const [profile, setProfile] = useState({});
+  const { address } = useAccount();
 
   const classRadio = (params, value) => {
     const defaultCssRadio =
@@ -194,7 +196,7 @@ export default function ProfilePage({ params }) {
                     {(profile.username) ? (
                       <span>{profile.username}</span>
                     ) : (
-                      <span>{profile.walletAddress ? truncateAddress(profile.walletAddress): ''}</span>
+                      <span>{profile.walletAddress ? truncateAddress(profile.walletAddress) : ''}</span>
                     )}
                   </div>
                   <div className="mt-3 line-clamp-2 text-lg  text-gray-900">
@@ -261,17 +263,19 @@ export default function ProfilePage({ params }) {
                     </div>
                   </div>
                 </div>
-                <div className="col-span-12 flex gap-1 font-semibold text-white">
-                  <a className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" href="/profile/setting">
-                    <FontAwesomeIcon icon={faPenToSquare} /> Edit Profile
-                  </a>
-                  <a className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" href="#">
-                    Sell
-                  </a>
-                  <a className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" href="#">
-                    <FontAwesomeIcon icon={faShare} />
-                  </a>
-                </div>
+                {(address === params.slug) && (
+                  <div className="col-span-12 flex gap-1 font-semibold text-white">
+                    <button className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" onClick={() => router.push(`/profile/setting`)}>
+                      <FontAwesomeIcon icon={faPenToSquare} /> Edit Profile
+                    </button>
+                    <button className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" href="#">
+                      Sell
+                    </button>
+                    <button className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" href="#">
+                      <FontAwesomeIcon icon={faShare} />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -371,16 +375,18 @@ export default function ProfilePage({ params }) {
           <div className="my-5 grid grid-cols-12 gap-6">
             <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12">
               <div className="grid w-full grid-cols-12 gap-6 text-gray-900">
-                <div className="col-span-12 mb-4 w-full h-[280px] sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                  <div className="flex h-full w-full flex-col items-center justify-center rounded-2xl border-2 border-gray-200">
-                    <button className="w-fit rounded-full bg-primary-500 px-4 py-1 text-white hover:bg-primary-300" onClick={handleModalCreate}>
-                      Create a new collection
-                    </button>
-                    <button className="w-fit px-4 py-1 font-semibold text-primary-500 hover:text-primary-300">
-                      Import existing collection
-                    </button>
+                {(address === params.slug) && (
+                  <div className="col-span-12 mb-4 w-full h-[280px] sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                    <div className="flex h-full w-full flex-col items-center justify-center rounded-2xl border-2 border-gray-200">
+                      <button className="w-fit rounded-full bg-primary-500 px-4 py-1 text-white hover:bg-primary-300" onClick={handleModalCreate}>
+                        Create a new collection
+                      </button>
+                      <button className="w-fit px-4 py-1 font-semibold text-primary-500 hover:text-primary-300">
+                        Import existing collection
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
                 {collections.map((collection, index) => (
                   <div key={index} className="group col-span-6 h-[320px] sm:h-[320px] md:h-[300px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px] w-full sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                     <img className="relative z-10 h-[200px] w-full rounded-2xl object-cover duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all" src="https://fakeimg.pl/325x175" />

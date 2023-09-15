@@ -176,7 +176,7 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="w-full bg-[url('/images/discover-section-background.png')] bg-cover bg-left-bottom text-black">
+          <div className="w-full bg-[url('/images/discover-section-clean-background.png')] bg-cover bg-left-bottom text-black">
             <div className="-mt-[20]md:ml-[20px] absolute md:mt-20">
               <Image
                 width={398}
@@ -223,9 +223,27 @@ export default function Home() {
                 {/* <SlideshowDiscoverSkeleton /> */}
               </div>
             </div>
+            <div className="absolute ml-[400px] -mt-[290px]">
+              <Image
+                width={332}
+                height={218}
+                objectFit="cover"
+                src="/images/discover-castle-1.png"
+                className="h-full"
+              />
+            </div>
+            <div className="absolute -ml-[60px] -mt-[140px]">
+              <Image
+                width={332}
+                height={218}
+                objectFit="cover"
+                src="/images/discover-castle-2.png"
+                className="h-full"
+              />
+            </div>
           </div>
         </section>
-        <section>
+        <section className="relative z-10">
           <div className="w-full bg-gray-100 text-black">
             <div className="container mx-auto px-4 py-4">
               <div className="flex items-center justify-between">

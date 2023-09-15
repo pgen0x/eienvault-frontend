@@ -2,7 +2,7 @@
 import { useIsMounted } from '@/hooks/use-is-mounted';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
-import Footer from '../../components/footer/main';
+import Footer from '@/components/footer/main';
 import { Listbox } from '@headlessui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -20,13 +20,18 @@ import {
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { Trykker } from 'next/font/google';
-import Search from '../../components/navbar/search';
+import Search from '@/components/navbar/search';
 import Ethereum from '@/assets/icon/ethereum';
 import { filter } from '@metamask/jazzicon/colors';
 import { useEffect } from 'react';
 import DatePicker from 'tailwind-datepicker-react';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { useRouter } from 'next-nprogress-bar';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import { useAuth } from '@/hooks/AuthContext';
+import { truncateAddress } from '@/utils/truncateAddress';
+import { useAccount } from 'wagmi';
 
 const servers = [
   'All Mainnet',
@@ -88,6 +93,7 @@ const listCollections = [
 ]
 export default function ProfilePage() {
   const router = useRouter();
+  const { token } = useAuth();
   const [selectedServer, setSelectedServer] = useState(servers[0]);
   const [selectedFilter, setSelectedFilter] = useState(filters[0]);
   const inputRef = useRef(null);
@@ -95,7 +101,9 @@ export default function ProfilePage() {
   const [stepCreate, setStepCreate] = useState(1);
   const [modalCreate, setModalCreate] = useState(false);
   const [selectedBlockchain, setSelectedBlockchain] = useState(blockchains[0]);
-  const [limitCollection, setLimitCollection] = useState(listCollections.length)
+  const [limitCollection, setLimitCollection] = useState(listCollections.length);
+  const [profile, setProfile] = useState({});
+  const { address } = useAccount();
 
   const classRadio = (params, value) => {
     const defaultCssRadio =
@@ -137,6 +145,29 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
+    if (token) {
+      getProfile(token);
+    }
+  }, [token]);
+
+  const getProfile = async (token) => {
+    await axios.request({
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `${process.env.NEXT_PUBLIC_API_URL}/api/user/get/${address}`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then((response) => {
+        setProfile(response.data);
+      })
+      .catch((error) => {
+        toast.error(JSON.stringify(error));
+      });
+  }
+
+  useEffect(() => {
     handleResize();
     window.addEventListener('resize', handleResize);
 
@@ -161,20 +192,15 @@ export default function ProfilePage() {
                   <div className="relative -mt-[5rem]">
                     <img className="w-36 rounded-full border-4 border-white shadow" src="https://fakeimg.pl/100x100" />
                   </div>
-                  <div className="mt-3 text-xl font-semibold text-gray-900">
-                    John Doe
+                  <div className="mt-3 text-xl font-semibold text-gray-900 w-full flex">
+                    {(profile.username) ? (
+                      <span>{profile.username}</span>
+                    ) : (
+                      <span>{profile.walletAddress ? truncateAddress(profile.walletAddress): ''}</span>
+                    )}
                   </div>
                   <div className="mt-3 line-clamp-2 text-lg  text-gray-900">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting
-                    industry. Lorem Ipsum has been the industry`&lsquo;`s standard
-                    dummy text ever since the 1500s, when an unknown printer took a
-                    galley of type and scrambled it to make a type specimen book. It
-                    has survived not only five centuries, but also the leap into
-                    electronic typesetting, remaining essentially unchanged. It was
-                    popularised in the 1960s with the release of Letraset sheets
-                    containing Lorem Ipsum passages, and more recently with desktop
-                    publishing software like Aldus PageMaker including versions of
-                    Lorem Ipsum.
+                    {profile.bio}
                   </div>
                 </div>
                 <div className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6 flex justify-end">
@@ -238,15 +264,15 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 <div className="col-span-12 flex gap-1 font-semibold text-white">
-                  <a className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" href="/profile/setting">
+                  <button className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" onClick={() => router.push(`/profile/setting`)}>
                     <FontAwesomeIcon icon={faPenToSquare} /> Edit Profile
-                  </a>
-                  <a className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" href="#">
+                  </button>
+                  <button className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" href="#">
                     Sell
-                  </a>
-                  <a className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" href="#">
+                  </button>
+                  <button className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" href="#">
                     <FontAwesomeIcon icon={faShare} />
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -396,7 +422,7 @@ export default function ProfilePage() {
             </div>
           </div>
         </section>
-      </div>
+      </div >
       {modalCreate && (
         <div className="relative z-[100]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
           <div className="fixed inset-0 bg-gray-200 bg-opacity-75 transition-opacity"></div>
@@ -625,7 +651,8 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
-      )}
+      )
+      }
       <Footer />
     </>
   );

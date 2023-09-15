@@ -54,11 +54,11 @@ const sliderBreakPoints = {
     spaceBetween: 5,
   },
   1920: {
-    slidesPerView: 5,
+    slidesPerView: 4,
     spaceBetween: 5,
   },
   2200: {
-    slidesPerView: 5,
+    slidesPerView: 4,
     spaceBetween: 5,
   },
 };
@@ -231,9 +231,21 @@ export const SlideshowActivities = ({ dataActivities }) => {
     setisOpenModalBuy(false);
   }
 
+  let slidesPerView = 1;
+  if (dataActivities.length >= 4) {
+    slidesPerView = 4;
+  } else {
+    for (const breakpoint in sliderBreakPoints) {
+      if (dataActivities.length < sliderBreakPoints[breakpoint].slidesPerView) {
+        slidesPerView = sliderBreakPoints[breakpoint].slidesPerView;
+        break;
+      }
+    }
+  }
+
   return (
     <>
-      <button className="swiper-prev-activities absolute -left-5 z-10 mr-2 hidden rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
+      <button className="swiper-prev-activities absolute -left-5 top-1/2 z-10 mr-2 hidden rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronLeft} />
       </button>
       <Swiper
@@ -455,7 +467,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
             </SwiperSlide>
           ))}
       </Swiper>
-      <button className="swiper-next-activities absolute -right-5 z-10 ml-2 hidden rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
+      <button className="swiper-next-activities absolute -right-5 top-1/2 z-10 ml-2 hidden rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronRight} />
       </button>
       <ModalBuy
@@ -499,7 +511,7 @@ export const SlideshowActivitiesSkeleton = () => {
           pauseOnMouseEnter: true,
         }}
       >
-        {[...Array(4)].map((nft, index) => (
+        {[...Array(6)].map((nft, index) => (
           <SwiperSlide key={index}>
             <div className="group h-[494px] w-full p-3">
               <div className="h-[250px] w-full animate-pulse rounded-2xl bg-gray-300" />

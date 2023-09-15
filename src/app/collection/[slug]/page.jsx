@@ -29,6 +29,7 @@ import { useAuth } from '@/hooks/AuthContext';
 import axios from 'axios';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { formatEther } from 'viem';
+import { toast } from 'react-toastify';
 
 const servers = [
   'All Mainnet',
@@ -142,7 +143,7 @@ export default function CollectionDetail({ params }) {
       })
       .catch((error) => {
         if (collectionToken) {
-          toast.error(JSON.stringify(error));
+          toast.error(error.message);
         } else {
           getCollection(true);
         }
@@ -159,7 +160,7 @@ export default function CollectionDetail({ params }) {
         setProfile(response.data);
       })
       .catch((error) => {
-        toast.error(JSON.stringify(error));
+        toast.error(error.message);
       });
   };
 
@@ -173,7 +174,7 @@ export default function CollectionDetail({ params }) {
         setNfts(response.data);
       })
       .catch((error) => {
-        toast.error(JSON.stringify(error));
+        toast.error(error.message);
       });
   };
 
@@ -187,7 +188,7 @@ export default function CollectionDetail({ params }) {
         setCollectionChain(response.data);
       })
       .catch((error) => {
-        toast.error(JSON.stringify(error));
+        toast.error(error.message);
       });
 
   }

@@ -231,7 +231,7 @@ export default function Home() {
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold">Recent Activities</h2>
               </div>
-              <div className="relative my-5 flex w-full flex-initial items-center justify-center">
+              <div className="relative my-5 w-full flex-initial items-center justify-center">
                 {isLoadingActivities || dataActivities.length <= 0 ? (
                   <SlideshowActivitiesSkeleton />
                 ) : (

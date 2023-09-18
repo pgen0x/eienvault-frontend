@@ -54,6 +54,7 @@ import { toast } from 'react-toastify';
 import RelatedNFTs, {
   RelatedNFTsSkeleton,
 } from '@/components/slideshow/relatednfts';
+import moment from 'moment';
 
 export default function NFTDetails({ dataNFTs }) {
   const router = useRouter();
@@ -103,7 +104,7 @@ export default function NFTDetails({ dataNFTs }) {
 
   function getLowestBid(auctionData) {
     if (auctionData.listOffers.length === 0) {
-      return 'No bids'; // Return a message if there are no bids
+      return 0; // Return a message if there are no bids
     }
 
     let lowestBid = Infinity; // Initialize to a large number
@@ -283,6 +284,13 @@ export default function NFTDetails({ dataNFTs }) {
 
     getRelatedNFTs();
   }, [token, address]);
+
+  const currentDate = moment();
+
+  const endDate = moment.unix(dataNFTs.itemDetails.endDate);
+  const releaseDate = moment.unix(dataNFTs.itemDetails.releaseDate);
+  const isNotExpired = endDate.isAfter(currentDate);
+  const isNotRelease = currentDate.isBefore(releaseDate);
 
   return (
     <>
@@ -517,7 +525,7 @@ export default function NFTDetails({ dataNFTs }) {
                         View original
                       </span>
                       <a
-                        href={`${dataNFTs.imageUri}`}
+                        href={`${dataNFTs?.imageUri}`}
                         className="flex items-center justify-center rounded-full p-2 hover:bg-primary-300"
                         target="_blank"
                       >
@@ -545,11 +553,25 @@ export default function NFTDetails({ dataNFTs }) {
                     <div className="flex justify-between gap-2">
                       {dataNFTs.itemDetails?.isAuctioned && (
                         <div>
-                          Auction starts in :{' '}
+                          Auction{' '}
+                          {isNotRelease
+                            ? 'starts'
+                            : isNotExpired
+                            ? 'ends'
+                            : 'ended'}{' '}
+                          in :{' '}
                           <span className="font-bold">
-                            <LiveCountdown
-                              endDate={dataNFTs.itemDetails?.endDate}
-                            />
+                            {isNotRelease ? (
+                              <LiveCountdown
+                                endDate={dataNFTs.itemDetails?.releaseDate}
+                              />
+                            ) : isNotExpired ? (
+                              <LiveCountdown
+                                endDate={dataNFTs.itemDetails?.endDate}
+                              />
+                            ) : (
+                              ''
+                            )}
                           </span>
                         </div>
                       )}
@@ -683,8 +705,15 @@ export default function NFTDetails({ dataNFTs }) {
                                 ),
                               )
                             }
+                            disabled={
+                              isNotRelease ? true : isNotExpired ? false : true
+                            }
                           >
-                            Place a bid
+                            {isNotRelease
+                              ? 'Upcoming'
+                              : isNotExpired
+                              ? 'Place a Bid'
+                              : 'Expired'}
                           </button>
                         </div>
                       ) : (
@@ -698,8 +727,9 @@ export default function NFTDetails({ dataNFTs }) {
                                 dataNFTs,
                               )
                             }
+                            disabled={!isNotExpired}
                           >
-                            Buy Now
+                            {isNotExpired ? 'Buy Now' : 'Expired'}
                           </button>
                         </div>
                       )

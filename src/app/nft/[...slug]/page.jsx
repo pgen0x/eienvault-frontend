@@ -11,7 +11,7 @@ export default async function Page({ params }) {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbytokenid/${collectionAddress}/${tokenId}`,
       {
-        next: { revalidate: 0 },
+        next: { revalidate: 10 },
         headers: {
           'Content-Type': 'application/json',
         },

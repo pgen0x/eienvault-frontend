@@ -245,9 +245,8 @@ export default function NFTDetails({ dataNFTs }) {
         toast.error(errorMessage.error.messages);
       }
       const responseData = await res.json();
-      toast.success(
-        'Refresh metada successfully, Please reload the page if your metadata not updated',
-      );
+      toast.success('Refresh metada successfully');
+      window.location.reload();
     } catch (error) {
       console.error('error likes:', error);
     }
@@ -304,14 +303,30 @@ export default function NFTDetails({ dataNFTs }) {
           <section>
             <div className="mt-5 flex w-full flex-col gap-4 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
               <div className="flex w-full flex-col gap-4">
-                <Image
-                  className="w-full rounded-2xl bg-white object-contain lg:w-96"
-                  width={600}
-                  height={600}
-                  placeholder="blur"
-                  blurDataURL={dataNFTs?.imageUri}
-                  src={dataNFTs?.imageUri}
-                />
+                {dataNFTs?.imageUri !== null ? (
+                  <Image
+                    className="w-full rounded-2xl bg-white object-contain lg:w-96"
+                    width={600}
+                    height={600}
+                    placeholder="blur"
+                    blurDataURL={dataNFTs?.imageUri}
+                    src={dataNFTs?.imageUri}
+                  />
+                ) : (
+                  <div className="flex h-[600px] w-full  flex-col justify-end rounded-2xl bg-gray-300">
+                    <button
+                      className="mb-4 inline-flex justify-center gap-2 self-center rounded-full border border-primary-500 bg-transparent px-2 py-2 text-sm font-semibold text-primary-500 hover:border-primary-300 hover:text-primary-300"
+                      onClick={() =>
+                        refreshMetadata(
+                          dataNFTs.collectionAddress,
+                          dataNFTs.tokenId,
+                        )
+                      }
+                    >
+                      Refresh Metadata
+                    </button>
+                  </div>
+                )}
                 <div className="relative -mt-16 px-5 sm:-mt-16 md:mt-5 lg:mt-5 xl:mt-5 2xl:mt-5">
                   <div className="flex rounded-lg bg-white/50 px-5 py-2 text-gray-900 backdrop-blur-sm sm:bg-white/50 sm:text-gray-900 md:bg-white md:text-gray-900 lg:bg-white lg:text-primary-500 xl:bg-white xl:text-primary-500 2xl:bg-white 2xl:text-primary-500">
                     <div className="flex w-full justify-between">

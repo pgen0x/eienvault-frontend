@@ -280,6 +280,7 @@ export default function Collection() {
                     type="text"
                     placeholder="Search ..."
                     aria-label="Search"
+                    name="search"
                     defaultValue={search}
                     onChange={(event) => setSearch(event.target.value)} />
                   <div className="inline-flex flex-col items-center justify-center gap-2 rounded-md bg-zinc-200 px-2">

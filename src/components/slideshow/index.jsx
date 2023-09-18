@@ -21,6 +21,7 @@ import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { formatEther } from 'viem';
 import { useRouter } from 'next-nprogress-bar';
 import { ImageWithFallback } from '../imagewithfallback';
+import moment from 'moment';
 
 const images = [1, 2, 3, 4];
 
@@ -132,6 +133,8 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
     setIsOpenModal(false);
   }
 
+  const currentDate = moment();
+
   return (
     <>
       <button className="swiper-prev absolute -left-5 z-10 mr-2 hidden rounded-full bg-primary-400 px-4 py-2 text-white sm:hidden md:block lg:block xl:block 2xl:block">
@@ -156,163 +159,187 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
         //   disableOnInteraction: false,
         // }}
       >
-        {auctions.map((auction, index) => (
-          <SwiperSlide key={index}>
-            <div className="inline-flex w-full flex-col justify-center gap-2 p-2 lg:items-start lg:pt-16">
-              <div className="flex w-fit flex-row items-center rounded-lg bg-[#fff1d4] px-2 py-2">
-                <span className="mr-2 h-1 w-1 animate-ping rounded-full bg-red-400 opacity-90"></span>
-                <div className="whitespace-nowrap text-sm font-semibold text-gray-900">
-                  Live auction
-                </div>
-              </div>
-              <div className="relative flex h-full flex-row md:w-full lg:w-full">
-                {auction.nftDetails?.imageUri !== null ? (
-                  <Image
-                    className="h-96 w-full rounded-2xl object-cover lg:w-96"
-                    width={500}
-                    height={404}
-                    placeholder="blur"
-                    blurDataURL={auction.nftDetails.imageUri}
-                    src={auction.nftDetails.imageUri}
-                  />
-                ) : (
-                  <div className="flex h-96 w-[500px]  flex-col justify-end rounded-2xl bg-gray-300">
-                    <button
-                      className="mb-4 inline-flex justify-center gap-2 self-center rounded-full border border-primary-500 bg-transparent px-2 py-2 text-sm font-semibold text-primary-500 hover:border-primary-300 hover:text-primary-300"
-                      onClick={() =>
-                        refreshMetadata(auction.collection, auction.tokenId)
-                      }
-                    >
-                      Refresh Metadata
-                    </button>
-                  </div>
-                )}
+        {auctions.map((auction, index) => {
+          const endDate = moment.unix(auction.endDate);
+          const releaseDate = moment.unix(auction.releaseDate);
+          const isNotExpired = endDate.isAfter(currentDate);
+          const isNotRelease = currentDate.isBefore(releaseDate);
 
-                <div className="my-3 inline-flex h-[357px] w-full flex-col items-start justify-start gap-4 rounded-br-2xl rounded-tr-2xl bg-white bg-opacity-50  p-5 backdrop-blur-xl">
-                  <div className="flex flex-col items-start justify-start">
-                    <div className="inline-flex items-center justify-start self-stretch">
-                      <div className="flex h-full shrink grow basis-0 items-end justify-start gap-2">
-                        <div
-                          className="cursor-pointer text-2xl font-bold leading-9 text-neutral-700"
-                          onClick={() =>
-                            router.push(
-                              `/nft/${auction.collection}/${auction.tokenId}`,
-                            )
-                          }
-                        >
-                          {auction.nftDetails?.name}
-                        </div>
-                      </div>
-                    </div>
+          console.log(auction.collectionData.name, isNotRelease);
+          return (
+            <SwiperSlide key={index}>
+              <div className="inline-flex w-full flex-col justify-center gap-2 p-2 lg:items-start lg:pt-16">
+                <div className="flex w-fit flex-row items-center rounded-lg bg-[#fff1d4] px-2 py-2">
+                  <span className="mr-2 h-1 w-1 animate-ping rounded-full bg-red-400 opacity-90"></span>
+                  <div className="whitespace-nowrap text-sm font-semibold text-gray-900">
+                    Live auction
                   </div>
-                  <div className="flex flex-col items-start justify-start gap-1">
-                    <div className="inline-flex items-center justify-start gap-4">
-                      <span className="text-gray-900">By</span>
-                      <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2 ">
-                        <ImageWithFallback
-                          className="h-full w-full rounded-2xl "
-                          width={15}
-                          height={15}
-                          alt={auction.collectionData.name}
-                          diameter={15}
-                          address={auction.collectionData?.tokenAddress}
-                          src={`/uploads/collections/${auction.collectionData?.logo}`}
-                        />
-                        <div className="flex items-start justify-start gap-2">
-                          <div className="text-xs font-medium leading-none text-neutral-700">
-                            {auction.collectionData?.User.username
-                              ? auction.collectionData?.User.username
-                              : truncateAddress4char(
-                                  auction.collectionData?.userAddress,
-                                )}
+                </div>
+                <div className="relative flex h-full flex-row md:w-full lg:w-full">
+                  {auction.nftDetails?.imageUri !== null ? (
+                    <Image
+                      className="h-96 w-full rounded-2xl bg-white object-cover lg:w-96"
+                      width={500}
+                      height={404}
+                      placeholder="blur"
+                      blurDataURL={auction.nftDetails.imageUri}
+                      src={auction.nftDetails.imageUri}
+                    />
+                  ) : (
+                    <div className="flex h-96 w-[500px]  flex-col justify-end rounded-2xl bg-gray-300">
+                      <button
+                        className="mb-4 inline-flex justify-center gap-2 self-center rounded-full border border-primary-500 bg-transparent px-2 py-2 text-sm font-semibold text-primary-500 hover:border-primary-300 hover:text-primary-300"
+                        onClick={() =>
+                          refreshMetadata(auction.collection, auction.tokenId)
+                        }
+                      >
+                        Refresh Metadata
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="my-3 inline-flex h-[357px] w-full flex-col items-start justify-start gap-4 rounded-br-2xl rounded-tr-2xl bg-white bg-opacity-50  p-5 backdrop-blur-xl">
+                    <div className="flex flex-col items-start justify-start">
+                      <div className="inline-flex items-center justify-start self-stretch">
+                        <div className="flex h-full shrink grow basis-0 items-end justify-start gap-2">
+                          <div
+                            className="cursor-pointer text-2xl font-bold leading-9 text-neutral-700"
+                            onClick={() =>
+                              router.push(
+                                `/nft/${auction.collection}/${auction.tokenId}`,
+                              )
+                            }
+                          >
+                            {auction.nftDetails?.name}
                           </div>
-                          {auction.collectionData?.User.isVerified && (
-                            <div className="text-xs font-black leading-none text-primary-500">
-                              <FontAwesomeIcon icon={faCircleCheck} />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-start justify-start gap-1">
+                      <div className="inline-flex items-center justify-start gap-4">
+                        <span className="text-gray-900">By</span>
+                        <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2 ">
+                          <ImageWithFallback
+                            className="h-full w-full rounded-2xl "
+                            width={15}
+                            height={15}
+                            alt={auction.collectionData.name}
+                            diameter={15}
+                            address={auction.collectionData?.tokenAddress}
+                            src={`/uploads/collections/${auction.collectionData?.logo}`}
+                          />
+                          <div className="flex items-start justify-start gap-2">
+                            <div className="text-xs font-medium leading-none text-neutral-700">
+                              {auction.collectionData?.User.username
+                                ? auction.collectionData?.User.username
+                                : truncateAddress4char(
+                                    auction.collectionData?.userAddress,
+                                  )}
                             </div>
-                          )}
+                            {auction.collectionData?.User.isVerified && (
+                              <div className="text-xs font-black leading-none text-primary-500">
+                                <FontAwesomeIcon icon={faCircleCheck} />
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                      <div className="text-sm font-normal leading-tight text-neutral-700">
-                        On{' '}
-                      </div>
-                      <div className="flex items-start justify-start gap-2">
                         <div className="text-sm font-normal leading-tight text-neutral-700">
-                          {(auction.collectionData?.chainId === 666888 ||
-                            auction.collectionData?.chainId === 8668) && (
-                            <HelaIcon className="h-4 w-4" />
-                          )}
+                          On{' '}
                         </div>
-                        <div className="text-sm font-medium leading-tight text-neutral-700">
-                          {auction.collectionData?.Chain?.symbol}
+                        <div className="flex items-start justify-start gap-2">
+                          <div className="text-sm font-normal leading-tight text-neutral-700">
+                            {(auction.collectionData?.chainId === 666888 ||
+                              auction.collectionData?.chainId === 8668) && (
+                              <HelaIcon className="h-4 w-4" />
+                            )}
+                          </div>
+                          <div className="text-sm font-medium leading-tight text-neutral-700">
+                            {auction.collectionData?.Chain?.symbol}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="line-clamp-5 w-72 text-sm font-light leading-tight text-neutral-700">
-                      {auction.collectionData?.description
-                        ? auction.collectionData?.description
-                        : `Welcome to our ${auction.collectionData.name} collection! Explore a world of digital art and assets that represent unique and exclusive tokens on the blockchain. You'll find something special in our collection. Each NFT is a one-of-a-kind piece, verified and secured on the blockchain, making it a valuable addition to your digital asset portfolio. Join us on this journey of innovation and creativity in the world of non-fungible tokens. Start collecting, trading, and owning a piece of the digital future with our NFTs!`}
-                    </div>
-                  </div>
-                  <div className="inline-flex items-center justify-start gap-4 self-stretch">
-                    <div className="inline-flex shrink grow basis-0 flex-col items-start justify-center gap-2">
-                      <div className="flex flex-col self-stretch text-sm font-normal leading-tight text-neutral-700">
-                        Highest Bid{' '}
-                        <span className="text-sm font-bold leading-tight text-neutral-700">
-                          {formatEther(
-                            Number(getHighestBid(auction).highestBid),
-                          )}{' '}
-                          {auction.collectionData?.Chain?.symbol}
-                        </span>
+                      <div className="line-clamp-5 w-72 text-sm font-light leading-tight text-neutral-700">
+                        {auction.collectionData?.description
+                          ? auction.collectionData?.description
+                          : `Welcome to our ${auction.collectionData.name} collection! Explore a world of digital art and assets that represent unique and exclusive tokens on the blockchain. You'll find something special in our collection. Each NFT is a one-of-a-kind piece, verified and secured on the blockchain, making it a valuable addition to your digital asset portfolio. Join us on this journey of innovation and creativity in the world of non-fungible tokens. Start collecting, trading, and owning a piece of the digital future with our NFTs!`}
                       </div>
                     </div>
-                    <div className="inline-flex shrink grow basis-0 flex-col items-center justify-center gap-2">
-                      <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
-                        <span className="mr-2 text-sm font-normal leading-tight text-neutral-700">
-                          By
-                        </span>
+                    <div className="inline-flex items-center justify-start gap-4 self-stretch">
+                      <div className="inline-flex shrink grow basis-0 flex-col items-start justify-center gap-2">
+                        <div className="flex flex-col self-stretch text-sm font-normal leading-tight text-neutral-700">
+                          Highest Bid{' '}
+                          <span className="text-sm font-bold leading-tight text-neutral-700">
+                            {formatEther(
+                              Number(getHighestBid(auction).highestBid),
+                            )}{' '}
+                            {auction.collectionData?.Chain?.symbol}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="inline-flex shrink grow basis-0 flex-col items-center justify-center gap-2">
+                        <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
+                          <span className="mr-2 text-sm font-normal leading-tight text-neutral-700">
+                            By
+                          </span>
 
-                        <span className="text-sm font-bold leading-tight text-neutral-700">
-                          {truncateAddress4char(
-                            getHighestBid(auction).highestBidder,
-                          )}
-                        </span>
+                          <span className="text-sm font-bold leading-tight text-neutral-700">
+                            {truncateAddress4char(
+                              getHighestBid(auction).highestBidder,
+                            )}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <button
-                    className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
-                    onClick={() =>
-                      handleOpenModalBid(
-                        auction.marketId,
-                        auction.listingPrice,
-                        auction.nftDetails?.imageUri,
-                        auction.nftDetails?.tokenId,
-                        auction.price,
-                        auction.nftDetails?.name,
-                        auction.collectionData,
-                        getHighestBid(auction),
-                        formatEther(getLowestBid(auction)),
-                      )
-                    }
-                  >
-                    <span className="text-center text-base font-bold leading-normal text-white">
-                      Place Bid
-                    </span>
-                  </button>
-                  <div className="inline-flex items-center justify-center gap-2 self-center">
-                    <div className="text-center text-sm font-medium leading-tight text-gray-600">
-                      <span className="mr-2 text-sm font-normal leading-tight text-neutral-700">
-                        Ends in
+                    <button
+                      className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300 disabled:bg-primary-300"
+                      onClick={() =>
+                        handleOpenModalBid(
+                          auction.marketId,
+                          auction.listingPrice,
+                          auction.nftDetails?.imageUri,
+                          auction.nftDetails?.tokenId,
+                          auction.price,
+                          auction.nftDetails?.name,
+                          auction.collectionData,
+                          getHighestBid(auction),
+                          formatEther(getLowestBid(auction)),
+                        )
+                      }
+                      disabled={!isNotRelease || isNotExpired}
+                    >
+                      <span className="text-center text-base font-bold leading-normal text-white">
+                        Place Bid
                       </span>
-                      <Countdown endDate={auction.endDate} />
+                    </button>
+                    <div className="inline-flex items-center justify-center gap-2 self-center">
+                      <div className="text-center text-sm font-medium leading-tight text-gray-600">
+                        {isNotRelease ? (
+                          <>
+                            {' '}
+                            <span className="mr-2 text-sm font-normal leading-tight text-neutral-700">
+                              Starts in
+                            </span>
+                            <Countdown endDate={auction.releaseDate} />
+                          </>
+                        ) : isNotExpired ? (
+                          <>
+                            {' '}
+                            <span className="mr-2 text-sm font-normal leading-tight text-neutral-700">
+                              Ends in
+                            </span>
+                            <Countdown endDate={auction.endDate} />
+                          </>
+                        ) : (
+                          'Expired'
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </SwiperSlide>
-        ))}
+            </SwiperSlide>
+          );
+        })}
 
         {auctions.length <= 0 &&
           images.map((image, index) => (

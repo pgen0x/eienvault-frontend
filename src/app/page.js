@@ -261,8 +261,8 @@ export default function Home() {
                 </button>
               </div>
               <div className="relative my-5 flex w-full flex-initial items-center justify-center sm:w-full md:w-[50%] lg:w-[69%] xl:w-[69%] 2xl:w-[69%]">
-                <SlideshowDiscover />
-                {/* <SlideshowDiscoverSkeleton /> */}
+                {/* <SlideshowDiscover /> */}
+                <SlideshowDiscoverSkeleton />
               </div>
             </div>
             <div className="absolute -mt-[290px] ml-[400px]">

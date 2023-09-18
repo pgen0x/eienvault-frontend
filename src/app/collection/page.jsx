@@ -77,7 +77,6 @@ export default function Collection() {
   const [search, setSearch] = useState(filterQuery.get('search') === null ? "" : filterQuery.get('search'));
 
   const handleTrendingTop = (target) => {
-    console.log(target);
     setTrendingTop(target);
   };
 

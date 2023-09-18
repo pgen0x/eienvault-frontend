@@ -148,7 +148,7 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
 
   function getLowestBid(auctionData) {
     if (auctionData.listOffers.length === 0) {
-      return 'No bids'; // Return a message if there are no bids
+      return 0; // Return a message if there are no bids
     }
 
     let lowestBid = Infinity; // Initialize to a large number
@@ -280,7 +280,7 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
                   }
                 >
                   <Image
-                    className="z-10 h-[250px] w-full rounded-2xl object-cover duration-300 ease-in-out group-hover:h-[210px] group-hover:transition-all"
+                    className="z-10 h-[250px] w-full rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[210px] group-hover:transition-all"
                     src={
                       nft.nftDetails?.imageUri
                         ? nft.nftDetails?.imageUri
@@ -351,13 +351,13 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
                             className="text-xl2 cursor-pointer font-medium leading-tight text-gray-600"
                             onClick={() =>
                               router.push(
-                                `/nft/${nft.collectionData.tokenAddress}/${nft.nftDetails.tokenId}`,
+                                `/nft/${nft.collectionData.tokenAddress}/${nft.nftDetails?.tokenId}`,
                               )
                             }
                           >
                             {nft.nftDetails?.name ? nft.nftDetails?.name : ''} #
-                            {nft.nftDetails.tokenId
-                              ? nft.nftDetails.tokenId
+                            {nft.nftDetails?.tokenId
+                              ? nft.nftDetails?.tokenId
                               : ''}
                           </div>
                           <div className="text-sm font-normal leading-tight text-neutral-700">
@@ -454,7 +454,7 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
                         <button
                           onClick={() =>
                             router.push(
-                              `/nft/${nft.collectionData.tokenAddress}/${nft.nftDetails.tokenId}`,
+                              `/nft/${nft.collectionData.tokenAddress}/${nft.nftDetails?.tokenId}`,
                             )
                           }
                           className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all"

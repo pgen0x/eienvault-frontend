@@ -89,7 +89,7 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
 
   function getLowestBid(auctionData) {
     if (auctionData.listOffers.length === 0) {
-      return 'No bids'; // Return a message if there are no bids
+      return 0; // Return a message if there are no bids
     }
 
     let lowestBid = Infinity; // Initialize to a large number
@@ -165,7 +165,6 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
           const isNotExpired = endDate.isAfter(currentDate);
           const isNotRelease = currentDate.isBefore(releaseDate);
 
-          console.log(auction.collectionData.name, isNotRelease);
           return (
             <SwiperSlide key={index}>
               <div className="inline-flex w-full flex-col justify-center gap-2 p-2 lg:items-start lg:pt-16">
@@ -182,8 +181,8 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                       width={500}
                       height={404}
                       placeholder="blur"
-                      blurDataURL={auction.nftDetails.imageUri}
-                      src={auction.nftDetails.imageUri}
+                      blurDataURL={auction.nftDetails?.imageUri}
+                      src={auction.nftDetails?.imageUri}
                     />
                   ) : (
                     <div className="flex h-96 w-[500px]  flex-col justify-end rounded-2xl bg-gray-300">
@@ -305,7 +304,9 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                           formatEther(getLowestBid(auction)),
                         )
                       }
-                      disabled={!isNotRelease || isNotExpired}
+                      disabled={
+                        isNotRelease ? true : isNotExpired ? false : true
+                      }
                     >
                       <span className="text-center text-base font-bold leading-normal text-white">
                         Place Bid
@@ -460,7 +461,7 @@ export const SlideshowMobile = ({ auctions, placeBid, refreshMetadata }) => {
 
   function getLowestBid(auctionData) {
     if (auctionData.listOffers.length === 0) {
-      return 'No bids'; // Return a message if there are no bids
+      return 0; // Return a message if there are no bids
     }
 
     let lowestBid = Infinity; // Initialize to a large number
@@ -538,7 +539,7 @@ export const SlideshowMobile = ({ auctions, placeBid, refreshMetadata }) => {
               <div className="relative flex w-[340px] flex-col">
                 {auction.nftDetails?.imageUri !== null ? (
                   <Image
-                    className="h-96 w-full rounded-2xl object-cover lg:w-96"
+                    className="h-96 w-full rounded-2xl bg-white object-cover lg:w-96"
                     width={500}
                     height={404}
                     placeholder="blur"

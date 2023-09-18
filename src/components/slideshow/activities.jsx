@@ -280,16 +280,16 @@ export const SlideshowActivities = ({ dataActivities }) => {
                   <Image
                     className="z-10 h-[250px] w-full rounded-2xl object-cover duration-300 ease-in-out group-hover:h-[210px] group-hover:transition-all"
                     src={
-                      nft.nftDetails.imageUri
-                        ? nft.nftDetails.imageUri
+                      nft.nftDetails?.imageUri
+                        ? nft.nftDetails?.imageUri
                         : 'https://placehold.co/325x265.png'
                     }
                     blurDataURL={
-                      nft.nftDetails.imageUri
-                        ? nft.nftDetails.imageUri
+                      nft.nftDetails?.imageUri
+                        ? nft.nftDetails?.imageUri
                         : 'https://placehold.co/325x265.png'
                     }
-                    alt={nft.nftDetails.name ? nft.nftDetails.name : ''}
+                    alt={nft.nftDetails?.name ? nft.nftDetails?.name : ''}
                     width={325}
                     height={265}
                     placeholder="blur"
@@ -353,7 +353,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
                               )
                             }
                           >
-                            {nft.nftDetails.name ? nft.nftDetails.name : ''} #
+                            {nft.nftDetails?.name ? nft.nftDetails?.name : ''} #
                             {nft.nftDetails.tokenId
                               ? nft.nftDetails.tokenId
                               : ''}

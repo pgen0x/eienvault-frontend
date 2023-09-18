@@ -131,6 +131,7 @@ export default function Create({ chains }) {
     formState: { errors },
     setValue,
     getValues,
+    reset,
   } = useForm();
   const selectedImage = watch('file');
   const price = watch('price');
@@ -623,6 +624,35 @@ export default function Create({ chains }) {
     setErrorIPFS({ isError: false, message: '' });
     setErrorMint({ isError: false, message: '' });
     setIsProcessing(false);
+    reset();
+  };
+
+  const allowedFileTypes = [
+    'image/png',
+    'image/jpeg',
+    'image/webp',
+    'video/mp4',
+    'audio/mp3',
+  ];
+  const maxFileSize = 100 * 1024 * 1024; // 100MB
+
+  const validateFile = (value) => {
+    if (!value) {
+      setValue('file', '');
+      return 'File is required.';
+    }
+
+    if (!allowedFileTypes.includes(value.type)) {
+      setValue('file', '');
+      return 'Invalid file type';
+    }
+
+    if (value.size > maxFileSize) {
+      setValue('file', '');
+      return 'File size exceeds the limit';
+    }
+
+    return true; // Validation passed
   };
 
   return (
@@ -829,6 +859,7 @@ export default function Create({ chains }) {
                           }}
                           {...register('file', {
                             required: 'File is required.',
+                            validate: validateFile,
                           })}
                         />
                       </label>

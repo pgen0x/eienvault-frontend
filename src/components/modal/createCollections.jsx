@@ -21,6 +21,7 @@ import {
 import { useWeb3Modal } from '@web3modal/react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/hooks/AuthContext';
+import { toast } from 'react-toastify';
 
 export default function ModalCreateCollection({
   isOpenModal,
@@ -51,6 +52,7 @@ export default function ModalCreateCollection({
     formState: { errors },
     setValue,
     getValues,
+    reset,
   } = useForm();
   const selectedImage = watch('file');
   const name = watch('name');
@@ -74,6 +76,7 @@ export default function ModalCreateCollection({
         return await response.json();
       } else {
         // Handle the error here
+        toast.error('File upload failed:', response.statusText);
         console.error('File upload failed:', response.statusText);
       }
     } catch (error) {
@@ -181,7 +184,36 @@ export default function ModalCreateCollection({
     setIsCompleted(false);
     onClose(false);
     onModalClose();
+    reset();
   }
+
+  const allowedFileTypes = [
+    'image/png',
+    'image/jpeg',
+    'image/webp',
+    'video/mp4',
+    'audio/mp3',
+  ];
+  const maxFileSize = 100 * 1024 * 1024; // 100MB
+
+  const validateFile = (value) => {
+    if (!value) {
+      setValue('file', '');
+      return 'File is required.';
+    }
+
+    if (!allowedFileTypes.includes(value.type)) {
+      setValue('file', '');
+      return 'Invalid file type';
+    }
+
+    if (value.size > maxFileSize) {
+      setValue('file', '');
+      return 'File size exceeds the limit';
+    }
+
+    return true; // Validation passed
+  };
 
   return (
     <>
@@ -275,6 +307,7 @@ export default function ModalCreateCollection({
                                         }}
                                         {...register('file', {
                                           required: 'File is required.',
+                                          validate: validateFile,
                                         })}
                                       />
                                     </label>

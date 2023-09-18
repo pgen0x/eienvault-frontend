@@ -272,7 +272,7 @@ export default function Collection() {
                 </div>
               </div>
               <form onSubmit={(event) => handleSearch(event)} className="w-full">
-                <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border border-0 border-gray-200 bg-white px-4 dark:bg-gray-800">
+                <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-gray-800">
                   <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
                     <FontAwesomeIcon icon={faSearch} />
                   </div>
@@ -382,7 +382,7 @@ export default function Collection() {
                       </div>
                       <span className="w-full flex items-center">{collection.name ? collection.name : collection?.userAddress}</span>
                     </div>
-                    <div className="col-span-2 flex items-center flex gap-2">
+                    <div className="col-span-2 flex items-center gap-2">
                       {collection.floorPrice ? Number(formatEther(Number(collection.floorPrice))).toFixed(2) : "0.00"}
                       <p className={classFloor(priceChangePercentage(collection))}>
                         {priceChangePercentage(collection)}%

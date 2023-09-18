@@ -169,7 +169,7 @@ const Main = () => {
 
 export const TrendingTop = ({ dataCollections }) => {
   const [limit, setLimit] = useState(0);
-
+  const router = useRouter();
   const classFloor = (value) => {
     return Number(value) < 0
       ? 'w-fit rounded-full font-semibold bg-red-500 text-center text-white px-2'
@@ -227,7 +227,12 @@ export const TrendingTop = ({ dataCollections }) => {
                 </div>
 
                 <div className="flex w-full flex-col">
-                  <p className="text-md h-[20px] w-full overflow-hidden text-ellipsis font-semibold leading-6 leading-[20px] text-gray-900">
+                  <p
+                    className="text-md h-[20px] w-full cursor-pointer overflow-hidden text-ellipsis font-semibold leading-6 text-gray-900"
+                    onClick={() =>
+                      router.push(`/collection/${trade.tokenAddress}`)
+                    }
+                  >
                     {trade.name}
                   </p>
                   <div className="flex w-full flex-col gap-2">

@@ -62,7 +62,7 @@ export default function NFTDetails({ dataNFTs }) {
   const { token } = useAuth();
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
-  const [countLikes, setCountLikes] = useState(dataNFTs.likeCount);
+  const [countLikes, setCountLikes] = useState(dataNFTs?.likeCount);
   const [dataRelatedNFTs, setDataRelatedNFTs] = useState([]);
   const [isLoadingRelatedNFTs, setIsLoadingRelatedNFTs] = useState(true);
 
@@ -286,8 +286,8 @@ export default function NFTDetails({ dataNFTs }) {
 
   const currentDate = moment();
 
-  const endDate = moment.unix(dataNFTs.itemDetails.endDate);
-  const releaseDate = moment.unix(dataNFTs.itemDetails.releaseDate);
+  const endDate = moment.unix(dataNFTs?.itemDetails?.endDate);
+  const releaseDate = moment.unix(dataNFTs?.itemDetails?.releaseDate);
   const isNotExpired = endDate.isAfter(currentDate);
   const isNotRelease = currentDate.isBefore(releaseDate);
 
@@ -318,8 +318,8 @@ export default function NFTDetails({ dataNFTs }) {
                       className="mb-4 inline-flex justify-center gap-2 self-center rounded-full border border-primary-500 bg-transparent px-2 py-2 text-sm font-semibold text-primary-500 hover:border-primary-300 hover:text-primary-300"
                       onClick={() =>
                         refreshMetadata(
-                          dataNFTs.collectionAddress,
-                          dataNFTs.tokenId,
+                          dataNFTs?.collectionAddress,
+                          dataNFTs?.tokenId,
                         )
                       }
                     >
@@ -334,7 +334,10 @@ export default function NFTDetails({ dataNFTs }) {
                         <button
                           className="group text-primary-500 hover:text-primary-300 sm:text-primary-500"
                           onClick={() =>
-                            likes(dataNFTs.collectionAddress, dataNFTs.tokenId)
+                            likes(
+                              dataNFTs?.collectionAddress,
+                              dataNFTs?.tokenId,
+                            )
                           }
                         >
                           <FontAwesomeIcon icon={faHeart} />{' '}
@@ -380,25 +383,25 @@ export default function NFTDetails({ dataNFTs }) {
                             width={28}
                             height={28}
                             alt={
-                              dataNFTs.ownerData?.username ||
+                              dataNFTs?.ownerData?.username ||
                               truncateAddress4char(
-                                dataNFTs.ownerData?.walletAddress,
+                                dataNFTs?.ownerData?.walletAddress,
                               ) ||
-                              truncateAddress4char(dataNFTs.owner)
+                              truncateAddress4char(dataNFTs?.owner)
                             }
                             diameter={28}
                             address={
-                              dataNFTs.ownerData?.walletAddress ||
-                              dataNFTs.owner
+                              dataNFTs?.ownerData?.walletAddress ||
+                              dataNFTs?.owner
                             }
-                            src={`/uploads/user/${dataNFTs.ownerData?.logo}`}
+                            src={`/uploads/user/${dataNFTs?.ownerData?.logo}`}
                           />
                           <div className="font-medium leading-none text-neutral-700">
-                            {dataNFTs.ownerData?.username ||
+                            {dataNFTs?.ownerData?.username ||
                               truncateAddress4char(
-                                dataNFTs.ownerData?.walletAddress,
+                                dataNFTs?.ownerData?.walletAddress,
                               ) ||
-                              truncateAddress4char(dataNFTs.owner)}
+                              truncateAddress4char(dataNFTs?.owner)}
                           </div>
                         </div>
                       </div>
@@ -418,7 +421,7 @@ export default function NFTDetails({ dataNFTs }) {
               </div>
               <div className="w-full">
                 <div className="flex w-full justify-around gap-4 text-white">
-                  {address === dataNFTs.owner && (
+                  {address === dataNFTs?.owner && (
                     <>
                       <button className="w-full rounded-full bg-primary-500 py-2 hover:bg-primary-300">
                         <FontAwesomeIcon icon={faPenToSquare} /> Edit detail
@@ -432,7 +435,7 @@ export default function NFTDetails({ dataNFTs }) {
                 </div>
                 <div className="mt-5 flex flex-col gap-4 text-gray-900">
                   <h2 className="text-2xl font-bold">
-                    {dataNFTs.name} #{dataNFTs.tokenId}
+                    {dataNFTs?.name} #{dataNFTs?.tokenId}
                   </h2>
                   <div className="flex w-full justify-around rounded-xl bg-white p-5">
                     <div className="px-5">
@@ -444,28 +447,28 @@ export default function NFTDetails({ dataNFTs }) {
                             width={28}
                             height={28}
                             alt={
-                              dataNFTs.ownerData?.username ||
+                              dataNFTs?.ownerData?.username ||
                               truncateAddress4char(
-                                dataNFTs.ownerData?.walletAddress,
+                                dataNFTs?.ownerData?.walletAddress,
                               ) ||
-                              truncateAddress4char(dataNFTs.owner)
+                              truncateAddress4char(dataNFTs?.owner)
                             }
                             diameter={28}
                             address={
-                              dataNFTs.ownerData?.walletAddress ||
-                              dataNFTs.owner
+                              dataNFTs?.ownerData?.walletAddress ||
+                              dataNFTs?.owner
                             }
-                            src={`/uploads/user/${dataNFTs.collectionData.User?.logo}`}
+                            src={`/uploads/user/${dataNFTs?.collectionData.User?.logo}`}
                           />
                           <div className="text-sm font-medium text-neutral-700">
-                            {dataNFTs.collectionData?.User?.username
-                              ? dataNFTs.collectionData?.User?.username
+                            {dataNFTs?.collectionData?.User?.username
+                              ? dataNFTs?.collectionData?.User?.username
                               : truncateAddress4char(
-                                  dataNFTs.collectionData?.userAddress,
+                                  dataNFTs?.collectionData?.userAddress,
                                 )}
                           </div>
 
-                          {dataNFTs.collectionData?.User?.isVerified && (
+                          {dataNFTs?.collectionData?.User?.isVerified && (
                             <div className="font-black leading-none text-primary-500">
                               <FontAwesomeIcon icon={faCircleCheck} />
                             </div>
@@ -484,36 +487,37 @@ export default function NFTDetails({ dataNFTs }) {
                           width={28}
                           height={28}
                           alt={
-                            dataNFTs.ownerData?.username ||
+                            dataNFTs?.ownerData?.username ||
                             truncateAddress4char(
-                              dataNFTs.ownerData?.walletAddress,
+                              dataNFTs?.ownerData?.walletAddress,
                             ) ||
-                            truncateAddress4char(dataNFTs.owner)
+                            truncateAddress4char(dataNFTs?.owner)
                           }
                           diameter={28}
                           address={
-                            dataNFTs.ownerData?.walletAddress || dataNFTs.owner
+                            dataNFTs?.ownerData?.walletAddress ||
+                            dataNFTs?.owner
                           }
-                          src={`/uploads/user/${dataNFTs.ownerData?.logo}`}
+                          src={`/uploads/user/${dataNFTs?.ownerData?.logo}`}
                         />
                         <div className="text-sm font-medium text-neutral-700">
-                          {dataNFTs.ownerData?.username ||
+                          {dataNFTs?.ownerData?.username ||
                             truncateAddress4char(
-                              dataNFTs.ownerData?.walletAddress,
+                              dataNFTs?.ownerData?.walletAddress,
                             ) ||
-                            truncateAddress4char(dataNFTs.owner)}
+                            truncateAddress4char(dataNFTs?.owner)}
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="flex w-full flex-wrap items-start justify-between gap-4 rounded-xl bg-white p-5 text-gray-900 md:flex-row">
                     <div className="flex items-center gap-2 self-stretch sm:w-full md:w-full lg:w-1/4 xl:w-1/4 2xl:w-1/4">
-                      {(dataNFTs.collectionData?.chainId === 666888 ||
-                        dataNFTs.collectionData?.chainId === 8668) && (
+                      {(dataNFTs?.collectionData?.chainId === 666888 ||
+                        dataNFTs?.collectionData?.chainId === 8668) && (
                         <HelaIcon className="h-6 w-6" />
                       )}
                       <span className="text-sm font-semibold md:text-base">
-                        {dataNFTs.collectionData.Chain.name}
+                        {dataNFTs?.collectionData.Chain.name}
                         {dataNFTs?.ContractType &&
                           `(${dataNFTs?.ContractType})`}
                       </span>
@@ -524,7 +528,7 @@ export default function NFTDetails({ dataNFTs }) {
                         Helascan
                       </span>
                       <a
-                        href={`https://testnet-blockexplorer.helachain.com/token/${dataNFTs.collectionAddress}/instance/${dataNFTs.tokenId}/token-transfers`}
+                        href={`https://testnet-blockexplorer.helachain.com/token/${dataNFTs?.collectionAddress}/instance/${dataNFTs?.tokenId}/token-transfers`}
                         className="flex items-center justify-center rounded-full p-2 hover:bg-primary-300"
                         target="_blank"
                       >
@@ -556,7 +560,7 @@ export default function NFTDetails({ dataNFTs }) {
                     <div className="flex items-center gap-2">
                       <h3 className="font-bold md:text-lg">Royalties</h3>
                       <span className="h-6 rounded-lg bg-gray-600 p-1 text-xs text-white">
-                        {Number(dataNFTs.royalties) / 100}%
+                        {Number(dataNFTs?.royalties) / 100}%
                       </span>
                     </div>
                     <p>
@@ -566,7 +570,7 @@ export default function NFTDetails({ dataNFTs }) {
                   </div>
                   <div className="flex w-full flex-col  gap-4 rounded-xl bg-white p-5 text-gray-900">
                     <div className="flex justify-between gap-2">
-                      {dataNFTs.itemDetails?.isAuctioned && (
+                      {dataNFTs?.itemDetails?.isAuctioned && (
                         <div>
                           Auction{' '}
                           {isNotRelease
@@ -578,11 +582,11 @@ export default function NFTDetails({ dataNFTs }) {
                           <span className="font-bold">
                             {isNotRelease ? (
                               <LiveCountdown
-                                endDate={dataNFTs.itemDetails?.releaseDate}
+                                endDate={dataNFTs?.itemDetails?.releaseDate}
                               />
                             ) : isNotExpired ? (
                               <LiveCountdown
-                                endDate={dataNFTs.itemDetails?.endDate}
+                                endDate={dataNFTs?.itemDetails?.endDate}
                               />
                             ) : (
                               ''
@@ -595,8 +599,8 @@ export default function NFTDetails({ dataNFTs }) {
                         className="font-bold text-primary-500 hover:text-primary-300"
                         onClick={() =>
                           refreshMetadata(
-                            dataNFTs.collectionAddress,
-                            dataNFTs.tokenId,
+                            dataNFTs?.collectionAddress,
+                            dataNFTs?.tokenId,
                           )
                         }
                       >
@@ -604,24 +608,24 @@ export default function NFTDetails({ dataNFTs }) {
                       </button>
                     </div>
                     <div className="flex gap-4">
-                      {dataNFTs.itemDetails?.isAuctioned ? (
+                      {dataNFTs?.itemDetails?.isAuctioned ? (
                         <>
                           <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5">
                             <h3 className="md:text-lg">Floor Price</h3>
                             <h4 className="text-sm font-bold md:text-lg">
-                              {dataNFTs.itemDetails
-                                ? formatEther(dataNFTs.itemDetails?.price)
+                              {dataNFTs?.itemDetails
+                                ? formatEther(dataNFTs?.itemDetails?.price)
                                 : formatEther(
-                                    dataNFTs.collectionData.floorPrice,
+                                    dataNFTs?.collectionData.floorPrice,
                                   )}{' '}
-                              {dataNFTs.collectionData.Chain.symbol}
+                              {dataNFTs?.collectionData.Chain.symbol}
                             </h4>
                             <h5>
                               $
-                              {dataNFTs.itemDetails
-                                ? formatEther(dataNFTs.itemDetails?.price)
+                              {dataNFTs?.itemDetails
+                                ? formatEther(dataNFTs?.itemDetails?.price)
                                 : formatEther(
-                                    dataNFTs.collectionData.floorPrice,
+                                    dataNFTs?.collectionData.floorPrice,
                                   )}
                             </h5>
                           </div>
@@ -632,18 +636,18 @@ export default function NFTDetails({ dataNFTs }) {
                               <span className="text-sm font-bold md:text-lg">
                                 {formatEther(
                                   Number(
-                                    getHighestBid(dataNFTs.itemDetails)
+                                    getHighestBid(dataNFTs?.itemDetails)
                                       .highestBid,
                                   ),
                                 )}{' '}
-                                {dataNFTs.collectionData?.Chain?.symbol}
+                                {dataNFTs?.collectionData?.Chain?.symbol}
                               </span>
                             </h4>
                             <div className="flex w-full gap-1">
                               <span>by</span>
                               <span className="text-sm font-bold md:text-lg">
                                 {truncateAddress4char(
-                                  getHighestBid(dataNFTs.itemDetails)
+                                  getHighestBid(dataNFTs?.itemDetails)
                                     .highestBidder,
                                 )}
                               </span>
@@ -655,19 +659,19 @@ export default function NFTDetails({ dataNFTs }) {
                           <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5">
                             <h3 className="md:text-lg">Floor Price</h3>
                             <h4 className="text-sm font-bold md:text-lg">
-                              {dataNFTs.itemDetails
-                                ? formatEther(dataNFTs.itemDetails?.price)
+                              {dataNFTs?.itemDetails
+                                ? formatEther(dataNFTs?.itemDetails?.price)
                                 : formatEther(
-                                    dataNFTs.collectionData.floorPrice,
+                                    dataNFTs?.collectionData.floorPrice,
                                   )}{' '}
-                              {dataNFTs.collectionData.Chain.symbol}
+                              {dataNFTs?.collectionData.Chain.symbol}
                             </h4>
                             <h5>
                               $
-                              {dataNFTs.itemDetails
-                                ? formatEther(dataNFTs.itemDetails?.price)
+                              {dataNFTs?.itemDetails
+                                ? formatEther(dataNFTs?.itemDetails?.price)
                                 : formatEther(
-                                    dataNFTs.collectionData.floorPrice,
+                                    dataNFTs?.collectionData.floorPrice,
                                   )}
                             </h5>
                           </div>
@@ -676,23 +680,23 @@ export default function NFTDetails({ dataNFTs }) {
                             <h4 className="text-sm md:text-lg">
                               Listing price at{' '}
                               <span className="font-bold">
-                                {dataNFTs.itemDetails
-                                  ? formatEther(dataNFTs.itemDetails?.price)
+                                {dataNFTs?.itemDetails
+                                  ? formatEther(dataNFTs?.itemDetails?.price)
                                   : formatEther(
-                                      dataNFTs.collectionData.floorPrice,
+                                      dataNFTs?.collectionData.floorPrice,
                                     )}{' '}
-                                {dataNFTs.collectionData.Chain.symbol}
+                                {dataNFTs?.collectionData.Chain.symbol}
                               </span>
                             </h4>
                             <div className="flex w-full flex-col gap-1 md:flex-row">
                               <span>by</span>
 
                               <span className="text-sm font-bold md:text-lg">
-                                {dataNFTs.ownerData?.username ||
+                                {dataNFTs?.ownerData?.username ||
                                   truncateAddress4char(
-                                    dataNFTs.ownerData?.walletAddress,
+                                    dataNFTs?.ownerData?.walletAddress,
                                   ) ||
-                                  truncateAddress4char(dataNFTs.owner)}
+                                  truncateAddress4char(dataNFTs?.owner)}
                               </span>
                             </div>
                           </div>{' '}
@@ -700,8 +704,8 @@ export default function NFTDetails({ dataNFTs }) {
                       )}
                     </div>
 
-                    {dataNFTs.itemDetails ? (
-                      dataNFTs.itemDetails?.isAuctioned ? (
+                    {dataNFTs?.itemDetails ? (
+                      dataNFTs?.itemDetails?.isAuctioned ? (
                         <div className="mt-5 flex w-full items-center gap-4">
                           <button
                             className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300"
@@ -712,7 +716,7 @@ export default function NFTDetails({ dataNFTs }) {
                                 dataNFTs?.imageUri,
                                 dataNFTs?.tokenId,
                                 dataNFTs?.itemDetails?.price,
-                                dataNFTs.nftDetails?.name,
+                                dataNFTs?.nftDetails?.name,
                                 dataNFTs?.collectionData,
                                 getHighestBid(dataNFTs?.itemDetails),
                                 formatEther(
@@ -775,25 +779,25 @@ export default function NFTDetails({ dataNFTs }) {
                               width={18}
                               height={18}
                               alt={
-                                dataNFTs.ownerData?.username ||
+                                dataNFTs?.ownerData?.username ||
                                 truncateAddress4char(
-                                  dataNFTs.ownerData?.walletAddress,
+                                  dataNFTs?.ownerData?.walletAddress,
                                 ) ||
-                                truncateAddress4char(dataNFTs.owner)
+                                truncateAddress4char(dataNFTs?.owner)
                               }
                               diameter={18}
                               address={
-                                dataNFTs.ownerData?.walletAddress ||
-                                dataNFTs.owner
+                                dataNFTs?.ownerData?.walletAddress ||
+                                dataNFTs?.owner
                               }
-                              src={`/uploads/user/${dataNFTs.ownerData?.logo}`}
+                              src={`/uploads/user/${dataNFTs?.ownerData?.logo}`}
                             />
                             <div className="text-sm font-medium leading-none text-neutral-700">
-                              {dataNFTs.ownerData?.username ||
+                              {dataNFTs?.ownerData?.username ||
                                 truncateAddress4char(
-                                  dataNFTs.ownerData?.walletAddress,
+                                  dataNFTs?.ownerData?.walletAddress,
                                 ) ||
-                                truncateAddress4char(dataNFTs.owner)}
+                                truncateAddress4char(dataNFTs?.owner)}
                             </div>
                           </div>
                         </div>

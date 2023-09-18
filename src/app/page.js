@@ -181,8 +181,8 @@ export default function Home() {
                 <Tab
                   className={({ selected }) =>
                     selected
-                      ? 'font-bold text-black'
-                      : 'font-bold text-neutral-400'
+                      ? 'text-xl font-semibold text-black'
+                      : 'text-xl font-semibold text-neutral-400'
                   }
                 >
                   Collections
@@ -257,7 +257,7 @@ export default function Home() {
                   asset that you can truly own.
                 </p>
                 <button className="mt-5 rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
-                  DIscover more
+                  Discover more
                 </button>
               </div>
               <div className="relative my-5 flex w-full flex-initial items-center justify-center sm:w-full md:w-[50%] lg:w-[69%] xl:w-[69%] 2xl:w-[69%]">

@@ -63,7 +63,7 @@ const Sidebar = () => {
 
   const handleViewProfileClick = () => {
     closeSidebar();
-    router.push('/profile'); // Navigate to the profile page
+    router.push(`/profile/${address}`); // Navigate to the profile page
   };
 
   const handleNftCreate = () => {

@@ -42,14 +42,14 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
   return (
     <>
       <div className="mb-5 mt-5 hidden gap-4 md:hidden lg:flex">
-        <div className="group h-[666px] w-1/2 overflow-hidden">
+        <div className="group h-[666px] w-2/6 overflow-hidden">
           <div
             style={{
               backgroundImage: `url(${dataUpcoming[0]?.nftDetails?.imageUri})`,
             }}
-            className="flex h-[666px] flex-col justify-end rounded-lg bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[514px] group-hover:transition-all"
+            className="flex h-[666px] flex-col justify-end rounded-lg bg-white bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[514px] group-hover:transition-all"
           >
-            <div className="flex w-fit items-center justify-center gap-2 rounded-lg bg-white p-2">
+            <div className="flex w-fit items-center justify-center gap-2 rounded-lg  p-2">
               <ImageWithFallback
                 className="h-full w-full rounded-2xl "
                 width={15}
@@ -74,9 +74,11 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
               </div>
             </div>
             <div className="mt-2 w-fit rounded-lg bg-white bg-opacity-70 p-2 font-bold text-black">
-              {dataUpcoming[0].collectionData?.name} #{dataUpcoming[0].tokenId}
+              {dataUpcoming[0].nftDetails.name ||
+                dataUpcoming[0].collectionData?.name}{' '}
+              #{dataUpcoming[0].tokenId}
             </div>
-            <div className="mt-2 w-fit rounded-lg bg-white bg-opacity-40 p-2 text-white">
+            <div className="mt-2 w-fit rounded-lg bg-white bg-opacity-40 p-2 text-gray-700">
               Auction starts in :
             </div>
             <div className="mt-2 flex w-fit items-center justify-between gap-2 text-center">
@@ -124,7 +126,7 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
             </div>
           </div>
         </div>
-        <div className="flex flex-wrap">
+        <div className="flex w-full flex-wrap">
           {dataUpcoming.slice(1).map((nft, index) => (
             <>
               <div className="group h-1/2 w-1/2 min-w-max overflow-hidden p-2">
@@ -132,7 +134,7 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                   style={{
                     backgroundImage: `url(${nft.nftDetails?.imageUri})`,
                   }}
-                  className="flex h-[322px] flex-col justify-end gap-1 rounded-lg bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[189px] group-hover:transition-all"
+                  className="flex h-[322px] flex-col justify-end gap-1 rounded-lg bg-white bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[189px] group-hover:transition-all"
                 >
                   <div className="flex w-fit items-center justify-center gap-2 rounded-lg bg-white p-2">
                     <ImageWithFallback
@@ -157,9 +159,10 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                     </div>
                   </div>
                   <div className="w-fit rounded-lg bg-white bg-opacity-70 p-2 font-bold text-black">
-                    {nft.collectionData?.name} #{nft.tokenId}
+                    {nft.nftDetails.name || nft.collectionData?.name} #
+                    {nft.tokenId}
                   </div>
-                  <div className="w-fit rounded-lg bg-white bg-opacity-40 p-2 text-white">
+                  <div className="w-fit rounded-lg bg-white bg-opacity-40 p-2 text-gray-700">
                     Auction starts in :
                   </div>
                   <div className="flex w-fit items-center justify-between gap-2 text-center">

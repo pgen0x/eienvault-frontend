@@ -21,16 +21,16 @@ function UpcomingCountdown({ endDate }) {
 
   return (
     <>
-      <div className="w-12 rounded-lg bg-white bg-opacity-40 py-3 text-white">
+      <div className="w-12 rounded-lg bg-white bg-opacity-40 py-3 text-gray-700">
         {countdown.days()}d
       </div>
-      <div className="w-12 rounded-lg bg-white bg-opacity-40 py-3 text-white">
+      <div className="w-12 rounded-lg bg-white bg-opacity-40 py-3 text-gray-700">
         {countdown.hours()}h
       </div>
-      <div className="w-12 rounded-lg bg-white bg-opacity-40 py-3 text-white">
+      <div className="w-12 rounded-lg bg-white bg-opacity-40 py-3 text-gray-700">
         {countdown.minutes()}m
       </div>
-      <div className="w-12 rounded-lg bg-white bg-opacity-40 py-3 text-white">
+      <div className="w-12 rounded-lg bg-white bg-opacity-40 py-3 text-gray-700">
         {countdown.seconds()}s
       </div>
     </>

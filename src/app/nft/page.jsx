@@ -31,6 +31,7 @@ import formatter from '@/utils/shortNumberFormatter';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSearchParams } from 'next/navigation';
+import { truncateAddress } from '@/utils/truncateAddress';
 
 const servers = [
   'All Mainnet',
@@ -337,7 +338,7 @@ export default function NftPage() {
                                       {nft.Collection?.name
                                         ? nft.Collection.name
                                         : nft.collectionAddress
-                                          ? nft.collectionAddress
+                                          ? truncateAddress(nft.collectionAddress)
                                           : ''}
                                     </div>
                                     <div className="text-xs font-black leading-none text-primary-500">

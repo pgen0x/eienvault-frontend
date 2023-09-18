@@ -13,7 +13,7 @@ import { useAuth } from '@/hooks/AuthContext';
 import { useAccount } from 'wagmi';
 import { formatEther, parseEther } from 'viem';
 import { ImageWithFallback } from '../imagewithfallback';
-import dataCollections from '../../app/collection/MOCK_DATA.json';
+// import dataCollections from '../../app/collection/MOCK_DATA.json';
 import formatter from '@/utils/shortNumberFormatter';
 
 const servers = [
@@ -155,7 +155,10 @@ const Main = () => {
           </div>
         </div>
         <div className="flex items-end px-3">
-          <button onClick={() => router.push(`/collection`)} className="text-primary-500">
+          <button
+            onClick={() => router.push(`/collection`)}
+            className="text-primary-500"
+          >
             See all
           </button>
         </div>
@@ -164,7 +167,7 @@ const Main = () => {
   );
 };
 
-export const TrendingTop = () => {
+export const TrendingTop = ({ dataCollections }) => {
   const [limit, setLimit] = useState(0);
 
   const classFloor = (value) => {
@@ -242,7 +245,9 @@ export const TrendingTop = () => {
                     </div>
                     <div className="flex w-full gap-2">
                       <span className="w-full">Volume</span>
-                      <p className="w-full">${formatter(trade.volume)}</p>
+                      <p className="w-full">
+                        ${Number(formatEther(Number(trade.volume))).toFixed(2)}
+                      </p>
                       <p
                         className={classMovement(
                           trade.volumeChangePercentage1h,
@@ -442,7 +447,10 @@ const MainMobile = () => {
           </div>
         </div>
         <div className="hidden items-end px-3 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
-          <button onClick={() => router.push(`/collection`)} className="text-primary-500">
+          <button
+            onClick={() => router.push(`/collection`)}
+            className="text-primary-500"
+          >
             See all
           </button>
         </div>
@@ -451,7 +459,7 @@ const MainMobile = () => {
   );
 };
 
-export const TrendingTopMobile = () => {
+export const TrendingTopMobile = ({ dataCollections }) => {
   const router = useRouter();
 
   const classFloor = (value) => {
@@ -470,37 +478,46 @@ export const TrendingTopMobile = () => {
     <>
       <MainMobile />
       <div className="mt-5 flex flex-col gap-5">
-        {trading.slice(trading.length - 3).map((trade, index) => (
+        {dataCollections.map((trade, index) => (
           <div
             key={index}
             className="flex flex-col gap-3 rounded-xl bg-white p-5"
           >
             <div className="flex w-full items-center gap-3 border-b border-gray-300 pb-2">
-              <img
-                className="h-10 w-10 flex-none rounded-full bg-gray-50"
-                width={40}
-                height={40}
-                src={trade.imageUrl}
-                alt=""
-              />
+              <div className="h-11 w-11">
+                <ImageWithFallback
+                  src={`/uploads/collections/${trade.logo}`}
+                  alt={trade.name}
+                  width={48}
+                  height={48}
+                  diameter={48}
+                  address={trade.tokenAddress}
+                  className="rounded-full"
+                />
+              </div>
               <h3 className="w-full">{trade.name}</h3>
-              <button className="h-8 w-12 rounded-full bg-primary-500 text-white hover:bg-primary-300">
+              <button
+                className="h-8 w-12 rounded-full bg-primary-500 text-white hover:bg-primary-300"
+                onClick={() => router.push(`/collection/${trade.tokenAddress}`)}
+              >
                 <FontAwesomeIcon icon={faArrowRight} />
               </button>
             </div>
             <div className="flex w-full gap-3">
               <div className="flex w-full flex-col gap-3">
                 <span>Floor</span>
-                <span>${formatter(trade.floor)}</span>
-                <span className={classFloor(trade.movement_floor)}>
-                  {trade.movement_floor}%
+                <span>
+                  ${Number(formatEther(Number(trade.floorPrice))).toFixed(2)}
+                </span>
+                <span className={classFloor(trade.priceChangePercentage1h)}>
+                  {trade.priceChangePercentage1h}%
                 </span>
               </div>
               <div className="flex w-full flex-col gap-3">
                 <span>Volume</span>
                 <span>${formatter(trade.volume)}</span>
-                <span className={classMovement(trade.movement_volume)}>
-                  {trade.movement_volume}%
+                <span className={classMovement(trade.volumeChangePercentage1h)}>
+                  {trade.volumeChangePercentage1h}%
                 </span>
               </div>
             </div>

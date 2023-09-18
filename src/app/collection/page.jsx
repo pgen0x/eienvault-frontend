@@ -134,6 +134,7 @@ export default function Collection() {
 
   const handleSearch = (event) => {
     setCollectionPage(1);
+    setCollectionLast(false);
     if(search === ""){
       setCollections([]);
     }else{

@@ -131,25 +131,17 @@ export default function CollectionDetail({ params }) {
     }
   }, [collection.tokenAddress, collection.chainId, collection.userAddress])
 
-  const getCollection = async (collectionToken = false) => {
-    let targetUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/collection/get/${params.slug}`;
-    if (collectionToken) {
-      targetUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/collection/getbycollection/${params.slug}`
-    }
+  const getCollection = async () => {
     await axios.request({
       method: 'get',
       maxBodyLength: Infinity,
-      url: targetUrl,
+      url: `${process.env.NEXT_PUBLIC_API_URL}/api/collection/getbycollection/${params.slug}`,
     })
       .then((response) => {
         setCollection(response.data);
       })
       .catch((error) => {
-        if (collectionToken) {
-          toast.error(error.message);
-        } else {
-          getCollection(true);
-        }
+        toast.error(error.message);
       });
   };
 
@@ -289,17 +281,18 @@ export default function CollectionDetail({ params }) {
               <div className="grid grid-cols-12 gap-4">
                 <div className="flex flex-col gap-3 col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
                   <div className="relative -mt-[5rem]">
-                    <Image
-                      className="w-36 rounded-lg border-4 border-white shadow"
-                      src={collection.logo ? `/uploads/collections/${collection.logo}` : 'https://placehold.co/100x100.png'}
-                      alt={collection.name ? collection.name : ''}
+                    <ImageWithFallback
+                      src={`/uploads/collections/${collection.logo}`}
+                      alt={collection?.name}
                       width={100}
                       height={100}
-                      objectFit="cover"
+                      diameter={100}
+                      address={collection?.tokenAddress}
+                      className="w-36 rounded-lg border-4 border-white shadow"
                     />
                   </div>
                   <div className="text-xl font-semibold text-gray-900">
-                    {collection.name ? collection.name : ''}
+                    {collection.name ? collection.name : collection?.tokenAddress ? truncateAddress(collection.tokenAddress) : ''}
                   </div>
                   <div className="block flex w-full justify-start gap-4 text-gray-900">
                     <div>

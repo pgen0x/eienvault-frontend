@@ -30,6 +30,8 @@ import axios from 'axios';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { formatEther } from 'viem';
 import { toast } from 'react-toastify';
+import { useSearchParams } from 'next/navigation';
+import { ImageWithFallback } from '@/components/imagewithfallback';
 
 const servers = [
   'All Mainnet',
@@ -73,7 +75,11 @@ export default function CollectionDetail({ params }) {
   const { token } = useAuth();
   const [collection, setCollection] = useState({});
   const [profile, setProfile] = useState({});
-  const [nfts, setNfts] = useState({});
+  const [nfts, setNfts] = useState([]);
+  const [nftPage, setNftPage] = useState(1);
+  const [nftLast, setNftLast] = useState(false);
+  const filterQuery = useSearchParams();
+  const [search, setSearch] = useState(filterQuery.get('search') === null ? "" : filterQuery.get('search'));
   const [showDescription, setShowDescription] = useState(false);
   const [collectionChain, setCollectionChain] = useState({});
   const [selectedServer, setSelectedServer] = useState(servers[0]);
@@ -117,9 +123,6 @@ export default function CollectionDetail({ params }) {
   }, []);
 
   useEffect(() => {
-    if (collection.tokenAddress) {
-      getNfts(collection.tokenAddress);
-    }
     if (collection.chainId) {
       getChain(collection.chainId);
     }
@@ -164,18 +167,59 @@ export default function CollectionDetail({ params }) {
       });
   };
 
-  const getNfts = async (collectionAddress) => {
-    await axios.request({
-      method: 'get',
-      maxBodyLength: Infinity,
-      url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbycollection/${collectionAddress}`,
-    })
-      .then((response) => {
-        setNfts(response.data);
+  useEffect(() => {
+    getNfts();
+  }, [nftPage]);
+
+  const getNfts = async () => {
+    if (nftLast === true) return;
+
+    if (search === "") {
+      await axios.request({
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbycollection/${params.slug}?page=${nftPage}`,
+        // url: `http://192.168.1.8/labs/dummy-data/collections.php?page=${nftPage}`,
       })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+        .then((response) => {
+          if (response.data.nfts.length > 0) {
+            setNfts((oldNfts) => [...oldNfts, ...response.data.nfts]);
+          } else {
+            setNftLast(true);
+          }
+        })
+        .catch((error) => {
+          toast.error(error.message);
+        });
+    } else {
+      await axios.request({
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbycollection/${params.slug}?query=${search}&page=${nftPage}`,
+      })
+        .then((response) => {
+          if (response.data.nfts.length > 0) {
+            if (nftPage > 1) {
+              setNfts((oldNft) => [...oldNft, ...response.data.nfts]);
+            } else {
+              setNfts([...response.data.nfts]);
+            }
+          } else {
+            setNftLast(true);
+          }
+        })
+        .catch((error) => {
+          if (error.response.status == 404) {
+            if (nftPage > 1) {
+              setNftLast(true);
+            } else {
+              setNfts([])
+            }
+          } else {
+            toast.error(error.message);
+          }
+        });
+    }
   };
 
   const getChain = async (chainId) => {
@@ -191,6 +235,37 @@ export default function CollectionDetail({ params }) {
         toast.error(error.message);
       });
 
+  }
+
+  const handleScroll = () => {
+    const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    const windowBottom = windowHeight + window.pageYOffset;
+    if ((windowBottom >= docHeight)) {
+      if (nftLast === false) {
+        setNftPage((oldPage) => oldPage + 1);
+      }
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleSearch = (event) => {
+    event.preventDefault();
+    setNftPage(1);
+    setNftLast(false);
+    if (search === "") {
+      setNfts([]);
+    } else {
+      setNftPage(1);
+    }
+
+    router.push(`?search=${search}`)
+    getNfts();
   }
 
   return (
@@ -302,124 +377,99 @@ export default function CollectionDetail({ params }) {
         </section>
         <section>
           <div className="grid grid-cols-12 gap-3">
-            <div className="col-span-12 hidden sm:col-span-12 sm:hidden md:col-span-4 md:block lg:col-span-3 lg:block xl:col-span-3 xl:block 2xl:col-span-3 2xl:block">
-              <button
-                className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
-                onClick={handleOpenFilter}
-              >
-                <FontAwesomeIcon icon={faSliders} /> Filter
-              </button>
-            </div>
-            <div className="col-span-12 flex gap-2 sm:col-span-12 md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9">
-              <div className="inline-flex h-10 w-2/3 w-full items-center justify-start gap-2 rounded-full border border-0 border-gray-200 bg-white px-4 dark:bg-gray-800">
-                <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
-                  <FontAwesomeIcon icon={faSearch} />
-                </div>
-                <input
-                  ref={inputRef}
-                  className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                  type="text"
-                  placeholder="Search ..."
-                  aria-label="Search"
-                />
-                <div className="inline-flex flex-col items-center justify-center gap-2 rounded-md bg-zinc-200 px-2">
-                  <div className="text-base font-light leading-normal text-zinc-500">
-                    /
-                  </div>
+            <div className="col-span-12 flex flex-col md:flex-row gap-2">
+              <div className="w-4/12 flex gap-1">
+                <div className="w-fit">
+                  <button className={`flex items-center gap-1 rounded-full px-4 py-2 hover:bg-primary-300 ${openFilter ? 'bg-primary-500' : 'bg-white text-primary-500'}`} onClick={handleOpenFilter}>
+                    <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
+                  </button>
                 </div>
               </div>
-              <Listbox
-                value={selectedFilter}
-                onChange={setSelectedFilter}
-                className="hidden sm:hidden md:block lg:block xl:block 2xl:block"
-              >
-                <div className="relative z-20">
-                  <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                    <span className="block truncate text-gray-600">
-                      {selectedFilter}
-                    </span>
-                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                      <svg
-                        width="16"
-                        height="9"
-                        viewBox="0 0 16 9"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M8 9C7.71875 9 7.46875 8.90625 7.28125 8.71875L1.28125 2.71875C0.875 2.34375 0.875 1.6875 1.28125 1.3125C1.65625 0.90625 2.3125 0.90625 2.6875 1.3125L8 6.59375L13.2812 1.3125C13.6562 0.90625 14.3125 0.90625 14.6875 1.3125C15.0938 1.6875 15.0938 2.34375 14.6875 2.71875L8.6875 8.71875C8.5 8.90625 8.25 9 8 9Z"
-                          fill="#7D778A"
-                        />
-                      </svg>
-                    </span>
-                  </Listbox.Button>
-                  <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    {servers.map((server, index) => (
-                      <Listbox.Option
-                        key={index}
-                        className={({ active }) =>
-                          `relative cursor-default select-none px-4 py-2 ${active
-                            ? 'bg-primary-500 text-white'
-                            : 'text-gray-900'
-                          }`
-                        }
-                        value={server}
-                      >
-                        {({ selectedServer }) => (
-                          <>
-                            <span
-                              className={`block truncate ${selectedServer ? 'font-medium' : 'font-normal'
-                                }`}
-                            >
-                              {server}
-                            </span>
-                          </>
-                        )}
-                      </Listbox.Option>
-                    ))}
-                  </Listbox.Options>
-                </div>
-              </Listbox>
-              <div className="hidden space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
-                <div>
+              <form onSubmit={(event) => handleSearch(event)} className="w-full flex gap-4">
+                <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border border-0 border-gray-200 bg-white px-4 dark:bg-gray-800">
+                  <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
+                    <FontAwesomeIcon icon={faSearch} />
+                  </div>
                   <input
-                    className="hidden"
-                    type="radio"
-                    name="rangeOptions"
-                    id="optionGrid"
-                    onChange={(event) => handleGridList(event, 'grid')}
-                  />
-                  <label
-                    className={classRadio(gridList, 'grid')}
-                    htmlFor="optionGrid"
-                  >
+                    className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                    type="text"
+                    placeholder="Search ..."
+                    aria-label="Search"
+                    defaultValue={search}
+                    onChange={(event) => setSearch(event.target.value)} />
+                  <div className="inline-flex flex-col items-center justify-center gap-2 rounded-md bg-zinc-200 px-2">
+                    <div className="text-base font-light leading-normal text-zinc-500">
+                      /
+                    </div>
+                  </div>
+                </div>
+                <Listbox
+                  value={selectedFilter}
+                  onChange={setSelectedFilter}
+                  className="hidden sm:hidden md:block lg:block xl:block 2xl:block"
+                >
+                  <div className="relative z-20">
+                    <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                      <span className="block truncate text-gray-600">
+                        {selectedFilter}
+                      </span>
+                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                        <svg
+                          width="16"
+                          height="9"
+                          viewBox="0 0 16 9"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8 9C7.71875 9 7.46875 8.90625 7.28125 8.71875L1.28125 2.71875C0.875 2.34375 0.875 1.6875 1.28125 1.3125C1.65625 0.90625 2.3125 0.90625 2.6875 1.3125L8 6.59375L13.2812 1.3125C13.6562 0.90625 14.3125 0.90625 14.6875 1.3125C15.0938 1.6875 15.0938 2.34375 14.6875 2.71875L8.6875 8.71875C8.5 8.90625 8.25 9 8 9Z"
+                            fill="#7D778A"
+                          />
+                        </svg>
+                      </span>
+                    </Listbox.Button>
+                    <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                      {servers.map((server, index) => (
+                        <Listbox.Option
+                          key={index}
+                          className={({ active }) =>
+                            `relative cursor-default select-none px-4 py-2 ${active
+                              ? 'bg-primary-500 text-white'
+                              : 'text-gray-900'
+                            }`
+                          }
+                          value={server}
+                        >
+                          {({ selectedServer }) => (
+                            <>
+                              <span
+                                className={`block truncate ${selectedServer ? 'font-medium' : 'font-normal'
+                                  }`}
+                              >
+                                {server}
+                              </span>
+                            </>
+                          )}
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  </div>
+                </Listbox>
+              </form>
+              <div className="space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 hidden sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+                <div>
+                  <input className="hidden" type="radio" name="rangeOptions" id="optionGrid" onChange={(event) => handleGridList(event, 'grid')} />
+                  <label className={classRadio(gridList, 'grid')} htmlFor="optionGrid">
                     <FontAwesomeIcon icon={faGrip} />
                   </label>
                 </div>
                 <div>
-                  <input
-                    className="hidden"
-                    type="radio"
-                    name="rangeOptions"
-                    id="optionList"
-                    onChange={(event) => handleGridList(event, 'list')}
-                  />
-                  <label
-                    className={classRadio(gridList, 'list')}
-                    htmlFor="optionList"
-                  >
+                  <input className="hidden" type="radio" name="rangeOptions" id="optionList" onChange={(event) => handleGridList(event, 'list')} />
+                  <label className={classRadio(gridList, 'list')} htmlFor="optionList">
                     <FontAwesomeIcon icon={faGripVertical} />
                   </label>
                 </div>
               </div>
-            </div>
-            <div className="col-span-12 block sm:col-span-12 sm:block md:col-span-4 md:hidden lg:col-span-3 lg:hidden xl:col-span-3 xl:hidden 2xl:col-span-3 2xl:hidden">
-              <button
-                className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
-                onClick={handleOpenFilter}
-              >
-                <FontAwesomeIcon icon={faSliders} /> Filter
-              </button>
             </div>
           </div>
           <div className="my-5 grid grid-cols-12 gap-6">
@@ -500,85 +550,99 @@ export default function CollectionDetail({ params }) {
             )}
             <div
               className={`col-span-12 sm:col-span-12 ${openFilter
-                  ? 'md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9'
-                  : 'md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12'
+                ? 'md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9'
+                : 'md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12'
                 }`}
             >
-              <div className="grid w-full grid-cols-12 gap-6 text-gray-900">
-                {nfts.nfts && nfts.nfts.map((nft, index) => (
-                  <div
-                    key={index}
-                    className={`group h-[300px] sm:h-[300px] md:h-[540px] lg:h-[540px] xl:h-[540px] 2xl:h-[540px] w-full ${openFilter
-                      ? 'col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-4 2xl:col-span-4'
-                      : 'col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3'
-                      }`}
-                  >
-                    <Image
-                      className="relative z-10 h-[150px] sm:h-[150px] md:h-[300px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px] w-full rounded-2xl object-cover duration-300 ease-in-out md:group-hover:h-[250px] md:group-hover:transition-all"
-                      src={nft.imageUri ? nft.imageUri : 'https://placehold.co/325x265.png'}
-                      alt={nft.name ? nft.name : ''}
-                      width={325}
-                      height={265}
-                      objectFit="cover"
-                    />
-                    <div className="relative -top-3 inline-flex w-full flex-col items-center justify-center lg:items-start">
-                      <div className="relative flex w-full flex-row px-2 sm:px-2 md:px-2 lg:px-5 xl:px-5 2xl:px-5">
-                        <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
-                          <div className="flex w-full flex-col items-start justify-start">
-                            <div className="inline-flex items-center justify-between self-stretch pt-2">
-                              <div className="font-semibold leading-none text-neutral-700">
-                                <div className="flex items-center justify-center gap-2 rounded-md bg-primary-50 p-1">
-                                  <Image
-                                    // src={profile.avatar ? `/uploads/users/${profile.avatar}` : 'https://placehold.co/16x16'}
-                                    src="https://placehold.co/16x16.png"
-                                    alt="Selected Preview"
+              <div className="grid w-full grid-cols-12 gap-7 text-gray-900">
+                {nfts.length == 0 && <div className="w-full col-span-12 text-black text-center font-semibold">NFT not found</div>}
+                {nfts.length > 0 && nfts.map((nft, index) => (
+                  <div key={index} className={`group col-span-12 h-[542px] sm:h-[542px] md:h-[542px] lg:h-[542px] xl:h-[542px] 2xl:h-[542px] w-full sm:col-span-6 ${gridList === 'grid'
+                    ? (openFilter ? 'md:col-span-4 xl:col-span-4 2xl:col-span-4' : 'md:col-span-6 xl:col-span-3 2xl:col-span-3')
+                    : (openFilter ? 'md:col-span-6 xl:col-span-2 2xl:col-span-3' : 'md:col-span-4 xl:col-span-2 2xl:col-span-2')
+                    }`}>
+                    <div className="w-full group h-[542px]">
+                      <Image
+                        className="w-full rounded-2xl z-10 group-hover:h-[250px] h-[290px] group-hover:transition-all ease-in-out duration-300 object-cover"
+                        width={600}
+                        height={600}
+                        placeholder="blur"
+                        blurDataURL={`https://via.placeholder.com/600x600`}
+                        src={nft?.imageUri}
+                      />
+                      <div className="w-full px-3 inline-flex flex-col items-center justify-center lg:items-start">
+                        <div className="relative w-full flex flex-row">
+                          <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-br-2xl rounded-bl-2xl bg-white bg-opacity-50 p-3  backdrop-blur-xl">
+                            <div className="w-full flex flex-col items-start justify-start">
+                              <div
+                                className="inline-flex items-center justify-between self-stretch cursor-pointer"
+                                onClick={() =>
+                                  router.push(
+                                    `/collection/${nft.collectionAddress}`,
+                                  )
+                                }
+                              >
+                                <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2">
+                                  <ImageWithFallback
+                                    className="h-full w-full rounded-2xl "
                                     width={16}
                                     height={16}
-                                    className="rounded-2xl"
-                                    objectFit="cover"
+                                    alt={
+                                      nft.Collection?.name
+                                        ? nft.Collection?.name
+                                        : nft.collectionAddress
+                                          ? nft.collectionAddress
+                                          : ''
+                                    }
+                                    diameter={16}
+                                    address={nft?.collectionAddress}
+                                    src={`/uploads/collections/${nft.Collection?.logo}`}
                                   />
                                   <div className="flex items-start justify-start gap-2">
                                     <div className="text-xs font-medium leading-none text-neutral-700">
-                                      {profile.username ? profile.username : ''}
+                                      {collection?.name
+                                        ? collection.name
+                                        : collection?.tokenAddress
+                                          ? truncateAddress(collection.tokenAddress)
+                                          : ''}
                                     </div>
                                     <div className="text-xs font-black leading-none text-primary-500">
                                       <FontAwesomeIcon icon={faCircleCheck} />
                                     </div>
                                   </div>
                                 </div>
+                                <div className="items-center">
+                                  <FontAwesomeIcon icon={faEllipsis} />
+                                </div>
                               </div>
-                              <div className="items-center text-primary-500">
-                                <FontAwesomeIcon icon={faEllipsis} />
+                              <div className="w-full inline-flex items-center justify-between gap-2 pt-1">
+                                <div className="font-medium leading-tight text-gray-600 leading-[20px] h-[40px] line-clamp-2" title={`${nft?.name} #${nft?.tokenId}`}>
+                                  {nft?.name} #{nft?.tokenId}
+                                </div>
+                                <div className="text-sm font-normal leading-tight text-neutral-700">
+                                  <Ethereum className="h-4 w-4" />
+                                </div>
                               </div>
-                            </div>
-                            <div className="inline-flex w-full items-center justify-between gap-2 pt-1">
-                              <div className="text-sm font-medium leading-tight text-gray-600">
-                                {nft.name ? nft.name : nft.collectionAddress}
+                              <div className="flex justify-between w-full mt-5 px-2 py-2 bg-white rounded-md">
+                                <div className="flex flex-col items-start truncate text-sm leading-5">
+                                  <p>Price</p>
+                                  <p className="font-bold">
+                                    {nft.price === null ? "0.00" : formatEther(Number(nft?.price))}{' '}
+                                    {nft.Collection?.Chain.symbol}
+                                  </p>
+                                </div>
+                                <div className="flex flex-col items-start truncate text-sm leading-5">
+                                  <p>Highest bid</p>
+                                  <p className="font-bold">No bids yet</p>
+                                </div>
                               </div>
-                              <div className="text-sm font-normal leading-tight text-neutral-700">
-                                <Ethereum className="h-4 w-4" />
-                              </div>
-                            </div>
-                            <div className="flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row justify-between w-full mt-5 py-2">
-                              <div className="flex flex-row sm:flex-row md:flex-col lg:flex-col xl:flex-col 2xl:flex-col items-start truncate text-sm leading-5 justify-between">
-                                <p>Price</p>
-                                <p className="font-bold">{nft.price ? formatEther(Number(nft.price)) : '0.00'} {collectionChain.symbol ? collectionChain.symbol : '-'}</p>
-                              </div>
-                              <div className="hidden flex-col sm:hidden md:flex lg:flex xl:flex 2xl:flex items-start truncate text-sm leading-5 justify-between">
-                                <p>Highest bid</p>
-                                <p className="font-bold">No bids yet</p>
-                              </div>
-                            </div>
-                            <div className="hidden sm:hidden md:block lg:block xl:block 2xl:block w-full">
-                              <div className="mt-5 flex gap-3 w-full items-center">
-                                <FontAwesomeIcon className="h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 " icon={faCartPlus} />
-                                <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
+                              <div className="flex mt-5 gap-2 w-full items-center">
+                                <FontAwesomeIcon className="w-5 h-5 p-3 rounded-full text-primary-500 cursor-pointer hover:bg-primary-50 " icon={faCartPlus} />
+                                <button className="w-full text-center text-base font-bold text-white bg-primary-500 rounded-full px-4 py-2 hover:bg-primary-300 text-xs">
                                   Buy Now
                                 </button>
                               </div>
-                              <button onClick={() => router.push('/nft/user')} className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all">
-                                View Detail
-                              </button>
+                              <button onClick={() => router.push(`/nft/${nft.collectionAddress}/${nft.tokenId}`)} className="bg-white hover:bg-primary-50 text-primary-500 mt-2 w-full py-0 text-center group-hover:py-2 overflow-hidden opacity-0 h-0 group-hover:h-auto group-hover:opacity-100 rounded-full group-hover:transition-all ease-in-out duration-800">View Detail</button>
                             </div>
                           </div>
                         </div>

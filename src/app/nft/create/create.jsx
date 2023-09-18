@@ -84,7 +84,11 @@ export default function Create({ chains }) {
     useState('snap');
   const { address } = useAccount();
   const [selectedOptionDate, setSelectedOptionDate] = useState('1 Day');
+  const [selectedOptionReleaseDate, setSelectedOptionReleaseDate] =
+    useState('1 Day');
   const [customValueDate, setCustomValueDate] = useState('');
+  const [customValueReleaseDate, setCustomValueReleaseDate] = useState('');
+
   const [isSubmit, setIsSubmit] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isCreateCollection, setIsCreateCollection] = useState(false);
@@ -146,6 +150,18 @@ export default function Create({ chains }) {
     setCustomValueDate(formattedDate);
   }, []);
 
+  useEffect(() => {
+    // Calculate the date 1 day from now using Moment.js
+    const currentDate = moment();
+    const nextDay = moment(currentDate).add(1, 'days');
+
+    // Format the calculated date in 'YYYY-MM-DDTHH:mm' format
+    const formattedDate = nextDay.format('YYYY-MM-DDTHH:mm');
+
+    // Set the formatted date as the default value
+    setCustomValueReleaseDate(formattedDate);
+  }, []);
+
   const handleDateSelectChange = (event) => {
     const selectedValue = event.target.value;
     setSelectedOptionDate(selectedValue);
@@ -170,6 +186,33 @@ export default function Create({ chains }) {
 
       // Set the formatted date as custom value
       setCustomValueDate(formattedDate);
+    }
+  };
+
+  const handleReleaseDateSelectChange = (event) => {
+    const selectedValue = event.target.value;
+    setSelectedOptionReleaseDate(selectedValue);
+
+    if (selectedValue === 'Custom') {
+      // Open modal or show date picker for custom date selection
+      // You can implement your modal or date picker logic here
+    } else {
+      const currentDate = moment(); // Get the current local time using Moment.js
+      let calculatedDate = moment(currentDate);
+
+      if (selectedValue === '1 Day') {
+        calculatedDate.add(1, 'days');
+      } else if (selectedValue === '7 Day' || selectedValue === '1 Week') {
+        calculatedDate.add(7, 'days');
+      } else if (selectedValue === '1 Month') {
+        calculatedDate.add(1, 'months');
+      }
+
+      // Format the calculated date in 'YYYY-MM-DDTHH:mm' format
+      const formattedDate = calculatedDate.format('YYYY-MM-DDTHH:mm');
+
+      // Set the formatted date as custom value
+      setCustomValueReleaseDate(formattedDate);
     }
   };
 
@@ -426,7 +469,10 @@ export default function Create({ chains }) {
 
   const putOnSale = async () => {
     const listingPrice = await getListingPrice();
-    const currentTime = moment().unix();
+    const releaseTime =
+      selectedOptionMarket === 'fixed'
+        ? moment().unix()
+        : moment(customValueReleaseDate).unix();
     const isAuction = selectedOptionMarket === 'fixed' ? false : true;
     const parsePrice = parseEther(price);
 
@@ -440,7 +486,7 @@ export default function Create({ chains }) {
           zeroAddress,
           tokenId,
           parsePrice,
-          currentTime,
+          releaseTime,
           moment(customValueDate).unix(),
         ],
         account: address,
@@ -871,17 +917,17 @@ export default function Create({ chains }) {
                   <li>
                     <input
                       type="radio"
-                      id="time-method"
+                      id="auction-method"
                       name="method"
-                      value="time"
+                      value="auction"
                       className="peer hidden"
                       onChange={(e) => setSelectedOptionMarket(e.target.value)}
-                      checked={selectedOptionMarket === 'time'}
+                      checked={selectedOptionMarket === 'auction'}
                     />
                     <label
-                      htmlFor="time-method"
+                      htmlFor="auction-method"
                       className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 ${
-                        selectedOptionMarket === 'time'
+                        selectedOptionMarket === 'auction'
                           ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
                           : 'dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300'
                       }`}
@@ -942,6 +988,45 @@ export default function Create({ chains }) {
                   </span>
                 </div>
               </div>
+              {selectedOptionMarket === 'auction' && (
+                <>
+                  <div className="mt-4 flex w-full flex-col rounded-xl bg-white p-5">
+                    <label className="block text-sm font-medium leading-6 text-gray-900">
+                      <span className="text-semantic-red-500">*</span> Release
+                      Date
+                    </label>
+                    <div className="mt-2 flex gap-2">
+                      <input
+                        type="datetime-local"
+                        name="release_date"
+                        id="release_date"
+                        autoComplete="release_date"
+                        className="flex-1 rounded-xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:text-sm sm:leading-6"
+                        value={customValueReleaseDate}
+                        disabled={selectedOptionReleaseDate !== 'Custom'}
+                        onChange={(e) =>
+                          setCustomValueReleaseDate(e.target.value)
+                        }
+                      />
+                      <select
+                        className="rounded-3xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:max-w-md sm:text-sm sm:leading-6"
+                        onChange={handleReleaseDateSelectChange}
+                        value={selectedOptionReleaseDate}
+                      >
+                        <option>1 Day</option>
+                        <option>7 Day</option>
+                        <option>1 Week</option>
+                        <option>1 Month</option>
+                        <option>Custom</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="mt-1 text-sm font-semibold text-primary-500">
+                    {!customValueReleaseDate && 'Release date is required'}
+                  </div>
+                </>
+              )}
+
               <div className="mt-4 flex w-full flex-col rounded-xl bg-white p-5">
                 <label className="block text-sm font-medium leading-6 text-gray-900">
                   <span className="text-semantic-red-500">*</span> Date of

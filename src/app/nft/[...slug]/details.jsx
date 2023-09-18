@@ -297,7 +297,7 @@ export default function NFTDetails({ dataNFTs }) {
             <div className="mt-5 flex w-full flex-col gap-4 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
               <div className="flex w-full flex-col gap-4">
                 <Image
-                  className="w-full rounded-2xl object-contain lg:w-96"
+                  className="w-full rounded-2xl bg-white object-contain lg:w-96"
                   width={600}
                   height={600}
                   placeholder="blur"
@@ -576,7 +576,7 @@ export default function NFTDetails({ dataNFTs }) {
                                 ? formatEther(dataNFTs.itemDetails?.price)
                                 : formatEther(
                                     dataNFTs.collectionData.floorPrice,
-                                  )}
+                                  )}{' '}
                               {dataNFTs.collectionData.Chain.symbol}
                             </h4>
                             <h5>

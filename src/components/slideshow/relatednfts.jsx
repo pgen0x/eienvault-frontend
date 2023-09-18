@@ -236,7 +236,9 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
     slidesPerView = 4;
   } else {
     for (const breakpoint in sliderBreakPoints) {
-      if (dataRelatedNFTs.length < sliderBreakPoints[breakpoint].slidesPerView) {
+      if (
+        dataRelatedNFTs.length < sliderBreakPoints[breakpoint].slidesPerView
+      ) {
         slidesPerView = sliderBreakPoints[breakpoint].slidesPerView;
         break;
       }
@@ -280,16 +282,16 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
                   <Image
                     className="z-10 h-[250px] w-full rounded-2xl object-cover duration-300 ease-in-out group-hover:h-[210px] group-hover:transition-all"
                     src={
-                      nft.nftDetails.imageUri
-                        ? nft.nftDetails.imageUri
+                      nft.nftDetails?.imageUri
+                        ? nft.nftDetails?.imageUri
                         : 'https://placehold.co/325x265.png'
                     }
                     blurDataURL={
-                      nft.nftDetails.imageUri
-                        ? nft.nftDetails.imageUri
+                      nft.nftDetails?.imageUri
+                        ? nft.nftDetails?.imageUri
                         : 'https://placehold.co/325x265.png'
                     }
-                    alt={nft.nftDetails.name ? nft.nftDetails.name : ''}
+                    alt={nft.nftDetails?.name ? nft.nftDetails?.name : ''}
                     width={325}
                     height={265}
                     placeholder="blur"
@@ -353,7 +355,7 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
                               )
                             }
                           >
-                            {nft.nftDetails.name ? nft.nftDetails.name : ''} #
+                            {nft.nftDetails?.name ? nft.nftDetails?.name : ''} #
                             {nft.nftDetails.tokenId
                               ? nft.nftDetails.tokenId
                               : ''}

@@ -1,30 +1,20 @@
 'use client';
-import { useIsMounted } from '@/hooks/use-is-mounted';
-import Image from 'next/image';
-import { useRef, useState } from 'react';
+
+import { useState } from 'react';
 import Footer from '@/components/footer/main';
 import { Listbox } from '@headlessui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCalendar,
-  faCartPlus,
   faChevronDown,
-  faCircleCheck,
-  faEllipsis,
   faGrip,
   faGripVertical,
   faPenToSquare,
   faSearch,
   faShare,
-  faSliders,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { Trykker } from 'next/font/google';
-import Search from '@/components/navbar/search';
 import Ethereum from '@/assets/icon/ethereum';
-import { filter } from '@metamask/jazzicon/colors';
 import { useEffect } from 'react';
-import DatePicker from 'tailwind-datepicker-react';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { useRouter } from 'next-nprogress-bar';
 import { toast } from 'react-toastify';
@@ -32,6 +22,9 @@ import axios from 'axios';
 import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { useAccount } from 'wagmi';
+import { useSearchParams } from 'next/navigation';
+import { formatEther } from 'viem';
+import { ImageWithFallback } from '@/components/imagewithfallback';
 
 const servers = [
   'All Mainnet',
@@ -67,69 +60,26 @@ const filters = [
   'Recently received',
 ];
 
-const collections = [
-  'Zombie drunk',
-  'Shadow fiend',
-  'Creepy NFT',
-  'Pandamonium',
-  'Robotofield',
-  'Black dragon',
-  'Cute ninja',
-  'Kokoakoci',
-  'Pyrameed',
-  'Cute ninja',
-  'Kokoakoci',
-];
-
-const listCollections = [
-  { name: 'Owned', badge: 0, active: false },
-  { name: 'Collections', badge: 2, active: true },
-  { name: 'Bid received', badge: 0, active: false },
-  { name: 'Collateral', badge: 0, active: false },
-  { name: 'Created', badge: 0, active: false },
-  { name: 'On sale', badge: 1, active: false },
-  { name: 'Sold', badge: 0, active: false },
-  { name: 'Liked', badge: 0, active: false }
-]
 export default function ProfilePage({ params }) {
+  const listCollections = [
+    { name: 'Owned', badge: 0, active: false, page: <Owned /> },
+    { name: 'Collections', badge: 2, active: true, page: <Collection params={params} /> },
+    { name: 'Bid received', badge: 0, active: false, page: <Bidreceived /> },
+    { name: 'Collateral', badge: 0, active: false, page: <Collateral /> },
+    { name: 'Created', badge: 0, active: false, page: <Created /> },
+    { name: 'On sale', badge: 1, active: false, page: <Onsale /> },
+    { name: 'Sold', badge: 0, active: false, page: <Sold /> },
+    { name: 'Liked', badge: 0, active: false, page: <Liked /> }
+  ]
+
   const router = useRouter();
   const { token } = useAuth();
   const [selectedServer, setSelectedServer] = useState(servers[0]);
-  const [selectedFilter, setSelectedFilter] = useState(filters[0]);
-  const inputRef = useRef(null);
-  const [gridList, setGridList] = useState('grid');
-  const [stepCreate, setStepCreate] = useState(1);
-  const [modalCreate, setModalCreate] = useState(false);
-  const [selectedBlockchain, setSelectedBlockchain] = useState(blockchains[0]);
   const [limitCollection, setLimitCollection] = useState(listCollections.length);
+  const [activePage, setActivePage] = useState("Collections");
+  const [renderPage, setRenderPage] = useState();
   const [profile, setProfile] = useState({});
   const { address } = useAccount();
-
-  const classRadio = (params, value) => {
-    const defaultCssRadio =
-      'cursor-pointer flex w-8 h-8 justify-center items-center rounded-full text-sm font-medium leading-5 ';
-    return (
-      defaultCssRadio +
-      (params === value
-        ? 'text-white bg-primary-500 shadow'
-        : 'text-primary-500 hover:bg-primary-300')
-    );
-  };
-
-  const handleGridList = (event, target) => {
-    setGridList(target);
-  };
-
-  const handleModalCreate = () => {
-    if (modalCreate) {
-      handleStepCreate(1);
-    }
-    setModalCreate(!modalCreate);
-  };
-
-  const handleStepCreate = (Create) => {
-    setStepCreate(Create);
-  };
 
   const handleResize = () => {
     const screen = window.innerWidth
@@ -175,6 +125,14 @@ export default function ProfilePage({ params }) {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    listCollections.map(collection => {
+      if (collection.name === activePage) {
+        setRenderPage(collection.page);
+      }
+    })
+  }, [activePage])
 
   return (
     <>
@@ -283,8 +241,8 @@ export default function ProfilePage({ params }) {
         <section className="inline">
           <ul className="w-full my-5 flex border-b border-gray-200 text-primary-500 gap-10">
             {listCollections.slice(0, limitCollection).map((collection, index) => (
-              <li key={index} className={`cursor-pointer pb-3 flex gap-2 ${collection.active === true ? "border-b-4 border-primary-500" : ""}`}>
-                <span>{collection.name}</span>
+              <li key={index} onClick={() => setActivePage(collection.name)} className={`cursor-pointer pb-3 flex gap-2 ${activePage === collection.name ? "border-b-4 border-primary-500" : ""}`}>
+                <span className="line-clamp-1">{collection.name}</span>
                 {collection.badge > 0 && (<span className="rounded-full bg-red-400 h-4 w-4 text-center text-xs font-semibold text-white">{collection.badge}</span>)}
               </li>
             ))}
@@ -293,7 +251,7 @@ export default function ProfilePage({ params }) {
                 <span className="pb-3">More</span> <FontAwesomeIcon icon={faChevronDown} />
                 <ul className="border-b border-gray-200 text-primary-500 hidden group-hover:flex flex-col absolute gap-3 py-3 mt-3 z-30 bg-white rounded-b-xl">
                   {listCollections.slice(limitCollection).map((collection, index) => (
-                    <li key={index} className={`cursor-pointer px-5 flex gap-2 ${collection.active === true ? "border-b-4 border-primary-500" : ""}`}>
+                    <li key={index} onClick={() => setActivePage(collection.name)} className={`cursor-pointer px-5 flex gap-2 ${activePage === collection.name ? "border-b-4 border-primary-500" : ""}`}>
                       <span>{collection.name}</span>
                       {collection.badge > 0 && (<span className="rounded-full bg-red-400 h-4 w-4 text-center text-xs font-semibold text-white">{collection.badge}</span>)}
                     </li>
@@ -303,130 +261,296 @@ export default function ProfilePage({ params }) {
             ) : ''}
           </ul>
         </section>
-        <section>
-          <div className="my-5 grid grid-cols-12 gap-1">
-            <div className="col-span-12 flex gap-2 sm:col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12">
-              <div className="inline-flex h-10 w-2/4 w-full items-center justify-start gap-2 rounded-full border border-0 border-gray-200 bg-white px-4 dark:bg-gray-800">
-                <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
-                  <FontAwesomeIcon icon={faSearch} />
-                </div>
-                <input ref={inputRef} className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500" type="text" placeholder="Search ..." aria-label="Search" />
-                <div className="inline-flex flex-col items-center justify-center gap-2 rounded-md bg-zinc-200 px-2">
-                  <div className="text-base font-light leading-normal text-zinc-500">
-                    /
-                  </div>
-                </div>
-              </div>
-              <Listbox value={selectedFilter} onChange={setSelectedFilter} className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
-                <div className="relative z-20  w-2/4">
-                  <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-100 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                    <span className="block truncate text-gray-600">
-                      {selectedFilter}
-                    </span>
-                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                      <svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 9C7.71875 9 7.46875 8.90625 7.28125 8.71875L1.28125 2.71875C0.875 2.34375 0.875 1.6875 1.28125 1.3125C1.65625 0.90625 2.3125 0.90625 2.6875 1.3125L8 6.59375L13.2812 1.3125C13.6562 0.90625 14.3125 0.90625 14.6875 1.3125C15.0938 1.6875 15.0938 2.34375 14.6875 2.71875L8.6875 8.71875C8.5 8.90625 8.25 9 8 9Z" fill="#7D778A" />
-                      </svg>
-                    </span>
-                  </Listbox.Button>
-                  <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    {servers.map((server, index) => (
-                      <Listbox.Option
-                        key={index}
-                        className={({ active }) =>
-                          `relative cursor-default select-none px-4 py-2 ${active
-                            ? 'bg-primary-500 text-white'
-                            : 'text-gray-900'
-                          }`
-                        }
-                        value={server}
-                      >
-                        {({ selectedServer }) => (
-                          <>
-                            <span
-                              className={`block truncate ${selectedServer ? 'font-medium' : 'font-normal'
-                                }`}
-                            >
-                              {server}
-                            </span>
-                          </>
-                        )}
-                      </Listbox.Option>
-                    ))}
-                  </Listbox.Options>
-                </div>
-              </Listbox>
-              <div className="space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 hidden sm:hidden md:flex lg:flex xl:flex 2xl:flex">
-                <div>
-                  <input className="hidden" type="radio" name="rangeOptions" id="optionGrid" onChange={(event) => handleGridList(event, 'grid')} />
-                  <label className={classRadio(gridList, 'grid')} htmlFor="optionGrid">
-                    <FontAwesomeIcon icon={faGrip} />
-                  </label>
-                </div>
-                <div>
-                  <input className="hidden" type="radio" name="rangeOptions" id="optionList" onChange={(event) => handleGridList(event, 'list')} />
-                  <label className={classRadio(gridList, 'list')} htmlFor="optionList">
-                    <FontAwesomeIcon icon={faGripVertical} />
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="my-5 grid grid-cols-12 gap-6">
-            <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12">
-              <div className="grid w-full grid-cols-12 gap-6 text-gray-900">
-                {(address === params.slug) && (
-                  <div className="col-span-12 mb-4 w-full h-[280px] sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                    <div className="flex h-full w-full flex-col items-center justify-center rounded-2xl border-2 border-gray-200">
-                      <button className="w-fit rounded-full bg-primary-500 px-4 py-1 text-white hover:bg-primary-300" onClick={handleModalCreate}>
-                        Create a new collection
-                      </button>
-                      <button className="w-fit px-4 py-1 font-semibold text-primary-500 hover:text-primary-300">
-                        Import existing collection
-                      </button>
-                    </div>
-                  </div>
-                )}
-                {collections.map((collection, index) => (
-                  <div key={index} className="group col-span-6 h-[320px] sm:h-[320px] md:h-[300px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px] w-full sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                    <img className="relative z-10 h-[200px] w-full rounded-2xl object-cover duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all" src="https://fakeimg.pl/325x175" />
-                    <div className="grid grid-cols-12 p-3">
-                      <div className="col-span-12 sm:col-span-12 md:col-span-10 lg:col-span-8 xl:col-span-8 2xl:col-span-8 relative z-10 -top-[60px] flex gap-1 rounded-tl-2xl rounded-tr-2xl bg-white bg-opacity-50 p-2">
-                        <div className="w-fit">
-                          <img src="https://fakeimg.pl/48x48" className="rounded-lg" />
-                        </div>
-                        <div className="w-full text-right">
-                          <h3 className="text-xs">Ship collections</h3>
-                          <h3 className="text-sm font-semibold">1 Owner</h3>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="relative -top-[85px] inline-flex w-full flex-col items-center justify-center lg:items-start">
-                      <div className="relative flex w-full flex-row px-3">
-                        <div className="inline-flex w-full flex-col items-start justify-start rounded-bl-2xl rounded-br-2xl bg-gray-50 p-3 backdrop-blur-xl">
-                          <div className="flex flex-col sm:flex-col md:flex-row w-full justify-between rounded-md bg-gray-100 px-2 py-2">
-                            <div className="shrink-0 truncate text-sm leading-5 flex flex-col sm:items-start">
-                              <p>Total Volume</p>
-                              <p className="font-bold">0.001 ETH</p>
-                            </div>
-                            <div className="shrink-0 truncate text-sm leading-5 flex flex-col sm:items-start">
-                              <p>Floor</p>
-                              <p className="font-bold">0.001 ETH</p>
-                            </div>
-                          </div>
-                          <button onClick={() => router.push('/collection')} className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all">
-                            View Detail
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        {renderPage}
       </div >
+      <Footer />
+    </>
+  );
+}
+
+
+const Collection = ({ params }) => {
+  const router = useRouter();
+  const filterQuery = useSearchParams();
+  const [collections, setCollections] = useState([]);
+  const [collectionPage, setCollectionPage] = useState(1);
+  const [collectionLast, setCollectionLast] = useState(false);
+  const [search, setSearch] = useState(filterQuery.get('search') === null ? "" : filterQuery.get('search'));
+  const [selectedFilter, setSelectedFilter] = useState(filters[0]);
+  const [gridList, setGridList] = useState('grid');
+  const [stepCreate, setStepCreate] = useState(1);
+  const [modalCreate, setModalCreate] = useState(false);
+  const { address } = useAccount();
+
+  const handleScroll = () => {
+    const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    const windowBottom = windowHeight + window.pageYOffset;
+    if ((windowBottom >= docHeight)) {
+      if (collectionLast === false) {
+        setCollectionPage((oldPage) => oldPage + 1);
+      }
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleSearch = (event) => {
+    setCollectionPage(1);
+    setCollectionLast(false);
+    if (search === "") {
+      setCollections([]);
+    } else {
+      setCollectionPage(1);
+    }
+
+    router.push(`?search=${search}`)
+    getCollections();
+    event.preventDefault();
+  }
+
+  useEffect(() => {
+    getCollections();
+  }, [collectionPage]);
+
+  const getCollections = async () => {
+    if (collectionLast === true) return;
+
+    if (search === "") {
+      await axios.request({
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/collection/getbyuseraddress/${params.slug}?page=${collectionPage}`,
+        // url: `http://192.168.1.8/labs/dummy-data/collections.php?page=${collectionPage}`,
+      })
+        .then((response) => {
+          if (response.data.data.length > 0) {
+            setCollections((oldCollections) => [...oldCollections, ...response.data.data]);
+          } else {
+            setCollectionLast(true);
+          }
+        })
+        .catch((error) => {
+          toast.error(error.message);
+        });
+    } else {
+      await axios.request({
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/collection/getbyuseraddress/${params.slug}?query=${search}&page=${collectionPage}`,
+      })
+        .then((response) => {
+          if (response.data.data.length > 0) {
+            if (collectionPage > 1) {
+              setCollections((oldCollections) => [...oldCollections, ...response.data.data]);
+            } else {
+              setCollections([...response.data.data]);
+            }
+          } else {
+            setCollectionLast(true);
+          }
+        })
+        .catch((error) => {
+          if (error.response.status == 404) {
+            if (collectionPage > 1) {
+              setCollectionLast(true);
+            } else {
+              setCollections([])
+            }
+          } else {
+            toast.error(error.message);
+          }
+        });
+    }
+  };
+
+  const classRadio = (params, value) => {
+    const defaultCssRadio =
+      'cursor-pointer flex w-8 h-8 justify-center items-center rounded-full text-sm font-medium leading-5 ';
+    return (
+      defaultCssRadio +
+      (params === value
+        ? 'text-white bg-primary-500 shadow'
+        : 'text-primary-500 hover:bg-primary-300')
+    );
+  };
+
+  const handleGridList = (event, target) => {
+    setGridList(target);
+  };
+
+  const handleModalCreate = () => {
+    if (modalCreate) {
+      handleStepCreate(1);
+    }
+    setModalCreate(!modalCreate);
+  };
+
+  const handleStepCreate = (Create) => {
+    setStepCreate(Create);
+  };
+
+  return (
+    <section>
+      <div className="my-5 grid grid-cols-12 gap-1">
+        <div className="col-span-12 flex gap-2 sm:col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12">
+          <form onSubmit={(event) => handleSearch(event)} className="w-full flex gap-4">
+            <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-gray-800">
+              <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
+                <FontAwesomeIcon icon={faSearch} />
+              </div>
+              <input
+                className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                type="text"
+                placeholder="Search ..."
+                aria-label="Search"
+                name="search"
+                defaultValue={search}
+                onChange={(event) => setSearch(event.target.value)} />
+              <div className="inline-flex flex-col items-center justify-center gap-2 rounded-md bg-zinc-200 px-2">
+                <div className="text-base font-light leading-normal text-zinc-500">
+                  /
+                </div>
+              </div>
+            </div>
+            <Listbox
+              value={selectedFilter}
+              onChange={setSelectedFilter}
+              className="hidden sm:hidden md:block lg:block xl:block 2xl:block"
+            >
+              <div className="relative z-20">
+                <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                  <span className="block truncate text-gray-600">
+                    {selectedFilter}
+                  </span>
+                  <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                    <svg
+                      width="16"
+                      height="9"
+                      viewBox="0 0 16 9"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8 9C7.71875 9 7.46875 8.90625 7.28125 8.71875L1.28125 2.71875C0.875 2.34375 0.875 1.6875 1.28125 1.3125C1.65625 0.90625 2.3125 0.90625 2.6875 1.3125L8 6.59375L13.2812 1.3125C13.6562 0.90625 14.3125 0.90625 14.6875 1.3125C15.0938 1.6875 15.0938 2.34375 14.6875 2.71875L8.6875 8.71875C8.5 8.90625 8.25 9 8 9Z"
+                        fill="#7D778A"
+                      />
+                    </svg>
+                  </span>
+                </Listbox.Button>
+                <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                  {servers.map((server, index) => (
+                    <Listbox.Option
+                      key={index}
+                      className={({ active }) =>
+                        `relative cursor-default select-none px-4 py-2 ${active
+                          ? 'bg-primary-500 text-white'
+                          : 'text-gray-900'
+                        }`
+                      }
+                      value={server}
+                    >
+                      {({ selectedServer }) => (
+                        <>
+                          <span
+                            className={`block truncate ${selectedServer ? 'font-medium' : 'font-normal'
+                              }`}
+                          >
+                            {server}
+                          </span>
+                        </>
+                      )}
+                    </Listbox.Option>
+                  ))}
+                </Listbox.Options>
+              </div>
+            </Listbox>
+          </form>
+          <div className="space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 hidden sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+            <div>
+              <input className="hidden" type="radio" name="rangeOptions" id="optionGrid" onChange={(event) => handleGridList(event, 'grid')} />
+              <label className={classRadio(gridList, 'grid')} htmlFor="optionGrid">
+                <FontAwesomeIcon icon={faGrip} />
+              </label>
+            </div>
+            <div>
+              <input className="hidden" type="radio" name="rangeOptions" id="optionList" onChange={(event) => handleGridList(event, 'list')} />
+              <label className={classRadio(gridList, 'list')} htmlFor="optionList">
+                <FontAwesomeIcon icon={faGripVertical} />
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="my-5 grid grid-cols-12 gap-6">
+        <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12">
+          <div className="grid w-full grid-cols-12 gap-6 text-gray-900">
+            {(address === params.slug) && (
+              <div className="col-span-12 mb-4 w-full h-[280px] sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                <div className="flex h-full w-full flex-col items-center justify-center rounded-2xl border-2 border-gray-200">
+                  <button className="w-fit rounded-full bg-primary-500 px-4 py-1 text-white hover:bg-primary-300" onClick={handleModalCreate}>
+                    Create a new collection
+                  </button>
+                  <button className="w-fit px-4 py-1 font-semibold text-primary-500 hover:text-primary-300">
+                    Import existing collection
+                  </button>
+                </div>
+              </div>
+            )}
+            {collections.length == 0 && <div className="w-full sm:col-span-6 md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9 text-black text-center font-semibold">Collection not found</div>}
+            {collections.length > 0 && collections.map((collection, index) => (
+              <div key={index}
+                className={`group col-span-6 h-[320px] sm:h-[320px] md:h-[300px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px] w-full ${gridList == "grid" ?
+                  'sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3' :
+                  'sm:col-span-4 md:col-span-3 lg:col-span-2 xl:col-span-2 2xl:col-span-2'}`}>
+                <img className="relative z-10 h-[200px] w-full rounded-2xl object-cover duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all" src="https://fakeimg.pl/325x175" />
+                <div className="grid grid-cols-12 p-3">
+                  <div className="col-span-12 sm:col-span-12 md:col-span-10 lg:col-span-8 xl:col-span-8 2xl:col-span-8 relative z-10 -top-[60px] flex gap-1 rounded-tl-2xl rounded-tr-2xl bg-white bg-opacity-50 p-2">
+                    <div className="w-fit">
+                      <ImageWithFallback
+                        src={`/uploads/collections/${collection.logo}`}
+                        alt={collection?.name}
+                        width={36}
+                        height={36}
+                        diameter={36}
+                        address={collection?.tokenAddress}
+                        className="w-full rounded-lg border-4 border-white shadow"
+                      />
+                    </div>
+                    <div className="w-full text-right">
+                      <h3 className="text-xs leading-[10px] h-[10px] line-clamp-1">{collection.name ? collection.name : collection.tokenAddress ? truncateAddress(collection.tokenAddress) : ''}</h3>
+                      <h3 className="text-sm font-semibold">1 Owner</h3>
+                    </div>
+                  </div>
+                </div>
+                <div className="relative -top-[85px] inline-flex w-full flex-col items-center justify-center lg:items-start">
+                  <div className="relative flex w-full flex-row px-3">
+                    <div className="inline-flex w-full flex-col items-start justify-start rounded-bl-2xl rounded-br-2xl bg-gray-50 p-3 backdrop-blur-xl">
+                      <div className="flex flex-col sm:flex-col md:flex-row w-full justify-between rounded-md bg-gray-100 px-2 py-2">
+                        <div className="shrink-0 truncate text-sm leading-5 flex flex-col sm:items-start">
+                          <p>Total Volume</p>
+                          <p className="font-bold">{collection.volume ? Number(formatEther(Number(collection.volume))).toFixed(2) : "0.00"} ETH</p>
+                        </div>
+                        <div className="shrink-0 truncate text-sm leading-5 flex flex-col sm:items-start">
+                          <p>Floor</p>
+                          <p className="font-bold">{collection.floorPrice ? Number(formatEther(Number(collection.floorPrice))).toFixed(2) : "0.00"} ETH</p>
+                        </div>
+                      </div>
+                      <button onClick={() => router.push(`/collection/${collection?.slug ? collection.slug : collection?.tokenAddress}`)} className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all">
+                        View Detail
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
       {modalCreate && (
         <div className="relative z-[100]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
           <div className="fixed inset-0 bg-gray-200 bg-opacity-75 transition-opacity"></div>
@@ -655,9 +779,35 @@ export default function ProfilePage({ params }) {
             </div>
           </div>
         </div>
-      )
-      }
-      <Footer />
-    </>
+      )}
+    </section>
   );
+}
+
+const Owned = () => {
+  return <h1 className="text-black">Owned</h1>
+}
+
+const Bidreceived = () => {
+  return <h1 className="text-black">Bid received</h1>
+}
+
+const Collateral = () => {
+  return <h1 className="text-black">Collateral</h1>
+}
+
+const Created = () => {
+  return <h1 className="text-black">Created</h1>
+}
+
+const Onsale = () => {
+  return <h1 className="text-black">On sale</h1>
+}
+
+const Sold = () => {
+  return <h1 className="text-black">Sold</h1>
+}
+
+const Liked = () => {
+  return <h1 className="text-black">Liked</h1>
 }

@@ -294,7 +294,7 @@ export default function CollectionDetail({ params }) {
                   <div className="text-xl font-semibold text-gray-900">
                     {collection.name ? collection.name : collection?.tokenAddress ? truncateAddress(collection.tokenAddress) : ''}
                   </div>
-                  <div className="block flex w-full justify-start gap-4 text-gray-900">
+                  <div className="flex w-full justify-start gap-4 text-gray-900">
                     <div>
                       Created by{' '}
                       <span className="font-semibold">
@@ -379,7 +379,7 @@ export default function CollectionDetail({ params }) {
                 </div>
               </div>
               <form onSubmit={(event) => handleSearch(event)} className="w-full flex gap-4">
-                <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border border-0 border-gray-200 bg-white px-4 dark:bg-gray-800">
+                <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-gray-800">
                   <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
                     <FontAwesomeIcon icon={faSearch} />
                   </div>
@@ -609,7 +609,7 @@ export default function CollectionDetail({ params }) {
                                 </div>
                               </div>
                               <div className="w-full inline-flex items-center justify-between gap-2 pt-1">
-                                <div className="font-medium leading-tight text-gray-600 leading-[20px] h-[40px] line-clamp-2" title={`${nft?.name} #${nft?.tokenId}`}>
+                                <div className="font-medium text-gray-600 leading-[20px] h-[40px] line-clamp-2" title={`${nft?.name} #${nft?.tokenId}`}>
                                   {nft?.name} #{nft?.tokenId}
                                 </div>
                                 <div className="text-sm font-normal leading-tight text-neutral-700">
@@ -631,7 +631,7 @@ export default function CollectionDetail({ params }) {
                               </div>
                               <div className="flex mt-5 gap-2 w-full items-center">
                                 <FontAwesomeIcon className="w-5 h-5 p-3 rounded-full text-primary-500 cursor-pointer hover:bg-primary-50 " icon={faCartPlus} />
-                                <button className="w-full text-center text-base font-bold text-white bg-primary-500 rounded-full px-4 py-2 hover:bg-primary-300 text-xs">
+                                <button className="w-full text-center font-bold text-white bg-primary-500 rounded-full px-4 py-2 hover:bg-primary-300 text-xs">
                                   Buy Now
                                 </button>
                               </div>

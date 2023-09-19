@@ -1,16 +1,34 @@
 import { writeFile } from 'fs/promises';
 import { NextResponse } from 'next/server';
 
+// Define allowed file types and maximum file size (100MB)
+const allowedFileTypes = ['image/png', 'image/webp', 'video/mp4', 'audio/mp3'];
+const maxFileSize = 100 * 1024 * 1024; // 100MB in bytes
+
 export async function POST(request) {
   const data = await request.formData();
   const file = data.get('file');
   const fileName = data.get('filename');
 
   if (!file) {
-    return NextResponse.json({ success: false });
+    return NextResponse.json({ success: false, error: 'No file provided' });
   }
 
   const fileExtension = file.name.split('.').pop();
+  const fileType = file.type;
+
+  // Check if the file type is allowed
+  if (!allowedFileTypes.includes(fileType)) {
+    return NextResponse.json({ success: false, error: 'Invalid file type' });
+  }
+
+  // Check if the file size is within the limit
+  if (file.size > maxFileSize) {
+    return NextResponse.json({
+      success: false,
+      error: 'File size exceeds the limit',
+    });
+  }
 
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);

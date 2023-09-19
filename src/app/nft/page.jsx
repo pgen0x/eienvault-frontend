@@ -190,15 +190,25 @@ export default function NftPage() {
       <div className="container m-auto p-3">
         <section>
           <div className="grid grid-cols-12 gap-3">
-            <div className="col-span-12 flex flex-col md:flex-row gap-2">
-              <div className="w-4/12 flex gap-1">
+            <div className="col-span-12 flex flex-col gap-2 md:flex-row">
+              <div className="flex w-4/12 gap-1">
                 <div className="w-fit">
-                  <button className={`flex items-center gap-1 rounded-full px-4 py-2 hover:bg-primary-300 ${openFilter ? 'bg-primary-500' : 'bg-white text-primary-500'}`} onClick={handleOpenFilter}>
+                  <button
+                    className={`flex items-center gap-1 rounded-full px-4 py-2 hover:bg-primary-300 ${
+                      openFilter
+                        ? 'bg-primary-500'
+                        : 'bg-white text-primary-500'
+                    }`}
+                    onClick={handleOpenFilter}
+                  >
                     <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
                   </button>
                 </div>
               </div>
-              <form onSubmit={(event) => handleSearch(event)} className="w-full">
+              <form
+                onSubmit={(event) => handleSearch(event)}
+                className="w-full"
+              >
                 <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-gray-800">
                   <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
                     <FontAwesomeIcon icon={faSearch} />
@@ -209,7 +219,8 @@ export default function NftPage() {
                     placeholder="Search ..."
                     aria-label="Search"
                     defaultValue={search}
-                    onChange={(event) => setSearch(event.target.value)} />
+                    onChange={(event) => setSearch(event.target.value)}
+                  />
                   <div className="inline-flex flex-col items-center justify-center gap-2 rounded-md bg-zinc-200 px-2">
                     <div className="text-base font-light leading-normal text-zinc-500">
                       /
@@ -217,16 +228,34 @@ export default function NftPage() {
                   </div>
                 </div>
               </form>
-              <div className="space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 hidden sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+              <div className="hidden space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
                 <div>
-                  <input className="hidden" type="radio" name="rangeOptions" id="optionGrid" onChange={(event) => handleGridList(event, 'grid')} />
-                  <label className={classRadio(gridList, 'grid')} htmlFor="optionGrid">
+                  <input
+                    className="hidden"
+                    type="radio"
+                    name="rangeOptions"
+                    id="optionGrid"
+                    onChange={(event) => handleGridList(event, 'grid')}
+                  />
+                  <label
+                    className={classRadio(gridList, 'grid')}
+                    htmlFor="optionGrid"
+                  >
                     <FontAwesomeIcon icon={faGrip} />
                   </label>
                 </div>
                 <div>
-                  <input className="hidden" type="radio" name="rangeOptions" id="optionList" onChange={(event) => handleGridList(event, 'list')} />
-                  <label className={classRadio(gridList, 'list')} htmlFor="optionList">
+                  <input
+                    className="hidden"
+                    type="radio"
+                    name="rangeOptions"
+                    id="optionList"
+                    onChange={(event) => handleGridList(event, 'list')}
+                  />
+                  <label
+                    className={classRadio(gridList, 'list')}
+                    htmlFor="optionList"
+                  >
                     <FontAwesomeIcon icon={faGripVertical} />
                   </label>
                 </div>
@@ -238,12 +267,24 @@ export default function NftPage() {
               <div className="col-span-12 sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                 <ul className="divide-y rounded-xl bg-white p-5 font-bold text-gray-900">
                   <li>
-                    <button className="action flex w-full cursor-pointer items-center justify-between py-3" onClick={() => handleFilterCollapse('blockchain')}>
+                    <button
+                      className="action flex w-full cursor-pointer items-center justify-between py-3"
+                      onClick={() => handleFilterCollapse('blockchain')}
+                    >
                       <span>Blockchain</span>
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
-                    <div className={`target py-5 ${filterCollapse.blockchain ? 'block' : 'hidden'}`}>
-                      <select id="country" name="country" autoComplete="country-name" className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                    <div
+                      className={`target py-5 ${
+                        filterCollapse.blockchain ? 'block' : 'hidden'
+                      }`}
+                    >
+                      <select
+                        id="country"
+                        name="country"
+                        autoComplete="country-name"
+                        className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                      >
                         <option>United States</option>
                         <option>Canada</option>
                         <option>Mexico</option>
@@ -251,31 +292,46 @@ export default function NftPage() {
                     </div>
                   </li>
                   <li>
-                    <button className="action flex w-full cursor-pointer items-center justify-between py-3" onClick={(event) => handleFilterCollapse('category')}>
+                    <button
+                      className="action flex w-full cursor-pointer items-center justify-between py-3"
+                      onClick={(event) => handleFilterCollapse('category')}
+                    >
                       <span>Category</span>
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
                   </li>
                   <li>
-                    <button className="action flex w-full cursor-pointer items-center justify-between py-3" onClick={(event) => handleFilterCollapse('price')}>
+                    <button
+                      className="action flex w-full cursor-pointer items-center justify-between py-3"
+                      onClick={(event) => handleFilterCollapse('price')}
+                    >
                       <span>Floor price</span>
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
                   </li>
                   <li>
-                    <button className="action flex w-full cursor-pointer items-center justify-between py-3" onClick={(event) => handleFilterCollapse('status')}>
+                    <button
+                      className="action flex w-full cursor-pointer items-center justify-between py-3"
+                      onClick={(event) => handleFilterCollapse('status')}
+                    >
                       <span>Status</span>
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
                   </li>
                   <li>
-                    <button className="action flex w-full cursor-pointer items-center justify-between py-3" onClick={(event) => handleFilterCollapse('currency')}>
+                    <button
+                      className="action flex w-full cursor-pointer items-center justify-between py-3"
+                      onClick={(event) => handleFilterCollapse('currency')}
+                    >
                       <span>Currency</span>
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
                   </li>
                   <li>
-                    <button className="action flex w-full cursor-pointer items-center justify-between py-3" onClick={(event) => handleFilterCollapse('collection')}>
+                    <button
+                      className="action flex w-full cursor-pointer items-center justify-between py-3"
+                      onClick={(event) => handleFilterCollapse('collection')}
+                    >
                       <span>Collection</span>
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
@@ -284,107 +340,140 @@ export default function NftPage() {
               </div>
             )}
             <div
-              className={`col-span-12 sm:col-span-12 ${openFilter
-                ? 'md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9'
-                : 'md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12'
-                }`}
+              className={`col-span-12 sm:col-span-12 ${
+                openFilter
+                  ? 'md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9'
+                  : 'md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12'
+              }`}
             >
               <div className="grid w-full grid-cols-12 gap-7 text-gray-900">
-                {nfts.length == 0 && <div className="w-full col-span-12 text-black text-center font-semibold">NFT not found</div>}
-                {nfts.length > 0 && nfts.map((nft, index) => (
-                  <div key={index} className={`group col-span-12 h-[542px] sm:h-[542px] md:h-[542px] lg:h-[542px] xl:h-[542px] 2xl:h-[542px] w-full sm:col-span-6 ${gridList === 'grid'
-                    ? (openFilter ? 'md:col-span-4 xl:col-span-4 2xl:col-span-4' : 'md:col-span-6 xl:col-span-3 2xl:col-span-3')
-                    : (openFilter ? 'md:col-span-6 xl:col-span-2 2xl:col-span-3' : 'md:col-span-4 xl:col-span-2 2xl:col-span-2')
-                    }`}>
-                    <div className="w-full group h-[542px]">
-                      <Image
-                        className="w-full rounded-2xl z-10 group-hover:h-[250px] h-[290px] group-hover:transition-all ease-in-out duration-300 object-cover"
-                        width={600}
-                        height={600}
-                        placeholder="blur"
-                        blurDataURL={`https://via.placeholder.com/600x600`}
-                        src={nft?.imageUri}
-                      />
-                      <div className="w-full px-3 inline-flex flex-col items-center justify-center lg:items-start">
-                        <div className="relative w-full flex flex-row">
-                          <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-br-2xl rounded-bl-2xl bg-white bg-opacity-50 p-3  backdrop-blur-xl">
-                            <div className="w-full flex flex-col items-start justify-start">
-                              <div
-                                className="inline-flex items-center justify-between self-stretch cursor-pointer"
-                                onClick={() =>
-                                  router.push(
-                                    `/collection/${nft.collectionAddress}`,
-                                  )
-                                }
-                              >
-                                <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2">
-                                  <ImageWithFallback
-                                    className="h-full w-full rounded-2xl "
-                                    width={16}
-                                    height={16}
-                                    alt={
-                                      nft.Collection?.name
-                                        ? nft.Collection?.name
-                                        : nft.collectionAddress
+                {nfts.length == 0 && (
+                  <div className="col-span-12 w-full text-center font-semibold text-black">
+                    NFT not found
+                  </div>
+                )}
+                {nfts.length > 0 &&
+                  nfts.map((nft, index) => (
+                    <div
+                      key={index}
+                      className={`group col-span-12 h-[542px] w-full sm:col-span-6 sm:h-[542px] md:h-[542px] lg:h-[542px] xl:h-[542px] 2xl:h-[542px] ${
+                        gridList === 'grid'
+                          ? openFilter
+                            ? 'md:col-span-4 xl:col-span-4 2xl:col-span-4'
+                            : 'md:col-span-6 xl:col-span-3 2xl:col-span-3'
+                          : openFilter
+                          ? 'md:col-span-6 xl:col-span-2 2xl:col-span-3'
+                          : 'md:col-span-4 xl:col-span-2 2xl:col-span-2'
+                      }`}
+                    >
+                      <div className="group h-[542px] w-full">
+                        <Image
+                          className="z-10 h-[290px] w-full rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all"
+                          width={600}
+                          height={600}
+                          placeholder="blur"
+                          blurDataURL={`https://via.placeholder.com/600x600`}
+                          src={nft?.imageUri}
+                        />
+                        <div className="inline-flex w-full flex-col items-center justify-center px-3 lg:items-start">
+                          <div className="relative flex w-full flex-row">
+                            <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 p-3  backdrop-blur-xl">
+                              <div className="flex w-full flex-col items-start justify-start">
+                                <div
+                                  className="inline-flex cursor-pointer items-center justify-between self-stretch"
+                                  onClick={() =>
+                                    router.push(
+                                      `/collection/${nft.collectionAddress}`,
+                                    )
+                                  }
+                                >
+                                  <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2">
+                                    <ImageWithFallback
+                                      className="h-full w-full rounded-2xl "
+                                      width={16}
+                                      height={16}
+                                      alt={
+                                        nft.Collection?.name
+                                          ? nft.Collection?.name
+                                          : nft.collectionAddress
                                           ? nft.collectionAddress
                                           : ''
-                                    }
-                                    diameter={16}
-                                    address={nft?.collectionAddress}
-                                    src={`/uploads/collections/${nft.Collection?.logo}`}
-                                  />
-                                  <div className="flex items-start justify-start gap-2">
-                                    <div className="text-xs font-medium leading-none text-neutral-700">
-                                      {nft.Collection?.name
-                                        ? nft.Collection.name
-                                        : nft.collectionAddress
-                                          ? truncateAddress(nft.collectionAddress)
+                                      }
+                                      diameter={16}
+                                      address={nft?.collectionAddress}
+                                      src={`/uploads/collections/${nft.Collection?.logo}`}
+                                    />
+                                    <div className="flex items-start justify-start gap-2">
+                                      <div className="text-xs font-medium leading-none text-neutral-700">
+                                        {nft.Collection?.name
+                                          ? nft.Collection.name
+                                          : nft.collectionAddress
+                                          ? truncateAddress(
+                                              nft.collectionAddress,
+                                            )
                                           : ''}
-                                    </div>
-                                    <div className="text-xs font-black leading-none text-primary-500">
-                                      <FontAwesomeIcon icon={faCircleCheck} />
+                                      </div>
+                                      <div className="text-xs font-black leading-none text-primary-500">
+                                        <FontAwesomeIcon icon={faCircleCheck} />
+                                      </div>
                                     </div>
                                   </div>
+                                  <div className="items-center">
+                                    <FontAwesomeIcon icon={faEllipsis} />
+                                  </div>
                                 </div>
-                                <div className="items-center">
-                                  <FontAwesomeIcon icon={faEllipsis} />
+                                <div className="inline-flex w-full items-center justify-between gap-2 pt-1">
+                                  <div
+                                    className="line-clamp-2 h-[40px] font-medium leading-[20px] text-gray-600"
+                                    title={`${nft?.name} #${nft?.tokenId}`}
+                                  >
+                                    {nft?.name} #{nft?.tokenId}
+                                  </div>
+                                  <div className="text-sm font-normal leading-tight text-neutral-700">
+                                    <Ethereum className="h-4 w-4" />
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="w-full inline-flex items-center justify-between gap-2 pt-1">
-                                <div className="font-medium text-gray-600 leading-[20px] h-[40px] line-clamp-2" title={`${nft?.name} #${nft?.tokenId}`}>
-                                  {nft?.name} #{nft?.tokenId}
+                                <div className="mt-5 flex w-full justify-between rounded-md bg-white px-2 py-2">
+                                  <div className="flex flex-col items-start truncate text-sm leading-5">
+                                    <p>Price</p>
+                                    <p className="font-bold">
+                                      {nft.price === null
+                                        ? '0.00'
+                                        : formatEther(Number(nft?.price))}{' '}
+                                      {nft.Collection?.Chain.symbol}
+                                    </p>
+                                  </div>
+                                  <div className="flex flex-col items-start truncate text-sm leading-5">
+                                    <p>Highest bid</p>
+                                    <p className="font-bold">No bids yet</p>
+                                  </div>
                                 </div>
-                                <div className="text-sm font-normal leading-tight text-neutral-700">
-                                  <Ethereum className="h-4 w-4" />
+                                <div className="mt-5 flex w-full items-center gap-2">
+                                  <FontAwesomeIcon
+                                    className="h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 "
+                                    icon={faCartPlus}
+                                  />
+                                  <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-xs font-bold text-white hover:bg-primary-300">
+                                    Buy Now
+                                  </button>
                                 </div>
-                              </div>
-                              <div className="flex justify-between w-full mt-5 px-2 py-2 bg-white rounded-md">
-                                <div className="flex flex-col items-start truncate text-sm leading-5">
-                                  <p>Price</p>
-                                  <p className="font-bold">
-                                    {nft.price === null ? "0.00" : formatEther(Number(nft?.price))}{' '}
-                                    {nft.Collection?.Chain.symbol}
-                                  </p>
-                                </div>
-                                <div className="flex flex-col items-start truncate text-sm leading-5">
-                                  <p>Highest bid</p>
-                                  <p className="font-bold">No bids yet</p>
-                                </div>
-                              </div>
-                              <div className="flex mt-5 gap-2 w-full items-center">
-                                <FontAwesomeIcon className="w-5 h-5 p-3 rounded-full text-primary-500 cursor-pointer hover:bg-primary-50 " icon={faCartPlus} />
-                                <button className="w-full text-center font-bold text-white bg-primary-500 rounded-full px-4 py-2 hover:bg-primary-300 text-xs">
-                                  Buy Now
+                                <button
+                                  onClick={() =>
+                                    router.push(
+                                      `/nft/${nft.collectionAddress}/${nft.tokenId}`,
+                                    )
+                                  }
+                                  className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all"
+                                >
+                                  View Detail
                                 </button>
                               </div>
-                              <button onClick={() => router.push(`/nft/${nft.collectionAddress}/${nft.tokenId}`)} className="bg-white hover:bg-primary-50 text-primary-500 mt-2 w-full py-0 text-center group-hover:py-2 overflow-hidden opacity-0 h-0 group-hover:h-auto group-hover:opacity-100 rounded-full group-hover:transition-all ease-in-out duration-800">View Detail</button>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </div>

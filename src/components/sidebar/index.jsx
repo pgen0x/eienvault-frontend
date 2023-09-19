@@ -13,15 +13,18 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { useRouter } from 'next-nprogress-bar';
-import { useAccount, useBalance, useDisconnect } from 'wagmi';
+import { useAccount, useBalance, useDisconnect, useNetwork } from 'wagmi';
 import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { useWeb3Modal } from '@web3modal/react';
 import HelaIcon from '@/assets/icon/hela';
+import ModalCreateCollection from '../modal/createCollections';
 
 const Sidebar = () => {
   const { isSidebarOpen, closeSidebar } = useSidebar();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [chains, setChains] = useState([]);
+  const [isCreateCollection, setIsCreateCollection] = useState(false);
   const sidebarRef = useRef();
   const sidebarContentRef = useRef();
   const router = useRouter();
@@ -31,6 +34,12 @@ const Sidebar = () => {
   const { open } = useWeb3Modal();
   const { data } = useBalance({
     address: address,
+  });
+  const { chain } = useNetwork();
+
+  const [selectedBlockchain, setSelectedBlockchain] = useState({
+    chainId: chain?.id || 666888,
+    symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
 
   useEffect(() => {
@@ -54,7 +63,7 @@ const Sidebar = () => {
 
   const handleViewProfileClick = () => {
     closeSidebar();
-    router.push('/profile'); // Navigate to the profile page
+    router.push(`/profile/${address}`); // Navigate to the profile page
   };
 
   const handleNftCreate = () => {
@@ -69,7 +78,7 @@ const Sidebar = () => {
 
   const handleCollectionCreate = () => {
     closeSidebar();
-    router.push('/collection/create'); // Navigate to the profile page
+    setIsCreateCollection(true);
   };
 
   const handleMyNft = () => {
@@ -92,178 +101,209 @@ const Sidebar = () => {
     disconnectAsync();
   };
 
-  return (
-    <div
-      ref={sidebarRef}
-      className={`fixed inset-0 flex max-w-full flex-shrink-0 basis-auto flex-col items-stretch bg-black/50 backdrop-blur-sm ${
-        isSidebarOpen ? 'z-50 opacity-100' : 'z-0 opacity-0'
-      } transition-opacity`}
-    >
-      <div
-        ref={sidebarContentRef}
-        className={`absolute inset-0 top-0 max-h-full w-full max-w-full flex-row overflow-hidden bg-neutral-100 transition-transform duration-300 md:left-auto md:right-0 md:max-w-[418px] ${
-          isSidebarOpen
-            ? 'translate-x-0 transform'
-            : 'translate-x-full transform'
-        }`}
-      >
-        <div className="flex h-full flex-col justify-between gap-4">
-          <div className="flex flex-col gap-8">
-            <div className="mx-8 inline-flex items-center justify-between gap-2.5 pt-8">
-              <div className="flex flex-row items-center justify-center gap-4">
-                <button className="inline-flex w-full justify-center rounded-full bg-primary-500 px-3 py-3 text-sm font-semibold">
-                  <FontAwesomeIcon icon={faUserAlt} />
-                </button>
-                <div className="inline-flex flex-col items-start justify-start">
-                  <div className="truncate text-center text-xl font-medium leading-loose text-gray-900 hover:text-gray-500">
-                    {isConnected && dataUser.username === null
-                      ? truncateAddress(address)
-                      : dataUser.username}
-                  </div>
-                  <button
-                    className="text-center text-sm font-light leading-tight text-gray-900 hover:text-gray-500"
-                    onClick={handleViewProfileClick}
-                  >
-                    view profile
-                  </button>
-                </div>
-              </div>
-              <div className="relative h-10 w-10">
-                <button
-                  className="h-10 w-10 rounded-full text-rose-500 hover:bg-primary-300"
-                  onClick={() => closeSidebar()}
-                >
-                  <FontAwesomeIcon icon={faClose} />
-                </button>
-              </div>
-            </div>
-            <div className="ml-8 inline-flex flex-col items-start justify-start gap-2">
-              <div
-                className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500"
-                onClick={() => handleMyNft()}
-              >
-                My NFTs
-              </div>
-              <div
-                className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500"
-                onClick={() => handleMyCollection()}
-              >
-                My Collections
-              </div>
-              <div
-                className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500"
-                onClick={() => handleMyBidandListiong()}
-              >
-                My Bid and Listings
-              </div>
-              <div
-                className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500"
-                onClick={() => handleMyActivity()}
-              >
-                My activity
-              </div>
-              <div className="flex h-full flex-col items-start justify-start gap-2 self-stretch">
-                <div
-                  className="inline-flex cursor-pointer items-center justify-start gap-3 self-stretch"
-                  onClick={() => setShowDropdown(!showDropdown)}
-                >
-                  <div className="flex items-start justify-start gap-4">
-                    <div className="text-center text-xl font-medium leading-8 text-gray-900 hover:text-gray-500">
-                      Create
-                    </div>
-                  </div>
-                  <div className="flex h-6 w-6 items-center justify-center">
-                    <div className="text-md h-6 w-6 text-center font-black leading-normal text-gray-900 hover:text-gray-500">
-                      {showDropdown ? (
-                        <FontAwesomeIcon icon={faChevronUp} />
-                      ) : (
-                        <FontAwesomeIcon icon={faChevronDown} />
-                      )}
-                    </div>
-                  </div>
-                </div>
-                {showDropdown && (
-                  <div className="flex h-full flex-col items-start justify-start gap-2 self-stretch px-6">
-                    <div className="inline-flex items-center justify-start gap-2 self-stretch">
-                      <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
-                      <div
-                        className="shrink grow basis-0 cursor-pointer text-xl font-medium leading-5 text-gray-900 hover:text-gray-500"
-                        onClick={() => handleNftCreate()}
-                      >
-                        NFT
-                      </div>
-                    </div>
-                    <div className="inline-flex items-center justify-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
-                      <div
-                        className="w-48 cursor-pointer text-xl font-medium leading-5 text-gray-900 hover:text-gray-500"
-                        onClick={() => handleCollectionCreate()}
-                      >
-                        Collections
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className="self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500">
-                <button onClick={() => router.push('/profile/setting')}>
-                  Setting
-                </button>
-              </div>
-            </div>
-          </div>
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/chain/getall`,
+          {
+            cache: 'force-cache',
+          },
+        );
 
-          <div className="bottom-10 m-8 mb-8 inline-flex h-80 flex-col items-start justify-start gap-2">
-            <div className="inline-flex h-5 w-full items-center justify-center">
-              <div className="shrink grow basis-0 text-sm font-bold leading-tight text-gray-900 hover:text-gray-500">
-                Connected wallet
-              </div>
-              <div className="flex h-5 shrink grow basis-0 items-center justify-center gap-2 rounded-lg py-2">
-                <button
-                  className="shrink grow basis-0 text-right text-sm font-bold leading-tight text-rose-500"
-                  onClick={open}
-                >
-                  Manage wallet
-                </button>
-              </div>
-            </div>
-            <div className="flex h-72 w-full flex-col items-start justify-start gap-4 rounded-2xl bg-white bg-opacity-50 p-4">
-              <div className="flex h-12 flex-col items-start justify-start gap-2 self-stretch">
-                <div className="inline-flex items-center justify-start gap-2 self-stretch">
-                  <div className="flex h-12 shrink grow basis-0 items-center justify-start gap-2">
-                    <div className="inline-flex flex-row items-center justify-between gap-4">
-                      <div className="font-light leading-normal text-gray-900 hover:text-gray-500">
-                        <HelaIcon className="h-12 w-12" />
-                      </div>
-                      <div className="font-medium leading-normal text-gray-900 hover:text-gray-500">
-                        {isConnected && truncateAddress(address)}
-                      </div>
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const dataChain = await res.json();
+        setChains(dataChain);
+        // Continue with your code
+      } catch (error) {
+        console.error('Fetch failed:', error);
+        // Handle the error gracefully, e.g., show an error message to the user
+      }
+    };
+
+    fetchData();
+  }, [isCreateCollection]);
+
+  const closeModal = () => {
+    setIsCreateCollection(false);
+  };
+
+  return (
+    <>
+      <div
+        ref={sidebarRef}
+        className={`fixed inset-0 flex max-w-full flex-shrink-0 basis-auto flex-col items-stretch bg-black/50 backdrop-blur-sm ${
+          isSidebarOpen ? 'z-50 opacity-100' : 'z-0 opacity-0'
+        } transition-opacity`}
+      >
+        <div
+          ref={sidebarContentRef}
+          className={`absolute inset-0 top-0 max-h-full w-full max-w-full flex-row overflow-hidden bg-neutral-100 transition-transform duration-300 md:left-auto md:right-0 md:max-w-[418px] ${
+            isSidebarOpen
+              ? 'translate-x-0 transform'
+              : 'translate-x-full transform'
+          }`}
+        >
+          <div className="flex h-full flex-col justify-between gap-4">
+            <div className="flex flex-col gap-8">
+              <div className="mx-8 inline-flex items-center justify-between gap-2.5 pt-8">
+                <div className="flex flex-row items-center justify-center gap-4">
+                  <button className="inline-flex w-full justify-center rounded-full bg-primary-500 px-3 py-3 text-sm font-semibold">
+                    <FontAwesomeIcon icon={faUserAlt} />
+                  </button>
+                  <div className="inline-flex flex-col items-start justify-start">
+                    <div className="truncate text-center text-xl font-medium leading-loose text-gray-900 hover:text-gray-500">
+                      {isConnected && dataUser.username === null
+                        ? truncateAddress(address)
+                        : dataUser.username}
                     </div>
-                  </div>
-                  <div className="inline-flex h-8 w-8 flex-col items-center justify-center gap-2 rounded-3xl bg-rose-500 p-2">
-                    <button className="text-sm font-black leading-tight text-white">
-                      <FontAwesomeIcon icon={faCopy} />
+                    <button
+                      className="text-center text-sm font-light leading-tight text-gray-900 hover:text-gray-500"
+                      onClick={handleViewProfileClick}
+                    >
+                      view profile
                     </button>
                   </div>
                 </div>
+                <div className="relative h-10 w-10">
+                  <button
+                    className="h-10 w-10 rounded-full text-rose-500 hover:bg-primary-300"
+                    onClick={() => closeSidebar()}
+                  >
+                    <FontAwesomeIcon icon={faClose} />
+                  </button>
+                </div>
               </div>
-              <div className="flex h-20 flex-col items-center justify-center gap-2 self-stretch rounded-lg bg-neutral-100 p-2">
-                <div className="inline-flex items-center justify-start self-stretch">
-                  <div className="flex h-8 shrink grow basis-0 items-center justify-start gap-2">
-                    <div className="flex items-center justify-start gap-1">
-                      <div className="h-6 w-6 text-center text-sm font-normal leading-snug text-zinc-500">
-                        <HelaIcon className="h-6 w-6" />
+              <div className="ml-8 inline-flex flex-col items-start justify-start gap-2">
+                <div
+                  className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500"
+                  onClick={() => handleMyNft()}
+                >
+                  My NFTs
+                </div>
+                <div
+                  className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500"
+                  onClick={() => handleMyCollection()}
+                >
+                  My Collections
+                </div>
+                <div
+                  className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500"
+                  onClick={() => handleMyBidandListiong()}
+                >
+                  My Bid and Listings
+                </div>
+                <div
+                  className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500"
+                  onClick={() => handleMyActivity()}
+                >
+                  My activity
+                </div>
+                <div className="flex h-full flex-col items-start justify-start gap-2 self-stretch">
+                  <div
+                    className="inline-flex cursor-pointer items-center justify-start gap-3 self-stretch"
+                    onClick={() => setShowDropdown(!showDropdown)}
+                  >
+                    <div className="flex items-start justify-start gap-4">
+                      <div className="text-center text-xl font-medium leading-8 text-gray-900 hover:text-gray-500">
+                        Create
+                      </div>
+                    </div>
+                    <div className="flex h-6 w-6 items-center justify-center">
+                      <div className="text-md h-6 w-6 text-center font-black leading-normal text-gray-900 hover:text-gray-500">
+                        {showDropdown ? (
+                          <FontAwesomeIcon icon={faChevronUp} />
+                        ) : (
+                          <FontAwesomeIcon icon={faChevronDown} />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  {showDropdown && (
+                    <div className="flex h-full flex-col items-start justify-start gap-2 self-stretch px-6">
+                      <div className="inline-flex items-center justify-start gap-2 self-stretch">
+                        <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
+                        <div
+                          className="shrink grow basis-0 cursor-pointer text-xl font-medium leading-normal text-gray-900 hover:text-gray-500"
+                          onClick={() => handleNftCreate()}
+                        >
+                          NFT
+                        </div>
+                      </div>
+                      <div className="inline-flex items-center justify-start gap-2">
+                        <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
+                        <div
+                          className="w-48 cursor-pointer text-xl font-medium leading-normal text-gray-900 hover:text-gray-500"
+                          onClick={() => handleCollectionCreate()}
+                        >
+                          Collections
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500">
+                  <button onClick={() => router.push('/profile/setting')}>
+                    Setting
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="bottom-10 m-8 mb-8 inline-flex h-80 flex-col items-start justify-start gap-2">
+              <div className="inline-flex h-5 w-full items-center justify-center">
+                <div className="shrink grow basis-0 text-sm font-bold leading-tight text-gray-900 hover:text-gray-500">
+                  Connected wallet
+                </div>
+                <div className="flex h-5 shrink grow basis-0 items-center justify-center gap-2 rounded-lg py-2">
+                  <button
+                    className="shrink grow basis-0 text-right text-sm font-bold leading-tight text-rose-500"
+                    onClick={open}
+                  >
+                    Manage wallet
+                  </button>
+                </div>
+              </div>
+              <div className="flex h-72 w-full flex-col items-start justify-start gap-4 rounded-2xl bg-white bg-opacity-50 p-4">
+                <div className="flex h-12 flex-col items-start justify-start gap-2 self-stretch">
+                  <div className="inline-flex items-center justify-start gap-2 self-stretch">
+                    <div className="flex h-12 shrink grow basis-0 items-center justify-start gap-2">
+                      <div className="inline-flex flex-row items-center justify-between gap-4">
+                        <div className="font-light leading-normal text-gray-900 hover:text-gray-500">
+                          <HelaIcon className="h-12 w-12" />
+                        </div>
+                        <div className="font-medium leading-normal text-gray-900 hover:text-gray-500">
+                          {isConnected && truncateAddress(address)}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="inline-flex h-8 w-8 flex-col items-center justify-center gap-2 rounded-3xl bg-rose-500 p-2">
+                      <button className="text-sm font-black leading-tight text-white">
+                        <FontAwesomeIcon icon={faCopy} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex h-20 flex-col items-center justify-center gap-2 self-stretch rounded-lg bg-neutral-100 p-2">
+                  <div className="inline-flex items-center justify-start self-stretch">
+                    <div className="flex h-8 shrink grow basis-0 items-center justify-start gap-2">
+                      <div className="flex items-center justify-start gap-1">
+                        <div className="h-6 w-6 text-center text-sm font-normal leading-snug text-zinc-500">
+                          <HelaIcon className="h-6 w-6" />
+                        </div>
+                      </div>
+                      <div className="text-center text-base font-normal leading-normal text-gray-900 hover:text-gray-500">
+                        {Number(data?.formatted).toFixed()} {data?.symbol}
                       </div>
                     </div>
                     <div className="text-center text-base font-normal leading-normal text-gray-900 hover:text-gray-500">
-                      {Number(data?.formatted).toFixed()} {data?.symbol}
+                      ${Number(data?.formatted).toFixed()}
                     </div>
                   </div>
-                  <div className="text-center text-base font-normal leading-normal text-gray-900 hover:text-gray-500">
-                    ${Number(data?.formatted).toFixed()}
-                  </div>
-                </div>
-                {/* <div className="inline-flex items-center justify-start self-stretch">
+                  {/* <div className="inline-flex items-center justify-start self-stretch">
                   <div className="flex h-8 shrink grow basis-0 items-center justify-start gap-2">
                     <div className="flex items-start justify-start gap-1">
                       <div className="h-8 w-8 rounded-full bg-red-50" />
@@ -279,35 +319,44 @@ const Sidebar = () => {
                     $0
                   </div>
                 </div> */}
-              </div>
-              <button
-                className="inline-flex items-start justify-start gap-2 self-stretch rounded-3xl bg-primary-500 hover:bg-primary-300"
-                onClick={open}
-              >
-                <div className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 px-4 py-2">
-                  <div className="text-center text-base font-bold leading-normal text-white">
-                    Manage Wallet
-                  </div>
                 </div>
-              </button>
-              <div className="inline-flex items-start justify-start gap-2 self-stretch">
                 <button
-                  className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl px-4 py-2 hover:bg-primary-200 hover:text-primary-200"
-                  onClick={handleDisconnect}
+                  className="inline-flex items-start justify-start gap-2 self-stretch rounded-3xl bg-primary-500 hover:bg-primary-300"
+                  onClick={open}
                 >
-                  <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500 ">
-                    <FontAwesomeIcon icon={faPlugCircleXmark} />
+                  <div className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 px-4 py-2">
+                    <div className="text-center text-base font-bold leading-normal text-white">
+                      Manage Wallet
+                    </div>
                   </div>
-                  <span className="text-base font-bold leading-normal text-primary-500 ">
-                    Disconnect wallet
-                  </span>
                 </button>
+                <div className="inline-flex items-start justify-start gap-2 self-stretch">
+                  <button
+                    className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl px-4 py-2 hover:bg-primary-200 hover:text-primary-200"
+                    onClick={handleDisconnect}
+                  >
+                    <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500 ">
+                      <FontAwesomeIcon icon={faPlugCircleXmark} />
+                    </div>
+                    <span className="text-base font-bold leading-normal text-primary-500 ">
+                      Disconnect wallet
+                    </span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <ModalCreateCollection
+        chains={chains}
+        isOpenModal={isCreateCollection}
+        selectedChain={selectedBlockchain}
+        setSelectedChain={setSelectedBlockchain}
+        onClose={closeModal}
+        onModalClose={closeModal}
+      />
+    </>
   );
 };
 

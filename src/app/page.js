@@ -55,10 +55,16 @@ export default function Home() {
 
   const [dataActivities, setDataActivities] = useState([]);
   const [dataCollections, setDataCollections] = useState([]);
+  const [dataUpcoming, setDataUpcoming] = useState([]);
+
   const [errorCollections, setErrorCollections] = useState(false);
   const [errorActivities, setErrorActivities] = useState(false);
+  const [errorUpcoming, setErrorUpcoming] = useState(false);
+
   const [isLoadingCollections, setIsLoadingCollections] = useState(true);
   const [isLoadingActivities, setIsLoadingActivities] = useState(true);
+  const [isLoadingUpcoming, setIsLoadingUpcoming] = useState(true);
+
   useEffect(() => {
     const getCollections = async () => {
       try {
@@ -120,8 +126,44 @@ export default function Home() {
       }
     };
 
+    const getUpcoming = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/market/marketauction?limit=5`,
+          {
+            cache: 'no-store',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+
+        if (!res.ok) {
+          setErrorUpcoming(true);
+          console.error('Fetch failed:', res);
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await res.json();
+        const filteredData = responseData.filter((nft) => {
+          const releaseDate = parseInt(nft.releaseDate);
+          const currentTime = Math.floor(Date.now() / 1000); // Convert current time to seconds
+
+          return releaseDate > currentTime;
+        });
+        setDataUpcoming(filteredData);
+      } catch (error) {
+        setErrorUpcoming(true);
+        console.error('Fetch failed:', error);
+      } finally {
+        setIsLoadingUpcoming(false);
+        setErrorUpcoming(false);
+      }
+    };
+
     getNfts();
     getCollections();
+    getUpcoming();
   }, [token, address]);
 
   if (!isMounted) {
@@ -139,8 +181,8 @@ export default function Home() {
                 <Tab
                   className={({ selected }) =>
                     selected
-                      ? 'font-bold text-black'
-                      : 'font-bold text-neutral-400'
+                      ? 'text-xl font-semibold text-black'
+                      : 'text-xl font-semibold text-neutral-400'
                   }
                 >
                   Collections
@@ -165,7 +207,7 @@ export default function Home() {
                     )}
                   </div>
                   <div className="block sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
-                    <TrendingTopMobile />
+                    <TrendingTopMobile dataCollections={dataCollections} />
                   </div>
                 </Tab.Panel>
                 {/* <Tab.Panel>
@@ -215,15 +257,15 @@ export default function Home() {
                   asset that you can truly own.
                 </p>
                 <button className="mt-5 rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
-                  DIscover more
+                  Discover more
                 </button>
               </div>
               <div className="relative my-5 flex w-full flex-initial items-center justify-center sm:w-full md:w-[50%] lg:w-[69%] xl:w-[69%] 2xl:w-[69%]">
-                <SlideshowDiscover />
-                {/* <SlideshowDiscoverSkeleton /> */}
+                {/* <SlideshowDiscover /> */}
+                <SlideshowDiscoverSkeleton />
               </div>
             </div>
-            <div className="absolute ml-[400px] -mt-[290px]">
+            <div className="absolute -mt-[290px] ml-[400px]">
               <Image
                 width={332}
                 height={218}
@@ -269,7 +311,11 @@ export default function Home() {
                 </a>
               </div>
               <div className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
-                <UpcomingAuction />
+                {isLoadingUpcoming || dataUpcoming.length <= 0 ? (
+                  <UpcomingAuctionSkeleton />
+                ) : (
+                  <UpcomingAuction dataUpcoming={dataUpcoming} />
+                )}
               </div>
               <div className="block sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
                 <UpcomingAuctionMobile />
@@ -337,7 +383,7 @@ export default function Home() {
             {/* <BgSubscribe className="relative w-full max-h-[30rem] object-cover" /> */}
           </div>
         </section>
-        <section>
+        {/* <section>
           <div className="w-full bg-gray-100 text-black">
             <div className="container mx-auto px-4 py-4">
               <div className="flex items-center justify-between">
@@ -348,11 +394,11 @@ export default function Home() {
               </div>
               <div className="relative my-5 flex w-full flex-initial items-center justify-center gap-5">
                 <SlideshowCreator />
-                {/* <SlideshowCreatorSkeleton /> */}
+                <SlideshowCreatorSkeleton />
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
         <section>
           <div className="h-auto w-full bg-gray-100 text-black sm:h-auto md:h-[480px] lg:h-[480px] xl:h-[480px] 2xl:h-[480px]">
             <div className="container mx-auto px-4 py-4">

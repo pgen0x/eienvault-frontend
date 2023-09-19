@@ -459,7 +459,7 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
                     <div className="inline-flex h-14 w-12 flex-col py-0.5">
                       <div className="h-12 w-12 rounded-full bg-gray-300">
                         <Image
-                          className="w-full rounded-2xl object-cover lg:w-96"
+                          className="w-full rounded-2xl bg-white object-cover lg:w-96"
                           width={48}
                           height={48}
                           placeholder="blur"

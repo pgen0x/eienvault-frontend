@@ -65,7 +65,7 @@ export default function NFTDetails({ dataNFTs }) {
   const [countLikes, setCountLikes] = useState(dataNFTs?.likeCount);
   const [dataRelatedNFTs, setDataRelatedNFTs] = useState([]);
   const [isLoadingRelatedNFTs, setIsLoadingRelatedNFTs] = useState(true);
-  const [activeTab, setActiveTab] = useState("collateral");
+  const [activeTab, setActiveTab] = useState('collateral');
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
   const { data: walletClient } = useWalletClient();
@@ -84,11 +84,11 @@ export default function NFTDetails({ dataNFTs }) {
       overview: <Overview dataNFTs={dataNFTs} />,
       bids: <Bids dataNFTs={dataNFTs} />,
       history: <History dataNFTs={dataNFTs} />,
-      collateral: <Collateral dataNFTs={dataNFTs} />
-    }
+      collateral: <Collateral dataNFTs={dataNFTs} />,
+    };
 
     return listTabs[activeTab];
-  }
+  };
 
   function getHighestBid(data) {
     if (!data.listOffers || data.listOffers.length === 0) {
@@ -155,11 +155,23 @@ export default function NFTDetails({ dataNFTs }) {
     setisOpenModalBid(true);
   };
 
-  const handleOpenModalBuy = async (marketId, price, dataNFT) => {
+  const handleOpenModalBuy = async (
+    marketId,
+    price,
+    imageUri,
+    name,
+    tokenId,
+    ChainSymbol,
+    ChainName,
+  ) => {
     setBuyData({
       marketId,
       price,
-      dataNFT,
+      imageUri,
+      name,
+      tokenId,
+      ChainSymbol,
+      ChainName,
     });
     setisOpenModalBuy(true);
   };
@@ -377,10 +389,46 @@ export default function NFTDetails({ dataNFTs }) {
                 </div>
                 <div className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
                   <ul className="my-5 flex w-full justify-around border-b border-gray-200 text-primary-500">
-                    <li className={`cursor-pointer px-5 pb-3 ${activeTab == "overview" ? "border-b-4 border-primary-500" : ""}`} onClick={() => setActiveTab("overview")}>Overview</li>
-                    <li className={`cursor-pointer px-5 pb-3 ${activeTab == "bids" ? "border-b-4 border-primary-500" : ""}`} onClick={() => setActiveTab("bids")}>Bids</li>
-                    <li className={`cursor-pointer px-5 pb-3 ${activeTab == "history" ? "border-b-4 border-primary-500" : ""}`} onClick={() => setActiveTab("history")}>History</li>
-                    <li className={`cursor-pointer px-5 pb-3 ${activeTab == "collateral" ? "border-b-4 border-primary-500" : ""}`} onClick={() => setActiveTab("collateral")}>Collateral</li>
+                    <li
+                      className={`cursor-pointer px-5 pb-3 ${
+                        activeTab == 'overview'
+                          ? 'border-b-4 border-primary-500'
+                          : ''
+                      }`}
+                      onClick={() => setActiveTab('overview')}
+                    >
+                      Overview
+                    </li>
+                    <li
+                      className={`cursor-pointer px-5 pb-3 ${
+                        activeTab == 'bids'
+                          ? 'border-b-4 border-primary-500'
+                          : ''
+                      }`}
+                      onClick={() => setActiveTab('bids')}
+                    >
+                      Bids
+                    </li>
+                    <li
+                      className={`cursor-pointer px-5 pb-3 ${
+                        activeTab == 'history'
+                          ? 'border-b-4 border-primary-500'
+                          : ''
+                      }`}
+                      onClick={() => setActiveTab('history')}
+                    >
+                      History
+                    </li>
+                    <li
+                      className={`cursor-pointer px-5 pb-3 ${
+                        activeTab == 'collateral'
+                          ? 'border-b-4 border-primary-500'
+                          : ''
+                      }`}
+                      onClick={() => setActiveTab('collateral')}
+                    >
+                      Collateral
+                    </li>
                   </ul>
                   <div className="flex w-full flex-col gap-4 rounded-lg bg-white p-5 text-gray-900">
                     {renderActiveTab()}
@@ -711,7 +759,11 @@ export default function NFTDetails({ dataNFTs }) {
                               handleOpenModalBuy(
                                 dataNFTs?.itemDetails?.marketId,
                                 dataNFTs?.itemDetails?.price,
-                                dataNFTs,
+                                dataNFTs?.imageUri,
+                                dataNFTs.name,
+                                dataNFTs.tokenId,
+                                dataNFTs?.collectionData.Chain.symbol,
+                                dataNFTs?.collectionData.Chain.name,
                               )
                             }
                             disabled={!isNotExpired}
@@ -730,10 +782,46 @@ export default function NFTDetails({ dataNFTs }) {
                   </div>
                   <div className="block sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
                     <ul className="my-5 flex w-full justify-around border-b border-gray-200 text-primary-500">
-                      <li className={`cursor-pointer px-5 pb-3 ${activeTab == "overview" ? "border-b-4 border-primary-500" : ""}`} onClick={() => setActiveTab("overview")}>Overview</li>
-                      <li className={`cursor-pointer px-5 pb-3 ${activeTab == "bids" ? "border-b-4 border-primary-500" : ""}`} onClick={() => setActiveTab("bids")}>Bids</li>
-                      <li className={`cursor-pointer px-5 pb-3 ${activeTab == "history" ? "border-b-4 border-primary-500" : ""}`} onClick={() => setActiveTab("history")}>History</li>
-                      <li className={`cursor-pointer px-5 pb-3 ${activeTab == "collateral" ? "border-b-4 border-primary-500" : ""}`} onClick={() => setActiveTab("collateral")}>Collateral</li>
+                      <li
+                        className={`cursor-pointer px-5 pb-3 ${
+                          activeTab == 'overview'
+                            ? 'border-b-4 border-primary-500'
+                            : ''
+                        }`}
+                        onClick={() => setActiveTab('overview')}
+                      >
+                        Overview
+                      </li>
+                      <li
+                        className={`cursor-pointer px-5 pb-3 ${
+                          activeTab == 'bids'
+                            ? 'border-b-4 border-primary-500'
+                            : ''
+                        }`}
+                        onClick={() => setActiveTab('bids')}
+                      >
+                        Bids
+                      </li>
+                      <li
+                        className={`cursor-pointer px-5 pb-3 ${
+                          activeTab == 'history'
+                            ? 'border-b-4 border-primary-500'
+                            : ''
+                        }`}
+                        onClick={() => setActiveTab('history')}
+                      >
+                        History
+                      </li>
+                      <li
+                        className={`cursor-pointer px-5 pb-3 ${
+                          activeTab == 'collateral'
+                            ? 'border-b-4 border-primary-500'
+                            : ''
+                        }`}
+                        onClick={() => setActiveTab('collateral')}
+                      >
+                        Collateral
+                      </li>
                     </ul>
                     <div className="flex w-full flex-col gap-4 rounded-lg bg-white p-5 text-gray-900">
                       {renderActiveTab()}
@@ -1089,7 +1177,6 @@ export default function NFTDetails({ dataNFTs }) {
   );
 }
 
-
 const Collateral = ({ dataNFTs }) => {
   return (
     <>
@@ -1103,23 +1190,16 @@ const Collateral = ({ dataNFTs }) => {
               height={28}
               alt={
                 dataNFTs.ownerData?.username ||
-                truncateAddress4char(
-                  dataNFTs.ownerData?.walletAddress,
-                ) ||
+                truncateAddress4char(dataNFTs.ownerData?.walletAddress) ||
                 truncateAddress4char(dataNFTs.owner)
               }
               diameter={28}
-              address={
-                dataNFTs.ownerData?.walletAddress ||
-                dataNFTs.owner
-              }
+              address={dataNFTs.ownerData?.walletAddress || dataNFTs.owner}
               src={`/uploads/user/${dataNFTs.ownerData?.logo}`}
             />
             <div className="font-medium leading-none text-neutral-700">
               {dataNFTs.ownerData?.username ||
-                truncateAddress4char(
-                  dataNFTs.ownerData?.walletAddress,
-                ) ||
+                truncateAddress4char(dataNFTs.ownerData?.walletAddress) ||
                 truncateAddress4char(dataNFTs.owner)}
             </div>
           </div>
@@ -1137,16 +1217,16 @@ const Collateral = ({ dataNFTs }) => {
       </button>
     </>
   );
-}
+};
 
 const Overview = ({ params }) => {
-  return <h1 className="text-black">Overview</h1>
-}
+  return <h1 className="text-black">Overview</h1>;
+};
 
 const Bids = ({ params }) => {
-  return <h1 className="text-black">Bids</h1>
-}
+  return <h1 className="text-black">Bids</h1>;
+};
 
 const History = ({ params }) => {
-  return <h1 className="text-black">History</h1>
-}
+  return <h1 className="text-black">History</h1>;
+};

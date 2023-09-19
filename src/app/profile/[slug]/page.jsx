@@ -272,6 +272,7 @@ export default function ProfilePage({ params }) {
 const Collection = ({ params }) => {
   const router = useRouter();
   const filterQuery = useSearchParams();
+  const [selectedBlockchain, setSelectedBlockchain] = useState();
   const [collections, setCollections] = useState([]);
   const [collectionPage, setCollectionPage] = useState(1);
   const [collectionLast, setCollectionLast] = useState(false);

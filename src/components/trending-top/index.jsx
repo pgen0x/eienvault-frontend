@@ -15,6 +15,11 @@ import { formatEther, parseEther } from 'viem';
 import { ImageWithFallback } from '../imagewithfallback';
 // import dataCollections from '../../app/collection/MOCK_DATA.json';
 import formatter from '@/utils/shortNumberFormatter';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import Image from 'next/image';
 
 const servers = [
   'All Mainnet',
@@ -209,19 +214,19 @@ export const TrendingTop = ({ dataCollections }) => {
         role="list"
         className="mt-4 grid w-full grid-flow-col grid-rows-5 gap-3"
       >
-        {dataCollections.slice(0, limit).map((trade, index) => (
+        {dataCollections.slice(0, limit).map((collection, index) => (
           <li key={index} className="w-full">
             <div className="flex w-full justify-between rounded-md bg-white px-5 py-2">
               <div className="flex w-full items-center gap-x-4">
                 <p className="text-sm text-primary-500">{index + 1}.</p>
                 <div className="h-11 w-11">
                   <ImageWithFallback
-                    src={`/uploads/collections/${trade.logo}`}
-                    alt={trade.name}
+                    src={`/uploads/collections/${collection.logo}`}
+                    alt={collection.name}
                     width={48}
                     height={48}
                     diameter={48}
-                    address={trade.tokenAddress}
+                    address={collection.tokenAddress}
                     className="rounded-full"
                   />
                 </div>
@@ -230,35 +235,42 @@ export const TrendingTop = ({ dataCollections }) => {
                   <p
                     className="text-md h-[20px] w-full cursor-pointer overflow-hidden text-ellipsis font-semibold leading-6 text-gray-900"
                     onClick={() =>
-                      router.push(`/collection/${trade.tokenAddress}`)
+                      router.push(`/collection/${collection.tokenAddress}`)
                     }
                   >
-                    {trade.name}
+                    {collection.name}
                   </p>
                   <div className="flex w-full flex-col gap-2">
                     <div className="flex w-full gap-2">
                       <p className="w-full">Floor</p>
                       <p className="w-full">
                         $
-                        {Number(formatEther(Number(trade.floorPrice))).toFixed(
-                          2,
-                        )}
+                        {Number(
+                          formatEther(Number(collection.floorPrice)),
+                        ).toFixed(2)}
                       </p>
-                      <p className={classFloor(trade.priceChangePercentage1h)}>
-                        {trade.priceChangePercentage1h}%
+                      <p
+                        className={classFloor(
+                          collection.priceChangePercentage1h,
+                        )}
+                      >
+                        {collection.priceChangePercentage1h}%
                       </p>
                     </div>
                     <div className="flex w-full gap-2">
                       <span className="w-full">Volume</span>
                       <p className="w-full">
-                        ${Number(formatEther(Number(trade.volume))).toFixed(2)}
+                        $
+                        {Number(formatEther(Number(collection.volume))).toFixed(
+                          2,
+                        )}
                       </p>
                       <p
                         className={classMovement(
-                          trade.volumeChangePercentage1h,
+                          collection.volumeChangePercentage1h,
                         )}
                       >
-                        {trade.volumeChangePercentage1h}%
+                        {collection.volumeChangePercentage1h}%
                       </p>
                     </div>
                   </div>
@@ -466,6 +478,7 @@ const MainMobile = () => {
 
 export const TrendingTopMobile = ({ dataCollections }) => {
   const router = useRouter();
+  const [nfts, setNfts] = useState({});
 
   const classFloor = (value) => {
     return Number(value) < 0
@@ -483,7 +496,7 @@ export const TrendingTopMobile = ({ dataCollections }) => {
     <>
       <MainMobile />
       <div className="mt-5 flex flex-col gap-5">
-        {dataCollections.map((trade, index) => (
+        {dataCollections.map((collection, index) => (
           <div
             key={index}
             className="flex flex-col gap-3 rounded-xl bg-white p-5"
@@ -491,19 +504,21 @@ export const TrendingTopMobile = ({ dataCollections }) => {
             <div className="flex w-full items-center gap-3 border-b border-gray-300 pb-2">
               <div className="h-11 w-11">
                 <ImageWithFallback
-                  src={`/uploads/collections/${trade.logo}`}
-                  alt={trade.name}
+                  src={`/uploads/collections/${collection.logo}`}
+                  alt={collection.name}
                   width={48}
                   height={48}
                   diameter={48}
-                  address={trade.tokenAddress}
+                  address={collection.tokenAddress}
                   className="rounded-full"
                 />
               </div>
-              <h3 className="w-full">{trade.name}</h3>
+              <h3 className="w-full">{collection.name}</h3>
               <button
                 className="h-8 w-12 rounded-full bg-primary-500 text-white hover:bg-primary-300"
-                onClick={() => router.push(`/collection/${trade.tokenAddress}`)}
+                onClick={() =>
+                  router.push(`/collection/${collection.tokenAddress}`)
+                }
               >
                 <FontAwesomeIcon icon={faArrowRight} />
               </button>
@@ -512,60 +527,29 @@ export const TrendingTopMobile = ({ dataCollections }) => {
               <div className="flex w-full flex-col gap-3">
                 <span>Floor</span>
                 <span>
-                  ${Number(formatEther(Number(trade.floorPrice))).toFixed(2)}
+                  $
+                  {Number(formatEther(Number(collection.floorPrice))).toFixed(
+                    2,
+                  )}
                 </span>
-                <span className={classFloor(trade.priceChangePercentage1h)}>
-                  {trade.priceChangePercentage1h}%
+                <span
+                  className={classFloor(collection.priceChangePercentage1h)}
+                >
+                  {collection.priceChangePercentage1h}%
                 </span>
               </div>
               <div className="flex w-full flex-col gap-3">
                 <span>Volume</span>
-                <span>${formatter(trade.volume)}</span>
-                <span className={classMovement(trade.volumeChangePercentage1h)}>
-                  {trade.volumeChangePercentage1h}%
+                <span>${formatter(collection.volume)}</span>
+                <span
+                  className={classMovement(collection.volumeChangePercentage1h)}
+                >
+                  {collection.volumeChangePercentage1h}%
                 </span>
               </div>
             </div>
-            <div className="flex gap-3 font-semibold text-gray-700">
-              <div>
-                <button className="absolute ml-[45px] mt-[5px] rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md">
-                  <FontAwesomeIcon icon={faCartPlus} />
-                </button>
-                <div
-                  className="flex h-20 w-20 flex-col justify-end bg-cover bg-center text-right"
-                  style={{ backgroundImage: 'url(' + trade.imageUrl + ')' }}
-                >
-                  <button className="ml-1 flex rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md">
-                    <Ethereum className="h-4 w-4" /> <span>5 ETH</span>
-                  </button>
-                </div>
-              </div>
-              <div>
-                <button className="absolute ml-[45px] mt-[5px] rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md">
-                  <FontAwesomeIcon icon={faCartPlus} />
-                </button>
-                <div
-                  className="flex h-20 w-20 flex-col justify-end bg-cover bg-center text-right"
-                  style={{ backgroundImage: 'url(' + trade.imageUrl + ')' }}
-                >
-                  <button className="ml-1 flex rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md">
-                    <Ethereum className="h-4 w-4" /> <span>5 ETH</span>
-                  </button>
-                </div>
-              </div>
-              <div>
-                <button className="absolute ml-[45px] mt-[5px] rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md">
-                  <FontAwesomeIcon icon={faCartPlus} />
-                </button>
-                <div
-                  className="flex h-20 w-20 flex-col justify-end bg-cover bg-center text-right"
-                  style={{ backgroundImage: 'url(' + trade.imageUrl + ')' }}
-                >
-                  <button className="ml-1 flex rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md">
-                    <Ethereum className="h-4 w-4" /> <span>5 ETH</span>
-                  </button>
-                </div>
-              </div>
+            <div className="w-full font-semibold text-gray-700">
+              {collection.tokenAddress && <MobileNft collection={collection} />}
             </div>
           </div>
         ))}
@@ -577,6 +561,82 @@ export const TrendingTopMobile = ({ dataCollections }) => {
         </button>
       </div>
     </>
+  );
+};
+
+const MobileNft = ({ collection }) => {
+  const router = useRouter();
+  const [nfts, setNfts] = useState([]);
+  
+  useEffect(() => {
+    getNfts();
+  }, [collection.tokenAddress]);
+
+  const getNfts = async () => {
+    await axios
+      .request({
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbycollection/${
+          collection.tokenAddress
+        }?limit=${6}`,
+      })
+      .then((response) => {
+        setNfts(response.data.nfts);
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
+
+  return (
+    <Swiper
+      modules={[Scrollbar]}
+      spaceBetween={50}
+      slidesPerView={4}
+      scrollbar={{ draggable: true }}
+    >
+      {nfts.length == 0 &&
+        [...Array(5)].map((nft, index) => {
+          return (
+            <SwiperSlide>
+              <span className="absolute ml-[45px] mt-[5px] rounded-lg bg-gray-500 px-3 py-2 text-xs backdrop-blur-md"></span>
+              <div className="flex h-20 w-20 animate-pulse flex-col justify-end bg-gray-300 bg-cover bg-center px-2 text-right">
+                <span className="mb-1 flex w-full rounded-lg bg-gray-500 py-2 text-xs"></span>
+              </div>
+            </SwiperSlide>
+          );
+        })}
+      {nfts.length > 0 &&
+        nfts.map((nft, index) => (
+          <SwiperSlide
+            key={index}
+            onClick={() =>
+              router.push(`/nft/${nft.collectionAddress}/${nft.tokenId}`)
+            }
+          >
+            <div className="w-full px-1">
+              <button className="absolute ml-[45px] mt-[5px] rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md">
+                <FontAwesomeIcon icon={faCartPlus} />
+              </button>
+              <div className="h-20 w-20">
+                <Image
+                  className="h-full w-full object-cover"
+                  width={600}
+                  height={600}
+                  placeholder="blur"
+                  blurDataURL={`https://via.placeholder.com/50x50`}
+                  src={nft?.imageUri}
+                />
+              </div>
+              <button className="-mt-5 flex w-20 rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md">
+                <Ethereum className="h-4 w-4" />{' '}
+                <span className="w-full">5 ETH</span>
+              </button>
+            </div>
+          </SwiperSlide>
+        ))}
+    </Swiper>
   );
 };
 

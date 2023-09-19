@@ -353,7 +353,7 @@ export default function Home() {
                 className="h-full"
               />
             </div>
-            <div className="relative top-0 mx-auto block h-[30rem] max-h-full w-[30rem] w-full max-w-full rounded-full bg-red-400 sm:top-0 md:-top-[50px] md:max-h-[30rem] md:max-w-[30rem] lg:-top-[50px] xl:-top-[50px] 2xl:-top-[50px]">
+            <div className="relative top-0 mx-auto block h-[30rem] max-h-full w-full max-w-full rounded-full bg-red-400 sm:top-0 md:-top-[50px] md:max-h-[30rem] md:max-w-[30rem] lg:-top-[50px] xl:-top-[50px] 2xl:-top-[50px]">
               <div className="relative top-[50px] mx-auto flex w-[90%] items-center justify-center sm:top-[50px] md:top-[130px] lg:top-[130px] xl:top-[130px] 2xl:top-[130px]">
                 <div className="z-10 w-full rounded-lg bg-white/60 p-10 px-3 text-center text-gray-800 backdrop-blur">
                   <h2 className="text-2xl font-bold">
@@ -400,22 +400,18 @@ export default function Home() {
           </div>
         </section> */}
         <section>
-          <div className="h-auto w-full bg-gray-100 text-black sm:h-auto md:h-[480px] lg:h-[480px] xl:h-[480px] 2xl:h-[480px]">
-            <div className="container mx-auto px-4 py-4">
-              <div className="flex flex-col-reverse items-center justify-between gap-5 lg:flex-row">
-                <div className="relative h-full w-full py-5">
-                  <div className="flex h-[229px] w-[192px] rounded-2xl md:h-full md:w-full">
-                    <Image width={344} height={344} src="/images/macan.png" />
+          <div className="h-auto w-full bg-gray-100 text-black pb-10">
+            <div className="container mx-auto px-20 pb-5">
+              <div className="flex flex-col-reverse items-center justify-between gap-5 lg:flex-row py-5">
+                <div className="w-fit sm:w-fit md:w-fit lg:w-full py-5">
+                  <div className="relative h-[344px] w-[244px] sm:w-[244px] md:w-[344px]">
+                    <Image width={344} height={344} src="/images/macan.png" className="w-full h-full object-cover rounded-2xl" />
                   </div>
-                  <div className="absolute left-[83px] top-[141px] h-[163px] w-[136px] rounded-2xl md:left-[123px] md:top-[191px] md:h-full md:w-full">
-                    <Image width={243} height={245} src="/images/marmer.png" />
+                  <div className="relative ml-[30px] sm:ml-[30px] md:ml-[83px] -mt-[131px] sm:-mt-[131px] md:-mt-[181px] h-[245px] w-[243px]">
+                    <Image width={243} height={245} src="/images/marmer.png" className="w-full h-full object-cover rounded-2xl" />
                   </div>
-                  <div className="absolute left-[153px] top-[64px] h-[217px] w-[135px] rounded-2xl md:left-[303px] md:top-[44px] md:h-full md:w-full">
-                    <Image
-                      src="/images/monalisa.png"
-                      width={243}
-                      height={327}
-                    />
+                  <div className="relative ml-[100px] sm:ml-[100px] md:ml-[203px] -mt-[404px] sm:-mt-[404px] md:-mt-[364px] h-[327px] w-[243px]">
+                    <Image src="/images/monalisa.png" width={243} height={327} className="object-cover rounded-2xl" />
                   </div>
                 </div>
 
@@ -439,27 +435,24 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="h-auto w-full bg-amber-100 bg-[url('/images/nft-lending-section-background.png')] bg-cover bg-right-bottom p-5 sm:h-auto md:h-auto lg:h-[550px] xl:h-[550px] 2xl:h-[550px]">
+          <div className="w-full bg-amber-100 bg-[url('/images/nft-lending-section-background.png')] bg-cover bg-right-bottom p-5">
             <div className="container relative z-[1] mx-auto flex flex-col justify-between gap-5 rounded-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl sm:flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row">
-              <div className="w-1/2 text-slate-600">
+              <div className="w-full md:px-20 text-slate-600">
                 <h2 className="text-3xl font-bold">
-                  Use your NFTs to get a crypto <br />
-                  loan
+                  Use your NFTs to get a crypto loan
                 </h2>
                 <p className="mt-3 py-5 font-semibold">
-                  Use your NFT as collateral to borrow wETH, DAI, or USDC <br />
-                  from lenders. Repay your loan, and you get your NFT
-                  <br /> back. No auto-liquidations! 0% borrower fees!
+                  Use your NFT as collateral to borrow wETH, DAI, or USDC from lenders. Repay your loan, and you get your NFT back. No auto-liquidations! 0% borrower fees!
                 </p>
-                <div className="my-5 flex flex-col justify-between gap-5 sm:flex-col md:flex-col lg:flex-col xl:flex-col 2xl:flex-col">
-                  <button className="w-full rounded-full bg-primary-500 px-5 py-2 font-bold text-white hover:bg-primary-300">
+                <div className="my-5 flex flex-col gap-3 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
+                  <button className="w-full md:w-fit rounded-full bg-primary-500 px-5 py-2 font-bold text-white hover:bg-primary-300">
                     Get loan now
                   </button>
-                  <button className="ml-1 w-full rounded-full bg-white px-5 py-2 font-bold text-primary-500 hover:bg-primary-50">
+                  <button className="ml-1 w-full md:w-fit rounded-full bg-white px-5 py-2 font-bold text-primary-500 hover:bg-primary-50">
                     I want to lend
                   </button>
                 </div>
-                <div className="flex w-full justify-between p-5">
+                <div className="flex flex-col md:flex-row w-full justify-between items-center gap-5 p-5">
                   <div className="">
                     <h3 className="text-center text-3xl font-bold">$450M+</h3>
                     <p className="">Total volume loan (USD)</p>
@@ -475,11 +468,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex w-full items-center justify-center text-black">
-                <Image
-                  width={660}
-                  height={365}
-                  src="/images/watchformore.png"
-                />
+                <Image width={660} height={365} src="/images/watchformore.png" className="w-full" />
               </div>
             </div>
             <div className="absolute -left-[30px] -mt-[240px] h-64 w-64 rounded-full bg-red-400"></div>
@@ -487,7 +476,7 @@ export default function Home() {
         </section>
         <section className="relative mt-[30px] w-full px-[10px] sm:px-[10px] md:px-[50px] lg:px-[50px] xl:px-[50px] 2xl:px-[50px]">
           <div className="rounded-tl-2xl rounded-tr-2xl bg-white p-[30px]">
-            <div className="flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
+            <div className="flex flex-col gap-4 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
               <div className="w-full sm:w-full md:w-[40vw] lg:w-[40vw] xl:w-[40vw] 2xl:w-[40vw]">
                 <div className="w-64">
                   <img src="logo.svg" className="w-36" />
@@ -500,7 +489,7 @@ export default function Home() {
                     offers
                   </p>
                 </div>
-                <div className="flex hidden flex-col py-5 text-primary-500 sm:hidden md:block lg:block xl:block 2xl:block">
+                <div className="hidden flex-col py-5 text-primary-500 sm:hidden md:block lg:block xl:block 2xl:block">
                   <h4 className="text-xl font-bold">Join our community</h4>
                   <ul className="mt-3 flex w-fit justify-between gap-2">
                     <li className="text-2xl">
@@ -586,7 +575,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="block flex w-full flex-col py-5 text-primary-500 sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
+              <div className="flex w-full flex-col py-5 text-primary-500 sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
                 <h4 className="text-xl font-bold">Join our community</h4>
                 <ul className="mt-3 flex w-fit justify-between gap-2">
                   <li className="text-2xl">

@@ -24,37 +24,37 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
+const sliderBreakPoints = {
+  640: {
+    slidesPerView: 2,
+    spaceBetween: 5,
+    width: 400,
+  },
+  768: {
+    slidesPerView: 1,
+    spaceBetween: 5,
+  },
+  1024: {
+    width: 545,
+  },
+  1280: {
+    width: 400,
+  },
+  1536: {
+    width: 400,
+  },
+  1700: {
+    width: 400,
+    spaceBetween: 5,
+  },
+  2200: {
+    width: 200,
+    spaceBetween: 5,
+  },
+};
 
 export const SlideshowDiscover = () => {
   const router = useRouter();
-  const sliderBreakPoints = {
-    640: {
-      slidesPerView: 2,
-      spaceBetween: 5,
-      width: 400,
-    },
-    768: {
-      slidesPerView: 1,
-      spaceBetween: 5,
-    },
-    1024: {
-      width: 545,
-    },
-    1280: {
-      width: 400,
-    },
-    1536: {
-      width: 400,
-    },
-    1700: {
-      width: 400,
-      spaceBetween: 5,
-    },
-    2200: {
-      width: 200,
-      spaceBetween: 5,
-    },
-  };
   return (
     <>
       <button className="hidden sm:hidden md:block lg:block xl:block 2xl:block swiper-prev-discover mr-2 px-4 py-2 rounded-full bg-primary-500 hover:bg-primary-300 text-white absolute -left-5 z-10"><FontAwesomeIcon icon={faChevronLeft} /></button>
@@ -144,48 +144,70 @@ export const SlideshowDiscover = () => {
 export const SlideshowDiscoverSkeleton = () => {
   return (
     <>
-      {[...Array(3)].map((x, i) => (
-        <div key={i} className="w-full p-3 h-[542px]">
-          <div className="w-full h-[290px] bg-gray-300 animate-pulse rounded-2xl" />
-          <div className="w-full px-5 inline-flex flex-col items-center justify-center lg:items-start">
-            <div className="relative w-full flex flex-row">
-              <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-br-2xl rounded-bl-2xl bg-white bg-opacity-50 p-3  backdrop-blur-xl">
-                <div className="w-full flex flex-col items-start justify-start">
-                  <div className="inline-flex items-center justify-between self-stretch">
-                    <div className="flex items-center justify-center gap-2 rounded-lg p-2">
-                      <div className="h-4 w-4 rounded-2xl animate-pulse bg-gray-300" />
-                      <div className="flex items-start justify-start gap-2">
-                        <div className="bg-gray-300 animate-pulse w-16 h-4 rounded-lg" />
+      <Swiper
+        className="!pb-5"
+        slidesPerView={1}
+        scrollbar={{ draggable: true }}
+        breakpoints={sliderBreakPoints}
+        observer={true}
+        navigation={{
+          nextEl: ".swiper-next-discover",
+          prevEl: ".swiper-prev-discover"
+        }}
+        pagination={{
+          dynamicBullets: true,
+        }}
+        modules={[Autoplay, Pagination, Navigation]}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
+      >
+        {[...Array(3)].map((x, i) => (
+          <SwiperSlide key={i}>
+            <div className="w-full p-3 h-[542px]">
+              <div className="w-full h-[290px] bg-gray-300 animate-pulse rounded-2xl" />
+              <div className="w-full px-5 inline-flex flex-col items-center justify-center lg:items-start">
+                <div className="relative w-full flex flex-row">
+                  <div className="w-full inline-flex flex-col items-start justify-start gap-4 rounded-br-2xl rounded-bl-2xl bg-white bg-opacity-50 p-3  backdrop-blur-xl">
+                    <div className="w-full flex flex-col items-start justify-start">
+                      <div className="inline-flex items-center justify-between self-stretch">
+                        <div className="flex items-center justify-center gap-2 rounded-lg p-2">
+                          <div className="h-4 w-4 rounded-2xl animate-pulse bg-gray-300" />
+                          <div className="flex items-start justify-start gap-2">
+                            <div className="bg-gray-300 animate-pulse w-16 h-4 rounded-lg" />
+                          </div>
+                        </div>
+                        <div className="items-center">
+                          <div className="w-6 h-2 bg-gray-300 animate-pulse rounded-full" />
+                        </div>
+                      </div>
+                      <div className="mt-3 w-full inline-flex items-center justify-between gap-2 pt-1">
+                        <div className="w-24 h-3 bg-gray-300 animate-pulse rounded-full" />
+                        <div className="h-4 w-4 rounded-2xl animate-pulse bg-gray-300" />
+                      </div>
+                      <div className="flex justify-between w-full mt-3 py-2">
+                        <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-start truncate text-sm leading-5 mt-2">
+                          <div className="mt-1 w-24 h-3 bg-gray-300 animate-pulse rounded-full" />
+                          <div className="mt-1 w-24 h-3 bg-gray-300 animate-pulse rounded-full" />
+                        </div>
+                        <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-start truncate text-sm leading-5 mt-2">
+                          <div className="mt-1 w-24 h-3 bg-gray-300 animate-pulse rounded-full" />
+                          <div className="mt-1 w-24 h-3 bg-gray-300 animate-pulse rounded-full" />
+                        </div>
+                      </div>
+                      <div className="flex mt-5 w-full items-center">
+                        <div className="mr-5 w-16 h-12 p-3 rounded-full bg-gray-300 animate-pulse" />
+                        <div className="w-full h-12 p-3 rounded-full bg-gray-300 animate-pulse" />
                       </div>
                     </div>
-                    <div className="items-center">
-                      <div className="w-6 h-2 bg-gray-300 animate-pulse rounded-full" />
-                    </div>
-                  </div>
-                  <div className="mt-3 w-full inline-flex items-center justify-between gap-2 pt-1">
-                    <div className="w-24 h-3 bg-gray-300 animate-pulse rounded-full" />
-                    <div className="h-4 w-4 rounded-2xl animate-pulse bg-gray-300" />
-                  </div>
-                  <div className="flex justify-between w-full mt-3 py-2">
-                    <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-start truncate text-sm leading-5 mt-2">
-                      <div className="mt-1 w-24 h-3 bg-gray-300 animate-pulse rounded-full" />
-                      <div className="mt-1 w-24 h-3 bg-gray-300 animate-pulse rounded-full" />
-                    </div>
-                    <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-start truncate text-sm leading-5 mt-2">
-                      <div className="mt-1 w-24 h-3 bg-gray-300 animate-pulse rounded-full" />
-                      <div className="mt-1 w-24 h-3 bg-gray-300 animate-pulse rounded-full" />
-                    </div>
-                  </div>
-                  <div className="flex mt-5 w-full items-center">
-                    <div className="mr-5 w-16 h-12 p-3 rounded-full bg-gray-300 animate-pulse" />
-                    <div className="w-full h-12 p-3 rounded-full bg-gray-300 animate-pulse" />
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      ))}
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </>
   );
 }

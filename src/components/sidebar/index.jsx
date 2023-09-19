@@ -156,15 +156,14 @@ const Sidebar = () => {
                   </button>
                   <div className="inline-flex flex-col items-start justify-start">
                     <div className="truncate text-center text-xl font-medium leading-loose text-gray-900 hover:text-gray-500">
-                      {isConnected && dataUser.username === null
-                        ? truncateAddress(address)
-                        : dataUser.username}
+                      {(isConnected && dataUser.username) ||
+                        truncateAddress(address)}
                     </div>
                     <button
                       className="text-center text-sm font-light leading-tight text-gray-900 hover:text-gray-500"
                       onClick={handleViewProfileClick}
                     >
-                      view profile
+                      View Profile
                     </button>
                   </div>
                 </div>

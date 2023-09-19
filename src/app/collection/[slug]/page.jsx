@@ -196,19 +196,14 @@ export default function CollectionDetail({ params }) {
                     <div>
                       Created by{' '}
                       <span className="font-semibold">
-                        {profile.username
-                          ? profile.username
-                          : collection.userAddress
-                          ? truncateAddress(collection.userAddress)
-                          : ''}
+                        {collection.User?.username ||
+                          truncateAddress(collection.User?.walletAddress)}
                       </span>
                     </div>
                     <div>
                       Address{' '}
                       <span className="font-semibold">
-                        {profile.walletAddress
-                          ? truncateAddress(profile.walletAddress)
-                          : ''}
+                        {truncateAddress(collection.User?.walletAddress)}
                       </span>
                     </div>
                   </div>
@@ -388,7 +383,9 @@ const Items = ({ params, collection }) => {
         .request({
           method: 'get',
           maxBodyLength: Infinity,
-          url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbycollection/${params.slug}?query=${search}&page=${nftPage}`,
+          url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/${
+            address ? 'getbycollection' : 'getbyslug'
+          }/${params.slug}?query=${search}&page=${nftPage}`,
         })
         .then((response) => {
           if (response.data.nfts.length > 0) {

@@ -203,11 +203,23 @@ export const SlideshowActivities = ({ dataActivities }) => {
     };
   }
 
-  const handleOpenModalBuy = async (marketId, price, dataNFT) => {
+  const handleOpenModalBuy = async (
+    marketId,
+    price,
+    imageUri,
+    name,
+    tokenId,
+    ChainSymbol,
+    ChainName,
+  ) => {
     setBuyData({
       marketId,
       price,
-      dataNFT,
+      imageUri,
+      name,
+      tokenId,
+      ChainSymbol,
+      ChainName,
     });
     setisOpenModalBuy(true);
   };
@@ -428,11 +440,16 @@ export const SlideshowActivities = ({ dataActivities }) => {
                                   handleOpenModalBuy(
                                     nft?.marketId,
                                     nft?.price,
-                                    nft,
+                                    nft?.nftDetails?.imageUri,
+                                    nft?.nftDetails?.name,
+                                    nft?.nftDetails?.tokenId,
+                                    nft.collectionData.Chain.symbol,
+                                    nft.collectionData.Chain.name,
                                   )
                                 }
+                                disabled={!isNotExpired}
                               >
-                                Buy Now
+                                {isNotExpired ? 'Buy Now' : 'Expired'}
                               </button>
                             </div>
                           )}

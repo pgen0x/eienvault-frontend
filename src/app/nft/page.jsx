@@ -362,7 +362,7 @@ export default function NftPage() {
                             ? 'md:col-span-4 xl:col-span-4 2xl:col-span-4'
                             : 'md:col-span-6 xl:col-span-3 2xl:col-span-3'
                           : openFilter
-                          ? 'md:col-span-6 xl:col-span-2 2xl:col-span-3'
+                          ? 'md:col-span-6 xl:col-span-3 2xl:col-span-3'
                           : 'md:col-span-4 xl:col-span-2 2xl:col-span-2'
                       }`}
                     >

@@ -16,6 +16,7 @@ import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { useRouter } from 'next-nprogress-bar';
 
 export default function OrdersPage() {
   const searchParams = useSearchParams();
@@ -346,13 +347,14 @@ export default function OrdersPage() {
 }
 
 const Listings = ({ dataListing, isLoading, removeListing }) => {
+  const router = useRouter();
   const currentDate = moment();
   console.log('dataListing', dataListing);
 
   return (
     <>
-      <div className="min-h-full w-full">
-        <div className="flex h-full w-full flex-col items-start justify-start gap-2">
+      <div className="min-h-full w-full ">
+        <div className="flex h-full w-full flex-col items-start justify-start gap-2 ">
           <div className="hidden w-full items-start justify-start self-stretch rounded-xl bg-primary-500 py-2 lg:inline-flex">
             <div className="shrink grow basis-0 text-center text-lg font-bold leading-loose text-white">
               Item{' '}
@@ -371,145 +373,157 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
             </div>
           </div>
         </div>
-        {isLoading ? (
-          <div className="flex h-full w-full flex-col items-start justify-start gap-2">
-            <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-              <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                  <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                    <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                  </div>
-                  <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                </div>
-              </div>
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-            </div>
-            <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-              <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                  <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                    <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                  </div>
-                  <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                </div>
-              </div>
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-            </div>
-            <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-              <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                  <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                    <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                  </div>
-                  <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                </div>
-              </div>
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-            </div>
-            <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-              <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                  <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                    <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                  </div>
-                  <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                </div>
-              </div>
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-            </div>
-            <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-              <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                  <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                    <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                  </div>
-                  <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                </div>
-              </div>
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-            </div>
-          </div>
-        ) : dataListing.length > 0 ? (
-          dataListing.map((data, index) => {
-            const endDate = moment.unix(data.endDate); // Convert the end date from Unix timestamp
-            const timeDifference = endDate.diff(currentDate);
-            const isEndDateInFuture = timeDifference > 0;
-            return (
-              <div
-                className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex"
-                key={index}
-              >
+        <div className="mt-5 rounded-lg border border-gray-200 bg-gray-100 p-3">
+          {isLoading ? (
+            <div className="flex h-full w-full flex-col items-start justify-start gap-2">
+              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
                 <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
-                    <div className="inline-flex h-14 w-12 flex-col py-0.5">
-                      <div className="h-12 w-12 rounded-full bg-gray-300">
-                        <Image
-                          className="w-full rounded-2xl bg-white object-cover lg:w-96"
-                          width={48}
-                          height={48}
-                          placeholder="blur"
-                          blurDataURL={data.nftDetails?.imageUri}
-                          src={data.nftDetails?.imageUri}
-                        />
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
+                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
+                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+                    </div>
+                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
+                  </div>
+                </div>
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+              </div>
+              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
+                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
+                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
+                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+                    </div>
+                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
+                  </div>
+                </div>
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+              </div>
+              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
+                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
+                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
+                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+                    </div>
+                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
+                  </div>
+                </div>
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+              </div>
+              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
+                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
+                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
+                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+                    </div>
+                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
+                  </div>
+                </div>
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+              </div>
+              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
+                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
+                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
+                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+                    </div>
+                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
+                  </div>
+                </div>
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+              </div>
+            </div>
+          ) : dataListing.length > 0 ? (
+            dataListing.map((data, index) => {
+              const endDate = moment.unix(data.endDate); // Convert the end date from Unix timestamp
+              const timeDifference = endDate.diff(currentDate);
+              const isEndDateInFuture = timeDifference > 0;
+              return (
+                <div className="m-2">
+                  <div
+                    className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex"
+                    key={index}
+                  >
+                    <div className="flex shrink grow basis-0 items-center justify-center text-center text-base font-bold leading-loose">
+                      <div
+                        className="inline-flex h-14 w-48 cursor-pointer items-center justify-center gap-4"
+                        onClick={() =>
+                          router.push(
+                            `/nft/${data.collectionData?.tokenAddress}/${data.tokenId}`,
+                          )
+                        }
+                      >
+                        <div className="inline-flex h-14 w-12 flex-col items-center justify-center">
+                          <div className="h-12 w-12 rounded-full bg-gray-300">
+                            <Image
+                              className="w-full rounded-2xl bg-white object-cover lg:w-96"
+                              width={48}
+                              height={48}
+                              placeholder="blur"
+                              blurDataURL={data.nftDetails?.imageUri}
+                              src={data.nftDetails?.imageUri}
+                            />
+                          </div>
+                        </div>
+                        <div className="text-md shrink grow basis-0 font-medium leading-loose">
+                          {data.nftDetails?.name} #{data.tokenId}
+                        </div>
                       </div>
                     </div>
-                    <div className="text-md shrink grow basis-0 font-medium leading-loose">
-                      {data.nftDetails?.name}
+                    <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
+                      {formatEther(data.price)}{' '}
+                      {data.collectionData.Chain.symbol}
                     </div>
-                  </div>
-                </div>
-                <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                  {formatEther(data.price)} {data.collectionData.Chain.symbol}
-                </div>
-                <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                  {data?.isAuctioned ? 'Yes' : 'No'}
-                </div>
-                <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                  {data?.isAuctioned && isEndDateInFuture
-                    ? moment
-                        .unix(data?.endDate)
-                        .format('Do MMM YYYY, h:mm:ss A')
-                    : '-'}
-                </div>
+                    <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
+                      {data?.isAuctioned ? 'Yes' : 'No'}
+                    </div>
+                    <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
+                      {data?.isAuctioned && isEndDateInFuture
+                        ? moment
+                            .unix(data?.endDate)
+                            .format('Do MMM YYYY, h:mm:ss A')
+                        : '-'}
+                    </div>
 
-                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
-                    <button
-                      onClick={() => removeListing(data.marketId)}
-                      className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl px-4 py-2 hover:bg-primary-200 hover:text-primary-200"
-                    >
-                      <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
-                        <FontAwesomeIcon icon={faXmark} />
+                    <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                      <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
+                        <button
+                          onClick={() => removeListing(data.marketId)}
+                          className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl px-4 py-2 hover:bg-primary-200 hover:text-primary-200"
+                        >
+                          <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
+                            <FontAwesomeIcon icon={faXmark} />
+                          </div>
+                          <span className="text-base font-bold leading-normal text-primary-500">
+                            Remove Listing
+                          </span>
+                        </button>
                       </div>
-                      <span className="text-base font-bold leading-normal text-primary-500">
-                        Remove Listing
-                      </span>
-                    </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })
-        ) : (
-          <div className="shrink grow basis-0 py-4 text-center text-base font-bold leading-loose">
-            Data Not Found
-          </div>
-        )}
+              );
+            })
+          ) : (
+            <div className="shrink grow basis-0 py-4 text-center text-base font-bold leading-loose">
+              Data Not Found
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
@@ -538,155 +552,159 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
             </div>
           </div>
         </div>
-        {isLoadingBidMade ? (
-          <div className="flex h-full w-full flex-col items-start justify-start gap-2">
-            <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-              <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                  <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                    <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                  </div>
-                  <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                </div>
-              </div>
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-            </div>
-            <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-              <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                  <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                    <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                  </div>
-                  <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                </div>
-              </div>
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-            </div>
-            <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-              <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                  <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                    <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                  </div>
-                  <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                </div>
-              </div>
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-            </div>
-            <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-              <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                  <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                    <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                  </div>
-                  <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                </div>
-              </div>
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-            </div>
-            <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-              <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                  <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                    <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                  </div>
-                  <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                </div>
-              </div>
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-            </div>
-          </div>
-        ) : dataBidMade.length > 0 ? (
-          dataBidMade.map((data, index) => {
-            const endDate = moment.unix(data?.itemsDetails?.endDate); // Convert the end date from Unix timestamp
-            const timeDifference = endDate.diff(currentDate);
-            const isEndDateInFuture = timeDifference > 0;
-            return (
-              <div
-                className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex"
-                key={index}
-              >
+        <div className="mt-5 rounded-lg border border-gray-200 bg-gray-100 p-3">
+          {isLoadingBidMade ? (
+            <div className="flex h-full w-full flex-col items-start justify-start gap-2">
+              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
                 <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
-                    <div className="inline-flex h-14 w-12 flex-col py-0.5">
-                      <div className="h-12 w-12 rounded-full bg-gray-300">
-                        <Image
-                          className="w-full rounded-2xl object-cover lg:w-96"
-                          width={48}
-                          height={48}
-                          placeholder="blur"
-                          blurDataURL={data.nftDetails?.imageUri}
-                          src={data.nftDetails?.imageUri}
-                        />
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
+                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
+                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+                    </div>
+                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
+                  </div>
+                </div>
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+              </div>
+              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
+                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
+                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
+                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+                    </div>
+                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
+                  </div>
+                </div>
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+              </div>
+              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
+                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
+                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
+                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+                    </div>
+                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
+                  </div>
+                </div>
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+              </div>
+              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
+                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
+                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
+                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+                    </div>
+                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
+                  </div>
+                </div>
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+              </div>
+              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
+                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
+                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
+                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+                    </div>
+                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
+                  </div>
+                </div>
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+              </div>
+            </div>
+          ) : dataBidMade.length > 0 ? (
+            dataBidMade.map((data, index) => {
+              const endDate = moment.unix(data?.itemsDetails?.endDate); // Convert the end date from Unix timestamp
+              const timeDifference = endDate.diff(currentDate);
+              const isEndDateInFuture = timeDifference > 0;
+              return (
+                <div className="m-2">
+                  <div
+                    className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex"
+                    key={index}
+                  >
+                    <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                      <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
+                        <div className="inline-flex h-14 w-12 flex-col py-0.5">
+                          <div className="h-12 w-12 rounded-full bg-gray-300">
+                            <Image
+                              className="w-full rounded-2xl object-cover lg:w-96"
+                              width={48}
+                              height={48}
+                              placeholder="blur"
+                              blurDataURL={data.nftDetails?.imageUri}
+                              src={data.nftDetails?.imageUri}
+                            />
+                          </div>
+                        </div>
+                        <div className="text-md shrink grow basis-0 font-medium leading-loose">
+                          {data.nftDetails?.name}
+                        </div>
                       </div>
                     </div>
-                    <div className="text-md shrink grow basis-0 font-medium leading-loose">
-                      {data.nftDetails?.name}
+                    <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
+                      {formatEther(data.BidAmount)} HLUSD
                     </div>
-                  </div>
-                </div>
-                <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                  {formatEther(data.BidAmount)} HLUSD
-                </div>
 
-                <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                  {moment
-                    .unix(data?.itemsDetails?.endDate)
-                    .format('Do MMM YYYY, h:mm:ss A')}
+                    <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
+                      {moment
+                        .unix(data?.itemsDetails?.endDate)
+                        .format('Do MMM YYYY, h:mm:ss A')}
+                    </div>
+                    {isEndDateInFuture ? (
+                      <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                        <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
+                          <button
+                            onClick={() => cancelBid(data.ItemId)}
+                            className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl px-4 py-2 hover:bg-primary-200 hover:text-primary-200"
+                          >
+                            <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
+                              <FontAwesomeIcon icon={faXmark} />
+                            </div>
+                            <span className="text-base font-bold leading-normal text-primary-500">
+                              Cancel Bid
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                        <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
+                          <button className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl bg-primary-500 px-4 py-2 hover:bg-primary-200 hover:text-primary-200">
+                            <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
+                              <FontAwesomeIcon icon={faHourglass} />
+                            </div>
+                            <span className="text-base font-bold leading-normal text-white">
+                              Expired
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                {isEndDateInFuture ? (
-                  <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                    <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
-                      <button
-                        onClick={() => cancelBid(data.ItemId)}
-                        className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl px-4 py-2 hover:bg-primary-200 hover:text-primary-200"
-                      >
-                        <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
-                          <FontAwesomeIcon icon={faXmark} />
-                        </div>
-                        <span className="text-base font-bold leading-normal text-primary-500">
-                          Cancel Bid
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                    <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
-                      <button className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl bg-primary-500 px-4 py-2 hover:bg-primary-200 hover:text-primary-200">
-                        <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
-                          <FontAwesomeIcon icon={faHourglass} />
-                        </div>
-                        <span className="text-base font-bold leading-normal text-white">
-                          Expired
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })
-        ) : (
-          <div className="shrink grow basis-0 py-4 text-center text-base font-bold leading-loose">
-            Data Not Found
-          </div>
-        )}
+              );
+            })
+          ) : (
+            <div className="shrink grow basis-0 py-4 text-center text-base font-bold leading-loose">
+              Data Not Found
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
@@ -717,158 +735,165 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
             </div>
           </div>
         </div>
-        {isLoadingReceived ? (
-          <div className="flex h-full w-full flex-col items-start justify-start gap-2">
-            <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-              <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                  <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                    <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+        <div className="mt-5 rounded-lg border border-gray-200 bg-gray-100 p-3">
+          {isLoadingReceived ? (
+            <div className="flex h-full w-full flex-col items-start justify-start gap-2">
+              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
+                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
+                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
+                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+                    </div>
+                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
                   </div>
-                  <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
                 </div>
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
               </div>
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-            </div>
-            <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-              <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                  <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                    <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
+                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
+                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
+                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+                    </div>
+                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
                   </div>
-                  <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
                 </div>
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
               </div>
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-            </div>
-            <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-              <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                  <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                    <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
+                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
+                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
+                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+                    </div>
+                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
                   </div>
-                  <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
                 </div>
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
               </div>
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-            </div>
-            <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-              <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                  <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                    <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
+                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
+                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
+                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+                    </div>
+                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
                   </div>
-                  <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
                 </div>
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
               </div>
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-            </div>
-            <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-              <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                  <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                    <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
+                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
+                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
+                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+                    </div>
+                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
                   </div>
-                  <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
                 </div>
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
+                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
               </div>
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
             </div>
-          </div>
-        ) : dataReceived.length > 0 ? (
-          dataReceived.map((data, index) => {
-            const endDate = moment.unix(data?.itemsEndDate); // Convert the end date from Unix timestamp
-            const timeDifference = endDate.diff(currentDate);
-            const isEndDateInFuture = timeDifference > 0;
-            return (
-              <React.Fragment key={index}>
-                {data.Bids.map((dataBids, indexBids) => (
-                  <div
-                    className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex"
-                    key={indexBids}
-                  >
-                    <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                      <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
-                        <div className="inline-flex h-14 w-12 flex-col py-0.5">
-                          <div className="h-12 w-12 rounded-full bg-gray-300">
-                            <Image
-                              className="w-full rounded-2xl object-cover lg:w-96"
-                              width={48}
-                              height={48}
-                              placeholder="blur"
-                              blurDataURL={data.nftDetails?.imageUri}
-                              src={data.nftDetails?.imageUri}
-                            />
+          ) : dataReceived.length > 0 ? (
+            dataReceived.map((data, index) => {
+              const endDate = moment.unix(data?.itemsEndDate); // Convert the end date from Unix timestamp
+              const timeDifference = endDate.diff(currentDate);
+              const isEndDateInFuture = timeDifference > 0;
+              return (
+                <React.Fragment key={index}>
+                  {data.Bids.map((dataBids, indexBids) => (
+                    <div className="m-2">
+                      <div
+                        className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex"
+                        key={indexBids}
+                      >
+                        <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                          <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
+                            <div className="inline-flex h-14 w-12 flex-col py-0.5">
+                              <div className="h-12 w-12 rounded-full bg-gray-300">
+                                <Image
+                                  className="w-full rounded-2xl object-cover lg:w-96"
+                                  width={48}
+                                  height={48}
+                                  placeholder="blur"
+                                  blurDataURL={data.nftDetails?.imageUri}
+                                  src={data.nftDetails?.imageUri}
+                                />
+                              </div>
+                            </div>
+                            <div className="text-md shrink grow basis-0 font-medium leading-loose">
+                              {data.nftDetails?.name}
+                            </div>
                           </div>
                         </div>
-                        <div className="text-md shrink grow basis-0 font-medium leading-loose">
-                          {data.nftDetails?.name}
+                        <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
+                          {formatEther(dataBids.BidAmount)} HLUSD
                         </div>
-                      </div>
-                    </div>
-                    <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                      {formatEther(dataBids.BidAmount)} HLUSD
-                    </div>
-                    <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                      {truncateAddress(dataBids.BidderAddress)}
-                    </div>
-                    <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                      {data?.itemsEndDate === '' ? (
-                        <span className="rounded-2xl bg-primary-500 px-3 py-2 text-sm font-bold leading-normal text-white">
-                          Expired or Closed
-                        </span>
-                      ) : (
-                        moment
-                          .unix(data?.itemsEndDate)
-                          .format('Do MMM YYYY, h:mm:ss A')
-                      )}
-                    </div>
-                    {isEndDateInFuture ? (
-                      <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                        <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
-                          <button
-                            onClick={() =>
-                              approveBid(data.ItemId, dataBids.BidderAddress)
-                            }
-                            className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl px-4 py-2 hover:bg-primary-200 hover:text-primary-200"
-                          >
-                            <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
-                              <FontAwesomeIcon icon={faCheck} />
-                            </div>
-                            <span className="text-base font-bold leading-normal text-primary-500">
-                              Approve Bid
+                        <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
+                          {truncateAddress(dataBids.BidderAddress)}
+                        </div>
+                        <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
+                          {data?.itemsEndDate === '' ? (
+                            <span className="rounded-2xl bg-primary-500 px-3 py-2 text-sm font-bold leading-normal text-white">
+                              Expired or Closed
                             </span>
-                          </button>
+                          ) : (
+                            moment
+                              .unix(data?.itemsEndDate)
+                              .format('Do MMM YYYY, h:mm:ss A')
+                          )}
                         </div>
+                        {isEndDateInFuture ? (
+                          <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
+                            <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
+                              <button
+                                onClick={() =>
+                                  approveBid(
+                                    data.ItemId,
+                                    dataBids.BidderAddress,
+                                  )
+                                }
+                                className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl px-4 py-2 hover:bg-primary-200 hover:text-primary-200"
+                              >
+                                <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
+                                  <FontAwesomeIcon icon={faCheck} />
+                                </div>
+                                <span className="text-base font-bold leading-normal text-primary-500">
+                                  Approve Bid
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="shrink grow basis-0 text-center text-base font-bold leading-loose"></div>
+                        )}
                       </div>
-                    ) : (
-                      <div className="shrink grow basis-0 text-center text-base font-bold leading-loose"></div>
-                    )}
-                  </div>
-                ))}
-              </React.Fragment>
-            );
-          })
-        ) : (
-          <div className="shrink grow basis-0 py-4 text-center text-base font-bold leading-loose">
-            Data Not Found
-          </div>
-        )}
+                    </div>
+                  ))}
+                </React.Fragment>
+              );
+            })
+          ) : (
+            <div className="shrink grow basis-0 py-4 text-center text-base font-bold leading-loose">
+              Data Not Found
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

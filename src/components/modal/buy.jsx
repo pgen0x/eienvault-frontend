@@ -40,7 +40,6 @@ export default function ModalBuy({
   buyAction,
   onModalClose,
 }) {
-  const dataBuyNFT = dataBuy.dataNFT;
   const router = useRouter();
   const { data: walletClient } = useWalletClient({
     onError(error) {
@@ -191,7 +190,7 @@ export default function ModalBuy({
   console.log(dataBuy);
 
   return (
-    dataBuyNFT && (
+    dataBuy && (
       <>
         <Transition appear show={isOpenModal} as={Fragment}>
           <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
@@ -233,20 +232,21 @@ export default function ModalBuy({
 
                     <section className="step-1 flex flex-col gap-3 pt-5 text-gray-700">
                       <div className="flex w-full items-center justify-center gap-3">
-                        {dataBuy.dataNFT?.imageUri !== null ? (
+                        {dataBuy.imageUri !== null ? (
                           <Image
                             className="h-full w-full rounded-2xl object-cover"
                             width={192}
                             height={100}
                             placeholder="blur"
-                            blurDataURL={dataBuy.dataNFT?.nftDetails?.imageUri}
-                            src={dataBuy.dataNFT?.nftDetails?.imageUri}
+                            alt={dataBuy?.name}
+                            blurDataURL={dataBuy?.imageUri}
+                            src={dataBuy?.imageUri}
                           />
                         ) : (
                           <div className="h-96 w-[192px] animate-pulse rounded-2xl bg-gray-300" />
                         )}
                         <div className="font w-full text-2xl text-gray-400">
-                          #{dataBuy.dataNFT?.tokenId}
+                          #{dataBuy?.tokenId}
                           <br />
                           Worriness
                         </div>
@@ -258,26 +258,24 @@ export default function ModalBuy({
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-gray-400">
-                            {formatEther(dataBuy?.price)}{' '}
-                            {dataBuy.dataNFT?.collectionData?.Chain?.symbol}
+                            {dataBuy?.price && formatEther(dataBuy?.price)}{' '}
+                            {dataBuy?.ChainSymbol}
                           </span>
                         </div>
                       </div>
                       <div className="flex justify-between rounded-lg border border-gray-200 p-3">
                         <div className="flex items-center gap-2">
                           <div className="rounded-lg p-2 text-white">
-                            {(dataBuy?.dataNFT?.collectionData?.chainId ===
-                              666888 ||
-                              dataBuy?.dataNFT?.collectionData?.chainId ===
-                                8668) && <HelaIcon className="h-6 w-6" />}
+                            {(dataBuy?.ChainSymbol === 666888 ||
+                              dataBuy?.ChainSymbol === 8668) && (
+                              <HelaIcon className="h-6 w-6" />
+                            )}
                           </div>
                           <div className="flex flex-col">
                             <span className="text-xl">
-                              {dataBuy.dataNFT?.collectionData?.Chain?.symbol}
+                              {dataBuy.ChainSymbol}
                             </span>
-                            <span className="text-xs">
-                              {dataBuy.dataNFT?.collectionData?.Chain.name}
-                            </span>
+                            <span className="text-xs">{dataBuy.ChainName}</span>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -292,8 +290,8 @@ export default function ModalBuy({
                         <div className="flex justify-between">
                           <span>Price</span>
                           <span className="font-semibold">
-                            {formatEther(dataBuy?.price)}{' '}
-                            {dataBuy.dataNFT?.collectionData?.Chain?.symbol}
+                            {dataBuy?.price && formatEther(dataBuy?.price)}{' '}
+                            {dataBuy.ChainSymbol}
                           </span>
                         </div>
 
@@ -301,8 +299,8 @@ export default function ModalBuy({
                         <div className="flex justify-between">
                           <span>Total amount</span>
                           <span className="font-semibold">
-                            {formatEther(dataBuy?.price)}{' '}
-                            {dataBuy.dataNFT?.collectionData?.Chain?.symbol}
+                            {dataBuy?.price && formatEther(dataBuy?.price)}{' '}
+                            {dataBuy.ChainSymbol}
                           </span>
                         </div>
                       </div>

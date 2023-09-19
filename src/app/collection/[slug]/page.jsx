@@ -677,11 +677,11 @@ const Items = ({ params, collection }) => {
                   className={`group col-span-12 h-[542px] w-full sm:col-span-6 sm:h-[542px] md:h-[542px] lg:h-[542px] xl:h-[542px] 2xl:h-[542px] ${
                     gridList === 'grid'
                       ? openFilter
-                        ? 'md:col-span-4 xl:col-span-4 2xl:col-span-4'
-                        : 'md:col-span-6 xl:col-span-3 2xl:col-span-3'
+                        ? 'md:col-span-6 xl:col-span-4 2xl:col-span-4'
+                        : 'md:col-span-4 xl:col-span-3 2xl:col-span-3'
                       : openFilter
-                      ? 'md:col-span-6 xl:col-span-2 2xl:col-span-3'
-                      : 'md:col-span-4 xl:col-span-2 2xl:col-span-2'
+                      ? 'md:col-span-4 xl:col-span-3 2xl:col-span-3'
+                      : 'md:col-span-3 xl:col-span-2 2xl:col-span-2'
                   }`}
                 >
                   <div className="group h-[542px] w-full">

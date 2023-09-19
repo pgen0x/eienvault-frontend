@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next-nprogress-bar';
 import { useSearchParams } from 'next/navigation';
@@ -10,6 +10,7 @@ export default function Search() {
   const router = useRouter();
   const filterQuery = useSearchParams();
   const [search, setSearch] = useState(filterQuery.get('search') === null ? "" : filterQuery.get('search'));
+  const [toggleSearch, setToggleSearch] = useState(false);
 
   const handleKeyDown = (event) => {
     if (event.ctrlKey && event.key === 'k') {
@@ -35,15 +36,15 @@ export default function Search() {
   }
 
   return (
-    <form action="/search" onSubmit={(event) => handleSearch(event)} className="w-2/4">
+    <form action="/search" onSubmit={(event) => handleSearch(event)} className={`${toggleSearch ? 'absolute left-0 bg-white' : ''} w-full`}>
       <div className="w-full inline-flex h-10 items-center justify-start gap-2 rounded-xl border-0 px-4 dark:bg-gray-800 md:bg-white lg:bg-white xl:bg-white 2xl:bg-white">
-        <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
-          <FontAwesomeIcon icon={faSearch} />
-        </div>
+        <span className="text-xl font-black text-zinc-500 dark:text-zinc-200" onClick={() => setToggleSearch(!toggleSearch)}>
+          <FontAwesomeIcon icon={toggleSearch ? faChevronLeft : faSearch} />
+        </span>
         <input
           ref={inputRef}
           name="search"
-          className="hidden h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500  dark:focus:ring-blue-500 sm:hidden md:block lg:block xl:block 2xl:block"
+          className={`${toggleSearch ? '' : 'hidden'} h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500  dark:focus:ring-blue-500 sm:hidden md:block lg:block xl:block 2xl:block`}
           type="text"
           placeholder="Search ..."
           aria-label="Search"

@@ -344,7 +344,7 @@ export default function Collection() {
               </div>
             )}
             <div
-              className={`col-span-12 sm:col-span-12 ${openFilter
+              className={`col-span-12 sm:col-span-12 overflow-auto ${openFilter
                 ? 'md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9'
                 : 'md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12'
                 }`}

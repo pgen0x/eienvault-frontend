@@ -280,7 +280,7 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
                   <Image
                     className="z-10 h-[250px] w-full rounded-2xl object-cover duration-300 ease-in-out group-hover:h-[210px] group-hover:transition-all"
                     src={
-                      nft.nftDetails.imageUri
+                      nft.nftDetails?.imageUri
                         ? nft.nftDetails.imageUri
                         : 'https://placehold.co/325x265.png'
                     }

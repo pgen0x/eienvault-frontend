@@ -65,7 +65,7 @@ export default function NFTDetails({ dataNFTs }) {
   const [countLikes, setCountLikes] = useState(dataNFTs?.likeCount);
   const [dataRelatedNFTs, setDataRelatedNFTs] = useState([]);
   const [isLoadingRelatedNFTs, setIsLoadingRelatedNFTs] = useState(true);
-
+  const [activeTab, setActiveTab] = useState("collateral");
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
   const { data: walletClient } = useWalletClient();
@@ -78,6 +78,17 @@ export default function NFTDetails({ dataNFTs }) {
     }
     setModalPropose(!modalPropose);
   };
+
+  const renderActiveTab = () => {
+    const listTabs = {
+      overview: <Overview dataNFTs={dataNFTs} />,
+      bids: <Bids dataNFTs={dataNFTs} />,
+      history: <History dataNFTs={dataNFTs} />,
+      collateral: <Collateral dataNFTs={dataNFTs} />
+    }
+
+    return listTabs[activeTab];
+  }
 
   function getHighestBid(data) {
     if (!data.listOffers || data.listOffers.length === 0) {
@@ -366,56 +377,13 @@ export default function NFTDetails({ dataNFTs }) {
                 </div>
                 <div className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
                   <ul className="my-5 flex w-full justify-around border-b border-gray-200 text-primary-500">
-                    <li className="cursor-pointer px-5 pb-3">Overview</li>
-                    <li className="cursor-pointer px-5 pb-3">Bids</li>
-                    <li className="cursor-pointer px-5 pb-3">History</li>
-                    <li className="cursor-pointer border-b-4 border-primary-500 px-5 pb-3">
-                      Collateral
-                    </li>
+                    <li className={`cursor-pointer px-5 pb-3 ${activeTab == "overview" ? "border-b-4 border-primary-500" : ""}`} onClick={() => setActiveTab("overview")}>Overview</li>
+                    <li className={`cursor-pointer px-5 pb-3 ${activeTab == "bids" ? "border-b-4 border-primary-500" : ""}`} onClick={() => setActiveTab("bids")}>Bids</li>
+                    <li className={`cursor-pointer px-5 pb-3 ${activeTab == "history" ? "border-b-4 border-primary-500" : ""}`} onClick={() => setActiveTab("history")}>History</li>
+                    <li className={`cursor-pointer px-5 pb-3 ${activeTab == "collateral" ? "border-b-4 border-primary-500" : ""}`} onClick={() => setActiveTab("collateral")}>Collateral</li>
                   </ul>
                   <div className="flex w-full flex-col gap-4 rounded-lg bg-white p-5 text-gray-900">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="md:text-lg">Current Owner</h3>
-                        <div className="flex w-fit items-center justify-center gap-2">
-                          <ImageWithFallback
-                            className="h-full w-full rounded-2xl "
-                            width={28}
-                            height={28}
-                            alt={
-                              dataNFTs?.ownerData?.username ||
-                              truncateAddress4char(
-                                dataNFTs?.ownerData?.walletAddress,
-                              ) ||
-                              truncateAddress4char(dataNFTs?.owner)
-                            }
-                            diameter={28}
-                            address={
-                              dataNFTs?.ownerData?.walletAddress ||
-                              dataNFTs?.owner
-                            }
-                            src={`/uploads/user/${dataNFTs?.ownerData?.logo}`}
-                          />
-                          <div className="font-medium leading-none text-neutral-700">
-                            {dataNFTs?.ownerData?.username ||
-                              truncateAddress4char(
-                                dataNFTs?.ownerData?.walletAddress,
-                              ) ||
-                              truncateAddress4char(dataNFTs?.owner)}
-                          </div>
-                        </div>
-                      </div>
-                      <div>No owner proposal yet.</div>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold md:text-lg">
-                        Propose an ETH lend to the owner
-                      </h3>
-                      <p>No owner lender proposes the offer yet.</p>
-                    </div>
-                    <button className="w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300">
-                      Propose an offer
-                    </button>
+                    {renderActiveTab()}
                   </div>
                 </div>
               </div>
@@ -761,62 +729,14 @@ export default function NFTDetails({ dataNFTs }) {
                     )}
                   </div>
                   <div className="block sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
-                    <ul className="my-4 flex w-full justify-around gap-4 border-b border-gray-200 text-gray-900">
-                      <li className="cursor-pointer">Overview</li>
-                      <li className="cursor-pointer">Bids</li>
-                      <li className="cursor-pointer">History</li>
-                      <li className="cursor-pointer border-b-4 border-primary-500 pb-2 text-primary-500">
-                        Collateral
-                      </li>
+                    <ul className="my-5 flex w-full justify-around border-b border-gray-200 text-primary-500">
+                      <li className={`cursor-pointer px-5 pb-3 ${activeTab == "overview" ? "border-b-4 border-primary-500" : ""}`} onClick={() => setActiveTab("overview")}>Overview</li>
+                      <li className={`cursor-pointer px-5 pb-3 ${activeTab == "bids" ? "border-b-4 border-primary-500" : ""}`} onClick={() => setActiveTab("bids")}>Bids</li>
+                      <li className={`cursor-pointer px-5 pb-3 ${activeTab == "history" ? "border-b-4 border-primary-500" : ""}`} onClick={() => setActiveTab("history")}>History</li>
+                      <li className={`cursor-pointer px-5 pb-3 ${activeTab == "collateral" ? "border-b-4 border-primary-500" : ""}`} onClick={() => setActiveTab("collateral")}>Collateral</li>
                     </ul>
                     <div className="flex w-full flex-col gap-4 rounded-lg bg-white p-5 text-gray-900">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h3 className="text-sm">Current Owner</h3>
-                          <div className="flex w-fit items-center justify-center gap-2">
-                            <ImageWithFallback
-                              className="h-full w-full rounded-2xl "
-                              width={18}
-                              height={18}
-                              alt={
-                                dataNFTs?.ownerData?.username ||
-                                truncateAddress4char(
-                                  dataNFTs?.ownerData?.walletAddress,
-                                ) ||
-                                truncateAddress4char(dataNFTs?.owner)
-                              }
-                              diameter={18}
-                              address={
-                                dataNFTs?.ownerData?.walletAddress ||
-                                dataNFTs?.owner
-                              }
-                              src={`/uploads/user/${dataNFTs?.ownerData?.logo}`}
-                            />
-                            <div className="text-sm font-medium leading-none text-neutral-700">
-                              {dataNFTs?.ownerData?.username ||
-                                truncateAddress4char(
-                                  dataNFTs?.ownerData?.walletAddress,
-                                ) ||
-                                truncateAddress4char(dataNFTs?.owner)}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-end text-sm md:text-lg">
-                          No owner proposal yet.
-                        </div>
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-semibold md:text-lg">
-                          Propose an ETH lend to the owner
-                        </h3>
-                        <p>No owner lender proposes the offer yet.</p>
-                      </div>
-                      <button
-                        // onClick={handleModalPropose}
-                        className="w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300"
-                      >
-                        Propose an offer
-                      </button>
+                      {renderActiveTab()}
                     </div>
                   </div>
                 </div>
@@ -1167,4 +1087,66 @@ export default function NFTDetails({ dataNFTs }) {
       />
     </>
   );
+}
+
+
+const Collateral = ({ dataNFTs }) => {
+  return (
+    <>
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="md:text-lg">Current Owner</h3>
+          <div className="flex w-fit items-center justify-center gap-2">
+            <ImageWithFallback
+              className="h-full w-full rounded-2xl "
+              width={28}
+              height={28}
+              alt={
+                dataNFTs.ownerData?.username ||
+                truncateAddress4char(
+                  dataNFTs.ownerData?.walletAddress,
+                ) ||
+                truncateAddress4char(dataNFTs.owner)
+              }
+              diameter={28}
+              address={
+                dataNFTs.ownerData?.walletAddress ||
+                dataNFTs.owner
+              }
+              src={`/uploads/user/${dataNFTs.ownerData?.logo}`}
+            />
+            <div className="font-medium leading-none text-neutral-700">
+              {dataNFTs.ownerData?.username ||
+                truncateAddress4char(
+                  dataNFTs.ownerData?.walletAddress,
+                ) ||
+                truncateAddress4char(dataNFTs.owner)}
+            </div>
+          </div>
+        </div>
+        <div>No owner proposal yet.</div>
+      </div>
+      <div>
+        <h3 className="font-semibold md:text-lg">
+          Propose an ETH lend to the owner
+        </h3>
+        <p>No owner lender proposes the offer yet.</p>
+      </div>
+      <button className="w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300">
+        Propose an offer
+      </button>
+    </>
+  );
+}
+
+const Overview = ({ params }) => {
+  return <h1 className="text-black">Overview</h1>
+}
+
+const Bids = ({ params }) => {
+  return <h1 className="text-black">Bids</h1>
+}
+
+const History = ({ params }) => {
+  return <h1 className="text-black">History</h1>
 }

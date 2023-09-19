@@ -119,14 +119,14 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                     `/nft/${dataUpcoming[0].collectionData?.tokenAddress}/${dataUpcoming[0].tokenId}`,
                   )
                 }
-                className="w-full w-full rounded-full py-1 text-center text-primary-500 hover:bg-primary-50"
+                className="w-full rounded-full py-1 text-center text-primary-500 hover:bg-primary-50"
               >
                 View Detail
               </button>
             </div>
           </div>
         </div>
-        <div className="flex w-full flex-wrap">
+        <div className="flex flex-wrap w-4/6 h-[666px]">
           {dataUpcoming.slice(1).map((nft, index) => (
             <>
               <div className="group h-1/2 w-1/2 min-w-max overflow-hidden p-2">
@@ -437,7 +437,7 @@ export const UpcomingAuctionMobile = () => {
                 </div>
                 <button
                   onClick={() => router.push('/nft/user')}
-                  className="w-full w-full rounded-full py-1 text-center text-primary-500 hover:bg-primary-50"
+                  className="w-full rounded-full py-1 text-center text-primary-500 hover:bg-primary-50"
                 >
                   View Detail
                 </button>

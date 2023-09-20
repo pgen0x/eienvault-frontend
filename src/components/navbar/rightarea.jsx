@@ -79,7 +79,7 @@ export default function RightArea() {
 
   const classRadio = (value) => {
     const defaultCssRadio =
-      'cursor-pointer flex w-8 h-8 justify-center items-center rounded-full text-sm font-medium leading-5 ';
+      'cursor-pointer flex w-6 h-6 md:w-8 md:h-8 justify-center items-center rounded-full text-sm font-medium leading-5 ';
     return (
       defaultCssRadio +
       (enabled === value
@@ -171,7 +171,7 @@ export default function RightArea() {
           </Switch> */}
         </div>
       )}
-      <div className="hidden space-x-1 rounded-full border dark:bg-slate-800 dark:border-gray-800 border-gray-200 bg-white px-1 py-1 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+      <div className="space-x-1 rounded-full border dark:bg-slate-800 dark:border-gray-800 border-gray-200 bg-white px-1 py-1 flex">
         <div>
           <input
             className="hidden"

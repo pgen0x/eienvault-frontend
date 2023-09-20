@@ -23,6 +23,7 @@ import Auction from '@/components/auction';
 import {
   UpcomingAuction,
   UpcomingAuctionMobile,
+  UpcomingAuctionMobileSkeleton,
   UpcomingAuctionSkeleton,
 } from '@/components/auction/upcoming';
 import { Tab } from '@headlessui/react';
@@ -321,12 +322,11 @@ export default function Home() {
               </div>
               <div className="block sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
                 {isLoadingUpcoming || dataUpcoming.length <= 0 ? (
-                  <UpcomingAuctionSkeleton />
+                  <UpcomingAuctionMobileSkeleton />
                 ) : (
                   <UpcomingAuctionMobile dataUpcoming={dataUpcoming} />
                 )}
               </div>
-              {/* <UpcomingAuctionSkeleton /> */}
             </div>
           </div>
         </section>

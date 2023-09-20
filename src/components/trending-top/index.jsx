@@ -599,7 +599,7 @@ const MobileNft = ({ collection }) => {
       {nfts.length == 0 &&
         [...Array(5)].map((nft, index) => {
           return (
-            <SwiperSlide>
+            <SwiperSlide key={index}>
               <span className="absolute ml-[45px] mt-[5px] rounded-lg bg-gray-500 px-3 py-2 text-xs backdrop-blur-md"></span>
               <div className="flex h-20 w-20 animate-pulse flex-col justify-end bg-gray-300 bg-cover bg-center px-2 text-right">
                 <span className="mb-1 flex w-full rounded-lg bg-gray-500 py-2 text-xs"></span>

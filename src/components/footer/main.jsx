@@ -58,10 +58,11 @@ const Footer = () => {
 const FooterMobile = () => {
   return (
     <>
-      <section className="bg-white px-5 py-[20px]">
-        <img src="/logo.svg" className="w-24 mb-5" />
+      <section className="bg-white dark:bg-zinc-800 px-5 py-[20px]">
+        <img src="/logo.svg" className="w-24 mb-5 dark:hidden" />
+        <img src="/logo-dark.svg" className="w-24 mb-5 dark:block" />
         <div className="flex flex-col w-full justify-between">
-          <div className="flex gap-5 text-primary-500">
+          <div className="flex gap-5 text-primary-500 dark:text-white">
             <a href="#" className="w-full">
               2023 EienVault, inc
             </a>
@@ -75,16 +76,16 @@ const FooterMobile = () => {
               Join Our Community
             </a>
             <div className="flex gap-2">
-              <a href="#" className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-primary-100">
+              <a href="#" className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-primary-100 dark:bg-zinc-200">
                 <FontAwesomeIcon icon={faTwitter} />
               </a>
-              <a href="#" className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-primary-100">
+              <a href="#" className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-primary-100 dark:bg-zinc-200">
                 <FontAwesomeIcon icon={faDiscord} />
               </a>
-              <a href="#" className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-primary-100">
+              <a href="#" className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-primary-100 dark:bg-zinc-200">
                 <FontAwesomeIcon icon={faMedium} />
               </a>
-              <a href="#" className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-primary-100">
+              <a href="#" className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-primary-100 dark:bg-zinc-200">
                 <FontAwesomeIcon icon={faEnvelope} />
               </a>
             </div>

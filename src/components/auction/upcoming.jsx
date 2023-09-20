@@ -32,7 +32,7 @@ const getHighestBid = (auctionData) => {
     highestBid: highestBid.toString(),
     highestBidder,
   };
-}
+};
 
 export const UpcomingAuction = ({ dataUpcoming }) => {
   const router = useRouter();
@@ -97,9 +97,9 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
             </div>
           </div>
           <div className="duration-800 h-0 overflow-hidden px-3 opacity-0 ease-in-out group-hover:h-auto group-hover:opacity-100 group-hover:transition-all">
-            <div className="flex flex-col gap-2 rounded-b-xl bg-white dark:text-white dark:bg-zinc-700 p-3">
+            <div className="flex flex-col gap-2 rounded-b-xl bg-white p-3 dark:bg-zinc-700 dark:text-white">
               <div className="flex justify-between gap-5">
-                <div className="grid w-4/6 grid-flow-col justify-stretch rounded-xl bg-gray-200 dark:bg-zinc-500 p-3">
+                <div className="grid w-4/6 grid-flow-col justify-stretch rounded-xl bg-gray-200 p-3 dark:bg-zinc-500">
                   <div className="flex flex-col">
                     <span className="text-sm">Price</span>
                     <span className="text-sm font-semibold">
@@ -130,7 +130,7 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                     `/nft/${dataUpcoming[0].collectionData?.tokenAddress}/${dataUpcoming[0].tokenId}`,
                   )
                 }
-                className="w-full rounded-full py-1 text-center text-primary-500 hover:bg-primary-50 dark:text-white dark:bg-zinc-600 dark:hover:bg-zinc-500 font-bold"
+                className="w-full rounded-full py-1 text-center font-bold text-primary-500 hover:bg-primary-50 dark:bg-zinc-600 dark:text-white dark:hover:bg-zinc-500"
               >
                 View Detail
               </button>
@@ -194,9 +194,9 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                   </div>
                 </div>
                 <div className="duration-800 h-0 overflow-hidden px-3 opacity-0 ease-in-out group-hover:h-auto group-hover:opacity-100 group-hover:transition-all">
-                  <div className="flex flex-col gap-2 rounded-b-xl bg-white dark:text-white dark:bg-zinc-700 p-3">
+                  <div className="flex flex-col gap-2 rounded-b-xl bg-white p-3 dark:bg-zinc-700 dark:text-white">
                     <div className="flex justify-between gap-5">
-                      <div className="grid w-4/6 grid-flow-col justify-stretch rounded-xl bg-gray-200 dark:bg-zinc-500 p-3">
+                      <div className="grid w-4/6 grid-flow-col justify-stretch rounded-xl bg-gray-200 p-3 dark:bg-zinc-500">
                         <div className="flex flex-col">
                           <span className="text-sm">Price</span>
                           <span className="text-sm font-semibold">
@@ -227,7 +227,7 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                           `/nft/${nft.collectionData?.tokenAddress}/${nft.tokenId}`,
                         )
                       }
-                      className="w-full rounded-full py-1 text-center text-primary-500 hover:bg-primary-50 dark:bg-zinc-600 dark:hover:bg-zinc-500 dark:text-white font-bold"
+                      className="w-full rounded-full py-1 text-center font-bold text-primary-500 hover:bg-primary-50 dark:bg-zinc-600 dark:text-white dark:hover:bg-zinc-500"
                     >
                       View Detail
                     </button>
@@ -455,9 +455,9 @@ export const UpcomingAuctionMobile = ({ dataUpcoming }) => {
               </div>
             </div>
             <div className="duration-800 h-0 overflow-hidden px-3 opacity-0 ease-in-out group-hover:h-auto group-hover:opacity-100 group-hover:transition-all">
-              <div className="flex flex-col gap-2 rounded-b-xl bg-white p-3">
+              <div className="flex flex-col gap-2 rounded-b-xl bg-white p-3 dark:bg-zinc-700 dark:text-white">
                 <div className="flex justify-between gap-5">
-                  <div className="grid w-4/6 grid-flow-col justify-stretch rounded-xl bg-gray-200 p-3">
+                  <div className="grid w-4/6 grid-flow-col justify-stretch rounded-xl bg-gray-200 p-3 dark:bg-zinc-500">
                     <div className="flex flex-col">
                       <span className="text-sm">Price</span>
                       <span className="text-sm font-semibold">
@@ -488,7 +488,7 @@ export const UpcomingAuctionMobile = ({ dataUpcoming }) => {
                       `/nft/${nft.collectionData?.tokenAddress}/${nft.tokenId}`,
                     )
                   }
-                  className="w-full rounded-full py-1 text-center text-primary-500 hover:bg-primary-50"
+                  className="w-full rounded-full py-1 text-center font-bold text-primary-500 hover:bg-primary-50 dark:bg-zinc-600 dark:text-white dark:hover:bg-zinc-500"
                 >
                   View Detail
                 </button>

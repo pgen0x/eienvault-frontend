@@ -358,12 +358,12 @@ export default function NftPage() {
                       key={index}
                       className={`group col-span-12 h-[542px] w-full sm:col-span-6 sm:h-[542px] md:h-[542px] lg:h-[542px] xl:h-[542px] 2xl:h-[542px] ${
                         gridList === 'grid'
-                          ? openFilter
-                            ? 'md:col-span-4 xl:col-span-4 2xl:col-span-4'
-                            : 'md:col-span-6 xl:col-span-3 2xl:col-span-3'
-                          : openFilter
-                          ? 'md:col-span-6 xl:col-span-3 2xl:col-span-3'
-                          : 'md:col-span-4 xl:col-span-2 2xl:col-span-2'
+                        ? openFilter
+                          ? 'md:col-span-6 xl:col-span-4 2xl:col-span-4'
+                          : 'md:col-span-4 xl:col-span-3 2xl:col-span-3'
+                        : openFilter
+                          ? 'md:col-span-4 xl:col-span-3 2xl:col-span-3'
+                          : 'md:col-span-3 xl:col-span-2 2xl:col-span-2'
                       }`}
                     >
                       <div className="group h-[542px] w-full">
@@ -403,7 +403,7 @@ export default function NftPage() {
                                       address={nft?.collectionAddress}
                                       src={`/uploads/collections/${nft.Collection?.logo}`}
                                     />
-                                    <div className="flex items-start justify-start gap-2">
+                                    <div className="flex items-center justify-start gap-2">
                                       <div className="text-xs font-medium leading-none text-neutral-700">
                                         {nft.Collection?.name
                                           ? nft.Collection.name
@@ -449,10 +449,10 @@ export default function NftPage() {
                                   </div>
                                 </div>
                                 <div className="mt-5 flex w-full items-center gap-2">
-                                  <FontAwesomeIcon
+                                  {/* <FontAwesomeIcon
                                     className="h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 "
                                     icon={faCartPlus}
-                                  />
+                                  /> */}
                                   <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-xs font-bold text-white hover:bg-primary-300">
                                     Buy Now
                                   </button>

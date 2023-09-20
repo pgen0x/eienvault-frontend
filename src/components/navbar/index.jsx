@@ -64,7 +64,7 @@ export default function Navbar() {
             </div>
             <div className="flex items-center">
               <RightArea suppressHydrationWarning />
-              <button onClick={() => setOpenMenu(!openMenu)} className="ml-3 inline-flex flex-col items-center justify-center rounded-xl text-xl text-primary-500 block sm:block md:block lg:hidden xl:hidden 2xl:hidden">
+              <button onClick={() => setOpenMenu(!openMenu)} className="ml-3 flex-col items-center justify-center rounded-xl text-xl text-primary-500 block sm:block md:block lg:hidden xl:hidden 2xl:hidden">
                 <FontAwesomeIcon icon={faBars} />
               </button>
             </div>

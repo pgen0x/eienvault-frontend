@@ -360,7 +360,7 @@ export default function Home() {
               />
             </div>
             <div className="relative top-0 mx-auto block h-[30rem] max-h-full w-full max-w-full rounded-full bg-red-400 sm:top-0 md:-top-[50px] md:max-h-[30rem] md:max-w-[30rem] lg:-top-[50px] xl:-top-[50px] 2xl:-top-[50px]">
-              <div className="relative top-[50px] mx-auto flex w-full items-center justify-center sm:top-[50px] md:top-[130px] lg:top-[130px] xl:top-[130px] 2xl:top-[130px]">
+              <div className="relative top-[50px] mx-auto flex w-[90%] md:w-full items-center justify-center sm:top-[50px] md:top-[130px] lg:top-[130px] xl:top-[130px] 2xl:top-[130px]">
                 <div className="z-10 w-full rounded-lg bg-white/60 p-10 px-3 text-center text-gray-800 backdrop-blur-md dark:bg-zinc-800 dark:bg-opacity-50 dark:text-white">
                   <h2 className="text-2xl font-bold">
                     Don&lsquo;t miss a drop

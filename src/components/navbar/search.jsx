@@ -36,7 +36,7 @@ export default function Search() {
   }
 
   return (
-    <form action="/search" onSubmit={(event) => handleSearch(event)} className={`${toggleSearch ? 'absolute left-0 bg-white' : ''} w-full`}>
+    <form action="/search" onSubmit={(event) => handleSearch(event)} className={`${toggleSearch ? 'absolute left-0 bg-white dark:bg-zinc-800' : ''} w-full`}>
       <div className="w-full inline-flex h-10 items-center justify-start gap-2 rounded-xl border-0 px-4 bg-transparent md:bg-white md:dark:bg-zinc-800">
         <span className="text-xl font-black text-zinc-500 dark:text-zinc-200" onClick={() => setToggleSearch(!toggleSearch)}>
           <FontAwesomeIcon icon={toggleSearch ? faChevronLeft : faSearch} />

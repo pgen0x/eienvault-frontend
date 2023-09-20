@@ -49,7 +49,11 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
             }}
             className="flex h-[666px] flex-col justify-end rounded-lg bg-white bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[514px] group-hover:transition-all"
           >
-            <div className="flex w-fit items-center justify-center gap-2 rounded-lg  p-2">
+            <div className="cursor-pointer flex w-fit items-center justify-center gap-2 rounded-lg bg-white p-2" onClick={() =>
+                  router.push(
+                    `/collection/${dataUpcoming[0].collectionData?.slug ? dataUpcoming[0].collectionData?.slug : dataUpcoming[0].collectionData?.tokenAddress ? dataUpcoming[0].collectionData?.tokenAddress : ''}`,
+                  )
+                }>
               <ImageWithFallback
                 className="h-full w-full rounded-2xl "
                 width={15}
@@ -136,7 +140,11 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                   }}
                   className="flex h-[322px] flex-col justify-end gap-1 rounded-lg bg-white bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[189px] group-hover:transition-all"
                 >
-                  <div className="flex w-fit items-center justify-center gap-2 rounded-lg bg-white p-2">
+                  <div className="flex w-fit cursor-pointer items-center justify-center gap-2 rounded-lg bg-white p-2" onClick={() =>
+                  router.push(
+                    `/collection/${nft.collectionData?.slug ? nft.collectionData?.slug : nft.collectionData?.tokenAddress ? nft.collectionData?.tokenAddress : ''}`,
+                  )
+                }>
                     <ImageWithFallback
                       className="h-full w-full rounded-2xl "
                       width={15}

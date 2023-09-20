@@ -20,11 +20,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className + ' bg-gray-100'}>
+      <body className={inter.className + ' bg-gray-100 dark:bg-zinc-800'}>
         <Providers>
           <Navbar />
           <Sidebar />
-          <main className="relative bg-gray-100">{children}</main>
+          <main className="relative bg-gray-100 dark:bg-zinc-800">{children}</main>
           <ToastContainer
             position="top-right"
             autoClose={5000}

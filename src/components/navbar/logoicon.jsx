@@ -11,7 +11,8 @@ const Logo = (props) => {
     <div className="flex w-1/12 sm:w-1/12 md:w-1/6 lg:w-1/6 xl:w-1/6 2xl:w-1/6 cursor-pointer outline-none" {...props}>
       <div className="relative flex items-center">
         <button  onClick={() => router.push('/')}>
-          <img src="/logo.svg" className="w-32 lg:block xl:block 2xl:block md:block sm:hidden hidden" />
+          <img src="/logo-dark.svg" className="w-32 lg:block xl:block 2xl:block md:block sm:hidden hidden md:dark:block" />
+          <img src="/logo.svg" className="w-32 lg:block xl:block 2xl:block md:block sm:hidden hidden dark:hidden" />
           <img src="/logo-mobile.svg" className="w-96 lg:hidden xl:hidden 2xl:hidden md:hidden sm:block block" />
         </button>
       </div>

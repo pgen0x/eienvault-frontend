@@ -77,6 +77,17 @@ export default function RightArea() {
     }
   };
 
+  const classRadio = (value) => {
+    const defaultCssRadio =
+      'cursor-pointer flex w-8 h-8 justify-center items-center rounded-full text-sm font-medium leading-5 ';
+    return (
+      defaultCssRadio +
+      (enabled === value
+        ? 'text-white bg-primary-500 shadow'
+        : 'text-primary-500 hover:bg-primary-300')
+    );
+  };
+
   return (
     <>
       {isClient && (
@@ -160,9 +171,32 @@ export default function RightArea() {
           </Switch> */}
         </div>
       )}
-      <button onClick={() => close()} className="ml-2 inline-flex flex-col items-center justify-center gap-2 rounded-xl text-xl text-primary-500">
-        <FontAwesomeIcon icon={faCartShopping} />
-      </button>
+      <div className="hidden space-x-1 rounded-full border dark:bg-slate-800 dark:border-gray-800 border-gray-200 bg-white px-1 py-1 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+        <div>
+          <input
+            className="hidden"
+            type="radio"
+            name="rangeOptions"
+            id="optionGrid"
+            onChange={() => toggleTheme()}
+          />
+          <label className={classRadio(false)} htmlFor="optionGrid">
+            <FontAwesomeIcon icon={faSun} />
+          </label>
+        </div>
+        <div>
+          <input
+            className="hidden"
+            type="radio"
+            name="rangeOptions"
+            id="optionList"
+            onChange={() => toggleTheme()}
+          />
+          <label className={classRadio(true)} htmlFor="optionList">
+            <FontAwesomeIcon icon={faMoon} />
+          </label>
+        </div>
+      </div>
     </>
   );
 }

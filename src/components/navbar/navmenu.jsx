@@ -14,7 +14,7 @@ export default function NavMenu() {
         <div className="relative">
           <button
             type="button"
-            className="flex items-center gap-x-1 text-sm font-bold leading-tight text-primary-500"
+            className="flex items-center gap-x-1 text-sm font-bold leading-tight text-primary-500 dark:text-white"
             aria-expanded="false"
             onClick={() => handleOpenMenu('trending')}
           >
@@ -211,7 +211,7 @@ export default function NavMenu() {
         <div className="relative">
           <button
             type="button"
-            className="flex items-center gap-x-1 text-sm font-bold leading-tight text-primary-500"
+            className="flex items-center gap-x-1 text-sm font-bold leading-tight text-primary-500 dark:text-white"
             aria-expanded="false"
             onClick={() => handleOpenMenu('stats')}
           >

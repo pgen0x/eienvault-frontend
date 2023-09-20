@@ -47,11 +47,11 @@ const Main = () => {
 
   const classRadio = (params, value) => {
     const defaultCssRadio =
-      'cursor-pointer w-full px-2.5 py-2 rounded-full text-sm font-medium leading-5 ';
+      'cursor-pointer w-full px-2.5 py-2 rounded-full text-sm font-bold leading-5 ';
     return (
       defaultCssRadio +
       (params === value
-        ? 'text-white bg-primary-500 shadow'
+        ? 'text-white bg-primary-500'
         : 'text-primary-500 hover:bg-primary-200')
     );
   };
@@ -59,7 +59,7 @@ const Main = () => {
     <>
       <div className="flex items-center justify-between">
         <div className="flex max-w-min flex-col gap-3 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
-          <div className="flex space-x-1 rounded-full bg-white px-1">
+          <div className="flex space-x-1 rounded-full bg-white dark:text-white dark:bg-gray-700 px-1">
             <label className={classRadio(TrendingTop, 'trending')}>
               Trending
               <input
@@ -79,7 +79,7 @@ const Main = () => {
               />
             </label>
           </div>
-          <div className="flex space-x-1 rounded-full bg-white px-1">
+          <div className="flex space-x-1 rounded-full bg-white dark:bg-gray-700 px-1">
             <label className={classRadio(Range, '1h')}>
               1h
               <input
@@ -111,8 +111,8 @@ const Main = () => {
           <div className="w-52 flex-none space-x-1 px-1">
             <Listbox value={selectedServer} onChange={setSelectedServer}>
               <div className="relative">
-                <Listbox.Button className="relative w-full cursor-default rounded-full bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                  <span className="block truncate text-gray-600">
+                <Listbox.Button className="relative w-full cursor-default rounded-full bg-white dark:bg-gray-700 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                  <span className="block truncate text-gray-600 dark:text-white">
                     {selectedServer}
                   </span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -130,13 +130,13 @@ const Main = () => {
                     </svg>
                   </span>
                 </Listbox.Button>
-                <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                   {servers.map((server, index) => (
                     <Listbox.Option
                       key={index}
                       className={({ active }) =>
                         `relative cursor-default select-none px-4 py-2 ${
-                          active ? 'bg-primary-500 text-white' : 'text-gray-900'
+                          active ? 'bg-primary-500 text-white' : 'text-gray-900 dark:bg-gray-700 dark:text-white'
                         }`
                       }
                       value={server}
@@ -162,7 +162,7 @@ const Main = () => {
         <div className="flex items-end px-3">
           <button
             onClick={() => router.push(`/collection`)}
-            className="text-primary-500"
+            className="text-primary-500 font-bold"
           >
             See all
           </button>
@@ -177,14 +177,14 @@ export const TrendingTop = ({ dataCollections }) => {
   const router = useRouter();
   const classFloor = (value) => {
     return Number(value) < 0
-      ? 'w-fit rounded-full font-semibold bg-red-500 text-center text-white px-2'
-      : 'w-fit rounded-full font-semibold bg-green-500 text-center text-white px-2';
+      ? 'w-fit rounded-full font-semibold text-xs flex items-center bg-red-500 text-center text-white px-2'
+      : 'w-fit rounded-full font-semibold text-xs flex items-center bg-green-500 text-center text-white px-2';
   };
 
   const classMovement = (value) => {
     return Number(value) < 0
-      ? 'w-fit text-center font-semibold text-red-500 px-2'
-      : 'w-fit text-center font-semibold text-green-500 px-2';
+      ? 'w-fit text-center font-semibold text-xs flex items-center text-red-500 px-2'
+      : 'w-fit text-center font-semibold text-xs flex items-center text-green-500 px-2';
   };
 
   const handleResize = () => {
@@ -216,9 +216,9 @@ export const TrendingTop = ({ dataCollections }) => {
       >
         {dataCollections.slice(0, limit).map((collection, index) => (
           <li key={index} className="w-full">
-            <div className="flex w-full justify-between rounded-md bg-white px-5 py-2">
+            <div className="flex w-full justify-between rounded-md bg-white dark:bg-gray-700 px-5 py-2">
               <div className="flex w-full items-center gap-x-4">
-                <p className="text-sm text-primary-500">{index + 1}.</p>
+                <p className="text-sm font-bold dark:text-white text-primary-500">{index + 1}.</p>
                 <div className="h-11 w-11">
                   <ImageWithFallback
                     src={`/uploads/collections/${collection.logo}`}
@@ -233,12 +233,12 @@ export const TrendingTop = ({ dataCollections }) => {
 
                 <div className="flex w-full flex-col">
                   <p
-                    className="text-md h-[20px] w-full cursor-pointer overflow-hidden text-ellipsis font-semibold leading-6 text-gray-900"
+                    className="text-md h-[20px] w-full cursor-pointer overflow-hidden text-ellipsis font-semibold leading-6 text-gray-900 dark:text-white"
                     onClick={() =>
-                      router.push(`/collection/${collection.tokenAddress}`)
+                      router.push(`/collection/${collection?.tokenAddress}`)
                     }
                   >
-                    {collection.name}
+                    {collection?.name}
                   </p>
                   <div className="flex w-full flex-col gap-2">
                     <div className="flex w-full gap-2">
@@ -246,31 +246,31 @@ export const TrendingTop = ({ dataCollections }) => {
                       <p className="w-full">
                         $
                         {Number(
-                          formatEther(Number(collection.floorPrice)),
+                          formatEther(Number(collection?.floorPrice)),
                         ).toFixed(2)}
                       </p>
                       <p
                         className={classFloor(
-                          collection.priceChangePercentage1h,
+                          collection?.priceChangePercentage1h,
                         )}
                       >
-                        {collection.priceChangePercentage1h}%
+                        {collection?.priceChangePercentage1h}%
                       </p>
                     </div>
                     <div className="flex w-full gap-2">
                       <span className="w-full">Volume</span>
                       <p className="w-full">
                         $
-                        {Number(formatEther(Number(collection.volume))).toFixed(
+                        {Number(formatEther(Number(collection?.volume))).toFixed(
                           2,
                         )}
                       </p>
                       <p
                         className={classMovement(
-                          collection.volumeChangePercentage1h,
+                          collection?.volumeChangePercentage1h,
                         )}
                       >
-                        {collection.volumeChangePercentage1h}%
+                        {collection?.volumeChangePercentage1h}%
                       </p>
                     </div>
                   </div>
@@ -363,7 +363,7 @@ const MainMobile = () => {
 
   const classRadio = (params, value) => {
     const defaultCssRadio =
-      'cursor-pointer w-full px-2.5 py-2 rounded-full text-sm font-medium leading-5 text-center flex items-center justify-center ';
+      'cursor-pointer w-full px-2.5 py-2 rounded-full text-sm font-bold leading-5 text-center flex items-center justify-center ';
     return (
       defaultCssRadio +
       (params === value
@@ -375,7 +375,7 @@ const MainMobile = () => {
     <>
       <div className="flex items-center justify-between">
         <div className="flex w-full flex-col gap-3">
-          <div className="flex justify-between rounded-full bg-white px-1 py-2">
+          <div className="flex justify-between rounded-full bg-white dark:text-white dark:bg-gray-700 px-1 py-2">
             <label className={classRadio(TrendingTop, 'trending')}>
               Trending
               <input
@@ -395,7 +395,7 @@ const MainMobile = () => {
               />
             </label>
           </div>
-          <div className="flex space-x-1 rounded-full bg-white px-1 py-2">
+          <div className="flex space-x-1 rounded-full bg-white dark:text-white dark:bg-gray-700 px-1 py-2">
             <label className={classRadio(Range, '1h')}>
               1h
               <input
@@ -424,7 +424,7 @@ const MainMobile = () => {
               />
             </label>
           </div>
-          <div className="flex space-x-1 rounded-full bg-white px-1 py-2">
+          <div className="flex space-x-1 rounded-full bg-white dark:text-white dark:bg-gray-700 px-1 py-2">
             <label className={classRadio(Coin, 'ethereum')}>
               <Ethereum />
               <input
@@ -499,7 +499,7 @@ export const TrendingTopMobile = ({ dataCollections }) => {
         {dataCollections.map((collection, index) => (
           <div
             key={index}
-            className="flex flex-col gap-3 rounded-xl bg-white p-5"
+            className="flex flex-col gap-3 rounded-xl bg-white dark:text-white dark:bg-gray-700 p-5"
           >
             <div className="flex w-full items-center gap-3 border-b border-gray-300 pb-2">
               <div className="h-11 w-11">
@@ -616,7 +616,7 @@ const MobileNft = ({ collection }) => {
             }
           >
             <div className="w-full px-1">
-              <button className="absolute ml-[45px] mt-[5px] rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md">
+              <button className="absolute ml-[45px] mt-[5px] rounded-lg bg-white/10 dark:text-white px-2 py-1 text-xs backdrop-blur-md">
                 <FontAwesomeIcon icon={faCartPlus} />
               </button>
               <div className="h-20 w-20">
@@ -629,7 +629,7 @@ const MobileNft = ({ collection }) => {
                   src={nft?.imageUri}
                 />
               </div>
-              <button className="-mt-5 flex w-20 rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md">
+              <button className="-mt-5 flex w-20 rounded-lg bg-white/10 dark:text-white px-2 py-1 text-xs backdrop-blur-md">
                 <Ethereum className="h-4 w-4" />{' '}
                 <span className="w-full">5 ETH</span>
               </button>

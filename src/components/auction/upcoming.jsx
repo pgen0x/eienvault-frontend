@@ -11,33 +11,31 @@ import { ImageWithFallback } from '../imagewithfallback';
 import { formatEther } from 'viem';
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
+const getHighestBid = (auctionData) => {
+  if (!auctionData.listOffers || auctionData.listOffers.length === 0) {
+    return { message: 'No bids', highestBid: '0', highestBidder: null }; // Return a message if there are no bids or if listOffers is null/undefined
+  }
+
+  let highestBid = BigInt(0);
+  let highestBidder = null;
+
+  for (const offer of auctionData.listOffers) {
+    const bidValue = BigInt(offer.value); // Convert the value to a BigInt for precision
+    if (bidValue > highestBid) {
+      highestBid = bidValue;
+      highestBidder = offer.address;
+    }
+  }
+
+  return {
+    message: 'Highest bid found',
+    highestBid: highestBid.toString(),
+    highestBidder,
+  };
+}
+
 export const UpcomingAuction = ({ dataUpcoming }) => {
   const router = useRouter();
-
-  console.log('dataUpcoming', dataUpcoming);
-
-  function getHighestBid(auctionData) {
-    if (!auctionData.listOffers || auctionData.listOffers.length === 0) {
-      return { message: 'No bids', highestBid: '0', highestBidder: null }; // Return a message if there are no bids or if listOffers is null/undefined
-    }
-
-    let highestBid = BigInt(0);
-    let highestBidder = null;
-
-    for (const offer of auctionData.listOffers) {
-      const bidValue = BigInt(offer.value); // Convert the value to a BigInt for precision
-      if (bidValue > highestBid) {
-        highestBid = bidValue;
-        highestBidder = offer.address;
-      }
-    }
-
-    return {
-      message: 'Highest bid found',
-      highestBid: highestBid.toString(),
-      highestBidder,
-    };
-  }
 
   return (
     <>
@@ -49,11 +47,20 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
             }}
             className="flex h-[666px] flex-col justify-end rounded-lg bg-white bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[514px] group-hover:transition-all"
           >
-            <div className="cursor-pointer flex w-fit items-center justify-center gap-2 rounded-lg bg-white p-2" onClick={() =>
-                  router.push(
-                    `/collection/${dataUpcoming[0].collectionData?.slug ? dataUpcoming[0].collectionData?.slug : dataUpcoming[0].collectionData?.tokenAddress ? dataUpcoming[0].collectionData?.tokenAddress : ''}`,
-                  )
-                }>
+            <div
+              className="flex w-fit cursor-pointer items-center justify-center gap-2 rounded-lg bg-white p-2"
+              onClick={() =>
+                router.push(
+                  `/collection/${
+                    dataUpcoming[0].collectionData?.slug
+                      ? dataUpcoming[0].collectionData?.slug
+                      : dataUpcoming[0].collectionData?.tokenAddress
+                      ? dataUpcoming[0].collectionData?.tokenAddress
+                      : ''
+                  }`,
+                )
+              }
+            >
               <ImageWithFallback
                 className="h-full w-full rounded-2xl "
                 width={15}
@@ -90,9 +97,9 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
             </div>
           </div>
           <div className="duration-800 h-0 overflow-hidden px-3 opacity-0 ease-in-out group-hover:h-auto group-hover:opacity-100 group-hover:transition-all">
-            <div className="flex flex-col gap-2 rounded-b-xl bg-white p-3">
+            <div className="flex flex-col gap-2 rounded-b-xl bg-white dark:text-white dark:bg-zinc-700 p-3">
               <div className="flex justify-between gap-5">
-                <div className="grid w-4/6 grid-flow-col justify-stretch rounded-xl bg-gray-200 p-3">
+                <div className="grid w-4/6 grid-flow-col justify-stretch rounded-xl bg-gray-200 dark:bg-zinc-500 p-3">
                   <div className="flex flex-col">
                     <span className="text-sm">Price</span>
                     <span className="text-sm font-semibold">
@@ -123,14 +130,14 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                     `/nft/${dataUpcoming[0].collectionData?.tokenAddress}/${dataUpcoming[0].tokenId}`,
                   )
                 }
-                className="w-full rounded-full py-1 text-center text-primary-500 hover:bg-primary-50"
+                className="w-full rounded-full py-1 text-center text-primary-500 hover:bg-primary-50 dark:text-white dark:bg-zinc-600 dark:hover:bg-zinc-500 font-bold"
               >
                 View Detail
               </button>
             </div>
           </div>
         </div>
-        <div className="flex flex-wrap w-4/6 h-[666px]">
+        <div className="flex h-[666px] w-4/6 flex-wrap">
           {dataUpcoming.slice(1).map((nft, index) => (
             <>
               <div className="group h-1/2 w-1/2 min-w-max overflow-hidden p-2">
@@ -140,11 +147,20 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                   }}
                   className="flex h-[322px] flex-col justify-end gap-1 rounded-lg bg-white bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[189px] group-hover:transition-all"
                 >
-                  <div className="flex w-fit cursor-pointer items-center justify-center gap-2 rounded-lg bg-white p-2" onClick={() =>
-                  router.push(
-                    `/collection/${nft.collectionData?.slug ? nft.collectionData?.slug : nft.collectionData?.tokenAddress ? nft.collectionData?.tokenAddress : ''}`,
-                  )
-                }>
+                  <div
+                    className="flex w-fit cursor-pointer items-center justify-center gap-2 rounded-lg bg-white p-2"
+                    onClick={() =>
+                      router.push(
+                        `/collection/${
+                          nft.collectionData?.slug
+                            ? nft.collectionData?.slug
+                            : nft.collectionData?.tokenAddress
+                            ? nft.collectionData?.tokenAddress
+                            : ''
+                        }`,
+                      )
+                    }
+                  >
                     <ImageWithFallback
                       className="h-full w-full rounded-2xl "
                       width={15}
@@ -178,9 +194,9 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                   </div>
                 </div>
                 <div className="duration-800 h-0 overflow-hidden px-3 opacity-0 ease-in-out group-hover:h-auto group-hover:opacity-100 group-hover:transition-all">
-                  <div className="flex flex-col gap-2 rounded-b-xl bg-white p-3">
+                  <div className="flex flex-col gap-2 rounded-b-xl bg-white dark:text-white dark:bg-zinc-700 p-3">
                     <div className="flex justify-between gap-5">
-                      <div className="grid w-4/6 grid-flow-col justify-stretch rounded-xl bg-gray-200 p-3">
+                      <div className="grid w-4/6 grid-flow-col justify-stretch rounded-xl bg-gray-200 dark:bg-zinc-500 p-3">
                         <div className="flex flex-col">
                           <span className="text-sm">Price</span>
                           <span className="text-sm font-semibold">
@@ -211,7 +227,7 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                           `/nft/${nft.collectionData?.tokenAddress}/${nft.tokenId}`,
                         )
                       }
-                      className="w-full rounded-full py-1 text-center text-primary-500 hover:bg-primary-50"
+                      className="w-full rounded-full py-1 text-center text-primary-500 hover:bg-primary-50 dark:bg-zinc-600 dark:hover:bg-zinc-500 dark:text-white font-bold"
                     >
                       View Detail
                     </button>
@@ -337,7 +353,7 @@ export const UpcomingAuctionSkeleton = () => {
   );
 };
 
-export const UpcomingAuctionMobile = () => {
+export const UpcomingAuctionMobile = ({ dataUpcoming }) => {
   const router = useRouter();
   const sliderBreakPoints = {
     640: {
@@ -384,43 +400,58 @@ export const UpcomingAuctionMobile = () => {
         disableOnInteraction: false,
       }}
     >
-      {images.map((image, index) => (
+      {dataUpcoming.map((nft, index) => (
         <SwiperSlide key={index}>
-          <div className="group h-[325px] flex-1 overflow-hidden px-3">
-            <div className="flex h-[325px] flex-col justify-end gap-1 rounded-lg bg-[url('https://via.placeholder.com/500x350')] bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[189px] group-hover:transition-all">
-              <div className="flex w-fit items-center justify-center gap-2 rounded-lg bg-white p-2">
-                <img
-                  className="h-4 w-4 rounded-2xl"
-                  src="https://via.placeholder.com/16x16"
+          <div className="group h-1/2 w-1/2 min-w-max overflow-hidden p-2">
+            <div
+              style={{
+                backgroundImage: `url(${nft.nftDetails?.imageUri})`,
+              }}
+              className="flex h-[322px] flex-col justify-end gap-1 rounded-lg bg-white bg-cover bg-center p-2 duration-300 ease-in-out group-hover:h-[189px] group-hover:transition-all"
+            >
+              <div
+                className="flex w-fit cursor-pointer items-center justify-center gap-2 rounded-lg bg-white p-2"
+                onClick={() =>
+                  router.push(
+                    `/collection/${
+                      nft.collectionData?.slug
+                        ? nft.collectionData?.slug
+                        : nft.collectionData?.tokenAddress
+                        ? nft.collectionData?.tokenAddress
+                        : ''
+                    }`,
+                  )
+                }
+              >
+                <ImageWithFallback
+                  className="h-full w-full rounded-2xl "
+                  width={15}
+                  height={15}
+                  alt={nft.collectionData.name}
+                  diameter={15}
+                  address={nft.collectionData?.tokenAddress}
+                  src={`/uploads/collections/${nft.collectionData?.logo}`}
                 />
                 <div className="flex items-start justify-start gap-2">
                   <div className="text-xs font-medium leading-none text-neutral-700">
-                    Ryuma
+                    {nft.collectionData.User.username ||
+                      truncateAddress(nft.collectionData.tokenAddress)}
                   </div>
-                  <div className="text-xs font-black leading-none text-primary-500">
-                    <FontAwesomeIcon icon={faCircleCheck} />
-                  </div>
+                  {nft.collectionData?.User.isVerified && (
+                    <div className="text-xs font-black leading-none text-primary-500">
+                      <FontAwesomeIcon icon={faCircleCheck} />
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="w-fit rounded-lg bg-white bg-opacity-70 p-2 font-bold text-black">
-                Worriness #18
+                {nft.nftDetails.name || nft.collectionData?.name} #{nft.tokenId}
               </div>
-              <div className="w-fit rounded-lg bg-white bg-opacity-40 p-2 text-white">
+              <div className="w-fit rounded-lg bg-white bg-opacity-40 p-2 text-gray-700">
                 Auction starts in :
               </div>
               <div className="flex w-fit items-center justify-between gap-2 text-center">
-                <div className="w-12 rounded-lg bg-white bg-opacity-40 py-3 text-white">
-                  1d
-                </div>
-                <div className="w-12 rounded-lg bg-white bg-opacity-40 py-3 text-white">
-                  10m
-                </div>
-                <div className="w-12 rounded-lg bg-white bg-opacity-40 py-3 text-white">
-                  12s
-                </div>
-                <div className="w-12 rounded-lg bg-white bg-opacity-40 py-3 text-white">
-                  1d
-                </div>
+                <UpcomingCountdown endDate={nft.endDate} />
               </div>
             </div>
             <div className="duration-800 h-0 overflow-hidden px-3 opacity-0 ease-in-out group-hover:h-auto group-hover:opacity-100 group-hover:transition-all">
@@ -429,11 +460,19 @@ export const UpcomingAuctionMobile = () => {
                   <div className="grid w-4/6 grid-flow-col justify-stretch rounded-xl bg-gray-200 p-3">
                     <div className="flex flex-col">
                       <span className="text-sm">Price</span>
-                      <span className="text-sm font-semibold">0.0 ETH</span>
+                      <span className="text-sm font-semibold">
+                        {formatEther(Number(dataUpcoming[0]?.price))}{' '}
+                        {dataUpcoming[0].collectionData?.Chain.symbol}
+                      </span>
                     </div>
                     <div className="flex flex-col">
                       <span className="text-sm">Highest bid</span>
-                      <span className="text-sm font-semibold">No bids yet</span>
+                      <span className="text-sm font-semibold">
+                        {formatEther(
+                          Number(getHighestBid(dataUpcoming[0]).highestBid),
+                        )}{' '}
+                        {dataUpcoming[0].collectionData?.Chain?.symbol}
+                      </span>
                     </div>
                   </div>
                   <button
@@ -444,7 +483,11 @@ export const UpcomingAuctionMobile = () => {
                   </button>
                 </div>
                 <button
-                  onClick={() => router.push('/nft/user')}
+                  onClick={() =>
+                    router.push(
+                      `/nft/${nft.collectionData?.tokenAddress}/${nft.tokenId}`,
+                    )
+                  }
                   className="w-full rounded-full py-1 text-center text-primary-500 hover:bg-primary-50"
                 >
                   View Detail

@@ -318,10 +318,10 @@ export const SlideshowActivities = ({ dataActivities }) => {
                   </Suspense>
                   <div className="inline-flex w-full flex-col items-center justify-center lg:items-start">
                     <div className="relative flex w-full flex-row px-5">
-                      <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-b-2xl bg-white/60 p-3 backdrop-blur">
+                      <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-b-2xl bg-white/60 dark:bg-gray-600/60 bg-opacity-30 p-3 backdrop-blur-xl">
                         <div className="flex w-full flex-col items-start justify-start">
                           <div className="inline-flex items-center justify-between self-stretch">
-                            <div className="flex items-center justify-center gap-2 bg-white bg-opacity-70 ">
+                            <div className="flex items-center justify-center gap-2 bg-white dark:bg-gray-500 bg-opacity-70 px-2 py-1 rounded-md">
                               <ImageWithFallback
                                 className="h-full w-full rounded-2xl "
                                 width={16}
@@ -340,7 +340,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
 
                               <div className="flex items-start justify-start gap-2">
                                 <div
-                                  className="cursor-pointer text-xs font-medium leading-none text-neutral-700"
+                                  className="cursor-pointer text-xs font-medium leading-none text-neutral-700 dark:text-white"
                                   onClick={() =>
                                     router.push(
                                       `/collection/${nft.collectionData.tokenAddress}`,
@@ -366,7 +366,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
                           </div>
                           <div className="inline-flex w-full items-center justify-between gap-2 pt-2">
                             <div
-                              className="text-xl2 cursor-pointer font-medium leading-tight text-gray-600"
+                              className="text-xl2 cursor-pointer font-medium leading-tight text-gray-600 dark:text-white"
                               onClick={() =>
                                 router.push(
                                   `/nft/${nft.collectionData.tokenAddress}/${nft.nftDetails?.tokenId}`,
@@ -386,7 +386,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
                               )}
                             </div>
                           </div>
-                          <div className="mt-5 flex w-full justify-between py-2">
+                          <div className="mt-5 flex w-full justify-between py-2 dark:bg-zinc-500 px-2 rounded-xl">
                             <div className="flex flex-col items-start truncate text-sm leading-5">
                               <p>Price</p>
                               <p className="font-bold">
@@ -492,7 +492,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
                                 `/nft/${nft.collectionData.tokenAddress}/${nft.nftDetails?.tokenId}`,
                               )
                             }
-                            className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all"
+                            className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center text-primary-500 dark:text-white opacity-0 ease-in-out dark:bg-zinc-600 dark:hover:bg-zinc-500 font-bold hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all"
                           >
                             View Detail
                           </button>

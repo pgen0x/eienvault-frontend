@@ -197,12 +197,12 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                     </div>
                   )}
 
-                  <div className="my-3 inline-flex h-[357px] w-full flex-col items-start justify-start gap-4 rounded-br-2xl rounded-tr-2xl bg-white bg-opacity-50  p-5 backdrop-blur-xl">
+                  <div className="my-3 inline-flex h-[357px] w-full flex-col items-start justify-start gap-4 rounded-br-2xl rounded-tr-2xl dark:bg-zinc-800 dark:bg-opacity-50 bg-white bg-opacity-50  p-5 backdrop-blur-xl">
                     <div className="flex flex-col items-start justify-start">
                       <div className="inline-flex items-center justify-start self-stretch">
                         <div className="flex h-full shrink grow basis-0 items-end justify-start gap-2">
                           <div
-                            className="cursor-pointer text-2xl font-bold leading-9 text-neutral-700"
+                            className="cursor-pointer text-2xl font-bold leading-9 text-neutral-700 dark:text-white"
                             onClick={() =>
                               router.push(
                                 `/nft/${auction.collection}/${auction.tokenId}`,
@@ -215,8 +215,8 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                       </div>
                     </div>
                     <div className="flex flex-col items-start justify-start gap-1">
-                      <div className="inline-flex items-center justify-start gap-4">
-                        <span className="text-gray-900">By</span>
+                      <div className="inline-flex items-center justify-start gap-2">
+                        <span className="text-gray-900 dark:text-white">By</span>
                         <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2 ">
                           <ImageWithFallback
                             className="h-full w-full rounded-2xl "
@@ -228,7 +228,7 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                             src={`/uploads/collections/${auction.collectionData?.logo}`}
                           />
                           <div className="flex items-start justify-start gap-2">
-                            <div className="text-xs font-medium leading-none text-neutral-700">
+                            <div className="text-xs font-bold leading-none text-neutral-700">
                               {auction.collectionData?.User.username
                                 ? auction.collectionData?.User.username
                                 : truncateAddress4char(
@@ -242,22 +242,22 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                             )}
                           </div>
                         </div>
-                        <div className="text-sm font-normal leading-tight text-neutral-700">
+                        <div className="text-sm font-normal leading-tight text-neutral-700 dark:text-white">
                           On{' '}
                         </div>
                         <div className="flex items-start justify-start gap-2">
-                          <div className="text-sm font-normal leading-tight text-neutral-700">
+                          <div className="text-sm font-normal leading-tight text-neutral-700 dark:text-white">
                             {(auction.collectionData?.chainId === 666888 ||
                               auction.collectionData?.chainId === 8668) && (
                               <HelaIcon className="h-4 w-4" />
                             )}
                           </div>
-                          <div className="text-sm font-medium leading-tight text-neutral-700">
+                          <div className="text-sm font-medium leading-tight text-neutral-700 dark:text-white">
                             {auction.collectionData?.Chain?.symbol}
                           </div>
                         </div>
                       </div>
-                      <div className="line-clamp-5 w-72 text-sm font-light leading-tight text-neutral-700">
+                      <div className="line-clamp-5 w-72 text-sm font-light leading-tight text-neutral-700 dark:text-white">
                         {auction.collectionData?.description
                           ? auction.collectionData?.description
                           : `Welcome to our ${auction.collectionData.name} collection! Explore a world of digital art and assets that represent unique and exclusive tokens on the blockchain. You'll find something special in our collection. Each NFT is a one-of-a-kind piece, verified and secured on the blockchain, making it a valuable addition to your digital asset portfolio. Join us on this journey of innovation and creativity in the world of non-fungible tokens. Start collecting, trading, and owning a piece of the digital future with our NFTs!`}
@@ -265,9 +265,9 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                     </div>
                     <div className="inline-flex items-center justify-start gap-4 self-stretch">
                       <div className="inline-flex shrink grow basis-0 flex-col items-start justify-center gap-2">
-                        <div className="flex flex-col self-stretch text-sm font-normal leading-tight text-neutral-700">
+                        <div className="flex flex-col self-stretch text-sm font-normal leading-tight text-neutral-700 dark:text-white">
                           Highest Bid{' '}
-                          <span className="text-sm font-bold leading-tight text-neutral-700">
+                          <span className="text-sm font-bold leading-tight text-neutral-700 dark:text-white">
                             {formatEther(
                               Number(getHighestBid(auction).highestBid),
                             )}{' '}
@@ -277,11 +277,11 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                       </div>
                       <div className="inline-flex shrink grow basis-0 flex-col items-center justify-center gap-2">
                         <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
-                          <span className="mr-2 text-sm font-normal leading-tight text-neutral-700">
+                          <span className="mr-2 text-sm font-normal leading-tight text-neutral-700 dark:text-white">
                             By
                           </span>
 
-                          <span className="text-sm font-bold leading-tight text-neutral-700">
+                          <span className="text-sm font-bold leading-tight text-neutral-700 dark:text-white">
                             {truncateAddress4char(
                               getHighestBid(auction).highestBidder,
                             )}
@@ -317,18 +317,18 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                         {isNotRelease ? (
                           <>
                             {' '}
-                            <span className="mr-2 text-sm font-normal leading-tight text-neutral-700">
+                            <span className="mr-2 text-sm font-normal leading-tight text-neutral-700 dark:text-white">
                               Starts in
                             </span>
-                            <Countdown endDate={auction.releaseDate} />
+                            <span className="text-neutral-700 dark:text-white"><Countdown endDate={auction.releaseDate} /></span>
                           </>
                         ) : isNotExpired ? (
                           <>
                             {' '}
-                            <span className="mr-2 text-sm font-normal leading-tight text-neutral-700">
+                            <span className="mr-2 text-sm font-normal leading-tight text-neutral-700 dark:text-white">
                               Ends in
                             </span>
-                            <Countdown endDate={auction.endDate} />
+                            <span className="text-neutral-700 dark:text-white"><Countdown endDate={auction.endDate} /></span>
                           </>
                         ) : (
                           'Expired'

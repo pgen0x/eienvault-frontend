@@ -55,14 +55,14 @@ export default function Navbar() {
   return (
     <>
       <div className="sticky group top-0 z-40 inline-flex w-full items-center justify-center md:px-10 lg:px-10 xl:px-10 2xl:px-10 transition-all">
-        <nav className="3xl:h-24 dark:from-dark dark:to-dark/60 top-0 z-10 mt-4 h-16 w-full max-w-full md:rounded-2xl lg:rounded-2xl xl:rounded-2xl 2xl:rounded-2xl bg-gradient-to-b from-white to-white/60 px-4 backdrop-blur transition-all duration-300 sm:h-20">
+        <nav className="3xl:h-24 dark:from-black/50 dark:to-black/40 top-0 z-10 mt-4 h-16 w-full max-w-full md:rounded-2xl lg:rounded-2xl xl:rounded-2xl 2xl:rounded-2xl bg-gradient-to-b from-white to-white/60 px-4 backdrop-blur transition-all duration-300 sm:h-20">
           <div className="flex h-full items-center justify-between px-4">
             <div className="flex items-center gap-4">
               <Logo />
               <Search />
               <NavMenu />
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
               <RightArea suppressHydrationWarning />
               <button onClick={() => setOpenMenu(!openMenu)} className="ml-3 flex-col items-center justify-center rounded-xl text-xl text-primary-500 block sm:block md:block lg:hidden xl:hidden 2xl:hidden">
                 <FontAwesomeIcon icon={faBars} />

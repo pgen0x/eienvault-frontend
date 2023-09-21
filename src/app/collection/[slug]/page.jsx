@@ -35,6 +35,8 @@ import { ImageWithFallback } from '@/components/imagewithfallback';
 import moment from 'moment';
 import ModalBid from '@/components/modal/bid';
 import ModalBuy from '@/components/modal/buy';
+import HelaIcon from '@/assets/icon/hela';
+import { useAccount } from 'wagmi';
 
 const servers = [
   'All Mainnet',
@@ -359,6 +361,7 @@ const Items = ({ params, collection }) => {
   const handleFilterCollapse = (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
   };
+  const { address } = useAccount();
 
   const classRadio = (params, value) => {
     const defaultCssRadio =
@@ -835,6 +838,7 @@ const Items = ({ params, collection }) => {
                   const releaseDate = moment.unix(nft.itemDetails?.releaseDate);
                   const isNotExpired = endDate.isAfter(currentDate);
                   const isNotRelease = currentDate.isBefore(releaseDate);
+
                   return (
                     <div
                       key={index}
@@ -856,6 +860,13 @@ const Items = ({ params, collection }) => {
                           placeholder="blur"
                           blurDataURL={`https://via.placeholder.com/600x600`}
                           src={nft?.imageUri}
+                          alt={
+                            nft.Collection?.name
+                              ? nft.Collection?.name
+                              : nft.collectionAddress
+                              ? nft.collectionAddress
+                              : ''
+                          }
                         />
                         <div className="inline-flex w-full flex-col items-center justify-center px-3 lg:items-start">
                           <div className="relative flex w-full flex-row">
@@ -906,13 +917,16 @@ const Items = ({ params, collection }) => {
                                 </div>
                                 <div className="inline-flex w-full items-center justify-between gap-2 pt-1">
                                   <div
-                                    className="line-clamp-2 h-[40px] font-medium leading-[20px] text-gray-600 dark:text-white"
+                                    className="line-clamp-2 flex h-[40px] items-center font-medium leading-[20px] text-gray-600"
                                     title={`${nft?.name} #${nft?.tokenId}`}
                                   >
                                     {nft?.name} #{nft?.tokenId}
                                   </div>
-                                  <div className="text-sm font-normal leading-tight text-neutral-700 dark:text-white">
-                                    <Ethereum className="h-4 w-4" />
+                                  <div className="text-sm font-normal leading-tight text-neutral-700">
+                                    {(nft.Collection?.chainId === 666888 ||
+                                      nft.Collection?.chainId === 8668) && (
+                                      <HelaIcon className="h-6 w-6" />
+                                    )}
                                   </div>
                                 </div>
                                 <div className="mt-5 flex w-full justify-between rounded-md bg-white dark:bg-zinc-600 dark:text-white px-2 py-2">
@@ -1029,9 +1043,15 @@ const Items = ({ params, collection }) => {
                                     )
                                   ) : (
                                     <div className="mt-5 flex w-full items-center gap-4">
-                                      <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
-                                        Not For Sale
-                                      </button>
+                                      {address === nft.owner ? (
+                                        <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
+                                          Put On Sale
+                                        </button>
+                                      ) : (
+                                        <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
+                                          Not For Sale
+                                        </button>
+                                      )}
                                     </div>
                                   )}
                                 </div>

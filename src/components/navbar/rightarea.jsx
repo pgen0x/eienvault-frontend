@@ -176,11 +176,11 @@ export default function RightArea() {
           <input
             className="hidden"
             type="radio"
-            name="rangeOptions"
-            id="optionGrid"
+            name="themeOptions"
+            id="themeLight"
             onChange={() => toggleTheme()}
           />
-          <label className={classRadio(false)} htmlFor="optionGrid">
+          <label className={classRadio(false)} htmlFor="themeLight">
             <FontAwesomeIcon icon={faSun} />
           </label>
         </div>
@@ -188,11 +188,11 @@ export default function RightArea() {
           <input
             className="hidden"
             type="radio"
-            name="rangeOptions"
-            id="optionList"
+            name="themeOptions"
+            id="themeDark"
             onChange={() => toggleTheme()}
           />
-          <label className={classRadio(true)} htmlFor="optionList">
+          <label className={classRadio(true)} htmlFor="themeDark">
             <FontAwesomeIcon icon={faMoon} />
           </label>
         </div>

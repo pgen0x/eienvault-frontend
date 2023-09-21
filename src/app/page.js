@@ -528,7 +528,7 @@ export default function Home() {
                     <li className="text-2xl">
                       <a
                         href="#"
-                        className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:hover:bg-zinc-700"
+                        className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:bg-white dark:hover:bg-zinc-300"
                       >
                         <FontAwesomeIcon icon={faTwitter} />
                       </a>
@@ -536,7 +536,7 @@ export default function Home() {
                     <li className="text-2xl">
                       <a
                         href="#"
-                        className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:hover:bg-zinc-700"
+                        className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:bg-white dark:hover:bg-zinc-300"
                       >
                         <FontAwesomeIcon icon={faDiscord} />
                       </a>
@@ -544,7 +544,7 @@ export default function Home() {
                     <li className="text-2xl">
                       <a
                         href="#"
-                        className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:hover:bg-zinc-700"
+                        className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:bg-white dark:hover:bg-zinc-300"
                       >
                         <FontAwesomeIcon icon={faMedium} />
                       </a>
@@ -552,7 +552,7 @@ export default function Home() {
                     <li className="text-2xl">
                       <a
                         href="#"
-                        className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:hover:bg-zinc-700"
+                        className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:bg-white dark:hover:bg-zinc-300"
                       >
                         <FontAwesomeIcon icon={faEnvelope} />
                       </a>

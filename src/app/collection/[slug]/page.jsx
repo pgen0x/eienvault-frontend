@@ -189,32 +189,54 @@ export default function CollectionDetail({ params }) {
                       className="w-36 rounded-lg border-4 border-white shadow"
                     />
                   </div>
-                  <div className="text-xl font-semibold text-gray-900">
-                    {collection.name
-                      ? collection.name
-                      : collection?.tokenAddress
-                      ? truncateAddress(collection.tokenAddress)
-                      : ''}
+                  <div className="text-xl font-semibold text-gray-900 dark:text-white">
+                    <button
+                      onClick={() =>
+                        router.push(
+                          `/profile/${collection.User?.walletAddress}`,
+                        )
+                      }
+                    >
+                      {collection.name
+                        ? collection.name
+                        : collection?.tokenAddress
+                        ? truncateAddress(collection.tokenAddress)
+                        : ''}
+                    </button>
                   </div>
-                  <div className="flex w-full justify-start gap-4 text-gray-900">
+                  <div className="flex w-full justify-start gap-4 text-gray-900 dark:text-white">
                     <div>
                       Created by{' '}
-                      <span className="font-semibold">
+                      <button
+                        className="font-bold"
+                        onClick={() =>
+                          router.push(
+                            `/profile/${collection.User?.walletAddress}`,
+                          )
+                        }
+                      >
                         {collection.User?.username ||
                           truncateAddress(collection.User?.walletAddress)}
-                      </span>
+                      </button>
                     </div>
                     <div>
                       Address{' '}
-                      <span className="font-semibold">
+                      <button
+                        className="font-semibold"
+                        onClick={() =>
+                          router.push(
+                            `/profile/${collection.User?.walletAddress}`,
+                          )
+                        }
+                      >
                         {truncateAddress(collection.User?.walletAddress)}
-                      </span>
+                      </button>
                     </div>
                   </div>
                   {collection.description && (
                     <div>
                       <p
-                        className={`block text-ellipsis text-black ${
+                        className={`block text-ellipsis text-black dark:text-white ${
                           showDescription
                             ? ''
                             : 'overflow-hidden whitespace-nowrap'
@@ -224,7 +246,7 @@ export default function CollectionDetail({ params }) {
                       </p>
                       <button
                         onClick={() => setShowDescription(!showDescription)}
-                        className="text-left text-gray-900"
+                        className="text-left text-gray-900 dark:text-white"
                       >
                         See {showDescription ? 'less' : 'more'}{' '}
                         <FontAwesomeIcon
@@ -235,7 +257,7 @@ export default function CollectionDetail({ params }) {
                   )}
                 </div>
                 <div className="col-span-12 flex h-fit justify-end sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
-                  <div className="flex w-96 flex-col gap-2 rounded-lg border-2 border-gray-200 bg-white p-5 text-sm text-gray-900">
+                  <div className="flex w-96 flex-col gap-2 rounded-lg border-2 border-gray-200 bg-white p-5 text-sm text-gray-900 dark:bg-zinc-700 dark:border-zinc-500 dark:text-white">
                     <div className="flex justify-between">
                       <span className="font-semibold">Floor</span>
                       <span>
@@ -256,7 +278,7 @@ export default function CollectionDetail({ params }) {
                       <span className="font-semibold">Items</span>
                       <span>0</span>
                     </div>
-                    <div className="flex justify-between border-b-2 pb-2">
+                    <div className="flex justify-between border-b-2 dark:border-zinc-500 pb-2">
                       <span className="font-semibold">Owner</span>
                       <span>0</span>
                     </div>
@@ -328,7 +350,7 @@ const Items = ({ params, collection }) => {
     currency: false,
     collection: false,
   });
-  const [openFilter, setOpenFilter] = useState(true);
+  const [openFilter, setOpenFilter] = useState(false);
   const [gridList, setGridList] = useState('grid');
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
@@ -595,7 +617,9 @@ const Items = ({ params, collection }) => {
               <div className="w-fit">
                 <button
                   className={`flex items-center gap-1 rounded-full px-4 py-2 hover:bg-primary-300 ${
-                    openFilter ? 'bg-primary-500' : 'bg-white text-primary-500'
+                    openFilter
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-white text-primary-500'
                   }`}
                   onClick={handleOpenFilter}
                 >
@@ -607,12 +631,12 @@ const Items = ({ params, collection }) => {
               onSubmit={(event) => handleSearch(event)}
               className="flex w-full gap-4"
             >
-              <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-gray-800">
+              <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-zinc-700">
                 <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
                   <FontAwesomeIcon icon={faSearch} />
                 </div>
                 <input
-                  className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                   type="text"
                   placeholder="Search ..."
                   aria-label="Search"
@@ -631,8 +655,8 @@ const Items = ({ params, collection }) => {
                 className="hidden sm:hidden md:block lg:block xl:block 2xl:block"
               >
                 <div className="relative z-20">
-                  <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                    <span className="block truncate text-gray-600">
+                  <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-500 dark:border-zinc-500 dark:bg-zinc-700 sm:text-sm">
+                    <span className="block truncate text-gray-600 dark:text-white">
                       {selectedFilter}
                     </span>
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -650,7 +674,7 @@ const Items = ({ params, collection }) => {
                       </svg>
                     </span>
                   </Listbox.Button>
-                  <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                  <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-700 sm:text-sm">
                     {servers.map((server, index) => (
                       <Listbox.Option
                         key={index}
@@ -658,7 +682,7 @@ const Items = ({ params, collection }) => {
                           `relative cursor-default select-none px-4 py-2 ${
                             active
                               ? 'bg-primary-500 text-white'
-                              : 'text-gray-900'
+                              : 'text-gray-900 dark:text-white '
                           }`
                         }
                         value={server}
@@ -680,7 +704,7 @@ const Items = ({ params, collection }) => {
                 </div>
               </Listbox>
             </form>
-            <div className="hidden space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+            <div className="hidden space-x-1 rounded-full border border-gray-200 bg-white px-1 items-center dark:border-zinc-500 dark:bg-zinc-700 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
               <div>
                 <input
                   className="hidden"
@@ -845,7 +869,7 @@ const Items = ({ params, collection }) => {
                                     )
                                   }
                                 >
-                                  <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2">
+                                  <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2 dark:bg-zinc-600">
                                     <ImageWithFallback
                                       className="h-full w-full rounded-2xl "
                                       width={16}
@@ -862,7 +886,7 @@ const Items = ({ params, collection }) => {
                                       src={`/uploads/collections/${nft.Collection?.logo}`}
                                     />
                                     <div className="flex items-start justify-start gap-2">
-                                      <div className="text-xs font-medium leading-none text-neutral-700">
+                                      <div className="text-xs font-medium leading-none text-neutral-700 dark:text-white">
                                         {collection?.name
                                           ? collection.name
                                           : collection?.tokenAddress
@@ -882,16 +906,16 @@ const Items = ({ params, collection }) => {
                                 </div>
                                 <div className="inline-flex w-full items-center justify-between gap-2 pt-1">
                                   <div
-                                    className="line-clamp-2 h-[40px] font-medium leading-[20px] text-gray-600"
+                                    className="line-clamp-2 h-[40px] font-medium leading-[20px] text-gray-600 dark:text-white"
                                     title={`${nft?.name} #${nft?.tokenId}`}
                                   >
                                     {nft?.name} #{nft?.tokenId}
                                   </div>
-                                  <div className="text-sm font-normal leading-tight text-neutral-700">
+                                  <div className="text-sm font-normal leading-tight text-neutral-700 dark:text-white">
                                     <Ethereum className="h-4 w-4" />
                                   </div>
                                 </div>
-                                <div className="mt-5 flex w-full justify-between rounded-md bg-white px-2 py-2">
+                                <div className="mt-5 flex w-full justify-between rounded-md bg-white dark:bg-zinc-600 dark:text-white px-2 py-2">
                                   <div className="flex flex-col items-start truncate text-sm leading-5">
                                     <p>Price</p>
                                     <p className="font-bold">
@@ -1017,7 +1041,7 @@ const Items = ({ params, collection }) => {
                                       `/nft/${nft.collectionAddress}/${nft.tokenId}`,
                                     )
                                   }
-                                  className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all"
+                                  className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full font-bold bg-white dark:text-white dark:bg-zinc-600 dark:hover:bg-zinc-500 text-center text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all"
                                 >
                                   View Detail
                                 </button>

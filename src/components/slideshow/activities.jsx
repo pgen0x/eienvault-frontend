@@ -318,10 +318,10 @@ export const SlideshowActivities = ({ dataActivities }) => {
                   </Suspense>
                   <div className="inline-flex w-full flex-col items-center justify-center lg:items-start">
                     <div className="relative flex w-full flex-row px-5">
-                      <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-b-2xl bg-white/60 dark:bg-gray-600/60 bg-opacity-30 p-3 backdrop-blur-xl">
+                      <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-b-2xl bg-white/60 dark:bg-zinc-700/60 bg-opacity-30 p-3 backdrop-blur-xl">
                         <div className="flex w-full flex-col items-start justify-start">
                           <div className="inline-flex items-center justify-between self-stretch">
-                            <div className="flex items-center justify-center gap-2 bg-white dark:bg-gray-500 bg-opacity-70 px-2 py-1 rounded-md">
+                            <div className="flex items-center justify-center gap-2 bg-white dark:bg-zinc-600 bg-opacity-70 px-2 py-1 rounded-md">
                               <ImageWithFallback
                                 className="h-full w-full rounded-2xl "
                                 width={16}
@@ -386,7 +386,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
                               )}
                             </div>
                           </div>
-                          <div className="mt-5 flex w-full justify-between py-2 dark:bg-zinc-500 px-2 rounded-xl">
+                          <div className="mt-5 flex w-full justify-between py-2 dark:bg-zinc-600 px-2 rounded-xl">
                             <div className="flex flex-col items-start truncate text-sm leading-5">
                               <p>Price</p>
                               <p className="font-bold">

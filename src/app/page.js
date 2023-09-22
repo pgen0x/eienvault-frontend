@@ -59,14 +59,17 @@ export default function Home() {
   const [dataActivities, setDataActivities] = useState([]);
   const [dataCollections, setDataCollections] = useState([]);
   const [dataUpcoming, setDataUpcoming] = useState([]);
+  const [dataDiscover, setDataDiscover] = useState([]);
 
   const [errorCollections, setErrorCollections] = useState(false);
   const [errorActivities, setErrorActivities] = useState(false);
   const [errorUpcoming, setErrorUpcoming] = useState(false);
+  const [errorDiscover, setErrorDiscover] = useState(false);
 
   const [isLoadingCollections, setIsLoadingCollections] = useState(true);
   const [isLoadingActivities, setIsLoadingActivities] = useState(true);
   const [isLoadingUpcoming, setIsLoadingUpcoming] = useState(true);
+  const [isLoadingDiscover, setIsLoadingDiscover] = useState(true);
 
   useEffect(() => {
     const getCollections = async () => {
@@ -88,7 +91,6 @@ export default function Home() {
         }
 
         const responseData = await res.json();
-        console.log(responseData);
         setDataCollections(responseData.collections);
       } catch (error) {
         setErrorCollections(true);
@@ -118,7 +120,6 @@ export default function Home() {
         }
 
         const responseData = await res.json();
-        console.log(responseData);
         setDataActivities(responseData);
       } catch (error) {
         setErrorActivities(true);
@@ -164,9 +165,41 @@ export default function Home() {
       }
     };
 
+    const getDiscover = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getdiscover?limit=5`,
+          {
+            cache: 'no-store',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+
+        if (!res.ok) {
+          setIsLoadingDiscover(true);
+          console.error('Fetch failed:', res);
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await res.json();
+        const nft = responseData.nfts;
+        const filteredData = nft.filter((item) => item.itemDetails);
+        setDataDiscover(filteredData);
+      } catch (error) {
+        setErrorDiscover(true);
+        console.error('Fetch failed:', error);
+      } finally {
+        setIsLoadingDiscover(false);
+        setErrorDiscover(false);
+      }
+    };
+
     getNfts();
     getCollections();
     getUpcoming();
+    getDiscover();
   }, [token, address]);
 
   if (!isMounted) {
@@ -229,6 +262,7 @@ export default function Home() {
                 objectFit="cover"
                 src="/images/cloud-discover-1.png"
                 className="h-full"
+                alt="cloud-discover"
               />
             </div>
             <div className="absolute -mt-[90px] hidden md:ml-[350px] md:block lg:ml-[450px]">
@@ -238,6 +272,7 @@ export default function Home() {
                 objectFit="cover"
                 src="/images/cloud-discover-3.png"
                 className="h-full"
+                alt="cloud-discover"
               />
             </div>
             <div className="absolute mt-[190px] hidden -translate-x-16 translate-y-4 md:ml-[340px] md:block lg:ml-[500px]">
@@ -247,6 +282,7 @@ export default function Home() {
                 objectFit="cover"
                 src="/images/cloud-discover-2.png"
                 className="h-full"
+                alt="cloud-discover"
               />
             </div>
             <div className="container relative z-20 mx-auto flex flex-col items-center justify-center sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
@@ -264,8 +300,11 @@ export default function Home() {
                 </button>
               </div>
               <div className="relative my-5 flex w-full flex-initial items-center justify-center sm:w-full md:w-[50%] lg:w-[69%] xl:w-[69%] 2xl:w-[69%]">
-                {/* <SlideshowDiscover /> */}
-                <SlideshowDiscoverSkeleton />
+                {isLoadingDiscover || dataDiscover.length <= 0 ? (
+                  <SlideshowDiscoverSkeleton />
+                ) : (
+                  <SlideshowDiscover dataDiscover={dataDiscover} />
+                )}
               </div>
             </div>
             <div className="absolute -mt-[290px] ml-[400px]">
@@ -275,6 +314,7 @@ export default function Home() {
                 objectFit="cover"
                 src="/images/discover-castle-1.png"
                 className="h-full"
+                alt="discover-castle"
               />
             </div>
             <div className="absolute -ml-[60px] -mt-[140px]">
@@ -284,6 +324,7 @@ export default function Home() {
                 objectFit="cover"
                 src="/images/discover-castle-2.png"
                 className="h-full"
+                alt="discover-castle"
               />
             </div>
           </div>
@@ -339,6 +380,7 @@ export default function Home() {
                 objectFit="cover"
                 src="/images/cloud-subscribe-1.png"
                 className="h-full"
+                alt="cloud"
               />
             </div>
             <div className="absolute left-[44vw] z-10 mt-[310px]">
@@ -348,6 +390,7 @@ export default function Home() {
                 objectFit="cover"
                 src="/images/cloud-subscribe-2.png"
                 className="h-full"
+                alt="cloud"
               />
             </div>
             <div className="md: absolute right-[8vw] z-10 -mt-[10px] lg:right-[28vw]">
@@ -357,10 +400,11 @@ export default function Home() {
                 objectFit="cover"
                 src="/images/cloud-subscribe-3.png"
                 className="h-full"
+                alt="cloud"
               />
             </div>
             <div className="relative top-0 mx-auto block h-[30rem] max-h-full w-full max-w-full rounded-full bg-red-400 sm:top-0 md:-top-[50px] md:max-h-[30rem] md:max-w-[30rem] lg:-top-[50px] xl:-top-[50px] 2xl:-top-[50px]">
-              <div className="relative top-[50px] mx-auto flex w-[90%] md:w-full items-center justify-center sm:top-[50px] md:top-[130px] lg:top-[130px] xl:top-[130px] 2xl:top-[130px]">
+              <div className="relative top-[50px] mx-auto flex w-[90%] items-center justify-center sm:top-[50px] md:top-[130px] md:w-full lg:top-[130px] xl:top-[130px] 2xl:top-[130px]">
                 <div className="z-10 w-full rounded-lg bg-white/60 p-10 px-3 text-center text-gray-800 backdrop-blur-md dark:bg-zinc-800 dark:bg-opacity-50 dark:text-white">
                   <h2 className="text-2xl font-bold">
                     Don&lsquo;t miss a drop
@@ -416,6 +460,7 @@ export default function Home() {
                       height={344}
                       src="/images/macan.png"
                       className="h-full w-full rounded-2xl object-cover"
+                      alt="macan"
                     />
                   </div>
                   <div className="relative -mt-[131px] ml-[30px] h-[245px] w-[243px] sm:-mt-[131px] sm:ml-[30px] md:-mt-[181px] md:ml-[83px]">
@@ -424,6 +469,7 @@ export default function Home() {
                       height={245}
                       src="/images/marmer.png"
                       className="h-full w-full rounded-2xl object-cover"
+                      alt="marmer"
                     />
                   </div>
                   <div className="relative -mt-[404px] ml-[100px] h-[327px] w-[243px] sm:-mt-[404px] sm:ml-[100px] md:-mt-[364px] md:ml-[203px]">
@@ -432,11 +478,12 @@ export default function Home() {
                       width={243}
                       height={327}
                       className="rounded-2xl object-cover"
+                      alt="monalisa"
                     />
                   </div>
                 </div>
 
-                <div className="flex w-full flex-col py-5 gap-5">
+                <div className="flex w-full flex-col gap-5 py-5">
                   <h2 className="text-4xl font-bold">Discover hidden gems</h2>
                   <p className="my-3 text-xl">
                     Eien vault is your window into a world of unique and
@@ -445,8 +492,8 @@ export default function Home() {
                     the globe.
                   </p>
                   <button
-                    onClick={() => router.push("/nft")}
-                    className="w-full rounded-full bg-primary-500 px-3 py-2 text-center font-bold text-white hover:bg-primary-300 text-lg"
+                    onClick={() => router.push('/nft')}
+                    className="w-full rounded-full bg-primary-500 px-3 py-2 text-center text-lg font-bold text-white hover:bg-primary-300"
                   >
                     Learn more
                   </button>
@@ -457,7 +504,7 @@ export default function Home() {
         </section>
         <section>
           <div className="w-full bg-amber-100 bg-[url('/images/nft-lending-section-background.png')] bg-cover bg-right-bottom p-5 pb-20">
-            <div className="container relative z-[1] mx-auto flex flex-col justify-between gap-5 rounded-2xl bg-white dark:bg-zinc-800 dark:bg-opacity-50 bg-opacity-50 p-5 backdrop-blur-sm sm:flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row">
+            <div className="container relative z-[1] mx-auto flex flex-col justify-between gap-5 rounded-2xl bg-white bg-opacity-50 p-5 backdrop-blur-sm dark:bg-zinc-800 dark:bg-opacity-50 sm:flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row">
               <div className="w-full text-slate-600 dark:text-white md:px-20">
                 <h2 className="text-3xl font-bold">
                   Use your NFTs to get a crypto loan
@@ -496,6 +543,7 @@ export default function Home() {
                   height={365}
                   src="/images/watchformore.png"
                   className="w-full"
+                  alt="watchformore"
                 />
               </div>
             </div>

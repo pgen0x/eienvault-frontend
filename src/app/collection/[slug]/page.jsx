@@ -36,7 +36,8 @@ import moment from 'moment';
 import ModalBid from '@/components/modal/bid';
 import ModalBuy from '@/components/modal/buy';
 import HelaIcon from '@/assets/icon/hela';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
+import ModalPutOnSale from '@/components/modal/putOnSale';
 
 const servers = [
   'All Mainnet',
@@ -341,6 +342,7 @@ const Items = ({ params, collection }) => {
   const [nftPage, setNftPage] = useState(1);
   const [nftLast, setNftLast] = useState(false);
   const filterQuery = useSearchParams();
+  const { chain } = useNetwork();
   const [search, setSearch] = useState(
     filterQuery.get('search') === null ? '' : filterQuery.get('search'),
   );
@@ -356,8 +358,16 @@ const Items = ({ params, collection }) => {
   const [gridList, setGridList] = useState('grid');
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
+  const [putOnSaleData, setPutonsaleData] = useState({});
+
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
+  const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
+
+  const [selectedChain, setSelectedChain] = useState({
+    chainId: chain?.id || 666888,
+    symbol: chain?.nativeCurrency.symbol || 'HLUSD',
+  });
   const handleFilterCollapse = (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
   };
@@ -571,12 +581,24 @@ const Items = ({ params, collection }) => {
     setisOpenModalBid(true);
   };
 
+  const handleOpenModalPutonsale = async (tokenId, collectionAddress) => {
+    setPutonsaleData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalPutonsale(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
 
   function closeModalBuy() {
     setisOpenModalBuy(false);
+  }
+
+  function closeModalPutonsale() {
+    setisOpenModalPutonsale(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -1044,7 +1066,15 @@ const Items = ({ params, collection }) => {
                                   ) : (
                                     <div className="mt-5 flex w-full items-center gap-4">
                                       {address === nft.owner ? (
-                                        <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
+                                        <button
+                                          onClick={() =>
+                                            handleOpenModalPutonsale(
+                                              nft?.tokenId,
+                                              collection?.tokenAddress,
+                                            )
+                                          }
+                                          className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
+                                        >
                                           Put On Sale
                                         </button>
                                       ) : (
@@ -1090,6 +1120,12 @@ const Items = ({ params, collection }) => {
         dataBuy={buyData}
         buyAction={buyAction}
         onModalClose={closeModalBuy}
+      />
+      <ModalPutOnSale
+        isOpenModal={isOpenModalPutonsale}
+        onClose={closeModalPutonsale}
+        onModalClose={closeModalPutonsale}
+        putonsaledata={putOnSaleData}
       />
     </>
   );

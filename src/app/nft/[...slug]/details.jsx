@@ -55,6 +55,7 @@ import RelatedNFTs, {
   RelatedNFTsSkeleton,
 } from '@/components/slideshow/relatednfts';
 import moment from 'moment';
+import ModalPutOnSale from '@/components/modal/putOnSale';
 
 export default function NFTDetails({ dataNFTs }) {
   const router = useRouter();
@@ -62,12 +63,15 @@ export default function NFTDetails({ dataNFTs }) {
   const { token } = useAuth();
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
+  const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
   const [countLikes, setCountLikes] = useState(dataNFTs?.likeCount);
   const [dataRelatedNFTs, setDataRelatedNFTs] = useState([]);
   const [isLoadingRelatedNFTs, setIsLoadingRelatedNFTs] = useState(true);
   const [activeTab, setActiveTab] = useState('collateral');
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
+  const [putOnSaleData, setPutonsaleData] = useState({});
+
   const { data: walletClient } = useWalletClient();
 
   const handleModalPropose = () => {
@@ -176,12 +180,24 @@ export default function NFTDetails({ dataNFTs }) {
     setisOpenModalBuy(true);
   };
 
+  const handleOpenModalPutonsale = async (tokenId, collectionAddress) => {
+    setPutonsaleData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalPutonsale(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
 
   function closeModalBuy() {
     setisOpenModalBuy(false);
+  }
+
+  function closeModalPutonsale() {
+    setisOpenModalPutonsale(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -774,9 +790,23 @@ export default function NFTDetails({ dataNFTs }) {
                       )
                     ) : (
                       <div className="mt-5 flex w-full items-center gap-4">
-                        <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
-                          Not For Sale
-                        </button>
+                        {address === dataNFTs.owner ? (
+                          <button
+                            onClick={() =>
+                              handleOpenModalPutonsale(
+                                dataNFTs?.tokenId,
+                                dataNFTs?.collectionAddress,
+                              )
+                            }
+                            className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
+                          >
+                            Put On Sale
+                          </button>
+                        ) : (
+                          <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
+                            Not For Sale
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
@@ -1172,6 +1202,12 @@ export default function NFTDetails({ dataNFTs }) {
         dataBuy={buyData}
         buyAction={buyAction}
         onModalClose={closeModalBuy}
+      />
+      <ModalPutOnSale
+        isOpenModal={isOpenModalPutonsale}
+        onClose={closeModalPutonsale}
+        onModalClose={closeModalPutonsale}
+        putonsaledata={putOnSaleData}
       />
     </>
   );

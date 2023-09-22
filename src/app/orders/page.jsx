@@ -453,7 +453,7 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
               const timeDifference = endDate.diff(currentDate);
               const isEndDateInFuture = timeDifference > 0;
               return (
-                <div className="m-2">
+                <div className="m-2" key={index}>
                   <div
                     className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex"
                     key={index}
@@ -632,7 +632,7 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
               const timeDifference = endDate.diff(currentDate);
               const isEndDateInFuture = timeDifference > 0;
               return (
-                <div className="m-2">
+                <div className="m-2" key={index}>
                   <div
                     className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex"
                     key={index}
@@ -817,7 +817,7 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
               return (
                 <React.Fragment key={index}>
                   {data.Bids.map((dataBids, indexBids) => (
-                    <div className="m-2">
+                    <div className="m-2" key={index}>
                       <div
                         className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex"
                         key={indexBids}

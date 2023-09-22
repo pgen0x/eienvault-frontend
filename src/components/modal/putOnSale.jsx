@@ -106,7 +106,6 @@ export default function ModalPutOnSale({
   const { open } = useWeb3Modal();
 
   function closeModal() {
-    reset();
     onClose(false);
     onModalClose();
   }
@@ -186,6 +185,14 @@ export default function ModalPutOnSale({
     const isAuction = selectedOptionMarket === 'fixed' ? false : true;
     const parsePrice = parseEther(price);
 
+    console.log(listingPrice, 'listingPrice');
+    console.log(releaseTime, 'releaseTime');
+    console.log(isAuction, 'isAuction');
+    console.log(moment(customValueDate).unix(), 'customValueDate');
+    console.log(parsePrice, 'parsePrice');
+    console.log(collectionAddress, 'collectionAddress');
+    console.log(address, 'address');
+
     try {
       const hash = await walletClient.writeContract({
         ...marketplaceABI,
@@ -230,6 +237,7 @@ export default function ModalPutOnSale({
       open();
       return;
     }
+
     setIsSubmit(true);
     setIsProcessing(true);
     setIsLoadingModal({

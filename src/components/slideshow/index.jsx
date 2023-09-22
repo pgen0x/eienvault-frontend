@@ -183,6 +183,7 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                       placeholder="blur"
                       blurDataURL={auction.nftDetails?.imageUri}
                       src={auction.nftDetails?.imageUri}
+                      alt={auction.collectionData.name}
                     />
                   ) : (
                     <div className="flex h-96 w-[500px]  flex-col justify-end rounded-2xl bg-gray-300">
@@ -197,7 +198,7 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                     </div>
                   )}
 
-                  <div className="my-3 inline-flex h-[357px] w-full flex-col items-start justify-start gap-4 rounded-br-2xl rounded-tr-2xl dark:bg-zinc-800 dark:bg-opacity-50 bg-white bg-opacity-50  p-5 backdrop-blur-xl">
+                  <div className="my-3 inline-flex h-[357px] w-full flex-col items-start justify-start gap-4 rounded-br-2xl rounded-tr-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl  dark:bg-zinc-800 dark:bg-opacity-50">
                     <div className="flex flex-col items-start justify-start">
                       <div className="inline-flex items-center justify-start self-stretch">
                         <div className="flex h-full shrink grow basis-0 items-end justify-start gap-2">
@@ -216,7 +217,9 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                     </div>
                     <div className="flex flex-col items-start justify-start gap-1">
                       <div className="inline-flex items-center justify-start gap-2">
-                        <span className="text-gray-900 dark:text-white">By</span>
+                        <span className="text-gray-900 dark:text-white">
+                          By
+                        </span>
                         <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2 ">
                           <ImageWithFallback
                             className="h-full w-full rounded-2xl "
@@ -320,7 +323,9 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                             <span className="mr-2 text-sm font-normal leading-tight text-neutral-700 dark:text-white">
                               Starts in
                             </span>
-                            <span className="text-neutral-700 dark:text-white"><Countdown endDate={auction.releaseDate} /></span>
+                            <span className="text-neutral-700 dark:text-white">
+                              <Countdown endDate={auction.releaseDate} />
+                            </span>
                           </>
                         ) : isNotExpired ? (
                           <>
@@ -328,7 +333,9 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                             <span className="mr-2 text-sm font-normal leading-tight text-neutral-700 dark:text-white">
                               Ends in
                             </span>
-                            <span className="text-neutral-700 dark:text-white"><Countdown endDate={auction.endDate} /></span>
+                            <span className="text-neutral-700 dark:text-white">
+                              <Countdown endDate={auction.endDate} />
+                            </span>
                           </>
                         ) : (
                           'Expired'
@@ -476,8 +483,6 @@ export const SlideshowMobile = ({ auctions, placeBid, refreshMetadata }) => {
     return lowestBid.toString(); // Convert the lowestBid back to a string
   }
 
-  console.log('auctions', auctions);
-
   const handleOpenModalBid = async (
     marketId,
     listingPrice,
@@ -545,6 +550,9 @@ export const SlideshowMobile = ({ auctions, placeBid, refreshMetadata }) => {
                     placeholder="blur"
                     blurDataURL={auction.nftDetails?.imageUri}
                     src={auction.nftDetails?.imageUri}
+                    alt={
+                      auction.nftDetails?.name || auction.collectionData?.name
+                    }
                   />
                 ) : (
                   <div className="flex h-96 w-[340px]  flex-col justify-end rounded-2xl bg-gray-300">
@@ -584,10 +592,13 @@ export const SlideshowMobile = ({ auctions, placeBid, refreshMetadata }) => {
                             className="h-full w-full rounded-2xl "
                             width={15}
                             height={15}
-                            alt={auction.collectionData.name}
                             diameter={15}
                             address={auction.collectionData?.tokenAddress}
                             src={`/uploads/collections/${auction.collectionData?.logo}`}
+                            alt={
+                              auction.nftDetails?.name ||
+                              auction.collectionData?.name
+                            }
                           />
                           <div className="flex items-start justify-start gap-2">
                             <div className="text-xs font-medium leading-none text-neutral-700">

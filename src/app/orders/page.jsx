@@ -476,6 +476,7 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
                               placeholder="blur"
                               blurDataURL={data.nftDetails?.imageUri}
                               src={data.nftDetails?.imageUri}
+                              alt={data.nftDetails?.name}
                             />
                           </div>
                         </div>

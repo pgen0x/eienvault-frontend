@@ -179,7 +179,12 @@ export default function NftPage() {
   const getNfts = async () => {
     if (nftLast === true) return;
     setIsLoading(true);
-    if (search === '' && filterBlockchain === '' && filterStatus === '' && filterVerifiedOnly === '') {
+    if (
+      search === '' &&
+      filterBlockchain === '' &&
+      filterStatus === '' &&
+      filterVerifiedOnly === ''
+    ) {
       await axios
         .request({
           method: 'get',
@@ -288,7 +293,7 @@ export default function NftPage() {
                   </div>
                 </div>
               </form>
-              <div className="hidden space-x-1 rounded-full border border-gray-200 bg-white dark:border-zinc-500 dark:bg-zinc-700  px-1 py-1 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+              <div className="hidden space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1  dark:border-zinc-500 dark:bg-zinc-700 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
                 <div>
                   <input
                     className="hidden"
@@ -483,16 +488,128 @@ export default function NftPage() {
                   </>
                 )}
                 {nfts.length > 0 &&
-                  nfts.map((nft, index) => {
-                    return (
-                      <ItemsNft
-                        key={index}
-                        nft={nft}
-                        gridList={gridList}
-                        openFilter={openFilter}
-                      />
-                    );
-                  })}
+                  nfts.map((nft, index) => (
+                    <div
+                      key={index}
+                      className={`group col-span-12 h-[542px] w-full sm:col-span-6 sm:h-[542px] md:h-[542px] lg:h-[542px] xl:h-[542px] 2xl:h-[542px] ${
+                        gridList === 'grid'
+                          ? openFilter
+                            ? 'md:col-span-6 xl:col-span-4 2xl:col-span-4'
+                            : 'md:col-span-4 xl:col-span-3 2xl:col-span-3'
+                          : openFilter
+                          ? 'md:col-span-4 xl:col-span-3 2xl:col-span-3'
+                          : 'md:col-span-3 xl:col-span-2 2xl:col-span-2'
+                      }`}
+                    >
+                      <div className="group h-[542px] w-full">
+                        <Image
+                          className="z-10 h-[290px] w-full rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all"
+                          width={600}
+                          height={600}
+                          placeholder="blur"
+                          blurDataURL={`https://via.placeholder.com/600x600`}
+                          src={nft?.imageUri}
+                          alt={nft?.Collection?.name}
+                        />
+                        <div className="inline-flex w-full flex-col items-center justify-center px-3 lg:items-start">
+                          <div className="relative flex w-full flex-row">
+                            <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 p-3  backdrop-blur-xl">
+                              <div className="flex w-full flex-col items-start justify-start">
+                                <div
+                                  className="inline-flex cursor-pointer items-center justify-between self-stretch"
+                                  onClick={() =>
+                                    router.push(
+                                      `/collection/${nft.collectionAddress}`,
+                                    )
+                                  }
+                                >
+                                  <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2">
+                                    <ImageWithFallback
+                                      className="h-full w-full rounded-2xl "
+                                      width={16}
+                                      height={16}
+                                      alt={
+                                        nft.Collection?.name
+                                          ? nft.Collection?.name
+                                          : nft.collectionAddress
+                                          ? nft.collectionAddress
+                                          : ''
+                                      }
+                                      diameter={16}
+                                      address={nft?.collectionAddress}
+                                      src={`/uploads/collections/${nft.Collection?.logo}`}
+                                    />
+                                    <div className="flex items-center justify-start gap-2">
+                                      <div className="text-xs font-medium leading-none text-neutral-700">
+                                        {nft.Collection?.name
+                                          ? nft.Collection.name
+                                          : nft.collectionAddress
+                                          ? truncateAddress(
+                                              nft.collectionAddress,
+                                            )
+                                          : ''}
+                                      </div>
+                                      <div className="text-xs font-black leading-none text-primary-500">
+                                        <FontAwesomeIcon icon={faCircleCheck} />
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="items-center">
+                                    <FontAwesomeIcon icon={faEllipsis} />
+                                  </div>
+                                </div>
+                                <div className="inline-flex w-full items-center justify-between gap-2 pt-1">
+                                  <div
+                                    className="line-clamp-2 h-[40px] font-medium leading-[20px] text-gray-600"
+                                    title={`${nft?.name} #${nft?.tokenId}`}
+                                  >
+                                    {nft?.name} #{nft?.tokenId}
+                                  </div>
+                                  <div className="text-sm font-normal leading-tight text-neutral-700">
+                                    <Ethereum className="h-4 w-4" />
+                                  </div>
+                                </div>
+                                <div className="mt-5 flex w-full justify-between rounded-md bg-white px-2 py-2">
+                                  <div className="flex flex-col items-start truncate text-sm leading-5">
+                                    <p>Price</p>
+                                    <p className="font-bold">
+                                      {nft.price === null
+                                        ? '0.00'
+                                        : formatEther(Number(nft?.price))}{' '}
+                                      {nft.Collection?.Chain.symbol}
+                                    </p>
+                                  </div>
+                                  <div className="flex flex-col items-start truncate text-sm leading-5">
+                                    <p>Highest bid</p>
+                                    <p className="font-bold">No bids yet</p>
+                                  </div>
+                                </div>
+                                <div className="mt-5 flex w-full items-center gap-2">
+                                  {/* <FontAwesomeIcon
+                                    className="h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 "
+                                    icon={faCartPlus}
+                                  /> */}
+                                  <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-xs font-bold text-white hover:bg-primary-300">
+                                    Buy Now
+                                  </button>
+                                </div>
+                                <button
+                                  onClick={() =>
+                                    router.push(
+                                      `/nft/${nft.collectionAddress}/${nft.tokenId}`,
+                                    )
+                                  }
+                                  className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all"
+                                >
+                                  View Detail
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
               </div>
             </div>
           </div>

@@ -59,7 +59,7 @@ const Main = () => {
     <>
       <div className="flex items-center justify-between">
         <div className="flex max-w-min flex-col gap-3 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
-          <div className="flex space-x-1 rounded-full bg-white dark:text-white dark:bg-gray-700 px-1">
+          <div className="flex space-x-1 rounded-full bg-white px-1 dark:bg-gray-700 dark:text-white">
             <label className={classRadio(TrendingTop, 'trending')}>
               Trending
               <input
@@ -79,7 +79,7 @@ const Main = () => {
               />
             </label>
           </div>
-          <div className="flex space-x-1 rounded-full bg-white dark:bg-gray-700 px-1">
+          <div className="flex space-x-1 rounded-full bg-white px-1 dark:bg-gray-700">
             <label className={classRadio(Range, '1h')}>
               1h
               <input
@@ -111,7 +111,7 @@ const Main = () => {
           <div className="w-52 flex-none space-x-1 px-1">
             <Listbox value={selectedServer} onChange={setSelectedServer}>
               <div className="relative">
-                <Listbox.Button className="relative w-full cursor-default rounded-full bg-white dark:bg-gray-700 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                <Listbox.Button className="relative w-full cursor-default rounded-full bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 dark:bg-gray-700 sm:text-sm">
                   <span className="block truncate text-gray-600 dark:text-white">
                     {selectedServer}
                   </span>
@@ -130,13 +130,15 @@ const Main = () => {
                     </svg>
                   </span>
                 </Listbox.Button>
-                <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-700 sm:text-sm">
                   {servers.map((server, index) => (
                     <Listbox.Option
                       key={index}
                       className={({ active }) =>
                         `relative cursor-default select-none px-4 py-2 ${
-                          active ? 'bg-primary-500 text-white' : 'text-gray-900 dark:bg-gray-700 dark:text-white'
+                          active
+                            ? 'bg-primary-500 text-white'
+                            : 'text-gray-900 dark:bg-gray-700 dark:text-white'
                         }`
                       }
                       value={server}
@@ -162,7 +164,7 @@ const Main = () => {
         <div className="flex items-end px-3">
           <button
             onClick={() => router.push(`/collection`)}
-            className="text-primary-500 font-bold"
+            className="font-bold text-primary-500"
           >
             See all
           </button>
@@ -216,9 +218,11 @@ export const TrendingTop = ({ dataCollections }) => {
       >
         {dataCollections.slice(0, limit).map((collection, index) => (
           <li key={index} className="w-full">
-            <div className="flex w-full justify-between rounded-md bg-white dark:bg-gray-700 px-5 py-2">
+            <div className="flex w-full justify-between rounded-md bg-white px-5 py-2 dark:bg-gray-700">
               <div className="flex w-full items-center gap-x-4">
-                <p className="text-sm font-bold dark:text-white text-primary-500">{index + 1}.</p>
+                <p className="text-sm font-bold text-primary-500 dark:text-white">
+                  {index + 1}.
+                </p>
                 <div className="h-11 w-11">
                   <ImageWithFallback
                     src={`/uploads/collections/${collection.logo}`}
@@ -261,9 +265,9 @@ export const TrendingTop = ({ dataCollections }) => {
                       <span className="w-full">Volume</span>
                       <p className="w-full">
                         $
-                        {Number(formatEther(Number(collection?.volume))).toFixed(
-                          2,
-                        )}
+                        {Number(
+                          formatEther(Number(collection?.volume)),
+                        ).toFixed(2)}
                       </p>
                       <p
                         className={classMovement(
@@ -375,7 +379,7 @@ const MainMobile = () => {
     <>
       <div className="flex items-center justify-between">
         <div className="flex w-full flex-col gap-3">
-          <div className="flex justify-between rounded-full bg-white dark:text-white dark:bg-gray-700 px-1 py-2">
+          <div className="flex justify-between rounded-full bg-white px-1 py-2 dark:bg-gray-700 dark:text-white">
             <label className={classRadio(TrendingTop, 'trending')}>
               Trending
               <input
@@ -395,7 +399,7 @@ const MainMobile = () => {
               />
             </label>
           </div>
-          <div className="flex space-x-1 rounded-full bg-white dark:text-white dark:bg-gray-700 px-1 py-2">
+          <div className="flex space-x-1 rounded-full bg-white px-1 py-2 dark:bg-gray-700 dark:text-white">
             <label className={classRadio(Range, '1h')}>
               1h
               <input
@@ -424,7 +428,7 @@ const MainMobile = () => {
               />
             </label>
           </div>
-          <div className="flex space-x-1 rounded-full bg-white dark:text-white dark:bg-gray-700 px-1 py-2">
+          <div className="flex space-x-1 rounded-full bg-white px-1 py-2 dark:bg-gray-700 dark:text-white">
             <label className={classRadio(Coin, 'ethereum')}>
               <Ethereum />
               <input
@@ -499,7 +503,7 @@ export const TrendingTopMobile = ({ dataCollections }) => {
         {dataCollections.map((collection, index) => (
           <div
             key={index}
-            className="flex flex-col gap-3 rounded-xl bg-white dark:text-white dark:bg-gray-700 p-5"
+            className="flex flex-col gap-3 rounded-xl bg-white p-5 dark:bg-gray-700 dark:text-white"
           >
             <div className="flex w-full items-center gap-3 border-b border-gray-300 pb-2">
               <div className="h-11 w-11">
@@ -567,7 +571,7 @@ export const TrendingTopMobile = ({ dataCollections }) => {
 const MobileNft = ({ collection }) => {
   const router = useRouter();
   const [nfts, setNfts] = useState([]);
-  
+
   useEffect(() => {
     getNfts();
   }, [collection.tokenAddress]);
@@ -616,7 +620,7 @@ const MobileNft = ({ collection }) => {
             }
           >
             <div className="w-full px-1">
-              <button className="absolute ml-[45px] mt-[5px] rounded-lg bg-white/10 dark:text-white px-2 py-1 text-xs backdrop-blur-md">
+              <button className="absolute ml-[45px] mt-[5px] rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md dark:text-white">
                 <FontAwesomeIcon icon={faCartPlus} />
               </button>
               <div className="h-20 w-20">
@@ -627,9 +631,10 @@ const MobileNft = ({ collection }) => {
                   placeholder="blur"
                   blurDataURL={`https://via.placeholder.com/50x50`}
                   src={nft?.imageUri}
+                  alt={nft.name}
                 />
               </div>
-              <button className="-mt-5 flex w-20 rounded-lg bg-white/10 dark:text-white px-2 py-1 text-xs backdrop-blur-md">
+              <button className="-mt-5 flex w-20 rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md dark:text-white">
                 <Ethereum className="h-4 w-4" />{' '}
                 <span className="w-full">5 ETH</span>
               </button>

@@ -104,16 +104,37 @@ const Auction = () => {
 
   return (
     <>
-      <section className="h-auto md:h-[600px] relative -top-24 flex w-full items-center justify-center bg-[url('/images/hero-section-background.png')] bg-cover bg-bottom">
+      <section className="relative -top-24 flex h-auto w-full items-center justify-center bg-[url('/images/hero-section-background.png')] bg-cover bg-bottom md:h-[600px]">
         <div className="absolute bottom-28 right-[12%] h-[532px] w-[532px] translate-y-1/3 items-center justify-center rounded-full bg-red-400" />
         <div className="absolute right-[2vw] top-32">
-          <Image width={398} height={121} objectFit="cover" src="/images/cloud-hero-1.png" className="h-full" />
+          <Image
+            width={398}
+            height={121}
+            objectFit="cover"
+            src="/images/cloud-hero-1.png"
+            className="h-full"
+            alt="cloud-hero"
+          />
         </div>
-        <div className="absolute right-[45vw] bottom-20">
-          <Image width={500} height={151} objectFit="cover" src="/images/cloud-hero-3.png" className="h-full" />
+        <div className="absolute bottom-20 right-[45vw]">
+          <Image
+            width={500}
+            height={151}
+            objectFit="cover"
+            src="/images/cloud-hero-3.png"
+            className="h-full"
+            alt="cloud-hero"
+          />
         </div>
         <div className="absolute bottom-60 left-0 -translate-x-16 translate-y-4">
-          <Image width={270} height={76} objectFit="cover" src="/images/cloud-hero-2.png" className="h-full" />
+          <Image
+            width={270}
+            height={76}
+            objectFit="cover"
+            src="/images/cloud-hero-2.png"
+            className="h-full"
+            alt="cloud-hero"
+          />
         </div>
         <div className="container m-auto">
           <div className="md: relative mb-5 hidden w-full flex-initial items-center justify-center pt-24 sm:hidden md:flex lg:flex lg:pt-10 xl:flex 2xl:flex">
@@ -123,7 +144,7 @@ const Auction = () => {
               refreshMetadata={refreshMetadata}
             />
           </div>
-          <div className="relative mb-5 flex sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden w-full flex-initial items-center justify-center">
+          <div className="relative mb-5 flex w-full flex-initial items-center justify-center sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden">
             <SlideshowMobile
               auctions={auctions}
               placeBid={placeBid}

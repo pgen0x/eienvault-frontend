@@ -187,8 +187,6 @@ export default function ModalBuy({
     }
   };
 
-  console.log(dataBuy);
-
   return (
     dataBuy && (
       <>

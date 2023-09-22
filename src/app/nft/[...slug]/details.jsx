@@ -209,7 +209,6 @@ export default function NFTDetails({ dataNFTs }) {
         account: address,
         value: price,
       });
-      setPlaceBidHash(hash);
       return hash;
     } catch (error) {
       console.error('Error Make an Offer', error);
@@ -225,7 +224,6 @@ export default function NFTDetails({ dataNFTs }) {
         account: address,
         value: price,
       });
-      setPlaceBidHash(hash);
       return hash;
     } catch (error) {
       console.error('Error Make an Offer', error);

@@ -14,7 +14,6 @@ const Auction = () => {
   const { address } = useAccount();
   const [auctions, setAuctions] = useState([]);
   const [isErrorAuctions, setErrorAuctions] = useState(false);
-  const [placeBidHash, setPlaceBidHash] = useState();
   const [refreshMetada, setRefreshMetadata] = useState();
 
   const { data: walletClient } = useWalletClient();
@@ -62,7 +61,6 @@ const Auction = () => {
         account: address,
         value: price,
       });
-      setPlaceBidHash(hash);
       return hash;
     } catch (error) {
       console.error('Error Make an Offer', error);

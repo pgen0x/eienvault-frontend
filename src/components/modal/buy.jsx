@@ -45,9 +45,6 @@ export default function ModalBuy({
     onError(error) {
       console.log('Error', error);
     },
-    onSettled(data, error) {
-      console.log('Settled', data, error);
-    },
   });
   const { address, isConnected } = useAccount();
 
@@ -246,7 +243,7 @@ export default function ModalBuy({
                         <div className="font w-full text-2xl text-gray-400">
                           #{dataBuy?.tokenId}
                           <br />
-                          Worriness
+                          {dataBuy?.name}
                         </div>
                       </div>
                       <div className="flex justify-between rounded-lg border border-gray-200 p-3">

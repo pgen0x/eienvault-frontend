@@ -70,7 +70,6 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const [auctionData, setAcutionData] = useState({});
-  const [placeBidHash, setPlaceBidHash] = useState();
   const { address } = useAccount();
   const { data: walletClient } = useWalletClient();
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
@@ -173,7 +172,6 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
         account: address,
         value: price,
       });
-      setPlaceBidHash(hash);
       return hash;
     } catch (error) {
       console.error('Error Make an Offer', error);

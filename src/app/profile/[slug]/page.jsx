@@ -30,6 +30,7 @@ import { formatEther, isAddress } from 'viem';
 import { ImageWithFallback } from '@/components/imagewithfallback';
 import ModalCreateCollection from '@/components/modal/createCollections';
 import Image from 'next/image';
+import moment from 'moment';
 
 const servers = [
   'All Mainnet',
@@ -66,27 +67,38 @@ const filters = [
 ];
 
 export default function ProfilePage({ params }) {
+  console.log(params, "$$$$$");
   const listCollections = [
     {
       name: 'Owned',
       badge: 0,
-      active: false,
+      active: params?.owned ? true : false,
       page: <Owned params={params} />,
     },
     {
       name: 'Collections',
       badge: 0,
-      active: true,
+      active: params?.collections ? true : false,
       page: <Collection params={params} />,
     },
     {
       name: 'On sale',
       badge: 0,
-      active: false,
+      active: params?.onsale ? true : false,
       page: <Onsale params={params} />,
     },
-    { name: 'Sold', badge: 0, active: false, page: <Sold /> },
-    { name: 'Liked', badge: 0, active: false, page: <Liked /> },
+    {
+      name: 'Sold',
+      badge: 0,
+      active: params?.sold ? true : false,
+      page: <Sold />,
+    },
+    {
+      name: 'Liked',
+      badge: 0,
+      active: params?.liked ? true : false,
+      page: <Liked />,
+    },
   ];
 
   const router = useRouter();
@@ -95,7 +107,7 @@ export default function ProfilePage({ params }) {
   const [limitCollection, setLimitCollection] = useState(
     listCollections.length,
   );
-  const [activePage, setActivePage] = useState('Owned');
+  const [activePage, setActivePage] = useState('Collections');
   const [renderPage, setRenderPage] = useState();
   const [profile, setProfile] = useState({});
   const { address } = useAccount();
@@ -295,24 +307,29 @@ export default function ProfilePage({ params }) {
           <ul className="my-5 flex w-full gap-10 border-b border-gray-200 text-primary-500">
             {listCollections
               .slice(0, limitCollection)
-              .map((collection, index) => (
-                <li
-                  key={index}
-                  onClick={() => setActivePage(collection.name)}
-                  className={`flex cursor-pointer gap-2 pb-3 ${
-                    activePage === collection.name
-                      ? 'border-b-4 border-primary-500'
-                      : ''
-                  }`}
-                >
-                  <span className="line-clamp-1">{collection.name}</span>
-                  {collection.badge > 0 && (
-                    <span className="h-4 w-4 rounded-full bg-red-400 text-center text-xs font-semibold text-white">
-                      {collection.badge}
-                    </span>
-                  )}
-                </li>
-              ))}
+              .map((collection, index) => {
+                if(collection.active){
+                  setActivePage(collection.name);
+                }
+                return (
+                  <li
+                    key={index}
+                    onClick={() => setActivePage(collection.name)}
+                    className={`flex cursor-pointer gap-2 pb-3 ${
+                      activePage === collection.name
+                        ? 'border-b-4 border-primary-500'
+                        : ''
+                    }`}
+                  >
+                    <span className="line-clamp-1">{collection.name}</span>
+                    {collection.badge > 0 && (
+                      <span className="h-4 w-4 rounded-full bg-red-400 text-center text-xs font-semibold text-white">
+                        {collection.badge}
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
             {limitCollection != listCollections.length ? (
               <li className="group cursor-pointer">
                 <span className="pb-3">More</span>{' '}
@@ -676,14 +693,25 @@ const Collection = ({ params }) => {
                   </div>
                 </div>
               )}
-              {collections.length == 0 && (
+              {collections.length == 0 && !isLoading && (
                 <div className="w-full text-center font-semibold text-black sm:col-span-6 md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9">
                   Collection not found
                 </div>
               )}
+              {collections.length == 0 && isLoading && (
+                <>
+                  {[...Array(12)].map((nft, index) => (
+                    <ItemCollectionSkeleton key={index} gridList={gridList} />
+                  ))}
+                </>
+              )}
               {collections.length > 0 &&
                 collections.map((collection, index) => (
-                  <ItemCollectionSkeleton key={index} collection={collection} gridList={gridList} />
+                  <ItemCollection
+                    key={index}
+                    collection={collection}
+                    gridList={gridList}
+                  />
                 ))}
             </div>
           </div>
@@ -939,7 +967,7 @@ const Collection = ({ params }) => {
   );
 };
 
-const ItemCollection = ({collection, gridList}) => {
+const ItemCollection = ({ collection, gridList }) => {
   return (
     <div
       className={`group col-span-6 h-[320px] w-full sm:h-[320px] md:h-[300px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px] ${
@@ -1023,41 +1051,27 @@ const ItemCollection = ({collection, gridList}) => {
   );
 };
 
-const ItemCollectionSkeleton = ({collection, gridList}) => {
+const ItemCollectionSkeleton = ({ collection, gridList }) => {
   return (
     <div
-      className={`group col-span-6 h-[320px] w-full sm:h-[320px] md:h-[300px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px] ${
+      className={`col-span-6 h-[320px] w-full sm:h-[320px] md:h-[300px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px] ${
         gridList == 'grid'
           ? 'sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3'
           : 'sm:col-span-4 md:col-span-3 lg:col-span-2 xl:col-span-2 2xl:col-span-2'
       }`}
     >
-      <img
-        className="relative z-10 h-[200px] w-full rounded-2xl object-cover duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all"
+      <div
+        className="relative z-10 h-[200px] w-full animate-pulse rounded-2xl bg-gray-300 object-cover"
         src="https://fakeimg.pl/325x175"
       />
       <div className="grid grid-cols-12 p-3">
         <div className="relative -top-[60px] z-10 col-span-12 flex gap-1 rounded-tl-2xl rounded-tr-2xl bg-white bg-opacity-50 p-2 sm:col-span-12 md:col-span-10 lg:col-span-8 xl:col-span-8 2xl:col-span-8">
           <div className="w-fit">
-            <ImageWithFallback
-              src={`/uploads/collections/${collection?.logo}`}
-              alt={collection?.name}
-              width={36}
-              height={36}
-              diameter={36}
-              address={collection?.tokenAddress}
-              className="w-full rounded-lg border-4 border-white shadow"
-            />
+            <div className="h-9 w-9 rounded-full bg-gray-300" />
           </div>
-          <div className="w-full text-right">
-            <h3 className="line-clamp-1 h-[10px] text-xs leading-[10px]">
-              {collection.name
-                ? collection.name
-                : collection.tokenAddress
-                ? truncateAddress(collection.tokenAddress)
-                : ''}
-            </h3>
-            <h3 className="text-sm font-semibold">1 Owner</h3>
+          <div className="flex w-full flex-col items-end gap-1 text-right">
+            <div className="h-4 w-full animate-pulse rounded-full bg-gray-300 text-xs" />
+            <div className="h-4 w-20 animate-pulse rounded-full bg-gray-300" />
           </div>
         </div>
       </div>
@@ -1065,41 +1079,15 @@ const ItemCollectionSkeleton = ({collection, gridList}) => {
         <div className="relative flex w-full flex-row px-3">
           <div className="inline-flex w-full flex-col items-start justify-start rounded-bl-2xl rounded-br-2xl bg-gray-50 p-3 backdrop-blur-xl">
             <div className="flex w-full flex-col justify-between rounded-md bg-gray-100 px-2 py-2 sm:flex-col md:flex-row">
-              <div className="flex shrink-0 flex-col truncate text-sm leading-5 sm:items-start">
-                <p>Total Volume</p>
-                <p className="font-bold">
-                  {collection.volume
-                    ? Number(formatEther(Number(collection.volume))).toFixed(2)
-                    : '0.00'}{' '}
-                  ETH
-                </p>
+              <div className="flex shrink-0 flex-col gap-2 truncate text-sm leading-5 sm:items-start">
+                <div className="h-4 w-20 animate-pulse rounded-full bg-gray-300" />
+                <div className="h-4 w-20 animate-pulse rounded-full bg-gray-300" />
               </div>
-              <div className="flex shrink-0 flex-col truncate text-sm leading-5 sm:items-start">
-                <p>Floor</p>
-                <p className="font-bold">
-                  {collection.floorPrice
-                    ? Number(
-                        formatEther(Number(collection.floorPrice)),
-                      ).toFixed(2)
-                    : '0.00'}{' '}
-                  ETH
-                </p>
+              <div className="flex shrink-0 flex-col gap-2 truncate text-sm leading-5 sm:items-start">
+                <div className="h-4 w-20 animate-pulse rounded-full bg-gray-300" />
+                <div className="h-4 w-20 animate-pulse rounded-full bg-gray-300" />
               </div>
             </div>
-            <button
-              onClick={() =>
-                router.push(
-                  `/collection/${
-                    collection?.slug
-                      ? collection.slug
-                      : collection?.tokenAddress
-                  }`,
-                )
-              }
-              className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all"
-            >
-              View Detail
-            </button>
           </div>
         </div>
       </div>

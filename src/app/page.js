@@ -510,7 +510,7 @@ export default function Home() {
                   <span className="dark:hidden">
                     <img src="/logo.svg" className="w-36" />
                   </span>
-                  <span className="dark:block">
+                  <span className="hidden dark:block">
                     <img src="/logo-dark.svg" className="w-36" />
                   </span>
                 </div>

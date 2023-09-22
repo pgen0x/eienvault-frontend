@@ -66,25 +66,25 @@ const filters = [
   'Recently received',
 ];
 
-export default function ProfilePage({ params }) {
+export default function ProfilePage() {
   const listCollections = [
     {
       name: 'Owned',
       slug: 'Owned',
       badge: 0,
-      page: <Owned params={params} />,
+      page: <Owned />,
     },
     {
       name: 'Collections',
       slug: 'Collections',
       badge: 0,
-      page: <Collection params={params} />,
+      page: <Collection />,
     },
     {
       name: 'On sale',
       slug: 'Onsale',
       badge: 0,
-      page: <Onsale params={params} />,
+      page: <Onsale />,
     },
     {
       name: 'Sold',
@@ -135,7 +135,7 @@ export default function ProfilePage({ params }) {
       .request({
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/user/get/${params.slug}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/user/get/${address}`,
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -162,7 +162,7 @@ export default function ProfilePage({ params }) {
     const urlParams = new URLSearchParams(queryString);
 
     listCollections.map((collection) => {
-      if (urlParams.get(collection.slug.toLowerCase()) === "") {
+      if (urlParams.get(collection.slug.toLowerCase()) === '') {
         setActivePage(collection.name);
       }
     });
@@ -287,28 +287,26 @@ export default function ProfilePage({ params }) {
                     </div>
                   </div>
                 </div>
-                {address === params.slug && (
-                  <div className="col-span-12 flex gap-1 font-semibold text-white">
-                    <button
-                      className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
-                      onClick={() => router.push(`/profile/setting`)}
-                    >
-                      <FontAwesomeIcon icon={faPenToSquare} /> Edit Profile
-                    </button>
-                    <button
-                      className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
-                      href="#"
-                    >
-                      Sell
-                    </button>
-                    <button
-                      className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
-                      href="#"
-                    >
-                      <FontAwesomeIcon icon={faShare} />
-                    </button>
-                  </div>
-                )}
+                <div className="col-span-12 flex gap-1 font-semibold text-white">
+                  <button
+                    className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
+                    onClick={() => router.push(`/profile/setting`)}
+                  >
+                    <FontAwesomeIcon icon={faPenToSquare} /> Edit Profile
+                  </button>
+                  <button
+                    className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
+                    href="#"
+                  >
+                    Sell
+                  </button>
+                  <button
+                    className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
+                    href="#"
+                  >
+                    <FontAwesomeIcon icon={faShare} />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -324,7 +322,9 @@ export default function ProfilePage({ params }) {
                 return (
                   <li
                     key={index}
-                    onClick={() => router.push(`?${collection.slug.toLowerCase()}`)}
+                    onClick={() =>
+                      router.push(`?${collection.slug.toLowerCase()}`)
+                    }
                     className={`flex cursor-pointer gap-2 pb-3 ${
                       activePage === collection.name
                         ? 'border-b-4 border-primary-500'
@@ -379,7 +379,7 @@ export default function ProfilePage({ params }) {
   );
 }
 
-const Collection = ({ params }) => {
+const Collection = () => {
   const router = useRouter();
   const { chain } = useNetwork();
   const filterQuery = useSearchParams();
@@ -456,7 +456,7 @@ const Collection = ({ params }) => {
         .request({
           method: 'get',
           maxBodyLength: Infinity,
-          url: `${process.env.NEXT_PUBLIC_API_URL}/api/collection/getbyuseraddress/${params.slug}?page=${collectionPage}`,
+          url: `${process.env.NEXT_PUBLIC_API_URL}/api/collection/getbyuseraddress/${address}?page=${collectionPage}`,
           // url: `http://192.168.1.8/labs/dummy-data/collections.php?page=${collectionPage}`,
         })
         .then((response) => {
@@ -479,7 +479,7 @@ const Collection = ({ params }) => {
         .request({
           method: 'get',
           maxBodyLength: Infinity,
-          url: `${process.env.NEXT_PUBLIC_API_URL}/api/collection/getbyuseraddress/${params.slug}?query=${search}&page=${collectionPage}`,
+          url: `${process.env.NEXT_PUBLIC_API_URL}/api/collection/getbyuseraddress/${address}?query=${search}&page=${collectionPage}`,
         })
         .then((response) => {
           if (response.data.data.length > 0) {
@@ -688,21 +688,19 @@ const Collection = ({ params }) => {
         <div className="my-5 grid grid-cols-12 gap-6">
           <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12">
             <div className="grid w-full grid-cols-12 gap-6 text-gray-900">
-              {address === params.slug && (
-                <div className="col-span-12 mb-4 h-[280px] w-full sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                  <div className="flex h-full w-full flex-col items-center justify-center rounded-2xl border-2 border-gray-200">
-                    <button
-                      className="w-fit rounded-full bg-primary-500 px-4 py-1 text-white hover:bg-primary-300"
-                      onClick={handleModalCreate}
-                    >
-                      Create a new collection
-                    </button>
-                    {/* <button className="w-fit px-4 py-1 font-semibold text-primary-500 hover:text-primary-300">
+              <div className="col-span-12 mb-4 h-[280px] w-full sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
+                <div className="flex h-full w-full flex-col items-center justify-center rounded-2xl border-2 border-gray-200">
+                  <button
+                    className="w-fit rounded-full bg-primary-500 px-4 py-1 text-white hover:bg-primary-300"
+                    onClick={handleModalCreate}
+                  >
+                    Create a new collection
+                  </button>
+                  {/* <button className="w-fit px-4 py-1 font-semibold text-primary-500 hover:text-primary-300">
                       Import existing collection
                     </button> */}
-                  </div>
                 </div>
-              )}
+              </div>
               {collections.length == 0 && !isLoading && (
                 <div className="w-full text-center font-semibold text-black sm:col-span-6 md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9">
                   Collection not found
@@ -1105,7 +1103,7 @@ const ItemCollectionSkeleton = ({ collection, gridList }) => {
   );
 };
 
-const Owned = ({ params }) => {
+const Owned = () => {
   const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState(filters[0]);
   const [isLoading, setIsLoading] = useState(false);
@@ -1129,6 +1127,7 @@ const Owned = ({ params }) => {
   const handleFilterCollapse = (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
   };
+  const { address } = useAccount();
 
   const classRadio = (params, value) => {
     const defaultCssRadio =
@@ -1154,8 +1153,6 @@ const Owned = ({ params }) => {
   }, [nftPage]);
 
   const getNfts = async () => {
-    const address = isAddress(params.slug);
-
     if (nftLast === true) return;
     setIsLoading(true);
     if (search === '') {
@@ -1163,7 +1160,7 @@ const Owned = ({ params }) => {
         .request({
           method: 'get',
           maxBodyLength: Infinity,
-          url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbyowner/${params.slug}?page=${nftPage}`,
+          url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbyowner/${address}?page=${nftPage}`,
           // url: `http://192.168.1.8/labs/dummy-data/collections.php?page=${nftPage}`,
         })
         .then((response) => {
@@ -1185,7 +1182,7 @@ const Owned = ({ params }) => {
           maxBodyLength: Infinity,
           url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/${
             address ? 'getbycollection' : 'getbyslug'
-          }/${params.slug}?query=${search}&page=${nftPage}`,
+          }/${address}?query=${search}&page=${nftPage}`,
         })
         .then((response) => {
           setIsLoading(false);
@@ -1527,7 +1524,7 @@ const Owned = ({ params }) => {
   );
 };
 
-const Onsale = ({ params }) => {
+const Onsale = () => {
   const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState(filters[0]);
   const [isLoading, setIsLoading] = useState(false);
@@ -1551,6 +1548,7 @@ const Onsale = ({ params }) => {
   const handleFilterCollapse = (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
   };
+  const { address } = useAccount();
 
   const classRadio = (params, value) => {
     const defaultCssRadio =
@@ -1576,8 +1574,6 @@ const Onsale = ({ params }) => {
   }, [nftPage]);
 
   const getNfts = async () => {
-    const address = isAddress(params.slug);
-
     if (nftLast === true) return;
 
     setIsLoading(true);
@@ -1586,7 +1582,7 @@ const Onsale = ({ params }) => {
         .request({
           method: 'get',
           maxBodyLength: Infinity,
-          url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbyowner/${params.slug}?page=${nftPage}`,
+          url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbyowner/${address}?page=${nftPage}`,
           // url: `http://192.168.1.8/labs/dummy-data/collections.php?page=${nftPage}`,
         })
         .then((response) => {
@@ -1608,7 +1604,7 @@ const Onsale = ({ params }) => {
           maxBodyLength: Infinity,
           url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/${
             address ? 'getbycollection' : 'getbyslug'
-          }/${params.slug}?query=${search}&page=${nftPage}`,
+          }/${address}?query=${search}&page=${nftPage}`,
         })
         .then((response) => {
           setIsLoading(false);

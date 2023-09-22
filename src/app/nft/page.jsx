@@ -63,17 +63,18 @@ export default function NftPage() {
   const filterQuery = useSearchParams();
   const [filterCollapse, setFilterCollapse] = useState({
     blockchain: false,
-    category: false,
-    price: false,
+    options: false,
     status: false,
-    currency: false,
-    collection: false,
   });
   const [openFilter, setOpenFilter] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [nfts, setNfts] = useState([]);
   const [nftPage, setNftPage] = useState(1);
   const [nftLast, setNftLast] = useState(false);
+  const [chains, setChains] = useState([]);
+  const [filterBlockchain, setFilterBlockchain] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
+  const [filterVerifiedOnly, setFilterVerifiedOnly] = useState(false);
   const [search, setSearch] = useState(
     filterQuery.get('search') === null ? '' : filterQuery.get('search'),
   );
@@ -122,6 +123,31 @@ export default function NftPage() {
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
+
+    const getChains = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/chain/getall`,
+          {
+            cache: 'no-store',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+
+        if (!res.ok) {
+          console.error('Fetch failed:', res);
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await res.json();
+        setChains(responseData);
+      } catch (error) {
+        console.error('Fetch failed:', error);
+      }
+    };
+    getChains();
   }, []);
 
   const handleSearch = (event) => {
@@ -142,10 +168,18 @@ export default function NftPage() {
     getNfts();
   }, [nftPage]);
 
+  useEffect(() => {
+    setNftPage(1);
+    setNftLast(false);
+    setNfts([]);
+
+    getNfts();
+  }, [filterBlockchain, filterStatus, filterVerifiedOnly]);
+
   const getNfts = async () => {
     if (nftLast === true) return;
     setIsLoading(true);
-    if (search === '') {
+    if (search === '' && filterBlockchain === '' && filterStatus === '' && filterVerifiedOnly === '') {
       await axios
         .request({
           method: 'get',
@@ -171,6 +205,14 @@ export default function NftPage() {
           method: 'post',
           maxBodyLength: Infinity,
           url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/search?query=${search}&page=${nftPage}`,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: JSON.stringify({
+            verifiedOnly: filterVerifiedOnly,
+            chainId: filterBlockchain,
+            status: filterStatus,
+          }),
         })
         .then((response) => {
           setIsLoading(false);
@@ -212,9 +254,9 @@ export default function NftPage() {
               <div className="flex w-4/12 gap-1">
                 <div className="w-fit">
                   <button
-                    className={`flex items-center gap-1 rounded-full px-4 py-2 hover:bg-primary-300 ${
+                    className={`flex items-center gap-1 rounded-full px-4 py-2 lg:hover:bg-primary-300 ${
                       openFilter
-                        ? 'bg-primary-500'
+                        ? 'bg-primary-500 text-white'
                         : 'bg-white text-primary-500'
                     }`}
                     onClick={handleOpenFilter}
@@ -227,12 +269,12 @@ export default function NftPage() {
                 onSubmit={(event) => handleSearch(event)}
                 className="w-full"
               >
-                <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-gray-800">
+                <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-zinc-700">
                   <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
                     <FontAwesomeIcon icon={faSearch} />
                   </div>
                   <input
-                    className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                    className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                     type="text"
                     placeholder="Search ..."
                     aria-label="Search"
@@ -246,7 +288,7 @@ export default function NftPage() {
                   </div>
                 </div>
               </form>
-              <div className="hidden space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+              <div className="hidden space-x-1 rounded-full border border-gray-200 bg-white dark:border-zinc-500 dark:bg-zinc-700  px-1 py-1 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
                 <div>
                   <input
                     className="hidden"
@@ -283,7 +325,7 @@ export default function NftPage() {
           <div className="my-5 grid grid-cols-12 gap-6">
             {openFilter && (
               <div className="col-span-12 sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                <ul className="divide-y rounded-xl bg-white p-5 font-bold text-gray-900">
+                <ul className="divide-y rounded-xl bg-white p-5 font-bold text-gray-900 dark:bg-zinc-700 dark:text-white">
                   <li>
                     <button
                       className="action flex w-full cursor-pointer items-center justify-between py-3"
@@ -293,39 +335,41 @@ export default function NftPage() {
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
                     <div
-                      className={`target py-5 ${
-                        filterCollapse.blockchain ? 'block' : 'hidden'
+                      className={`gap-1 pb-5 ${
+                        filterCollapse.blockchain ? 'flex' : 'hidden'
                       }`}
                     >
-                      <select
-                        id="country"
-                        name="country"
-                        autoComplete="country-name"
-                        className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                      >
-                        <option>United States</option>
-                        <option>Canada</option>
-                        <option>Mexico</option>
-                      </select>
+                      {chains.length == 0 && (
+                        <>
+                          {[...Array(8)].map((nft, index) => (
+                            <div className="col-span-4 h-8 w-full animate-pulse rounded-xl bg-gray-300 px-3 py-1" />
+                          ))}
+                        </>
+                      )}
+                      {chains.length > 0 &&
+                        chains
+                          .filter(
+                            (filterChain) => filterChain.mode == 'mainnet',
+                          )
+                          .map((chain, index) => {
+                            return (
+                              <button
+                                onClick={() =>
+                                  filterBlockchain === chain.chainId
+                                    ? setFilterBlockchain('')
+                                    : setFilterBlockchain(chain.chainId)
+                                }
+                                className={`col-span-3 flex h-8 w-full min-w-[2rem] cursor-pointer items-center justify-center rounded-lg text-xs font-medium leading-5 text-white shadow ${
+                                  filterBlockchain === chain.chainId
+                                    ? 'bg-primary-300'
+                                    : 'bg-primary-500 lg:hover:bg-primary-300'
+                                }`}
+                              >
+                                {chain.symbol}
+                              </button>
+                            );
+                          })}
                     </div>
-                  </li>
-                  <li>
-                    <button
-                      className="action flex w-full cursor-pointer items-center justify-between py-3"
-                      onClick={(event) => handleFilterCollapse('category')}
-                    >
-                      <span>Category</span>
-                      <FontAwesomeIcon icon={faChevronDown} />
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      className="action flex w-full cursor-pointer items-center justify-between py-3"
-                      onClick={(event) => handleFilterCollapse('price')}
-                    >
-                      <span>Floor price</span>
-                      <FontAwesomeIcon icon={faChevronDown} />
-                    </button>
                   </li>
                   <li>
                     <button
@@ -335,24 +379,81 @@ export default function NftPage() {
                       <span>Status</span>
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
+                    <div
+                      className={`flex-wrap items-start gap-1 pb-5 ${
+                        filterCollapse.status ? 'flex' : 'hidden'
+                      }`}
+                    >
+                      <button
+                        onClick={() =>
+                          filterStatus === 'onauction'
+                            ? setFilterStatus('')
+                            : setFilterStatus('onauction')
+                        }
+                        className={`col-span-3 flex h-8 w-fit min-w-[2rem] cursor-pointer items-center justify-center rounded-lg px-3 text-xs font-medium leading-5 text-white shadow ${
+                          filterStatus === 'onauction'
+                            ? 'bg-primary-300'
+                            : 'bg-primary-500 lg:hover:bg-primary-300'
+                        }`}
+                      >
+                        On Auction
+                      </button>
+                      <button
+                        onClick={() =>
+                          filterStatus === 'listed'
+                            ? setFilterStatus('')
+                            : setFilterStatus('listed')
+                        }
+                        className={`col-span-3 flex h-8 w-fit min-w-[2rem] cursor-pointer items-center justify-center rounded-lg px-3 text-xs font-medium leading-5 text-white shadow ${
+                          filterStatus === 'listed'
+                            ? 'bg-primary-300'
+                            : 'bg-primary-500 lg:hover:bg-primary-300'
+                        }`}
+                      >
+                        Listed
+                      </button>
+                    </div>
                   </li>
                   <li>
                     <button
                       className="action flex w-full cursor-pointer items-center justify-between py-3"
-                      onClick={(event) => handleFilterCollapse('currency')}
+                      onClick={(event) => handleFilterCollapse('options')}
                     >
-                      <span>Currency</span>
+                      <span>Options</span>
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
-                  </li>
-                  <li>
-                    <button
-                      className="action flex w-full cursor-pointer items-center justify-between py-3"
-                      onClick={(event) => handleFilterCollapse('collection')}
+                    <div
+                      className={`flex-wrap items-start gap-1 pb-5 ${
+                        filterCollapse.options ? 'flex' : 'hidden'
+                      }`}
                     >
-                      <span>Collection</span>
-                      <FontAwesomeIcon icon={faChevronDown} />
-                    </button>
+                      <div className="relative flex w-full gap-x-3">
+                        <div className="flex h-6 items-center">
+                          <input
+                            onChange={() =>
+                              filterVerifiedOnly
+                                ? setFilterVerifiedOnly(false)
+                                : setFilterVerifiedOnly(true)
+                            }
+                            checked={filterVerifiedOnly}
+                            id="filterVerifiedOnly"
+                            name="filterVerifiedOnly"
+                            type="checkbox"
+                            className={`h-4 w-4 rounded border-gray-300 text-primary-500 focus:ring-primary-500 ${
+                              filterVerifiedOnly ? 'ring-primary-500' : ''
+                            }`}
+                          />
+                        </div>
+                        <div className="text-sm leading-6">
+                          <label
+                            htmlFor="filterVerifiedOnly"
+                            className="font-medium"
+                          >
+                            Verified only
+                          </label>
+                        </div>
+                      </div>
+                    </div>
                   </li>
                 </ul>
               </div>
@@ -505,7 +606,10 @@ const ItemsNft = ({
                           : ''}
                       </div>
                       <div className="text-xs font-black leading-none text-primary-500">
-                        <FontAwesomeIcon icon={faCircleCheck} />
+                        {nft.Collection?.User?.isVerified &&
+                          nft.Collection.User.isVerified && (
+                            <FontAwesomeIcon icon={faCircleCheck} />
+                          )}
                       </div>
                     </div>
                   </div>
@@ -678,12 +782,12 @@ const ItemsNftSkeleton = ({ gridList, openFilter }) => {
                 </div>
                 <div className="mb-5 mt-3 flex w-full justify-between py-2">
                   <div className="hidden shrink-0 truncate text-sm leading-5 sm:flex sm:flex-col sm:items-start">
-                    <div className="mt-2 h-3 w-24 animate-pulse rounded-full bg-gray-300" />
-                    <div className="mt-2 h-3 w-24 animate-pulse rounded-full bg-gray-300" />
+                    <div className="mt-2 h-3 w-20 animate-pulse rounded-full bg-gray-300" />
+                    <div className="mt-2 h-3 w-20 animate-pulse rounded-full bg-gray-300" />
                   </div>
                   <div className="hidden shrink-0 truncate text-sm leading-5 sm:flex sm:flex-col sm:items-start">
-                    <div className="mt-2 h-3 w-24 animate-pulse rounded-full bg-gray-300" />
-                    <div className="mt-2 h-3 w-24 animate-pulse rounded-full bg-gray-300" />
+                    <div className="mt-2 h-3 w-20 animate-pulse rounded-full bg-gray-300" />
+                    <div className="mt-2 h-3 w-20 animate-pulse rounded-full bg-gray-300" />
                   </div>
                 </div>
                 <div className="mt-5 flex w-full items-center">

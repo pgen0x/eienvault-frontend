@@ -88,7 +88,7 @@ const Sidebar = () => {
 
   const handleMyCollection = () => {
     closeSidebar();
-    router.push(`/profile/${address}?view=collection`); // Navigate to the profile page
+    router.push(`/profile?view=collection`); // Navigate to the profile page
   };
 
   const handleMyActivity = () => {

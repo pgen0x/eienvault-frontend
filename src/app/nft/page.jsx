@@ -347,7 +347,10 @@ export default function NftPage() {
                       {chains.length == 0 && (
                         <>
                           {[...Array(8)].map((nft, index) => (
-                            <div className="col-span-4 h-8 w-full animate-pulse rounded-xl bg-gray-300 px-3 py-1" />
+                            <div
+                              className="col-span-4 h-8 w-full animate-pulse rounded-xl bg-gray-300 px-3 py-1"
+                              key={index}
+                            />
                           ))}
                         </>
                       )}
@@ -359,6 +362,7 @@ export default function NftPage() {
                           .map((chain, index) => {
                             return (
                               <button
+                                key={index}
                                 onClick={() =>
                                   filterBlockchain === chain.chainId
                                     ? setFilterBlockchain('')

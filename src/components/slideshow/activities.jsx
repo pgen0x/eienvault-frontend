@@ -70,7 +70,6 @@ export const SlideshowActivities = ({ dataActivities }) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const [auctionData, setAcutionData] = useState({});
-  const [placeBidHash, setPlaceBidHash] = useState();
   const { address } = useAccount();
   const { data: walletClient } = useWalletClient();
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
@@ -173,7 +172,6 @@ export const SlideshowActivities = ({ dataActivities }) => {
         account: address,
         value: price,
       });
-      setPlaceBidHash(hash);
       return hash;
     } catch (error) {
       console.error('Error Make an Offer', error);
@@ -318,10 +316,10 @@ export const SlideshowActivities = ({ dataActivities }) => {
                   </Suspense>
                   <div className="inline-flex w-full flex-col items-center justify-center lg:items-start">
                     <div className="relative flex w-full flex-row px-5">
-                      <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-b-2xl bg-white/60 dark:bg-zinc-700/60 bg-opacity-30 p-3 backdrop-blur-xl">
+                      <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-b-2xl bg-white/60 bg-opacity-30 p-3 backdrop-blur-xl dark:bg-zinc-700/60">
                         <div className="flex w-full flex-col items-start justify-start">
                           <div className="inline-flex items-center justify-between self-stretch">
-                            <div className="flex items-center justify-center gap-2 bg-white dark:bg-zinc-600 bg-opacity-70 px-2 py-1 rounded-md">
+                            <div className="flex items-center justify-center gap-2 rounded-md bg-white bg-opacity-70 px-2 py-1 dark:bg-zinc-600">
                               <ImageWithFallback
                                 className="h-full w-full rounded-2xl "
                                 width={16}
@@ -386,7 +384,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
                               )}
                             </div>
                           </div>
-                          <div className="mt-5 flex w-full justify-between py-2 dark:bg-zinc-600 px-2 rounded-xl">
+                          <div className="mt-5 flex w-full justify-between rounded-xl px-2 py-2 dark:bg-zinc-600">
                             <div className="flex flex-col items-start truncate text-sm leading-5">
                               <p>Price</p>
                               <p className="font-bold">
@@ -492,7 +490,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
                                 `/nft/${nft.collectionData.tokenAddress}/${nft.nftDetails?.tokenId}`,
                               )
                             }
-                            className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center text-primary-500 dark:text-white opacity-0 ease-in-out dark:bg-zinc-600 dark:hover:bg-zinc-500 font-bold hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all"
+                            className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center font-bold text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all dark:bg-zinc-600 dark:text-white dark:hover:bg-zinc-500"
                           >
                             View Detail
                           </button>

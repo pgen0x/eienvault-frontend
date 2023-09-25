@@ -209,7 +209,6 @@ export default function NFTDetails({ dataNFTs }) {
         account: address,
         value: price,
       });
-      setPlaceBidHash(hash);
       return hash;
     } catch (error) {
       console.error('Error Make an Offer', error);
@@ -225,7 +224,6 @@ export default function NFTDetails({ dataNFTs }) {
         account: address,
         value: price,
       });
-      setPlaceBidHash(hash);
       return hash;
     } catch (error) {
       console.error('Error Make an Offer', error);
@@ -350,6 +348,7 @@ export default function NFTDetails({ dataNFTs }) {
                     placeholder="blur"
                     blurDataURL={dataNFTs?.imageUri}
                     src={dataNFTs?.imageUri}
+                    alt={dataNFTs?.name || dataNFTs?.collectionAddress}
                   />
                 ) : (
                   <div className="flex h-[600px] w-full  flex-col justify-end rounded-2xl bg-gray-300">

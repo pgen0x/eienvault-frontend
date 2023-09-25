@@ -38,6 +38,7 @@ import ModalBuy from '@/components/modal/buy';
 import HelaIcon from '@/assets/icon/hela';
 import { useAccount, useNetwork } from 'wagmi';
 import ModalPutOnSale from '@/components/modal/putOnSale';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 
 const servers = [
   'All Mainnet',
@@ -260,7 +261,7 @@ export default function CollectionDetail({ params }) {
                   )}
                 </div>
                 <div className="col-span-12 flex h-fit justify-end sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
-                  <div className="flex w-96 flex-col gap-2 rounded-lg border-2 border-gray-200 bg-white p-5 text-sm text-gray-900 dark:bg-zinc-700 dark:border-zinc-500 dark:text-white">
+                  <div className="flex w-96 flex-col gap-2 rounded-lg border-2 border-gray-200 bg-white p-5 text-sm text-gray-900 dark:border-zinc-500 dark:bg-zinc-700 dark:text-white">
                     <div className="flex justify-between">
                       <span className="font-semibold">Floor</span>
                       <span>
@@ -281,7 +282,7 @@ export default function CollectionDetail({ params }) {
                       <span className="font-semibold">Items</span>
                       <span>0</span>
                     </div>
-                    <div className="flex justify-between border-b-2 dark:border-zinc-500 pb-2">
+                    <div className="flex justify-between border-b-2 pb-2 dark:border-zinc-500">
                       <span className="font-semibold">Owner</span>
                       <span>0</span>
                     </div>
@@ -610,7 +611,6 @@ const Items = ({ params, collection }) => {
         account: address,
         value: price,
       });
-      setPlaceBidHash(hash);
       return hash;
     } catch (error) {
       console.error('Error Make an Offer', error);
@@ -626,7 +626,6 @@ const Items = ({ params, collection }) => {
         account: address,
         value: price,
       });
-      setPlaceBidHash(hash);
       return hash;
     } catch (error) {
       console.error('Error Make an Offer', error);
@@ -729,7 +728,7 @@ const Items = ({ params, collection }) => {
                 </div>
               </Listbox>
             </form>
-            <div className="hidden space-x-1 rounded-full border border-gray-200 bg-white px-1 items-center dark:border-zinc-500 dark:bg-zinc-700 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+            <div className="hidden items-center space-x-1 rounded-full border border-gray-200 bg-white px-1 dark:border-zinc-500 dark:bg-zinc-700 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
               <div>
                 <input
                   className="hidden"
@@ -951,7 +950,7 @@ const Items = ({ params, collection }) => {
                                     )}
                                   </div>
                                 </div>
-                                <div className="mt-5 flex w-full justify-between rounded-md bg-white dark:bg-zinc-600 dark:text-white px-2 py-2">
+                                <div className="mt-5 flex w-full justify-between rounded-md bg-white px-2 py-2 dark:bg-zinc-600 dark:text-white">
                                   <div className="flex flex-col items-start truncate text-sm leading-5">
                                     <p>Price</p>
                                     <p className="font-bold">
@@ -1091,7 +1090,7 @@ const Items = ({ params, collection }) => {
                                       `/nft/${nft.collectionAddress}/${nft.tokenId}`,
                                     )
                                   }
-                                  className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full font-bold bg-white dark:text-white dark:bg-zinc-600 dark:hover:bg-zinc-500 text-center text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all"
+                                  className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white text-center font-bold text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all dark:bg-zinc-600 dark:text-white dark:hover:bg-zinc-500"
                                 >
                                   View Detail
                                 </button>

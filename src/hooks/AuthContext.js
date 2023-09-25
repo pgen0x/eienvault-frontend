@@ -17,7 +17,6 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    console.log(isConnected, 'isConnected');
     if (isConnected) {
       handleLogin();
     }
@@ -74,7 +73,6 @@ export function AuthProvider({ children }) {
       }
 
       const data = await response.json();
-      console.log('data', data);
       setDataUser(data);
     } catch (error) {
       console.error('Get data failed:', error.message);

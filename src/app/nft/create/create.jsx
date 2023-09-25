@@ -1143,6 +1143,7 @@ export default function Create({ chains }) {
                             height={56}
                             width={56}
                             className="rounded-full"
+                            alt={collection.name}
                           />
                           <span>
                             {collection.name}

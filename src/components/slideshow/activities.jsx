@@ -367,15 +367,12 @@ export const SlideshowActivities = ({ dataActivities }) => {
                               className="text-xl2 cursor-pointer font-medium leading-tight text-gray-600 dark:text-white"
                               onClick={() =>
                                 router.push(
-                                  `/nft/${nft.collectionData.tokenAddress}/${nft.nftDetails?.tokenId}`,
+                                  `/nft/${nft.collectionData.tokenAddress}/${nft.tokenId}`,
                                 )
                               }
                             >
                               {nft.nftDetails?.name ? nft.nftDetails?.name : ''}{' '}
-                              #
-                              {nft.nftDetails?.tokenId
-                                ? nft.nftDetails?.tokenId
-                                : ''}
+                              #{nft.tokenId ? nft.tokenId : ''}
                             </div>
                             <div className="text-sm font-normal leading-tight text-neutral-700">
                               {(nft.collectionData?.chainId === 666888 ||
@@ -460,7 +457,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
                                     nft.marketId,
                                     nft.listingPrice,
                                     nft.nftDetails?.imageUri,
-                                    nft.nftDetails?.tokenId,
+                                    nft.tokenId,
                                     nft.price,
                                     nft.nftDetails?.name,
                                     nft.collectionData,
@@ -487,7 +484,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
                           <button
                             onClick={() =>
                               router.push(
-                                `/nft/${nft.collectionData.tokenAddress}/${nft.nftDetails?.tokenId}`,
+                                `/nft/${nft.collectionData.tokenAddress}/${nft.tokenId}`,
                               )
                             }
                             className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center font-bold text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all dark:bg-zinc-600 dark:text-white dark:hover:bg-zinc-500"

@@ -248,10 +248,7 @@ export const TrendingTop = ({ dataCollections }) => {
                     <div className="flex w-full gap-2">
                       <p className="w-full">Floor</p>
                       <p className="w-full">
-                        $
-                        {Number(
-                          formatEther(Number(collection?.floorPrice)),
-                        ).toFixed(2)}
+                        ${formatEther(Number(collection?.floorPrice))}
                       </p>
                       <p
                         className={classFloor(
@@ -264,10 +261,7 @@ export const TrendingTop = ({ dataCollections }) => {
                     <div className="flex w-full gap-2">
                       <span className="w-full">Volume</span>
                       <p className="w-full">
-                        $
-                        {Number(
-                          formatEther(Number(collection?.volume)),
-                        ).toFixed(2)}
+                        ${formatEther(Number(collection?.volume))}
                       </p>
                       <p
                         className={classMovement(

@@ -1,5 +1,5 @@
 export const marketplaceABI = {
-  address: '0xeD3788084E4D20c32ed4EdC6d1871E3ed1d87506',
+  address: '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc',
   abi: [
     {
       inputs: [
@@ -184,6 +184,12 @@ export const marketplaceABI = {
           name: 'Buyer',
           type: 'address',
         },
+        {
+          indexed: false,
+          internalType: 'address',
+          name: 'PaidWith',
+          type: 'address',
+        },
       ],
       name: 'ItemSold',
       type: 'event',
@@ -221,6 +227,18 @@ export const marketplaceABI = {
           name: 'OfferedBy',
           type: 'address',
         },
+        {
+          indexed: false,
+          internalType: 'uint256',
+          name: 'Offer',
+          type: 'uint256',
+        },
+        {
+          indexed: false,
+          internalType: 'address',
+          name: 'PaidWith',
+          type: 'address',
+        },
       ],
       name: 'NewOffer',
       type: 'event',
@@ -256,6 +274,18 @@ export const marketplaceABI = {
           indexed: false,
           internalType: 'address',
           name: 'OfferedBy',
+          type: 'address',
+        },
+        {
+          indexed: false,
+          internalType: 'uint256',
+          name: 'Price',
+          type: 'uint256',
+        },
+        {
+          indexed: false,
+          internalType: 'address',
+          name: 'PaidWith',
           type: 'address',
         },
       ],

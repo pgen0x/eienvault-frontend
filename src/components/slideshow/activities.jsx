@@ -30,6 +30,8 @@ import HelaIcon from '@/assets/icon/hela';
 import { ImageWithFallback } from '../imagewithfallback';
 import ModalBuy from '../modal/buy';
 import moment from 'moment';
+import { NftItemDetail } from '../nft/itemDetail';
+import ModalPutOnSale from '../modal/putOnSale';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
@@ -67,13 +69,16 @@ const sliderBreakPoints = {
 export const SlideshowActivities = ({ dataActivities }) => {
   const router = useRouter();
   const [nfts, setNfts] = useState([]);
-  const [isOpenModal, setIsOpenModal] = useState(false);
-
-  const [auctionData, setAcutionData] = useState({});
   const { address } = useAccount();
   const { data: walletClient } = useWalletClient();
-  const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
+  
+  const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
+  const [putOnSaleData, setPutonsaleData] = useState({});
+
+  const [isOpenModalBid, setisOpenModalBid] = useState(false);
+  const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
+  const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
 
   useEffect(() => {
     getNfts();
@@ -92,6 +97,27 @@ export const SlideshowActivities = ({ dataActivities }) => {
       .catch((error) => {
         toast.error(JSON.stringify(error));
       });
+  };
+
+  const handleOpenModalBuy = async (
+    marketId,
+    price,
+    imageUri,
+    name,
+    tokenId,
+    ChainSymbol,
+    ChainName,
+  ) => {
+    setBuyData({
+      marketId,
+      price,
+      imageUri,
+      name,
+      tokenId,
+      ChainSymbol,
+      ChainName,
+    });
+    setisOpenModalBuy(true);
   };
 
   const handleOpenModalBid = async (
@@ -116,51 +142,27 @@ export const SlideshowActivities = ({ dataActivities }) => {
       highestBid,
       lowestBid,
     });
-    setIsOpenModal(true);
+    setisOpenModalBid(true);
   };
 
-  function closeModal() {
-    setIsOpenModal(false);
+  const handleOpenModalPutonsale = async (tokenId, collectionAddress) => {
+    setPutonsaleData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalPutonsale(true);
+  };
+
+  function closeModalBid() {
+    setisOpenModalBid(false);
   }
 
-  function getHighestBid(auctionData) {
-    if (!auctionData.listOffers || auctionData.listOffers.length === 0) {
-      return { message: 'No bids', highestBid: '0.00', highestBidder: null }; // Return a message if there are no bids or if listOffers is null/undefined
-    }
-
-    let highestBid = BigInt(0);
-    let highestBidder = null;
-
-    for (const offer of auctionData.listOffers) {
-      const bidValue = BigInt(offer.value); // Convert the value to a BigInt for precision
-      if (bidValue > highestBid) {
-        highestBid = bidValue;
-        highestBidder = offer.address;
-      }
-    }
-
-    return {
-      message: 'Highest bid found',
-      highestBid: highestBid.toString(),
-      highestBidder,
-    };
+  function closeModalBuy() {
+    setisOpenModalBuy(false);
   }
 
-  function getLowestBid(auctionData) {
-    if (auctionData.listOffers.length === 0) {
-      return 0; // Return a message if there are no bids
-    }
-
-    let lowestBid = Infinity; // Initialize to a large number
-
-    for (const offer of auctionData.listOffers) {
-      const bidValue = BigInt(offer.value); // Convert the value to a BigInt for precision
-      if (bidValue < lowestBid) {
-        lowestBid = bidValue;
-      }
-    }
-
-    return lowestBid.toString(); // Convert the lowestBid back to a string
+  function closeModalPutonsale() {
+    setisOpenModalPutonsale(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -178,50 +180,6 @@ export const SlideshowActivities = ({ dataActivities }) => {
     }
   };
 
-  function getHighestBid(data) {
-    if (!data.listOffers || data.listOffers.length === 0) {
-      return { message: 'No bids', highestBid: '0', highestBidder: null }; // Return a message if there are no bids or if listOffers is null/undefined
-    }
-
-    let highestBid = BigInt(0);
-    let highestBidder = null;
-
-    for (const offer of data.listOffers) {
-      const bidValue = BigInt(offer.value); // Convert the value to a BigInt for precision
-      if (bidValue > highestBid) {
-        highestBid = bidValue;
-        highestBidder = offer.address;
-      }
-    }
-
-    return {
-      message: 'Highest bid found',
-      highestBid: highestBid.toString(),
-      highestBidder,
-    };
-  }
-
-  const handleOpenModalBuy = async (
-    marketId,
-    price,
-    imageUri,
-    name,
-    tokenId,
-    ChainSymbol,
-    ChainName,
-  ) => {
-    setBuyData({
-      marketId,
-      price,
-      imageUri,
-      name,
-      tokenId,
-      ChainSymbol,
-      ChainName,
-    });
-    setisOpenModalBuy(true);
-  };
-
   const buyAction = async (marketId, price) => {
     try {
       const hash = await walletClient.writeContract({
@@ -231,16 +189,11 @@ export const SlideshowActivities = ({ dataActivities }) => {
         account: address,
         value: price,
       });
-
       return hash;
     } catch (error) {
       console.error('Error Make an Offer', error);
     }
   };
-
-  function closeModalBuy() {
-    setisOpenModalBuy(false);
-  }
 
   let slidesPerView = 1;
   if (dataActivities.length >= 4) {
@@ -289,216 +242,16 @@ export const SlideshowActivities = ({ dataActivities }) => {
 
             return (
               <SwiperSlide key={index}>
-                <div className="group h-[494px] w-full p-3">
-                  <Suspense
-                    fallback={
-                      <div className="h-[250px] w-full animate-pulse rounded-2xl bg-gray-300" />
-                    }
-                  >
-                    <Image
-                      className="z-10 h-[250px] w-full rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[210px] group-hover:transition-all"
-                      src={
-                        nft.nftDetails?.imageUri
-                          ? nft.nftDetails?.imageUri
-                          : 'https://placehold.co/325x265.png'
-                      }
-                      blurDataURL={
-                        nft.nftDetails?.imageUri
-                          ? nft.nftDetails?.imageUri
-                          : 'https://placehold.co/325x265.png'
-                      }
-                      alt={nft.nftDetails?.name ? nft.nftDetails?.name : ''}
-                      width={325}
-                      height={265}
-                      placeholder="blur"
-                      objectFit="cover"
-                    />
-                  </Suspense>
-                  <div className="inline-flex w-full flex-col items-center justify-center lg:items-start">
-                    <div className="relative flex w-full flex-row px-5">
-                      <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-b-2xl bg-white/60 bg-opacity-30 p-3 backdrop-blur-xl dark:bg-zinc-700/60">
-                        <div className="flex w-full flex-col items-start justify-start">
-                          <div className="inline-flex items-center justify-between self-stretch">
-                            <div className="flex items-center justify-center gap-2 rounded-md bg-white bg-opacity-70 px-2 py-1 dark:bg-zinc-600">
-                              <ImageWithFallback
-                                className="h-full w-full rounded-2xl "
-                                width={16}
-                                height={16}
-                                alt={
-                                  nft.collectionData.name
-                                    ? nft.collectionData.name
-                                    : nft.collectionData.tokenAddress
-                                    ? nft.collectionData.tokenAddress
-                                    : ''
-                                }
-                                diameter={16}
-                                address={nft.collectionData?.tokenAddress}
-                                src={`/uploads/collections/${nft.collectionData.logo}`}
-                              />
-
-                              <div className="flex items-start justify-start gap-2">
-                                <div
-                                  className="cursor-pointer text-xs font-medium leading-none text-neutral-700 dark:text-white"
-                                  onClick={() =>
-                                    router.push(
-                                      `/collection/${nft.collectionData.tokenAddress}`,
-                                    )
-                                  }
-                                >
-                                  {nft.collectionData.name
-                                    ? nft.collectionData.name
-                                    : nft.collectionData.tokenAddress
-                                    ? nft.collectionData.tokenAddress
-                                    : ''}
-                                </div>
-                                <div className="text-xs font-black leading-none text-primary-500">
-                                  {nft.collectionData.User.isVerified && (
-                                    <FontAwesomeIcon icon={faCircleCheck} />
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                            {/* <div className="items-center">
-                            <FontAwesomeIcon icon={faEllipsis} />
-                          </div> */}
-                          </div>
-                          <div className="inline-flex w-full items-center justify-between gap-2 pt-2">
-                            <div
-                              className="text-xl2 cursor-pointer font-medium leading-tight text-gray-600 dark:text-white"
-                              onClick={() =>
-                                router.push(
-                                  `/nft/${nft.collectionData.tokenAddress}/${nft.nftDetails?.tokenId}`,
-                                )
-                              }
-                            >
-                              {nft.nftDetails?.name ? nft.nftDetails?.name : ''}{' '}
-                              #
-                              {nft.nftDetails?.tokenId
-                                ? nft.nftDetails?.tokenId
-                                : ''}
-                            </div>
-                            <div className="text-sm font-normal leading-tight text-neutral-700">
-                              {(nft.collectionData?.chainId === 666888 ||
-                                nft.collectionData?.chainId === 8668) && (
-                                <HelaIcon className="h-5 w-5" />
-                              )}
-                            </div>
-                          </div>
-                          <div className="mt-5 flex w-full justify-between rounded-xl px-2 py-2 dark:bg-zinc-600">
-                            <div className="flex flex-col items-start truncate text-sm leading-5">
-                              <p>Price</p>
-                              <p className="font-bold">
-                                {nft.price
-                                  ? formatEther(Number(nft.price))
-                                  : '0.00'}{' '}
-                                {nft.collectionData.Chain.symbol
-                                  ? nft.collectionData.Chain.symbol
-                                  : '-'}
-                              </p>
-                            </div>
-                            <div className="flex flex-col items-start truncate text-sm leading-5">
-                              {nft.isAuctioned ? (
-                                <>
-                                  <p>Highest bid</p>
-                                  <p className="font-bold">
-                                    {formatEther(
-                                      Number(getHighestBid(nft).highestBid),
-                                    )}{' '}
-                                    {nft.collectionData.Chain.symbol
-                                      ? nft.collectionData.Chain.symbol
-                                      : '-'}
-                                  </p>
-                                </>
-                              ) : (
-                                <>
-                                  <p>Floor Price</p>
-                                  <p className="font-bold">
-                                    {nft.collectionData.floorPrice
-                                      ? formatEther(
-                                          Number(nft.collectionData.floorPrice),
-                                        )
-                                      : '0.00'}{' '}
-                                    {nft.collectionData.Chain.symbol
-                                      ? nft.collectionData.Chain.symbol
-                                      : '-'}
-                                  </p>
-                                </>
-                              )}
-                            </div>
-                          </div>
-                          {!nft.isAuctioned && (
-                            <div className="mt-5 flex w-full items-center">
-                              {/* <FontAwesomeIcon
-                              className="mr-5 h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 "
-                              icon={faCartPlus}
-                            /> */}
-                              <button
-                                className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
-                                onClick={() =>
-                                  handleOpenModalBuy(
-                                    nft?.marketId,
-                                    nft?.price,
-                                    nft?.nftDetails?.imageUri,
-                                    nft?.nftDetails?.name,
-                                    nft?.nftDetails?.tokenId,
-                                    nft.collectionData.Chain.symbol,
-                                    nft.collectionData.Chain.name,
-                                  )
-                                }
-                                disabled={!isNotExpired}
-                              >
-                                {isNotExpired ? 'Buy Now' : 'Expired'}
-                              </button>
-                            </div>
-                          )}
-                          {nft.isAuctioned && (
-                            <div className="mt-5 flex w-full items-center">
-                              <button
-                                className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
-                                onClick={() =>
-                                  handleOpenModalBid(
-                                    nft.marketId,
-                                    nft.listingPrice,
-                                    nft.nftDetails?.imageUri,
-                                    nft.nftDetails?.tokenId,
-                                    nft.price,
-                                    nft.nftDetails?.name,
-                                    nft.collectionData,
-                                    getHighestBid(nft),
-                                    formatEther(getLowestBid(nft)),
-                                  )
-                                }
-                                disabled={
-                                  isNotRelease
-                                    ? true
-                                    : isNotExpired
-                                    ? false
-                                    : true
-                                }
-                              >
-                                {isNotRelease
-                                  ? 'Upcoming'
-                                  : isNotExpired
-                                  ? 'Place Bid'
-                                  : 'Expired'}
-                              </button>
-                            </div>
-                          )}
-                          <button
-                            onClick={() =>
-                              router.push(
-                                `/nft/${nft.collectionData.tokenAddress}/${nft.nftDetails?.tokenId}`,
-                              )
-                            }
-                            className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center font-bold text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all dark:bg-zinc-600 dark:text-white dark:hover:bg-zinc-500"
-                          >
-                            View Detail
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <NftItemDetail
+                  key={index}
+                  nft={nft.nftDetails}
+                  collection={nft.Collection}
+                  handleOpenModalBuy={handleOpenModalBuy}
+                  handleOpenModalBid={handleOpenModalBid}
+                  handleOpenModalPutonsale={handleOpenModalPutonsale}
+                  isNotExpired={isNotExpired}
+                  isNotRelease={isNotRelease}
+                />
               </SwiperSlide>
             );
           })}
@@ -514,11 +267,17 @@ export const SlideshowActivities = ({ dataActivities }) => {
         onModalClose={closeModalBuy}
       />
       <ModalBid
-        isOpenModal={isOpenModal}
-        onClose={closeModal}
+        isOpenModal={isOpenModalBid}
+        onClose={closeModalBid}
         auction={auctionData}
         placeBid={placeBid}
-        onModalClose={closeModal}
+        onModalClose={closeModalBid}
+      />
+      <ModalPutOnSale
+        isOpenModal={isOpenModalPutonsale}
+        onClose={closeModalPutonsale}
+        onModalClose={closeModalPutonsale}
+        putonsaledata={putOnSaleData}
       />
     </>
   );

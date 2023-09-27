@@ -133,25 +133,6 @@ export default function ProfilePage({ params }) {
     };
   }, []);
 
-  useEffect(() => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-
-    listCollections.map((collection) => {
-      if (urlParams.get(collection.slug.toLowerCase()) === '') {
-        setActivePage(collection.name);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    listCollections.map((collection) => {
-      if (collection.name === activePage) {
-        setRenderPage(collection.page);
-      }
-    });
-  }, [activePage]);
-
   const handleChangePage = (collection) => {
     setActivePage(collection.name);
     router.push(`?${collection.slug.toLowerCase()}`);
@@ -296,6 +277,25 @@ export default function ProfilePage({ params }) {
       page: <Liked useAccount={params?.slug ? params.slug : address} />,
     },
   ];
+
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    listCollections.map((collection) => {
+      if (urlParams.get(collection.slug.toLowerCase()) === '') {
+        setActivePage(collection.name);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    listCollections.map((collection) => {
+      if (collection.name === activePage) {
+        setRenderPage(collection.page);
+      }
+    });
+  }, [activePage]);
 
   return (
     <>
@@ -1647,13 +1647,14 @@ const Onsale = ({ useAccount }) => {
       .request({
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbyowner/${useAccount}?query=${search}&page=${nftPage}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/itemsbyuseraddress/${useAccount}`,
         // url: `http://192.168.1.8/labs/dummy-data/collections.php?page=${nftPage}`,
       })
       .then((response) => {
         setIsLoading(false);
-        if (response.data.nfts.length > 0) {
-          setNfts((oldNfts) => [...oldNfts, ...response.data.nfts]);
+        if (response.data.length > 0) {
+          setNfts((oldNfts) => [...oldNfts, ...response.data]);
+          setNftLast(true);
         } else {
           setNftLast(true);
         }
@@ -1945,8 +1946,8 @@ const Onsale = ({ useAccount }) => {
                   return (
                     <NftItemDetail
                       key={index}
-                      nft={nft}
-                      collection={nft.Collection}
+                      nft={nft.nftDetails}
+                      collection={nft.collectionData}
                       gridList={gridList}
                       openFilter={openFilter}
                       isNotExpired={isNotExpired}
@@ -2018,13 +2019,14 @@ const Sold = ({ useAccount }) => {
       .request({
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/itemsoldbyuseraddress/${useAccount}?query=${search}&page=${nftPage}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/itemsoldbyuseraddress/${useAccount}`,
         // url: `http://192.168.1.8/labs/dummy-data/collections.php?page=${nftPage}`,
       })
       .then((response) => {
         setIsLoading(false);
         if (response.data.length > 0) {
           setNfts((oldNfts) => [...oldNfts, ...response.data]);
+          setNftLast(true);
         } else {
           setNftLast(true);
         }
@@ -2403,13 +2405,14 @@ const Liked = ({ useAccount, handleOpenModalBuy, handleOpenModalBid, handleOpenM
       .request({
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/user/getlikes/${useAccount}?query=${search}&page=${nftPage}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/user/getlikes/${useAccount}`,
         // url: `http://192.168.1.8/labs/dummy-data/collections.php?page=${nftPage}`,
       })
       .then((response) => {
         setIsLoading(false);
         if (response.data.length > 0) {
           setNfts((oldNfts) => [...oldNfts, ...response.data]);
+          setNftLast(true);
         } else {
           setNftLast(true);
         }

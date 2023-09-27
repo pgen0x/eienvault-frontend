@@ -40,6 +40,7 @@ import { useAccount, useNetwork } from 'wagmi';
 import ModalPutOnSale from '@/components/modal/putOnSale';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { NftItemDetail, NftItemDetailSkeleton } from '@/components/nft/itemDetail';
+import ModaluploadCover from '@/components/modal/uploadCover';
 
 const servers = [
   'All Mainnet',
@@ -86,7 +87,8 @@ export default function CollectionDetail({ params }) {
   const [showDescription, setShowDescription] = useState(false);
   const [collectionChain, setCollectionChain] = useState({});
   const [activeTab, setActiveTab] = useState('items');
-
+  const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
+  const { address, isConnected } = useAccount();
   useEffect(() => {
     getCollection();
   }, []);
@@ -158,14 +160,22 @@ export default function CollectionDetail({ params }) {
     return listTabs[activeTab];
   };
 
+  const editBanner = () => {
+    setIsOpenModalCover(true);
+  };
+
+  const closeModal = () => {
+    setIsOpenModalCover(false);
+  };
+
   return (
     <>
       <section>
-        <div className="w-full">
+        <div className="group relative w-full">
           <Image
             src={
-              collection.banner
-                ? `/uploads/collections/${collection.banner}`
+              collection.bannerImage
+                ? `/uploads/collections/banner/${collection.bannerImage}`
                 : 'https://placehold.co/1920x266.png'
             }
             alt={collection.name ? collection.name : ''}
@@ -174,6 +184,16 @@ export default function CollectionDetail({ params }) {
             objectFit="cover"
             className="h-[266px] object-cover"
           />
+
+          {address === collection.userAddress && (
+            <button
+              onClick={editBanner}
+              className="absolute right-0 top-0 m-4 rounded-full bg-primary-500 px-4 py-2 opacity-0 hover:bg-primary-300 group-hover:opacity-100"
+            >
+              <FontAwesomeIcon className="mr-2" icon={faPenToSquare} />
+              Edit Cover
+            </button>
+          )}
         </div>
       </section>
       <div className="container m-auto p-3">
@@ -282,7 +302,7 @@ export default function CollectionDetail({ params }) {
                     </div>
                     <div className="flex justify-between">
                       <span className="font-semibold">Items</span>
-                      <span>0</span>
+                      <span>{collection.length || 0}</span>
                     </div>
                     <div className="flex justify-between border-b-2 pb-2 dark:border-zinc-500">
                       <span className="font-semibold">Owner</span>
@@ -333,6 +353,11 @@ export default function CollectionDetail({ params }) {
         </section>
         {renderActiveTab()}
       </div>
+      <ModaluploadCover
+        isOpenModal={IsOpenModalCover}
+        onModalClose={closeModal}
+        address={collection?.tokenAddress}
+      />
       <Footer />
     </>
   );

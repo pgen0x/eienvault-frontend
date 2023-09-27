@@ -227,7 +227,11 @@ export default function ModalBid({
                       </div>
                       <div className="flex flex-col justify-between gap-1 rounded-lg bg-gray-50 p-3">
                         <div className="flex justify-between">
-                          <span>Floor price</span>
+                          <span>
+                            {auction.lowestBid !== '0'
+                              ? 'Lowest Bid'
+                              : 'Floor price'}
+                          </span>
                           <span className="font-semibold">
                             {auction.lowestBid !== '0'
                               ? auction.lowestBid

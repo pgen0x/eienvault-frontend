@@ -67,7 +67,7 @@ export default function NFTDetails({ dataNFTs }) {
   const [countLikes, setCountLikes] = useState(dataNFTs?.likeCount);
   const [dataRelatedNFTs, setDataRelatedNFTs] = useState([]);
   const [isLoadingRelatedNFTs, setIsLoadingRelatedNFTs] = useState(true);
-  const [activeTab, setActiveTab] = useState('collateral');
+  const [activeTab, setActiveTab] = useState('overview');
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
   const [putOnSaleData, setPutonsaleData] = useState({});
@@ -88,7 +88,7 @@ export default function NFTDetails({ dataNFTs }) {
       overview: <Overview dataNFTs={dataNFTs} />,
       bids: <Bids dataBid={dataNFTs} />,
       history: <History dataNFTs={dataNFTs} />,
-      collateral: <Collateral dataNFTs={dataNFTs} />,
+      // collateral: <Collateral dataNFTs={dataNFTs} />,
     };
 
     return listTabs[activeTab];
@@ -429,7 +429,7 @@ export default function NFTDetails({ dataNFTs }) {
                     >
                       History
                     </li>
-                    <li
+                    {/* <li
                       className={`cursor-pointer px-5 pb-3 ${
                         activeTab == 'collateral'
                           ? 'border-b-4 border-primary-500'
@@ -438,7 +438,7 @@ export default function NFTDetails({ dataNFTs }) {
                       onClick={() => setActiveTab('collateral')}
                     >
                       Collateral
-                    </li>
+                    </li> */}
                   </ul>
                   <div className="flex w-full flex-col gap-4 rounded-lg bg-white/70 p-5 text-gray-900">
                     {renderActiveTab()}
@@ -899,7 +899,7 @@ export default function NFTDetails({ dataNFTs }) {
                   View collection
                 </button>
               </div>
-              <div className="relative flex w-full flex-initial items-center justify-center">
+              <div className="relative w-full flex-initial items-center justify-center">
                 {isLoadingRelatedNFTs || dataRelatedNFTs.length <= 0 ? (
                   <RelatedNFTsSkeleton />
                 ) : (
@@ -1272,7 +1272,7 @@ const Bids = ({ dataBid }) => {
         >
           <div className="flex shrink grow basis-0 items-center justify-between text-center text-base font-bold leading-loose">
             <div className="inline-flex h-14 w-1/2 cursor-pointer items-center justify-center">
-              <div className="text-md inline-flex shrink grow basis-0 flex-col font-medium leading-loose">
+              <div className="text-md inline-flex shrink grow basis-0 flex-row gap-3 font-medium leading-loose">
                 <div className="h-12 w-12 rounded-full bg-gray-300">
                   <ImageWithFallback
                     className="h-full w-full rounded-2xl "
@@ -1287,9 +1287,7 @@ const Bids = ({ dataBid }) => {
                     src={`/uploads/user/${offer?.userDetails?.logo}`}
                   />
                 </div>
-              </div>
-              <div className="text-md flex shrink grow basis-0 flex-col font-medium leading-loose">
-                <div className="justify-start">
+                <div className="inline-flex items-center justify-center">
                   {offer?.userDetails?.username ||
                     truncateAddress(offer?.userDetails?.walletAddress)}
                 </div>

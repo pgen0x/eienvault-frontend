@@ -2,13 +2,7 @@ import { writeFile } from 'fs/promises';
 import { NextResponse } from 'next/server';
 
 // Define allowed file types and maximum file size (100MB)
-const allowedFileTypes = [
-  'image/png',
-  'image/webp',
-  'image/jpeg',
-  'video/mp4',
-  'audio/mp3',
-];
+const allowedFileTypes = ['image/png', 'image/webp', 'image/jpeg', 'image/jpg'];
 const maxFileSize = 100 * 1024 * 1024; // 100MB in bytes
 
 export async function POST(request) {
@@ -40,7 +34,7 @@ export async function POST(request) {
   const buffer = Buffer.from(bytes);
   const newFileNameBase64 = Buffer.from(fileName).toString('base64');
 
-  const path = `./public/uploads/collections/${newFileNameBase64}.${fileExtension}`;
+  const path = `./public/uploads/collections/banner/${newFileNameBase64}.${fileExtension}`;
   await writeFile(path, buffer);
 
   return NextResponse.json({

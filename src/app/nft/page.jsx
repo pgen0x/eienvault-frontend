@@ -579,20 +579,8 @@ export default function NftPage() {
                   nfts.map((nft, index) => {
                     const currentDate = moment();
                     console.log(nft.itemDetails);
-                    const endDate = moment.unix(
-                      nft.itemDetails?.endDate
-                        ? nft.itemDetails.endDate
-                        : nft.itemDetails[0]?.endDate
-                        ? nft.itemDetails[0].endDate
-                        : undefined,
-                    );
-                    const releaseDate = moment.unix(
-                      nft.itemDetails?.releaseDate
-                        ? nft.itemDetails.releaseDate
-                        : nft.itemDetails[0]?.releaseDate
-                        ? nft.itemDetails[0].releaseDate
-                        : undefined,
-                    );
+                    const endDate = moment.unix(nft.itemDetails?.endDate);
+                    const releaseDate = moment.unix(nft.itemDetails?.releaseDate);
                     const isNotExpired = endDate.isAfter(currentDate);
                     const isNotRelease = currentDate.isBefore(releaseDate);
                     return (

@@ -39,6 +39,7 @@ import HelaIcon from '@/assets/icon/hela';
 import { useAccount, useNetwork } from 'wagmi';
 import ModalPutOnSale from '@/components/modal/putOnSale';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { NftItemDetail, NftItemDetailSkeleton } from '@/components/nft/itemDetail';
 
 const servers = [
   'All Mainnet',
@@ -112,7 +113,6 @@ export default function CollectionDetail({ params }) {
       })
       .then((response) => {
         setCollection(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         toast.error(error.message);
@@ -274,7 +274,9 @@ export default function CollectionDetail({ params }) {
                     <div className="flex justify-between">
                       <span className="font-semibold">Volumes</span>
                       <span>
-                        {collection.volume ? collection.volume : '0.00'}{' '}
+                        {collection.volume
+                          ? formatEther(Number(collection.volume))
+                          : '0.00'}{' '}
                         {collectionChain.symbol ? collectionChain.symbol : '-'}
                       </span>
                     </div>
@@ -365,10 +367,7 @@ const Items = ({ params, collection }) => {
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
 
-  const [selectedChain, setSelectedChain] = useState({
-    chainId: chain?.id || 666888,
-    symbol: chain?.nativeCurrency.symbol || 'HLUSD',
-  });
+  const [isLoading, setIsLoading] = useState(false);
   const handleFilterCollapse = (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
   };
@@ -399,61 +398,41 @@ const Items = ({ params, collection }) => {
 
   const getNfts = async () => {
     const address = isAddress(params.slug);
+    setIsLoading(true);
 
     if (nftLast === true) return;
-
-    if (search === '') {
-      await axios
-        .request({
-          method: 'get',
-          maxBodyLength: Infinity,
-          url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/${
-            address ? 'getbycollection' : 'getbyslug'
-          }/${params.slug}?page=${nftPage}`,
-          // url: `http://192.168.1.8/labs/dummy-data/collections.php?page=${nftPage}`,
-        })
-        .then((response) => {
-          if (response.data.nfts.length > 0) {
-            setNfts((oldNfts) => [...oldNfts, ...response.data.nfts]);
+    await axios
+      .request({
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/${
+          address ? 'getbycollection' : 'getbyslug'
+        }/${params.slug}?query=${search}&page=${nftPage}`,
+      })
+      .then((response) => {
+        setIsLoading(false);
+        if (response.data.nfts.length > 0) {
+          if (nftPage > 1) {
+            setNfts((oldNft) => [...oldNft, ...response.data.nfts]);
           } else {
-            setNftLast(true);
+            setNfts([...response.data.nfts]);
           }
-        })
-        .catch((error) => {
+        } else {
+          setNftLast(true);
+        }
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        if (error.response.status == 404) {
+          if (nftPage > 1) {
+            setNftLast(true);
+          } else {
+            setNfts([]);
+          }
+        } else {
           toast.error(error.message);
-        });
-    } else {
-      await axios
-        .request({
-          method: 'get',
-          maxBodyLength: Infinity,
-          url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/${
-            address ? 'getbycollection' : 'getbyslug'
-          }/${params.slug}?query=${search}&page=${nftPage}`,
-        })
-        .then((response) => {
-          if (response.data.nfts.length > 0) {
-            if (nftPage > 1) {
-              setNfts((oldNft) => [...oldNft, ...response.data.nfts]);
-            } else {
-              setNfts([...response.data.nfts]);
-            }
-          } else {
-            setNftLast(true);
-          }
-        })
-        .catch((error) => {
-          if (error.response.status == 404) {
-            if (nftPage > 1) {
-              setNftLast(true);
-            } else {
-              setNfts([]);
-            }
-          } else {
-            toast.error(error.message);
-          }
-        });
-    }
+        }
+      });
   };
 
   const handleScroll = () => {
@@ -765,7 +744,7 @@ const Items = ({ params, collection }) => {
         <div className="my-5 grid grid-cols-12 gap-6">
           {openFilter && (
             <div className="col-span-12 sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-              <ul className="divide-y rounded-xl bg-white p-5 font-bold text-gray-900">
+              <ul className="divide-y rounded-xl bg-white p-5 font-bold text-gray-900 dark:bg-zinc-700 dark:text-white">
                 <li>
                   <button
                     className="action flex w-full cursor-pointer items-center justify-between py-3"
@@ -847,10 +826,21 @@ const Items = ({ params, collection }) => {
             }`}
           >
             <div className="grid w-full grid-cols-12 gap-7 text-gray-900">
-              {nfts.length == 0 && (
+              {nfts.length == 0 && !isLoading && (
                 <div className="col-span-12 w-full text-center font-semibold text-black">
                   NFT not found
                 </div>
+              )}
+              {nfts.length == 0 && isLoading && (
+                <>
+                  {[...Array(12)].map((nft, index) => (
+                    <NftItemDetailSkeleton
+                      key={index}
+                      gridList={gridList}
+                      openFilter={openFilter}
+                    />
+                  ))}
+                </>
               )}
               {nfts.length > 0 &&
                 nfts.map((nft, index) => {
@@ -859,247 +849,16 @@ const Items = ({ params, collection }) => {
                   const releaseDate = moment.unix(nft.itemDetails?.releaseDate);
                   const isNotExpired = endDate.isAfter(currentDate);
                   const isNotRelease = currentDate.isBefore(releaseDate);
-
                   return (
-                    <div
+                    <NftItemDetail
                       key={index}
-                      className={`group col-span-12 h-[542px] w-full sm:col-span-6 sm:h-[542px] md:h-[542px] lg:h-[542px] xl:h-[542px] 2xl:h-[542px] ${
-                        gridList === 'grid'
-                          ? openFilter
-                            ? 'md:col-span-6 xl:col-span-4 2xl:col-span-4'
-                            : 'md:col-span-4 xl:col-span-3 2xl:col-span-3'
-                          : openFilter
-                          ? 'md:col-span-4 xl:col-span-3 2xl:col-span-3'
-                          : 'md:col-span-3 xl:col-span-2 2xl:col-span-2'
-                      }`}
-                    >
-                      <div className="group h-[542px] w-full">
-                        <Image
-                          className="z-10 h-[290px] w-full rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all"
-                          width={600}
-                          height={600}
-                          placeholder="blur"
-                          blurDataURL={`https://via.placeholder.com/600x600`}
-                          src={nft?.imageUri}
-                          alt={
-                            nft.Collection?.name
-                              ? nft.Collection?.name
-                              : nft.collectionAddress
-                              ? nft.collectionAddress
-                              : ''
-                          }
-                        />
-                        <div className="inline-flex w-full flex-col items-center justify-center px-3 lg:items-start">
-                          <div className="relative flex w-full flex-row">
-                            <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 p-3  backdrop-blur-xl">
-                              <div className="flex w-full flex-col items-start justify-start">
-                                <div
-                                  className="inline-flex cursor-pointer items-center justify-between self-stretch"
-                                  onClick={() =>
-                                    router.push(
-                                      `/collection/${nft.collectionAddress}`,
-                                    )
-                                  }
-                                >
-                                  <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2 dark:bg-zinc-600">
-                                    <ImageWithFallback
-                                      className="h-full w-full rounded-2xl "
-                                      width={16}
-                                      height={16}
-                                      alt={
-                                        nft.Collection?.name
-                                          ? nft.Collection?.name
-                                          : nft.collectionAddress
-                                          ? nft.collectionAddress
-                                          : ''
-                                      }
-                                      diameter={16}
-                                      address={nft?.collectionAddress}
-                                      src={`/uploads/collections/${nft.Collection?.logo}`}
-                                    />
-                                    <div className="flex items-start justify-start gap-2">
-                                      <div className="text-xs font-medium leading-none text-neutral-700 dark:text-white">
-                                        {collection?.name
-                                          ? collection.name
-                                          : collection?.tokenAddress
-                                          ? truncateAddress(
-                                              collection.tokenAddress,
-                                            )
-                                          : ''}
-                                      </div>
-                                      <div className="text-xs font-black leading-none text-primary-500">
-                                        <FontAwesomeIcon icon={faCircleCheck} />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="items-center">
-                                    <FontAwesomeIcon icon={faEllipsis} />
-                                  </div>
-                                </div>
-                                <div className="inline-flex w-full items-center justify-between gap-2 pt-1">
-                                  <div
-                                    className="line-clamp-2 flex h-[40px] items-center font-medium leading-[20px] text-gray-600"
-                                    title={`${nft?.name} #${nft?.tokenId}`}
-                                  >
-                                    {nft?.name} #{nft?.tokenId}
-                                  </div>
-                                  <div className="text-sm font-normal leading-tight text-neutral-700">
-                                    {(nft.Collection?.chainId === 666888 ||
-                                      nft.Collection?.chainId === 8668) && (
-                                      <HelaIcon className="h-6 w-6" />
-                                    )}
-                                  </div>
-                                </div>
-                                <div className="mt-5 flex w-full justify-between rounded-md bg-white px-2 py-2 dark:bg-zinc-600 dark:text-white">
-                                  <div className="flex flex-col items-start truncate text-sm leading-5">
-                                    <p>Price</p>
-                                    <p className="font-bold">
-                                      {nft.itemDetails?.price
-                                        ? formatEther(
-                                            Number(nft.itemDetails?.price),
-                                          )
-                                        : '0.00'}{' '}
-                                      {nft.Collection.Chain.symbol
-                                        ? nft.Collection.Chain.symbol
-                                        : '-'}
-                                    </p>
-                                  </div>
-                                  <div className="flex flex-col items-start truncate text-sm leading-5">
-                                    {nft.itemDetails?.isAuctioned ? (
-                                      <>
-                                        <p>Highest bid</p>
-                                        <p className="font-bold">
-                                          {formatEther(
-                                            Number(
-                                              getHighestBid(nft).highestBid,
-                                            ),
-                                          )}{' '}
-                                          {nft.Collection.Chain.symbol
-                                            ? nft.Collection.Chain.symbol
-                                            : '-'}
-                                        </p>
-                                      </>
-                                    ) : (
-                                      <>
-                                        <p>Floor Price</p>
-                                        <p className="font-bold">
-                                          {nft.Collection.floorPrice
-                                            ? formatEther(
-                                                Number(
-                                                  nft.Collection.floorPrice,
-                                                ),
-                                              )
-                                            : '0.00'}{' '}
-                                          {nft.Collection.Chain.symbol
-                                            ? nft.Collection.Chain.symbol
-                                            : '-'}
-                                        </p>
-                                      </>
-                                    )}
-                                  </div>
-                                </div>
-
-                                <div className="mt-5 flex w-full items-center gap-2">
-                                  {nft?.itemDetails ? (
-                                    !nft.itemDetails?.isAuctioned ? (
-                                      <div className="mt-5 flex w-full items-center">
-                                        {/* <FontAwesomeIcon
-                              className="mr-5 h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 "
-                              icon={faCartPlus}
-                            /> */}
-                                        <button
-                                          className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
-                                          onClick={() =>
-                                            handleOpenModalBuy(
-                                              nft.itemDetails.marketId,
-                                              nft.itemDetails.price,
-                                              nft.imageUri,
-                                              nft.name,
-                                              nft.tokenId,
-                                              nft.Collection.Chain.symbol,
-                                              nft.Collection.Chain.name,
-                                            )
-                                          }
-                                          disabled={!isNotExpired}
-                                        >
-                                          {isNotExpired ? 'Buy Now' : 'Expired'}
-                                        </button>
-                                      </div>
-                                    ) : (
-                                      nft.itemDetails?.isAuctioned && (
-                                        <div className="mt-5 flex w-full items-center">
-                                          <button
-                                            className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
-                                            onClick={() =>
-                                              handleOpenModalBid(
-                                                nft.itemDetails.marketId,
-                                                nft.itemDetails.listingPrice,
-                                                nft?.imageUri,
-                                                nft?.tokenId,
-                                                nft.itemDetails.price,
-                                                nft?.name,
-                                                nft.Collection,
-                                                getHighestBid(nft.itemDetails),
-                                                formatEther(
-                                                  getLowestBid(nft.itemDetails),
-                                                ),
-                                              )
-                                            }
-                                            disabled={
-                                              isNotRelease
-                                                ? true
-                                                : isNotExpired
-                                                ? false
-                                                : true
-                                            }
-                                          >
-                                            {isNotRelease
-                                              ? 'Upcoming'
-                                              : isNotExpired
-                                              ? 'Place Bid'
-                                              : 'Expired'}
-                                          </button>
-                                        </div>
-                                      )
-                                    )
-                                  ) : (
-                                    <div className="mt-5 flex w-full items-center gap-4">
-                                      {address === nft.owner ? (
-                                        <button
-                                          onClick={() =>
-                                            handleOpenModalPutonsale(
-                                              nft?.tokenId,
-                                              collection?.tokenAddress,
-                                            )
-                                          }
-                                          className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
-                                        >
-                                          Put On Sale
-                                        </button>
-                                      ) : (
-                                        <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
-                                          Not For Sale
-                                        </button>
-                                      )}
-                                    </div>
-                                  )}
-                                </div>
-                                <button
-                                  onClick={() =>
-                                    router.push(
-                                      `/nft/${nft.collectionAddress}/${nft.tokenId}`,
-                                    )
-                                  }
-                                  className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white text-center font-bold text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all dark:bg-zinc-600 dark:text-white dark:hover:bg-zinc-500"
-                                >
-                                  View Detail
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                      nft={nft}
+                      collection={collection}
+                      gridList={gridList}
+                      openFilter={openFilter}
+                      isNotExpired={isNotExpired}
+                      isNotRelease={isNotRelease}
+                    />
                   );
                 })}
             </div>

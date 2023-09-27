@@ -23,7 +23,7 @@ export const NftItemDetail = ({
 }) => {
   return (
     <>
-      {gridList && openFilter && (
+      {(gridList !== undefined && openFilter !== undefined) && (
         <div
           className={`group col-span-12 h-[542px] w-full sm:col-span-6 sm:h-[542px] md:h-[542px] lg:h-[542px] xl:h-[542px] 2xl:h-[542px] ${
             gridList === 'grid'
@@ -46,7 +46,7 @@ export const NftItemDetail = ({
           />
         </div>
       )}
-      {gridList === undefined && openFilter === undefined && (
+      {(gridList === undefined && openFilter === undefined) && (
         <Nft
           nft={nft}
           collection={collection}
@@ -119,8 +119,6 @@ export const NftItemDetailSkeleton = ({ gridList, openFilter }) => {
 };
 
 const Nft = ({
-  gridList,
-  openFilter,
   nft,
   collection,
   handleOpenModalBid,
@@ -187,8 +185,8 @@ const Nft = ({
           blurDataURL={`https://via.placeholder.com/600x600`}
           src={nft?.imageUri}
           alt={
-            nft.Collection?.name
-              ? nft.Collection?.name
+            collection?.name
+              ? collection?.name
               : nft.collectionAddress
               ? nft.collectionAddress
               : ''
@@ -211,8 +209,8 @@ const Nft = ({
                     width={16}
                     height={16}
                     alt={
-                      nft.Collection?.name
-                        ? nft.Collection?.name
+                      collection?.name
+                        ? collection?.name
                         : nft.collectionAddress
                         ? nft.collectionAddress
                         : ''
@@ -259,9 +257,7 @@ const Nft = ({
                     {nft.itemDetails?.price
                       ? formatEther(Number(nft.itemDetails?.price))
                       : '0.00'}{' '}
-                    {collection?.Chain.symbol
-                      ? collection.Chain.symbol
-                      : '-'}
+                    {collection?.Chain.symbol ? collection.Chain.symbol : '-'}
                   </p>
                 </div>
                 <div className="flex flex-col items-start truncate text-sm leading-5">
@@ -293,23 +289,47 @@ const Nft = ({
 
               <div className="mt-5 flex w-full items-center gap-2">
                 {nft?.itemDetails ? (
-                  !nft.itemDetails?.isAuctioned ? (
-                    <div className="mt-5 flex w-full items-center">
-                      {/* <FontAwesomeIcon
-                              className="mr-5 h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 "
-                              icon={faCartPlus}
-                            /> */}
+                  nft?.itemDetails?.isAuctioned ? (
+                    <div className="mt-5 flex w-full items-center gap-4">
+                      <button
+                        className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300"
+                        onClick={() =>
+                          handleOpenModalBid(
+                            nft?.itemDetails?.marketId,
+                            nft?.itemDetails?.listingPrice,
+                            nft?.imageUri,
+                            nft?.tokenId,
+                            nft?.itemDetails?.price,
+                            nft?.nftDetails?.name,
+                            nft?.collectionData,
+                            getHighestBid(nft?.itemDetails),
+                            formatEther(getLowestBid(nft?.itemDetails)),
+                          )
+                        }
+                        disabled={
+                          isNotRelease ? true : isNotExpired ? false : true
+                        }
+                      >
+                        {isNotRelease
+                          ? 'Upcoming'
+                          : isNotExpired
+                          ? 'Place a Bid'
+                          : 'Expired'}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="mt-5 flex w-full items-center gap-4">
                       <button
                         className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
                         onClick={() =>
                           handleOpenModalBuy(
-                            nft.itemDetails.marketId,
-                            nft.itemDetails.price,
-                            nft.imageUri,
+                            nft?.itemDetails?.marketId,
+                            nft?.itemDetails?.price,
+                            nft?.imageUri,
                             nft.name,
                             nft.tokenId,
-                            nft.Collection.Chain.symbol,
-                            nft.Collection.Chain.name,
+                            collection?.Chain?.symbol,
+                            collection?.Chain?.name,
                           )
                         }
                         disabled={!isNotExpired}
@@ -317,36 +337,6 @@ const Nft = ({
                         {isNotExpired ? 'Buy Now' : 'Expired'}
                       </button>
                     </div>
-                  ) : (
-                    nft.itemDetails?.isAuctioned && (
-                      <div className="mt-5 flex w-full items-center">
-                        <button
-                          className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
-                          onClick={() =>
-                            handleOpenModalBid(
-                              nft.itemDetails.marketId,
-                              nft.itemDetails.listingPrice,
-                              nft?.imageUri,
-                              nft?.tokenId,
-                              nft.itemDetails.price,
-                              nft?.name,
-                              nft.Collection,
-                              getHighestBid(nft.itemDetails),
-                              formatEther(getLowestBid(nft.itemDetails)),
-                            )
-                          }
-                          disabled={
-                            isNotRelease ? true : isNotExpired ? false : true
-                          }
-                        >
-                          {isNotRelease
-                            ? 'Upcoming'
-                            : isNotExpired
-                            ? 'Place Bid'
-                            : 'Expired'}
-                        </button>
-                      </div>
-                    )
                   )
                 ) : (
                   <div className="mt-5 flex w-full items-center gap-4">
@@ -355,7 +345,7 @@ const Nft = ({
                         onClick={() =>
                           handleOpenModalPutonsale(
                             nft?.tokenId,
-                            collection?.tokenAddress,
+                            nft?.collectionAddress,
                           )
                         }
                         className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"

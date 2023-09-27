@@ -339,7 +339,7 @@ export default function Home() {
                 {isLoadingActivities || dataActivities.length <= 0 ? (
                   <SlideshowActivitiesSkeleton />
                 ) : (
-                  <SlideshowActivities dataActivities={dataActivities} />
+                  <SlideshowActivities dataActivities={dataActivities} isLoadingActivities={isLoadingActivities} />
                 )}
               </div>
             </div>

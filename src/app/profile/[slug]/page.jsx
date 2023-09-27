@@ -1561,6 +1561,13 @@ const Owned = ({ useAccount, handleOpenModalBid, handleOpenModalBuy, handleOpenM
               )}
               {nfts.length > 0 &&
                 nfts.map((nft, index) => {
+                  const currentDate = moment();
+                  console.log(nft.itemDetails);
+                  const endDate = moment.unix(nft.itemDetails?.endDate);
+                  const releaseDate = moment.unix(nft.itemDetails?.releaseDate);
+                  const isNotExpired = endDate.isAfter(currentDate);
+                  const isNotRelease = currentDate.isBefore(releaseDate);
+
                   return (
                     <NftItemDetail
                       key={index}
@@ -1568,6 +1575,8 @@ const Owned = ({ useAccount, handleOpenModalBid, handleOpenModalBuy, handleOpenM
                       collection={nft.Collection}
                       gridList={gridList}
                       openFilter={openFilter}
+                      isNotExpired={isNotExpired}
+                      isNotRelease={isNotRelease}
                       handleOpenModalBid={handleOpenModalBid}
                       handleOpenModalBuy={handleOpenModalBuy}
                       handleOpenModalPutonsale={handleOpenModalPutonsale}

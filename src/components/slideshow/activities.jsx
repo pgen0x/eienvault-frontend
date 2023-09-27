@@ -30,7 +30,7 @@ import HelaIcon from '@/assets/icon/hela';
 import { ImageWithFallback } from '../imagewithfallback';
 import ModalBuy from '../modal/buy';
 import moment from 'moment';
-import { NftItemDetail } from '../nft/itemDetail';
+import { NftItemDetail, NftItemDetailSkeleton } from '../nft/itemDetail';
 import ModalPutOnSale from '../modal/putOnSale';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
@@ -71,7 +71,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
   const [nfts, setNfts] = useState([]);
   const { address } = useAccount();
   const { data: walletClient } = useWalletClient();
-  
+
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
   const [putOnSaleData, setPutonsaleData] = useState({});
@@ -245,7 +245,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
                 <NftItemDetail
                   key={index}
                   nft={nft.nftDetails}
-                  collection={nft.Collection}
+                  collection={nft.collectionData}
                   handleOpenModalBuy={handleOpenModalBuy}
                   handleOpenModalBid={handleOpenModalBid}
                   handleOpenModalPutonsale={handleOpenModalPutonsale}
@@ -308,46 +308,7 @@ export const SlideshowActivitiesSkeleton = () => {
       >
         {[...Array(6)].map((nft, index) => (
           <SwiperSlide key={index}>
-            <div className="group h-[494px] w-full p-3">
-              <div className="h-[250px] w-full animate-pulse rounded-2xl bg-gray-300" />
-              <div className="inline-flex w-full flex-col items-center justify-center lg:flex-row lg:items-start">
-                <div className="relative flex w-full flex-row px-5">
-                  <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-b-2xl bg-white/60 p-3 backdrop-blur">
-                    <div className="flex w-full flex-col items-start justify-start">
-                      <div className="mt-2 inline-flex items-center justify-between self-stretch">
-                        <div className="flex items-center justify-center gap-2 rounded-lg p-2">
-                          <div className="h-4 w-4 animate-pulse rounded-2xl bg-gray-300" />
-                          <div className="flex items-start justify-start gap-2">
-                            <div className="h-4 w-16 animate-pulse rounded-lg bg-gray-300" />
-                          </div>
-                        </div>
-                        <div className="items-center">
-                          <div className="h-2 w-6 animate-pulse rounded-full bg-gray-300" />
-                        </div>
-                      </div>
-                      <div className="mt-3 inline-flex w-full items-center justify-between gap-2 pt-1">
-                        <div className="h-3 w-24 animate-pulse rounded-full bg-gray-300" />
-                        <div className="h-4 w-4 animate-pulse rounded-2xl bg-gray-300" />
-                      </div>
-                      <div className="mt-3 flex w-full justify-between py-2">
-                        <div className="hidden shrink-0 truncate text-sm leading-5 sm:flex sm:flex-col sm:items-start">
-                          <div className="mt-1 h-3 w-24 animate-pulse rounded-full bg-gray-300" />
-                          <div className="mt-1 h-3 w-24 animate-pulse rounded-full bg-gray-300" />
-                        </div>
-                        <div className="hidden shrink-0 truncate text-sm leading-5 sm:flex sm:flex-col sm:items-start">
-                          <div className="mt-1 h-3 w-24 animate-pulse rounded-full bg-gray-300" />
-                          <div className="mt-1 h-3 w-24 animate-pulse rounded-full bg-gray-300" />
-                        </div>
-                      </div>
-                      <div className="mt-5 flex w-full items-center">
-                        <div className="mr-5 h-12 w-16 animate-pulse rounded-full bg-gray-300 p-3" />
-                        <div className="h-12 w-full animate-pulse rounded-full bg-gray-300 p-3" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <NftItemDetailSkeleton />
           </SwiperSlide>
         ))}
       </Swiper>

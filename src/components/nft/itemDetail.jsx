@@ -24,7 +24,7 @@ export const NftItemDetail = ({
 }) => {
   return (
     <>
-      {(gridList !== undefined && openFilter !== undefined) && (
+      {gridList !== undefined && openFilter !== undefined && (
         <div
           className={`group col-span-12 h-[542px] w-full sm:col-span-6 sm:h-[542px] md:h-[542px] lg:h-[542px] xl:h-[542px] 2xl:h-[542px] ${
             gridList === 'grid'
@@ -48,7 +48,7 @@ export const NftItemDetail = ({
           />
         </div>
       )}
-      {(gridList === undefined && openFilter === undefined) && (
+      {gridList === undefined && openFilter === undefined && (
         <Nft
           nft={nft}
           collection={collection}
@@ -323,23 +323,29 @@ const Nft = ({
                     </div>
                   ) : (
                     <div className="mt-5 flex w-full items-center gap-4">
-                      <button
-                        className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
-                        onClick={() =>
-                          handleOpenModalBuy(
-                            itemDetails?.marketId,
-                            itemDetails?.price,
-                            nft?.imageUri,
-                            nft.name,
-                            nft.tokenId,
-                            collection?.Chain?.symbol,
-                            collection?.Chain?.name,
-                          )
-                        }
-                        disabled={!isNotExpired}
-                      >
-                        {isNotExpired ? 'Buy Now' : 'Expired'}
-                      </button>
+                      {address === nft.owner ? (
+                        <button className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300">
+                          Owned By You
+                        </button>
+                      ) : (
+                        <button
+                          className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
+                          onClick={() =>
+                            handleOpenModalBuy(
+                              itemDetails?.marketId,
+                              itemDetails?.price,
+                              nft?.imageUri,
+                              nft.name,
+                              nft.tokenId,
+                              collection.Chain.symbol,
+                              collection.Chain.name,
+                            )
+                          }
+                          disabled={!isNotExpired}
+                        >
+                          {isNotExpired ? 'Buy Now' : 'Expired'}
+                        </button>
+                      )}
                     </div>
                   )
                 ) : (

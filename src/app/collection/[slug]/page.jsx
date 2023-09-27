@@ -854,6 +854,7 @@ const Items = ({ params, collection }) => {
                       key={index}
                       nft={nft}
                       collection={collection}
+                      itemDetails={nft.itemDetails}
                       gridList={gridList}
                       openFilter={openFilter}
                       isNotExpired={isNotExpired}

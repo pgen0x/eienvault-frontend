@@ -1573,6 +1573,7 @@ const Owned = ({ useAccount, handleOpenModalBid, handleOpenModalBuy, handleOpenM
                       key={index}
                       nft={nft}
                       collection={nft.Collection}
+                      itemDetails={nft.itemDetails}
                       gridList={gridList}
                       openFilter={openFilter}
                       isNotExpired={isNotExpired}
@@ -1939,14 +1940,15 @@ const Onsale = ({ useAccount }) => {
               {nfts.length > 0 &&
                 nfts.map((nft, index) => {
                   const currentDate = moment();
-                  const endDate = moment.unix(nft.itemDetails?.endDate);
-                  const releaseDate = moment.unix(nft.itemDetails?.releaseDate);
+                  const endDate = moment.unix(nft?.endDate);
+                  const releaseDate = moment.unix(nft?.releaseDate);
                   const isNotExpired = endDate.isAfter(currentDate);
                   const isNotRelease = currentDate.isBefore(releaseDate);
                   return (
                     <NftItemDetail
                       key={index}
                       nft={nft.nftDetails}
+                      itemDetails={nft}
                       collection={nft.collectionData}
                       gridList={gridList}
                       openFilter={openFilter}
@@ -2329,6 +2331,7 @@ const Sold = ({ useAccount }) => {
                         key={index}
                         nft={nft}
                         collection={nft.Collection}
+                        itemDetails={nft.itemDetails}
                         gridList={gridList}
                         openFilter={openFilter}
                         isNotExpired={isNotExpired}
@@ -2697,8 +2700,8 @@ const Liked = ({ useAccount, handleOpenModalBuy, handleOpenModalBid, handleOpenM
               {nfts.length > 0 &&
                 nfts.map((nft, index) => {
                   const currentDate = moment();
-                  const endDate = moment.unix(nft.itemDetails?.endDate);
-                  const releaseDate = moment.unix(nft.itemDetails?.releaseDate);
+                  const endDate = moment.unix(nft?.endDate);
+                  const releaseDate = moment.unix(nft?.releaseDate);
                   const isNotExpired = endDate.isAfter(currentDate);
                   const isNotRelease = currentDate.isBefore(releaseDate);
 
@@ -2709,6 +2712,7 @@ const Liked = ({ useAccount, handleOpenModalBuy, handleOpenModalBid, handleOpenM
                       openFilter={openFilter}
                       nft={nft.nftDetails}
                       collection={nft.collectionData}
+                      itemDetails={nft}
                       handleOpenModalBuy={handleOpenModalBuy}
                       handleOpenModalBid={handleOpenModalBid}
                       handleOpenModalPutonsale={handleOpenModalPutonsale}

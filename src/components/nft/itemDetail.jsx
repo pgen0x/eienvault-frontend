@@ -15,6 +15,7 @@ export const NftItemDetail = ({
   openFilter,
   nft,
   collection,
+  itemDetails,
   handleOpenModalBid,
   handleOpenModalBuy,
   handleOpenModalPutonsale,
@@ -38,6 +39,7 @@ export const NftItemDetail = ({
           <Nft
             nft={nft}
             collection={collection}
+            itemDetails={itemDetails}
             handleOpenModalBid={handleOpenModalBid}
             handleOpenModalBuy={handleOpenModalBuy}
             handleOpenModalPutonsale={handleOpenModalPutonsale}
@@ -50,6 +52,7 @@ export const NftItemDetail = ({
         <Nft
           nft={nft}
           collection={collection}
+          itemDetails={itemDetails}
           handleOpenModalBid={handleOpenModalBid}
           handleOpenModalBuy={handleOpenModalBuy}
           handleOpenModalPutonsale={handleOpenModalPutonsale}
@@ -121,6 +124,7 @@ export const NftItemDetailSkeleton = ({ gridList, openFilter }) => {
 const Nft = ({
   nft,
   collection,
+  itemDetails,
   handleOpenModalBid,
   handleOpenModalBuy,
   handleOpenModalPutonsale,
@@ -254,14 +258,14 @@ const Nft = ({
                 <div className="flex flex-col items-start truncate text-sm leading-5">
                   <p>Price</p>
                   <p className="font-bold">
-                    {nft.itemDetails?.price
-                      ? formatEther(Number(nft.itemDetails?.price))
+                    {itemDetails?.price
+                      ? formatEther(Number(itemDetails?.price))
                       : '0.00'}{' '}
                     {collection?.Chain.symbol ? collection.Chain.symbol : '-'}
                   </p>
                 </div>
                 <div className="flex flex-col items-start truncate text-sm leading-5">
-                  {nft.itemDetails?.isAuctioned ? (
+                  {itemDetails?.isAuctioned ? (
                     <>
                       <p>Highest bid</p>
                       <p className="font-bold">
@@ -288,22 +292,22 @@ const Nft = ({
               </div>
 
               <div className="mt-5 flex w-full items-center gap-2">
-                {nft?.itemDetails ? (
-                  nft?.itemDetails?.isAuctioned ? (
+                {itemDetails ? (
+                  itemDetails?.isAuctioned ? (
                     <div className="mt-5 flex w-full items-center gap-4">
                       <button
                         className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300"
                         onClick={() =>
                           handleOpenModalBid(
-                            nft?.itemDetails?.marketId,
-                            nft?.itemDetails?.listingPrice,
+                            itemDetails?.marketId,
+                            itemDetails?.listingPrice,
                             nft?.imageUri,
                             nft?.tokenId,
-                            nft?.itemDetails?.price,
+                            itemDetails?.price,
                             nft?.nftDetails?.name,
                             nft?.collectionData,
-                            getHighestBid(nft?.itemDetails),
-                            formatEther(getLowestBid(nft?.itemDetails)),
+                            getHighestBid(itemDetails),
+                            formatEther(getLowestBid(itemDetails)),
                           )
                         }
                         disabled={
@@ -323,8 +327,8 @@ const Nft = ({
                         className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
                         onClick={() =>
                           handleOpenModalBuy(
-                            nft?.itemDetails?.marketId,
-                            nft?.itemDetails?.price,
+                            itemDetails?.marketId,
+                            itemDetails?.price,
                             nft?.imageUri,
                             nft.name,
                             nft.tokenId,

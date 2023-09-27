@@ -578,7 +578,6 @@ export default function NftPage() {
                 {nfts.length > 0 &&
                   nfts.map((nft, index) => {
                     const currentDate = moment();
-                    console.log(nft.itemDetails);
                     const endDate = moment.unix(nft.itemDetails?.endDate);
                     const releaseDate = moment.unix(nft.itemDetails?.releaseDate);
                     const isNotExpired = endDate.isAfter(currentDate);
@@ -589,6 +588,7 @@ export default function NftPage() {
                         gridList={gridList}
                         openFilter={openFilter}
                         collection={nft.Collection}
+                        itemDetails={nft.itemDetails}
                         nft={nft}
                         isNotExpired={isNotExpired}
                         isNotRelease={isNotRelease}

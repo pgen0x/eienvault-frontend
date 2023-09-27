@@ -246,6 +246,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
                   key={index}
                   nft={nft.nftDetails}
                   collection={nft.collectionData}
+                  itemDetails={nft}
                   handleOpenModalBuy={handleOpenModalBuy}
                   handleOpenModalBid={handleOpenModalBid}
                   handleOpenModalPutonsale={handleOpenModalPutonsale}

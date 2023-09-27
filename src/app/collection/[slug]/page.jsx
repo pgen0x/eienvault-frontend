@@ -249,16 +249,9 @@ export default function CollectionDetail({ params }) {
                       </div>
                       <div>
                         Address{' '}
-                        <button
-                          className="font-semibold"
-                          onClick={() =>
-                            router.push(
-                              `/profile/${collection.User?.walletAddress}`,
-                            )
-                          }
-                        >
-                          {truncateAddress(collection.User?.walletAddress)}
-                        </button>
+                        <span className="font-bold">
+                          {truncateAddress(collection.tokenAddress)}
+                        </span>
                       </div>
                     </div>
                     {collection.description ? (
@@ -340,9 +333,7 @@ export default function CollectionDetail({ params }) {
                       <div className="flex justify-between">
                         <span className="font-semibold">Blockchain</span>
                         <span>
-                          {collectionChain.symbol
-                            ? collectionChain.symbol
-                            : '-'}
+                          {collectionChain.name ? collectionChain.name : '-'}
                         </span>
                       </div>
                     </div>

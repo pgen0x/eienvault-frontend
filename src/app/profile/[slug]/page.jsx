@@ -2312,33 +2312,25 @@ const Sold = ({ userAccount }) => {
               )}
               {nfts.length > 0 &&
                 nfts.map((nft, index) => {
-                  if (
-                    nft?.itemDetails &&
-                    !nft.itemDetails?.isAuctioned &&
-                    isNotExpired
-                  ) {
-                    setCountNfts(countNfts + 1);
-
                     const currentDate = moment();
-                    const endDate = moment.unix(nft.itemDetails?.endDate);
+                    const endDate = moment.unix(nft?.endDate);
                     const releaseDate = moment.unix(
-                      nft.itemDetails?.releaseDate,
+                      nft?.releaseDate,
                     );
                     const isNotExpired = endDate.isAfter(currentDate);
                     const isNotRelease = currentDate.isBefore(releaseDate);
                     return (
                       <NftItemDetail
                         key={index}
-                        nft={nft}
-                        collection={nft.Collection}
-                        itemDetails={nft.itemDetails}
+                        nft={nft.nftDetails}
+                        collection={nft.collectionData}
+                        itemDetails={nft}
                         gridList={gridList}
                         openFilter={openFilter}
                         isNotExpired={isNotExpired}
                         isNotRelease={isNotRelease}
                       />
                     );
-                  }
                 })}
               {nfts.length > 0 && countNfts > 0 && !isLoading && (
                 <div className="col-span-12 w-full text-center font-semibold text-black">

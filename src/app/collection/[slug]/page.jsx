@@ -39,7 +39,10 @@ import HelaIcon from '@/assets/icon/hela';
 import { useAccount, useNetwork } from 'wagmi';
 import ModalPutOnSale from '@/components/modal/putOnSale';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import { NftItemDetail, NftItemDetailSkeleton } from '@/components/nft/itemDetail';
+import {
+  NftItemDetail,
+  NftItemDetailSkeleton,
+} from '@/components/nft/itemDetail';
 import ModaluploadCover from '@/components/modal/uploadCover';
 
 const servers = [
@@ -197,140 +200,220 @@ export default function CollectionDetail({ params }) {
         </div>
       </section>
       <div className="container m-auto p-3">
-        <section>
-          <div className="mt-5 flex justify-between">
-            <div className="flex w-full flex-col">
-              <div className="grid grid-cols-12 gap-4">
-                <div className="col-span-12 flex flex-col gap-3 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
-                  <div className="relative -mt-[5rem]">
-                    <ImageWithFallback
-                      src={`/uploads/collections/${collection.logo}`}
-                      alt={collection?.name}
-                      width={100}
-                      height={100}
-                      diameter={100}
-                      address={collection?.tokenAddress}
-                      className="w-36 rounded-lg border-4 border-white shadow"
-                    />
+        {Object.keys(collection).length > 0 ? (
+          <section>
+            <div className="mt-5 flex justify-between">
+              <div className="flex w-full flex-col">
+                <div className="grid grid-cols-12 gap-4">
+                  <div className="col-span-12 flex flex-col gap-3 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
+                    <div className="relative -mt-[5rem]">
+                      <ImageWithFallback
+                        src={`/uploads/collections/${collection.logo}`}
+                        alt={collection?.name}
+                        width={100}
+                        height={100}
+                        diameter={100}
+                        address={collection?.tokenAddress}
+                        className="w-36 rounded-full border-4 border-white shadow"
+                      />
+                    </div>
+                    <div className="text-xl font-semibold text-gray-900 dark:text-white">
+                      <button
+                        onClick={() =>
+                          router.push(
+                            `/profile/${collection.User?.walletAddress}`,
+                          )
+                        }
+                      >
+                        {collection.name
+                          ? collection.name
+                          : collection?.tokenAddress
+                          ? truncateAddress(collection.tokenAddress)
+                          : ''}
+                      </button>
+                    </div>
+                    <div className="flex w-full justify-start gap-4 text-gray-900 dark:text-white">
+                      <div>
+                        Created by{' '}
+                        <button
+                          className="font-bold"
+                          onClick={() =>
+                            router.push(
+                              `/profile/${collection.User?.walletAddress}`,
+                            )
+                          }
+                        >
+                          {collection.User?.username ||
+                            truncateAddress(collection.User?.walletAddress)}
+                        </button>
+                      </div>
+                      <div>
+                        Address{' '}
+                        <button
+                          className="font-semibold"
+                          onClick={() =>
+                            router.push(
+                              `/profile/${collection.User?.walletAddress}`,
+                            )
+                          }
+                        >
+                          {truncateAddress(collection.User?.walletAddress)}
+                        </button>
+                      </div>
+                    </div>
+                    {collection.description ? (
+                      <div>
+                        <p
+                          className={`block text-ellipsis text-black dark:text-white ${
+                            showDescription
+                              ? ''
+                              : 'overflow-hidden whitespace-nowrap'
+                          }`}
+                        >
+                          {collection.description ? collection.description : ''}
+                        </p>
+                        <button
+                          onClick={() => setShowDescription(!showDescription)}
+                          className="text-left text-gray-900 dark:text-white"
+                        >
+                          See {showDescription ? 'less' : 'more'}{' '}
+                          <FontAwesomeIcon
+                            icon={showDescription ? faChevronUp : faChevronDown}
+                          />
+                        </button>
+                      </div>
+                    ) : (
+                      <div>
+                        <p
+                          className={`block text-ellipsis text-black dark:text-white ${
+                            showDescription
+                              ? ''
+                              : 'overflow-hidden whitespace-nowrap'
+                          }`}
+                        >
+                          {`Welcome to our ${collection.name} collection! Explore a world of digital art and assets that represent unique and exclusive tokens on the blockchain. You'll find something special in our collection. Each NFT is a one-of-a-kind piece, verified and secured on the blockchain, making it a valuable addition to your digital asset portfolio. Join us on this journey of innovation and creativity in the world of non-fungible tokens. Start collecting, trading, and owning a piece of the digital future with our NFTs!`}
+                        </p>
+                        <button
+                          onClick={() => setShowDescription(!showDescription)}
+                          className="text-left text-gray-900 dark:text-white"
+                        >
+                          See {showDescription ? 'less' : 'more'}{' '}
+                          <FontAwesomeIcon
+                            icon={showDescription ? faChevronUp : faChevronDown}
+                          />
+                        </button>
+                      </div>
+                    )}
                   </div>
-                  <div className="text-xl font-semibold text-gray-900 dark:text-white">
-                    <button
-                      onClick={() =>
-                        router.push(
-                          `/profile/${collection.User?.walletAddress}`,
-                        )
-                      }
-                    >
-                      {collection.name
-                        ? collection.name
-                        : collection?.tokenAddress
-                        ? truncateAddress(collection.tokenAddress)
-                        : ''}
+                  <div className="col-span-12 flex h-fit justify-end sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
+                    <div className="flex w-96 flex-col gap-2 rounded-lg border-2 border-gray-200 bg-white p-5 text-sm text-gray-900 dark:border-zinc-500 dark:bg-zinc-700 dark:text-white">
+                      <div className="flex justify-between">
+                        <span className="font-semibold">Floor</span>
+                        <span>
+                          {collection.floorPrice
+                            ? formatEther(Number(collection.floorPrice))
+                            : '0.00'}{' '}
+                          {collectionChain.symbol
+                            ? collectionChain.symbol
+                            : '-'}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="font-semibold">Volumes</span>
+                        <span>
+                          {collection.volume
+                            ? formatEther(Number(collection.volume))
+                            : '0.00'}{' '}
+                          {collectionChain.symbol
+                            ? collectionChain.symbol
+                            : '-'}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="font-semibold">Items</span>
+                        <span>{collection.length || 0}</span>
+                      </div>
+                      <div className="flex justify-between border-b-2 pb-2 dark:border-zinc-500">
+                        <span className="font-semibold">Owner</span>
+                        <span>0</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="font-semibold">Blockchain</span>
+                        <span>
+                          {collectionChain.symbol
+                            ? collectionChain.symbol
+                            : '-'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-span-12 flex gap-1 font-semibold text-white">
+                    {address === collection.userAddress && (
+                      <button className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300">
+                        <FontAwesomeIcon icon={faPenToSquare} /> Edit Collection
+                      </button>
+                    )}
+
+                    <button className="h-[40px] w-[40px] rounded-full bg-primary-500 hover:bg-primary-300">
+                      <FontAwesomeIcon icon={faShare} />
+                    </button>
+                    <button className="h-[40px] w-[40px] rounded-full bg-primary-500 hover:bg-primary-300">
+                      <FontAwesomeIcon icon={faEllipsisVertical} />
                     </button>
                   </div>
-                  <div className="flex w-full justify-start gap-4 text-gray-900 dark:text-white">
-                    <div>
-                      Created by{' '}
-                      <button
-                        className="font-bold"
-                        onClick={() =>
-                          router.push(
-                            `/profile/${collection.User?.walletAddress}`,
-                          )
-                        }
-                      >
-                        {collection.User?.username ||
-                          truncateAddress(collection.User?.walletAddress)}
-                      </button>
-                    </div>
-                    <div>
-                      Address{' '}
-                      <button
-                        className="font-semibold"
-                        onClick={() =>
-                          router.push(
-                            `/profile/${collection.User?.walletAddress}`,
-                          )
-                        }
-                      >
-                        {truncateAddress(collection.User?.walletAddress)}
-                      </button>
-                    </div>
-                  </div>
-                  {collection.description && (
-                    <div>
-                      <p
-                        className={`block text-ellipsis text-black dark:text-white ${
-                          showDescription
-                            ? ''
-                            : 'overflow-hidden whitespace-nowrap'
-                        }`}
-                      >
-                        {collection.description ? collection.description : ''}
-                      </p>
-                      <button
-                        onClick={() => setShowDescription(!showDescription)}
-                        className="text-left text-gray-900 dark:text-white"
-                      >
-                        See {showDescription ? 'less' : 'more'}{' '}
-                        <FontAwesomeIcon
-                          icon={showDescription ? faChevronUp : faChevronDown}
-                        />
-                      </button>
-                    </div>
-                  )}
-                </div>
-                <div className="col-span-12 flex h-fit justify-end sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
-                  <div className="flex w-96 flex-col gap-2 rounded-lg border-2 border-gray-200 bg-white p-5 text-sm text-gray-900 dark:border-zinc-500 dark:bg-zinc-700 dark:text-white">
-                    <div className="flex justify-between">
-                      <span className="font-semibold">Floor</span>
-                      <span>
-                        {collection.floorPrice
-                          ? formatEther(Number(collection.floorPrice))
-                          : '0.00'}{' '}
-                        {collectionChain.symbol ? collectionChain.symbol : '-'}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-semibold">Volumes</span>
-                      <span>
-                        {collection.volume
-                          ? formatEther(Number(collection.volume))
-                          : '0.00'}{' '}
-                        {collectionChain.symbol ? collectionChain.symbol : '-'}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-semibold">Items</span>
-                      <span>{collection.length || 0}</span>
-                    </div>
-                    <div className="flex justify-between border-b-2 pb-2 dark:border-zinc-500">
-                      <span className="font-semibold">Owner</span>
-                      <span>0</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-semibold">Blockchain</span>
-                      <span>
-                        {collectionChain.symbol ? collectionChain.symbol : '-'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-span-12 flex gap-1 font-semibold text-white">
-                  <button className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300">
-                    <FontAwesomeIcon icon={faPenToSquare} /> Edit Collection
-                  </button>
-                  <button className="h-[40px] w-[40px] rounded-full bg-primary-500 hover:bg-primary-300">
-                    <FontAwesomeIcon icon={faShare} />
-                  </button>
-                  <button className="h-[40px] w-[40px] rounded-full bg-primary-500 hover:bg-primary-300">
-                    <FontAwesomeIcon icon={faEllipsisVertical} />
-                  </button>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        ) : (
+          <section>
+            <div className="mt-5 flex justify-between">
+              <div className="flex w-full flex-col">
+                <div className="grid grid-cols-12 gap-4">
+                  <div className="col-span-12 flex flex-col gap-3 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
+                    <div className="relative -mt-[5rem]">
+                      <div className="h-[100px] w-[100px] rounded-full border-4 border-white bg-gray-300 shadow" />
+                    </div>
+                    <div className="h-6 w-64 animate-pulse rounded-lg bg-gray-300 text-xl font-semibold dark:text-white"></div>
+                    <div className="flex w-full justify-start gap-4 text-gray-900 dark:text-white">
+                      <div className="flex flex-col gap-2">
+                        <div className="h-4 w-96 animate-pulse rounded-lg bg-gray-300 text-xl font-semibold dark:text-white" />
+                        <div className="h-4 w-80 animate-pulse rounded-lg bg-gray-300 text-xl font-semibold dark:text-white" />
+                        <div className="h-4 w-96 animate-pulse rounded-lg bg-gray-300 text-xl font-semibold dark:text-white" />
+                        <div className="h-4 w-64 animate-pulse rounded-lg bg-gray-300 text-xl font-semibold dark:text-white" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-span-12 flex h-fit justify-end sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
+                    <div className="flex w-96 flex-col gap-3 rounded-lg border-2 border-gray-200 bg-white p-5 text-sm text-gray-900 dark:border-zinc-500 dark:bg-zinc-700 dark:text-white">
+                      <div className="flex justify-between">
+                        <div className="h-4 w-20 animate-pulse rounded-lg bg-gray-300 text-xl font-semibold dark:text-white" />
+                        <div className="h-4 w-40 animate-pulse rounded-lg bg-gray-300 text-xl font-semibold dark:text-white" />
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="h-4 w-20 animate-pulse rounded-lg bg-gray-300 text-xl font-semibold dark:text-white" />
+                        <div className="h-4 w-40 animate-pulse rounded-lg bg-gray-300 text-xl font-semibold dark:text-white" />
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="h-4 w-20 animate-pulse rounded-lg bg-gray-300 text-xl font-semibold dark:text-white" />
+                        <div className="h-4 w-40 animate-pulse rounded-lg bg-gray-300 text-xl font-semibold dark:text-white" />
+                      </div>
+                      <div className="flex justify-between border-b-2 pb-2 dark:border-zinc-500">
+                        <div className="h-4 w-20 animate-pulse rounded-lg bg-gray-300 text-xl font-semibold dark:text-white" />
+                        <div className="h-4 w-40 animate-pulse rounded-lg bg-gray-300 text-xl font-semibold dark:text-white" />
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="h-4 w-20 animate-pulse rounded-lg bg-gray-300 text-xl font-semibold dark:text-white" />
+                        <div className="h-4 w-32 animate-pulse rounded-lg bg-gray-300 text-xl font-semibold dark:text-white" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
         <section>
           <ul className="my-5 flex border-b border-gray-200 text-primary-500">
             <li

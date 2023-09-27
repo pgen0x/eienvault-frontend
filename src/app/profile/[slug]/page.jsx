@@ -2408,13 +2408,13 @@ const Liked = ({ useAccount, handleOpenModalBuy, handleOpenModalBid, handleOpenM
       .request({
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/user/getlikes/${useAccount}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getlikes/${useAccount}`,
         // url: `http://192.168.1.8/labs/dummy-data/collections.php?page=${nftPage}`,
       })
       .then((response) => {
         setIsLoading(false);
-        if (response.data.length > 0) {
-          setNfts((oldNfts) => [...oldNfts, ...response.data]);
+        if (response.data.likes.length > 0) {
+          setNfts((oldNfts) => [...oldNfts, ...response.data.likes]);
           setNftLast(true);
         } else {
           setNftLast(true);

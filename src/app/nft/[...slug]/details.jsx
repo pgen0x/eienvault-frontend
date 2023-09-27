@@ -772,23 +772,29 @@ export default function NFTDetails({ dataNFTs }) {
                         </div>
                       ) : (
                         <div className="mt-5 flex w-full items-center gap-4">
-                          <button
-                            className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
-                            onClick={() =>
-                              handleOpenModalBuy(
-                                dataNFTs?.itemDetails?.marketId,
-                                dataNFTs?.itemDetails?.price,
-                                dataNFTs?.imageUri,
-                                dataNFTs.name,
-                                dataNFTs.tokenId,
-                                dataNFTs?.collectionData.Chain.symbol,
-                                dataNFTs?.collectionData.Chain.name,
-                              )
-                            }
-                            disabled={!isNotExpired}
-                          >
-                            {isNotExpired ? 'Buy Now' : 'Expired'}
-                          </button>
+                          {address === dataNFTs.owner ? (
+                            <button className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300">
+                              Owned By You
+                            </button>
+                          ) : (
+                            <button
+                              className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
+                              onClick={() =>
+                                handleOpenModalBuy(
+                                  dataNFTs?.itemDetails?.marketId,
+                                  dataNFTs?.itemDetails?.price,
+                                  dataNFTs?.imageUri,
+                                  dataNFTs.name,
+                                  dataNFTs.tokenId,
+                                  dataNFTs?.collectionData.Chain.symbol,
+                                  dataNFTs?.collectionData.Chain.name,
+                                )
+                              }
+                              disabled={!isNotExpired}
+                            >
+                              {isNotExpired ? 'Buy Now' : 'Expired'}
+                            </button>
+                          )}
                         </div>
                       )
                     ) : (

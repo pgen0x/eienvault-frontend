@@ -245,7 +245,7 @@ export default function ProfilePage({ params }) {
       badge: 0,
       page: (
         <Owned
-          useAccount={params?.slug ? params.slug : address}
+          userAccount={params?.slug ? params.slug : address}
           handleOpenModalBuy={handleOpenModalBuy}
           handleOpenModalBid={handleOpenModalBid}
           handleOpenModalPutonsale={handleOpenModalPutonsale}
@@ -256,25 +256,25 @@ export default function ProfilePage({ params }) {
       name: 'Collections',
       slug: 'Collections',
       badge: 0,
-      page: <Collection useAccount={params?.slug ? params.slug : address} />,
+      page: <Collection userAccount={params?.slug ? params.slug : address} />,
     },
     {
       name: 'On sale',
       slug: 'Onsale',
       badge: 0,
-      page: <Onsale useAccount={params?.slug ? params.slug : address} />,
+      page: <Onsale userAccount={params?.slug ? params.slug : address} />,
     },
     {
       name: 'Sold',
       slug: 'Sold',
       badge: 0,
-      page: <Sold useAccount={params?.slug ? params.slug : address} />,
+      page: <Sold userAccount={params?.slug ? params.slug : address} />,
     },
     {
       name: 'Liked',
       slug: 'Liked',
       badge: 0,
-      page: <Liked useAccount={params?.slug ? params.slug : address} />,
+      page: <Liked userAccount={params?.slug ? params.slug : address} />,
     },
   ];
 
@@ -1216,7 +1216,7 @@ const ItemCollectionSkeleton = ({ collection, gridList }) => {
   );
 };
 
-const Owned = ({ useAccount, handleOpenModalBid, handleOpenModalBuy, handleOpenModalPutonsale }) => {
+const Owned = ({ userAccount, handleOpenModalBid, handleOpenModalBuy, handleOpenModalPutonsale }) => {
   const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState(filters[0]);
   const [isLoading, setIsLoading] = useState(false);
@@ -1271,7 +1271,7 @@ const Owned = ({ useAccount, handleOpenModalBid, handleOpenModalBuy, handleOpenM
       .request({
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbyowner/${useAccount}?query=${search}&page=${nftPage}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbyowner/${userAccount}?query=${search}&page=${nftPage}`,
         // url: `http://192.168.1.8/labs/dummy-data/collections.php?page=${nftPage}`,
       })
       .then((response) => {
@@ -1592,7 +1592,7 @@ const Owned = ({ useAccount, handleOpenModalBid, handleOpenModalBuy, handleOpenM
   );
 };
 
-const Onsale = ({ useAccount }) => {
+const Onsale = ({ userAccount }) => {
   const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState(filters[0]);
   const [isLoading, setIsLoading] = useState(false);
@@ -1648,7 +1648,7 @@ const Onsale = ({ useAccount }) => {
       .request({
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/itemsbyuseraddress/${useAccount}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/itemsbyuseraddress/${userAccount}`,
         // url: `http://192.168.1.8/labs/dummy-data/collections.php?page=${nftPage}`,
       })
       .then((response) => {
@@ -1965,7 +1965,7 @@ const Onsale = ({ useAccount }) => {
   );
 };
 
-const Sold = ({ useAccount }) => {
+const Sold = ({ userAccount }) => {
   const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState(filters[0]);
   const [isLoading, setIsLoading] = useState(false);
@@ -2021,7 +2021,7 @@ const Sold = ({ useAccount }) => {
       .request({
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/itemsoldbyuseraddress/${useAccount}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/itemsoldbyuseraddress/${userAccount}`,
         // url: `http://192.168.1.8/labs/dummy-data/collections.php?page=${nftPage}`,
       })
       .then((response) => {
@@ -2353,7 +2353,7 @@ const Sold = ({ useAccount }) => {
   );
 };
 
-const Liked = ({ useAccount, handleOpenModalBuy, handleOpenModalBid, handleOpenModalPutonsale }) => {
+const Liked = ({ userAccount, handleOpenModalBuy, handleOpenModalBid, handleOpenModalPutonsale }) => {
   const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState(filters[0]);
   const [isLoading, setIsLoading] = useState(false);
@@ -2408,7 +2408,7 @@ const Liked = ({ useAccount, handleOpenModalBuy, handleOpenModalBid, handleOpenM
       .request({
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getlikes/${useAccount}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getlikes/${userAccount}`,
         // url: `http://192.168.1.8/labs/dummy-data/collections.php?page=${nftPage}`,
       })
       .then((response) => {

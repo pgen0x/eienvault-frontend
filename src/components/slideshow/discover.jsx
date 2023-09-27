@@ -397,7 +397,11 @@ export const SlideshowDiscover = ({ dataDiscover }) => {
                           )}
                         </div>
                         <button
-                          onClick={() => router.push('/nft/user')}
+                          onClick={() =>
+                            router.push(
+                              `/nft/${data?.collectionAddress}/${data?.tokenId}`,
+                            )
+                          }
                           className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all"
                         >
                           View Detail

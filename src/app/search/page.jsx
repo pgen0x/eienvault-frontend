@@ -9,8 +9,8 @@ const SearchPage = () => {
 
   return (
     <>
-      <div className="container mx-auto">
-        <section>
+      <section>
+        <div className="container mx-auto">
           <ul className="mt-5 flex items-center justify-start gap-3 text-black">
             <li
               className={`${groupOptions === 'collection' ? 'font-bold' : ''}`}
@@ -27,10 +27,10 @@ const SearchPage = () => {
               <button onClick={() => setGroupOptions('user')}>User</button>
             </li>
           </ul>
-        </section>
-        <section>{groupOptions == 'collection' && <Collection />}</section>
-        <section>{groupOptions == 'nft' && <NftPage />}</section>
-      </div>
+        </div>
+      </section>
+      <section>{groupOptions == 'collection' && <Collection />}</section>
+      <section>{groupOptions == 'nft' && <NftPage />}</section>
     </>
   );
 };

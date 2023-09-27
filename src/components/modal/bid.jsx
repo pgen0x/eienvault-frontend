@@ -60,12 +60,12 @@ export default function ModalBid({
       open();
       return;
     }
+    setIsSubmit(true);
 
     try {
       const hash = await placeBid(auction.marketId, parseEther(data.amount));
       setBidHash(hash);
     } catch (error) {
-      closeModal();
       setIsSubmit(false);
       console.error('Error Place a Bid:', error);
     }
@@ -229,7 +229,9 @@ export default function ModalBid({
                         <div className="flex justify-between">
                           <span>Floor price</span>
                           <span className="font-semibold">
-                            {auction.lowestBid}{' '}
+                            {auction.lowestBid !== '0'
+                              ? auction.lowestBid
+                              : formatEther(auction.price)}{' '}
                             {auction.collectionData?.Chain?.symbol}
                           </span>
                         </div>
@@ -270,12 +272,25 @@ export default function ModalBid({
                                   required: 'Amount is required.',
                                   validate: (value) => {
                                     if (
-                                      parseFloat(value) <=
-                                      formatEther(
-                                        Number(auction?.highestBid?.highestBid),
-                                      )
+                                      auction?.highestBid?.highestBid !== '0'
                                     ) {
-                                      return 'Price must be greater than highest bid';
+                                      if (
+                                        parseFloat(value) <=
+                                        formatEther(
+                                          Number(
+                                            auction?.highestBid?.highestBid,
+                                          ),
+                                        )
+                                      ) {
+                                        return 'Price must be greater than highest bid';
+                                      }
+                                    } else {
+                                      if (
+                                        parseFloat(value) <=
+                                        formatEther(Number(auction.price))
+                                      ) {
+                                        return 'Price must be greater than floor price';
+                                      }
                                     }
                                     return true; // Validation passed
                                   },

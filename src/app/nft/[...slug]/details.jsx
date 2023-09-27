@@ -86,7 +86,7 @@ export default function NFTDetails({ dataNFTs }) {
   const renderActiveTab = () => {
     const listTabs = {
       overview: <Overview dataNFTs={dataNFTs} />,
-      bids: <Bids dataNFTs={dataNFTs} />,
+      bids: <Bids dataBid={dataNFTs} />,
       history: <History dataNFTs={dataNFTs} />,
       collateral: <Collateral dataNFTs={dataNFTs} />,
     };
@@ -201,18 +201,14 @@ export default function NFTDetails({ dataNFTs }) {
   }
 
   const placeBid = async (marketId, price) => {
-    try {
-      const hash = await walletClient.writeContract({
-        ...marketplaceABI,
-        functionName: 'makeAnOfferNative',
-        args: [marketId, price],
-        account: address,
-        value: price,
-      });
-      return hash;
-    } catch (error) {
-      console.error('Error Make an Offer', error);
-    }
+    const hash = await walletClient.writeContract({
+      ...marketplaceABI,
+      functionName: 'makeAnOfferNative',
+      args: [marketId, price],
+      account: address,
+      value: price,
+    });
+    return hash;
   };
 
   const buyAction = async (marketId, price) => {
@@ -226,7 +222,7 @@ export default function NFTDetails({ dataNFTs }) {
       });
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      console.error('Error Buy Auction', error);
     }
   };
 
@@ -309,7 +305,6 @@ export default function NFTDetails({ dataNFTs }) {
         }
 
         const responseData = await res.json();
-        console.log(responseData);
         setDataRelatedNFTs(responseData);
       } catch (error) {
         console.error('Fetch failed:', error);
@@ -445,13 +440,13 @@ export default function NFTDetails({ dataNFTs }) {
                       Collateral
                     </li>
                   </ul>
-                  <div className="flex w-full flex-col gap-4 rounded-lg bg-white p-5 text-gray-900">
+                  <div className="flex w-full flex-col gap-4 rounded-lg bg-white/70 p-5 text-gray-900">
                     {renderActiveTab()}
                   </div>
                 </div>
               </div>
               <div className="w-full">
-                <div className="flex w-full justify-around gap-4 text-white">
+                {/* <div className="flex w-full justify-around gap-4 text-white">
                   {address === dataNFTs?.owner && (
                     <>
                       <button className="w-full rounded-full bg-primary-500 py-2 hover:bg-primary-300">
@@ -463,7 +458,7 @@ export default function NFTDetails({ dataNFTs }) {
                       </button>
                     </>
                   )}
-                </div>
+                </div> */}
                 <div className="mt-5 flex flex-col gap-4 text-gray-900">
                   <h2 className="text-2xl font-bold">
                     {dataNFTs?.name} #{dataNFTs?.tokenId}
@@ -478,16 +473,15 @@ export default function NFTDetails({ dataNFTs }) {
                             width={28}
                             height={28}
                             alt={
-                              dataNFTs?.ownerData?.username ||
+                              dataNFTs?.User?.username ||
                               truncateAddress4char(
-                                dataNFTs?.ownerData?.walletAddress,
+                                dataNFTs?.User?.walletAddress,
                               ) ||
                               truncateAddress4char(dataNFTs?.owner)
                             }
                             diameter={28}
                             address={
-                              dataNFTs?.ownerData?.walletAddress ||
-                              dataNFTs?.owner
+                              dataNFTs?.User?.walletAddress || dataNFTs?.owner
                             }
                             src={`/uploads/user/${dataNFTs?.collectionData.User?.logo}`}
                           />
@@ -738,33 +732,43 @@ export default function NFTDetails({ dataNFTs }) {
                     {dataNFTs?.itemDetails ? (
                       dataNFTs?.itemDetails?.isAuctioned ? (
                         <div className="mt-5 flex w-full items-center gap-4">
-                          <button
-                            className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300"
-                            onClick={() =>
-                              handleOpenModalBid(
-                                dataNFTs?.itemDetails?.marketId,
-                                dataNFTs?.itemDetails?.listingPrice,
-                                dataNFTs?.imageUri,
-                                dataNFTs?.tokenId,
-                                dataNFTs?.itemDetails?.price,
-                                dataNFTs?.nftDetails?.name,
-                                dataNFTs?.collectionData,
-                                getHighestBid(dataNFTs?.itemDetails),
-                                formatEther(
-                                  getLowestBid(dataNFTs?.itemDetails),
-                                ),
-                              )
-                            }
-                            disabled={
-                              isNotRelease ? true : isNotExpired ? false : true
-                            }
-                          >
-                            {isNotRelease
-                              ? 'Upcoming'
-                              : isNotExpired
-                              ? 'Place a Bid'
-                              : 'Expired'}
-                          </button>
+                          {address === dataNFTs.owner ? (
+                            <button className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300">
+                              Owned By You
+                            </button>
+                          ) : (
+                            <button
+                              className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300"
+                              onClick={() =>
+                                handleOpenModalBid(
+                                  dataNFTs?.itemDetails?.marketId,
+                                  dataNFTs?.itemDetails?.listingPrice,
+                                  dataNFTs?.imageUri,
+                                  dataNFTs?.tokenId,
+                                  dataNFTs?.itemDetails?.price,
+                                  dataNFTs?.nftDetails?.name,
+                                  dataNFTs?.collectionData,
+                                  getHighestBid(dataNFTs?.itemDetails),
+                                  formatEther(
+                                    getLowestBid(dataNFTs?.itemDetails),
+                                  ),
+                                )
+                              }
+                              disabled={
+                                isNotRelease
+                                  ? true
+                                  : isNotExpired
+                                  ? false
+                                  : true
+                              }
+                            >
+                              {isNotRelease
+                                ? 'Upcoming'
+                                : isNotExpired
+                                ? 'Place a Bid'
+                                : 'Expired'}
+                            </button>
+                          )}
                         </div>
                       ) : (
                         <div className="mt-5 flex w-full items-center gap-4">
@@ -852,7 +856,7 @@ export default function NFTDetails({ dataNFTs }) {
                         Collateral
                       </li>
                     </ul>
-                    <div className="flex w-full flex-col gap-4 rounded-lg bg-white p-5 text-gray-900">
+                    <div className="flex w-full flex-col gap-4 rounded-lg bg-white/70 p-5 text-gray-900">
                       {renderActiveTab()}
                     </div>
                   </div>
@@ -1258,10 +1262,61 @@ const Overview = ({ params }) => {
   return <h1 className="text-black">Overview</h1>;
 };
 
-const Bids = ({ params }) => {
-  return <h1 className="text-black">Bids</h1>;
+const Bids = ({ dataBid }) => {
+  return dataBid.itemDetails?.listOffers?.length > 0 ? (
+    dataBid.itemDetails?.listOffers.map((offer, index) => {
+      return (
+        <div
+          className="w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white p-3 lg:inline-flex"
+          key={index}
+        >
+          <div className="flex shrink grow basis-0 items-center justify-between text-center text-base font-bold leading-loose">
+            <div className="inline-flex h-14 w-1/2 cursor-pointer items-center justify-center">
+              <div className="text-md inline-flex shrink grow basis-0 flex-col font-medium leading-loose">
+                <div className="h-12 w-12 rounded-full bg-gray-300">
+                  <ImageWithFallback
+                    className="h-full w-full rounded-2xl "
+                    width={48}
+                    height={48}
+                    alt={
+                      offer?.userDetails?.username ||
+                      truncateAddress4char(offer?.userDetails?.walletAddress)
+                    }
+                    diameter={48}
+                    address={offer?.userDetails?.walletAddress}
+                    src={`/uploads/user/${offer?.userDetails?.logo}`}
+                  />
+                </div>
+              </div>
+              <div className="text-md flex shrink grow basis-0 flex-col font-medium leading-loose">
+                <div className="justify-start">
+                  {offer?.userDetails?.username ||
+                    truncateAddress(offer?.userDetails?.walletAddress)}
+                </div>
+              </div>
+            </div>
+            <div className="text-md flex shrink grow basis-0 flex-col items-end justify-end self-end font-medium leading-loose">
+              <div className="justify-start">Bid At</div>
+              <div className="justify-start">
+                {formatEther(offer?.value)}{' '}
+                {dataBid?.collectionData.Chain.symbol}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    })
+  ) : (
+    <div className="w-full items-center justify-center gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex">
+      Data Not Found
+    </div>
+  );
 };
 
 const History = ({ params }) => {
-  return <h1 className="text-black">History</h1>;
+  return (
+    <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex">
+      History
+    </div>
+  );
 };

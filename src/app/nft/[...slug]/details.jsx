@@ -85,9 +85,11 @@ export default function NFTDetails({ dataNFTs }) {
 
   const renderActiveTab = () => {
     const listTabs = {
-      overview: <Overview dataNFTs={dataNFTs} />,
+      overview: (
+        <Overview dataOverview={dataNFTs} onSeeAllClick={handleSeeAllClick} />
+      ),
       bids: <Bids dataBid={dataNFTs} />,
-      history: <History dataNFTs={dataNFTs} />,
+      history: <History dataHistory={dataNFTs} />,
       // collateral: <Collateral dataNFTs={dataNFTs} />,
     };
 
@@ -322,6 +324,10 @@ export default function NFTDetails({ dataNFTs }) {
   const releaseDate = moment.unix(dataNFTs?.itemDetails?.releaseDate);
   const isNotExpired = endDate.isAfter(currentDate);
   const isNotRelease = currentDate.isBefore(releaseDate);
+
+  const handleSeeAllClick = (tab) => {
+    setActiveTab(tab);
+  };
 
   return (
     <>
@@ -1264,8 +1270,70 @@ const Collateral = ({ dataNFTs }) => {
   );
 };
 
-const Overview = ({ params }) => {
-  return <h1 className="text-black">Overview</h1>;
+const Overview = ({ dataOverview, onSeeAllClick }) => {
+  const limitedOffers = dataOverview.itemDetails?.listOffers?.slice(0, 3);
+  return (
+    <div>
+      <h1 className="text-xl font-semibold text-black">Description</h1>
+      <p className="text-base text-black">{dataOverview.description || '-'}</p>
+      <div className="flex justify-between">
+        <h1 className="pt-5 text-xl font-semibold text-black">Bids</h1>
+        {limitedOffers && limitedOffers.length > 0 && (
+          <h1
+            className="cursor-pointer pt-5 text-lg font-semibold text-black"
+            onClick={() => onSeeAllClick('bids')}
+          >
+            See All
+          </h1>
+        )}
+      </div>
+      {limitedOffers && limitedOffers.length > 0 ? (
+        limitedOffers.map((offer, index) => {
+          return (
+            <div
+              className="inline-flex w-full items-center justify-start gap-5 self-stretch rounded-xl"
+              key={index}
+            >
+              <div className="flex shrink grow basis-0 items-center justify-between text-center text-base font-bold leading-loose">
+                <div className="inline-flex h-14 w-full items-center justify-center">
+                  <div className="text-md inline-flex shrink grow basis-0 flex-row gap-3 font-medium leading-loose">
+                    <div className="h-8 w-8 rounded-full bg-gray-300">
+                      <ImageWithFallback
+                        className="h-full w-full rounded-2xl "
+                        width={32}
+                        height={32}
+                        alt={
+                          offer?.userDetails?.username ||
+                          truncateAddress4char(
+                            offer?.userDetails?.walletAddress,
+                          )
+                        }
+                        diameter={32}
+                        address={offer?.userDetails?.walletAddress}
+                        src={`/uploads/user/${offer?.userDetails?.logo}`}
+                      />
+                    </div>
+                    <div className="inline-flex cursor-pointer items-center justify-center">
+                      {offer?.userDetails?.username ||
+                        truncateAddress(offer?.userDetails?.walletAddress)}
+                    </div>
+                    <div className="justify-start">
+                      {'- '}Bid At {formatEther(offer?.value)}{' '}
+                      {dataOverview?.collectionData.Chain.symbol}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })
+      ) : (
+        <div className="w-full gap-5 self-stretch rounded-xl lg:inline-flex">
+          No bids yet
+        </div>
+      )}
+    </div>
+  );
 };
 
 const Bids = ({ dataBid }) => {
@@ -1277,7 +1345,7 @@ const Bids = ({ dataBid }) => {
           key={index}
         >
           <div className="flex shrink grow basis-0 items-center justify-between text-center text-base font-bold leading-loose">
-            <div className="inline-flex h-14 w-1/2 cursor-pointer items-center justify-center">
+            <div className="inline-flex h-14 w-1/2 items-center justify-center">
               <div className="text-md inline-flex shrink grow basis-0 flex-row gap-3 font-medium leading-loose">
                 <div className="h-12 w-12 rounded-full bg-gray-300">
                   <ImageWithFallback
@@ -1293,7 +1361,7 @@ const Bids = ({ dataBid }) => {
                     src={`/uploads/user/${offer?.userDetails?.logo}`}
                   />
                 </div>
-                <div className="inline-flex items-center justify-center">
+                <div className="inline-flex cursor-pointer items-center justify-center ">
                   {offer?.userDetails?.username ||
                     truncateAddress(offer?.userDetails?.walletAddress)}
                 </div>
@@ -1312,15 +1380,15 @@ const Bids = ({ dataBid }) => {
     })
   ) : (
     <div className="w-full items-center justify-center gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex">
-      Data Not Found
+      No bids yet
     </div>
   );
 };
 
-const History = ({ params }) => {
+const History = ({ dataHistory }) => {
   return (
-    <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex">
-      History
+    <div className="w-full items-center justify-center gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex">
+      No history
     </div>
   );
 };

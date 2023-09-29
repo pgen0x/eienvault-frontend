@@ -324,11 +324,11 @@ export default function CollectionDetail({ params }) {
                       </div>
                       <div className="flex justify-between">
                         <span className="font-semibold">Items</span>
-                        <span>{collection.length || 0}</span>
+                        <span>{collection.totalItems || 0}</span>
                       </div>
                       <div className="flex justify-between border-b-2 pb-2 dark:border-zinc-500">
                         <span className="font-semibold">Owner</span>
-                        <span>0</span>
+                        <span>{collection.totalOwners || 0}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="font-semibold">Blockchain</span>

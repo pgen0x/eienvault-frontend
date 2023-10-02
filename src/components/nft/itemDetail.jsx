@@ -1,11 +1,13 @@
 import Ethereum from '@/assets/icon/ethereum';
 import HelaIcon from '@/assets/icon/hela';
+import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { faCircleCheck, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next-nprogress-bar';
 import Image from 'next/image';
 import { Suspense, useState } from 'react';
+import { toast } from 'react-toastify';
 import { formatEther } from 'viem';
 import { useAccount, useNetwork } from 'wagmi';
 import { ImageWithFallback } from '../imagewithfallback';
@@ -133,6 +135,7 @@ const Nft = ({
 }) => {
   const router = useRouter();
   const { address } = useAccount();
+  const { token } = useAuth();
 
   function getHighestBid(auctionData) {
     if (!auctionData.listOffers || auctionData.listOffers.length === 0) {
@@ -174,6 +177,36 @@ const Nft = ({
     return lowestBid.toString(); // Convert the lowestBid back to a string
   }
 
+  async function refreshMetadata(collectionAddress, tokenId) {
+    const bodyData = {
+      collectionAddress,
+      tokenId,
+    };
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/refreshmetadata`,
+        {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          method: 'POST',
+          body: JSON.stringify(bodyData),
+        },
+      );
+      if (!res.ok) {
+        const errorMessage = await res.json();
+        toast.error(errorMessage.error.messages);
+      }
+      const responseData = await res.json();
+      toast.success('Refresh metada successfully');
+      window.location.reload();
+    } catch (error) {
+      console.error('error likes:', error);
+    }
+  }
+
   return (
     <div className="group h-[542px] w-full">
       <Suspense
@@ -181,12 +214,13 @@ const Nft = ({
           <div className="h-[290px] w-full animate-pulse rounded-2xl bg-gray-300" />
         }
       >
-        <Image
+        {nft?.imageUri !== null ? (
+          <Image
           className="z-10 h-[290px] w-full rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all"
           width={600}
           height={600}
           placeholder="blur"
-          blurDataURL={`https://via.placeholder.com/600x600`}
+          blurDataURL={`https://fakeimg.pl/600x600`}
           src={nft?.imageUri}
           alt={
             collection?.name
@@ -195,11 +229,23 @@ const Nft = ({
               ? nft.collectionAddress
               : ''
           }
-        />
+          />
+        ) : (
+          <div className="z-10 h-[290px] w-full rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all flex items-center justify-center">
+            <button
+              className="rounded-full border border-primary-500 bg-transparent px-2 py-2 text-sm font-semibold text-primary-500 hover:border-primary-300 hover:text-primary-300"
+              onClick={() =>
+                refreshMetadata(nft.collectionAddress, nft.tokenId)
+              }
+            >
+              Refresh Metadadata
+            </button>
+          </div>
+        )}
       </Suspense>
       <div className="inline-flex w-full flex-col items-center justify-center px-3 lg:items-start">
         <div className="relative flex w-full flex-row">
-          <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 p-3  backdrop-blur-xl">
+          <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 dark:bg-zinc-700 p-3 backdrop-blur-xl">
             <div className="flex w-full flex-col items-start justify-start">
               <div
                 className="inline-flex cursor-pointer items-center justify-between self-stretch"
@@ -207,7 +253,7 @@ const Nft = ({
                   router.push(`/collection/${nft.collectionAddress}`)
                 }
               >
-                <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2 dark:bg-zinc-600">
+                <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2 dark:bg-zinc-500">
                   <ImageWithFallback
                     className="h-full w-full rounded-2xl "
                     width={16}
@@ -221,7 +267,7 @@ const Nft = ({
                     }
                     diameter={16}
                     address={nft?.collectionAddress}
-                    src={`/uploads/collections/${nft.Collection?.logo}`}
+                    src={`/uploads/collections/${collection?.logo}`}
                   />
                   <div className="flex items-start justify-start gap-2">
                     <div className="text-xs font-medium leading-none text-neutral-700 dark:text-white">
@@ -242,19 +288,19 @@ const Nft = ({
               </div>
               <div className="inline-flex w-full items-center justify-between gap-2 pt-1">
                 <div
-                  className="line-clamp-2 flex h-[40px] items-center font-medium leading-[20px] text-gray-600"
+                  className="line-clamp-2 flex h-[40px] items-center font-medium leading-[20px] text-gray-600 dark:text-white"
                   title={`${nft?.name} #${nft?.tokenId}`}
                 >
                   {nft?.name} #{nft?.tokenId}
                 </div>
                 <div className="text-sm font-normal leading-tight text-neutral-700">
-                  {(nft.Collection?.chainId === 666888 ||
-                    nft.Collection?.chainId === 8668) && (
+                  {(collection?.chainId === 666888 ||
+                    collection?.chainId === 8668) && (
                     <HelaIcon className="h-6 w-6" />
                   )}
                 </div>
               </div>
-              <div className="mt-5 flex w-full justify-between rounded-md bg-white px-2 py-2 dark:bg-zinc-600 dark:text-white">
+              <div className="mt-5 flex w-full justify-between rounded-md bg-white px-2 py-2 dark:bg-zinc-500 dark:text-white">
                 <div className="flex flex-col items-start truncate text-sm leading-5">
                   <p>Price</p>
                   <p className="font-bold">
@@ -323,7 +369,7 @@ const Nft = ({
                     </div>
                   ) : (
                     <div className="mt-5 flex w-full items-center gap-4">
-                      {address === nft.owner ? (
+                      {address === nft?.owner ? (
                         <button className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300">
                           Owned By You
                         </button>
@@ -335,10 +381,10 @@ const Nft = ({
                               itemDetails?.marketId,
                               itemDetails?.price,
                               nft?.imageUri,
-                              nft.name,
-                              nft.tokenId,
-                              collection.Chain.symbol,
-                              collection.Chain.name,
+                              nft?.name,
+                              nft?.tokenId,
+                              collection?.Chain?.symbol,
+                              collection?.Chain?.name,
                             )
                           }
                           disabled={!isNotExpired}
@@ -350,7 +396,7 @@ const Nft = ({
                   )
                 ) : (
                   <div className="mt-5 flex w-full items-center gap-4">
-                    {address === nft.owner ? (
+                    {address === nft?.owner ? (
                       <button
                         onClick={() =>
                           handleOpenModalPutonsale(

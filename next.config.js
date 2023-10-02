@@ -26,6 +26,12 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'fakeimg.pl',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'gateway.pinata.cloud',
         port: '',
         pathname: '/ipfs/**',

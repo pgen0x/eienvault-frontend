@@ -134,7 +134,7 @@ export default function ProfilePage({ params }) {
   }, []);
 
   const handleChangePage = (collection) => {
-    setActivePage(collection.name);
+    setActivePage(collection.slug);
     router.push(`?${collection.slug.toLowerCase()}`);
   };
 
@@ -278,24 +278,45 @@ export default function ProfilePage({ params }) {
     },
   ];
 
-  useEffect(() => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
+  // useEffect(() => {
+  //   const queryString = window.location.search;
+  //   const urlParams = new URLSearchParams(queryString);
 
-    listCollections.map((collection) => {
-      if (urlParams.get(collection.slug.toLowerCase()) === '') {
-        setActivePage(collection.name);
-      }
-    });
-  }, []);
+  //   listCollections.map((collection) => {
+  //     if (urlParams.get(collection.slug.toLowerCase()) === '') {
+  //       setActivePage(collection.name);
+  //     }
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    listCollections.map((collection) => {
-      if (collection.name === activePage) {
-        setRenderPage(collection.page);
-      }
-    });
-  }, [activePage]);
+  // useEffect(() => {
+  //   listCollections.map((collection) => {
+  //     if (collection.name === activePage) {
+  //       setRenderPage(collection.page);
+  //     }
+  //   });
+  // }, [activePage]);
+
+  const renderActiveTab = () => {
+    const listTabs = {
+      Collections: (
+        <Collection userAccount={params?.slug ? params.slug : address} />
+      ),
+      Owned: (
+        <Owned
+          userAccount={params?.slug ? params.slug : address}
+          handleOpenModalBuy={handleOpenModalBuy}
+          handleOpenModalBid={handleOpenModalBid}
+          handleOpenModalPutonsale={handleOpenModalPutonsale}
+        />
+      ),
+      Onsale: <Onsale userAccount={params?.slug ? params.slug : address} />,
+      Sold: <Sold userAccount={params?.slug ? params.slug : address} />,
+      Liked: <Liked userAccount={params?.slug ? params.slug : address} />,
+    };
+
+    return listTabs[activePage];
+  };
 
   return (
     <>
@@ -440,14 +461,14 @@ export default function ProfilePage({ params }) {
               .slice(0, limitCollection)
               .map((collection, index) => {
                 if (collection.active) {
-                  setActivePage(collection.name);
+                  setActivePage(collection.slug);
                 }
                 return (
                   <li
                     key={index}
                     onClick={() => handleChangePage(collection)}
                     className={`flex cursor-pointer gap-2 pb-3 ${
-                      activePage === collection.name
+                      activePage === collection.slug
                         ? 'border-b-4 border-primary-500'
                         : ''
                     }`}
@@ -493,7 +514,7 @@ export default function ProfilePage({ params }) {
             )}
           </ul>
         </section>
-        {renderPage}
+        {renderActiveTab()}
       </div>
       <ModalBid
         isOpenModal={isOpenModalBid}
@@ -1216,7 +1237,12 @@ const ItemCollectionSkeleton = ({ collection, gridList }) => {
   );
 };
 
-const Owned = ({ userAccount, handleOpenModalBid, handleOpenModalBuy, handleOpenModalPutonsale }) => {
+const Owned = ({
+  userAccount,
+  handleOpenModalBid,
+  handleOpenModalBuy,
+  handleOpenModalPutonsale,
+}) => {
   const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState(filters[0]);
   const [isLoading, setIsLoading] = useState(false);
@@ -2312,25 +2338,23 @@ const Sold = ({ userAccount }) => {
               )}
               {nfts.length > 0 &&
                 nfts.map((nft, index) => {
-                    const currentDate = moment();
-                    const endDate = moment.unix(nft?.endDate);
-                    const releaseDate = moment.unix(
-                      nft?.releaseDate,
-                    );
-                    const isNotExpired = endDate.isAfter(currentDate);
-                    const isNotRelease = currentDate.isBefore(releaseDate);
-                    return (
-                      <NftItemDetail
-                        key={index}
-                        nft={nft.nftDetails}
-                        collection={nft.collectionData}
-                        itemDetails={nft}
-                        gridList={gridList}
-                        openFilter={openFilter}
-                        isNotExpired={isNotExpired}
-                        isNotRelease={isNotRelease}
-                      />
-                    );
+                  const currentDate = moment();
+                  const endDate = moment.unix(nft?.endDate);
+                  const releaseDate = moment.unix(nft?.releaseDate);
+                  const isNotExpired = endDate.isAfter(currentDate);
+                  const isNotRelease = currentDate.isBefore(releaseDate);
+                  return (
+                    <NftItemDetail
+                      key={index}
+                      nft={nft.nftDetails}
+                      collection={nft.collectionData}
+                      itemDetails={nft}
+                      gridList={gridList}
+                      openFilter={openFilter}
+                      isNotExpired={isNotExpired}
+                      isNotRelease={isNotRelease}
+                    />
+                  );
                 })}
               {nfts.length > 0 && countNfts > 0 && !isLoading && (
                 <div className="col-span-12 w-full text-center font-semibold text-black">
@@ -2345,7 +2369,12 @@ const Sold = ({ userAccount }) => {
   );
 };
 
-const Liked = ({ userAccount, handleOpenModalBuy, handleOpenModalBid, handleOpenModalPutonsale }) => {
+const Liked = ({
+  userAccount,
+  handleOpenModalBuy,
+  handleOpenModalBid,
+  handleOpenModalPutonsale,
+}) => {
   const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState(filters[0]);
   const [isLoading, setIsLoading] = useState(false);

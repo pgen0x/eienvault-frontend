@@ -94,6 +94,9 @@ export default function CollectionDetail({ params }) {
   const [activeTab, setActiveTab] = useState('items');
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
   const { address, isConnected } = useAccount();
+  const [bannerImage, setBannerImage] = useState(
+    'https://placehold.co/1920x266.png',
+  );
 
   const [isUpdateCollection, setIsUpdateCollection] = useState(false);
   const [chains, setChains] = useState([]);
@@ -102,9 +105,6 @@ export default function CollectionDetail({ params }) {
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
 
-  const [bannerImage, setBannerImage] = useState(
-    'https://placehold.co/1920x266.png',
-  );
   useEffect(() => {
     getCollection();
   }, []);

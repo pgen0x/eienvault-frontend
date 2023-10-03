@@ -101,6 +101,11 @@ const Sidebar = () => {
     disconnectAsync();
   };
 
+  const handleSetting = () => {
+    closeSidebar();
+    router.push('/profile/setting');
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -245,7 +250,7 @@ const Sidebar = () => {
                   )}
                 </div>
                 <div className="self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500">
-                  <button onClick={() => router.push('/profile/setting')}>
+                  <button onClick={() => handleSetting()}>
                     Setting
                   </button>
                 </div>

@@ -1110,6 +1110,7 @@ const Collection = ({ userAddress }) => {
 };
 
 const ItemCollection = ({ collection, gridList }) => {
+  const router = useRouter();
   return (
     <div
       className={`group col-span-6 h-[320px] w-full sm:h-[320px] md:h-[300px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px] ${

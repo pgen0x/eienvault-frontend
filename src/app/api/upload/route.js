@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 // Define allowed file types and maximum file size (100MB)
 const allowedFileTypes = [
   'image/png',
+  'image/jpg',
   'image/webp',
   'image/jpeg',
   'video/mp4',

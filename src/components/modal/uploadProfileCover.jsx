@@ -19,7 +19,7 @@ import { useAccount } from 'wagmi';
 export default function ModalUploadProfileCover({
   isOpenModal,
   onModalClose,
-  setProfile
+  updateBannerImage,
 }) {
   const [fileError, setFileError] = useState('');
   const { token } = useAuth();
@@ -61,6 +61,8 @@ export default function ModalUploadProfileCover({
         if (data.success) {
           const res = await onSave(data.filename);
           if (res.success) {
+            const newBannerImageURL = `/uploads/users/banner/${data.filename}`;
+            updateBannerImage(newBannerImageURL);
             toast.success('Update Cover Successfully');
             reset();
             closeModal();
@@ -83,10 +85,6 @@ export default function ModalUploadProfileCover({
 
   const onSave = async (filename) => {
     try {
-      setProfile((oldProfile) => {
-        oldProfile['banner'] = filename;
-        return oldProfile;
-      });
       const payload = {
         banner: filename,
         walletAddress: address,

@@ -17,6 +17,9 @@ const ProfileSetting = () => {
   const { token } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
   const [profile, setProfile] = useState({});
+  const [bannerImage, setBannerImage] = useState(
+    'https://placehold.co/1920x266.png',
+  );
   useEffect(() => {
     if (token) {
       getProfile(token);
@@ -34,6 +37,11 @@ const ProfileSetting = () => {
     })
       .then((response) => {
         setProfile(response.data);
+        if (response.data.banner !== null) {
+          setBannerImage(
+            `/uploads/users/banner/${response.data.banner}`,
+          );
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -62,7 +70,7 @@ const ProfileSetting = () => {
               </ul>
             </div>
             <div className="col-span-12 sm:col-span-8 md:col-span-10 lg:col-span-10 xl:col-span-10 2xl:col-span-10">
-              {activeTab == "profile" && <Profile profile={profile} setProfile={setProfile} token={token} />}
+              {activeTab == "profile" && <Profile profile={profile} setProfile={setProfile} token={token} bannerImage={bannerImage} setBannerImage={setBannerImage} />}
               {activeTab == "account" && <Account />}
               {activeTab == "wallets" && <Wallets />}
             </div>
@@ -74,7 +82,7 @@ const ProfileSetting = () => {
   );
 }
 
-const Profile = ({ profile, setProfile, token }) => {
+const Profile = ({ profile, setProfile, token, bannerImage, setBannerImage }) => {
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
   const handleChangeProfile = (event, attribute) => {
     setProfile((oldProfile) => {
@@ -116,15 +124,15 @@ const Profile = ({ profile, setProfile, token }) => {
     setIsOpenModalCover(false);
   };
 
+  const updateBannerImage = (newImageURL) => {
+    setBannerImage(newImageURL);
+  };
+
   return (
     <>
       <div className="group relative w-full">
         <Image
-          src={
-            profile.banner
-              ? `/uploads/users/banner/${profile.banner}`
-              : 'https://fakeimg.pl/1920x266'
-          }
+          src={bannerImage}
           alt={profile.username ? profile.username : ''}
           width={1920}
           height={266}
@@ -214,7 +222,7 @@ const Profile = ({ profile, setProfile, token }) => {
       <ModalUploadProfileCover
         isOpenModal={IsOpenModalCover}
         onModalClose={closeModalCover}
-        setProfile={setProfile}
+        updateBannerImage={updateBannerImage}
       />
     </>
   );

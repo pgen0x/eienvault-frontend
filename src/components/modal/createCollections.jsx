@@ -2,6 +2,7 @@
 import Ethereum from '@/assets/icon/ethereum';
 import HelaIcon from '@/assets/icon/hela';
 import {
+  faCheck,
   faChevronDown,
   faClose,
   faImage,
@@ -22,6 +23,7 @@ import { useWeb3Modal } from '@web3modal/react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/hooks/AuthContext';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 export default function ModalCreateCollection({
   isOpenModal,
@@ -38,6 +40,9 @@ export default function ModalCreateCollection({
   const [isWait, setIsWait] = useState(false);
   const [hash, setHash] = useState();
   const [isErrorDeploy, setIsErrorDeploy] = useState();
+  const [deployedContractAddress, setDeployedContractAddress] = useState();
+  const [onSaveData, setOnsaveData] = useState();
+
   const { data: walletClient } = useWalletClient();
   const { address, isConnected } = useAccount();
   const { chain } = useNetwork();
@@ -58,6 +63,7 @@ export default function ModalCreateCollection({
   const name = watch('name');
   const tokenSymbol = watch('tokenSymbol');
   const description = watch('description');
+  const router = useRouter();
 
   const onUpload = async (file, filename) => {
     try {
@@ -113,6 +119,7 @@ export default function ModalCreateCollection({
 
       if (response.ok) {
         // Data was saved successfully
+        return response.json();
         console.log('Data saved successfully.');
       } else {
         // Handle the error here
@@ -162,7 +169,9 @@ export default function ModalCreateCollection({
             selectedImage[0],
             selectedImage[0].name,
           );
-          const onSaveData = await onSave({
+          console.log(data);
+          console.log(selectedImage[0]);
+          const onSaveDataRes = await onSave({
             name: name,
             tokenSymbol: tokenSymbol,
             description: description,
@@ -170,7 +179,8 @@ export default function ModalCreateCollection({
             logo: filenameBase64.filename,
             tokenAddress: data.contractAddress,
           });
-
+          setDeployedContractAddress(data.contractAddress);
+          setOnsaveData(onSaveDataRes);
           setIsWait(false);
           setIsCompleted(true);
         }
@@ -184,7 +194,6 @@ export default function ModalCreateCollection({
     setIsCompleted(false);
     onClose(false);
     onModalClose();
-    reset();
   }
 
   const allowedFileTypes = [
@@ -213,6 +222,17 @@ export default function ModalCreateCollection({
     }
 
     return true; // Validation passed
+  };
+
+  useEffect(() => {
+    if (isOpenModal === true) {
+      reset();
+    }
+  }, [isOpenModal]);
+
+  const handleCustomize = () => {
+    closeModal();
+    router.push(`/collection/${deployedContractAddress}`);
   };
 
   return (
@@ -712,10 +732,12 @@ export default function ModalCreateCollection({
                       <div className="text-gray-900">
                         <section className="step-2 flex flex-col gap-3 bg-gray-100 p-5">
                           <div className="flex flex-col items-center gap-5">
-                            <img
-                              src="https://fakeimg.pl/84x84"
-                              className="h-20 w-20 rounded-lg"
-                            />
+                            <div className="relative z-10 flex h-28 w-28 items-center justify-center rounded-full border-[8px] border-green-400">
+                              <FontAwesomeIcon
+                                icon={faCheck}
+                                className="text-6xl font-bold text-green-400"
+                              />
+                            </div>
                             <div className="text-center">
                               <h3 className="text-lg font-bold">
                                 Your collections is now created!
@@ -726,10 +748,16 @@ export default function ModalCreateCollection({
                               </span>
                             </div>
                             <div className="justiry-between flex w-full gap-2">
-                              <button className="w-full rounded-full bg-primary-500 py-2 font-bold text-white hover:text-primary-400">
+                              <button
+                                className="w-full rounded-full bg-primary-500 py-2 font-bold text-white hover:bg-primary-400"
+                                onClick={() => handleCustomize()}
+                              >
                                 Customize
                               </button>
-                              <button className="w-full rounded-full bg-white py-2 font-bold text-primary-500 hover:text-primary-400">
+                              <button
+                                className="w-full rounded-full bg-white py-2 font-bold text-primary-500 hover:bg-primary-200"
+                                onClick={closeModal}
+                              >
                                 Later
                               </button>
                             </div>

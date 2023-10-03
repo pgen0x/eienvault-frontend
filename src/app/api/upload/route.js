@@ -8,6 +8,7 @@ const allowedFileTypes = [
   'image/webp',
   'image/jpeg',
   'image/jpg',
+  'image/gif',
   'video/mp4',
   'audio/mp3',
 ];

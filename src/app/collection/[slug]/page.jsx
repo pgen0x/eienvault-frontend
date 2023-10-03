@@ -102,6 +102,9 @@ export default function CollectionDetail({ params }) {
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
 
+  const [bannerImage, setBannerImage] = useState(
+    'https://placehold.co/1920x266.png',
+  );
   useEffect(() => {
     getCollection();
   }, []);
@@ -128,6 +131,11 @@ export default function CollectionDetail({ params }) {
       })
       .then((response) => {
         setCollection(response.data);
+        if (response.data.bannerImage !== null) {
+          setBannerImage(
+            `/uploads/collections/banner/${response.data.bannerImage}`,
+          );
+        }
       })
       .catch((error) => {
         toast.error(error.message);
@@ -223,16 +231,16 @@ export default function CollectionDetail({ params }) {
     setStepUpdate(Create);
   };
 
+  const updateBannerImage = (newImageURL) => {
+    setBannerImage(newImageURL);
+  };
+
   return (
     <>
       <section>
         <div className="group relative w-full">
           <Image
-            src={
-              collection.bannerImage
-                ? `/uploads/collections/banner/${collection.bannerImage}`
-                : 'https://fakeimg.pl/1920x266'
-            }
+            src={bannerImage}
             alt={collection.name ? collection.name : ''}
             width={1920}
             height={266}
@@ -485,6 +493,7 @@ export default function CollectionDetail({ params }) {
         address={collection?.tokenAddress}
         collection={collection}
         setCollection={setCollection}
+        updateBannerImage={updateBannerImage}
       />
       <ModalUpdateCollection
         collectionAddress={collection?.tokenAddress}

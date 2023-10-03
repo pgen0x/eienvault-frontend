@@ -220,7 +220,14 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                         <span className="text-gray-900 dark:text-white">
                           By
                         </span>
-                        <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2 ">
+                        <div
+                          className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2"
+                          onClick={() =>
+                            router.push(
+                              `/profile/${auction.collectionData?.userAddress}`,
+                            )
+                          }
+                        >
                           <ImageWithFallback
                             className="h-full w-full rounded-2xl "
                             width={15}

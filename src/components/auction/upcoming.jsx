@@ -72,7 +72,7 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
               />
               <div className="flex items-start justify-start gap-2">
                 <div className="text-xs font-medium leading-none text-neutral-700">
-                  {dataUpcoming[0].collectionData.User.username ||
+                  {dataUpcoming[0].collectionData.name ||
                     truncateAddress(
                       dataUpcoming[0].collectionData.tokenAddress,
                     )}
@@ -85,7 +85,7 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
               </div>
             </div>
             <div className="mt-2 w-fit rounded-lg bg-white bg-opacity-70 p-2 font-bold text-black">
-              {dataUpcoming[0].nftDetails.name ||
+              {dataUpcoming[0].nftDetails?.name ||
                 dataUpcoming[0].collectionData?.name}{' '}
               #{dataUpcoming[0].tokenId}
             </div>

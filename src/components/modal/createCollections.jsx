@@ -160,7 +160,7 @@ export default function ModalCreateCollection({
         if (data) {
           const filenameBase64 = await onUpload(
             selectedImage[0],
-            data.contractAddress,
+            selectedImage[0].name,
           );
           const onSaveData = await onSave({
             name: name,

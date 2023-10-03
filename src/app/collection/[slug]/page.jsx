@@ -506,7 +506,7 @@ const Items = ({ params, collection }) => {
   const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState(filters[0]);
   const [nfts, setNfts] = useState([]);
-  const [filteredNFTs, setFilteredNFTs] = useState([]);
+  const [sortedNFTs, setSortedNFTs] = useState([]);
   const [nftPage, setNftPage] = useState(1);
   const [nftLast, setNftLast] = useState(false);
   const filterQuery = useSearchParams();
@@ -533,6 +533,18 @@ const Items = ({ params, collection }) => {
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [filterStatus, setFilterStatus] = useState('');
+
+  const [startPrice, setStartPrice] = useState('');
+  const [endPrice, setEndPrice] = useState('');
+  const [priceFilter, setPriceFilter] = useState({ start: '', end: '' });
+
+  const handleApplyPriceFilter = (start, end) => {
+    // Update the price filter criteria
+    console.log('Clicked');
+    setPriceFilter({ start, end });
+  };
+
   const handleFilterCollapse = (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
   };
@@ -733,7 +745,7 @@ const Items = ({ params, collection }) => {
     }
   };
 
-  const filterNfts = () => {
+  const sortNfts = () => {
     if (selectedFilter === 'All') {
       return nfts;
     } else if (selectedFilter === 'Price low to high') {
@@ -776,6 +788,7 @@ const Items = ({ params, collection }) => {
       if (endingSoonNFTs.length === 0) {
         return []; // No data matches the filter
       }
+      console.log(endingSoonNFTs);
 
       // Sort the ending soon NFTs by end date (ascending order)
       const sortedNfts = [...endingSoonNFTs].sort((a, b) => {
@@ -813,11 +826,87 @@ const Items = ({ params, collection }) => {
 
   useEffect(() => {
     if (nfts) {
-      console.log(isLoading);
-      const filteredNfts = filterNfts();
-      setFilteredNFTs(filteredNfts);
+      const sortedNfts = sortNfts();
+      setSortedNFTs(sortedNfts);
     }
   }, [selectedFilter, nfts]);
+
+  const filterNFTs = () => {
+    if (filterStatus === '') {
+      return nfts;
+    } else if (filterStatus === 'onauction') {
+      const nftsWithItemDetails = nfts.filter((nft) => {
+        return (
+          nft.itemDetails !== undefined &&
+          nft.itemDetails !== null &&
+          nft.itemDetails.isAuctioned === true
+        );
+      });
+      if (nftsWithItemDetails.length === 0) {
+        return []; // No data matches the filter
+      }
+
+      return nftsWithItemDetails;
+    } else if (filterStatus === 'listed') {
+      const nftsWithItemDetails = nfts.filter((nft) => {
+        return (
+          nft.itemDetails !== undefined &&
+          nft.itemDetails !== null &&
+          nft.itemDetails.isAuctioned === false
+        );
+      });
+      if (nftsWithItemDetails.length === 0) {
+        return []; // No data matches the filter
+      }
+
+      return nftsWithItemDetails;
+    } else if (filterStatus === 'notforsale') {
+      const nftsWithoutItemDetails = nfts.filter((nft) => {
+        return nft.itemDetails === undefined || nft.itemDetails === null;
+      });
+      if (nftsWithoutItemDetails.length === 0) {
+        return []; // No data matches the filter
+      }
+
+      return nftsWithoutItemDetails;
+    } else {
+      return nfts;
+    }
+  };
+
+  useEffect(() => {
+    if (nfts) {
+      const filteredNFTs = filterNFTs();
+      setSortedNFTs(filteredNFTs);
+    }
+  }, [filterStatus, nfts]);
+
+  const priceFilterNFTs = () => {
+    if (priceFilter.start !== '' || priceFilter.end !== '') {
+      const filteredNFTs = nfts.filter((nft) => {
+        const price = formatEther(Number(nft.itemDetails?.price) || 0);
+        const start = priceFilter.start !== '' ? Number(priceFilter.start) : 0;
+        const end = priceFilter.end !== '' ? Number(priceFilter.end) : Infinity;
+
+        return price >= start && price <= end;
+      });
+
+      if (filteredNFTs.length === 0) {
+        return []; // No data matches the filter
+      }
+
+      return filteredNFTs;
+    }
+  };
+
+  useEffect(() => {
+    if (priceFilter.start !== '' || priceFilter.end !== '') {
+      const pricefilteredNFTs = priceFilterNFTs();
+      setSortedNFTs(pricefilteredNFTs);
+    } else {
+      setSortedNFTs(nfts);
+    }
+  }, [priceFilter]);
 
   return (
     <>
@@ -956,72 +1045,113 @@ const Items = ({ params, collection }) => {
                 <li>
                   <button
                     className="action flex w-full cursor-pointer items-center justify-between py-3"
-                    onClick={(event) => handleFilterCollapse('blockchain')}
+                    onClick={(event) => handleFilterCollapse('status')}
                   >
-                    <span>Blockchain</span>
+                    <span>Status</span>
                     <FontAwesomeIcon icon={faChevronDown} />
                   </button>
                   <div
-                    className={`target py-5 ${
-                      filterCollapse.blockchain ? 'block' : 'hidden'
+                    className={`target flex flex-wrap gap-2 pb-4 ${
+                      filterCollapse.status ? 'block' : 'hidden'
                     }`}
                   >
-                    <select
-                      id="country"
-                      name="country"
-                      autoComplete="country-name"
-                      className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                    <button
+                      onClick={() =>
+                        filterStatus === 'onauction'
+                          ? setFilterStatus('')
+                          : setFilterStatus('onauction')
+                      }
+                      className={`col-span-3 flex h-8 w-fit min-w-[2rem] cursor-pointer items-center justify-center rounded-lg px-3 text-xs font-medium leading-5 text-white shadow ${
+                        filterStatus === 'onauction'
+                          ? 'bg-primary-300'
+                          : 'bg-primary-500 lg:hover:bg-primary-300'
+                      }`}
                     >
-                      <option>United States</option>
-                      <option>Canada</option>
-                      <option>Mexico</option>
-                    </select>
+                      On Auction
+                    </button>
+                    <button
+                      onClick={() =>
+                        filterStatus === 'listed'
+                          ? setFilterStatus('')
+                          : setFilterStatus('listed')
+                      }
+                      className={`col-span-3 flex h-8 w-fit min-w-[2rem] cursor-pointer items-center justify-center rounded-lg px-3 text-xs font-medium leading-5 text-white shadow ${
+                        filterStatus === 'listed'
+                          ? 'bg-primary-300'
+                          : 'bg-primary-500 lg:hover:bg-primary-300'
+                      }`}
+                    >
+                      Listed
+                    </button>
+                    <button
+                      onClick={() =>
+                        filterStatus === 'notforsale'
+                          ? setFilterStatus('')
+                          : setFilterStatus('notforsale')
+                      }
+                      className={`col-span-3 flex h-8 w-fit min-w-[2rem] cursor-pointer items-center justify-center rounded-lg px-3 text-xs font-medium leading-5 text-white shadow ${
+                        filterStatus === 'notforsale'
+                          ? 'bg-primary-300'
+                          : 'bg-primary-500 lg:hover:bg-primary-300'
+                      }`}
+                    >
+                      Not For Sale
+                    </button>
                   </div>
-                </li>
-                <li>
-                  <button
-                    className="action flex w-full cursor-pointer items-center justify-between py-3"
-                    onClick={(event) => handleFilterCollapse('category')}
-                  >
-                    <span>Category</span>
-                    <FontAwesomeIcon icon={faChevronDown} />
-                  </button>
                 </li>
                 <li>
                   <button
                     className="action flex w-full cursor-pointer items-center justify-between py-3"
                     onClick={(event) => handleFilterCollapse('price')}
                   >
-                    <span>Floor price</span>
+                    <span>Price</span>
                     <FontAwesomeIcon icon={faChevronDown} />
                   </button>
+                  <div
+                    className={`target flex flex-col gap-3 pb-2  ${
+                      filterCollapse.price ? 'block' : 'hidden'
+                    }`}
+                  >
+                    <div className="flex flex-row gap-2">
+                      <input
+                        type="number"
+                        placeholder="Start Price"
+                        value={startPrice}
+                        onChange={(e) => setStartPrice(e.target.value)}
+                        className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                      />
+                      <div className="flex items-center justify-center">-</div>
+                      <input
+                        type="number"
+                        placeholder="End Price"
+                        value={endPrice}
+                        onChange={(e) => setEndPrice(e.target.value)}
+                        className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                      />
+                    </div>
+                    <button
+                      className="mb-2 inline-flex w-full justify-center rounded-full bg-primary-500 px-4 py-2 text-sm text-white hover:bg-primary-300"
+                      onClick={() =>
+                        handleApplyPriceFilter(startPrice, endPrice)
+                      }
+                    >
+                      Apply
+                    </button>
+                  </div>
                 </li>
                 <li>
                   <button
                     className="action flex w-full cursor-pointer items-center justify-between py-3"
-                    onClick={(event) => handleFilterCollapse('status')}
+                    onClick={(event) => handleFilterCollapse('properties')}
                   >
-                    <span>Status</span>
+                    <span>Properties</span>
                     <FontAwesomeIcon icon={faChevronDown} />
                   </button>
-                </li>
-                <li>
-                  <button
-                    className="action flex w-full cursor-pointer items-center justify-between py-3"
-                    onClick={(event) => handleFilterCollapse('currency')}
-                  >
-                    <span>Currency</span>
-                    <FontAwesomeIcon icon={faChevronDown} />
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="action flex w-full cursor-pointer items-center justify-between py-3"
-                    onClick={(event) => handleFilterCollapse('collection')}
-                  >
-                    <span>Collection</span>
-                    <FontAwesomeIcon icon={faChevronDown} />
-                  </button>
+                  <div
+                    className={`target py-5 ${
+                      filterCollapse.properties ? 'block' : 'hidden'
+                    }`}
+                  ></div>
                 </li>
               </ul>
             </div>
@@ -1034,12 +1164,12 @@ const Items = ({ params, collection }) => {
             }`}
           >
             <div className="grid w-full grid-cols-12 gap-7 text-gray-900">
-              {filteredNFTs.length == 0 && !isLoading && (
+              {sortedNFTs.length == 0 && !isLoading && (
                 <div className="col-span-12 w-full text-center font-semibold text-black">
                   No results found
                 </div>
               )}
-              {filteredNFTs.length == 0 && isLoading && (
+              {sortedNFTs.length == 0 && isLoading && (
                 <>
                   {[...Array(12)].map((nft, index) => (
                     <NftItemDetailSkeleton
@@ -1050,8 +1180,8 @@ const Items = ({ params, collection }) => {
                   ))}
                 </>
               )}
-              {filteredNFTs.length > 0 &&
-                filteredNFTs.map((nft, index) => {
+              {sortedNFTs.length > 0 &&
+                sortedNFTs.map((nft, index) => {
                   const currentDate = moment();
                   const endDate = moment.unix(nft.itemDetails?.endDate);
                   const releaseDate = moment.unix(nft.itemDetails?.releaseDate);

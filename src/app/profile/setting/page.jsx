@@ -12,6 +12,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import ModalUploadProfileCover from '@/components/modal/uploadProfileCover';
 import Image from 'next/image';
+import ModalUploadProfileLogo from '@/components/modal/uploadProfileLogo';
 
 const ProfileSetting = () => {
   const { token } = useAuth();
@@ -19,6 +20,9 @@ const ProfileSetting = () => {
   const [profile, setProfile] = useState({});
   const [bannerImage, setBannerImage] = useState(
     'https://placehold.co/1920x266.png',
+  );
+  const [logoImage, setLogoImage] = useState(
+    'https://placehold.co/100x100.png',
   );
   useEffect(() => {
     if (token) {
@@ -40,6 +44,11 @@ const ProfileSetting = () => {
         if (response.data.banner !== null) {
           setBannerImage(
             `/uploads/users/banner/${response.data.banner}`,
+          );
+        }
+        if (response.data.logo !== null) {
+          setLogoImage(
+            `/uploads/users/${response.data.logo}`,
           );
         }
       })
@@ -70,7 +79,7 @@ const ProfileSetting = () => {
               </ul>
             </div>
             <div className="col-span-12 sm:col-span-8 md:col-span-10 lg:col-span-10 xl:col-span-10 2xl:col-span-10">
-              {activeTab == "profile" && <Profile profile={profile} setProfile={setProfile} token={token} bannerImage={bannerImage} setBannerImage={setBannerImage} />}
+              {activeTab == "profile" && <Profile profile={profile} setProfile={setProfile} token={token} bannerImage={bannerImage} setBannerImage={setBannerImage} logoImage={logoImage} setLogoImage={setLogoImage} />}
               {activeTab == "account" && <Account />}
               {activeTab == "wallets" && <Wallets />}
             </div>
@@ -82,8 +91,9 @@ const ProfileSetting = () => {
   );
 }
 
-const Profile = ({ profile, setProfile, token, bannerImage, setBannerImage }) => {
+const Profile = ({ profile, setProfile, token, bannerImage, setBannerImage, logoImage, setLogoImage }) => {
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
+  const [IsOpenModalLogo, setIsOpenModalLogo] = useState(false);
   const handleChangeProfile = (event, attribute) => {
     setProfile((oldProfile) => {
       oldProfile[attribute] = event.target.value;
@@ -120,12 +130,24 @@ const Profile = ({ profile, setProfile, token, bannerImage, setBannerImage }) =>
     setIsOpenModalCover(true);
   };
 
+  const editLogo = () => {
+    setIsOpenModalLogo(true);
+  };
+
   const closeModalCover = () => {
     setIsOpenModalCover(false);
   };
 
+  const closeModalLogo = () => {
+    setIsOpenModalLogo(false);
+  };
+
   const updateBannerImage = (newImageURL) => {
     setBannerImage(newImageURL);
+  };
+
+  const updateLogoImage = (newImageURL) => {
+    setLogoImage(newImageURL);
   };
 
   return (
@@ -149,8 +171,14 @@ const Profile = ({ profile, setProfile, token, bannerImage, setBannerImage }) =>
       </div>
       <div className="mt-5 flex justify-between">
         <div className="flex max-w-xs flex-col">
-          <div className="relative -mt-[7.5rem] ml-[1rem] sm:ml-[1rem] md:ml-[2.5rem] lg:ml-[2.5rem] xl:ml-[2.5rem] 2xl:ml-[2.5rem]">
-            <img className="w-36 rounded-full border-4 border-white shadow" src="https://fakeimg.pl/100x100" />
+          <div className="group relative -mt-[7.5rem] ml-[1rem] sm:ml-[1rem] md:ml-[2.5rem] lg:ml-[2.5rem] xl:ml-[2.5rem] 2xl:ml-[2.5rem]">
+            <Image className="w-36 h-36 rounded-full border-8 border-gray-100 shadow" src={logoImage} width={100} height={100} />
+            <button
+              onClick={editLogo}
+              className="absolute right-0 top-0 m-6 rounded-full bg-primary-500 text-white w-8 h-8 flex items-center justify-center opacity-0 hover:bg-primary-300 group-hover:opacity-100"
+            >
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </button>
           </div>
         </div>
       </div>
@@ -223,6 +251,11 @@ const Profile = ({ profile, setProfile, token, bannerImage, setBannerImage }) =>
         isOpenModal={IsOpenModalCover}
         onModalClose={closeModalCover}
         updateBannerImage={updateBannerImage}
+      />
+      <ModalUploadProfileLogo
+        isOpenModal={IsOpenModalLogo}
+        onModalClose={closeModalLogo}
+        updateLogoImage={updateLogoImage}
       />
     </>
   );

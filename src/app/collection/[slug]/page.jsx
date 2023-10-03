@@ -92,6 +92,9 @@ export default function CollectionDetail({ params }) {
   const [activeTab, setActiveTab] = useState('items');
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
   const { address, isConnected } = useAccount();
+  const [bannerImage, setBannerImage] = useState(
+    'https://placehold.co/1920x266.png',
+  );
   useEffect(() => {
     getCollection();
   }, []);
@@ -118,6 +121,11 @@ export default function CollectionDetail({ params }) {
       })
       .then((response) => {
         setCollection(response.data);
+        if (response.data.bannerImage !== null) {
+          setBannerImage(
+            `/uploads/collections/banner/${response.data.bannerImage}`,
+          );
+        }
       })
       .catch((error) => {
         toast.error(error.message);
@@ -171,16 +179,16 @@ export default function CollectionDetail({ params }) {
     setIsOpenModalCover(false);
   };
 
+  const updateBannerImage = (newImageURL) => {
+    setBannerImage(newImageURL);
+  };
+
   return (
     <>
       <section>
         <div className="group relative w-full">
           <Image
-            src={
-              collection.bannerImage
-                ? `/uploads/collections/banner/${collection.bannerImage}`
-                : 'https://placehold.co/1920x266.png'
-            }
+            src={bannerImage}
             alt={collection.name ? collection.name : ''}
             width={1920}
             height={266}
@@ -431,6 +439,7 @@ export default function CollectionDetail({ params }) {
         isOpenModal={IsOpenModalCover}
         onModalClose={closeModal}
         address={collection?.tokenAddress}
+        updateBannerImage={updateBannerImage}
       />
       <Footer />
     </>

@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import Image from 'next/legacy/image';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -19,11 +19,11 @@ export default function ModaluploadCover({
   isOpenModal,
   onModalClose,
   address,
+  updateBannerImage,
 }) {
   const [fileError, setFileError] = useState('');
   const { token } = useAuth();
   function closeModal() {
-    reset();
     onModalClose();
   }
 
@@ -61,8 +61,9 @@ export default function ModaluploadCover({
         if (data.success) {
           const res = await onSave(data.filename);
           if (res.success) {
+            const newBannerImageURL = `/uploads/collections/banner/${data.filename}`;
+            updateBannerImage(newBannerImageURL);
             toast.success('Update Cover Successfully');
-            reset();
             closeModal();
           } else {
             toast.error(`File upload failed: ${data.error}`);
@@ -122,6 +123,7 @@ export default function ModaluploadCover({
     'image/jpeg',
     'image/jpg',
     'image/gif',
+    'image/webp',
   ];
   const maxFileSize = 15 * 1024 * 1024; // 15MB
 
@@ -143,6 +145,12 @@ export default function ModaluploadCover({
 
     return true; // Validation passed
   };
+
+  useEffect(() => {
+    if (isOpenModal === true) {
+      reset();
+    }
+  }, [isOpenModal]);
 
   return (
     <>

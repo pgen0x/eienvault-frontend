@@ -44,6 +44,7 @@ import LoadingCollections from './loadingCollections';
 import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { getContract, hexToNumber, parseEther, zeroAddress } from 'viem';
+import { ImageWithFallback } from '@/components/imagewithfallback';
 
 export default function Create({ chains }) {
   const { token } = useAuth();
@@ -1138,12 +1139,14 @@ export default function Create({ chains }) {
                           htmlFor={`collection-${collection.tokenAddress}`} // Match the input's ID
                           className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-500 peer-checked:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500`}
                         >
-                          <Image
+                          <ImageWithFallback
                             src={`/uploads/collections/${collection.logo}`}
-                            height={56}
-                            width={56}
+                            height={54}
+                            width={54}
                             className="rounded-full"
                             alt={collection.name}
+                            address={collection.tokenAddress}
+                            diameter={54}
                           />
                           <span>
                             {collection.name}

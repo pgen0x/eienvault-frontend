@@ -14,16 +14,16 @@ import Image from 'next/legacy/image';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import { useAccount } from 'wagmi';
 
-export default function ModaluploadCover({
+export default function ModalUploadProfileCover({
   isOpenModal,
   onModalClose,
-  address,
-  collection,
-  setCollection
+  setProfile
 }) {
   const [fileError, setFileError] = useState('');
   const { token } = useAuth();
+  const { address } = useAccount();
   function closeModal() {
     reset();
     onModalClose();
@@ -50,12 +50,10 @@ export default function ModaluploadCover({
       formData.append('filename', filename);
 
       // Use the fetch API to send the FormData to the server
-      const response = await fetch('/api/uploadcover', {
+      const response = await fetch('/api/uploadprofilecover', {
         method: 'POST',
         body: formData,
       });
-
-      console.log(response);
 
       if (response.ok) {
         const data = await response.json();
@@ -85,12 +83,13 @@ export default function ModaluploadCover({
 
   const onSave = async (filename) => {
     try {
-      setCollection((oldCollection) => {
-        oldCollection['bannerImage'] = filename;
-        return oldCollection;
-      })
+      setProfile((oldProfile) => {
+        oldProfile['banner'] = filename;
+        return oldProfile;
+      });
       const payload = {
-        bannerImage: filename,
+        banner: filename,
+        walletAddress: address,
       };
 
       const options = {
@@ -104,7 +103,7 @@ export default function ModaluploadCover({
       };
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/collection/edit/${address}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/update`,
         options,
       );
 

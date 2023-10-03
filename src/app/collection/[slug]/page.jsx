@@ -44,6 +44,7 @@ import {
   NftItemDetailSkeleton,
 } from '@/components/nft/itemDetail';
 import ModaluploadCover from '@/components/modal/uploadCover';
+import ModalUpdateCollection from '@/components/modal/updateCollections';
 
 const servers = [
   'All Mainnet',
@@ -85,6 +86,7 @@ const collections = [
 export default function CollectionDetail({ params }) {
   const router = useRouter();
   const { token } = useAuth();
+  const { chain } = useNetwork();
   const [collection, setCollection] = useState({});
   const [profile, setProfile] = useState({});
   const [showDescription, setShowDescription] = useState(false);
@@ -92,6 +94,14 @@ export default function CollectionDetail({ params }) {
   const [activeTab, setActiveTab] = useState('items');
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
   const { address, isConnected } = useAccount();
+
+  const [isUpdateCollection, setIsUpdateCollection] = useState(false);
+  const [chains, setChains] = useState([]);
+  const [selectedBlockchain, setSelectedBlockchain] = useState({
+    chainId: chain?.id || 666888,
+    symbol: chain?.nativeCurrency.symbol || 'HLUSD',
+  });
+
   useEffect(() => {
     getCollection();
   }, []);
@@ -167,8 +177,50 @@ export default function CollectionDetail({ params }) {
     setIsOpenModalCover(true);
   };
 
-  const closeModal = () => {
+  const closeModalCover = () => {
     setIsOpenModalCover(false);
+  };
+
+  const handleModalUpdate = () => {
+    if (!token) {
+      open();
+    } else {
+      setIsUpdateCollection(true);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/chain/getall`,
+          {
+            cache: 'force-cache',
+          },
+        );
+
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const dataChain = await res.json();
+        setChains(dataChain);
+        // Continue with your code
+      } catch (error) {
+        console.error('Fetch failed:', error);
+        // Handle the error gracefully, e.g., show an error message to the user
+      }
+    };
+
+    fetchData();
+  }, [isUpdateCollection]);
+
+  const closeModalUpdateCollection = () => {
+    setIsUpdateCollection(false);
+  };
+
+  const handleStepUpdate = (Create) => {
+    setStepUpdate(Create);
   };
 
   return (
@@ -179,7 +231,7 @@ export default function CollectionDetail({ params }) {
             src={
               collection.bannerImage
                 ? `/uploads/collections/banner/${collection.bannerImage}`
-                : 'https://placehold.co/1920x266.png'
+                : 'https://fakeimg.pl/1920x266'
             }
             alt={collection.name ? collection.name : ''}
             width={1920}
@@ -340,7 +392,7 @@ export default function CollectionDetail({ params }) {
                   </div>
                   <div className="col-span-12 flex gap-1 font-semibold text-white">
                     {address === collection.userAddress && (
-                      <button className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300">
+                      <button className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" onClick={() => handleModalUpdate()}>
                         <FontAwesomeIcon icon={faPenToSquare} /> Edit Collection
                       </button>
                     )}
@@ -429,8 +481,21 @@ export default function CollectionDetail({ params }) {
       </div>
       <ModaluploadCover
         isOpenModal={IsOpenModalCover}
-        onModalClose={closeModal}
+        onModalClose={closeModalCover}
         address={collection?.tokenAddress}
+        collection={collection}
+        setCollection={setCollection}
+      />
+      <ModalUpdateCollection
+        collectionAddress={collection?.tokenAddress}
+        chains={chains}
+        isOpenModal={isUpdateCollection}
+        selectedChain={selectedBlockchain}
+        setSelectedChain={setSelectedBlockchain}
+        onClose={closeModalUpdateCollection}
+        onModalClose={closeModalUpdateCollection}
+        collection={collection}
+        setCollection={setCollection}
       />
       <Footer />
     </>
@@ -573,46 +638,6 @@ const Items = ({ params, collection }) => {
     router.push(`?search=${search}`);
     getNfts();
   };
-
-  function getHighestBid(auctionData) {
-    if (!auctionData.listOffers || auctionData.listOffers.length === 0) {
-      return { message: 'No bids', highestBid: '0.00', highestBidder: null }; // Return a message if there are no bids or if listOffers is null/undefined
-    }
-
-    let highestBid = BigInt(0);
-    let highestBidder = null;
-
-    for (const offer of auctionData.listOffers) {
-      const bidValue = BigInt(offer.value); // Convert the value to a BigInt for precision
-      if (bidValue > highestBid) {
-        highestBid = bidValue;
-        highestBidder = offer.address;
-      }
-    }
-
-    return {
-      message: 'Highest bid found',
-      highestBid: highestBid.toString(),
-      highestBidder,
-    };
-  }
-
-  function getLowestBid(auctionData) {
-    if (auctionData.listOffers.length === 0) {
-      return 0; // Return a message if there are no bids
-    }
-
-    let lowestBid = Infinity; // Initialize to a large number
-
-    for (const offer of auctionData.listOffers) {
-      const bidValue = BigInt(offer.value); // Convert the value to a BigInt for precision
-      if (bidValue < lowestBid) {
-        lowestBid = bidValue;
-      }
-    }
-
-    return lowestBid.toString(); // Convert the lowestBid back to a string
-  }
 
   const handleOpenModalBuy = async (
     marketId,
@@ -958,6 +983,9 @@ const Items = ({ params, collection }) => {
                       openFilter={openFilter}
                       isNotExpired={isNotExpired}
                       isNotRelease={isNotRelease}
+                      handleOpenModalBid={handleOpenModalBid}
+                      handleOpenModalBuy={handleOpenModalBuy}
+                      handleOpenModalPutonsale={handleOpenModalPutonsale}
                     />
                   );
                 })}

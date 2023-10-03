@@ -1119,9 +1119,17 @@ const ItemCollection = ({ collection, gridList }) => {
           : 'sm:col-span-4 md:col-span-3 lg:col-span-2 xl:col-span-2 2xl:col-span-2'
       }`}
     >
-      <img
+      <Image
+        src={
+          collection.bannerImage
+            ? `/uploads/collections/banner/${collection?.bannerImage}`
+            : 'https://fakeimg.pl/325x175'
+        }
+        alt={collection.name ? collection.name : ''}
+        width={1920}
+        height={266}
+        objectFit="cover"
         className="relative z-10 h-[200px] w-full rounded-2xl object-cover duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all"
-        src="https://fakeimg.pl/325x175"
       />
       <div className="grid grid-cols-12 p-3">
         <div className="relative -top-[60px] z-10 col-span-12 flex gap-1 rounded-tl-2xl rounded-tr-2xl bg-white bg-opacity-50 p-2 sm:col-span-12 md:col-span-10 lg:col-span-8 xl:col-span-8 2xl:col-span-8">

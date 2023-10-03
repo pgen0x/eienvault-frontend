@@ -3,13 +3,15 @@ import { useState } from 'react';
 import Footer from '@/components/footer/main';
 import Ethereum from '@/assets/icon/ethereum';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBatteryEmpty, faCopy, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { faBatteryEmpty, faCopy, faEllipsisVertical, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import Bitcoin from '@/assets/icon/bitcoin';
 import Ggtoken from '@/assets/icon/ggtoken';
 import { useAuth } from '@/hooks/AuthContext';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import ModalUploadProfileCover from '@/components/modal/uploadProfileCover';
+import Image from 'next/image';
 
 const ProfileSetting = () => {
   const { token } = useAuth();
@@ -73,10 +75,10 @@ const ProfileSetting = () => {
 }
 
 const Profile = ({ profile, setProfile, token }) => {
+  const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
   const handleChangeProfile = (event, attribute) => {
     setProfile((oldProfile) => {
       oldProfile[attribute] = event.target.value;
-      console.log(oldProfile);
       return oldProfile;
     });
   }
@@ -106,10 +108,36 @@ const Profile = ({ profile, setProfile, token }) => {
 
   }
 
+  const editBanner = () => {
+    setIsOpenModalCover(true);
+  };
+
+  const closeModalCover = () => {
+    setIsOpenModalCover(false);
+  };
+
   return (
     <>
-      <div className="w-full">
-        <img src="https://fakeimg.pl/1920x266" className="rounded-2xl h-[266px] object-cover" />
+      <div className="group relative w-full">
+        <Image
+          src={
+            profile.banner
+              ? `/uploads/users/banner/${profile.banner}`
+              : 'https://fakeimg.pl/1920x266'
+          }
+          alt={profile.username ? profile.username : ''}
+          width={1920}
+          height={266}
+          objectFit="cover"
+          className="rounded-2xl h-[266px] object-cover"
+        />
+        <button
+          onClick={editBanner}
+          className="absolute right-0 top-0 m-4 rounded-full text-white bg-primary-500 px-4 py-2 opacity-0 hover:bg-primary-300 group-hover:opacity-100"
+        >
+          <FontAwesomeIcon className="mr-2" icon={faPenToSquare} />
+          Edit Cover
+        </button>
       </div>
       <div className="mt-5 flex justify-between">
         <div className="flex max-w-xs flex-col">
@@ -183,6 +211,11 @@ const Profile = ({ profile, setProfile, token }) => {
           </a>
         </div>
       </div>
+      <ModalUploadProfileCover
+        isOpenModal={IsOpenModalCover}
+        onModalClose={closeModalCover}
+        setProfile={setProfile}
+      />
     </>
   );
 }

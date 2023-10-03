@@ -57,18 +57,11 @@ const servers = [
 ];
 
 const filters = [
+  'All',
   'Price low to high',
   'Price high to low',
-  'Recently listed',
-  'Best offer',
-  'Highest last sale',
-  'Recently sold',
-  'Recently created',
-  'Most viewed',
-  'Oldest',
   'Most favorited',
   'Ending soon',
-  'Recently received',
 ];
 
 const collections = [
@@ -513,6 +506,7 @@ const Items = ({ params, collection }) => {
   const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState(filters[0]);
   const [nfts, setNfts] = useState([]);
+  const [filteredNFTs, setFilteredNFTs] = useState([]);
   const [nftPage, setNftPage] = useState(1);
   const [nftLast, setNftLast] = useState(false);
   const filterQuery = useSearchParams();
@@ -538,7 +532,7 @@ const Items = ({ params, collection }) => {
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const handleFilterCollapse = (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
   };
@@ -568,9 +562,6 @@ const Items = ({ params, collection }) => {
   }, [nftPage]);
 
   const getNfts = async () => {
-    const address = isAddress(params.slug);
-    setIsLoading(true);
-
     if (nftLast === true) return;
     await axios
       .request({
@@ -581,7 +572,6 @@ const Items = ({ params, collection }) => {
         }/${params.slug}?query=${search}&page=${nftPage}`,
       })
       .then((response) => {
-        setIsLoading(false);
         if (response.data.nfts.length > 0) {
           if (nftPage > 1) {
             setNfts((oldNft) => [...oldNft, ...response.data.nfts]);
@@ -591,6 +581,7 @@ const Items = ({ params, collection }) => {
         } else {
           setNftLast(true);
         }
+        setIsLoading(false);
       })
       .catch((error) => {
         setIsLoading(false);
@@ -742,6 +733,92 @@ const Items = ({ params, collection }) => {
     }
   };
 
+  const filterNfts = () => {
+    if (selectedFilter === 'All') {
+      return nfts;
+    } else if (selectedFilter === 'Price low to high') {
+      const nftsWithItemDetails = nfts.filter((nft) => {
+        return nft.itemDetails !== undefined && nft.itemDetails !== null;
+      });
+      if (nftsWithItemDetails.length === 0) {
+        return []; // No data matches the filter
+      }
+      // Sort the NFTs by price low to high
+      const sortedNfts = [...nftsWithItemDetails].sort((a, b) => {
+        // Convert price from wei to integer
+        const priceA = formatEther(Number(a.itemDetails?.price)) || 0;
+        const priceB = formatEther(Number(b.itemDetails?.price)) || 0;
+        return priceA - priceB; // Sort low to high
+      });
+      return sortedNfts;
+    } else if (selectedFilter === 'Price high to low') {
+      const nftsWithItemDetails = nfts.filter((nft) => {
+        return nft.itemDetails !== undefined && nft.itemDetails !== null;
+      });
+      if (nftsWithItemDetails.length === 0) {
+        return []; // No data matches the filter
+      }
+      const sortedNfts = [...nftsWithItemDetails].sort((a, b) => {
+        // Convert price from wei to integer
+        const priceA = formatEther(Number(a.itemDetails?.price)) || 0;
+        const priceB = formatEther(Number(b.itemDetails?.price)) || 0;
+        return priceB - priceA; // Sort high to low
+      });
+      return sortedNfts;
+    } else if (selectedFilter === 'Ending soon') {
+      // Filter to display NFTs ending soon (based on end date)
+      const endingSoonNFTs = nfts.filter((nft) => {
+        const endDate = Number(nft.itemDetails?.endDate);
+
+        // Only include NFTs with a valid endDate
+        return endDate !== undefined && !isNaN(endDate);
+      });
+      if (endingSoonNFTs.length === 0) {
+        return []; // No data matches the filter
+      }
+
+      // Sort the ending soon NFTs by end date (ascending order)
+      const sortedNfts = [...endingSoonNFTs].sort((a, b) => {
+        const endDateA = Number(a.itemDetails?.endDate) || 0;
+        const endDateB = Number(b.itemDetails?.endDate) || 0;
+        return endDateA - endDateB;
+      });
+
+      return sortedNfts;
+    } else if (selectedFilter === 'Most favorited') {
+      // Filter to display NFTs with valid likeCount
+      const favoritedNFTs = nfts.filter((nft) => {
+        const likeCount = nft.likeCount;
+
+        // Only include NFTs with a valid likeCount
+        return likeCount !== undefined && likeCount !== null;
+      });
+
+      if (favoritedNFTs.length === 0) {
+        return []; // No data matches the filter
+      }
+
+      // Sort the favorited NFTs by likeCount (descending order)
+      const sortedNfts = [...favoritedNFTs].sort((a, b) => {
+        const likeCountA = Number(a.likeCount) || 0;
+        const likeCountB = Number(b.likeCount) || 0;
+        return likeCountB - likeCountA; // Sort by most favorited
+      });
+
+      return sortedNfts;
+    } else {
+      return nfts;
+    }
+  };
+
+  useEffect(() => {
+    if (nfts) {
+      console.log(isLoading);
+      const filteredNfts = filterNfts();
+      setFilteredNFTs(filteredNfts);
+    }
+  }, [selectedFilter, nfts]);
+
   return (
     <>
       <section>
@@ -789,7 +866,7 @@ const Items = ({ params, collection }) => {
                 className="hidden sm:hidden md:block lg:block xl:block 2xl:block"
               >
                 <div className="relative z-20">
-                  <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-500 dark:border-zinc-500 dark:bg-zinc-700 sm:text-sm">
+                  <Listbox.Button className="relative w-[200px] cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-500 dark:border-zinc-500 dark:bg-zinc-700 sm:text-sm">
                     <span className="block truncate text-gray-600 dark:text-white">
                       {selectedFilter}
                     </span>
@@ -809,7 +886,7 @@ const Items = ({ params, collection }) => {
                     </span>
                   </Listbox.Button>
                   <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-700 sm:text-sm">
-                    {servers.map((server, index) => (
+                    {filters.map((server, index) => (
                       <Listbox.Option
                         key={index}
                         className={({ active }) =>
@@ -872,7 +949,7 @@ const Items = ({ params, collection }) => {
             </div>
           </div>
         </div>
-        <div className="my-5 grid grid-cols-12 gap-6">
+        <div className="my-5 grid min-h-[53px] grid-cols-12 gap-6">
           {openFilter && (
             <div className="col-span-12 sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
               <ul className="divide-y rounded-xl bg-white p-5 font-bold text-gray-900 dark:bg-zinc-700 dark:text-white">
@@ -957,12 +1034,12 @@ const Items = ({ params, collection }) => {
             }`}
           >
             <div className="grid w-full grid-cols-12 gap-7 text-gray-900">
-              {nfts.length == 0 && !isLoading && (
+              {filteredNFTs.length == 0 && !isLoading && (
                 <div className="col-span-12 w-full text-center font-semibold text-black">
-                  NFT not found
+                  No results found
                 </div>
               )}
-              {nfts.length == 0 && isLoading && (
+              {filteredNFTs.length == 0 && isLoading && (
                 <>
                   {[...Array(12)].map((nft, index) => (
                     <NftItemDetailSkeleton
@@ -973,8 +1050,8 @@ const Items = ({ params, collection }) => {
                   ))}
                 </>
               )}
-              {nfts.length > 0 &&
-                nfts.map((nft, index) => {
+              {filteredNFTs.length > 0 &&
+                filteredNFTs.map((nft, index) => {
                   const currentDate = moment();
                   const endDate = moment.unix(nft.itemDetails?.endDate);
                   const releaseDate = moment.unix(nft.itemDetails?.releaseDate);

@@ -84,10 +84,6 @@ export default function ModaluploadCover({
 
   const onSave = async (filename) => {
     try {
-      setCollection((oldCollection) => {
-        oldCollection['bannerImage'] = filename;
-        return oldCollection;
-      })
       const payload = {
         bannerImage: filename,
       };

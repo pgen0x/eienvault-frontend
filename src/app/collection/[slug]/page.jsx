@@ -491,8 +491,6 @@ export default function CollectionDetail({ params }) {
         isOpenModal={IsOpenModalCover}
         onModalClose={closeModalCover}
         address={collection?.tokenAddress}
-        collection={collection}
-        setCollection={setCollection}
         updateBannerImage={updateBannerImage}
       />
       <ModalUpdateCollection

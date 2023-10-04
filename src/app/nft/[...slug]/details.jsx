@@ -56,6 +56,7 @@ import RelatedNFTs, {
 } from '@/components/slideshow/relatednfts';
 import moment from 'moment';
 import ModalPutOnSale from '@/components/modal/putOnSale';
+import axios from 'axios';
 
 export default function NFTDetails({ dataNFTs }) {
   const router = useRouter();
@@ -89,7 +90,12 @@ export default function NFTDetails({ dataNFTs }) {
         <Overview dataOverview={dataNFTs} onSeeAllClick={handleSeeAllClick} />
       ),
       bids: <Bids dataBid={dataNFTs} />,
-      history: <History dataHistory={dataNFTs} />,
+      history: (
+        <History
+          collectionAddress={dataNFTs.collectionAddress}
+          tokenId={dataNFTs.tokenId}
+        />
+      ),
       // collateral: <Collateral dataNFTs={dataNFTs} />,
     };
 
@@ -1385,10 +1391,93 @@ const Bids = ({ dataBid }) => {
   );
 };
 
-const History = ({ dataHistory }) => {
+const History = ({ collectionAddress, tokenId }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [events, setEvents] = useState([]);
+  useEffect(() => {
+    const getHistory = async () => {
+      setIsLoading(true);
+      await axios
+        .request({
+          method: 'get',
+          maxBodyLength: Infinity,
+          url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/geteventsbycollectionid/${collectionAddress}/${tokenId}`,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => {
+          setIsLoading(false);
+          setEvents(response.data.events);
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          if (error.response.status == 404) {
+            if (nftPage > 1) {
+              setNftLast(true);
+            } else {
+              setNfts([]);
+            }
+          } else {
+            toast.error(error.message);
+          }
+        });
+    };
+    getHistory();
+  }, []);
+
+  const timeAgo = (timestamp) => {
+    const currentDate = new Date();
+    const inputDate = new Date(timestamp);
+    const timeDifference = currentDate - inputDate;
+    const minutesAgo = Math.floor(timeDifference / 60000); // 1 minute = 60000 milliseconds
+  
+    if (minutesAgo < 1) {
+      return 'just now';
+    } else if (minutesAgo === 1) {
+      return '1 minute ago';
+    } else if (minutesAgo < 60) {
+      return `${minutesAgo} minutes ago`;
+    } else if (minutesAgo < 120) {
+      return '1 hour ago';
+    } else if (minutesAgo < 1440) {
+      return `${Math.floor(minutesAgo / 60)} hours ago`;
+    } else if (minutesAgo < 2880) {
+      return '1 day ago';
+    } else {
+      return `${Math.floor(minutesAgo / 1440)} days ago`;
+    }
+  }
+
   return (
-    <div className="w-full items-center justify-center gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex">
-      No history
-    </div>
+    <>
+      {events.length == 0 && (
+        <div className="w-full items-center justify-center gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex">
+          No history
+        </div>
+      )}
+      {events.length > 0 && (
+        <div className="text-sm flex flex-col gap-5">
+          <div className="col-span-12 grid grid-cols-12 gap-3">
+            <div className="col-span-2">Event</div>
+            <div className="col-span-2">Price</div>
+            <div className="col-span-3">From</div>
+            <div className="col-span-3">To</div>
+            <div className="col-span-2">Date</div>
+          </div>
+          {events.map((event, index) => {
+            return (
+              <div className="col-span-12 grid grid-cols-12 gap-1" key={index}>
+                <div className="col-span-2">{event.eventType}</div>
+                <div className="col-span-2"></div>
+                <div className="col-span-3">{truncateAddress4char(event?.item?.From)}</div>
+                <div className="col-span-3">{truncateAddress4char(event?.item?.To)}</div>
+                <div className="col-span-2">{timeAgo(event?.item?.Timestamp * 1000)}</div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </>
   );
 };

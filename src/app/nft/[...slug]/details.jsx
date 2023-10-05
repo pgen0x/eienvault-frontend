@@ -372,10 +372,10 @@ export default function NFTDetails({ dataNFTs }) {
                     </button>
                   </div>
                 )}
-                <div className="relative -mt-16 px-5 sm:-mt-16 md:mt-5 lg:mt-5 xl:mt-5 2xl:mt-5">
-                  <div className="flex rounded-lg bg-white/50 px-5 py-2 text-gray-900 backdrop-blur-sm sm:bg-white/50 sm:text-gray-900 md:bg-white md:text-gray-900 lg:bg-white lg:text-primary-500 xl:bg-white xl:text-primary-500 2xl:bg-white 2xl:text-primary-500">
+                <div className="relative -mt-20 w-fit self-center px-5">
+                  <div className="flex rounded-lg border border-white/20 bg-white/50 px-5 py-2 text-gray-900 backdrop-blur-sm">
                     <div className="flex w-full justify-between">
-                      <div className="flex w-full justify-around">
+                      <div className="flex w-full justify-around gap-4 md:gap-6 lg:gap-20">
                         <button
                           className="group text-primary-500 hover:text-primary-300 sm:text-primary-500"
                           onClick={() =>
@@ -386,26 +386,26 @@ export default function NFTDetails({ dataNFTs }) {
                           }
                         >
                           <FontAwesomeIcon icon={faHeart} />{' '}
-                          <span className="2xl-text-black font-semibold group-hover:text-primary-300 md:text-black lg:text-black">
+                          <span className="2xl-text-black font-semibold text-black group-hover:text-primary-300">
                             {countLikes} likes
                           </span>
                         </button>
                         <button className="group text-primary-500 hover:text-primary-300">
                           <FontAwesomeIcon icon={faShareFromSquare} />{' '}
-                          <span className="2xl-text-black font-semibold group-hover:text-primary-300 md:text-black lg:text-black">
+                          <span className="2xl-text-black font-semibold text-black group-hover:text-primary-300">
                             Share
                           </span>
                         </button>
                         <button className="group text-primary-500 hover:text-primary-300">
                           <FontAwesomeIcon icon={faFlag} />{' '}
-                          <span className="2xl-text-black font-semibold group-hover:text-primary-300 md:text-black lg:text-black">
+                          <span className="2xl-text-black font-semibold text-black group-hover:text-primary-300">
                             Report
                           </span>
                         </button>
                       </div>
-                      <button className="hidden rounded-full px-2 text-primary-500 hover:bg-primary-50 hover:text-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
+                      {/* <button className="hidden rounded-full px-2 text-primary-500 hover:bg-primary-50 hover:text-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
                         <FontAwesomeIcon icon={faEllipsisVertical} />{' '}
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                 </div>
@@ -452,7 +452,7 @@ export default function NFTDetails({ dataNFTs }) {
                       Collateral
                     </li> */}
                   </ul>
-                  <div className="flex w-full flex-col gap-4 rounded-lg bg-white/70 p-5 text-gray-900">
+                  <div className="w-full text-gray-900">
                     {renderActiveTab()}
                   </div>
                 </div>
@@ -1343,50 +1343,58 @@ const Overview = ({ dataOverview, onSeeAllClick }) => {
 };
 
 const Bids = ({ dataBid }) => {
-  return dataBid.itemDetails?.listOffers?.length > 0 ? (
-    dataBid.itemDetails?.listOffers.map((offer, index) => {
-      return (
-        <div
-          className="w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white p-3 lg:inline-flex"
-          key={index}
-        >
-          <div className="flex shrink grow basis-0 items-center justify-between text-center text-base font-bold leading-loose">
-            <div className="inline-flex h-14 w-1/2 items-center justify-center">
-              <div className="text-md inline-flex shrink grow basis-0 flex-row gap-3 font-medium leading-loose">
-                <div className="h-12 w-12 rounded-full bg-gray-300">
-                  <ImageWithFallback
-                    className="h-full w-full rounded-2xl "
-                    width={48}
-                    height={48}
-                    alt={
-                      offer?.userDetails?.username ||
-                      truncateAddress4char(offer?.userDetails?.walletAddress)
-                    }
-                    diameter={48}
-                    address={offer?.userDetails?.walletAddress}
-                    src={`/uploads/users/${offer?.userDetails?.logo}`}
-                  />
-                </div>
-                <div className="inline-flex cursor-pointer items-center justify-center ">
-                  {offer?.userDetails?.username ||
-                    truncateAddress(offer?.userDetails?.walletAddress)}
+  return (
+    <div className="flex flex-col gap-3">
+      {dataBid.itemDetails?.listOffers?.length > 0 ? (
+        <>
+          {dataBid.itemDetails?.listOffers.map((offer, index) => {
+            return (
+              <div
+                className="w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white p-3 lg:inline-flex"
+                key={index}
+              >
+                <div className="flex shrink grow basis-0 items-center justify-between text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-1/2 items-center justify-center">
+                    <div className="text-md inline-flex shrink grow basis-0 flex-row gap-3 font-medium leading-loose">
+                      <div className="h-12 w-12 rounded-full bg-gray-300">
+                        <ImageWithFallback
+                          className="h-full w-full rounded-2xl "
+                          width={48}
+                          height={48}
+                          alt={
+                            offer?.userDetails?.username ||
+                            truncateAddress4char(
+                              offer?.userDetails?.walletAddress,
+                            )
+                          }
+                          diameter={48}
+                          address={offer?.userDetails?.walletAddress}
+                          src={`/uploads/users/${offer?.userDetails?.logo}`}
+                        />
+                      </div>
+                      <div className="inline-flex cursor-pointer items-center justify-center ">
+                        {offer?.userDetails?.username ||
+                          truncateAddress(offer?.userDetails?.walletAddress)}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-md flex shrink grow basis-0 flex-col items-end justify-end self-end font-medium leading-loose">
+                    <div className="justify-start">Bid At</div>
+                    <div className="justify-start">
+                      {formatEther(offer?.value)}{' '}
+                      {dataBid?.collectionData.Chain.symbol}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="text-md flex shrink grow basis-0 flex-col items-end justify-end self-end font-medium leading-loose">
-              <div className="justify-start">Bid At</div>
-              <div className="justify-start">
-                {formatEther(offer?.value)}{' '}
-                {dataBid?.collectionData.Chain.symbol}
-              </div>
-            </div>
-          </div>
+            );
+          })}
+        </>
+      ) : (
+        <div className="w-full gap-5 self-stretch rounded-xl lg:inline-flex">
+          No bids yet
         </div>
-      );
-    })
-  ) : (
-    <div className="w-full items-center justify-center gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex">
-      No bids yet
+      )}
     </div>
   );
 };
@@ -1455,15 +1463,7 @@ const History = ({ collectionAddress, tokenId }) => {
           parsingMintTransferEvents(response.data.events);
         })
         .catch((error) => {
-          if (error.response.status == 404) {
-            if (nftPage > 1) {
-              setNftLast(true);
-            } else {
-              setNfts([]);
-            }
-          } else {
-            toast.error(error.message);
-          }
+          toast.error(error.message);
         });
     };
     getHistoryMintTransfer();
@@ -1482,15 +1482,7 @@ const History = ({ collectionAddress, tokenId }) => {
           parsingBidsSalesListing(response.data);
         })
         .catch((error) => {
-          if (error.response.status == 404) {
-            if (nftPage > 1) {
-              setNftLast(true);
-            } else {
-              setNfts([]);
-            }
-          } else {
-            toast.error(error.message);
-          }
+          toast.error(error.message);
         });
     };
     getHistoryBidsSalesListing();
@@ -1527,29 +1519,30 @@ const History = ({ collectionAddress, tokenId }) => {
         </div>
       )}
       {events.length > 0 && (
-        <div className="flex flex-col gap-5 text-sm">
-          <div className="grid grid-cols-12 gap-4 rounded-2xl bg-primary-500 px-2 py-2 text-white">
-            <div className="col-span-3">Event</div>
+        <div className="flex flex-col gap-5 text-sm ">
+          <div className="grid grid-cols-12 gap-1 rounded-2xl px-4 text-center font-bold text-primary-500">
+            <div className="col-span-2">Event</div>
             <div className="col-span-2">Price</div>
-            <div className="col-span-5 grid grid-cols-12">
-              <div className="col-span-6">From</div>
-              <div className="col-span-6">To</div>
-            </div>
+            <div className="col-span-3">From</div>
+            <div className="col-span-3">To</div>
             <div className="col-span-2">Date</div>
           </div>
-          {events.map((event, index) => {
-            return (
-              <div className="col-span-12 grid grid-cols-12 gap-1" key={index}>
-                <div className="col-span-3">{event.event}</div>
-                <div className="col-span-2">{event.price}</div>
-                <div className="col-span-5 grid grid-cols-12">
-                  <div className="col-span-6">{event.from}</div>
-                  <div className="col-span-6">{event.to}</div>
+          <div className="flex flex-col gap-3 rounded-lg border border-gray-300 bg-gray-50 p-3">
+            {events.map((event, index) => {
+              return (
+                <div
+                  className="col-span-12 grid grid-cols-12 gap-1 rounded-lg bg-white p-4"
+                  key={index}
+                >
+                  <div className="col-span-2 break-words">{event.event}</div>
+                  <div className="col-span-2 text-center">{event.price}</div>
+                  <div className="col-span-3 text-center">{event.from}</div>
+                  <div className="col-span-3 text-center">{event.to}</div>
+                  <div className="col-span-2">{event.timestamp}</div>
                 </div>
-                <div className="col-span-2">{event.timestamp}</div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       )}
     </>

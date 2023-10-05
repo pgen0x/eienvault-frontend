@@ -43,6 +43,8 @@ import {
 } from '@/components/nft/itemDetail';
 import ModaluploadCover from '@/components/modal/uploadCover';
 import ModalUpdateCollection from '@/components/modal/updateCollections';
+import { truncateAddress4char } from '@/utils/truncateAddress4char';
+import { JazzIcon } from '@/components/jazzicon';
 
 const filters = [
   'All',
@@ -129,7 +131,7 @@ export default function CollectionDetail({ params }) {
   const renderActiveTab = () => {
     const listTabs = {
       items: <Items params={params} collection={collection} />,
-      activity: <Activity />,
+      activity: <Activity collection={collection} />,
     };
 
     return listTabs[activeTab];
@@ -1375,6 +1377,244 @@ const Items = ({ params, collection }) => {
   );
 };
 
-const Activity = () => {
-  return <h1 className="text-center text-black">Activity Section</h1>;
+const Activity = ({ collection }) => {
+  const [events, setEvents] = useState([]);
+  const router = useRouter();
+
+  const parsingMintTransferEvents = (events) => {
+    for (const event of events) {
+      let type;
+      if (event.item.From === '0x0000000000000000000000000000000000000000') {
+        type = 'Mints';
+      } else if (
+        event.item.From === '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' ||
+        event.item.To === '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc'
+      ) {
+        type = `Transfer from ${truncateAddress(
+          event?.item?.From,
+        )} to ${truncateAddress(event?.item?.To)}`;
+      } else {
+        continue;
+      }
+      setEvents((oldEvent) => [
+        ...oldEvent,
+        {
+          event: type,
+          tokenId: parseInt(event?.item?.TokenId?.hex, 16),
+          price: '',
+          from: truncateAddress4char(event?.item?.From),
+          to: truncateAddress4char(event?.item?.To),
+          timestamp: timeAgo(event?.item?.Timestamp * 1000),
+        },
+      ]);
+    }
+  };
+
+  const parsingBidsSalesListing = (events) => {
+    for (const event of events) {
+      let description;
+      if (event.eventType == 'ItemListed') {
+        description = (
+          <div className="flex gap-1">
+            <span>listed by</span>{' '}
+            <JazzIcon
+              diameter={16}
+              seed={event?.seller}
+              useGradientFallback={true}
+            />
+            <button className="font-bold" onClick={() => router.push(`/profile/${event?.seller}`)}>
+              {event?.sellerData?.username
+                ? event.sellerData.username
+                : truncateAddress4char(event?.seller)}
+            </button>
+            for
+            <span className="font-bold">
+              {formatEther(Number(event?.price))}{' '}
+              {event?.collectionData?.Chain?.symbol}
+            </span>
+          </div>
+        );
+      } else if (event.eventType == 'NewOffer') {
+        description = (
+          <div className="flex gap-1">
+            <JazzIcon
+              diameter={16}
+              seed={event?.seller}
+              useGradientFallback={true}
+            />
+            <button className="font-bold" onClick={() => router.push(`/profile/${event?.seller}`)}>
+              {event?.sellerData?.username
+                ? event.sellerData.username
+                : truncateAddress4char(event?.seller)}
+            </button>
+            offered
+            <span className="font-bold">
+              {formatEther(Number(event?.offer))}{' '}
+              {event?.collectionData?.Chain?.symbol}
+            </span>
+          </div>
+        );
+      } else if (event.eventType == 'ItemSold') {
+        description = (
+          <div className="flex gap-1">
+            purchased by
+            <JazzIcon
+              diameter={16}
+              seed={event?.buyer}
+              useGradientFallback={true}
+            />
+            <button className="font-bold" onClick={() => router.push(`/profile/${event?.buyer}`)}>
+              {event?.buyerData?.username
+                ? event.buyerData.username
+                : truncateAddress4char(event?.buyer)}
+            </button>
+            for
+            <span className="font-bold">
+              {formatEther(Number(event?.price))}{' '}
+              {event?.collectionData?.Chain?.symbol}
+            </span>
+            from
+            <JazzIcon
+              diameter={16}
+              seed={event?.seller}
+              useGradientFallback={true}
+            />
+            <button className="font-bold" onClick={() => router.push(`/profile/${event?.seller}`)}>
+              {event?.sellerData?.username
+                ? event.sellerData.username
+                : truncateAddress4char(event?.seller)}
+            </button>
+          </div>
+        );
+      } else {
+        continue;
+      }
+      setEvents((oldEvent) => [
+        ...oldEvent,
+        {
+          event: description,
+          tokenId: event?.nftDetails?.tokenId,
+          price: `${
+            event.price === '' ? 0 : formatEther(Number(event.price))
+          } ${event?.collectionData?.Chain?.symbol}`,
+          from: event?.sellerData?.username
+            ? event.sellerData.username
+            : truncateAddress4char(event.seller),
+          to: event?.buyerData?.username
+            ? event.buyerData.username
+            : truncateAddress4char(event.buyer),
+          timestamp: timeAgo(event?.timestamp * 1000),
+          collection: event?.collectionData,
+          nft: event?.nftDetails,
+        },
+      ]);
+    }
+  };
+  useEffect(() => {
+    const getHistoryMintTransfer = async () => {
+      await axios
+        .request({
+          method: 'get',
+          maxBodyLength: Infinity,
+          url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/geteventsbycollection/${collection.tokenAddress}`,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => {
+          parsingMintTransferEvents(response.data.events);
+        })
+        .catch((error) => {
+          toast.error(error.message);
+        });
+    };
+    // getHistoryMintTransfer();
+
+    const getHistoryBidsSalesListing = async () => {
+      await axios
+        .request({
+          method: 'get',
+          maxBodyLength: Infinity,
+          url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/eventbycollection/${collection.tokenAddress}`,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => {
+          parsingBidsSalesListing(response.data);
+        })
+        .catch((error) => {
+          toast.error(error.message);
+        });
+    };
+    getHistoryBidsSalesListing();
+  }, []);
+
+  const timeAgo = (timestamp) => {
+    const currentDate = new Date();
+    const inputDate = new Date(timestamp);
+    const timeDifference = currentDate - inputDate;
+    const minutesAgo = Math.floor(timeDifference / 60000); // 1 minute = 60000 milliseconds
+
+    if (minutesAgo < 1) {
+      return 'just now';
+    } else if (minutesAgo === 1) {
+      return '1 minute ago';
+    } else if (minutesAgo < 60) {
+      return `${minutesAgo} minutes ago`;
+    } else if (minutesAgo < 120) {
+      return '1 hour ago';
+    } else if (minutesAgo < 1440) {
+      return `${Math.floor(minutesAgo / 60)} hours ago`;
+    } else if (minutesAgo < 2880) {
+      return '1 day ago';
+    } else {
+      return `${Math.floor(minutesAgo / 1440)} days ago`;
+    }
+  };
+
+  return (
+    <>
+      {events.length == 0 && (
+        <div className="w-full items-center justify-center gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex text-black">
+          No Activities
+        </div>
+      )}
+      {events.length > 0 && (
+        <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
+          <div className="flex flex-col gap-3 rounded-lg border border-gray-300 bg-gray-50 p-3">
+            {events.map((event, index) => {
+              return (
+                <div className="flex gap-2">
+                  <div className="w-fit">
+                    <ImageWithFallback
+                      src={`/uploads/collections/${collection.logo}`}
+                      alt={event?.collection?.name}
+                      width={70}
+                      height={70}
+                      diameter={70}
+                      address={event?.collection?.tokenAddress}
+                      className="h-full w-full rounded-none"
+                    />
+                  </div>
+                  <div className="flex w-full flex-col">
+                    <button className="w-fit font-bold" onClick={() => router.push(`/nft/${event?.collection?.tokenAddress}/${event?.tokenId}`)}>
+                      {event?.nft?.name
+                        ? event.nft.name
+                        : event?.collection?.name
+                        ? event?.collection.name
+                        : truncateAddress(event?.collection?.tokenAddress)}{' '}
+                      #{event?.tokenId}
+                    </button>
+                    <div>{event?.event}</div>
+                    <div>{event.timestamp}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </>
+  );
 };

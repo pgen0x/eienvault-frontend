@@ -2,8 +2,9 @@ import jazzicon from '@metamask/jazzicon';
 import React, { useEffect, useRef } from 'react';
 import color from 'tinycolor2';
 
-export function JazzIcon({ diameter, seed, useGradientFallback }) {
+export function JazzIcon({ diameter, seed, useGradientFallback, ...props }) {
   const ref = useRef(null);
+  const { className, ...otherProps } = props;
 
   useEffect(() => {
     if (ref?.current) {
@@ -59,8 +60,9 @@ export function JazzIcon({ diameter, seed, useGradientFallback }) {
   return (
     <div
       ref={ref}
-      className="flex justify-center rounded-full border-solid border-white"
+      className={`flex justify-center rounded-full border-solid border-white ${className}`}
       style={{ width: diameter, height: diameter }}
+      {...otherProps}
     ></div>
   );
 }

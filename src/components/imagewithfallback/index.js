@@ -26,7 +26,7 @@ export const ImageWithFallback = ({
 
   if (!isValidImage) {
     return (
-      <JazzIcon diameter={diameter} seed={address} useGradientFallback={true} />
+      <JazzIcon diameter={diameter} seed={address} useGradientFallback={true} {...props} />
     );
   }
 

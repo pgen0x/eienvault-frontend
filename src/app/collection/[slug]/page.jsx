@@ -28,7 +28,7 @@ import { useRouter } from 'next-nprogress-bar';
 import { useAuth } from '@/hooks/AuthContext';
 import axios from 'axios';
 import { truncateAddress } from '@/utils/truncateAddress';
-import { formatEther, isAddress } from 'viem';
+import { formatEther, getAddress, isAddress } from 'viem';
 import { toast } from 'react-toastify';
 import { useSearchParams } from 'next/navigation';
 import { ImageWithFallback } from '@/components/imagewithfallback';
@@ -112,15 +112,19 @@ export default function CollectionDetail({ params }) {
   }, [collection.tokenAddress, collection.chainId, collection.userAddress]);
 
   const getCollection = async () => {
-    const address = isAddress(params.slug);
-
+    let url;
+    if (isAddress(params.slug)) {
+      url = `${
+        process.env.NEXT_PUBLIC_API_URL
+      }/api/collection/getbycollection/${getAddress(params.slug)}`;
+    } else {
+      url = `${process.env.NEXT_PUBLIC_API_URL}/api/collection/get/${params.slug}`;
+    }
     await axios
       .request({
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/collection/${
-          address ? 'getbycollection' : 'get'
-        }/${params.slug}`,
+        url: url,
       })
       .then((response) => {
         setCollection(response.data);
@@ -393,7 +397,10 @@ export default function CollectionDetail({ params }) {
                   </div>
                   <div className="col-span-12 flex gap-1 font-semibold text-white">
                     {address === collection.userAddress && (
-                      <button className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" onClick={() => handleModalUpdate()}>
+                      <button
+                        className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
+                        onClick={() => handleModalUpdate()}
+                      >
                         <FontAwesomeIcon icon={faPenToSquare} /> Edit Collection
                       </button>
                     )}
@@ -504,6 +511,7 @@ export default function CollectionDetail({ params }) {
 
 const Items = ({ params, collection }) => {
   const router = useRouter();
+  const { address } = useAccount();
   const [selectedFilter, setSelectedFilter] = useState(filters[0]);
   const [nfts, setNfts] = useState([]);
   const [sortedNFTs, setSortedNFTs] = useState([]);
@@ -515,13 +523,11 @@ const Items = ({ params, collection }) => {
     filterQuery.get('search') === null ? '' : filterQuery.get('search'),
   );
   const [filterCollapse, setFilterCollapse] = useState({
-    blockchain: false,
-    category: false,
-    price: false,
     status: false,
-    currency: false,
-    collection: false,
+    price: false,
+    properties: false,
   });
+  const [filterProperties, setFilterProperties] = useState([]);
   const [openFilter, setOpenFilter] = useState(false);
   const [gridList, setGridList] = useState('grid');
   const [auctionData, setAcutionData] = useState({});
@@ -538,6 +544,7 @@ const Items = ({ params, collection }) => {
   const [startPrice, setStartPrice] = useState('');
   const [endPrice, setEndPrice] = useState('');
   const [priceFilter, setPriceFilter] = useState({ start: '', end: '' });
+  const [dataProperties, setDataProperties] = useState([]);
 
   const handleApplyPriceFilter = (start, end) => {
     // Update the price filter criteria
@@ -545,10 +552,20 @@ const Items = ({ params, collection }) => {
     setPriceFilter({ start, end });
   };
 
-  const handleFilterCollapse = (filter) => {
+  const handleFilterCollapse = async (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
+
+    if (filter === 'properties' && !filterCollapse.properties) {
+      const getProper = await getProperties(collection.tokenAddress);
+    }
   };
-  const { address } = useAccount();
+
+  const handleOpenProperties = async (filter) => {
+    setFilterProperties({
+      ...filterProperties,
+      [filter]: !filterProperties[filter],
+    });
+  };
 
   const classRadio = (params, value) => {
     const defaultCssRadio =
@@ -575,13 +592,19 @@ const Items = ({ params, collection }) => {
 
   const getNfts = async () => {
     if (nftLast === true) return;
+    let url;
+    if (isAddress(params.slug)) {
+      url = `${
+        process.env.NEXT_PUBLIC_API_URL
+      }/api/nfts/getbycollection/${getAddress(params.slug)}`;
+    } else {
+      url = `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbyslug/${params.slug}`;
+    }
     await axios
       .request({
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/${
-          address ? 'getbycollection' : 'getbyslug'
-        }/${params.slug}?query=${search}&page=${nftPage}`,
+        url: url,
       })
       .then((response) => {
         if (response.data.nfts.length > 0) {
@@ -908,6 +931,23 @@ const Items = ({ params, collection }) => {
     }
   }, [priceFilter]);
 
+  const getProperties = async (collectionAddress) => {
+    await axios
+      .request({
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getproperties/${collectionAddress}`,
+      })
+      .then((response) => {
+        if (response.data.length > 0) {
+          setDataProperties(response.data);
+        }
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
+
   return (
     <>
       <section>
@@ -1117,6 +1157,8 @@ const Items = ({ params, collection }) => {
                         type="number"
                         placeholder="Start Price"
                         value={startPrice}
+                        min={0}
+                        onWheel={(e) => e.target.blur()}
                         onChange={(e) => setStartPrice(e.target.value)}
                         className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                       />
@@ -1125,6 +1167,8 @@ const Items = ({ params, collection }) => {
                         type="number"
                         placeholder="End Price"
                         value={endPrice}
+                        min={0}
+                        onWheel={(e) => e.target.blur()}
                         onChange={(e) => setEndPrice(e.target.value)}
                         className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                       />
@@ -1148,10 +1192,58 @@ const Items = ({ params, collection }) => {
                     <FontAwesomeIcon icon={faChevronDown} />
                   </button>
                   <div
-                    className={`target py-5 ${
+                    className={`target pb-5 ${
                       filterCollapse.properties ? 'block' : 'hidden'
                     }`}
-                  ></div>
+                  >
+                    <div className="flex flex-col ">
+                      {dataProperties.map((data, index) => (
+                        <div
+                          key={index}
+                          className="flex cursor-pointer flex-col justify-between gap-2"
+                        >
+                          <div
+                            className="flex justify-between gap-2"
+                            onClick={(event) =>
+                              handleOpenProperties(data?.key?.trait_type)
+                            }
+                          >
+                            <span className="capitalize">
+                              {data.key.trait_type}
+                            </span>
+                            <div>
+                              <span className="mr-2">{data.key.count}</span>
+                              <FontAwesomeIcon icon={faChevronDown} />
+                            </div>
+                          </div>
+                          <div
+                            className={`pb-3 ${
+                              filterProperties[data.key.trait_type]
+                                ? 'block'
+                                : 'hidden'
+                            }`}
+                          >
+                            {data.values.map((val, index) => (
+                              <div className="flex justify-between gap-2">
+                                <div className="inline-flex items-center justify-center">
+                                  <input
+                                    type="checkbox"
+                                    className="mr-2 h-4 w-4 rounded border-gray-300 text-primary-500 ring-primary-500 focus:ring-primary-500"
+                                  />
+                                  <span className="capitalize">
+                                    {val.value}
+                                  </span>
+                                </div>
+                                <div>
+                                  <span className="mr-2">{val.count}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </li>
               </ul>
             </div>

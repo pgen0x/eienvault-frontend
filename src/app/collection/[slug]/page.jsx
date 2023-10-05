@@ -19,16 +19,14 @@ import {
   faShare,
   faSliders,
 } from '@fortawesome/free-solid-svg-icons';
-import { Trykker } from 'next/font/google';
 import Search from '@/components/navbar/search';
 import Ethereum from '@/assets/icon/ethereum';
-import { filter } from '@metamask/jazzicon/colors';
 import { useEffect } from 'react';
 import { useRouter } from 'next-nprogress-bar';
 import { useAuth } from '@/hooks/AuthContext';
 import axios from 'axios';
 import { truncateAddress } from '@/utils/truncateAddress';
-import { formatEther, isAddress } from 'viem';
+import { formatEther, getAddress, isAddress } from 'viem';
 import { toast } from 'react-toastify';
 import { useSearchParams } from 'next/navigation';
 import { ImageWithFallback } from '@/components/imagewithfallback';
@@ -46,34 +44,12 @@ import {
 import ModaluploadCover from '@/components/modal/uploadCover';
 import ModalUpdateCollection from '@/components/modal/updateCollections';
 
-const servers = [
-  'All Mainnet',
-  'Testnet',
-  'Durward Reynolds',
-  'Kenton Towne',
-  'Therese Wunsch',
-  'Benedict Kessler',
-  'Katelyn Rohan',
-];
-
 const filters = [
   'All',
   'Price low to high',
   'Price high to low',
   'Most favorited',
   'Ending soon',
-];
-
-const collections = [
-  'Zombie drunk',
-  'Shadow fiend',
-  'Creepy NFT',
-  'Pandamonium',
-  'Robotofield',
-  'Black dragon',
-  'Cute ninja',
-  'Kokoakoci',
-  'Pyrameed',
 ];
 
 export default function CollectionDetail({ params }) {
@@ -83,7 +59,6 @@ export default function CollectionDetail({ params }) {
   const [collection, setCollection] = useState({});
   const [profile, setProfile] = useState({});
   const [showDescription, setShowDescription] = useState(false);
-  const [collectionChain, setCollectionChain] = useState({});
   const [activeTab, setActiveTab] = useState('items');
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
   const { address, isConnected } = useAccount();
@@ -103,24 +78,25 @@ export default function CollectionDetail({ params }) {
   }, []);
 
   useEffect(() => {
-    if (collection.chainId) {
-      getChain(collection.chainId);
-    }
     if (collection.userAddress) {
       getProfile(collection.userAddress);
     }
   }, [collection.tokenAddress, collection.chainId, collection.userAddress]);
 
   const getCollection = async () => {
-    const address = isAddress(params.slug);
-
+    let url;
+    if (isAddress(params.slug)) {
+      url = `${
+        process.env.NEXT_PUBLIC_API_URL
+      }/api/collection/getbycollection/${getAddress(params.slug)}`;
+    } else {
+      url = `${process.env.NEXT_PUBLIC_API_URL}/api/collection/get/${params.slug}`;
+    }
     await axios
       .request({
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/collection/${
-          address ? 'getbycollection' : 'get'
-        }/${params.slug}`,
+        url: url,
       })
       .then((response) => {
         setCollection(response.data);
@@ -144,21 +120,6 @@ export default function CollectionDetail({ params }) {
       })
       .then((response) => {
         setProfile(response.data);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
-  };
-
-  const getChain = async (chainId) => {
-    await axios
-      .request({
-        method: 'get',
-        maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/chain/get/${chainId}`,
-      })
-      .then((response) => {
-        setCollectionChain(response.data);
       })
       .catch((error) => {
         toast.error(error.message);
@@ -359,8 +320,8 @@ export default function CollectionDetail({ params }) {
                           {collection.floorPrice
                             ? formatEther(Number(collection.floorPrice))
                             : '0.00'}{' '}
-                          {collectionChain.symbol
-                            ? collectionChain.symbol
+                          {collection.Chain.symbol
+                            ? collection.Chain.symbol
                             : '-'}
                         </span>
                       </div>
@@ -370,8 +331,8 @@ export default function CollectionDetail({ params }) {
                           {collection.volume
                             ? formatEther(Number(collection.volume))
                             : '0.00'}{' '}
-                          {collectionChain.symbol
-                            ? collectionChain.symbol
+                          {collection.Chain.symbol
+                            ? collection.Chain.symbol
                             : '-'}
                         </span>
                       </div>
@@ -386,14 +347,17 @@ export default function CollectionDetail({ params }) {
                       <div className="flex justify-between">
                         <span className="font-semibold">Blockchain</span>
                         <span>
-                          {collectionChain.name ? collectionChain.name : '-'}
+                          {collection.Chain.name ? collection.Chain.name : '-'}
                         </span>
                       </div>
                     </div>
                   </div>
                   <div className="col-span-12 flex gap-1 font-semibold text-white">
                     {address === collection.userAddress && (
-                      <button className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300" onClick={() => handleModalUpdate()}>
+                      <button
+                        className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
+                        onClick={() => handleModalUpdate()}
+                      >
                         <FontAwesomeIcon icon={faPenToSquare} /> Edit Collection
                       </button>
                     )}
@@ -504,7 +468,8 @@ export default function CollectionDetail({ params }) {
 
 const Items = ({ params, collection }) => {
   const router = useRouter();
-  const [selectedFilter, setSelectedFilter] = useState(filters[0]);
+  const { address } = useAccount();
+  const [sortFilter, setSortFilter] = useState(filters[0]);
   const [nfts, setNfts] = useState([]);
   const [sortedNFTs, setSortedNFTs] = useState([]);
   const [nftPage, setNftPage] = useState(1);
@@ -515,13 +480,11 @@ const Items = ({ params, collection }) => {
     filterQuery.get('search') === null ? '' : filterQuery.get('search'),
   );
   const [filterCollapse, setFilterCollapse] = useState({
-    blockchain: false,
-    category: false,
-    price: false,
     status: false,
-    currency: false,
-    collection: false,
+    price: false,
+    properties: false,
   });
+  const [filterProperties, setFilterProperties] = useState([]);
   const [openFilter, setOpenFilter] = useState(false);
   const [gridList, setGridList] = useState('grid');
   const [auctionData, setAcutionData] = useState({});
@@ -533,22 +496,32 @@ const Items = ({ params, collection }) => {
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [filterStatus, setFilterStatus] = useState('');
+  const [filterStatus, setFilterStatus] = useState(null);
 
   const [startPrice, setStartPrice] = useState('');
   const [endPrice, setEndPrice] = useState('');
   const [priceFilter, setPriceFilter] = useState({ start: '', end: '' });
+  const [dataProperties, setDataProperties] = useState([]);
+  const [selectedValues, setSelectedValues] = useState([]);
 
   const handleApplyPriceFilter = (start, end) => {
-    // Update the price filter criteria
-    console.log('Clicked');
     setPriceFilter({ start, end });
   };
 
-  const handleFilterCollapse = (filter) => {
+  const handleFilterCollapse = async (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
+
+    if (filter === 'properties' && !filterCollapse.properties) {
+      const getProper = await getProperties(collection.tokenAddress);
+    }
   };
-  const { address } = useAccount();
+
+  const handleOpenProperties = async (filter) => {
+    setFilterProperties({
+      ...filterProperties,
+      [filter]: !filterProperties[filter],
+    });
+  };
 
   const classRadio = (params, value) => {
     const defaultCssRadio =
@@ -575,16 +548,26 @@ const Items = ({ params, collection }) => {
 
   const getNfts = async () => {
     if (nftLast === true) return;
+    let url;
+    if (isAddress(params.slug)) {
+      url = `${
+        process.env.NEXT_PUBLIC_API_URL
+      }/api/nfts/getbycollection/${getAddress(params.slug)}?page=${nftPage}`;
+    } else {
+      url = `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbyslug/${params.slug}`;
+    }
     await axios
       .request({
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/${
-          address ? 'getbycollection' : 'getbyslug'
-        }/${params.slug}?query=${search}&page=${nftPage}`,
+        url: url,
       })
       .then((response) => {
         if (response.data.nfts.length > 0) {
+          if (nftPage >= response.data.totalPages) {
+            setNftLast(true); // Set nftLast to true if the current page is the last page
+          }
+
           if (nftPage > 1) {
             setNfts((oldNft) => [...oldNft, ...response.data.nfts]);
           } else {
@@ -745,10 +728,84 @@ const Items = ({ params, collection }) => {
     }
   };
 
+  const getProperties = async (collectionAddress) => {
+    await axios
+      .request({
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getproperties/${collectionAddress}`,
+      })
+      .then((response) => {
+        if (response.data.length > 0) {
+          setDataProperties(response.data);
+        }
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
+
+  const handleCheckboxChange = (e, traitType) => {
+    const { value, checked } = e.target;
+
+    setSelectedValues((prevSelectedValues) => {
+      // Find the object with the same key in the existing selectedValues
+      const existingObjectIndex = prevSelectedValues.findIndex(
+        (selectedValue) => selectedValue.key === traitType,
+      );
+
+      if (existingObjectIndex !== -1) {
+        // If an object with the same key exists, update its value array
+        if (checked) {
+          return prevSelectedValues.map((selectedValue, index) => {
+            if (index === existingObjectIndex) {
+              return {
+                key: selectedValue.key,
+                value: [...selectedValue.value, value],
+              };
+            }
+            return selectedValue;
+          });
+        } else {
+          // If unchecked, remove the value from the existing value array
+          const updatedSelectedValues = prevSelectedValues.map(
+            (selectedValue, index) => {
+              if (index === existingObjectIndex) {
+                return {
+                  key: selectedValue.key,
+                  value: selectedValue.value.filter((v) => v !== value),
+                };
+              }
+              return selectedValue;
+            },
+          );
+
+          // Filter out objects with empty value arrays
+          return updatedSelectedValues.filter(
+            (selectedValue) => selectedValue.value.length > 0,
+          );
+        }
+      } else {
+        // If no object with the same key exists, add a new object
+        if (checked) {
+          return [
+            ...prevSelectedValues,
+            {
+              key: traitType,
+              value: [value],
+            },
+          ];
+        }
+      }
+
+      return prevSelectedValues;
+    });
+  };
+
   const sortNfts = () => {
-    if (selectedFilter === 'All') {
+    if (sortFilter === 'All') {
       return nfts;
-    } else if (selectedFilter === 'Price low to high') {
+    } else if (sortFilter === 'Price low to high') {
       const nftsWithItemDetails = nfts.filter((nft) => {
         return nft.itemDetails !== undefined && nft.itemDetails !== null;
       });
@@ -763,7 +820,7 @@ const Items = ({ params, collection }) => {
         return priceA - priceB; // Sort low to high
       });
       return sortedNfts;
-    } else if (selectedFilter === 'Price high to low') {
+    } else if (sortFilter === 'Price high to low') {
       const nftsWithItemDetails = nfts.filter((nft) => {
         return nft.itemDetails !== undefined && nft.itemDetails !== null;
       });
@@ -777,7 +834,7 @@ const Items = ({ params, collection }) => {
         return priceB - priceA; // Sort high to low
       });
       return sortedNfts;
-    } else if (selectedFilter === 'Ending soon') {
+    } else if (sortFilter === 'Ending soon') {
       // Filter to display NFTs ending soon (based on end date)
       const endingSoonNFTs = nfts.filter((nft) => {
         const endDate = Number(nft.itemDetails?.endDate);
@@ -788,7 +845,6 @@ const Items = ({ params, collection }) => {
       if (endingSoonNFTs.length === 0) {
         return []; // No data matches the filter
       }
-      console.log(endingSoonNFTs);
 
       // Sort the ending soon NFTs by end date (ascending order)
       const sortedNfts = [...endingSoonNFTs].sort((a, b) => {
@@ -798,7 +854,7 @@ const Items = ({ params, collection }) => {
       });
 
       return sortedNfts;
-    } else if (selectedFilter === 'Most favorited') {
+    } else if (sortFilter === 'Most favorited') {
       // Filter to display NFTs with valid likeCount
       const favoritedNFTs = nfts.filter((nft) => {
         const likeCount = nft.likeCount;
@@ -825,14 +881,14 @@ const Items = ({ params, collection }) => {
   };
 
   useEffect(() => {
-    if (nfts) {
+    if (nfts.length > 0) {
       const sortedNfts = sortNfts();
       setSortedNFTs(sortedNfts);
     }
-  }, [selectedFilter, nfts]);
+  }, [sortFilter, nfts]);
 
-  const filterNFTs = () => {
-    if (filterStatus === '') {
+  const filterNFTStatus = () => {
+    if (filterStatus === null) {
       return nfts;
     } else if (filterStatus === 'onauction') {
       const nftsWithItemDetails = nfts.filter((nft) => {
@@ -869,17 +925,17 @@ const Items = ({ params, collection }) => {
       }
 
       return nftsWithoutItemDetails;
-    } else {
-      return nfts;
     }
   };
 
   useEffect(() => {
-    if (nfts) {
-      const filteredNFTs = filterNFTs();
+    if (nfts.length > 0) {
+      const filteredNFTs = filterNFTStatus();
       setSortedNFTs(filteredNFTs);
     }
   }, [filterStatus, nfts]);
+
+  console.log(filterStatus, 'filterStatus');
 
   const priceFilterNFTs = () => {
     if (priceFilter.start !== '' || priceFilter.end !== '') {
@@ -907,6 +963,36 @@ const Items = ({ params, collection }) => {
       setSortedNFTs(nfts);
     }
   }, [priceFilter]);
+
+  const filterNFTProperties = () => {
+    if (selectedValues.length > 0) {
+      const filteredNFTs = nfts.filter((nft) => {
+        return selectedValues.some((selectedValue) => {
+          const { key, value } = selectedValue;
+          const matchingProperty = nft.properties.find((property) => {
+            return (
+              property.trait_type === key &&
+              value.some((selectedVal) =>
+                property.value.toString().includes(selectedVal),
+              )
+            );
+          });
+          return !!matchingProperty;
+        });
+      });
+
+      return filteredNFTs;
+    }
+  };
+
+  useEffect(() => {
+    if (selectedValues.length > 0) {
+      const pricefilteredNFTs = filterNFTProperties();
+      setSortedNFTs(pricefilteredNFTs);
+    } else {
+      setSortedNFTs(nfts);
+    }
+  }, [selectedValues]);
 
   return (
     <>
@@ -950,14 +1036,14 @@ const Items = ({ params, collection }) => {
                 </div>
               </div>
               <Listbox
-                value={selectedFilter}
-                onChange={setSelectedFilter}
+                value={sortFilter}
+                onChange={setSortFilter}
                 className="hidden sm:hidden md:block lg:block xl:block 2xl:block"
               >
                 <div className="relative z-20">
                   <Listbox.Button className="relative w-[200px] cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-500 dark:border-zinc-500 dark:bg-zinc-700 sm:text-sm">
                     <span className="block truncate text-gray-600 dark:text-white">
-                      {selectedFilter}
+                      {sortFilter}
                     </span>
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                       <svg
@@ -1058,7 +1144,7 @@ const Items = ({ params, collection }) => {
                     <button
                       onClick={() =>
                         filterStatus === 'onauction'
-                          ? setFilterStatus('')
+                          ? setFilterStatus(null)
                           : setFilterStatus('onauction')
                       }
                       className={`col-span-3 flex h-8 w-fit min-w-[2rem] cursor-pointer items-center justify-center rounded-lg px-3 text-xs font-medium leading-5 text-white shadow ${
@@ -1072,7 +1158,7 @@ const Items = ({ params, collection }) => {
                     <button
                       onClick={() =>
                         filterStatus === 'listed'
-                          ? setFilterStatus('')
+                          ? setFilterStatus(null)
                           : setFilterStatus('listed')
                       }
                       className={`col-span-3 flex h-8 w-fit min-w-[2rem] cursor-pointer items-center justify-center rounded-lg px-3 text-xs font-medium leading-5 text-white shadow ${
@@ -1086,7 +1172,7 @@ const Items = ({ params, collection }) => {
                     <button
                       onClick={() =>
                         filterStatus === 'notforsale'
-                          ? setFilterStatus('')
+                          ? setFilterStatus(null)
                           : setFilterStatus('notforsale')
                       }
                       className={`col-span-3 flex h-8 w-fit min-w-[2rem] cursor-pointer items-center justify-center rounded-lg px-3 text-xs font-medium leading-5 text-white shadow ${
@@ -1117,6 +1203,8 @@ const Items = ({ params, collection }) => {
                         type="number"
                         placeholder="Start Price"
                         value={startPrice}
+                        min={0}
+                        onWheel={(e) => e.target.blur()}
                         onChange={(e) => setStartPrice(e.target.value)}
                         className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                       />
@@ -1125,6 +1213,8 @@ const Items = ({ params, collection }) => {
                         type="number"
                         placeholder="End Price"
                         value={endPrice}
+                        min={0}
+                        onWheel={(e) => e.target.blur()}
                         onChange={(e) => setEndPrice(e.target.value)}
                         className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                       />
@@ -1148,10 +1238,73 @@ const Items = ({ params, collection }) => {
                     <FontAwesomeIcon icon={faChevronDown} />
                   </button>
                   <div
-                    className={`target py-5 ${
+                    className={`target pb-5 ${
                       filterCollapse.properties ? 'block' : 'hidden'
                     }`}
-                  ></div>
+                  >
+                    <div className="flex flex-col ">
+                      {dataProperties.map((data, index) => (
+                        <div
+                          key={index}
+                          className="flex cursor-pointer flex-col justify-between gap-2"
+                        >
+                          <div
+                            className="flex justify-between gap-2"
+                            onClick={(event) =>
+                              handleOpenProperties(data?.key?.trait_type)
+                            }
+                          >
+                            <span className="capitalize">
+                              {data.key.trait_type}
+                            </span>
+                            <div>
+                              <span className="mr-2">{data.key.count}</span>
+                              <FontAwesomeIcon icon={faChevronDown} />
+                            </div>
+                          </div>
+                          <div
+                            className={`pb-3 ${
+                              filterProperties[data.key.trait_type]
+                                ? 'block'
+                                : 'hidden'
+                            }`}
+                          >
+                            {data.values.map((val, index) => (
+                              <div
+                                className="flex justify-between gap-2"
+                                key={index}
+                              >
+                                <div className="inline-flex items-center justify-center">
+                                  <input
+                                    type="checkbox"
+                                    className="mr-2 h-4 w-4 rounded border-gray-300 text-primary-500 ring-primary-500 focus:ring-primary-500"
+                                    value={val.value}
+                                    checked={selectedValues.some(
+                                      (item) =>
+                                        item.key === data?.key?.trait_type &&
+                                        item.value.includes(val.value),
+                                    )}
+                                    onChange={(e) =>
+                                      handleCheckboxChange(
+                                        e,
+                                        data?.key?.trait_type,
+                                      )
+                                    }
+                                  />
+                                  <span className="capitalize">
+                                    {val.value}
+                                  </span>
+                                </div>
+                                <div>
+                                  <span className="mr-2">{val.count}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -1164,14 +1317,14 @@ const Items = ({ params, collection }) => {
             }`}
           >
             <div className="grid w-full grid-cols-12 gap-7 text-gray-900">
-              {sortedNFTs.length == 0 && !isLoading && (
+              {sortedNFTs.length === 0 && !isLoading && (
                 <div className="col-span-12 w-full text-center font-semibold text-black">
                   No results found
                 </div>
               )}
-              {sortedNFTs.length == 0 && isLoading && (
+              {sortedNFTs.length === 0 && isLoading && (
                 <>
-                  {[...Array(12)].map((nft, index) => (
+                  {[...Array(4)].map((nft, index) => (
                     <NftItemDetailSkeleton
                       key={index}
                       gridList={gridList}
@@ -1182,11 +1335,6 @@ const Items = ({ params, collection }) => {
               )}
               {sortedNFTs.length > 0 &&
                 sortedNFTs.map((nft, index) => {
-                  const currentDate = moment();
-                  const endDate = moment.unix(nft.itemDetails?.endDate);
-                  const releaseDate = moment.unix(nft.itemDetails?.releaseDate);
-                  const isNotExpired = endDate.isAfter(currentDate);
-                  const isNotRelease = currentDate.isBefore(releaseDate);
                   return (
                     <NftItemDetail
                       key={index}
@@ -1195,11 +1343,7 @@ const Items = ({ params, collection }) => {
                       itemDetails={nft.itemDetails}
                       gridList={gridList}
                       openFilter={openFilter}
-                      isNotExpired={isNotExpired}
-                      isNotRelease={isNotRelease}
-                      handleOpenModalBid={handleOpenModalBid}
-                      handleOpenModalBuy={handleOpenModalBuy}
-                      handleOpenModalPutonsale={handleOpenModalPutonsale}
+                      // Other props
                     />
                   );
                 })}

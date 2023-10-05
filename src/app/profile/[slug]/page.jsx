@@ -39,6 +39,8 @@ import NotFound from '@/app/not-found';
 import ModalBid from '@/components/modal/bid';
 import ModalBuy from '@/components/modal/buy';
 import ModalPutOnSale from '@/components/modal/putOnSale';
+import ModalUploadProfileCover from '@/components/modal/uploadProfileCover';
+import ModalUploadProfileLogo from '@/components/modal/uploadProfileLogo';
 
 const servers = [
   'All Mainnet',
@@ -91,6 +93,15 @@ export default function ProfilePage({ params }) {
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
 
+  const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
+  const [IsOpenModalLogo, setIsOpenModalLogo] = useState(false);
+  const [bannerImage, setBannerImage] = useState(
+    'https://placehold.co/1920x266.png',
+  );
+  const [logoImage, setLogoImage] = useState(
+    'https://placehold.co/100x100.png',
+  );
+
   const handleResize = () => {
     const screen = window.innerWidth;
     if (screen < 640) {
@@ -101,23 +112,25 @@ export default function ProfilePage({ params }) {
   };
 
   useEffect(() => {
-    if (token) {
-      getProfile(token);
-    }
-  }, [token]);
+    getProfile(token);
+  }, []);
 
-  const getProfile = async (token) => {
+  const getProfile = async () => {
     await axios
       .request({
         method: 'get',
         maxBodyLength: Infinity,
         url: `${process.env.NEXT_PUBLIC_API_URL}/api/user/get/${params.slug}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       })
       .then((response) => {
         setProfile(response.data);
+        console.log(profile, "@@@@@@@@@@");
+        if (response.data.banner !== null) {
+          setBannerImage(`/uploads/users/banner/${response.data.banner}`);
+        }
+        if (response.data.logo !== null) {
+          setLogoImage(`/uploads/users/${response.data.logo}`);
+        }
       })
       .catch((error) => {
         toast.error(JSON.stringify(error));
@@ -318,14 +331,51 @@ export default function ProfilePage({ params }) {
     return listTabs[activePage];
   };
 
+  const editBanner = () => {
+    setIsOpenModalCover(true);
+  };
+
+  const editLogo = () => {
+    setIsOpenModalLogo(true);
+  };
+
+  const closeModalCover = () => {
+    setIsOpenModalCover(false);
+  };
+
+  const closeModalLogo = () => {
+    setIsOpenModalLogo(false);
+  };
+
+  const updateBannerImage = (newImageURL) => {
+    setBannerImage(newImageURL);
+  };
+
+  const updateLogoImage = (newImageURL) => {
+    setLogoImage(newImageURL);
+  };
+
   return (
     <>
       <section>
-        <div className="w-full">
-          <img
-            src="https://fakeimg.pl/1920x266"
+        <div className="group relative w-full">
+          <Image
+            src={bannerImage}
+            alt={profile.username ? profile.username : ''}
+            width={1920}
+            height={266}
+            objectFit="cover"
             className="h-[266px] object-cover"
           />
+          {params.slug === address && (
+            <button
+              onClick={editBanner}
+              className="absolute right-0 top-0 m-4 rounded-full bg-primary-500 px-4 py-2 text-white opacity-0 hover:bg-primary-300 group-hover:opacity-100"
+            >
+              <FontAwesomeIcon className="mr-2" icon={faPenToSquare} />
+              Edit Cover
+            </button>
+          )}
         </div>
       </section>
       <div className="container m-auto p-3">
@@ -334,11 +384,21 @@ export default function ProfilePage({ params }) {
             <div className="flex w-full flex-col">
               <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
-                  <div className="relative -mt-[5rem]">
-                    <img
-                      className="w-36 rounded-full border-4 border-white shadow dark:border-zinc-700"
-                      src="https://fakeimg.pl/100x100"
+                  <div className="group relative -mt-[5rem] w-fit">
+                    <Image
+                      className="h-36 w-36 rounded-full border-8 border-gray-100 shadow"
+                      src={logoImage}
+                      width={100}
+                      height={100}
                     />
+                    {params.slug === address && (
+                      <button
+                        onClick={editLogo}
+                        className="absolute right-0 top-0 m-6 flex h-8 w-8 items-center justify-center rounded-full bg-primary-500 text-white opacity-0 hover:bg-primary-300 group-hover:opacity-100"
+                      >
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                      </button>
+                    )}
                   </div>
                   <div className="mt-3 flex w-full text-xl font-semibold text-gray-900">
                     {profile.username ? (
@@ -536,12 +596,22 @@ export default function ProfilePage({ params }) {
         onModalClose={closeModalPutonsale}
         putonsaledata={putOnSaleData}
       />
+      <ModalUploadProfileCover
+        isOpenModal={IsOpenModalCover}
+        onModalClose={closeModalCover}
+        updateBannerImage={updateBannerImage}
+      />
+      <ModalUploadProfileLogo
+        isOpenModal={IsOpenModalLogo}
+        onModalClose={closeModalLogo}
+        updateLogoImage={updateLogoImage}
+      />
       <Footer />
     </>
   );
 }
 
-const Collection = ({ userAddress }) => {
+const Collection = ({ userAccount }) => {
   const router = useRouter();
   const { chain } = useNetwork();
   const filterQuery = useSearchParams();
@@ -814,7 +884,7 @@ const Collection = ({ userAddress }) => {
         <div className="my-5 grid grid-cols-12 gap-6">
           <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12">
             <div className="grid w-full grid-cols-12 gap-6 text-gray-900">
-              {address === userAddress && (
+              {address === userAccount && (
                 <div className="col-span-12 mb-4 h-[280px] w-full sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                   <div className="flex h-full w-full flex-col items-center justify-center rounded-2xl border-2 border-gray-200">
                     <button
@@ -832,7 +902,7 @@ const Collection = ({ userAddress }) => {
               {collections.length == 0 && !isLoading && (
                 <div
                   className={`w-full text-center font-semibold text-black ${
-                    address === userAddress
+                    address === userAccount
                       ? 'sm:col-span-6 md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9'
                       : 'col-span-12'
                   }`}

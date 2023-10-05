@@ -495,7 +495,7 @@ export default function NFTDetails({ dataNFTs }) {
                             address={
                               dataNFTs?.User?.walletAddress || dataNFTs?.owner
                             }
-                            src={`/uploads/user/${dataNFTs?.collectionData.User?.logo}`}
+                            src={`/uploads/users/${dataNFTs?.collectionData.User?.logo}`}
                           />
                           <div className="text-sm font-medium text-neutral-700">
                             {dataNFTs?.collectionData?.User?.username
@@ -535,7 +535,7 @@ export default function NFTDetails({ dataNFTs }) {
                             dataNFTs?.ownerData?.walletAddress ||
                             dataNFTs?.owner
                           }
-                          src={`/uploads/user/${dataNFTs?.ownerData?.logo}`}
+                          src={`/uploads/users/${dataNFTs?.ownerData?.logo}`}
                         />
                         <div className="text-sm font-medium text-neutral-700">
                           {dataNFTs?.ownerData?.username ||
@@ -1252,7 +1252,7 @@ const Collateral = ({ dataNFTs }) => {
               }
               diameter={28}
               address={dataNFTs.ownerData?.walletAddress || dataNFTs.owner}
-              src={`/uploads/user/${dataNFTs.ownerData?.logo}`}
+              src={`/uploads/users/${dataNFTs.ownerData?.logo}`}
             />
             <div className="font-medium leading-none text-neutral-700">
               {dataNFTs.ownerData?.username ||
@@ -1316,7 +1316,7 @@ const Overview = ({ dataOverview, onSeeAllClick }) => {
                         }
                         diameter={32}
                         address={offer?.userDetails?.walletAddress}
-                        src={`/uploads/user/${offer?.userDetails?.logo}`}
+                        src={`/uploads/users/${offer?.userDetails?.logo}`}
                       />
                     </div>
                     <div className="inline-flex cursor-pointer items-center justify-center">
@@ -1364,7 +1364,7 @@ const Bids = ({ dataBid }) => {
                     }
                     diameter={48}
                     address={offer?.userDetails?.walletAddress}
-                    src={`/uploads/user/${offer?.userDetails?.logo}`}
+                    src={`/uploads/users/${offer?.userDetails?.logo}`}
                   />
                 </div>
                 <div className="inline-flex cursor-pointer items-center justify-center ">
@@ -1392,11 +1392,56 @@ const Bids = ({ dataBid }) => {
 };
 
 const History = ({ collectionAddress, tokenId }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const [events, setEvents] = useState([]);
+
+  const parsingMintTransferEvents = (events) => {
+    for (const event of events) {
+      let type;
+      if (event.item.From === '0x0000000000000000000000000000000000000000') {
+        type = 'Mints';
+      } else if (
+        event.item.From === '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' ||
+        event.item.To === '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc'
+      ) {
+        type = 'Transfer';
+      } else {
+        continue;
+      }
+      setEvents((oldEvent) => [
+        ...oldEvent,
+        {
+          event: type,
+          price: '',
+          from: truncateAddress4char(event?.item?.From),
+          to: truncateAddress4char(event?.item?.To),
+          timestamp: timeAgo(event?.item?.Timestamp * 1000),
+        },
+      ]);
+    }
+  };
+
+  const parsingBidsSalesListing = (events) => {
+    for (const event of events) {
+      setEvents((oldEvent) => [
+        ...oldEvent,
+        {
+          event: event.eventType,
+          price: `${
+            event.price === '' ? 0 : formatEther(Number(event.price))
+          } ${event?.collectionData?.Chain?.symbol}`,
+          from: event?.sellerData?.username
+            ? event.sellerData.username
+            : truncateAddress4char(event.seller),
+          to: event?.buyerData?.username
+            ? event.buyerData.username
+            : truncateAddress4char(event.buyer),
+          timestamp: timeAgo(event?.timestamp * 1000),
+        },
+      ]);
+    }
+  };
   useEffect(() => {
-    const getHistory = async () => {
-      setIsLoading(true);
+    const getHistoryMintTransfer = async () => {
       await axios
         .request({
           method: 'get',
@@ -1407,11 +1452,9 @@ const History = ({ collectionAddress, tokenId }) => {
           },
         })
         .then((response) => {
-          setIsLoading(false);
-          setEvents(response.data.events);
+          parsingMintTransferEvents(response.data.events);
         })
         .catch((error) => {
-          setIsLoading(false);
           if (error.response.status == 404) {
             if (nftPage > 1) {
               setNftLast(true);
@@ -1423,7 +1466,34 @@ const History = ({ collectionAddress, tokenId }) => {
           }
         });
     };
-    getHistory();
+    getHistoryMintTransfer();
+
+    const getHistoryBidsSalesListing = async () => {
+      await axios
+        .request({
+          method: 'get',
+          maxBodyLength: Infinity,
+          url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/eventbycollectiontokenId/${collectionAddress}/${tokenId}`,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => {
+          parsingBidsSalesListing(response.data);
+        })
+        .catch((error) => {
+          if (error.response.status == 404) {
+            if (nftPage > 1) {
+              setNftLast(true);
+            } else {
+              setNfts([]);
+            }
+          } else {
+            toast.error(error.message);
+          }
+        });
+    };
+    getHistoryBidsSalesListing();
   }, []);
 
   const timeAgo = (timestamp) => {
@@ -1431,7 +1501,7 @@ const History = ({ collectionAddress, tokenId }) => {
     const inputDate = new Date(timestamp);
     const timeDifference = currentDate - inputDate;
     const minutesAgo = Math.floor(timeDifference / 60000); // 1 minute = 60000 milliseconds
-  
+
     if (minutesAgo < 1) {
       return 'just now';
     } else if (minutesAgo === 1) {
@@ -1447,7 +1517,7 @@ const History = ({ collectionAddress, tokenId }) => {
     } else {
       return `${Math.floor(minutesAgo / 1440)} days ago`;
     }
-  }
+  };
 
   return (
     <>
@@ -1457,22 +1527,26 @@ const History = ({ collectionAddress, tokenId }) => {
         </div>
       )}
       {events.length > 0 && (
-        <div className="text-sm flex flex-col gap-5">
-          <div className="col-span-12 grid grid-cols-12 gap-3">
-            <div className="col-span-2">Event</div>
+        <div className="flex flex-col gap-5 text-sm">
+          <div className="grid grid-cols-12 gap-4 rounded-2xl bg-primary-500 px-2 py-2 text-white">
+            <div className="col-span-3">Event</div>
             <div className="col-span-2">Price</div>
-            <div className="col-span-3">From</div>
-            <div className="col-span-3">To</div>
+            <div className="col-span-5 grid grid-cols-12">
+              <div className="col-span-6">From</div>
+              <div className="col-span-6">To</div>
+            </div>
             <div className="col-span-2">Date</div>
           </div>
           {events.map((event, index) => {
             return (
               <div className="col-span-12 grid grid-cols-12 gap-1" key={index}>
-                <div className="col-span-2">{event.eventType}</div>
-                <div className="col-span-2"></div>
-                <div className="col-span-3">{truncateAddress4char(event?.item?.From)}</div>
-                <div className="col-span-3">{truncateAddress4char(event?.item?.To)}</div>
-                <div className="col-span-2">{timeAgo(event?.item?.Timestamp * 1000)}</div>
+                <div className="col-span-3">{event.event}</div>
+                <div className="col-span-2">{event.price}</div>
+                <div className="col-span-5 grid grid-cols-12">
+                  <div className="col-span-6">{event.from}</div>
+                  <div className="col-span-6">{event.to}</div>
+                </div>
+                <div className="col-span-2">{event.timestamp}</div>
               </div>
             );
           })}

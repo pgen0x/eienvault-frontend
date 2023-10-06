@@ -497,19 +497,28 @@ export default function NFTDetails({ dataNFTs }) {
                             }
                             src={`/uploads/users/${dataNFTs?.collectionData.User?.logo}`}
                           />
-                          <div className="text-sm font-medium text-neutral-700">
-                            {dataNFTs?.collectionData?.User?.username
-                              ? dataNFTs?.collectionData?.User?.username
-                              : truncateAddress4char(
-                                  dataNFTs?.collectionData?.userAddress,
-                                )}
-                          </div>
-
-                          {dataNFTs?.collectionData?.User?.isVerified && (
-                            <div className="font-black leading-none text-primary-500">
-                              <FontAwesomeIcon icon={faCircleCheck} />
+                          <div
+                            onClick={() =>
+                              router.push(
+                                `/profile/${dataNFTs?.collectionData?.userAddress}`,
+                              )
+                            }
+                            className="flex cursor-pointer items-center gap-2"
+                          >
+                            <div className="text-sm font-medium text-neutral-700">
+                              {dataNFTs?.collectionData?.User?.username
+                                ? dataNFTs?.collectionData?.User?.username
+                                : truncateAddress4char(
+                                    dataNFTs?.collectionData?.userAddress,
+                                  )}
                             </div>
-                          )}
+
+                            {dataNFTs?.collectionData?.User?.isVerified && (
+                              <div className="font-black leading-none text-primary-500">
+                                <FontAwesomeIcon icon={faCircleCheck} />
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -537,12 +546,26 @@ export default function NFTDetails({ dataNFTs }) {
                           }
                           src={`/uploads/users/${dataNFTs?.ownerData?.logo}`}
                         />
-                        <div className="text-sm font-medium text-neutral-700">
-                          {dataNFTs?.ownerData?.username ||
-                            truncateAddress4char(
-                              dataNFTs?.ownerData?.walletAddress,
-                            ) ||
-                            truncateAddress4char(dataNFTs?.owner)}
+                        <div
+                          onClick={() =>
+                            router.push(
+                              `/profile/${dataNFTs?.ownerData?.walletAddress}`,
+                            )
+                          }
+                          className="flex cursor-pointer items-center gap-2"
+                        >
+                          <div className="text-sm font-medium text-neutral-700">
+                            {dataNFTs?.ownerData?.username ||
+                              truncateAddress4char(
+                                dataNFTs?.ownerData?.walletAddress,
+                              ) ||
+                              truncateAddress4char(dataNFTs?.owner)}
+                          </div>
+                          {dataNFTs?.collectionData?.User?.isVerified && (
+                            <div className="font-black leading-none text-primary-500">
+                              <FontAwesomeIcon icon={faCircleCheck} />
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

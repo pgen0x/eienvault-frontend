@@ -232,9 +232,9 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                             className="h-full w-full rounded-2xl "
                             width={15}
                             height={15}
-                            alt={auction.collectionData.name}
+                            alt={auction.collectionData?.userAddress}
                             diameter={15}
-                            address={auction.collectionData?.tokenAddress}
+                            address={auction.collectionData?.userAddress}
                             src={`/uploads/collections/${auction.collectionData?.logo}`}
                           />
                           <div className="flex items-start justify-start gap-2">

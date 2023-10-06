@@ -498,8 +498,8 @@ const Items = ({ params, collection }) => {
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [filterStatus, setFilterStatus] = useState(null);
 
+  const [filterStatus, setFilterStatus] = useState(null);
   const [startPrice, setStartPrice] = useState('');
   const [endPrice, setEndPrice] = useState('');
   const [priceFilter, setPriceFilter] = useState({ start: '', end: '' });
@@ -556,7 +556,7 @@ const Items = ({ params, collection }) => {
         process.env.NEXT_PUBLIC_API_URL
       }/api/nfts/getbycollection/${getAddress(params.slug)}?page=${nftPage}`;
     } else {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbyslug/${params.slug}`;
+      url = `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbyslug/${params.slug}?page=${nftPage}`;
     }
     await axios
       .request({

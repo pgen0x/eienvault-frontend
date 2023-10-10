@@ -136,6 +136,7 @@ const Nft = ({
   const router = useRouter();
   const { address } = useAccount();
   const { token } = useAuth();
+  const [openEllipsis, setOpenEllipsis] = useState(false);
 
   function getHighestBid(auctionData) {
     if (!auctionData.listOffers || auctionData.listOffers.length === 0) {
@@ -216,22 +217,22 @@ const Nft = ({
       >
         {nft?.imageUri !== null ? (
           <Image
-          className="z-10 h-[290px] w-full rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all"
-          width={600}
-          height={600}
-          placeholder="blur"
-          blurDataURL={`https://fakeimg.pl/600x600`}
-          src={nft?.imageUri}
-          alt={
-            collection?.name
-              ? collection?.name
-              : nft.collectionAddress
-              ? nft.collectionAddress
-              : ''
-          }
+            className="z-10 h-[290px] w-full rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all"
+            width={600}
+            height={600}
+            placeholder="blur"
+            blurDataURL={`https://fakeimg.pl/600x600`}
+            src={nft?.imageUri}
+            alt={
+              collection?.name
+                ? collection?.name
+                : nft.collectionAddress
+                ? nft.collectionAddress
+                : ''
+            }
           />
         ) : (
-          <div className="z-10 h-[290px] w-full rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all flex items-center justify-center">
+          <div className="z-10 flex h-[290px] w-full items-center justify-center rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all">
             <button
               className="rounded-full border border-primary-500 bg-transparent px-2 py-2 text-sm font-semibold text-primary-500 hover:border-primary-300 hover:text-primary-300"
               onClick={() =>
@@ -245,7 +246,7 @@ const Nft = ({
       </Suspense>
       <div className="inline-flex w-full flex-col items-center justify-center px-3 lg:items-start">
         <div className="relative flex w-full flex-row">
-          <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 dark:bg-zinc-700 p-3 backdrop-blur-xl">
+          <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 p-3 backdrop-blur-xl dark:bg-zinc-700">
             <div className="flex w-full flex-col items-start justify-start">
               <div
                 className="inline-flex cursor-pointer items-center justify-between self-stretch"
@@ -283,7 +284,42 @@ const Nft = ({
                   </div>
                 </div>
                 <div className="items-center">
-                  <FontAwesomeIcon icon={faEllipsis} />
+                  <button onClick={() => setOpenEllipsis(!openEllipsis)}>
+                    <FontAwesomeIcon icon={faEllipsis} />
+                  </button>
+                  {openEllipsis && (
+                    <div class="invisible absolute -left-6 top-full z-10 w-48 overflow-hidden pt-3 group-hover/discover:visible">
+                      <div class="rounded-xl bg-white ring-1 ring-gray-900/5">
+                        <div class="p-3">
+                          <div class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
+                            <button class="block font-semibold text-primary-500">
+                              Refresh Metadata
+                            </button>
+                          </div>
+                          <div class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
+                            <button class="block font-semibold text-primary-500">
+                              Share
+                            </button>
+                          </div>
+                          <div class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
+                            <button class="block font-semibold text-primary-500">
+                              Like
+                            </button>
+                          </div>
+                          <div class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
+                            <button class="block font-semibold text-primary-500">
+                              Open Original
+                            </button>
+                          </div>
+                          <div class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
+                            <button class="block font-semibold text-primary-500">
+                              Report
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="inline-flex w-full items-center justify-between gap-2 pt-1">
@@ -315,7 +351,7 @@ const Nft = ({
                     <>
                       <p>Highest bid</p>
                       <p className="font-bold">
-                        {formatEther(Number(getHighestBid(nft).highestBid))}{' '}
+                        {formatEther(Number(getHighestBid(itemDetails).highestBid))}{' '}
                         {collection?.Chain.symbol
                           ? collection.Chain.symbol
                           : '-'}
@@ -341,31 +377,37 @@ const Nft = ({
                 {itemDetails ? (
                   itemDetails?.isAuctioned ? (
                     <div className="mt-5 flex w-full items-center gap-4">
-                      <button
-                        className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300"
-                        onClick={() =>
-                          handleOpenModalBid(
-                            itemDetails?.marketId,
-                            itemDetails?.listingPrice,
-                            nft?.imageUri,
-                            nft?.tokenId,
-                            itemDetails?.price,
-                            nft?.nftDetails?.name,
-                            nft?.collectionData,
-                            getHighestBid(itemDetails),
-                            formatEther(getLowestBid(itemDetails)),
-                          )
-                        }
-                        disabled={
-                          isNotRelease ? true : isNotExpired ? false : true
-                        }
-                      >
-                        {isNotRelease
-                          ? 'Upcoming'
-                          : isNotExpired
-                          ? 'Place a Bid'
-                          : 'Expired'}
-                      </button>
+                      {address === nft?.owner ? (
+                        <button className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300">
+                          Owned By You
+                        </button>
+                      ) : (
+                        <button
+                          className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300"
+                          onClick={() =>
+                            handleOpenModalBid(
+                              itemDetails?.marketId,
+                              itemDetails?.listingPrice,
+                              nft?.imageUri,
+                              nft?.tokenId,
+                              itemDetails?.price,
+                              nft?.name,
+                              collection,
+                              getHighestBid(itemDetails),
+                              formatEther(getLowestBid(itemDetails)),
+                            )
+                          }
+                          disabled={
+                            isNotRelease ? true : isNotExpired ? false : true
+                          }
+                        >
+                          {isNotRelease
+                            ? 'Upcoming'
+                            : isNotExpired
+                            ? 'Place a Bid'
+                            : 'Expired'}
+                        </button>
+                      )}
                     </div>
                   ) : (
                     <div className="mt-5 flex w-full items-center gap-4">

@@ -28,7 +28,7 @@ import { formatEther } from 'viem';
 import moment from 'moment';
 import ModalBid from '../modal/bid';
 import ModalBuy from '../modal/buy';
-import { useWalletClient } from 'wagmi';
+import { useAccount, useWalletClient } from 'wagmi';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
@@ -68,6 +68,7 @@ export const SlideshowDiscover = ({ dataDiscover }) => {
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const { data: walletClient } = useWalletClient();
+  const { address } = useAccount();
 
   function getHighestBid(auctionData) {
     if (!auctionData.listOffers || auctionData.listOffers.length === 0) {

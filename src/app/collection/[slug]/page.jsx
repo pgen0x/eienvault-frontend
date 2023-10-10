@@ -34,7 +34,7 @@ import moment from 'moment';
 import ModalBid from '@/components/modal/bid';
 import ModalBuy from '@/components/modal/buy';
 import HelaIcon from '@/assets/icon/hela';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount, useNetwork, useWalletClient } from 'wagmi';
 import ModalPutOnSale from '@/components/modal/putOnSale';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import {
@@ -65,7 +65,7 @@ export default function CollectionDetail({ params }) {
   const [collection, setCollection] = useState({});
   const [profile, setProfile] = useState({});
   const [showDescription, setShowDescription] = useState(false);
-  const [activeTab, setActiveTab] = useState('items');
+  const [activeTab, setActiveTab] = useState('activity');
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
   const { address, isConnected } = useAccount();
   const [bannerImage, setBannerImage] = useState(
@@ -510,6 +510,8 @@ const Items = ({ params, collection }) => {
   const [priceFilter, setPriceFilter] = useState({ start: '', end: '' });
   const [dataProperties, setDataProperties] = useState([]);
   const [selectedValues, setSelectedValues] = useState([]);
+
+  const { data: walletClient } = useWalletClient();
 
   const handleApplyPriceFilter = (start, end) => {
     setPriceFilter({ start, end });
@@ -1342,6 +1344,12 @@ const Items = ({ params, collection }) => {
               )}
               {sortedNFTs.length > 0 &&
                 sortedNFTs.map((nft, index) => {
+                  const currentDate = moment();
+                  const endDate = moment.unix(nft?.itemDetails?.endDate);
+                  const releaseDate = moment.unix(nft?.itemDetails?.releaseDate);
+                  const isNotExpired = endDate.isAfter(currentDate);
+                  const isNotRelease = currentDate.isBefore(releaseDate);
+
                   return (
                     <NftItemDetail
                       key={index}
@@ -1350,7 +1358,11 @@ const Items = ({ params, collection }) => {
                       itemDetails={nft.itemDetails}
                       gridList={gridList}
                       openFilter={openFilter}
-                      // Other props
+                      handleOpenModalBuy={handleOpenModalBuy}
+                      handleOpenModalBid={handleOpenModalBid}
+                      handleOpenModalPutonsale={handleOpenModalPutonsale}
+                      isNotExpired={isNotExpired}
+                      isNotRelease={isNotRelease}
                     />
                   );
                 })}

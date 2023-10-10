@@ -208,6 +208,11 @@ const Nft = ({
     }
   }
 
+  const handleOpenEllipsis = (event) => {
+    event.preventDefault();
+    setOpenEllipsis(!openEllipsis)
+  }
+
   return (
     <div className="group h-[542px] w-full">
       <Suspense
@@ -284,35 +289,35 @@ const Nft = ({
                   </div>
                 </div>
                 <div className="items-center">
-                  <button onClick={() => setOpenEllipsis(!openEllipsis)}>
+                  <button onClick={handleOpenEllipsis}>
                     <FontAwesomeIcon icon={faEllipsis} />
                   </button>
                   {openEllipsis && (
-                    <div class="invisible absolute -left-6 top-full z-10 w-48 overflow-hidden pt-3 group-hover/discover:visible">
-                      <div class="rounded-xl bg-white ring-1 ring-gray-900/5">
-                        <div class="p-3">
-                          <div class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
-                            <button class="block font-semibold text-primary-500">
+                    <div className="absolute left-16 z-10 w-48 overflow-hidden pt-3 shadow-lg">
+                      <div className="rounded-xl bg-white ring-1 ring-gray-900/5">
+                        <div className="p-3">
+                          <div className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
+                            <button className="block font-semibold text-primary-500">
                               Refresh Metadata
                             </button>
                           </div>
-                          <div class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
-                            <button class="block font-semibold text-primary-500">
+                          <div className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
+                            <button className="block font-semibold text-primary-500">
                               Share
                             </button>
                           </div>
-                          <div class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
-                            <button class="block font-semibold text-primary-500">
+                          <div className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
+                            <button className="block font-semibold text-primary-500">
                               Like
                             </button>
                           </div>
-                          <div class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
-                            <button class="block font-semibold text-primary-500">
+                          <div className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
+                            <button className="block font-semibold text-primary-500">
                               Open Original
                             </button>
                           </div>
-                          <div class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
-                            <button class="block font-semibold text-primary-500">
+                          <div className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
+                            <button className="block font-semibold text-primary-500">
                               Report
                             </button>
                           </div>

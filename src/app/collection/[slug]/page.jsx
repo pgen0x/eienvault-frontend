@@ -65,7 +65,7 @@ export default function CollectionDetail({ params }) {
   const [collection, setCollection] = useState({});
   const [profile, setProfile] = useState({});
   const [showDescription, setShowDescription] = useState(false);
-  const [activeTab, setActiveTab] = useState('activity');
+  const [activeTab, setActiveTab] = useState('items');
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
   const { address, isConnected } = useAccount();
   const [bannerImage, setBannerImage] = useState(

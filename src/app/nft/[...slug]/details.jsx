@@ -57,6 +57,7 @@ import RelatedNFTs, {
 import moment from 'moment';
 import ModalPutOnSale from '@/components/modal/putOnSale';
 import axios from 'axios';
+import { ActivityItemDetail, ActivityItemDetailSkeleton } from '@/components/activity/itemDetail';
 
 export default function NFTDetails({ dataNFTs }) {
   const router = useRouter();
@@ -92,7 +93,7 @@ export default function NFTDetails({ dataNFTs }) {
       bids: <Bids dataBid={dataNFTs} />,
       history: (
         <History
-          collectionAddress={dataNFTs.collectionAddress}
+          collection={dataNFTs.collectionData}
           tokenId={dataNFTs.tokenId}
         />
       ),
@@ -1422,152 +1423,81 @@ const Bids = ({ dataBid }) => {
   );
 };
 
-const History = ({ collectionAddress, tokenId }) => {
+const History = ({ collection, tokenId }) => {
   const [events, setEvents] = useState([]);
-
-  const parsingMintTransferEvents = (events) => {
-    for (const event of events) {
-      let type;
-      if (event.item.From === '0x0000000000000000000000000000000000000000') {
-        type = 'Mints';
-      } else if (
-        event.item.From === '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' ||
-        event.item.To === '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc'
-      ) {
-        type = 'Transfer';
-      } else {
-        continue;
-      }
-      setEvents((oldEvent) => [
-        ...oldEvent,
-        {
-          event: type,
-          price: '',
-          from: truncateAddress4char(event?.item?.From),
-          to: truncateAddress4char(event?.item?.To),
-          timestamp: timeAgo(event?.item?.Timestamp * 1000),
-        },
-      ]);
-    }
-  };
-
-  const parsingBidsSalesListing = (events) => {
-    for (const event of events) {
-      setEvents((oldEvent) => [
-        ...oldEvent,
-        {
-          event: event.eventType,
-          price: `${
-            event.price === '' ? 0 : formatEther(Number(event.price))
-          } ${event?.collectionData?.Chain?.symbol}`,
-          from: event?.sellerData?.username
-            ? event.sellerData.username
-            : truncateAddress4char(event.seller),
-          to: event?.buyerData?.username
-            ? event.buyerData.username
-            : truncateAddress4char(event.buyer),
-          timestamp: timeAgo(event?.timestamp * 1000),
-        },
-      ]);
-    }
-  };
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const getHistoryMintTransfer = async () => {
+      setIsLoading(true);
       await axios
         .request({
           method: 'get',
           maxBodyLength: Infinity,
-          url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/geteventsbycollectionid/${collectionAddress}/${tokenId}`,
+          url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/geteventsbycollectionid/${collection.tokenAddress}/${tokenId}`,
           headers: {
             'Content-Type': 'application/json',
           },
         })
         .then((response) => {
-          parsingMintTransferEvents(response.data.events);
+          setEvents((oldEvent) => {
+            return [...oldEvent, ...response.data.events]
+          })
         })
         .catch((error) => {
           toast.error(error.message);
         });
     };
-    getHistoryMintTransfer();
+
+    getHistoryMintTransfer().then(() => {
+      getHistoryBidsSalesListing();
+    });
 
     const getHistoryBidsSalesListing = async () => {
       await axios
         .request({
           method: 'get',
           maxBodyLength: Infinity,
-          url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/eventbycollectiontokenId/${collectionAddress}/${tokenId}`,
+          url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/eventbycollectiontokenId/${collection.tokenAddress}/${tokenId}`,
           headers: {
             'Content-Type': 'application/json',
           },
         })
         .then((response) => {
-          parsingBidsSalesListing(response.data);
+          setEvents((oldEvent) => {
+            return [...oldEvent, ...response.data]
+          })
+          setIsLoading(false);
         })
         .catch((error) => {
           toast.error(error.message);
+          setIsLoading(false);
         });
     };
-    getHistoryBidsSalesListing();
   }, []);
-
-  const timeAgo = (timestamp) => {
-    const currentDate = new Date();
-    const inputDate = new Date(timestamp);
-    const timeDifference = currentDate - inputDate;
-    const minutesAgo = Math.floor(timeDifference / 60000); // 1 minute = 60000 milliseconds
-
-    if (minutesAgo < 1) {
-      return 'just now';
-    } else if (minutesAgo === 1) {
-      return '1 minute ago';
-    } else if (minutesAgo < 60) {
-      return `${minutesAgo} minutes ago`;
-    } else if (minutesAgo < 120) {
-      return '1 hour ago';
-    } else if (minutesAgo < 1440) {
-      return `${Math.floor(minutesAgo / 60)} hours ago`;
-    } else if (minutesAgo < 2880) {
-      return '1 day ago';
-    } else {
-      return `${Math.floor(minutesAgo / 1440)} days ago`;
-    }
-  };
 
   return (
     <>
-      {events.length == 0 && (
+      {events.length == 0 && !isLoading && (
         <div className="w-full items-center justify-center gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex">
           No history
         </div>
       )}
-      {events.length > 0 && (
-        <div className="flex flex-col gap-5 text-sm ">
-          <div className="grid grid-cols-12 gap-1 rounded-2xl px-4 text-center font-bold text-primary-500">
-            <div className="col-span-2">Event</div>
-            <div className="col-span-2">Price</div>
-            <div className="col-span-3">From</div>
-            <div className="col-span-3">To</div>
-            <div className="col-span-2">Date</div>
-          </div>
+      {events.length == 0 && isLoading && (
+        <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
           <div className="flex flex-col gap-3 rounded-lg border border-gray-300 bg-gray-50 p-3">
-            {events.map((event, index) => {
-              return (
-                <div
-                  className="col-span-12 grid grid-cols-12 gap-1 rounded-lg bg-white p-4"
-                  key={index}
-                >
-                  <div className="col-span-2 break-words">{event.event}</div>
-                  <div className="col-span-2 text-center">{event.price}</div>
-                  <div className="col-span-3 text-center">{event.from}</div>
-                  <div className="col-span-3 text-center">{event.to}</div>
-                  <div className="col-span-2">{event.timestamp}</div>
-                </div>
-              );
-            })}
+            {[...Array(5)].map((nft, index) => (
+              <ActivityItemDetailSkeleton key={index} />
+            ))}
+          </div>
+        </div>
+      )}
+      {events.length > 0 && !isLoading && (
+        <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
+          <div className="flex flex-col gap-3 rounded-lg border border-gray-300 bg-gray-50 p-3">
+            <ActivityItemDetail events={events} collection={collection} />
           </div>
         </div>
       )}
     </>
   );
-};
+}

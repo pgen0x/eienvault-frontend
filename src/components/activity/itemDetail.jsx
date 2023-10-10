@@ -1,6 +1,7 @@
 import { truncateAddress } from '@/utils/truncateAddress';
 import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import { useRouter } from 'next-nprogress-bar';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { formatEther } from 'viem';
 import { ImageWithFallback } from '../imagewithfallback';
@@ -10,16 +11,14 @@ export const ActivityItemDetail = ({ events, collection }) => {
   const router = useRouter();
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    console.log('####', data);
-  }, [data]);
+  useEffect(() => {}, [data]);
 
   useEffect(() => {
-    console.log(events, '@@@@@@@@@@@@');
     parsingMintTransferEvents();
     parsingBidsSalesListing();
   }, []);
   const parsingMintTransferEvents = () => {
+    console.log(events, '@@@@@@@@@@@@');
     for (const event of events) {
       let description;
       let type;
@@ -36,7 +35,7 @@ export const ActivityItemDetail = ({ events, collection }) => {
               className="font-bold"
               onClick={() => router.push(`/profile/${event?.item?.To}`)}
             >
-              {event?.item?.To}
+              {truncateAddress(event?.item?.To)}
             </button>
           </div>
         );
@@ -111,7 +110,7 @@ export const ActivityItemDetail = ({ events, collection }) => {
             />
             <button
               className="font-bold"
-              onClick={() => router.push(`/profile/${event?.seller}`)}
+              onClick={() => router.push(`/profile/${event?.item?.Seller}`)}
             >
               {event?.sellerData?.username
                 ? event.sellerData.username
@@ -119,7 +118,7 @@ export const ActivityItemDetail = ({ events, collection }) => {
             </button>
             for
             <span className="font-bold">
-              {formatEther(Number(parseInt(event?.item?.Price?.hex, 16)))}{' '}
+              {formatEther(Number(event?.price))}{' '}
               {event?.collectionData?.Chain?.symbol}
             </span>
           </div>
@@ -252,7 +251,7 @@ export const ActivityItemDetail = ({ events, collection }) => {
         {
           event: type,
           description: description,
-          tokenId: event?.nftDetails?.tokenId,
+          tokenId: event?.tokenId,
           price: `${
             event.price === '' ? 0 : formatEther(Number(event.price))
           } ${event?.collectionData?.Chain?.symbol}`,
@@ -262,10 +261,10 @@ export const ActivityItemDetail = ({ events, collection }) => {
           to: event?.buyerData?.username
             ? event.buyerData.username
             : truncateAddress4char(event.buyer),
-          timestamp: timeAgo(event?.item?.Timestamp * 1000),
+          timestamp: timeAgo(event?.timestamp * 1000),
           collection: event?.collectionData,
           nft: event?.nftDetails,
-          tokenAddress: event?.collectionData?.tokenAddress,
+          tokenAddress: event?.collection,
         },
       ]);
     }
@@ -296,21 +295,55 @@ export const ActivityItemDetail = ({ events, collection }) => {
 
   return (
     <>
+      {data.length == 0 && (
+        <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
+          <div className="flex flex-col gap-3 rounded-lg border border-gray-300 bg-gray-50 p-3">
+            {[...Array(5)].map((nft, index) => (
+              <ActivityItemDetailSkeleton key={index} />
+            ))}
+          </div>
+        </div>
+      )}
       {data.length > 0 && (
         <>
           {data.map((event, index) => {
             return (
               <div className="flex gap-2" key={index}>
                 <div className="w-fit">
-                  <ImageWithFallback
-                    src={`/uploads/collections/${collection.logo}`}
-                    alt={event?.collection?.name}
-                    width={70}
-                    height={70}
-                    diameter={70}
-                    address={event.tokenAddress}
-                    className="h-full w-full rounded-xl"
-                  />
+                  {event?.nft?.imageUri ? (
+                    <button
+                      onClick={() =>
+                        router.push(
+                          `/nft/${event?.tokenAddress}/${event?.tokenId}`,
+                        )
+                      }
+                    >
+                      <Image
+                        className="h-[70px] w-[70px] rounded-xl"
+                        width={70}
+                        height={70}
+                        placeholder="blur"
+                        blurDataURL={`https://fakeimg.pl/600x600`}
+                        src={event?.nft?.imageUri}
+                        alt={event?.nft?.name || event?.nft?.collectionAddress}
+                      />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() =>
+                        router.push(
+                          `/collection/${event?.tokenAddress}`,
+                        )
+                      }
+                    >
+                      <JazzIcon
+                        diameter={70}
+                        seed={event?.tokenAddress}
+                        useGradientFallback={true}
+                        className="h-[70px] w-[70px] rounded-xl"
+                      />
+                    </button>
+                  )}
                 </div>
                 <div className="flex w-full flex-col">
                   <button

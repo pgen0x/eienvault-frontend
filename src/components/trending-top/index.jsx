@@ -618,15 +618,23 @@ const MobileNft = ({ collection }) => {
                 <FontAwesomeIcon icon={faCartPlus} />
               </button>
               <div className="h-20 w-20">
-                <Image
-                  className="h-full w-full object-cover"
-                  width={600}
-                  height={600}
-                  placeholder="blur"
-                  blurDataURL={`https://via.placeholder.com/50x50`}
-                  src={nft?.imageUri}
-                  alt={nft.name}
-                />
+                {nft?.imageUri !== null ? (
+                  <Image
+                    className="h-full w-full object-cover"
+                    width={600}
+                    height={600}
+                    placeholder="blur"
+                    blurDataURL={`https://via.placeholder.com/50x50`}
+                    src={
+                      nft?.imageUri
+                        ? nft?.imageUri
+                        : 'https://via.placeholder.com/50x50'
+                    }
+                    alt={nft.name}
+                  />
+                ) : (
+                  <div className="h-full w-full bg-gray-300"></div>
+                )}
               </div>
               <button className="-mt-5 flex w-20 rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md dark:text-white">
                 <Ethereum className="h-4 w-4" />{' '}

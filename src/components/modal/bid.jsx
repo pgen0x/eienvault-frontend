@@ -12,6 +12,7 @@ import { useAccount, useBalance, useWaitForTransaction } from 'wagmi';
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { useWeb3Modal } from '@web3modal/react';
+import { useRouter } from 'next-nprogress-bar';
 
 export default function ModalBid({
   isOpenModal,
@@ -23,6 +24,7 @@ export default function ModalBid({
   const { address, isConnected } = useAccount();
   const [isSubmit, setIsSubmit] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const router = useRouter();
 
   const [bidHash, setBidHash] = useState();
 
@@ -71,30 +73,18 @@ export default function ModalBid({
     }
   };
 
-  // TODO: Integration place bid to API
   const onSave = async () => {
     try {
-      const payload = {
-        collectionAddress: 'any',
-        tokenId: 'any',
-        bidAmount: 'any',
-        chainId: '',
-        marketId: '',
-        txHash: '',
-      };
-
       const options = {
-        method: 'POST',
-        body: JSON.stringify(payload), // Convert the payload to JSON
+        method: 'GET',
         headers: {
           Accept: 'application/json',
-          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json', // Set the content type to JSON
         },
       };
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/create`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/market/updatemarketevent`,
         options,
       );
 
@@ -122,6 +112,7 @@ export default function ModalBid({
         }
 
         if (dataBid) {
+          await onSave();
           setIsSubmit(false);
           setIsCompleted(true);
         }
@@ -416,7 +407,10 @@ export default function ModalBid({
                             bidding history by clicking the link below
                           </span>
                         </div>
-                        <button className="rounded-full border border-primary-500 px-5 py-1 font-bold text-primary-500 hover:border-primary-400 hover:text-primary-400">
+                        <button
+                          className="rounded-full border border-primary-500 px-5 py-1 font-bold text-primary-500 hover:border-primary-400 hover:text-primary-400"
+                          onClick={() => router.push('/orders?page=bidmade')}
+                        >
                           View Bid
                         </button>
                       </div>

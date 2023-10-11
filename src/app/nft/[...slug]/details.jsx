@@ -1484,7 +1484,7 @@ const History = ({ collection, tokenId }) => {
       )}
       {events.length == 0 && isLoading && (
         <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
-          <div className="flex flex-col gap-3 rounded-lg border border-gray-300 bg-gray-50 p-3">
+          <div className="flex flex-col gap-3 rounded-lg border border-gray-300">
             {[...Array(5)].map((nft, index) => (
               <ActivityItemDetailSkeleton key={index} />
             ))}
@@ -1493,7 +1493,7 @@ const History = ({ collection, tokenId }) => {
       )}
       {events.length > 0 && !isLoading && (
         <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
-          <div className="flex flex-col gap-3 rounded-lg border border-gray-300 bg-gray-50 p-3">
+          <div className="flex flex-col gap-3 rounded-lg border border-gray-300">
             <ActivityItemDetail events={events} collection={collection} />
           </div>
         </div>

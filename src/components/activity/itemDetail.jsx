@@ -16,7 +16,7 @@ import { formatEther } from 'viem';
 import { ImageWithFallback } from '../imagewithfallback';
 import { JazzIcon } from '../jazzicon';
 
-export const ActivityItemDetail = ({ events, collection }) => {
+export const ActivityItemDetail = ({ events, usingFilter = false }) => {
   const router = useRouter();
   const [data, setData] = useState([]);
   const [filterData, setFilterData] = useState([]);
@@ -360,9 +360,15 @@ export const ActivityItemDetail = ({ events, collection }) => {
   return (
     <>
       <div className="grid grid-cols-12 gap-3">
-        <div className="col-span-9 flex flex-col gap-3 rounded-lg bg-gray-50 p-3">
+        <div
+          className={`${
+            usingFilter ? 'col-span-9' : 'col-span-12'
+          } flex flex-col gap-3 rounded-lg bg-gray-50 p-3`}
+        >
           {filterData.length == 0 && (
-            <div className="h-full flex justify-center items-center">No Activities</div>
+            <div className="flex h-full items-center justify-center">
+              No Activities
+            </div>
           )}
           {filterData.length > 0 && (
             <>
@@ -433,24 +439,26 @@ export const ActivityItemDetail = ({ events, collection }) => {
             </>
           )}
         </div>
-        <div className="col-span-3 flex h-fit flex-col gap-3 rounded-lg bg-gray-50 p-3">
-          <h3 className="text-xl font-bold">Filter</h3>
-          <div className="flex flex-wrap gap-3 rounded-lg">
-            {Object.keys(datafilters).map((key) => (
-              <button
-                key={key}
-                className={`w-fit rounded-lg px-3 py-2 font-semibold text-primary-500 hover:bg-primary-100 ${
-                  activeFilter.indexOf(key) !== -1
-                    ? 'bg-primary-100'
-                    : 'bg-white'
-                }`}
-                onClick={() => actionFilter(key)}
-              >
-                {datafilters[key]} {key}
-              </button>
-            ))}
+        {usingFilter && (
+          <div className="col-span-3 flex h-fit flex-col gap-3 rounded-lg bg-gray-50 p-3">
+            <h3 className="text-xl font-bold">Filter</h3>
+            <div className="flex flex-wrap gap-3 rounded-lg">
+              {Object.keys(datafilters).map((key) => (
+                <button
+                  key={key}
+                  className={`w-fit rounded-lg px-3 py-2 font-semibold text-primary-500 hover:bg-primary-100 ${
+                    activeFilter.indexOf(key) !== -1
+                      ? 'bg-primary-100'
+                      : 'bg-white'
+                  }`}
+                  onClick={() => actionFilter(key)}
+                >
+                  {datafilters[key]} {key}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

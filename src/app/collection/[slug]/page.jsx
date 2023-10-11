@@ -1461,7 +1461,7 @@ const Activity = ({ collection }) => {
       {events.length > 0 && !isLoading && (
         <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
           <div className="flex flex-col gap-3 rounded-lg">
-            <ActivityItemDetail events={events} collection={collection} />
+            <ActivityItemDetail events={events} usingFilter={true} />
           </div>
         </div>
       )}

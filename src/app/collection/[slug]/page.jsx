@@ -1346,7 +1346,9 @@ const Items = ({ params, collection }) => {
                 sortedNFTs.map((nft, index) => {
                   const currentDate = moment();
                   const endDate = moment.unix(nft?.itemDetails?.endDate);
-                  const releaseDate = moment.unix(nft?.itemDetails?.releaseDate);
+                  const releaseDate = moment.unix(
+                    nft?.itemDetails?.releaseDate,
+                  );
                   const isNotExpired = endDate.isAfter(currentDate);
                   const isNotRelease = currentDate.isBefore(releaseDate);
 
@@ -1397,6 +1399,7 @@ const Items = ({ params, collection }) => {
 const Activity = ({ collection }) => {
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const filter = ['Mints', 'Transfer', 'Burn', 'Bids', 'Sales', 'Listing'];
 
   useEffect(() => {
     const getActivity = async () => {
@@ -1428,22 +1431,36 @@ const Activity = ({ collection }) => {
   return (
     <>
       {events.length == 0 && !isLoading && (
-        <div className="w-full items-center justify-center gap-5 self-stretch rounded-xl bg-white p-2 text-black lg:inline-flex">
+        <div className="w-full items-center justify-center gap-5 self-stretch rounded-xl bg-gray-50 p-2 text-black lg:inline-flex">
           No Activities
         </div>
       )}
       {events.length == 0 && isLoading && (
         <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
-          <div className="flex flex-col gap-3 rounded-lg border border-gray-300 bg-gray-50 p-3">
-            {[...Array(5)].map((nft, index) => (
-              <ActivityItemDetailSkeleton key={index} />
-            ))}
+          <div className="flex flex-col gap-3 rounded-lg">
+            <div className="grid grid-cols-12 gap-3">
+              <div className="col-span-9 flex flex-col gap-3 rounded-lg bg-gray-50 p-3">
+                {[...Array(5)].map((nft, index) => (
+                  <ActivityItemDetailSkeleton key={index} />
+                ))}
+              </div>
+              <div className="col-span-3 flex h-fit flex-col gap-3 rounded-lg bg-gray-50 p-3">
+                <h3 className="text-xl font-bold">Filter</h3>
+                <div className="flex flex-wrap gap-3 rounded-lg">
+                  {[...Array(6)].map((nft, key) => (
+                    <div
+                      key={key}
+                      className="w-20 h-9 rounded-lg px-3 py-2 font-semibold bg-gray-300 animate-pulse" />
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
       {events.length > 0 && !isLoading && (
         <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
-          <div className="flex flex-col gap-3 rounded-lg border border-gray-300 bg-gray-50 p-3">
+          <div className="flex flex-col gap-3 rounded-lg">
             <ActivityItemDetail events={events} collection={collection} />
           </div>
         </div>

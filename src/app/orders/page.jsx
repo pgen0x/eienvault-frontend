@@ -126,8 +126,7 @@ export default function OrdersPage() {
         throw new Error('Network response was not ok');
       } else {
         const responseData = await res.json();
-        console.log(responseData);
-        setDataListing(responseData);
+        setDataListing(responseData.nfts);
       }
     } catch (error) {
       setErrorBidandListing(true);
@@ -160,7 +159,6 @@ export default function OrdersPage() {
         throw new Error('Network response was not ok');
       } else {
         const responseData = await res.json();
-        console.log(responseData);
         setDataBidMade(responseData.bids);
       }
     } catch (error) {
@@ -206,22 +204,22 @@ export default function OrdersPage() {
   };
 
   useEffect(() => {
-    if (address) {
+    if (token) {
       fetchDataListing();
     }
-  }, [address]);
+  }, [token]);
 
   useEffect(() => {
-    if (address) {
+    if (token) {
       fetchDataBidMade();
     }
-  }, [address, token]);
+  }, [token]);
 
   useEffect(() => {
-    if (address) {
+    if (token) {
       fetchDataBidReceived();
     }
-  }, [address, token]);
+  }, [token]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -349,7 +347,6 @@ export default function OrdersPage() {
 const Listings = ({ dataListing, isLoading, removeListing }) => {
   const router = useRouter();
   const currentDate = moment();
-  console.log('dataListing', dataListing);
 
   return (
     <>
@@ -531,8 +528,6 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
 };
 
 const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
-  const currentDate = moment();
-  console.log('dataBidMade', dataBidMade);
   return (
     <>
       <div className="min-h-full w-full">
@@ -629,6 +624,7 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
             </div>
           ) : dataBidMade.length > 0 ? (
             dataBidMade.map((data, index) => {
+              const currentDate = moment();
               const endDate = moment.unix(data?.itemsDetails?.endDate); // Convert the end date from Unix timestamp
               const timeDifference = endDate.diff(currentDate);
               const isEndDateInFuture = timeDifference > 0;
@@ -662,11 +658,13 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
                     </div>
 
                     <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                      {moment
-                        .unix(data?.itemsDetails?.endDate)
-                        .format('Do MMM YYYY, h:mm:ss A')}
+                      {data?.itemsDetails !== null
+                        ? moment
+                            .unix(data?.itemsDetails?.endDate)
+                            .format('Do MMM YYYY, h:mm:ss A')
+                        : '-'}
                     </div>
-                    {isEndDateInFuture ? (
+                    {data?.itemsDetails !== null ? (
                       <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
                         <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
                           <button

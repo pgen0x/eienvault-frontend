@@ -213,7 +213,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
         <FontAwesomeIcon icon={faChevronLeft} />
       </button>
       <Swiper
-        className="!pb-5"
+        className="!pb-10"
         slidesPerView={1}
         scrollbar={{ draggable: true }}
         breakpoints={sliderBreakPoints}
@@ -288,7 +288,7 @@ export const SlideshowActivitiesSkeleton = () => {
   return (
     <>
       <Swiper
-        className="!pb-5"
+        className="!pb-10"
         slidesPerView={1}
         scrollbar={{ draggable: true }}
         breakpoints={sliderBreakPoints}

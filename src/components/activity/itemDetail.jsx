@@ -47,10 +47,12 @@ export const ActivityItemDetail = ({ events, collection }) => {
 
   useEffect(() => {
     const fullData = data;
-    if(activeFilter.length > 0){
-      const filteredData = fullData.filter(item => activeFilter.includes(item.event));
+    if (activeFilter.length > 0) {
+      const filteredData = fullData.filter((item) =>
+        activeFilter.includes(item.event),
+      );
       setFilterData(filteredData);
-    }else{
+    } else {
       setFilterData(fullData);
     }
   }, [activeFilter]);
@@ -357,100 +359,99 @@ export const ActivityItemDetail = ({ events, collection }) => {
 
   return (
     <>
-      {filterData.length == 0 && (
-        <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
-          <div className="flex flex-col gap-3 rounded-lg border border-gray-300 bg-gray-50 p-3">
-            {[...Array(5)].map((nft, index) => (
-              <ActivityItemDetailSkeleton key={index} />
-            ))}
-          </div>
-        </div>
-      )}
-      {filterData.length > 0 && (
-        <div className="grid grid-cols-12 gap-3">
-          <div className="col-span-9 flex flex-col gap-3 rounded-lg bg-gray-50 p-3">
-            {filterData.map((event, index) => {
-              return (
-                <div className="flex gap-3 rounded-lg bg-white p-3" key={index}>
-                  <div className="w-fit">
-                    {event?.nft?.imageUri ? (
+      <div className="grid grid-cols-12 gap-3">
+        <div className="col-span-9 flex flex-col gap-3 rounded-lg bg-gray-50 p-3">
+          {filterData.length == 0 && (
+            <div className="h-full flex justify-center items-center">No Activities</div>
+          )}
+          {filterData.length > 0 && (
+            <>
+              {filterData.map((event, index) => {
+                return (
+                  <div
+                    className="flex gap-3 rounded-lg bg-white p-3"
+                    key={index}
+                  >
+                    <div className="w-fit">
+                      {event?.nft?.imageUri ? (
+                        <button
+                          onClick={() =>
+                            router.push(
+                              `/nft/${event?.tokenAddress}/${event?.tokenId}`,
+                            )
+                          }
+                        >
+                          <Image
+                            className="h-[70px] w-[70px] rounded-xl"
+                            width={70}
+                            height={70}
+                            placeholder="blur"
+                            blurDataURL={`https://fakeimg.pl/600x600`}
+                            src={event?.nft?.imageUri}
+                            alt={
+                              event?.nft?.name || event?.nft?.collectionAddress
+                            }
+                          />
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() =>
+                            router.push(`/collection/${event?.tokenAddress}`)
+                          }
+                        >
+                          <JazzIcon
+                            diameter={70}
+                            seed={event?.tokenAddress}
+                            useGradientFallback={true}
+                            className="h-[70px] w-[70px] rounded-xl"
+                          />
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex w-full flex-col">
                       <button
+                        className="w-fit font-bold"
                         onClick={() =>
                           router.push(
                             `/nft/${event?.tokenAddress}/${event?.tokenId}`,
                           )
                         }
                       >
-                        <Image
-                          className="h-[70px] w-[70px] rounded-xl"
-                          width={70}
-                          height={70}
-                          placeholder="blur"
-                          blurDataURL={`https://fakeimg.pl/600x600`}
-                          src={event?.nft?.imageUri}
-                          alt={
-                            event?.nft?.name || event?.nft?.collectionAddress
-                          }
-                        />
+                        {event?.nft?.name
+                          ? event.nft.name
+                          : event?.collection?.name
+                          ? event?.collection.name
+                          : truncateAddress(event?.tokenAddress)}
+                        {' W'}#{event?.tokenId}
                       </button>
-                    ) : (
-                      <button
-                        onClick={() =>
-                          router.push(`/collection/${event?.tokenAddress}`)
-                        }
-                      >
-                        <JazzIcon
-                          diameter={70}
-                          seed={event?.tokenAddress}
-                          useGradientFallback={true}
-                          className="h-[70px] w-[70px] rounded-xl"
-                        />
-                      </button>
-                    )}
+                      <div>{event?.description}</div>
+                      <div>{event.timestamp}</div>
+                    </div>
                   </div>
-                  <div className="flex w-full flex-col">
-                    <button
-                      className="w-fit font-bold"
-                      onClick={() =>
-                        router.push(
-                          `/nft/${event?.tokenAddress}/${event?.tokenId}`,
-                        )
-                      }
-                    >
-                      {event?.nft?.name
-                        ? event.nft.name
-                        : event?.collection?.name
-                        ? event?.collection.name
-                        : truncateAddress(event?.tokenAddress)}
-                      {' W'}#{event?.tokenId}
-                    </button>
-                    <div>{event?.description}</div>
-                    <div>{event.timestamp}</div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div className="col-span-3 flex h-fit flex-col gap-3 rounded-lg bg-gray-50 p-3">
-            <h3 className="text-xl font-bold">Filter</h3>
-            <div className="flex flex-wrap gap-3 rounded-lg">
-              {Object.keys(datafilters).map((key) => (
-                <button
-                  key={key}
-                  className={`w-fit rounded-lg px-3 py-2 font-semibold hover:bg-primary-100 text-primary-500 ${
-                    activeFilter.indexOf(key) !== -1
-                      ? 'bg-primary-100'
-                      : 'bg-white'
-                  }`}
-                  onClick={() => actionFilter(key)}
-                >
-                  {datafilters[key]} {key}
-                </button>
-              ))}
-            </div>
+                );
+              })}
+            </>
+          )}
+        </div>
+        <div className="col-span-3 flex h-fit flex-col gap-3 rounded-lg bg-gray-50 p-3">
+          <h3 className="text-xl font-bold">Filter</h3>
+          <div className="flex flex-wrap gap-3 rounded-lg">
+            {Object.keys(datafilters).map((key) => (
+              <button
+                key={key}
+                className={`w-fit rounded-lg px-3 py-2 font-semibold text-primary-500 hover:bg-primary-100 ${
+                  activeFilter.indexOf(key) !== -1
+                    ? 'bg-primary-100'
+                    : 'bg-white'
+                }`}
+                onClick={() => actionFilter(key)}
+              >
+                {datafilters[key]} {key}
+              </button>
+            ))}
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 };

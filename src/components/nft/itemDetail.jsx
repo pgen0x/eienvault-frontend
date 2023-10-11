@@ -2,11 +2,16 @@ import Ethereum from '@/assets/icon/ethereum';
 import HelaIcon from '@/assets/icon/hela';
 import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
-import { faCircleCheck, faEllipsis } from '@fortawesome/free-solid-svg-icons';
+import {
+  faChevronDown,
+  faCircleCheck,
+  faEllipsis,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Menu, Transition } from '@headlessui/react';
 import { useRouter } from 'next-nprogress-bar';
 import Image from 'next/image';
-import { Suspense, useState } from 'react';
+import { Fragment, Suspense, useState } from 'react';
 import { toast } from 'react-toastify';
 import { formatEther } from 'viem';
 import { useAccount, useNetwork } from 'wagmi';
@@ -208,10 +213,81 @@ const Nft = ({
     }
   }
 
-  const handleOpenEllipsis = (event) => {
-    event.preventDefault();
-    setOpenEllipsis(!openEllipsis)
+  const likes = async (collectionAddress, tokenId) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/likes/${collectionAddress}/${tokenId}`,
+        {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          method: 'POST',
+        },
+      );
+
+      if (!res.ok) {
+        const errorMessage = await res.json();
+        toast.error(errorMessage.error.messages);
+      } else {
+        const responseData = await res.json();
+        toast.success(responseData.success.messages);
+
+        setCountLikes(countLikes + 1);
+      }
+    } catch (error) {
+      console.error('error likes:', error);
+    }
+  };
+
+  async function refreshMetadata(collectionAddress, tokenId) {
+    const bodyData = {
+      collectionAddress,
+      tokenId,
+    };
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/refreshmetadata`,
+        {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          method: 'POST',
+          body: JSON.stringify(bodyData),
+        },
+      );
+      if (!res.ok) {
+        console.error('Refresh metadata failed:', res);
+        const errorMessage = await res.json();
+        toast.error(errorMessage.error.messages);
+      }
+      const responseData = await res.json();
+      toast.success('Refresh metada successfully');
+      window.location.reload();
+    } catch (error) {
+      console.error('error likes:', error);
+    }
   }
+
+  const openOriginal = (url) => {
+    window.open(url, '_blank');
+  };
+
+  const share = (collectionAddress, tokenId) => {
+    const text = `${window.location.protocol}//${window.location.host}/nft/${collectionAddress}/${tokenId}`;
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+
+    textArea.select();
+    document.execCommand('copy');
+
+    document.body.removeChild(textArea);
+    toast.success("Shared link copied to clipboard");
+  };
 
   return (
     <div className="group h-[542px] w-full">
@@ -249,17 +325,17 @@ const Nft = ({
           </div>
         )}
       </Suspense>
-      <div className="inline-flex w-full flex-col items-center justify-center px-3 lg:items-start">
+      <div className="group/discover inline-flex w-full flex-col items-center justify-center px-3 lg:items-start">
         <div className="relative flex w-full flex-row">
           <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 p-3 backdrop-blur-xl dark:bg-zinc-700">
             <div className="flex w-full flex-col items-start justify-start">
-              <div
-                className="inline-flex cursor-pointer items-center justify-between self-stretch"
-                onClick={() =>
-                  router.push(`/collection/${nft.collectionAddress}`)
-                }
-              >
-                <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2 dark:bg-zinc-500">
+              <div className="inline-flex cursor-pointer items-center justify-between self-stretch">
+                <div
+                  className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2 dark:bg-zinc-500"
+                  onClick={() =>
+                    router.push(`/collection/${nft.collectionAddress}`)
+                  }
+                >
                   <ImageWithFallback
                     className="h-full w-full rounded-2xl "
                     width={16}
@@ -288,44 +364,71 @@ const Nft = ({
                     </div>
                   </div>
                 </div>
-                <div className="items-center">
-                  <button onClick={handleOpenEllipsis}>
-                    <FontAwesomeIcon icon={faEllipsis} />
-                  </button>
-                  {openEllipsis && (
-                    <div className="absolute left-16 z-10 w-48 overflow-hidden pt-3 shadow-lg">
-                      <div className="rounded-xl bg-white ring-1 ring-gray-900/5">
-                        <div className="p-3">
-                          <div className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
-                            <button className="block font-semibold text-primary-500">
-                              Refresh Metadata
-                            </button>
-                          </div>
-                          <div className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
-                            <button className="block font-semibold text-primary-500">
-                              Share
-                            </button>
-                          </div>
-                          <div className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
-                            <button className="block font-semibold text-primary-500">
-                              Like
-                            </button>
-                          </div>
-                          <div className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
-                            <button className="block font-semibold text-primary-500">
-                              Open Original
-                            </button>
-                          </div>
-                          <div className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
-                            <button className="block font-semibold text-primary-500">
-                              Report
-                            </button>
-                          </div>
-                        </div>
+                <Menu as="div" className="relative inline-block text-left">
+                  <Menu.Button className="inline-flex w-full justify-center font-semibold text-gray-900 hover:text-primary-500">
+                    <FontAwesomeIcon icon={faEllipsis} aria-hidden="true" className="px-4 py-2" />
+                  </Menu.Button>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white p-2 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        <Menu.Item>
+                          <button
+                            className="block w-full rounded-md px-4 py-2 text-left text-sm text-black hover:bg-gray-50 hover:text-primary-500"
+                            onClick={() =>
+                              refreshMetadata(
+                                nft?.collectionAddress,
+                                nft?.tokenId,
+                              )
+                            }
+                          >
+                            Refresh Metadata
+                          </button>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <button
+                            className="block w-full rounded-md px-4 py-2 text-left text-sm text-black hover:bg-gray-50 hover:text-primary-500"
+                            onClick={() =>
+                              share(nft?.collectionAddress, nft?.tokenId)
+                            }
+                          >
+                            Share
+                          </button>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <button
+                            className="block w-full rounded-md px-4 py-2 text-left text-sm text-black hover:bg-gray-50 hover:text-primary-500"
+                            onClick={() =>
+                              likes(nft?.collectionAddress, nft?.tokenId)
+                            }
+                          >
+                            Like
+                          </button>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <button
+                            className="block w-full rounded-md px-4 py-2 text-left text-sm text-black hover:bg-gray-50 hover:text-primary-500"
+                            onClick={() => openOriginal(nft?.imageUri)}
+                          >
+                            Open Original
+                          </button>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <button className="block w-full rounded-md px-4 py-2 text-left text-sm text-black hover:bg-gray-50 hover:text-primary-500">
+                            Report
+                          </button>
+                        </Menu.Item>
                       </div>
-                    </div>
-                  )}
-                </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
               </div>
               <div className="inline-flex w-full items-center justify-between gap-2 pt-1">
                 <div
@@ -356,7 +459,9 @@ const Nft = ({
                     <>
                       <p>Highest bid</p>
                       <p className="font-bold">
-                        {formatEther(Number(getHighestBid(itemDetails).highestBid))}{' '}
+                        {formatEther(
+                          Number(getHighestBid(itemDetails).highestBid),
+                        )}{' '}
                         {collection?.Chain.symbol
                           ? collection.Chain.symbol
                           : '-'}

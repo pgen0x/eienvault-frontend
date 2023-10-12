@@ -32,6 +32,7 @@ import ModalBuy from '../modal/buy';
 import moment from 'moment';
 import { NftItemDetail, NftItemDetailSkeleton } from '../nft/itemDetail';
 import ModalPutOnSale from '../modal/putOnSale';
+import ModalShareSocialMedia from '../modal/shareSocialMedia';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
@@ -75,10 +76,12 @@ export const SlideshowActivities = ({ dataActivities }) => {
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
   const [putOnSaleData, setPutonsaleData] = useState({});
+  const [shareData, setShareData] = useState({});
 
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
+  const [isOpenModalShare, setisOpenModalShare] = useState(false);
 
   useEffect(() => {
     getNfts();
@@ -153,6 +156,14 @@ export const SlideshowActivities = ({ dataActivities }) => {
     setisOpenModalPutonsale(true);
   };
 
+  const handleOpenModalShare = async (tokenId, collectionAddress) => {
+    setShareData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalShare(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
@@ -163,6 +174,10 @@ export const SlideshowActivities = ({ dataActivities }) => {
 
   function closeModalPutonsale() {
     setisOpenModalPutonsale(false);
+  }
+
+  function closeModalShare() {
+    setisOpenModalShare(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -250,6 +265,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
                   handleOpenModalBuy={handleOpenModalBuy}
                   handleOpenModalBid={handleOpenModalBid}
                   handleOpenModalPutonsale={handleOpenModalPutonsale}
+                  handleOpenModalShare={handleOpenModalShare}
                   isNotExpired={isNotExpired}
                   isNotRelease={isNotRelease}
                 />
@@ -279,6 +295,12 @@ export const SlideshowActivities = ({ dataActivities }) => {
         onClose={closeModalPutonsale}
         onModalClose={closeModalPutonsale}
         putonsaledata={putOnSaleData}
+      />
+      <ModalShareSocialMedia
+        isOpenModal={isOpenModalShare}
+        onClose={closeModalShare}
+        onModalClose={closeModalShare}
+        shareData={shareData}
       />
     </>
   );

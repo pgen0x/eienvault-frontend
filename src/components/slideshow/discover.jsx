@@ -31,6 +31,7 @@ import ModalBuy from '../modal/buy';
 import { useAccount, useWalletClient } from 'wagmi';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { NftItemDetail, NftItemDetailSkeleton } from '../nft/itemDetail';
+import ModalShareSocialMedia from '../modal/shareSocialMedia';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 const sliderBreakPoints = {
@@ -71,8 +72,12 @@ export const SlideshowDiscover = ({ dataDiscover }) => {
   const router = useRouter();
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
+  const [shareData, setShareData] = useState({});
+
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
+  const [isOpenModalShare, setisOpenModalShare] = useState(false);
+
   const { data: walletClient } = useWalletClient();
   const { address } = useAccount();
 
@@ -162,12 +167,24 @@ export const SlideshowDiscover = ({ dataDiscover }) => {
     setisOpenModalBid(true);
   };
 
+  const handleOpenModalShare = async (tokenId, collectionAddress) => {
+    setShareData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalShare(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
 
   function closeModalBuy() {
     setisOpenModalBuy(false);
+  }
+
+  function closeModalShare() {
+    setisOpenModalShare(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -240,6 +257,7 @@ export const SlideshowDiscover = ({ dataDiscover }) => {
                 itemDetails={data.itemDetails}
                 handleOpenModalBuy={handleOpenModalBuy}
                 handleOpenModalBid={handleOpenModalBid}
+                handleOpenModalShare={handleOpenModalShare}
                 isNotExpired={isNotExpired}
                 isNotRelease={isNotRelease}
               />
@@ -263,6 +281,12 @@ export const SlideshowDiscover = ({ dataDiscover }) => {
         dataBuy={buyData}
         buyAction={buyAction}
         onModalClose={closeModalBuy}
+      />
+      <ModalShareSocialMedia
+        isOpenModal={isOpenModalShare}
+        onClose={closeModalShare}
+        onModalClose={closeModalShare}
+        shareData={shareData}
       />
     </>
   );

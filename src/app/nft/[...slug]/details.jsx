@@ -57,7 +57,11 @@ import RelatedNFTs, {
 import moment from 'moment';
 import ModalPutOnSale from '@/components/modal/putOnSale';
 import axios from 'axios';
-import { ActivityItemDetail, ActivityItemDetailSkeleton } from '@/components/activity/itemDetail';
+import {
+  ActivityItemDetail,
+  ActivityItemDetailSkeleton,
+} from '@/components/activity/itemDetail';
+import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
 
 export default function NFTDetails({ dataNFTs }) {
   const router = useRouter();
@@ -66,13 +70,17 @@ export default function NFTDetails({ dataNFTs }) {
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
+  const [isOpenModalShare, setisOpenModalShare] = useState(false);
+
   const [countLikes, setCountLikes] = useState(dataNFTs?.likeCount);
   const [dataRelatedNFTs, setDataRelatedNFTs] = useState([]);
   const [isLoadingRelatedNFTs, setIsLoadingRelatedNFTs] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
   const [putOnSaleData, setPutonsaleData] = useState({});
+  const [shareData, setShareData] = useState({});
 
   const { data: walletClient } = useWalletClient();
 
@@ -197,6 +205,14 @@ export default function NFTDetails({ dataNFTs }) {
     setisOpenModalPutonsale(true);
   };
 
+  const handleOpenModalShare = async (tokenId, collectionAddress) => {
+    setShareData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalShare(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
@@ -207,6 +223,10 @@ export default function NFTDetails({ dataNFTs }) {
 
   function closeModalPutonsale() {
     setisOpenModalPutonsale(false);
+  }
+
+  function closeModalShare() {
+    setisOpenModalShare(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -391,7 +411,15 @@ export default function NFTDetails({ dataNFTs }) {
                             {countLikes} likes
                           </span>
                         </button>
-                        <button className="group text-primary-500 hover:text-primary-300">
+                        <button
+                          className="group text-primary-500 hover:text-primary-300"
+                          onClick={() =>
+                            handleOpenModalShare(
+                              dataNFTs?.tokenId,
+                              dataNFTs?.collectionAddress,
+                            )
+                          }
+                        >
                           <FontAwesomeIcon icon={faShareFromSquare} />{' '}
                           <span className="2xl-text-black font-semibold text-black group-hover:text-primary-300">
                             Share
@@ -1254,6 +1282,12 @@ export default function NFTDetails({ dataNFTs }) {
         onModalClose={closeModalPutonsale}
         putonsaledata={putOnSaleData}
       />
+      <ModalShareSocialMedia
+        isOpenModal={isOpenModalShare}
+        onClose={closeModalShare}
+        onModalClose={closeModalShare}
+        shareData={shareData}
+      />
     </>
   );
 }
@@ -1440,8 +1474,8 @@ const History = ({ collection, tokenId }) => {
         })
         .then((response) => {
           setEvents((oldEvent) => {
-            return [...oldEvent, ...response.data.events]
-          })
+            return [...oldEvent, ...response.data.events];
+          });
         })
         .catch((error) => {
           toast.error(error.message);
@@ -1464,8 +1498,8 @@ const History = ({ collection, tokenId }) => {
         })
         .then((response) => {
           setEvents((oldEvent) => {
-            return [...oldEvent, ...response.data]
-          })
+            return [...oldEvent, ...response.data];
+          });
           setIsLoading(false);
         })
         .catch((error) => {
@@ -1500,4 +1534,4 @@ const History = ({ collection, tokenId }) => {
       )}
     </>
   );
-}
+};

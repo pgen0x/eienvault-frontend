@@ -26,7 +26,7 @@ const filters = [
   'Most favorited',
   'Ending soon',
 ];
-const Onsale = ({ userAccount }) => {
+const Onsale = ({ userAccount, handleOpenModalShare }) => {
   const router = useRouter();
 
   const [sortFilter, setSortFilter] = useState(filters[0]);
@@ -586,6 +586,7 @@ const Onsale = ({ userAccount }) => {
                       openFilter={openFilter}
                       isNotExpired={isNotExpired}
                       isNotRelease={isNotRelease}
+                      handleOpenModalShare={handleOpenModalShare}
                     />
                   );
                 })}

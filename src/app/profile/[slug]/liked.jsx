@@ -32,6 +32,7 @@ const Liked = ({
   handleOpenModalBuy,
   handleOpenModalBid,
   handleOpenModalPutonsale,
+  handleOpenModalShare
 }) => {
   const router = useRouter();
   const [sortFilter, setSortFilter] = useState(filters[0]);
@@ -585,6 +586,7 @@ const Liked = ({
                       handleOpenModalBuy={handleOpenModalBuy}
                       handleOpenModalBid={handleOpenModalBid}
                       handleOpenModalPutonsale={handleOpenModalPutonsale}
+                      handleOpenModalShare={handleOpenModalShare}
                       isNotExpired={isNotExpired}
                       isNotRelease={isNotRelease}
                     />

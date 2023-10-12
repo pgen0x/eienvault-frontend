@@ -37,7 +37,7 @@ const servers = [
   'Katelyn Rohan',
 ];
 
-const Sold = ({ userAccount }) => {
+const Sold = ({ userAccount, handleOpenModalShare }) => {
   const router = useRouter();
   const [sortFilter, setSortFilter] = useState(filters[0]);
   const [isLoading, setIsLoading] = useState(false);
@@ -596,6 +596,7 @@ const Sold = ({ userAccount }) => {
                       openFilter={openFilter}
                       isNotExpired={isNotExpired}
                       isNotRelease={isNotRelease}
+                      handleOpenModalShare={handleOpenModalShare}
                     />
                   );
                 })}

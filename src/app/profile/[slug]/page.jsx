@@ -30,11 +30,6 @@ import { formatEther, isAddress } from 'viem';
 import { ImageWithFallback } from '@/components/imagewithfallback';
 import ModalCreateCollection from '@/components/modal/createCollections';
 import Image from 'next/image';
-import moment from 'moment';
-import {
-  NftItemDetail,
-  NftItemDetailSkeleton,
-} from '@/components/nft/itemDetail';
 import NotFound from '@/app/not-found';
 import ModalBid from '@/components/modal/bid';
 import ModalBuy from '@/components/modal/buy';
@@ -45,6 +40,7 @@ import Owned from './owned';
 import Onsale from './onsale';
 import Sold from './sold';
 import Liked from './liked';
+import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
 
 const servers = [
   'All Mainnet',
@@ -85,10 +81,12 @@ export default function ProfilePage({ params }) {
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
   const [putOnSaleData, setPutonsaleData] = useState({});
+  const [shareData, setShareData] = useState({});
 
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
+  const [isOpenModalShare, setisOpenModalShare] = useState(false);
 
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
   const [IsOpenModalLogo, setIsOpenModalLogo] = useState(false);
@@ -204,6 +202,14 @@ export default function ProfilePage({ params }) {
     setisOpenModalPutonsale(true);
   };
 
+  const handleOpenModalShare = async (tokenId, collectionAddress) => {
+    setShareData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalShare(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
@@ -214,6 +220,10 @@ export default function ProfilePage({ params }) {
 
   function closeModalPutonsale() {
     setisOpenModalPutonsale(false);
+  }
+
+  function closeModalShare() {
+    setisOpenModalShare(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -257,6 +267,7 @@ export default function ProfilePage({ params }) {
           handleOpenModalBuy={handleOpenModalBuy}
           handleOpenModalBid={handleOpenModalBid}
           handleOpenModalPutonsale={handleOpenModalPutonsale}
+          handleOpenModalShare={handleOpenModalShare}
         />
       ),
     },
@@ -264,25 +275,21 @@ export default function ProfilePage({ params }) {
       name: 'Collections',
       slug: 'Collections',
       badge: 0,
-      page: <Collection userAccount={params?.slug ? params.slug : address} />,
     },
     {
       name: 'On sale',
       slug: 'Onsale',
       badge: 0,
-      page: <Onsale userAccount={params?.slug ? params.slug : address} />,
     },
     {
       name: 'Sold',
       slug: 'Sold',
       badge: 0,
-      page: <Sold userAccount={params?.slug ? params.slug : address} />,
     },
     {
       name: 'Liked',
       slug: 'Liked',
       badge: 0,
-      page: <Liked userAccount={params?.slug ? params.slug : address} />,
     },
   ];
 
@@ -316,11 +323,27 @@ export default function ProfilePage({ params }) {
           handleOpenModalBuy={handleOpenModalBuy}
           handleOpenModalBid={handleOpenModalBid}
           handleOpenModalPutonsale={handleOpenModalPutonsale}
+          handleOpenModalShare={handleOpenModalShare}
         />
       ),
-      Onsale: <Onsale userAccount={params?.slug ? params.slug : address} />,
-      Sold: <Sold userAccount={params?.slug ? params.slug : address} />,
-      Liked: <Liked userAccount={params?.slug ? params.slug : address} />,
+      Onsale: (
+        <Onsale
+          userAccount={params?.slug ? params.slug : address}
+          handleOpenModalShare={handleOpenModalShare}
+        />
+      ),
+      Sold: (
+        <Sold
+          userAccount={params?.slug ? params.slug : address}
+          handleOpenModalShare={handleOpenModalShare}
+        />
+      ),
+      Liked: (
+        <Liked
+          userAccount={params?.slug ? params.slug : address}
+          handleOpenModalShare={handleOpenModalShare}
+        />
+      ),
     };
 
     return listTabs[activePage];
@@ -599,6 +622,12 @@ export default function ProfilePage({ params }) {
         onClose={closeModalPutonsale}
         onModalClose={closeModalPutonsale}
         putonsaledata={putOnSaleData}
+      />
+      <ModalShareSocialMedia
+        isOpenModal={isOpenModalShare}
+        onClose={closeModalShare}
+        onModalClose={closeModalShare}
+        shareData={shareData}
       />
       <ModalUploadProfileCover
         isOpenModal={IsOpenModalCover}

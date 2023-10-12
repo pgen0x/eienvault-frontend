@@ -40,6 +40,7 @@ import {
 import ModalBid from '@/components/modal/bid';
 import ModalBuy from '@/components/modal/buy';
 import ModalPutOnSale from '@/components/modal/putOnSale';
+import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
 
 const servers = [
   'All Mainnet',
@@ -90,10 +91,12 @@ export default function NftPage() {
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
   const [putOnSaleData, setPutonsaleData] = useState({});
+  const [shareData, setShareData] = useState({});
 
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
+  const [isOpenModalShare, setisOpenModalShare] = useState(false);
 
   const handleFilterCollapse = (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
@@ -292,6 +295,14 @@ export default function NftPage() {
     setisOpenModalPutonsale(true);
   };
 
+  const handleOpenModalShare = async (tokenId, collectionAddress) => {
+    setShareData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalShare(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
@@ -302,6 +313,10 @@ export default function NftPage() {
 
   function closeModalPutonsale() {
     setisOpenModalPutonsale(false);
+  }
+
+  function closeModalShare() {
+    setisOpenModalShare(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -595,6 +610,7 @@ export default function NftPage() {
                         handleOpenModalBuy={handleOpenModalBuy}
                         handleOpenModalBid={handleOpenModalBid}
                         handleOpenModalPutonsale={handleOpenModalPutonsale}
+                        handleOpenModalShare={handleOpenModalShare}
                       />
                     );
                   })}
@@ -622,6 +638,12 @@ export default function NftPage() {
         onClose={closeModalPutonsale}
         onModalClose={closeModalPutonsale}
         putonsaledata={putOnSaleData}
+      />
+      <ModalShareSocialMedia
+        isOpenModal={isOpenModalShare}
+        onClose={closeModalShare}
+        onModalClose={closeModalShare}
+        shareData={shareData}
       />
       <Footer />
     </>

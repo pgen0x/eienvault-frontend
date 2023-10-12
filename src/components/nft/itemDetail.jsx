@@ -26,6 +26,7 @@ export const NftItemDetail = ({
   handleOpenModalBid,
   handleOpenModalBuy,
   handleOpenModalPutonsale,
+  handleOpenModalShare,
   isNotExpired,
   isNotRelease,
 }) => {
@@ -50,6 +51,7 @@ export const NftItemDetail = ({
             handleOpenModalBid={handleOpenModalBid}
             handleOpenModalBuy={handleOpenModalBuy}
             handleOpenModalPutonsale={handleOpenModalPutonsale}
+            handleOpenModalShare={handleOpenModalShare}
             isNotExpired={isNotExpired}
             isNotRelease={isNotRelease}
           />
@@ -63,6 +65,7 @@ export const NftItemDetail = ({
           handleOpenModalBid={handleOpenModalBid}
           handleOpenModalBuy={handleOpenModalBuy}
           handleOpenModalPutonsale={handleOpenModalPutonsale}
+          handleOpenModalShare={handleOpenModalShare}
           isNotExpired={isNotExpired}
           isNotRelease={isNotRelease}
         />
@@ -135,6 +138,7 @@ const Nft = ({
   handleOpenModalBid,
   handleOpenModalBuy,
   handleOpenModalPutonsale,
+  handleOpenModalShare,
   isNotExpired,
   isNotRelease,
 }) => {
@@ -276,19 +280,6 @@ const Nft = ({
     window.open(url, '_blank');
   };
 
-  const share = (collectionAddress, tokenId) => {
-    const text = `${window.location.protocol}//${window.location.host}/nft/${collectionAddress}/${tokenId}`;
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    document.body.appendChild(textArea);
-
-    textArea.select();
-    document.execCommand('copy');
-
-    document.body.removeChild(textArea);
-    toast.success("Shared link copied to clipboard");
-  };
-
   return (
     <div className="group h-[542px] w-full">
       <Suspense
@@ -329,9 +320,9 @@ const Nft = ({
         <div className="relative flex w-full flex-row">
           <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 p-3 backdrop-blur-xl dark:bg-zinc-700">
             <div className="flex w-full flex-col items-start justify-start">
-              <div className="inline-flex cursor-pointer items-center justify-between self-stretch">
+              <div className="inline-flex items-center justify-between self-stretch">
                 <div
-                  className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2 dark:bg-zinc-500"
+                  className="flex items-center justify-center gap-2 cursor-pointer rounded-lg bg-white bg-opacity-70 p-2 dark:bg-zinc-500"
                   onClick={() =>
                     router.push(`/collection/${nft.collectionAddress}`)
                   }
@@ -366,7 +357,7 @@ const Nft = ({
                 </div>
                 <Menu as="div" className="relative inline-block text-left">
                   <Menu.Button className="inline-flex w-full justify-center font-semibold text-gray-900 hover:text-primary-500">
-                    <FontAwesomeIcon icon={faEllipsis} aria-hidden="true" className="px-4 py-2" />
+                    <FontAwesomeIcon icon={faEllipsis} aria-hidden="true" className="p-2" />
                   </Menu.Button>
                   <Transition
                     as={Fragment}
@@ -396,7 +387,10 @@ const Nft = ({
                           <button
                             className="block w-full rounded-md px-4 py-2 text-left text-sm text-black hover:bg-gray-50 hover:text-primary-500"
                             onClick={() =>
-                              share(nft?.collectionAddress, nft?.tokenId)
+                              handleOpenModalShare(
+                                nft?.tokenId,
+                                nft?.collectionAddress,
+                              )
                             }
                           >
                             Share

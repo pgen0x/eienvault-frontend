@@ -445,7 +445,7 @@ const Nft = ({
                     {itemDetails?.price
                       ? formatEther(Number(itemDetails?.price))
                       : '0.00'}{' '}
-                    {collection?.Chain.symbol ? collection.Chain.symbol : '-'}
+                    {collection?.Chain?.symbol ? collection.Chain.symbol : '-'}
                   </p>
                 </div>
                 <div className="flex flex-col items-start truncate text-sm leading-5">
@@ -456,7 +456,7 @@ const Nft = ({
                         {formatEther(
                           Number(getHighestBid(itemDetails).highestBid),
                         )}{' '}
-                        {collection?.Chain.symbol
+                        {collection?.Chain?.symbol
                           ? collection.Chain.symbol
                           : '-'}
                       </p>

@@ -57,6 +57,7 @@ import {
 } from '@/components/activity/itemDetail';
 import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
 import formatter from '@/utils/shortNumberFormatter';
+import ModalReportNft from '@/components/modal/reportNft';
 
 const filters = [
   'All',
@@ -508,11 +509,13 @@ const Items = ({ params, collection }) => {
   const [buyData, setBuyData] = useState({});
   const [putOnSaleData, setPutonsaleData] = useState({});
   const [shareData, setShareData] = useState({});
+  const [reportData, setReportData] = useState({});
 
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
+  const [isOpenModalReport, setisOpenModalReport] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -715,6 +718,14 @@ const Items = ({ params, collection }) => {
     setisOpenModalShare(true);
   };
 
+  const handleOpenModalReport = async (tokenId, collectionAddress) => {
+    setReportData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalReport(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
@@ -729,6 +740,10 @@ const Items = ({ params, collection }) => {
 
   function closeModalShare() {
     setisOpenModalShare(false);
+  }
+
+  function closeModalReport() {
+    setisOpenModalReport(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -1388,6 +1403,7 @@ const Items = ({ params, collection }) => {
                       handleOpenModalBid={handleOpenModalBid}
                       handleOpenModalPutonsale={handleOpenModalPutonsale}
                       handleOpenModalShare={handleOpenModalShare}
+                      handleOpenModalReport={handleOpenModalReport}
                       isNotExpired={isNotExpired}
                       isNotRelease={isNotRelease}
                     />
@@ -1422,6 +1438,12 @@ const Items = ({ params, collection }) => {
         onClose={closeModalShare}
         onModalClose={closeModalShare}
         shareData={shareData}
+      />
+      <ModalReportNft
+        isOpenModal={isOpenModalReport}
+        onClose={closeModalReport}
+        onModalClose={closeModalReport}
+        reportData={reportData}
       />
     </>
   );

@@ -32,6 +32,7 @@ import { useAccount, useWalletClient } from 'wagmi';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { NftItemDetail, NftItemDetailSkeleton } from '../nft/itemDetail';
 import ModalShareSocialMedia from '../modal/shareSocialMedia';
+import ModalReportNft from '../modal/reportNft';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 const sliderBreakPoints = {
@@ -73,53 +74,15 @@ export const SlideshowDiscover = ({ dataDiscover }) => {
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
   const [shareData, setShareData] = useState({});
+  const [reportData, setReportData] = useState({});
 
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
+  const [isOpenModalReport, setisOpenModalReport] = useState(false);
 
   const { data: walletClient } = useWalletClient();
   const { address } = useAccount();
-
-  function getHighestBid(auctionData) {
-    if (!auctionData.listOffers || auctionData.listOffers.length === 0) {
-      return { message: 'No bids', highestBid: '0.00', highestBidder: null }; // Return a message if there are no bids or if listOffers is null/undefined
-    }
-
-    let highestBid = BigInt(0);
-    let highestBidder = null;
-
-    for (const offer of auctionData.listOffers) {
-      const bidValue = BigInt(offer.value); // Convert the value to a BigInt for precision
-      if (bidValue > highestBid) {
-        highestBid = bidValue;
-        highestBidder = offer.address;
-      }
-    }
-
-    return {
-      message: 'Highest bid found',
-      highestBid: highestBid.toString(),
-      highestBidder,
-    };
-  }
-
-  function getLowestBid(auctionData) {
-    if (auctionData.listOffers.length === 0) {
-      return 0; // Return a message if there are no bids
-    }
-
-    let lowestBid = Infinity; // Initialize to a large number
-
-    for (const offer of auctionData.listOffers) {
-      const bidValue = BigInt(offer.value); // Convert the value to a BigInt for precision
-      if (bidValue < lowestBid) {
-        lowestBid = bidValue;
-      }
-    }
-
-    return lowestBid.toString(); // Convert the lowestBid back to a string
-  }
 
   const handleOpenModalBuy = async (
     marketId,
@@ -175,6 +138,14 @@ export const SlideshowDiscover = ({ dataDiscover }) => {
     setisOpenModalShare(true);
   };
 
+  const handleOpenModalReport = async (tokenId, collectionAddress) => {
+    setReportData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalReport(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
@@ -185,6 +156,10 @@ export const SlideshowDiscover = ({ dataDiscover }) => {
 
   function closeModalShare() {
     setisOpenModalShare(false);
+  }
+
+  function closeModalReport() {
+    setisOpenModalReport(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -258,6 +233,7 @@ export const SlideshowDiscover = ({ dataDiscover }) => {
                 handleOpenModalBuy={handleOpenModalBuy}
                 handleOpenModalBid={handleOpenModalBid}
                 handleOpenModalShare={handleOpenModalShare}
+                handleOpenModalReport={handleOpenModalReport}
                 isNotExpired={isNotExpired}
                 isNotRelease={isNotRelease}
               />
@@ -287,6 +263,12 @@ export const SlideshowDiscover = ({ dataDiscover }) => {
         onClose={closeModalShare}
         onModalClose={closeModalShare}
         shareData={shareData}
+      />
+      <ModalReportNft
+        isOpenModal={isOpenModalReport}
+        onClose={closeModalReport}
+        onModalClose={closeModalReport}
+        reportData={reportData}
       />
     </>
   );

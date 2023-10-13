@@ -33,6 +33,7 @@ import moment from 'moment';
 import { NftItemDetail, NftItemDetailSkeleton } from '../nft/itemDetail';
 import ModalPutOnSale from '../modal/putOnSale';
 import ModalShareSocialMedia from '../modal/shareSocialMedia';
+import ModalReportNft from '../modal/reportNft';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
@@ -77,11 +78,13 @@ export const SlideshowActivities = ({ dataActivities }) => {
   const [buyData, setBuyData] = useState({});
   const [putOnSaleData, setPutonsaleData] = useState({});
   const [shareData, setShareData] = useState({});
+  const [reportData, setReportData] = useState({});
 
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
+  const [isOpenModalReport, setisOpenModalReport] = useState(false);
 
   useEffect(() => {
     getNfts();
@@ -164,6 +167,14 @@ export const SlideshowActivities = ({ dataActivities }) => {
     setisOpenModalShare(true);
   };
 
+  const handleOpenModalReport = async (tokenId, collectionAddress) => {
+    setReportData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalReport(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
@@ -178,6 +189,10 @@ export const SlideshowActivities = ({ dataActivities }) => {
 
   function closeModalShare() {
     setisOpenModalShare(false);
+  }
+
+  function closeModalReport() {
+    setisOpenModalReport(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -266,6 +281,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
                   handleOpenModalBid={handleOpenModalBid}
                   handleOpenModalPutonsale={handleOpenModalPutonsale}
                   handleOpenModalShare={handleOpenModalShare}
+                  handleOpenModalReport={handleOpenModalReport}
                   isNotExpired={isNotExpired}
                   isNotRelease={isNotRelease}
                 />
@@ -301,6 +317,12 @@ export const SlideshowActivities = ({ dataActivities }) => {
         onClose={closeModalShare}
         onModalClose={closeModalShare}
         shareData={shareData}
+      />
+      <ModalReportNft
+        isOpenModal={isOpenModalReport}
+        onClose={closeModalReport}
+        onModalClose={closeModalReport}
+        reportData={reportData}
       />
     </>
   );

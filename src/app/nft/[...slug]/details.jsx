@@ -42,7 +42,7 @@ import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { ImageWithFallback } from '@/components/imagewithfallback';
 import HelaIcon from '@/assets/icon/hela';
-import { formatEther, parseEther } from 'viem';
+import { formatEther, isAddress, parseEther } from 'viem';
 const accounts = ['0x30756...Fb179', '0x30756...Zi57G', '0x30756...Gy352'];
 import { notFound } from 'next/navigation';
 import ModalBid from '@/components/modal/bid';
@@ -62,6 +62,7 @@ import {
   ActivityItemDetailSkeleton,
 } from '@/components/activity/itemDetail';
 import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
+import { JazzIcon } from '@/components/jazzicon';
 
 export default function NFTDetails({ dataNFTs }) {
   const router = useRouter();
@@ -75,7 +76,7 @@ export default function NFTDetails({ dataNFTs }) {
   const [countLikes, setCountLikes] = useState(dataNFTs?.likeCount);
   const [dataRelatedNFTs, setDataRelatedNFTs] = useState([]);
   const [isLoadingRelatedNFTs, setIsLoadingRelatedNFTs] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('history');
 
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
@@ -500,11 +501,11 @@ export default function NFTDetails({ dataNFTs }) {
                     </>
                   )}
                 </div> */}
-                <div className="mt-5 flex flex-col gap-4 text-gray-900">
+                <div className="mt-5 flex flex-col gap-4 text-gray-900 dark:text-white">
                   <h2 className="text-2xl font-bold">
                     {dataNFTs?.name} #{dataNFTs?.tokenId}
                   </h2>
-                  <div className="flex w-full justify-around rounded-xl bg-white p-5">
+                  <div className="flex w-full justify-around rounded-xl bg-white dark:bg-zinc-700 p-5">
                     <div className="px-5">
                       <h3 className="font-semibold md:text-lg">Creator</h3>
                       <div className="flex">
@@ -534,7 +535,7 @@ export default function NFTDetails({ dataNFTs }) {
                             }
                             className="flex cursor-pointer items-center gap-2"
                           >
-                            <div className="text-sm font-medium text-neutral-700">
+                            <div className="text-sm font-medium text-neutral-700 dark:text-white">
                               {dataNFTs?.collectionData?.User?.username
                                 ? dataNFTs?.collectionData?.User?.username
                                 : truncateAddress4char(
@@ -583,7 +584,7 @@ export default function NFTDetails({ dataNFTs }) {
                           }
                           className="flex cursor-pointer items-center gap-2"
                         >
-                          <div className="text-sm font-medium text-neutral-700">
+                          <div className="text-sm font-medium text-neutral-700 dark:text-white">
                             {dataNFTs?.ownerData?.username ||
                               truncateAddress4char(
                                 dataNFTs?.ownerData?.walletAddress,
@@ -599,7 +600,7 @@ export default function NFTDetails({ dataNFTs }) {
                       </div>
                     </div>
                   </div>
-                  <div className="flex w-full flex-wrap items-start justify-between gap-4 rounded-xl bg-white p-5 text-gray-900 md:flex-row">
+                  <div className="flex w-full flex-wrap items-start justify-between gap-4 rounded-xl bg-white p-5 text-gray-900 dark:bg-zinc-700 dark:text-white md:flex-row">
                     <div className="flex items-center gap-2 self-stretch sm:w-full md:w-full lg:w-1/4 xl:w-1/4 2xl:w-1/4">
                       {(dataNFTs?.collectionData?.chainId === 666888 ||
                         dataNFTs?.collectionData?.chainId === 8668) && (
@@ -645,7 +646,7 @@ export default function NFTDetails({ dataNFTs }) {
                     </div>
                   </div>
 
-                  <div className="w-full rounded-xl bg-white p-5 text-gray-900">
+                  <div className="w-full rounded-xl bg-white p-5 text-gray-900 dark:bg-zinc-700 dark:text-white">
                     <div className="flex items-center gap-2">
                       <h3 className="font-bold md:text-lg">Royalties</h3>
                       <span className="h-6 rounded-lg bg-gray-600 p-1 text-xs text-white">
@@ -657,7 +658,7 @@ export default function NFTDetails({ dataNFTs }) {
                       recipient&lsquo;s wallet.
                     </p>
                   </div>
-                  <div className="flex w-full flex-col  gap-4 rounded-xl bg-white p-5 text-gray-900">
+                  <div className="flex w-full flex-col  gap-4 rounded-xl bg-white p-5 text-gray-900 dark:bg-zinc-700 dark:text-white">
                     <div className="flex justify-between gap-2">
                       {dataNFTs?.itemDetails?.isAuctioned && (
                         <div>
@@ -699,7 +700,7 @@ export default function NFTDetails({ dataNFTs }) {
                     <div className="flex gap-4">
                       {dataNFTs?.itemDetails?.isAuctioned ? (
                         <>
-                          <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5">
+                          <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5 dark:bg-zinc-600">
                             <h3 className="md:text-lg">Floor Price</h3>
                             <h4 className="text-sm font-bold md:text-lg">
                               {dataNFTs?.itemDetails
@@ -718,7 +719,7 @@ export default function NFTDetails({ dataNFTs }) {
                                   )}
                             </h5>
                           </div>
-                          <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5">
+                          <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5 dark:bg-zinc-600">
                             <h3 className="md:text-lg">Bid</h3>
                             <h4 className="md:text-lg">
                               Highest bid at{' '}
@@ -1337,25 +1338,26 @@ const Collateral = ({ dataNFTs }) => {
 const Overview = ({ dataOverview, onSeeAllClick }) => {
   const limitedOffers = dataOverview.itemDetails?.listOffers?.slice(0, 3);
   return (
-    <div>
-      <h1 className="text-xl font-semibold text-black">Description</h1>
-      <p className="text-base text-black">{dataOverview.description || '-'}</p>
+    <div className="bg-gray-50 p-3 rounded-lg dark:bg-zinc-700 dark:text-white">
+      <h1 className="text-xl font-semibold">Description</h1>
+      <p className="text-base">{dataOverview.description || '-'}</p>
       <div className="flex justify-between">
-        <h1 className="pt-5 text-xl font-semibold text-black">Bids</h1>
+        <h1 className="pt-5 text-xl font-semibold">Bids</h1>
         {limitedOffers && limitedOffers.length > 0 && (
           <h1
-            className="cursor-pointer pt-5 text-lg font-semibold text-black"
+            className="cursor-pointer pt-5 text-lg font-semibold"
             onClick={() => onSeeAllClick('bids')}
           >
             See All
           </h1>
         )}
       </div>
+      <div className="flex flex-col gap-2">
       {limitedOffers && limitedOffers.length > 0 ? (
         limitedOffers.map((offer, index) => {
           return (
             <div
-              className="inline-flex w-full items-center justify-start gap-5 self-stretch rounded-xl"
+              className="inline-flex w-full items-center justify-start gap-5 self-stretch rounded-lg p-2 bg-gray-100 hover:bg-gray-200 dark:bg-zinc-600 hover:dark:bg-zinc-500"
               key={index}
             >
               <div className="flex shrink grow basis-0 items-center justify-between text-center text-base font-bold leading-loose">
@@ -1396,25 +1398,26 @@ const Overview = ({ dataOverview, onSeeAllClick }) => {
           No bids yet
         </div>
       )}
+      </div>
     </div>
   );
 };
 
 const Bids = ({ dataBid }) => {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 bg-white dark:bg-zinc-700 p-3 rounded-lg">
       {dataBid.itemDetails?.listOffers?.length > 0 ? (
         <>
           {dataBid.itemDetails?.listOffers.map((offer, index) => {
             return (
               <div
-                className="w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white p-3 lg:inline-flex"
+                className="w-full items-center justify-start gap-5 self-stretch rounded-xl bg-gray-50 hover:bg-gray-100 dark:bg-zinc-600 hover:dark:bg-zinc-500 dark:text-white p-3 lg:inline-flex"
                 key={index}
               >
                 <div className="flex shrink grow basis-0 items-center justify-between text-center text-base font-bold leading-loose">
                   <div className="inline-flex h-14 w-1/2 items-center justify-center">
                     <div className="text-md inline-flex shrink grow basis-0 flex-row gap-3 font-medium leading-loose">
-                      <div className="h-12 w-12 rounded-full bg-gray-300">
+                      <div className="h-12 w-12 rounded-full bg-gray-300 dark:bg-zinc-600">
                         <ImageWithFallback
                           className="h-full w-full rounded-2xl "
                           width={48}
@@ -1460,6 +1463,272 @@ const Bids = ({ dataBid }) => {
 const History = ({ collection, tokenId }) => {
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const parsingMintTransferEvents = (event) => {
+    let description;
+    let type;
+    if (event?.item?.From === '0x0000000000000000000000000000000000000000') {
+      description = (
+        <div className="flex gap-1">
+          minted by
+          <JazzIcon
+            diameter={16}
+            seed={event?.item?.To}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.item?.To}`)}
+          >
+            {truncateAddress(event?.item?.To)}
+          </button>
+        </div>
+      );
+      type = 'Mints';
+    } else if (
+      event?.item?.To === '0x0000000000000000000000000000000000000000'
+    ) {
+      description = (
+        <div className="flex gap-1">
+          burn by
+          <JazzIcon
+            diameter={16}
+            seed={event?.item?.To}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.item?.To}`)}
+          >
+            {truncateAddress(event?.item?.To)}
+          </button>
+        </div>
+      );
+      type = 'Burn';
+    } else if (
+      (event?.item?.From !== '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
+        isAddress(event?.item?.From)) ||
+      (event?.item?.To == '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
+        isAddress(event?.item?.To))
+    ) {
+      description = (
+        <div className="flex gap-1">
+          transfer from
+          <JazzIcon
+            diameter={16}
+            seed={event?.item?.From}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.item?.From}`)}
+          >
+            {truncateAddress4char(event?.item?.From)}
+          </button>
+          to
+          <JazzIcon
+            diameter={16}
+            seed={event?.item?.To}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.item?.To}`)}
+          >
+            {truncateAddress4char(event?.item?.To)}
+          </button>
+        </div>
+      );
+      type = 'Transfer';
+    } else {
+      return false;
+    }
+    return {
+      event: type,
+      description: description,
+      tokenId: parseInt(event?.item?.TokenId?.hex, 16),
+      price: '',
+      from: truncateAddress4char(event?.item?.From),
+      to: truncateAddress4char(event?.item?.To),
+      timestamp: event?.item?.Timestamp * 1000,
+      collection: event?.collectionData,
+      nft: event?.nftDetails,
+      tokenAddress: event?.collectionAddress,
+    };
+  };
+
+  const parsingBidsSalesListing = (event) => {
+    let description;
+    let type;
+    if (event.eventType == 'ItemListed') {
+      type = 'Listings';
+      description = (
+        <div className="flex gap-1">
+          <span>listed by</span>{' '}
+          <JazzIcon
+            diameter={16}
+            seed={event?.seller}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.item?.Seller}`)}
+          >
+            {event?.sellerData?.username
+              ? event.sellerData.username
+              : truncateAddress4char(event?.seller)}
+          </button>
+          for
+          <span className="font-bold text-primary-500">
+            {formatEther(Number(event?.price))}{' '}
+            {event?.collectionData?.Chain?.symbol}
+          </span>
+        </div>
+      );
+    } else if (event.eventType == 'NewOffer') {
+      type = 'Bids';
+      description = (
+        <div className="flex gap-1">
+          <JazzIcon
+            diameter={16}
+            seed={event?.seller}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.seller}`)}
+          >
+            {event?.sellerData?.username
+              ? event.sellerData.username
+              : truncateAddress4char(event?.seller)}
+          </button>
+          offered
+          <span className="font-bold text-primary-500">
+            {formatEther(Number(event?.offer))}{' '}
+            {event?.collectionData?.Chain?.symbol}
+          </span>
+        </div>
+      );
+    } else if (event.eventType == 'ItemSold') {
+      type = 'Sales';
+      description = (
+        <div className="flex gap-1">
+          purchased by
+          <JazzIcon
+            diameter={16}
+            seed={event?.buyer}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.buyer}`)}
+          >
+            {event?.buyerData?.username
+              ? event.buyerData.username
+              : truncateAddress4char(event?.buyer)}
+          </button>
+          for
+          <span className="font-bold text-primary-500">
+            {formatEther(Number(event?.price))}{' '}
+            {event?.collectionData?.Chain?.symbol}
+          </span>
+          from
+          <JazzIcon
+            diameter={16}
+            seed={event?.seller}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.seller}`)}
+          >
+            {event?.sellerData?.username
+              ? event.sellerData.username
+              : truncateAddress4char(event?.seller)}
+          </button>
+        </div>
+      );
+    } else if (event.eventType == 'RemoveOffer') {
+      type = 'Bids';
+      description = (
+        <div className="flex gap-1">
+          bid cancelled by
+          <JazzIcon
+            diameter={16}
+            seed={event?.buyer ? event.buyer : event?.seller}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() =>
+              router.push(
+                `/profile/${event?.buyer ? event.buyer : event?.seller}`,
+              )
+            }
+          >
+            {event?.buyer
+              ? truncateAddress4char(event?.buyer)
+              : truncateAddress4char(event?.seller)}
+          </button>
+        </div>
+      );
+    } else if (event.eventType == 'OfferAccepted') {
+      type = 'Sales';
+      description = (
+        <div className="flex gap-1">
+          <JazzIcon
+            diameter={16}
+            seed={event?.buyer}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.buyer}`)}
+          >
+            {truncateAddress4char(event?.buyer)}
+          </button>
+          accepted bid
+          <span className="font-bold text-primary-500">
+            {formatEther(Number(event?.price))}{' '}
+            {event?.collectionData?.Chain?.symbol}
+          </span>
+          <JazzIcon
+            diameter={16}
+            seed={event?.seller}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.seller}`)}
+          >
+            {truncateAddress4char(event?.seller)}
+          </button>
+        </div>
+      );
+    } else {
+      return false;
+    }
+
+    return {
+      event: type,
+      description: description,
+      tokenId: event?.tokenId,
+      price: `${event.price === '' ? 0 : formatEther(Number(event.price))} ${
+        event?.collectionData?.Chain?.symbol
+      }`,
+      from: event?.sellerData?.username
+        ? event.sellerData.username
+        : truncateAddress4char(event.seller),
+      to: event?.buyerData?.username
+        ? event.buyerData.username
+        : truncateAddress4char(event.buyer),
+      timestamp: event?.timestamp * 1000,
+      collection: event?.collectionData,
+      nft: event?.nftDetails,
+      tokenAddress: event?.collection,
+    };
+  };
+
   useEffect(() => {
     const getHistoryMintTransfer = async () => {
       setIsLoading(true);
@@ -1473,8 +1742,16 @@ const History = ({ collection, tokenId }) => {
           },
         })
         .then((response) => {
+          let result = [];
+          response.data.events.map((event, index) => {
+            const activity = parsingMintTransferEvents(event);
+            if (activity) {
+              result.push(activity);
+            }
+          });
+
           setEvents((oldEvent) => {
-            return [...oldEvent, ...response.data.events];
+            return [...oldEvent, ...result];
           });
         })
         .catch((error) => {
@@ -1497,8 +1774,16 @@ const History = ({ collection, tokenId }) => {
           },
         })
         .then((response) => {
+          let result = [];
+          response.data.map((event, index) => {
+            const activity = parsingBidsSalesListing(event);
+            if (activity) {
+              result.push(activity);
+            }
+          });
+
           setEvents((oldEvent) => {
-            return [...oldEvent, ...response.data];
+            return [...oldEvent, ...result];
           });
           setIsLoading(false);
         })
@@ -1525,13 +1810,11 @@ const History = ({ collection, tokenId }) => {
           </div>
         </div>
       )}
-      {events.length > 0 && !isLoading && (
-        <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
-          <div className="flex flex-col gap-3 rounded-lg border border-gray-300">
-            <ActivityItemDetail events={events} collection={collection} />
-          </div>
-        </div>
-      )}
+      <div className="flex flex-col gap-3 text-sm text-black dark:text-white overflow-y-auto max-h-96 px-3">
+        {events.map((event, index) => {
+          return <ActivityItemDetail key={index} event={event} />;
+        })}
+      </div>
     </>
   );
 };

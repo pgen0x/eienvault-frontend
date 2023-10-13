@@ -10,14 +10,20 @@ import {
   faChevronDown,
   faChevronUp,
   faCircleCheck,
+  faClone,
   faEllipsis,
   faEllipsisVertical,
+  faFire,
+  faGavel,
   faGrip,
   faGripVertical,
+  faPaperPlane,
   faPenToSquare,
+  faPercent,
   faSearch,
   faShare,
   faSliders,
+  faTags,
 } from '@fortawesome/free-solid-svg-icons';
 import Search from '@/components/navbar/search';
 import Ethereum from '@/assets/icon/ethereum';
@@ -49,6 +55,8 @@ import {
   ActivityItemDetail,
   ActivityItemDetailSkeleton,
 } from '@/components/activity/itemDetail';
+import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
+import formatter from '@/utils/shortNumberFormatter';
 
 const filters = [
   'All',
@@ -324,10 +332,10 @@ export default function CollectionDetail({ params }) {
                       <div className="flex justify-between">
                         <span className="font-semibold">Floor</span>
                         <span>
-                          {collection.floorPrice
+                          {collection?.floorPrice
                             ? formatEther(Number(collection.floorPrice))
                             : '0.00'}{' '}
-                          {collection.Chain.symbol
+                          {collection?.Chain?.symbol
                             ? collection.Chain.symbol
                             : '-'}
                         </span>
@@ -335,10 +343,10 @@ export default function CollectionDetail({ params }) {
                       <div className="flex justify-between">
                         <span className="font-semibold">Volumes</span>
                         <span>
-                          {collection.volume
+                          {collection?.volume
                             ? formatEther(Number(collection.volume))
                             : '0.00'}{' '}
-                          {collection.Chain.symbol
+                          {collection?.Chain?.symbol
                             ? collection.Chain.symbol
                             : '-'}
                         </span>
@@ -354,7 +362,9 @@ export default function CollectionDetail({ params }) {
                       <div className="flex justify-between">
                         <span className="font-semibold">Blockchain</span>
                         <span>
-                          {collection.Chain.name ? collection.Chain.name : '-'}
+                          {collection?.Chain?.name
+                            ? collection.Chain.name
+                            : '-'}
                         </span>
                       </div>
                     </div>
@@ -497,10 +507,12 @@ const Items = ({ params, collection }) => {
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
   const [putOnSaleData, setPutonsaleData] = useState({});
+  const [shareData, setShareData] = useState({});
 
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
+  const [isOpenModalShare, setisOpenModalShare] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -695,6 +707,14 @@ const Items = ({ params, collection }) => {
     setisOpenModalPutonsale(true);
   };
 
+  const handleOpenModalShare = async (tokenId, collectionAddress) => {
+    setShareData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalShare(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
@@ -705,6 +725,10 @@ const Items = ({ params, collection }) => {
 
   function closeModalPutonsale() {
     setisOpenModalPutonsale(false);
+  }
+
+  function closeModalShare() {
+    setisOpenModalShare(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -1363,6 +1387,7 @@ const Items = ({ params, collection }) => {
                       handleOpenModalBuy={handleOpenModalBuy}
                       handleOpenModalBid={handleOpenModalBid}
                       handleOpenModalPutonsale={handleOpenModalPutonsale}
+                      handleOpenModalShare={handleOpenModalShare}
                       isNotExpired={isNotExpired}
                       isNotRelease={isNotRelease}
                     />
@@ -1392,41 +1417,399 @@ const Items = ({ params, collection }) => {
         onModalClose={closeModalPutonsale}
         putonsaledata={putOnSaleData}
       />
+      <ModalShareSocialMedia
+        isOpenModal={isOpenModalShare}
+        onClose={closeModalShare}
+        onModalClose={closeModalShare}
+        shareData={shareData}
+      />
     </>
   );
 };
 
 const Activity = ({ collection }) => {
+  
   const [events, setEvents] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const filter = ['Mints', 'Transfer', 'Burn', 'Bids', 'Sales', 'Listing'];
+  const [eventsPage, setEventsPage] = useState(1);
+  const [eventsLast, setEventsLast] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeFilter, setActiveFilter] = useState([]);
+  const allDataFilters = [
+    'Mints',
+    'Transfer',
+    'Burn',
+    'Bids',
+    'Sales',
+    'Listings',
+  ];
+  const datafilters = {
+    Mints: <FontAwesomeIcon icon={faClone} />,
+    Transfer: <FontAwesomeIcon icon={faPaperPlane} />,
+    Burn: <FontAwesomeIcon icon={faFire} />,
+    Bids: <FontAwesomeIcon icon={faGavel} />,
+    Sales: <FontAwesomeIcon icon={faPercent} />,
+    Listings: <FontAwesomeIcon icon={faTags} />,
+  };
+
+  const handleScroll = () => {
+    const windowHeight =
+      'innerHeight' in window
+        ? window.innerHeight
+        : document.documentElement.offsetHeight;
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight,
+    );
+    const windowBottom = windowHeight + window.pageYOffset;
+    if (windowBottom >= docHeight) {
+      if (eventsLast === false) {
+        setEventsPage((oldPage) => oldPage + 1);
+      }
+    }
+  };
 
   useEffect(() => {
-    const getActivity = async () => {
-      setIsLoading(true);
-      await axios
-        .request({
-          method: 'get',
-          maxBodyLength: Infinity,
-          url: `${process.env.NEXT_PUBLIC_API_URL}/api/collection/activity/${collection.tokenAddress}`,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        .then((response) => {
-          setEvents(response.data.data);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.log(error.message);
-          setIsLoading(false);
-        });
-    };
+    window.addEventListener('scroll', handleScroll);
+  }, []);
 
-    if (collection) {
+  const getActivity = async () => {
+    if (eventsLast === true) return;
+    await axios
+      .request({
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/collection/activity/${collection.tokenAddress}?page=${eventsPage}`,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response) => {
+        if (response.data.data.length > 0) {
+          if (eventsPage >= response.data.totalPages) {
+            setEventsLast(true); // Set nftLast to true if the current page is the last page
+          }
+
+          const tmpEvents = convertData(response.data.data);
+          if(tmpEvents.length > 0){
+            if (eventsPage > 1) {
+              setEvents((oldEvents) => [...oldEvents, ...tmpEvents]);
+            } else {
+              setEvents([...tmpEvents]);
+            }
+          }else{
+            setEventsPage((oldPage) => oldPage + 1);
+          }
+        } else {
+          setEventsLast(true);
+        }
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error.message);
+        setIsLoading(false);
+      });
+  };
+
+  const convertData = (events) => {
+    let result = [];
+
+    events.map((event, index) => {
+      const activity1 = parsingMintTransferEvents(event);
+      const activity2 = parsingBidsSalesListing(event);
+      if (activity1) {
+        result.push(activity1);
+      } else if (activity2) {
+        result.push(activity2);
+      }
+    });
+
+    return result;
+  };
+
+  useEffect(() => {
+    if (collection?.tokenAddress) {
       getActivity();
     }
-  }, [collection]);
+  }, [collection, eventsPage]);
+
+  const actionFilter = (filter) => {
+    setActiveFilter((oldFilter) => {
+      if (oldFilter.indexOf(filter) !== -1) {
+        return oldFilter.filter((item) => item !== filter);
+      } else {
+        return [...oldFilter, filter];
+      }
+    });
+    // data.filter((item, key) => item.age > 30);
+  };
+
+  const parsingMintTransferEvents = (event) => {
+    let description;
+    let type;
+    if (event?.item?.From === '0x0000000000000000000000000000000000000000') {
+      description = (
+        <div className="flex gap-1">
+          minted by
+          <JazzIcon
+            diameter={16}
+            seed={event?.item?.To}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.item?.To}`)}
+          >
+            {truncateAddress(event?.item?.To)}
+          </button>
+        </div>
+      );
+      type = 'Mints';
+    } else if (
+      event?.item?.To === '0x0000000000000000000000000000000000000000'
+    ) {
+      description = (
+        <div className="flex gap-1">
+          burn by
+          <JazzIcon
+            diameter={16}
+            seed={event?.item?.To}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.item?.To}`)}
+          >
+            {truncateAddress(event?.item?.To)}
+          </button>
+        </div>
+      );
+      type = 'Burn';
+    } else if (
+      (event?.item?.From !== '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' && isAddress(event?.item?.From)) ||
+      (event?.item?.To == '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' && isAddress(event?.item?.To))
+    ) {
+      description = (
+        <div className="flex gap-1">
+          transfer from
+          <JazzIcon
+            diameter={16}
+            seed={event?.item?.From}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.item?.From}`)}
+          >
+            {truncateAddress4char(event?.item?.From)}
+          </button>
+          to
+          <JazzIcon
+            diameter={16}
+            seed={event?.item?.To}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.item?.To}`)}
+          >
+            {truncateAddress4char(event?.item?.To)}
+          </button>
+        </div>
+      );
+      type = 'Transfer';
+    } else {
+      return false;
+    }
+    return {
+      event: type,
+      description: description,
+      tokenId: parseInt(event?.item?.TokenId?.hex, 16),
+      price: '',
+      from: truncateAddress4char(event?.item?.From),
+      to: truncateAddress4char(event?.item?.To),
+      timestamp: event?.item?.Timestamp * 1000,
+      collection: event?.collectionData,
+      nft: event?.nftDetails,
+      tokenAddress: event?.collectionAddress,
+    };
+  };
+
+  const parsingBidsSalesListing = (event) => {
+    let description;
+    let type;
+    if (event.eventType == 'ItemListed') {
+      type = 'Listings';
+      description = (
+        <div className="flex gap-1">
+          <span>listed by</span>{' '}
+          <JazzIcon
+            diameter={16}
+            seed={event?.seller}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.item?.Seller}`)}
+          >
+            {event?.sellerData?.username
+              ? event.sellerData.username
+              : truncateAddress4char(event?.seller)}
+          </button>
+          for
+          <span className="font-bold text-primary-500">
+            {formatEther(Number(event?.price))}{' '}
+            {event?.collectionData?.Chain?.symbol}
+          </span>
+        </div>
+      );
+    } else if (event.eventType == 'NewOffer') {
+      type = 'Bids';
+      description = (
+        <div className="flex gap-1">
+          <JazzIcon
+            diameter={16}
+            seed={event?.seller}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.seller}`)}
+          >
+            {event?.sellerData?.username
+              ? event.sellerData.username
+              : truncateAddress4char(event?.seller)}
+          </button>
+          offered
+          <span className="font-bold text-primary-500">
+            {formatEther(Number(event?.offer))}{' '}
+            {event?.collectionData?.Chain?.symbol}
+          </span>
+        </div>
+      );
+    } else if (event.eventType == 'ItemSold') {
+      type = 'Sales';
+      description = (
+        <div className="flex gap-1">
+          purchased by
+          <JazzIcon
+            diameter={16}
+            seed={event?.buyer}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.buyer}`)}
+          >
+            {event?.buyerData?.username
+              ? event.buyerData.username
+              : truncateAddress4char(event?.buyer)}
+          </button>
+          for
+          <span className="font-bold text-primary-500">
+            {formatEther(Number(event?.price))}{' '}
+            {event?.collectionData?.Chain?.symbol}
+          </span>
+          from
+          <JazzIcon
+            diameter={16}
+            seed={event?.seller}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.seller}`)}
+          >
+            {event?.sellerData?.username
+              ? event.sellerData.username
+              : truncateAddress4char(event?.seller)}
+          </button>
+        </div>
+      );
+    } else if (event.eventType == 'RemoveOffer') {
+      type = 'Bids';
+      description = (
+        <div className="flex gap-1">
+          bid cancelled by
+          <JazzIcon
+            diameter={16}
+            seed={event?.buyer ? event.buyer : event?.seller}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() =>
+              router.push(
+                `/profile/${event?.buyer ? event.buyer : event?.seller}`,
+              )
+            }
+          >
+            {event?.buyer
+              ? truncateAddress4char(event?.buyer)
+              : truncateAddress4char(event?.seller)}
+          </button>
+        </div>
+      );
+    } else if (event.eventType == 'OfferAccepted') {
+      type = 'Sales';
+      description = (
+        <div className="flex gap-1">
+          <JazzIcon
+            diameter={16}
+            seed={event?.buyer}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.buyer}`)}
+          >
+            {truncateAddress4char(event?.buyer)}
+          </button>
+          accepted bid
+          <span className="font-bold text-primary-500">
+            {formatEther(Number(event?.price))}{' '}
+            {event?.collectionData?.Chain?.symbol}
+          </span>
+          <JazzIcon
+            diameter={16}
+            seed={event?.seller}
+            useGradientFallback={true}
+          />
+          <button
+            className="font-bold text-primary-500"
+            onClick={() => router.push(`/profile/${event?.seller}`)}
+          >
+            {truncateAddress4char(event?.seller)}
+          </button>
+        </div>
+      );
+    } else {
+      return false;
+    }
+
+    return {
+      event: type,
+      description: description,
+      tokenId: event?.tokenId,
+      price: `${event.price === '' ? 0 : formatEther(Number(event.price))} ${
+        event?.collectionData?.Chain?.symbol
+      }`,
+      from: event?.sellerData?.username
+        ? event.sellerData.username
+        : truncateAddress4char(event.seller),
+      to: event?.buyerData?.username
+        ? event.buyerData.username
+        : truncateAddress4char(event.buyer),
+      timestamp: event?.timestamp * 1000,
+      collection: event?.collectionData,
+      nft: event?.nftDetails,
+      tokenAddress: event?.collection,
+    };
+  };
 
   return (
     <>
@@ -1439,18 +1822,19 @@ const Activity = ({ collection }) => {
         <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
           <div className="flex flex-col gap-3 rounded-lg">
             <div className="grid grid-cols-12 gap-3">
-              <div className="col-span-9 flex flex-col gap-3 rounded-lg bg-gray-50 p-3">
+              <div className="col-span-9 flex flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-zinc-700">
                 {[...Array(5)].map((nft, index) => (
                   <ActivityItemDetailSkeleton key={index} />
                 ))}
               </div>
-              <div className="col-span-3 flex h-fit flex-col gap-3 rounded-lg bg-gray-50 p-3">
+              <div className="col-span-3 flex h-fit flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-zinc-700">
                 <h3 className="text-xl font-bold">Filter</h3>
                 <div className="flex flex-wrap gap-3 rounded-lg">
                   {[...Array(6)].map((nft, key) => (
                     <div
                       key={key}
-                      className="w-20 h-9 rounded-lg px-3 py-2 font-semibold bg-gray-300 animate-pulse" />
+                      className="h-9 w-20 animate-pulse rounded-lg bg-gray-300 px-3 py-2 font-semibold"
+                    />
                   ))}
                 </div>
               </div>
@@ -1461,7 +1845,37 @@ const Activity = ({ collection }) => {
       {events.length > 0 && !isLoading && (
         <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
           <div className="flex flex-col gap-3 rounded-lg">
-            <ActivityItemDetail events={events} usingFilter={true} />
+            <div className="grid grid-cols-12 gap-3">
+              <div className="col-span-9 flex flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-zinc-700">
+                {events
+                  .filter((item) =>
+                    activeFilter.length > 0
+                      ? activeFilter.includes(item.event)
+                      : allDataFilters.includes(item.event),
+                  )
+                  .map((event, index) => {
+                    return <ActivityItemDetail key={index} event={event} />;
+                  })}
+              </div>
+              <div className="col-span-3 flex h-fit flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-zinc-700">
+                <h3 className="text-xl font-bold">Filter</h3>
+                <div className="flex flex-wrap gap-3 rounded-lg">
+                  {Object.keys(datafilters).map((key) => (
+                    <button
+                      key={key}
+                      className={`w-fit rounded-lg px-3 py-2 font-semibold text-primary-500 hover:bg-primary-100 hover:dark:bg-zinc-500 ${
+                        activeFilter.indexOf(key) !== -1
+                          ? 'bg-primary-100 dark:bg-zinc-500'
+                          : 'bg-white dark:bg-zinc-600'
+                      }`}
+                      onClick={() => actionFilter(key)}
+                    >
+                      {datafilters[key]} {key}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}

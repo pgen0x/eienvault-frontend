@@ -239,7 +239,7 @@ export default function Collection() {
                   <button
                     className={`flex items-center gap-1 rounded-full px-4 py-2 hover:bg-primary-300 ${
                       openFilter
-                        ? 'bg-primary-500'
+                        ? 'bg-primary-500 text-white'
                         : 'bg-white text-primary-500'
                     }`}
                     onClick={handleOpenFilter}
@@ -247,7 +247,7 @@ export default function Collection() {
                     <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
                   </button>
                 </div>
-                <div className="flex w-fit space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1">
+                <div className="flex w-fit space-x-1 rounded-full border border-gray-200 bg-white dark:bg-zinc-700 dark:border-zinc-500 px-1 py-1">
                   <label
                     className={`px-3 ${classRadio(TrendingTop, 'trending')}`}
                   >
@@ -269,7 +269,7 @@ export default function Collection() {
                     />
                   </label>
                 </div>
-                <div className="flex w-fit space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1">
+                <div className="flex w-fit space-x-1 rounded-full border border-gray-200 bg-white dark:bg-zinc-700 dark:border-zinc-500 px-1 py-1">
                   <label className={classRadio(Range, '1h')}>
                     1h
                     <input
@@ -303,12 +303,12 @@ export default function Collection() {
                 onSubmit={(event) => handleSearch(event)}
                 className="w-full"
               >
-                <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-gray-800">
+                <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-zinc-700">
                   <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
                     <FontAwesomeIcon icon={faSearch} />
                   </div>
                   <input
-                    className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                    className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                     type="text"
                     placeholder="Search ..."
                     aria-label="Search"
@@ -328,7 +328,7 @@ export default function Collection() {
           <div className="my-5 grid grid-cols-12 gap-6">
             {openFilter && (
               <div className="col-span-12 sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                <ul className="divide-y rounded-xl bg-white p-5 font-bold text-gray-900">
+                <ul className="divide-y rounded-xl bg-white dark:bg-zinc-700 dark:text-white p-5 font-bold text-gray-900">
                   <li>
                     <button
                       className="action flex w-full cursor-pointer items-center justify-between py-3"
@@ -409,8 +409,8 @@ export default function Collection() {
                   : 'md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12'
               }`}
             >
-              <div className="grid w-full min-w-[720px] grid-cols-12 gap-7 text-gray-900">
-                <div className="col-span-12 grid grid-cols-12 gap-4 rounded-2xl bg-primary-500 px-10 py-4 text-white">
+              <div className="grid w-full min-w-[720px] grid-cols-12 text-gray-900">
+                <div className="col-span-12 grid grid-cols-12 gap-4 rounded-2xl px-10 py-4 font-bold text-primary-500">
                   <div className="col-span-1 grid">Rank</div>
                   <div className="col-span-5 grid">Collection</div>
                   <div className="col-span-2 grid">Floor price</div>
@@ -418,81 +418,83 @@ export default function Collection() {
                   <div className="col-span-1 grid">Items</div>
                   <div className="col-span-1 grid">Owner</div>
                 </div>
-                {collections.length == 0 && (
-                  <div className="col-span-12 w-full text-center font-semibold text-black">
-                    Collection not found
-                  </div>
-                )}
-                {collections.length > 0 &&
-                  collections.map((collection, index) => (
-                    <div
-                      key={index}
-                      className={`group col-span-12 grid w-full cursor-pointer grid-cols-12 rounded-xl px-5 py-2 hover:bg-white/70`}
-                      onClick={() =>
-                        router.push(
-                          `/collection/${
-                            collection?.slug
-                              ? collection.slug
-                              : collection?.tokenAddress
-                          }`,
-                        )
-                      }
-                    >
-                      <div className="col-span-1 flex items-center justify-center font-bold text-primary-500">
-                        {index + 1}.
-                      </div>
-                      <div className="flex-items-center col-span-5 flex gap-3">
-                        <div className="w-full flex-1">
-                          <div className="h-[48px] w-[48px]">
-                            <ImageWithFallback
-                              src={`/uploads/collections/${collection.logo}`}
-                              alt={collection?.name}
-                              width={48}
-                              height={48}
-                              diameter={48}
-                              address={collection?.tokenAddress}
-                              className="rounded-full"
-                            />
-                          </div>
-                        </div>
-                        <span className="flex w-full items-center">
-                          {collection.name
-                            ? collection.name
-                            : collection?.userAddress}
-                        </span>
-                      </div>
-                      <div className="col-span-2 flex items-center gap-2">
-                        {collection.floorPrice
-                          ? Number(
-                              formatEther(Number(collection.floorPrice)),
-                            ).toFixed(2)
-                          : '0.00'}
-                        <p
-                          className={classFloor(
-                            priceChangePercentage(collection),
-                          )}
-                        >
-                          {priceChangePercentage(collection)}%
-                        </p>
-                      </div>
-                      <div className="col-span-2 flex items-center">
-                        ${formatter(collection.volume)}
-                        <p
-                          className={classMovement(
-                            volumeChangePercentage(collection),
-                          )}
-                        >
-                          {volumeChangePercentage(collection)}%
-                        </p>
-                      </div>
-                      <div className="col-span-1 flex items-center">
-                        {collection.totalItems}
-                      </div>
-                      <div className="col-span-1 flex items-center">
-                        {collection.totalOwners}
-                      </div>
+                <div className="border-2 border-gray-200 bg-gray-100 dark:bg-zinc-700 dark:border-zinc-500 grid col-span-12 grid-cols-12 gap-3 rounded-lg p-3">
+                  {collections.length == 0 && (
+                    <div className="col-span-12 w-full text-center font-semibold text-black">
+                      Collection not found
                     </div>
-                  ))}
+                  )}
+                  {collections.length > 0 &&
+                    collections.map((collection, index) => (
+                      <div
+                        key={index}
+                        className={`group col-span-12 grid w-full cursor-pointer grid-cols-12 rounded-xl px-5 py-2 dark:bg-zinc-600 hover:dark:bg-zinc-500 dark:text-white bg-gray-50 hover:bg-gray-200 p-3`}
+                        onClick={() =>
+                          router.push(
+                            `/collection/${
+                              collection?.slug
+                                ? collection.slug
+                                : collection?.tokenAddress
+                            }`,
+                          )
+                        }
+                      >
+                        <div className="col-span-1 flex items-center justify-center font-bold text-primary-500">
+                          {index + 1}.
+                        </div>
+                        <div className="flex-items-center col-span-5 flex gap-3">
+                          <div className="w-full flex-1">
+                            <div className="h-[48px] w-[48px]">
+                              <ImageWithFallback
+                                src={`/uploads/collections/${collection.logo}`}
+                                alt={collection?.name}
+                                width={48}
+                                height={48}
+                                diameter={48}
+                                address={collection?.tokenAddress}
+                                className="rounded-full"
+                              />
+                            </div>
+                          </div>
+                          <span className="flex w-full items-center">
+                            {collection.name
+                              ? collection.name
+                              : collection?.userAddress}
+                          </span>
+                        </div>
+                        <div className="col-span-2 flex items-center gap-2">
+                          {collection.floorPrice
+                            ? Number(
+                                formatEther(Number(collection.floorPrice)),
+                              ).toFixed(2)
+                            : '0.00'}
+                          <p
+                            className={classFloor(
+                              priceChangePercentage(collection),
+                            )}
+                          >
+                            {priceChangePercentage(collection)}%
+                          </p>
+                        </div>
+                        <div className="col-span-2 flex items-center">
+                          ${formatter(collection.volume)}
+                          <p
+                            className={classMovement(
+                              volumeChangePercentage(collection),
+                            )}
+                          >
+                            {volumeChangePercentage(collection)}%
+                          </p>
+                        </div>
+                        <div className="col-span-1 flex items-center">
+                          {collection.totalItems}
+                        </div>
+                        <div className="col-span-1 flex items-center">
+                          {collection.totalOwners}
+                        </div>
+                      </div>
+                    ))}
+                </div>
               </div>
             </div>
           </div>

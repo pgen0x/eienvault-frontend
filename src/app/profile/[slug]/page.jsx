@@ -157,6 +157,7 @@ export default function ProfilePage({ params }) {
     imageUri,
     name,
     tokenId,
+    collectionAddress,
     ChainSymbol,
     ChainName,
   ) => {
@@ -166,6 +167,7 @@ export default function ProfilePage({ params }) {
       imageUri,
       name,
       tokenId,
+      collectionAddress,
       ChainSymbol,
       ChainName,
     });

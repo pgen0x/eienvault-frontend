@@ -186,6 +186,7 @@ export default function NFTDetails({ dataNFTs }) {
     imageUri,
     name,
     tokenId,
+    collectionAddress,
     ChainSymbol,
     ChainName,
   ) => {
@@ -195,6 +196,7 @@ export default function NFTDetails({ dataNFTs }) {
       imageUri,
       name,
       tokenId,
+      collectionAddress,
       ChainSymbol,
       ChainName,
     });
@@ -1623,11 +1625,11 @@ const History = ({ collection, tokenId }) => {
           />
           <button
             className="font-bold text-primary-500"
-            onClick={() => router.push(`/profile/${event?.seller}`)}
+            onClick={() => router.push(`/profile/${event?.OfferedBy}`)}
           >
-            {event?.sellerData?.username
-              ? event.sellerData.username
-              : truncateAddress4char(event?.seller)}
+            {event?.OfferedByData?.username
+              ? event.OfferedByData.username
+              : truncateAddress4char(event?.OfferedBy)}
           </button>
           offered
           <span className="font-bold text-primary-500">

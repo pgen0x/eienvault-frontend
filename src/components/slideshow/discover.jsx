@@ -90,6 +90,7 @@ export const SlideshowDiscover = ({ dataDiscover }) => {
     imageUri,
     name,
     tokenId,
+    collectionAddress,
     ChainSymbol,
     ChainName,
   ) => {
@@ -99,6 +100,7 @@ export const SlideshowDiscover = ({ dataDiscover }) => {
       imageUri,
       name,
       tokenId,
+      collectionAddress,
       ChainSymbol,
       ChainName,
     });

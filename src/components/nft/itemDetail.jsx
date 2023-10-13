@@ -542,6 +542,7 @@ const Nft = ({
                               nft?.imageUri,
                               nft?.name,
                               nft?.tokenId,
+                              collection?.tokenAddress,
                               collection?.Chain?.symbol,
                               collection?.Chain?.name,
                             )

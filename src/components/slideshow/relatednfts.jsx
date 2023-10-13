@@ -87,6 +87,7 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
     imageUri,
     name,
     tokenId,
+    collectionAddress,
     ChainSymbol,
     ChainName,
   ) => {
@@ -96,6 +97,7 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
       imageUri,
       name,
       tokenId,
+      collectionAddress,
       ChainSymbol,
       ChainName,
     });

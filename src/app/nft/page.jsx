@@ -250,6 +250,7 @@ export default function NftPage() {
     imageUri,
     name,
     tokenId,
+    collectionAddress,
     ChainSymbol,
     ChainName,
   ) => {
@@ -259,6 +260,7 @@ export default function NftPage() {
       imageUri,
       name,
       tokenId,
+      collectionAddress,
       ChainSymbol,
       ChainName,
     });

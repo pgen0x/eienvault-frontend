@@ -427,7 +427,7 @@ export default function ModalBuy({
                           <span>check your profile to see the asset</span>
                         </div>
                         <button
-                          onClick={() => router.push('/profile?view=owned')}
+                          onClick={() => router.push(`/nft/${dataBuy?.collectionAddress}/${dataBuy?.tokenId}`)}
                           className="rounded-full border border-primary-500 px-5 py-1 font-bold text-primary-500 hover:border-primary-400 hover:text-primary-400"
                         >
                           View asset

@@ -111,6 +111,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
     imageUri,
     name,
     tokenId,
+    collectionAddress,
     ChainSymbol,
     ChainName,
   ) => {
@@ -120,6 +121,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
       imageUri,
       name,
       tokenId,
+      collectionAddress,
       ChainSymbol,
       ChainName,
     });

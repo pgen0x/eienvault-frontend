@@ -693,7 +693,7 @@ export default function ModalPutOnSale({
                         ) : (
                           <FontAwesomeIcon
                             icon={faCheckCircle}
-                            className="h-7 w-7 text-primary-500"
+                            className="h-7 w-7 text-green-500"
                           />
                         )}
                       </div>
@@ -740,7 +740,7 @@ export default function ModalPutOnSale({
                         ) : (
                           <FontAwesomeIcon
                             icon={faCheckCircle}
-                            className="h-7 w-7 text-primary-500"
+                            className="h-7 w-7 text-green-500"
                           />
                         )}
                       </div>

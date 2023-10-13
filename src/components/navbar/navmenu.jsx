@@ -54,7 +54,7 @@ const NavMenu = () => {
           </div>
         </div>
       </div>
-      <div className="flex w-28 items-center justify-center gap-2 rounded-lg px-4 py-2">
+      {/*<div className="flex w-28 items-center justify-center gap-2 rounded-lg px-4 py-2">
         <div className="group/discover relative">
           <button
             type="button"
@@ -89,19 +89,19 @@ const NavMenu = () => {
                     </button>
                   </div>
                 </div>
-                {/* <div className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
+                <div className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 hover:bg-gray-50">
                 <div className="flex-auto">
                   <a href="#" className="block font-semibold text-primary-500">
                     Users
                     <span className="absolute inset-0"></span>
                   </a>
                 </div>
-              </div> */}
+              </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </div>*/}
     </div>
   );
 };

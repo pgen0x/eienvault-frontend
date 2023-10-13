@@ -360,7 +360,7 @@ const Nft = ({
                   </div>
                 </div>
                 <Menu as="div" className="relative inline-block text-left">
-                  <Menu.Button className="inline-flex w-full justify-center font-semibold text-gray-900 hover:text-primary-500">
+                  <Menu.Button className="inline-flex w-full justify-center font-semibold text-gray-900 dark:text-white hover:text-primary-500">
                     <FontAwesomeIcon
                       icon={faEllipsis}
                       aria-hidden="true"

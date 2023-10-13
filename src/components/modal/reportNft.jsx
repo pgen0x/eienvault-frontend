@@ -1,0 +1,168 @@
+'use client';
+import { useAuth } from '@/hooks/AuthContext';
+import {
+  faFacebook,
+  faTelegram,
+  faTwitter,
+  faWhatsapp,
+  faXTwitter,
+} from '@fortawesome/free-brands-svg-icons';
+import {
+  faCheckCircle,
+  faCircleXmark,
+  faClose,
+  faCopy,
+  faCross,
+  faImage,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Dialog, Transition } from '@headlessui/react';
+import { ErrorMessage } from '@hookform/error-message';
+import { useWeb3Modal } from '@web3modal/react';
+import axios from 'axios';
+import Image from 'next/legacy/image';
+import { Fragment, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import { useAccount } from 'wagmi';
+
+export default function ModalReportNft({
+  isOpenModal,
+  onClose,
+  reportData,
+  onModalClose,
+}) {
+  const tokenId = reportData.tokenId;
+  const collectionAddress = reportData.collectionAddress;
+  const { token } = useAuth();
+  const [message, setMessage] = useState("");
+  const { isConnected } = useAccount();
+  const { open } = useWeb3Modal();
+
+  useEffect(() => {
+    if (isOpenModal && !isConnected) {
+      open();
+    }
+  }, [isOpenModal])
+
+  function closeModal() {
+    onClose(false);
+    onModalClose();
+    setMessage("");
+  }
+
+  const sendReport = async () => {
+    if (!isConnected) {
+      open();
+      return
+    }
+    await axios
+      .request({
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/report`,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        data: JSON.stringify({
+          collectionAddress: collectionAddress,
+          tokenId: tokenId,
+          message: message
+        }),
+      })
+      .then((response) => {
+        console.log(response, "%%%%");
+        if (response.data.hasOwnProperty('success')) {
+          toast.success(response.data.success.message);
+        }
+        if (response.data.hasOwnProperty('error')) {
+          toast.error(response.data.error.message);
+        }
+      })
+      .catch((error) => {
+        if(error.response.data.hasOwnProperty("error")){
+          toast.error(error.response.data.error.message);
+        }else{
+          console.log("Report error:", JSON.stringify(error));
+        }
+      });
+  };
+
+  return (
+    <>
+      <Transition appear show={isOpenModal} as={Fragment}>
+        <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-50 p-6 text-left align-middle shadow-xl transition-all dark:bg-zinc-700">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-xl font-bold text-gray-900 dark:text-white"
+                  >
+                    Report Nft
+                  </Dialog.Title>
+                  <div className="flex flex-col gap-3 bg-gray-50 pt-5 text-sm text-gray-900 dark:bg-zinc-700 dark:text-white">
+                    <p className="text-xl">
+                      Tell us why you think we should investigate these NFTs
+                      immediately?
+                    </p>
+                    <label
+                      htmlFor="message"
+                      className="block text-sm font-medium leading-6"
+                    >
+                      Message
+                    </label>
+                    <input
+                      name="message"
+                      id="message"
+                      type="text"
+                      autoComplete="message"
+                      placeholder="Tell us about the issue min 10 chars"
+                      onChange={(event) => setMessage(event.target.value)}
+                      className="block w-full rounded-md border-0 py-2 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-500 dark:bg-zinc-600 sm:text-sm sm:leading-6"
+                    />
+                    <button
+                      className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300 disabled:bg-primary-300 disabled:cursor-not-allowed"
+                      disabled={message.length<=10}
+                      onClick={sendReport}
+                    >
+                      Report
+                    </button>
+                    <button
+                      className="w-full rounded-full bg-zinc-600 px-4 py-2 text-center text-base font-bold text-white hover:bg-zinc-500"
+                      onClick={closeModal}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+    </>
+  );
+}

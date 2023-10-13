@@ -32,7 +32,8 @@ export default function Owned({
   handleOpenModalBid,
   handleOpenModalBuy,
   handleOpenModalPutonsale,
-  handleOpenModalShare
+  handleOpenModalShare,
+  handleOpenModalReport
 }) {
   const router = useRouter();
   const [sortFilter, setSortFilter] = useState(filters[0]);
@@ -83,7 +84,6 @@ export default function Owned({
 
   useEffect(() => {
     getNfts();
-    console.log(handleOpenModalShare, "@@@");
   }, [ownedPage]);
 
   const getNfts = async () => {
@@ -597,6 +597,7 @@ export default function Owned({
                       handleOpenModalBuy={handleOpenModalBuy}
                       handleOpenModalPutonsale={handleOpenModalPutonsale}
                       handleOpenModalShare={handleOpenModalShare}
+                      handleOpenModalReport={handleOpenModalReport}
                     />
                   );
                 })}

@@ -63,6 +63,7 @@ import {
 } from '@/components/activity/itemDetail';
 import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
 import { JazzIcon } from '@/components/jazzicon';
+import ModalReportNft from '@/components/modal/reportNft';
 
 export default function NFTDetails({ dataNFTs }) {
   const router = useRouter();
@@ -72,6 +73,7 @@ export default function NFTDetails({ dataNFTs }) {
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
+  const [isOpenModalReport, setisOpenModalReport] = useState(false);
 
   const [countLikes, setCountLikes] = useState(dataNFTs?.likeCount);
   const [dataRelatedNFTs, setDataRelatedNFTs] = useState([]);
@@ -82,6 +84,7 @@ export default function NFTDetails({ dataNFTs }) {
   const [buyData, setBuyData] = useState({});
   const [putOnSaleData, setPutonsaleData] = useState({});
   const [shareData, setShareData] = useState({});
+  const [reportData, setReportData] = useState({});
 
   const { data: walletClient } = useWalletClient();
 
@@ -214,6 +217,14 @@ export default function NFTDetails({ dataNFTs }) {
     setisOpenModalShare(true);
   };
 
+  const handleOpenModalReport = async (tokenId, collectionAddress) => {
+    setReportData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalReport(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
@@ -228,6 +239,10 @@ export default function NFTDetails({ dataNFTs }) {
 
   function closeModalShare() {
     setisOpenModalShare(false);
+  }
+
+  function closeModalReport() {
+    setisOpenModalReport(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -426,7 +441,13 @@ export default function NFTDetails({ dataNFTs }) {
                             Share
                           </span>
                         </button>
-                        <button className="group text-primary-500 hover:text-primary-300">
+                        <button className="group text-primary-500 hover:text-primary-300"
+                          onClick={() =>
+                            handleOpenModalReport(
+                              dataNFTs?.tokenId,
+                              dataNFTs?.collectionAddress,
+                            )
+                          }>
                           <FontAwesomeIcon icon={faFlag} />{' '}
                           <span className="2xl-text-black font-semibold text-black group-hover:text-primary-300">
                             Report
@@ -1288,6 +1309,12 @@ export default function NFTDetails({ dataNFTs }) {
         onClose={closeModalShare}
         onModalClose={closeModalShare}
         shareData={shareData}
+      />
+      <ModalReportNft
+        isOpenModal={isOpenModalReport}
+        onClose={closeModalReport}
+        onModalClose={closeModalReport}
+        reportData={reportData}
       />
     </>
   );

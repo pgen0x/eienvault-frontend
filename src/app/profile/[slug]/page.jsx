@@ -41,6 +41,7 @@ import Onsale from './onsale';
 import Sold from './sold';
 import Liked from './liked';
 import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
+import ModalReportNft from '@/components/modal/reportNft';
 
 const servers = [
   'All Mainnet',
@@ -82,11 +83,13 @@ export default function ProfilePage({ params }) {
   const [buyData, setBuyData] = useState({});
   const [putOnSaleData, setPutonsaleData] = useState({});
   const [shareData, setShareData] = useState({});
+  const [reportData, setReportData] = useState({});
 
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
+  const [isOpenModalReport, setisOpenModalReport] = useState(false);
 
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
   const [IsOpenModalLogo, setIsOpenModalLogo] = useState(false);
@@ -210,6 +213,14 @@ export default function ProfilePage({ params }) {
     setisOpenModalShare(true);
   };
 
+  const handleOpenModalReport = async (tokenId, collectionAddress) => {
+    setReportData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalReport(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
@@ -224,6 +235,10 @@ export default function ProfilePage({ params }) {
 
   function closeModalShare() {
     setisOpenModalShare(false);
+  }
+
+  function closeModalReport() {
+    setisOpenModalReport(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -324,24 +339,28 @@ export default function ProfilePage({ params }) {
           handleOpenModalBid={handleOpenModalBid}
           handleOpenModalPutonsale={handleOpenModalPutonsale}
           handleOpenModalShare={handleOpenModalShare}
+          handleOpenModalReport={handleOpenModalReport}
         />
       ),
       Onsale: (
         <Onsale
           userAccount={params?.slug ? params.slug : address}
           handleOpenModalShare={handleOpenModalShare}
+          handleOpenModalReport={handleOpenModalReport}
         />
       ),
       Sold: (
         <Sold
           userAccount={params?.slug ? params.slug : address}
           handleOpenModalShare={handleOpenModalShare}
+          handleOpenModalReport={handleOpenModalReport}
         />
       ),
       Liked: (
         <Liked
           userAccount={params?.slug ? params.slug : address}
           handleOpenModalShare={handleOpenModalShare}
+          handleOpenModalReport={handleOpenModalReport}
         />
       ),
     };
@@ -422,7 +441,7 @@ export default function ProfilePage({ params }) {
                       </button>
                     )}
                   </div>
-                  <div className="mt-3 flex w-full items-center text-xl font-semibold text-gray-900">
+                  <div className="mt-3 flex w-full items-center text-xl font-semibold text-gray-900 dark:text-white">
                     {profile.username ? (
                       <span>{profile.username}</span>
                     ) : (
@@ -438,7 +457,7 @@ export default function ProfilePage({ params }) {
                       </div>
                     )}
                   </div>
-                  <div className="mt-3 line-clamp-2 text-lg  text-gray-900">
+                  <div className="mt-3 line-clamp-2 text-lg text-gray-900 dark:text-white">
                     {profile.bio}
                   </div>
                 </div>
@@ -629,6 +648,12 @@ export default function ProfilePage({ params }) {
         onModalClose={closeModalShare}
         shareData={shareData}
       />
+      <ModalReportNft
+        isOpenModal={isOpenModalReport}
+        onClose={closeModalReport}
+        onModalClose={closeModalReport}
+        reportData={reportData}
+      />
       <ModalUploadProfileCover
         isOpenModal={IsOpenModalCover}
         onModalClose={closeModalCover}
@@ -655,10 +680,7 @@ const Collection = ({ userAccount }) => {
   const [search, setSearch] = useState(
     filterQuery.get('search') === null ? '' : filterQuery.get('search'),
   );
-  const [selectedFilter, setSelectedFilter] = useState(filters[0]);
   const [gridList, setGridList] = useState('grid');
-  const [stepCreate, setStepCreate] = useState(1);
-  const [modalCreate, setModalCreate] = useState(false);
   const { address } = useAccount();
   const { token } = useAuth();
   const [isCreateCollection, setIsCreateCollection] = useState(false);
@@ -795,10 +817,6 @@ const Collection = ({ userAccount }) => {
     setIsCreateCollection(false);
   };
 
-  const handleStepCreate = (Create) => {
-    setStepCreate(Create);
-  };
-
   return (
     <>
       <section>
@@ -808,12 +826,12 @@ const Collection = ({ userAccount }) => {
               onSubmit={(event) => handleSearch(event)}
               className="flex w-full gap-4"
             >
-              <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-gray-800">
+              <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-zinc-700">
                 <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
                   <FontAwesomeIcon icon={faSearch} />
                 </div>
                 <input
-                  className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-gray-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                   type="text"
                   placeholder="Search ..."
                   aria-label="Search"
@@ -828,7 +846,7 @@ const Collection = ({ userAccount }) => {
                 </div>
               </div>
             </form>
-            <div className="hidden space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+            <div className="hidden space-x-1 rounded-full border border-gray-200 bg-white dark:bg-zinc-700 dark:border-zinc-500 px-1 py-1 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
               <div>
                 <input
                   className="hidden"
@@ -867,7 +885,7 @@ const Collection = ({ userAccount }) => {
             <div className="grid w-full grid-cols-12 gap-6 text-gray-900">
               {address === userAccount && (
                 <div className="col-span-12 mb-4 h-[280px] w-full sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                  <div className="flex h-full w-full flex-col items-center justify-center rounded-2xl border-2 border-gray-200">
+                  <div className="flex h-full w-full flex-col items-center justify-center rounded-2xl border-2 border-gray-200 dark:border-zinc-500">
                     <button
                       className="w-fit rounded-full bg-primary-500 px-4 py-1 text-white hover:bg-primary-300"
                       onClick={handleModalCreate}
@@ -909,244 +927,6 @@ const Collection = ({ userAccount }) => {
             </div>
           </div>
         </div>
-        {modalCreate && (
-          <div
-            className="relative z-[100]"
-            aria-labelledby="modal-title"
-            role="dialog"
-            aria-modal="true"
-          >
-            <div className="fixed inset-0 bg-gray-200 bg-opacity-75 transition-opacity"></div>
-            <div className="fixed inset-0 z-10 overflow-y-auto">
-              <div className="flex min-h-full items-start justify-center p-4 text-center sm:items-center sm:p-0">
-                <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                  <div className="text-gray-900">
-                    {stepCreate == 1 && (
-                      <section className="step-1 flex flex-col gap-3 overflow-y-auto bg-gray-100 p-5">
-                        <div className="flex w-full justify-between">
-                          <h3 className="font-semibold">Create collection</h3>
-                          <button
-                            onClick={handleModalCreate}
-                            className="text-primary-500"
-                          >
-                            <FontAwesomeIcon icon={faXmark} />
-                          </button>
-                        </div>
-                        <div className="w-full">
-                          Deploying your own contract requires uploading your
-                          metadata outside of OpenSea.
-                        </div>
-                        <div className="w-full">
-                          <label className="block text-sm font-bold leading-6 text-gray-900">
-                            Upload your item
-                          </label>
-                          <div className="flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-5 text-center">
-                            <FontAwesomeIcon
-                              icon={faImage}
-                              className="text-6xl"
-                            />
-                            <div className="">
-                              400 x 400 pixel is recommended
-                            </div>
-                            <label className="cursor-pointer rounded-full bg-primary-500 px-4 py-1 font-semibold text-white">
-                              Choose file
-                              <input type="file" className="hidden" />
-                            </label>
-                          </div>
-                        </div>
-                        <div className="w-full">
-                          <label className="block text-sm font-bold leading-6 text-gray-900">
-                            Name
-                          </label>
-                          <div className="flex w-full items-center rounded-full border border-gray-200 bg-white">
-                            <input
-                              type="text"
-                              className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
-                              placeholder="Name of your collection"
-                            />
-                          </div>
-                        </div>
-                        <div className="w-full">
-                          <label className="block text-sm font-bold leading-6 text-gray-900">
-                            Token symbol
-                          </label>
-                          <span>
-                            The token symbol is shown on the block explorer when
-                            others view your smart contract. e:g : Bitcoin shown
-                            as BTC
-                          </span>
-                          <div className="flex w-full items-center rounded-full border border-gray-200 bg-white">
-                            <input
-                              type="number"
-                              className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
-                              placeholder="AAA"
-                            />
-                          </div>
-                        </div>
-                        <div className="w-full">
-                          <label className="block text-sm leading-6 text-gray-900">
-                            Blockchain
-                          </label>
-                          <Listbox
-                            disabled={stepCreate == 3 ? true : false}
-                            value={selectedBlockchain}
-                            onChange={setSelectedBlockchain}
-                          >
-                            <div className="relative z-20">
-                              <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none sm:text-sm">
-                                <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                                  <Ethereum />
-                                </span>
-                                <span className="block truncate pl-5 text-gray-600">
-                                  {selectedBlockchain}
-                                </span>
-                                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                  <svg
-                                    width="16"
-                                    height="9"
-                                    viewBox="0 0 16 9"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      d="M8 9C7.71875 9 7.46875 8.90625 7.28125 8.71875L1.28125 2.71875C0.875 2.34375 0.875 1.6875 1.28125 1.3125C1.65625 0.90625 2.3125 0.90625 2.6875 1.3125L8 6.59375L13.2812 1.3125C13.6562 0.90625 14.3125 0.90625 14.6875 1.3125C15.0938 1.6875 15.0938 2.34375 14.6875 2.71875L8.6875 8.71875C8.5 8.90625 8.25 9 8 9Z"
-                                      fill="#7D778A"
-                                    />
-                                  </svg>
-                                </span>
-                              </Listbox.Button>
-                              <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                {blockchains.map((blockchain, index) => (
-                                  <Listbox.Option
-                                    key={index}
-                                    className={({ active }) =>
-                                      `relative cursor-default select-none px-4 py-2 ${
-                                        active
-                                          ? 'bg-primary-500 text-white'
-                                          : 'text-gray-900'
-                                      }`
-                                    }
-                                    value={blockchain}
-                                  >
-                                    {({ selectedBlockchain }) => (
-                                      <>
-                                        <span
-                                          className={`block truncate ${
-                                            selectedBlockchain
-                                              ? 'font-medium'
-                                              : 'font-normal'
-                                          }`}
-                                        >
-                                          {blockchain}
-                                        </span>
-                                      </>
-                                    )}
-                                  </Listbox.Option>
-                                ))}
-                              </Listbox.Options>
-                            </div>
-                          </Listbox>
-                        </div>
-                        <button
-                          className="w-full rounded-full bg-primary-500 py-3 font-semibold text-white disabled:bg-primary-200"
-                          onClick={() => handleStepCreate(stepCreate + 1)}
-                        >
-                          Create an offer
-                        </button>
-                      </section>
-                    )}
-                    {stepCreate == 2 && (
-                      <section className="step-2 flex flex-col gap-3 bg-gray-100 p-5">
-                        <div className="flex flex-col items-center gap-5">
-                          <div className="h-12 w-12 animate-ping rounded-lg bg-primary-100"></div>
-                          <div className="text-center">
-                            <h3 className="text-lg font-bold">
-                              Deploying your contract
-                            </h3>
-                            <span>
-                              Check your wallet and do an approvement to
-                              continue deploying your contract
-                            </span>
-                          </div>
-                          <button
-                            className="w-full rounded-full bg-white py-2 font-bold text-primary-500 hover:text-primary-400"
-                            onClick={() => handleStepCreate(stepCreate - 1)}
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            className="font-bold text-primary-500 hover:text-primary-400"
-                            onClick={() => handleStepCreate(stepCreate + 1)}
-                          >
-                            Next
-                          </button>
-                        </div>
-                      </section>
-                    )}
-                    {stepCreate == 3 && (
-                      <section className="step-2 flex flex-col gap-3 bg-gray-100 p-5">
-                        <div className="flex flex-col items-center gap-5">
-                          <div className="h-12 w-12 animate-ping rounded-lg bg-primary-100"></div>
-                          <div className="text-center">
-                            <h3 className="text-lg font-bold">
-                              Your contract has been deploying
-                            </h3>
-                            <span>Wait a moment, deploying on progress.</span>
-                          </div>
-                          <button
-                            className="w-full rounded-full bg-white py-2 font-bold text-primary-500 hover:text-primary-400"
-                            onClick={() => handleStepCreate(stepCreate + 1)}
-                          >
-                            View on etherscan
-                          </button>
-                          <button
-                            className="font-bold text-primary-500 hover:text-primary-400"
-                            onClick={() => handleStepCreate(stepCreate - 1)}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </section>
-                    )}
-                    {stepCreate == 4 && (
-                      <section className="step-2 flex flex-col gap-3 bg-gray-100 p-5">
-                        <div className="flex flex-col items-center gap-5">
-                          <img
-                            src="https://fakeimg.pl/84x84"
-                            className="h-20 w-20 rounded-lg"
-                          />
-                          <div className="text-center">
-                            <h3 className="text-lg font-bold">
-                              Your collections is now created!
-                            </h3>
-                            <span>
-                              Clik the customize button to adjust your
-                              collections setting.
-                            </span>
-                          </div>
-                          <div className="justiry-between flex w-full gap-2">
-                            <button
-                              className="w-full rounded-full bg-primary-500 py-2 font-bold text-white hover:text-primary-400"
-                              onClick={handleModalCreate}
-                            >
-                              Customize
-                            </button>
-                            <button
-                              className="w-full rounded-full bg-white py-2 font-bold text-primary-500 hover:text-primary-400"
-                              onClick={handleModalCreate}
-                            >
-                              Later
-                            </button>
-                          </div>
-                        </div>
-                      </section>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </section>
       <ModalCreateCollection
         chains={chains}
@@ -1188,7 +968,7 @@ const ItemCollection = ({ collection, gridList }) => {
       )}
 
       <div className="grid grid-cols-12 p-3">
-        <div className="relative -top-[60px] z-10 col-span-12 flex gap-1 rounded-tl-2xl rounded-tr-2xl bg-white bg-opacity-50 p-2 sm:col-span-12 md:col-span-10 lg:col-span-8 xl:col-span-8 2xl:col-span-8">
+        <div className="relative -top-[60px] z-10 col-span-12 flex gap-1 rounded-tl-2xl rounded-tr-2xl bg-white dark:bg-zinc-700 dark:text-white bg-opacity-50 p-2 sm:col-span-12 md:col-span-10 lg:col-span-8 xl:col-span-8 2xl:col-span-8">
           <div className="w-fit">
             <ImageWithFallback
               src={`/uploads/collections/${collection?.logo}`}
@@ -1208,14 +988,14 @@ const ItemCollection = ({ collection, gridList }) => {
                 ? truncateAddress(collection.tokenAddress)
                 : ''}
             </h3>
-            <h3 className="text-sm font-semibold">1 Owner</h3>
+            <h3 className="text-sm font-semibold">{collection.totalOwners} Owner</h3>
           </div>
         </div>
       </div>
       <div className="relative -top-[85px] inline-flex w-full flex-col items-center justify-center lg:items-start">
         <div className="relative flex w-full flex-row px-3">
-          <div className="inline-flex w-full flex-col items-start justify-start rounded-bl-2xl rounded-br-2xl bg-gray-50 p-3 backdrop-blur-xl">
-            <div className="flex w-full flex-col justify-between rounded-md bg-gray-100 px-2 py-2 sm:flex-col md:flex-row">
+          <div className="inline-flex w-full flex-col items-start justify-start rounded-bl-2xl rounded-br-2xl bg-gray-50 dark:bg-zinc-700 dark:text-white p-3 backdrop-blur-xl">
+            <div className="flex w-full flex-col justify-between rounded-md bg-gray-100 dark:bg-zinc-600 px-2 py-2 sm:flex-col md:flex-row">
               <div className="flex shrink-0 flex-col truncate text-sm leading-5 sm:items-start">
                 <p>Total Volume</p>
                 <p className="font-bold">

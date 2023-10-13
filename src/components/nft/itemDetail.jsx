@@ -27,6 +27,7 @@ export const NftItemDetail = ({
   handleOpenModalBuy,
   handleOpenModalPutonsale,
   handleOpenModalShare,
+  handleOpenModalReport,
   isNotExpired,
   isNotRelease,
 }) => {
@@ -52,6 +53,7 @@ export const NftItemDetail = ({
             handleOpenModalBuy={handleOpenModalBuy}
             handleOpenModalPutonsale={handleOpenModalPutonsale}
             handleOpenModalShare={handleOpenModalShare}
+            handleOpenModalReport={handleOpenModalReport}
             isNotExpired={isNotExpired}
             isNotRelease={isNotRelease}
           />
@@ -66,6 +68,7 @@ export const NftItemDetail = ({
           handleOpenModalBuy={handleOpenModalBuy}
           handleOpenModalPutonsale={handleOpenModalPutonsale}
           handleOpenModalShare={handleOpenModalShare}
+          handleOpenModalReport={handleOpenModalReport}
           isNotExpired={isNotExpired}
           isNotRelease={isNotRelease}
         />
@@ -139,6 +142,7 @@ const Nft = ({
   handleOpenModalBuy,
   handleOpenModalPutonsale,
   handleOpenModalShare,
+  handleOpenModalReport,
   isNotExpired,
   isNotRelease,
 }) => {
@@ -322,7 +326,7 @@ const Nft = ({
             <div className="flex w-full flex-col items-start justify-start">
               <div className="inline-flex items-center justify-between self-stretch">
                 <div
-                  className="flex items-center justify-center gap-2 cursor-pointer rounded-lg bg-white bg-opacity-70 p-2 dark:bg-zinc-500"
+                  className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2 dark:bg-zinc-500"
                   onClick={() =>
                     router.push(`/collection/${nft.collectionAddress}`)
                   }
@@ -357,7 +361,11 @@ const Nft = ({
                 </div>
                 <Menu as="div" className="relative inline-block text-left">
                   <Menu.Button className="inline-flex w-full justify-center font-semibold text-gray-900 hover:text-primary-500">
-                    <FontAwesomeIcon icon={faEllipsis} aria-hidden="true" className="p-2" />
+                    <FontAwesomeIcon
+                      icon={faEllipsis}
+                      aria-hidden="true"
+                      className="p-2"
+                    />
                   </Menu.Button>
                   <Transition
                     as={Fragment}
@@ -415,7 +423,12 @@ const Nft = ({
                           </button>
                         </Menu.Item>
                         <Menu.Item>
-                          <button className="block w-full rounded-md px-4 py-2 text-left text-sm text-black hover:bg-gray-50 hover:text-primary-500">
+                          <button
+                            className="block w-full rounded-md px-4 py-2 text-left text-sm text-black hover:bg-gray-50 hover:text-primary-500"
+                            onClick={() =>
+                              handleOpenModalReport(nft?.tokenId, nft?.collectionAddress)
+                            }
+                          >
                             Report
                           </button>
                         </Menu.Item>

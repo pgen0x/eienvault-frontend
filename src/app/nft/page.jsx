@@ -41,6 +41,7 @@ import ModalBid from '@/components/modal/bid';
 import ModalBuy from '@/components/modal/buy';
 import ModalPutOnSale from '@/components/modal/putOnSale';
 import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
+import ModalReportNft from '@/components/modal/reportNft';
 
 const servers = [
   'All Mainnet',
@@ -92,11 +93,13 @@ export default function NftPage() {
   const [buyData, setBuyData] = useState({});
   const [putOnSaleData, setPutonsaleData] = useState({});
   const [shareData, setShareData] = useState({});
+  const [reportData, setReportData] = useState({});
 
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
+  const [isOpenModalReport, setisOpenModalReport] = useState(false);
 
   const handleFilterCollapse = (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
@@ -303,6 +306,14 @@ export default function NftPage() {
     setisOpenModalShare(true);
   };
 
+  const handleOpenModalReport = async (tokenId, collectionAddress) => {
+    setReportData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalReport(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
@@ -317,6 +328,10 @@ export default function NftPage() {
 
   function closeModalShare() {
     setisOpenModalShare(false);
+  }
+
+  function closeModalReport() {
+    setisOpenModalReport(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -611,6 +626,7 @@ export default function NftPage() {
                         handleOpenModalBid={handleOpenModalBid}
                         handleOpenModalPutonsale={handleOpenModalPutonsale}
                         handleOpenModalShare={handleOpenModalShare}
+                        handleOpenModalReport={handleOpenModalReport}
                       />
                     );
                   })}
@@ -644,6 +660,12 @@ export default function NftPage() {
         onClose={closeModalShare}
         onModalClose={closeModalShare}
         shareData={shareData}
+      />
+      <ModalReportNft
+        isOpenModal={isOpenModalReport}
+        onClose={closeModalReport}
+        onModalClose={closeModalReport}
+        reportData={reportData}
       />
       <Footer />
     </>

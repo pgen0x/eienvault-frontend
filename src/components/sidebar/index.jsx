@@ -104,7 +104,7 @@ const Sidebar = () => {
   const handleSetting = () => {
     closeSidebar();
     router.push('/profile/setting');
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -200,12 +200,12 @@ const Sidebar = () => {
                 >
                   My Bid and Listings
                 </div>
-                <div
+                {/* <div
                   className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500"
                   onClick={() => handleMyActivity()}
                 >
                   My activity
-                </div>
+                </div> */}
                 <div className="flex h-full flex-col items-start justify-start gap-2 self-stretch">
                   <div
                     className="inline-flex cursor-pointer items-center justify-start gap-3 self-stretch"
@@ -250,9 +250,7 @@ const Sidebar = () => {
                   )}
                 </div>
                 <div className="self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500">
-                  <button onClick={() => handleSetting()}>
-                    Setting
-                  </button>
+                  <button onClick={() => handleSetting()}>Setting</button>
                 </div>
               </div>
             </div>

@@ -273,6 +273,7 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                           : `Welcome to our ${auction.collectionData.name} collection! Explore a world of digital art and assets that represent unique and exclusive tokens on the blockchain. You'll find something special in our collection. Each NFT is a one-of-a-kind piece, verified and secured on the blockchain, making it a valuable addition to your digital asset portfolio. Join us on this journey of innovation and creativity in the world of non-fungible tokens. Start collecting, trading, and owning a piece of the digital future with our NFTs!`}
                       </div>
                     </div>
+                    {isNotRelease ? <div className="h-[35px]" /> : (
                     <div className="inline-flex items-center justify-start gap-4 self-stretch">
                       <div className="inline-flex shrink grow basis-0 flex-col items-start justify-center gap-2">
                         <div className="flex flex-col self-stretch text-sm font-normal leading-tight text-neutral-700 dark:text-white">
@@ -299,6 +300,7 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                         </div>
                       </div>
                     </div>
+                    )}
                     <button
                       className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300 disabled:bg-primary-300"
                       onClick={() =>

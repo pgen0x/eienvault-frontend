@@ -874,9 +874,9 @@ const Items = ({ params, collection }) => {
       // Sort the NFTs by price low to high
       const sortedNfts = [...nftsWithItemDetails].sort((a, b) => {
         // Convert price from wei to integer
-        const priceA = formatEther(Number(a.itemDetails?.price)) || 0;
-        const priceB = formatEther(Number(b.itemDetails?.price)) || 0;
-        return priceA - priceB; // Sort low to high
+        const priceA = formatEther(a.itemDetails?.price) || 0;
+        const priceB = formatEther(b.itemDetails?.price) || 0;
+        return Number(priceA) - Number(priceB); // Sort low to high
       });
       return sortedNfts;
     } else if (sortFilter === 'Price high to low') {
@@ -994,8 +994,6 @@ const Items = ({ params, collection }) => {
     }
   }, [filterStatus, nfts]);
 
-  console.log(filterStatus, 'filterStatus');
-
   const priceFilterNFTs = () => {
     if (priceFilter.start !== '' || priceFilter.end !== '') {
       const filteredNFTs = nfts.filter((nft) => {
@@ -1052,6 +1050,15 @@ const Items = ({ params, collection }) => {
       setSortedNFTs(nfts);
     }
   }, [selectedValues]);
+
+  const refreshData = async () => {
+    console.log('Trigger refreshData');
+    setNfts([]);
+    setNftPage(1);
+    setNftLast(false);
+    setIsLoading(true);
+    await getNfts();
+  };
 
   return (
     <>
@@ -1381,7 +1388,7 @@ const Items = ({ params, collection }) => {
                   No results found
                 </div>
               )}
-              {sortedNFTs.length === 0 && isLoading && (
+              {isLoading && (
                 <>
                   {[...Array(4)].map((nft, index) => (
                     <NftItemDetailSkeleton
@@ -1393,6 +1400,7 @@ const Items = ({ params, collection }) => {
                 </>
               )}
               {sortedNFTs.length > 0 &&
+                !isLoading &&
                 sortedNFTs.map((nft, index) => {
                   const currentDate = moment();
                   const endDate = moment.unix(nft?.itemDetails?.endDate);
@@ -1443,6 +1451,7 @@ const Items = ({ params, collection }) => {
         onClose={closeModalPutonsale}
         onModalClose={closeModalPutonsale}
         putonsaledata={putOnSaleData}
+        refreshData={refreshData}
       />
       <ModalShareSocialMedia
         isOpenModal={isOpenModalShare}

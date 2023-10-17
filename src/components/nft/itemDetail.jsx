@@ -360,7 +360,7 @@ const Nft = ({
                   </div>
                 </div>
                 <Menu as="div" className="relative inline-block text-left">
-                  <Menu.Button className="inline-flex w-full justify-center font-semibold text-gray-900 dark:text-white hover:text-primary-500">
+                  <Menu.Button className="inline-flex w-full justify-center font-semibold text-gray-900 hover:text-primary-500 dark:text-white">
                     <FontAwesomeIcon
                       icon={faEllipsis}
                       aria-hidden="true"
@@ -426,7 +426,10 @@ const Nft = ({
                           <button
                             className="block w-full rounded-md px-4 py-2 text-left text-sm text-black hover:bg-gray-50 hover:text-primary-500"
                             onClick={() =>
-                              handleOpenModalReport(nft?.tokenId, nft?.collectionAddress)
+                              handleOpenModalReport(
+                                nft?.tokenId,
+                                nft?.collectionAddress,
+                              )
                             }
                           >
                             Report
@@ -456,7 +459,7 @@ const Nft = ({
                   <p>Price</p>
                   <p className="font-bold">
                     {itemDetails?.price
-                      ? formatEther(Number(itemDetails?.price))
+                      ? formatEther(itemDetails?.price)
                       : '0.00'}{' '}
                     {collection?.Chain?.symbol ? collection.Chain.symbol : '-'}
                   </p>

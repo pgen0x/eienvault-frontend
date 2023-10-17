@@ -35,6 +35,7 @@ export default function ModalPutOnSale({
   onClose,
   putonsaledata,
   onModalClose,
+  refreshData,
 }) {
   const { address, isConnected } = useAccount();
   const [isSubmit, setIsSubmit] = useState(false);
@@ -63,6 +64,7 @@ export default function ModalPutOnSale({
   const [approveHash, setApproveHash] = useState();
   const [putOnSaleHash, setPutOnSaleHash] = useState();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isCompletedHash, setIsCompletedHash] = useState(false);
 
   useEffect(() => {
     // Calculate the date 1 day from now using Moment.js
@@ -322,7 +324,7 @@ export default function ModalPutOnSale({
         if (isErrorApp) {
           setErrorApprove({
             isError: true,
-            message: isError,
+            message: isErrorApp,
           });
         }
 
@@ -356,18 +358,48 @@ export default function ModalPutOnSale({
         }
 
         if (dataPutonsale) {
+          await onSave();
           setIsLoadingModal({
             approve: false,
             putonsale: false,
           });
-          // await onSave();
+          setIsCompletedHash(true);
           setIsProcessing(false);
+          refreshData();
         }
       }
     };
 
     fetchData();
   }, [putOnSaleHash, dataPutonsale, isErrorPutsale, isLoadingPutonsale]);
+
+  const onSave = async () => {
+    try {
+      const options = {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json', // Set the content type to JSON
+        },
+      };
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/market/updatemarketevent`,
+        options,
+      );
+
+      if (response.ok) {
+        // Data was saved successfully
+        console.log('Data saved successfully.');
+      } else {
+        // Handle the error here
+        console.error('Data saved failed:', response.statusText);
+      }
+    } catch (error) {
+      // Handle any unexpected errors
+      console.error('Error during data save:', error);
+    }
+  };
 
   return (
     <>
@@ -737,10 +769,15 @@ export default function ModalPutOnSale({
                             icon={faCircleXmark}
                             className="h-7 w-7 text-primary-500"
                           />
+                        ) : isCompletedHash ? (
+                          <FontAwesomeIcon
+                            icon={faCheckCircle}
+                            className="h-7 w-7 text-green-400"
+                          />
                         ) : (
                           <FontAwesomeIcon
                             icon={faCheckCircle}
-                            className="h-7 w-7 text-green-500"
+                            className="h-7 w-7 text-gray-400"
                           />
                         )}
                       </div>

@@ -42,6 +42,8 @@ import ModalBuy from '@/components/modal/buy';
 import ModalPutOnSale from '@/components/modal/putOnSale';
 import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
 import ModalReportNft from '@/components/modal/reportNft';
+import { useAccount, useWalletClient } from 'wagmi';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 
 const servers = [
   'All Mainnet',
@@ -70,6 +72,7 @@ const filters = [
 
 export default function NftPage() {
   const router = useRouter();
+  const { address } = useAccount();
   const filterQuery = useSearchParams();
   const [filterCollapse, setFilterCollapse] = useState({
     blockchain: false,
@@ -100,6 +103,8 @@ export default function NftPage() {
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
   const [isOpenModalReport, setisOpenModalReport] = useState(false);
+
+  const { data: walletClient } = useWalletClient();
 
   const handleFilterCollapse = (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
@@ -366,6 +371,15 @@ export default function NftPage() {
     }
   };
 
+  const refreshData = async () => {
+    console.log('Trigger refreshData');
+    setNfts([]);
+    setNftPage(1);
+    setNftLast(false);
+    setIsLoading(true);
+    await getNfts();
+  };
+
   return (
     <>
       <div className="container m-auto p-3">
@@ -611,7 +625,9 @@ export default function NftPage() {
                   nfts.map((nft, index) => {
                     const currentDate = moment();
                     const endDate = moment.unix(nft.itemDetails?.endDate);
-                    const releaseDate = moment.unix(nft.itemDetails?.releaseDate);
+                    const releaseDate = moment.unix(
+                      nft.itemDetails?.releaseDate,
+                    );
                     const isNotExpired = endDate.isAfter(currentDate);
                     const isNotRelease = currentDate.isBefore(releaseDate);
                     return (
@@ -656,6 +672,7 @@ export default function NftPage() {
         onClose={closeModalPutonsale}
         onModalClose={closeModalPutonsale}
         putonsaledata={putOnSaleData}
+        refreshData={refreshData}
       />
       <ModalShareSocialMedia
         isOpenModal={isOpenModalShare}

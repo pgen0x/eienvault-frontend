@@ -1,3 +1,6 @@
+import ModalBid from '@/components/modal/bid';
+import ModalBuy from '@/components/modal/buy';
+import ModalPutOnSale from '@/components/modal/putOnSale';
 import {
   NftItemDetail,
   NftItemDetailSkeleton,
@@ -15,9 +18,11 @@ import axios from 'axios';
 import moment from 'moment';
 import { useRouter } from 'next-nprogress-bar';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { formatEther } from 'viem';
+import { useAccount, useWalletClient } from 'wagmi';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 
 const filters = [
   'All',
@@ -29,13 +34,11 @@ const filters = [
 
 export default function Owned({
   userAccount,
-  handleOpenModalBid,
-  handleOpenModalBuy,
-  handleOpenModalPutonsale,
   handleOpenModalShare,
-  handleOpenModalReport
+  handleOpenModalReport,
 }) {
   const router = useRouter();
+  const { address } = useAccount();
   const [sortFilter, setSortFilter] = useState(filters[0]);
   const [isLoading, setIsLoading] = useState(false);
   const [nfts, setNfts] = useState([]);
@@ -58,6 +61,15 @@ export default function Owned({
   const [startPrice, setStartPrice] = useState('');
   const [endPrice, setEndPrice] = useState('');
   const [priceFilter, setPriceFilter] = useState({ start: '', end: '' });
+
+  const [auctionData, setAcutionData] = useState({});
+  const [buyData, setBuyData] = useState({});
+  const [putOnSaleData, setPutonsaleData] = useState({});
+  const [isOpenModalBid, setisOpenModalBid] = useState(false);
+  const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
+  const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
+
+  const { data: walletClient } = useWalletClient();
 
   const handleFilterCollapse = async (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
@@ -313,6 +325,113 @@ export default function Owned({
     setPriceFilter({ start, end });
   };
 
+  const handleOpenModalBuy = async (
+    marketId,
+    price,
+    imageUri,
+    name,
+    tokenId,
+    collectionAddress,
+    ChainSymbol,
+    ChainName,
+  ) => {
+    setBuyData({
+      marketId,
+      price,
+      imageUri,
+      name,
+      tokenId,
+      collectionAddress,
+      ChainSymbol,
+      ChainName,
+    });
+    setisOpenModalBuy(true);
+  };
+
+  const handleOpenModalBid = async (
+    marketId,
+    listingPrice,
+    imageUri,
+    tokenId,
+    price,
+    name,
+    collectionData,
+    highestBid,
+    lowestBid,
+  ) => {
+    setAcutionData({
+      marketId,
+      listingPrice,
+      imageUri,
+      tokenId,
+      price,
+      name,
+      collectionData,
+      highestBid,
+      lowestBid,
+    });
+    setisOpenModalBid(true);
+  };
+
+  const handleOpenModalPutonsale = async (tokenId, collectionAddress) => {
+    setPutonsaleData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalPutonsale(true);
+  };
+
+  function closeModalBid() {
+    setisOpenModalBid(false);
+  }
+
+  function closeModalBuy() {
+    setisOpenModalBuy(false);
+  }
+
+  function closeModalPutonsale() {
+    setisOpenModalPutonsale(false);
+  }
+
+  const placeBid = async (marketId, price) => {
+    try {
+      const hash = await walletClient.writeContract({
+        ...marketplaceABI,
+        functionName: 'makeAnOfferNative',
+        args: [marketId, price],
+        account: address,
+        value: price,
+      });
+      return hash;
+    } catch (error) {
+      console.error('Error Make an Offer', error);
+    }
+  };
+
+  const buyAction = async (marketId, price) => {
+    try {
+      const hash = await walletClient.writeContract({
+        ...marketplaceABI,
+        functionName: 'makeAnOfferNative',
+        args: [marketId, price],
+        account: address,
+        value: price,
+      });
+      return hash;
+    } catch (error) {
+      console.error('Error Make an Offer', error);
+    }
+  };
+
+  const refreshData = async () => {
+    console.log('Trigger refreshData');
+    setNfts([]);
+    setOWnedPage(1);
+    setNftLast(false);
+    setIsLoading(true);
+    await getNfts();
+  };
+
   return (
     <>
       <section>
@@ -564,7 +683,7 @@ export default function Owned({
                   NFT not found
                 </div>
               )}
-              {sortedNFTs.length == 0 && isLoading && (
+              {isLoading && (
                 <>
                   {[...Array(12)].map((nft, index) => (
                     <NftItemDetailSkeleton
@@ -576,6 +695,7 @@ export default function Owned({
                 </>
               )}
               {sortedNFTs.length > 0 &&
+                !isLoading &&
                 sortedNFTs.map((nft, index) => {
                   const currentDate = moment();
                   const endDate = moment.unix(nft.itemDetails?.endDate);
@@ -605,6 +725,27 @@ export default function Owned({
           </div>
         </div>
       </section>
+      <ModalBid
+        isOpenModal={isOpenModalBid}
+        onClose={closeModalBid}
+        auction={auctionData}
+        placeBid={placeBid}
+        onModalClose={closeModalBid}
+      />
+      <ModalBuy
+        isOpenModal={isOpenModalBuy}
+        onClose={closeModalBuy}
+        dataBuy={buyData}
+        buyAction={buyAction}
+        onModalClose={closeModalBuy}
+      />
+      <ModalPutOnSale
+        isOpenModal={isOpenModalPutonsale}
+        onClose={closeModalPutonsale}
+        onModalClose={closeModalPutonsale}
+        putonsaledata={putOnSaleData}
+        refreshData={refreshData}
+      />
     </>
   );
 }

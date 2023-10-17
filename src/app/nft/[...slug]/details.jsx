@@ -336,7 +336,7 @@ export default function NFTDetails({ dataNFTs }) {
     const getRelatedNFTs = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/market/items?limit=10`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/market/itemsbycollection/${dataNFTs?.collectionAddress}`,
           {
             cache: 'no-store',
             headers: {
@@ -372,6 +372,10 @@ export default function NFTDetails({ dataNFTs }) {
 
   const handleSeeAllClick = (tab) => {
     setActiveTab(tab);
+  };
+
+  const refreshData = async () => {
+    router.refresh();
   };
 
   return (
@@ -1330,6 +1334,7 @@ export default function NFTDetails({ dataNFTs }) {
         onClose={closeModalPutonsale}
         onModalClose={closeModalPutonsale}
         putonsaledata={putOnSaleData}
+        refreshData={refreshData}
       />
       <ModalShareSocialMedia
         isOpenModal={isOpenModalShare}
@@ -1427,29 +1432,20 @@ const Overview = ({ dataOverview, onSeeAllClick }) => {
                   <div className="inline-flex h-14 w-full items-center justify-center">
                     <div className="text-md inline-flex shrink grow basis-0 flex-row gap-3 font-medium leading-loose">
                       <div className="h-8 w-8 rounded-full bg-gray-300">
-                        {offer?.userDetails?.logo ? (
-                          <ImageWithFallback
-                            className="h-full w-full rounded-2xl "
-                            width={32}
-                            height={32}
-                            alt={
-                              offer?.userDetails?.username ||
-                              truncateAddress4char(
-                                offer?.userDetails?.walletAddress,
-                              )
-                            }
-                            diameter={32}
-                            address={offer?.userDetails?.walletAddress}
-                            src={`/uploads/users/${offer?.userDetails?.logo}`}
-                          />
-                        ) : (
-                          <JazzIcon
-                            diameter={32}
-                            seed={dataNFTs?.User?.walletAddress}
-                            useGradientFallback={true}
-                            className="h-[32px] w-[32px] rounded-full"
-                          />
-                        )}
+                        <ImageWithFallback
+                          className="h-full w-full rounded-2xl "
+                          width={32}
+                          height={32}
+                          alt={
+                            offer?.userDetails?.username ||
+                            truncateAddress4char(
+                              offer?.userDetails?.walletAddress,
+                            )
+                          }
+                          diameter={32}
+                          address={offer?.userDetails?.walletAddress}
+                          src={`/uploads/users/${offer?.userDetails?.logo}`}
+                        />
                       </div>
                       <div className="inline-flex cursor-pointer items-center justify-center">
                         {offer?.userDetails?.username ||

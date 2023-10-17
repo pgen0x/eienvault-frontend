@@ -80,15 +80,10 @@ export default function ProfilePage({ params }) {
   const [activePage, setActivePage] = useState('Collections');
   const [renderPage, setRenderPage] = useState();
   const [profile, setProfile] = useState({});
-  const [auctionData, setAcutionData] = useState({});
-  const [buyData, setBuyData] = useState({});
-  const [putOnSaleData, setPutonsaleData] = useState({});
+
   const [shareData, setShareData] = useState({});
   const [reportData, setReportData] = useState({});
 
-  const [isOpenModalBid, setisOpenModalBid] = useState(false);
-  const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
-  const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
   const [isOpenModalReport, setisOpenModalReport] = useState(false);
 
@@ -110,7 +105,7 @@ export default function ProfilePage({ params }) {
 
   useEffect(() => {
     getProfile(token);
-  }, []);
+  }, [token]);
 
   const getProfile = async () => {
     await axios
@@ -151,62 +146,6 @@ export default function ProfilePage({ params }) {
     return <NotFound />;
   }
 
-  const handleOpenModalBuy = async (
-    marketId,
-    price,
-    imageUri,
-    name,
-    tokenId,
-    collectionAddress,
-    ChainSymbol,
-    ChainName,
-  ) => {
-    setBuyData({
-      marketId,
-      price,
-      imageUri,
-      name,
-      tokenId,
-      collectionAddress,
-      ChainSymbol,
-      ChainName,
-    });
-    setisOpenModalBuy(true);
-  };
-
-  const handleOpenModalBid = async (
-    marketId,
-    listingPrice,
-    imageUri,
-    tokenId,
-    price,
-    name,
-    collectionData,
-    highestBid,
-    lowestBid,
-  ) => {
-    setAcutionData({
-      marketId,
-      listingPrice,
-      imageUri,
-      tokenId,
-      price,
-      name,
-      collectionData,
-      highestBid,
-      lowestBid,
-    });
-    setisOpenModalBid(true);
-  };
-
-  const handleOpenModalPutonsale = async (tokenId, collectionAddress) => {
-    setPutonsaleData({
-      tokenId,
-      collectionAddress,
-    });
-    setisOpenModalPutonsale(true);
-  };
-
   const handleOpenModalShare = async (tokenId, collectionAddress) => {
     setShareData({
       tokenId,
@@ -223,18 +162,6 @@ export default function ProfilePage({ params }) {
     setisOpenModalReport(true);
   };
 
-  function closeModalBid() {
-    setisOpenModalBid(false);
-  }
-
-  function closeModalBuy() {
-    setisOpenModalBuy(false);
-  }
-
-  function closeModalPutonsale() {
-    setisOpenModalPutonsale(false);
-  }
-
   function closeModalShare() {
     setisOpenModalShare(false);
   }
@@ -242,36 +169,6 @@ export default function ProfilePage({ params }) {
   function closeModalReport() {
     setisOpenModalReport(false);
   }
-
-  const placeBid = async (marketId, price) => {
-    try {
-      const hash = await walletClient.writeContract({
-        ...marketplaceABI,
-        functionName: 'makeAnOfferNative',
-        args: [marketId, price],
-        account: address,
-        value: price,
-      });
-      return hash;
-    } catch (error) {
-      console.error('Error Make an Offer', error);
-    }
-  };
-
-  const buyAction = async (marketId, price) => {
-    try {
-      const hash = await walletClient.writeContract({
-        ...marketplaceABI,
-        functionName: 'makeAnOfferNative',
-        args: [marketId, price],
-        account: address,
-        value: price,
-      });
-      return hash;
-    } catch (error) {
-      console.error('Error Make an Offer', error);
-    }
-  };
 
   const listCollections = [
     {
@@ -281,9 +178,6 @@ export default function ProfilePage({ params }) {
       page: (
         <Owned
           userAccount={params?.slug ? params.slug : address}
-          handleOpenModalBuy={handleOpenModalBuy}
-          handleOpenModalBid={handleOpenModalBid}
-          handleOpenModalPutonsale={handleOpenModalPutonsale}
           handleOpenModalShare={handleOpenModalShare}
         />
       ),
@@ -337,9 +231,6 @@ export default function ProfilePage({ params }) {
       Owned: (
         <Owned
           userAccount={params?.slug ? params.slug : address}
-          handleOpenModalBuy={handleOpenModalBuy}
-          handleOpenModalBid={handleOpenModalBid}
-          handleOpenModalPutonsale={handleOpenModalPutonsale}
           handleOpenModalShare={handleOpenModalShare}
           handleOpenModalReport={handleOpenModalReport}
         />
@@ -633,26 +524,7 @@ export default function ProfilePage({ params }) {
         </section>
         {renderActiveTab()}
       </div>
-      <ModalBid
-        isOpenModal={isOpenModalBid}
-        onClose={closeModalBid}
-        auction={auctionData}
-        placeBid={placeBid}
-        onModalClose={closeModalBid}
-      />
-      <ModalBuy
-        isOpenModal={isOpenModalBuy}
-        onClose={closeModalBuy}
-        dataBuy={buyData}
-        buyAction={buyAction}
-        onModalClose={closeModalBuy}
-      />
-      <ModalPutOnSale
-        isOpenModal={isOpenModalPutonsale}
-        onClose={closeModalPutonsale}
-        onModalClose={closeModalPutonsale}
-        putonsaledata={putOnSaleData}
-      />
+
       <ModalShareSocialMedia
         isOpenModal={isOpenModalShare}
         onClose={closeModalShare}

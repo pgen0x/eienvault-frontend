@@ -56,16 +56,19 @@ export default function Home() {
   const { token } = useAuth();
   const { address } = useAccount();
 
+  const [dataUsers, setDataUsers] = useState([]);
   const [dataActivities, setDataActivities] = useState([]);
   const [dataCollections, setDataCollections] = useState([]);
   const [dataUpcoming, setDataUpcoming] = useState([]);
   const [dataDiscover, setDataDiscover] = useState([]);
 
+  const [errorUsers, setErrorUsers] = useState(false);
   const [errorCollections, setErrorCollections] = useState(false);
   const [errorActivities, setErrorActivities] = useState(false);
   const [errorUpcoming, setErrorUpcoming] = useState(false);
   const [errorDiscover, setErrorDiscover] = useState(false);
 
+  const [isLoadingUsers, setIsLoadingUsers] = useState(true);
   const [isLoadingCollections, setIsLoadingCollections] = useState(true);
   const [isLoadingActivities, setIsLoadingActivities] = useState(true);
   const [isLoadingUpcoming, setIsLoadingUpcoming] = useState(true);
@@ -196,10 +199,40 @@ export default function Home() {
       }
     };
 
+    const getUsers = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/user/getusers?limit=10`,
+          {
+            cache: 'no-store',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+
+        if (!res.ok) {
+          setErrorUsers(true);
+          console.error('Fetch failed:', res);
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await res.json();
+        setDataUsers(responseData.users);
+      } catch (error) {
+        setErrorUsers(true);
+        console.error('Fetch failed:', error);
+      } finally {
+        setIsLoadingUsers(false);
+        setErrorUsers(false);
+      }
+    };
+
     getNfts();
     getCollections();
     getUpcoming();
     getDiscover();
+    getUsers();
   }, [token, address]);
 
   if (!isMounted) {
@@ -433,8 +466,8 @@ export default function Home() {
             {/* <BgSubscribe className="relative w-full max-h-[30rem] object-cover" /> */}
           </div>
         </section>
-        {/* <section>
-          <div className="w-full bg-gray-100 text-black">
+        <section>
+          <div className="w-full bg-gray-100 text-black dark:bg-zinc-800 dark:text-white">
             <div className="container mx-auto px-4 py-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold">Trending creator</h2>
@@ -443,12 +476,15 @@ export default function Home() {
                 </a>
               </div>
               <div className="relative my-5 flex w-full flex-initial items-center justify-center gap-5">
-                <SlideshowCreator />
-                <SlideshowCreatorSkeleton />
+                {isLoadingUsers || dataUsers.length <= 0 ? (
+                  <SlideshowCreatorSkeleton />
+                ) : (
+                  <SlideshowCreator dataUsers={dataUsers} />
+                )}
               </div>
             </div>
           </div>
-        </section> */}
+        </section>
         <section>
           <div className="h-auto w-full bg-gray-100 pb-10 text-black dark:bg-zinc-800 dark:text-white">
             <div className="container mx-auto px-20 pb-5">

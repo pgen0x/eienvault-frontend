@@ -110,7 +110,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
                 )}
               </div>
               <div className="line-clamp-2 h-12 w-full font-semibold text-zinc-500 dark:text-white">
-                {user?.bio ? user.bio : <>-</>}
+                {user?.bio ? user.bio : <>Feel free to browse my gallery, engage in discussions, and connect with me about your artistic endeavors. I'm always eager to collaborate and discuss the endless possibilities that lie at the intersection of art and design.</>}
               </div>
             </div>
             <div className="flex w-full items-center justify-around divide-x text-center">

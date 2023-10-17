@@ -74,160 +74,160 @@ export default function Home() {
   const [isLoadingUpcoming, setIsLoadingUpcoming] = useState(true);
   const [isLoadingDiscover, setIsLoadingDiscover] = useState(true);
 
-  useEffect(() => {
-    const getCollections = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/collection/get`,
-          {
-            cache: 'no-store',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+  const getCollections = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/collection/get`,
+        {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+        },
+      );
 
-        if (!res.ok) {
-          setErrorCollections(true);
-          console.error('Fetch failed:', res);
-          throw new Error('Network response was not ok');
-        }
-
-        const responseData = await res.json();
-        setDataCollections(responseData.collections);
-      } catch (error) {
+      if (!res.ok) {
         setErrorCollections(true);
-        console.error('Fetch failed:', error);
-      } finally {
-        setIsLoadingCollections(false);
-        setErrorCollections(false);
+        console.error('Fetch failed:', res);
+        throw new Error('Network response was not ok');
       }
-    };
 
-    const getNfts = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/market/items?limit=10`,
-          {
-            cache: 'no-store',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+      const responseData = await res.json();
+      setDataCollections(responseData.collections);
+    } catch (error) {
+      setErrorCollections(true);
+      console.error('Fetch failed:', error);
+    } finally {
+      setIsLoadingCollections(false);
+      setErrorCollections(false);
+    }
+  };
+
+  const getNfts = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/market/items?limit=10`,
+        {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+        },
+      );
 
-        if (!res.ok) {
-          setErrorActivities(true);
-          console.error('Fetch failed:', res);
-          throw new Error('Network response was not ok');
-        }
-
-        const responseData = await res.json();
-        setDataActivities(responseData);
-      } catch (error) {
+      if (!res.ok) {
         setErrorActivities(true);
-        console.error('Fetch failed:', error);
-      } finally {
-        setIsLoadingActivities(false);
-        setErrorActivities(false);
+        console.error('Fetch failed:', res);
+        throw new Error('Network response was not ok');
       }
-    };
 
-    const getUpcoming = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/market/marketauction?limit=5`,
-          {
-            cache: 'no-store',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+      const responseData = await res.json();
+      setDataActivities(responseData);
+    } catch (error) {
+      setErrorActivities(true);
+      console.error('Fetch failed:', error);
+    } finally {
+      setIsLoadingActivities(false);
+      setErrorActivities(false);
+    }
+  };
+
+  const getUpcoming = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/market/marketauction?limit=5`,
+        {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+        },
+      );
 
-        if (!res.ok) {
-          setErrorUpcoming(true);
-          console.error('Fetch failed:', res);
-          throw new Error('Network response was not ok');
-        }
-
-        const responseData = await res.json();
-        const filteredData = responseData.filter((nft) => {
-          const releaseDate = parseInt(nft.releaseDate);
-          const currentTime = Math.floor(Date.now() / 1000); // Convert current time to seconds
-
-          return releaseDate > currentTime;
-        });
-        setDataUpcoming(filteredData);
-      } catch (error) {
+      if (!res.ok) {
         setErrorUpcoming(true);
-        console.error('Fetch failed:', error);
-      } finally {
-        setIsLoadingUpcoming(false);
-        setErrorUpcoming(false);
+        console.error('Fetch failed:', res);
+        throw new Error('Network response was not ok');
       }
-    };
 
-    const getDiscover = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getdiscover?limit=5`,
-          {
-            cache: 'no-store',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+      const responseData = await res.json();
+      const filteredData = responseData.filter((nft) => {
+        const releaseDate = parseInt(nft.releaseDate);
+        const currentTime = Math.floor(Date.now() / 1000); // Convert current time to seconds
+
+        return releaseDate > currentTime;
+      });
+      setDataUpcoming(filteredData);
+    } catch (error) {
+      setErrorUpcoming(true);
+      console.error('Fetch failed:', error);
+    } finally {
+      setIsLoadingUpcoming(false);
+      setErrorUpcoming(false);
+    }
+  };
+
+  const getDiscover = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getdiscover?limit=5`,
+        {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+        },
+      );
 
-        if (!res.ok) {
-          setIsLoadingDiscover(true);
-          console.error('Fetch failed:', res);
-          throw new Error('Network response was not ok');
-        }
-
-        const responseData = await res.json();
-        const nft = responseData.nfts;
-        const filteredData = nft.filter((item) => item.itemDetails);
-        setDataDiscover(filteredData);
-      } catch (error) {
-        setErrorDiscover(true);
-        console.error('Fetch failed:', error);
-      } finally {
-        setIsLoadingDiscover(false);
-        setErrorDiscover(false);
+      if (!res.ok) {
+        setIsLoadingDiscover(true);
+        console.error('Fetch failed:', res);
+        throw new Error('Network response was not ok');
       }
-    };
 
-    const getUsers = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/user/getusers?limit=10`,
-          {
-            cache: 'no-store',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+      const responseData = await res.json();
+      const nft = responseData.nfts;
+      const filteredData = nft.filter((item) => item.itemDetails);
+      setDataDiscover(filteredData);
+    } catch (error) {
+      setErrorDiscover(true);
+      console.error('Fetch failed:', error);
+    } finally {
+      setIsLoadingDiscover(false);
+      setErrorDiscover(false);
+    }
+  };
+
+  const getUsers = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/getusers?limit=10`,
+        {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+        },
+      );
 
-        if (!res.ok) {
-          setErrorUsers(true);
-          console.error('Fetch failed:', res);
-          throw new Error('Network response was not ok');
-        }
-
-        const responseData = await res.json();
-        setDataUsers(responseData.users);
-      } catch (error) {
+      if (!res.ok) {
         setErrorUsers(true);
-        console.error('Fetch failed:', error);
-      } finally {
-        setIsLoadingUsers(false);
-        setErrorUsers(false);
+        console.error('Fetch failed:', res);
+        throw new Error('Network response was not ok');
       }
-    };
 
+      const responseData = await res.json();
+      setDataUsers(responseData.users);
+    } catch (error) {
+      setErrorUsers(true);
+      console.error('Fetch failed:', error);
+    } finally {
+      setIsLoadingUsers(false);
+      setErrorUsers(false);
+    }
+  };
+
+  useEffect(() => {
     getNfts();
     getCollections();
     getUpcoming();
@@ -238,6 +238,20 @@ export default function Home() {
   if (!isMounted) {
     return null;
   }
+
+  const refreshDataActivities = async () => {
+    console.log('Trigger refreshDataActivities');
+    setIsLoadingActivities(true);
+    setDataDiscover([]);
+    await getNfts();
+  };
+
+  const refreshDataDiscover = async () => {
+    console.log('Trigger refreshDataDiscover');
+    setIsLoadingDiscover(true);
+    setDataActivities([]);
+    await getDiscover();
+  };
 
   return (
     <>
@@ -336,7 +350,10 @@ export default function Home() {
                 {isLoadingDiscover || dataDiscover.length <= 0 ? (
                   <SlideshowDiscoverSkeleton />
                 ) : (
-                  <SlideshowDiscover dataDiscover={dataDiscover} />
+                  <SlideshowDiscover
+                    dataDiscover={dataDiscover}
+                    refreshDataDiscover={refreshDataDiscover}
+                  />
                 )}
               </div>
             </div>
@@ -372,7 +389,11 @@ export default function Home() {
                 {isLoadingActivities || dataActivities.length <= 0 ? (
                   <SlideshowActivitiesSkeleton />
                 ) : (
-                  <SlideshowActivities dataActivities={dataActivities} isLoadingActivities={isLoadingActivities} />
+                  <SlideshowActivities
+                    dataActivities={dataActivities}
+                    isLoadingActivities={isLoadingActivities}
+                    refreshData={refreshDataActivities}
+                  />
                 )}
               </div>
             </div>

@@ -69,7 +69,7 @@ const sliderBreakPoints = {
   },
 };
 
-export const SlideshowDiscover = ({ dataDiscover }) => {
+export const SlideshowDiscover = ({ dataDiscover, refreshData }) => {
   const router = useRouter();
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
@@ -252,6 +252,7 @@ export const SlideshowDiscover = ({ dataDiscover }) => {
         auction={auctionData}
         placeBid={placeBid}
         onModalClose={closeModalBid}
+        refreshData={refreshData}
       />
       <ModalBuy
         isOpenModal={isOpenModalBuy}
@@ -259,6 +260,7 @@ export const SlideshowDiscover = ({ dataDiscover }) => {
         dataBuy={buyData}
         buyAction={buyAction}
         onModalClose={closeModalBuy}
+        refreshData={refreshData}
       />
       <ModalShareSocialMedia
         isOpenModal={isOpenModalShare}

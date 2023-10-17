@@ -1438,6 +1438,7 @@ const Items = ({ params, collection }) => {
         auction={auctionData}
         placeBid={placeBid}
         onModalClose={closeModalBid}
+        refreshData={refreshData}
       />
       <ModalBuy
         isOpenModal={isOpenModalBuy}
@@ -1445,6 +1446,7 @@ const Items = ({ params, collection }) => {
         dataBuy={buyData}
         buyAction={buyAction}
         onModalClose={closeModalBuy}
+        refreshData={refreshData}
       />
       <ModalPutOnSale
         isOpenModal={isOpenModalPutonsale}

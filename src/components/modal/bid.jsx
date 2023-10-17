@@ -20,6 +20,7 @@ export default function ModalBid({
   auction,
   placeBid,
   onModalClose,
+  refreshData,
 }) {
   const { address, isConnected } = useAccount();
   const [isSubmit, setIsSubmit] = useState(false);
@@ -115,6 +116,7 @@ export default function ModalBid({
           await onSave();
           setIsSubmit(false);
           setIsCompleted(true);
+          refreshData();
         }
       }
     };

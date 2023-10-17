@@ -68,7 +68,7 @@ const sliderBreakPoints = {
   },
 };
 
-export const SlideshowActivities = ({ dataActivities }) => {
+export const SlideshowActivities = ({ dataActivities, refreshData }) => {
   const router = useRouter();
   const [nfts, setNfts] = useState([]);
   const { address } = useAccount();
@@ -300,6 +300,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
         dataBuy={buyData}
         buyAction={buyAction}
         onModalClose={closeModalBuy}
+        refreshData={refreshData}
       />
       <ModalBid
         isOpenModal={isOpenModalBid}
@@ -307,6 +308,7 @@ export const SlideshowActivities = ({ dataActivities }) => {
         auction={auctionData}
         placeBid={placeBid}
         onModalClose={closeModalBid}
+        refreshData={refreshData}
       />
       <ModalPutOnSale
         isOpenModal={isOpenModalPutonsale}

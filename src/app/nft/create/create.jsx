@@ -45,6 +45,7 @@ import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { getContract, hexToNumber, parseEther, zeroAddress } from 'viem';
 import { ImageWithFallback } from '@/components/imagewithfallback';
+import { JazzIcon } from '@/components/jazzicon';
 
 export default function Create({ chains }) {
   const { token } = useAuth();
@@ -658,7 +659,7 @@ export default function Create({ chains }) {
 
   return (
     <>
-      <div className="my-5 flex flex-col justify-center gap-5 p-4 text-gray-900 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
+      <div className="my-5 flex flex-col justify-center gap-5 p-4 text-gray-900 dark:text-white sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
         <div className="flex w-1/2 flex-col">
           <h2 className="text-2xl font-semibold">Create New NFT</h2>
           <p>
@@ -757,10 +758,10 @@ export default function Create({ chains }) {
                     />
                     <label
                       htmlFor="single-edition"
-                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-t-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 ${
+                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-t-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-zinc-500 ${
                         selectedOptionEdition === 'single'
                           ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
-                          : 'dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500'
+                          : 'dark:border-zinc-600 dark:bg-zinc-700 dark:text-gray-400 dark:hover:bg-zinc-600 dark:hover:text-gray-300 dark:peer-checked:text-primary-500'
                       }`}
                     >
                       <FontAwesomeIcon icon={faUsers} className="text-5xl" />
@@ -793,10 +794,10 @@ export default function Create({ chains }) {
                     />
                     <label
                       htmlFor="community-edition"
-                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-t-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 ${
+                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-t-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-zinc-500 ${
                         selectedOptionEdition === 'community'
                           ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
-                          : 'dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500'
+                          : 'dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-600 dark:hover:text-gray-300 dark:peer-checked:text-primary-500'
                       }`}
                     >
                       <FontAwesomeIcon icon={faUser} className="text-5xl" />
@@ -958,10 +959,10 @@ export default function Create({ chains }) {
                     />
                     <label
                       htmlFor="auction-method"
-                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 ${
+                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-zinc-400 hover:bg-gray-100 hover:text-zinc-500 ${
                         selectedOptionMarket === 'auction'
                           ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
-                          : 'dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300'
+                          : 'dark:border-zinc-600 dark:bg-zinc-700 dark:text-gray-400 dark:hover:bg-zinc-600 dark:hover:text-gray-300'
                       }`}
                     >
                       <FontAwesomeIcon
@@ -1103,7 +1104,7 @@ export default function Create({ chains }) {
                         e.preventDefault();
                         handleModalCreate();
                       }}
-                      className="flex h-full w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 focus:border-primary-500 focus:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:text-primary-500"
+                      className="flex h-full w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-zinc-500 hover:bg-gray-100 hover:text-zinc-500 focus:border-primary-500 focus:text-primary-500 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-600 dark:hover:text-gray-300 dark:focus:text-primary-500"
                     >
                       <FontAwesomeIcon
                         icon={faPlusCircle}
@@ -1137,17 +1138,26 @@ export default function Create({ chains }) {
                         />
                         <label
                           htmlFor={`collection-${collection.tokenAddress}`} // Match the input's ID
-                          className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-500 peer-checked:text-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-primary-500`}
+                          className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-zinc-500 hover:bg-gray-100 hover:text-zinc-500 peer-checked:border-primary-500 peer-checked:text-primary-500 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-600 dark:hover:text-gray-300 dark:peer-checked:text-primary-500`}
                         >
-                          <ImageWithFallback
-                            src={`/uploads/collections/${collection.logo}`}
-                            height={54}
-                            width={54}
-                            className="rounded-full"
-                            alt={collection.name}
-                            address={collection.tokenAddress}
-                            diameter={54}
-                          />
+                          {collection?.logo ? (
+                            <ImageWithFallback
+                              src={`/uploads/collections/${collection.logo}`}
+                              height={54}
+                              width={54}
+                              className="rounded-full"
+                              alt={collection.name}
+                              address={collection.tokenAddress}
+                              diameter={54}
+                            />
+                          ) : (
+                            <JazzIcon
+                              diameter={54}
+                              seed={collection?.tokenAddress}
+                              useGradientFallback={true}
+                              className="h-[54px] w-[54px] rounded-full"
+                            />
+                          )}
                           <span>
                             {collection.name}
                             <br />

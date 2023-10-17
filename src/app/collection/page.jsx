@@ -31,6 +31,7 @@ import formatter from '@/utils/shortNumberFormatter';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSearchParams } from 'next/navigation';
+import { JazzIcon } from '@/components/jazzicon';
 
 const servers = [
   'All Mainnet',
@@ -247,7 +248,7 @@ export default function Collection() {
                     <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
                   </button>
                 </div>
-                <div className="flex w-fit space-x-1 rounded-full border border-gray-200 bg-white dark:bg-zinc-700 dark:border-zinc-500 px-1 py-1">
+                <div className="flex w-fit space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 dark:border-zinc-500 dark:bg-zinc-700">
                   <label
                     className={`px-3 ${classRadio(TrendingTop, 'trending')}`}
                   >
@@ -269,7 +270,7 @@ export default function Collection() {
                     />
                   </label>
                 </div>
-                <div className="flex w-fit space-x-1 rounded-full border border-gray-200 bg-white dark:bg-zinc-700 dark:border-zinc-500 px-1 py-1">
+                <div className="flex w-fit space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 dark:border-zinc-500 dark:bg-zinc-700">
                   <label className={classRadio(Range, '1h')}>
                     1h
                     <input
@@ -328,7 +329,7 @@ export default function Collection() {
           <div className="my-5 grid grid-cols-12 gap-6">
             {openFilter && (
               <div className="col-span-12 sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                <ul className="divide-y rounded-xl bg-white dark:bg-zinc-700 dark:text-white p-5 font-bold text-gray-900">
+                <ul className="divide-y rounded-xl bg-white p-5 font-bold text-gray-900 dark:bg-zinc-700 dark:text-white">
                   <li>
                     <button
                       className="action flex w-full cursor-pointer items-center justify-between py-3"
@@ -418,7 +419,7 @@ export default function Collection() {
                   <div className="col-span-1 grid">Items</div>
                   <div className="col-span-1 grid">Owner</div>
                 </div>
-                <div className="border-2 border-gray-200 bg-gray-100 dark:bg-zinc-700 dark:border-zinc-500 grid col-span-12 grid-cols-12 gap-3 rounded-lg p-3">
+                <div className="col-span-12 grid grid-cols-12 gap-3 rounded-lg border-2 border-gray-200 bg-gray-100 p-3 dark:border-zinc-500 dark:bg-zinc-700">
                   {collections.length == 0 && (
                     <div className="col-span-12 w-full text-center font-semibold text-black">
                       Collection not found
@@ -428,7 +429,7 @@ export default function Collection() {
                     collections.map((collection, index) => (
                       <div
                         key={index}
-                        className={`group col-span-12 grid w-full cursor-pointer grid-cols-12 rounded-xl px-5 py-2 dark:bg-zinc-600 hover:dark:bg-zinc-500 dark:text-white bg-gray-50 hover:bg-gray-200 p-3`}
+                        className={`group col-span-12 grid w-full cursor-pointer grid-cols-12 rounded-xl bg-gray-50 p-3 px-5 py-2 hover:bg-gray-200 dark:bg-zinc-600 dark:text-white hover:dark:bg-zinc-500`}
                         onClick={() =>
                           router.push(
                             `/collection/${
@@ -445,15 +446,24 @@ export default function Collection() {
                         <div className="flex-items-center col-span-5 flex gap-3">
                           <div className="w-full flex-1">
                             <div className="h-[48px] w-[48px]">
-                              <ImageWithFallback
-                                src={`/uploads/collections/${collection.logo}`}
-                                alt={collection?.name}
-                                width={48}
-                                height={48}
-                                diameter={48}
-                                address={collection?.tokenAddress}
-                                className="rounded-full"
-                              />
+                              {collection?.logo ? (
+                                <ImageWithFallback
+                                  src={`/uploads/collections/${collection.logo}`}
+                                  alt={collection?.name}
+                                  width={48}
+                                  height={48}
+                                  diameter={48}
+                                  address={collection?.tokenAddress}
+                                  className="rounded-full"
+                                />
+                              ) : (
+                                <JazzIcon
+                                  diameter={48}
+                                  seed={collection?.tokenAddress}
+                                  useGradientFallback={true}
+                                  className="h-[48px] w-[48px] rounded-full"
+                                />
+                              )}
                             </div>
                           </div>
                           <span className="flex w-full items-center">

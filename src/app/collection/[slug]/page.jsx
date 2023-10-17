@@ -237,15 +237,24 @@ export default function CollectionDetail({ params }) {
                 <div className="grid grid-cols-12 gap-4">
                   <div className="col-span-12 flex flex-col gap-3 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
                     <div className="relative -mt-[5rem]">
-                      <ImageWithFallback
-                        src={`/uploads/collections/${collection.logo}`}
-                        alt={collection?.name}
-                        width={100}
-                        height={100}
-                        diameter={100}
-                        address={collection?.tokenAddress}
-                        className="w-36 rounded-full border-4 border-white shadow"
-                      />
+                      {collection?.logo ? (
+                        <ImageWithFallback
+                          src={`/uploads/collections/${collection?.logo}`}
+                          alt={collection?.name}
+                          width={100}
+                          height={100}
+                          diameter={100}
+                          address={collection?.tokenAddress}
+                          className="w-36 rounded-full border-4 border-white shadow"
+                        />
+                      ) : (
+                        <JazzIcon
+                          diameter={100}
+                          seed={collection?.tokenAddress}
+                          useGradientFallback={true}
+                          className="h-[100px] w-[100px] rounded-full"
+                        />
+                      )}
                     </div>
                     <div className="text-xl font-semibold text-gray-900 dark:text-white">
                       <button
@@ -1452,7 +1461,6 @@ const Items = ({ params, collection }) => {
 };
 
 const Activity = ({ collection }) => {
-  
   const [events, setEvents] = useState([]);
   const [eventsPage, setEventsPage] = useState(1);
   const [eventsLast, setEventsLast] = useState(false);
@@ -1519,13 +1527,13 @@ const Activity = ({ collection }) => {
           }
 
           const tmpEvents = convertData(response.data.data);
-          if(tmpEvents.length > 0){
+          if (tmpEvents.length > 0) {
             if (eventsPage > 1) {
               setEvents((oldEvents) => [...oldEvents, ...tmpEvents]);
             } else {
               setEvents([...tmpEvents]);
             }
-          }else{
+          } else {
             setEventsPage((oldPage) => oldPage + 1);
           }
         } else {
@@ -1614,8 +1622,10 @@ const Activity = ({ collection }) => {
       );
       type = 'Burn';
     } else if (
-      (event?.item?.From !== '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' && isAddress(event?.item?.From)) ||
-      (event?.item?.To == '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' && isAddress(event?.item?.To))
+      (event?.item?.From !== '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
+        isAddress(event?.item?.From)) ||
+      (event?.item?.To == '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
+        isAddress(event?.item?.To))
     ) {
       description = (
         <div className="flex gap-1">

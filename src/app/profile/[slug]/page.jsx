@@ -42,6 +42,7 @@ import Sold from './sold';
 import Liked from './liked';
 import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
 import ModalReportNft from '@/components/modal/reportNft';
+import { JazzIcon } from '@/components/jazzicon';
 
 const servers = [
   'All Mainnet',
@@ -120,7 +121,6 @@ export default function ProfilePage({ params }) {
       })
       .then((response) => {
         setProfile(response.data);
-        console.log(profile, '@@@@@@@@@@');
         if (response.data.banner !== null) {
           setBannerImage(`/uploads/users/banner/${response.data.banner}`);
         }
@@ -424,15 +424,24 @@ export default function ProfilePage({ params }) {
               <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
                   <div className="group relative -mt-[5rem] w-fit">
-                    <ImageWithFallback
-                      src={`/uploads/collections/${logoImage}`}
-                      alt={profile?.username || profile?.walletAddress}
-                      width={100}
-                      height={100}
-                      diameter={100}
-                      address={profile?.walletAddress}
-                      className="w-36 rounded-full border-4 border-white shadow"
-                    />
+                    {logoImage ? (
+                      <ImageWithFallback
+                        src={logoImage}
+                        alt={profile?.username || profile?.walletAddress}
+                        width={100}
+                        height={100}
+                        diameter={100}
+                        address={profile?.walletAddress}
+                        className="w-36 rounded-full border-4 border-white shadow"
+                      />
+                    ) : (
+                      <JazzIcon
+                        diameter={100}
+                        seed={profile?.walletAddress}
+                        useGradientFallback={true}
+                        className="h-[100px] w-[100px] rounded-full"
+                      />
+                    )}
 
                     {params.slug === address && (
                       <button
@@ -848,7 +857,7 @@ const Collection = ({ userAccount }) => {
                 </div>
               </div>
             </form>
-            <div className="hidden space-x-1 rounded-full border border-gray-200 bg-white dark:bg-zinc-700 dark:border-zinc-500 px-1 py-1 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+            <div className="hidden space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 dark:border-zinc-500 dark:bg-zinc-700 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
               <div>
                 <input
                   className="hidden"
@@ -970,17 +979,26 @@ const ItemCollection = ({ collection, gridList }) => {
       )}
 
       <div className="grid grid-cols-12 p-3">
-        <div className="relative -top-[60px] z-10 col-span-12 flex gap-1 rounded-tl-2xl rounded-tr-2xl bg-white dark:bg-zinc-700 dark:text-white bg-opacity-50 p-2 sm:col-span-12 md:col-span-10 lg:col-span-8 xl:col-span-8 2xl:col-span-8">
+        <div className="relative -top-[60px] z-10 col-span-12 flex gap-1 rounded-tl-2xl rounded-tr-2xl bg-white bg-opacity-50 p-2 dark:bg-zinc-700 dark:text-white sm:col-span-12 md:col-span-10 lg:col-span-8 xl:col-span-8 2xl:col-span-8">
           <div className="w-fit">
-            <ImageWithFallback
-              src={`/uploads/collections/${collection?.logo}`}
-              alt={collection?.name}
-              width={36}
-              height={36}
-              diameter={36}
-              address={collection?.tokenAddress}
-              className="w-full rounded-lg border-4 border-white shadow"
-            />
+            {collection?.logo ? (
+              <ImageWithFallback
+                src={`/uploads/collections/${collection?.logo}`}
+                alt={collection?.name}
+                width={36}
+                height={36}
+                diameter={36}
+                address={collection?.tokenAddress}
+                className="w-full rounded-lg border-4 border-white shadow"
+              />
+            ) : (
+              <JazzIcon
+                diameter={36}
+                seed={collection?.tokenAddress}
+                useGradientFallback={true}
+                className="h-[36px] w-[36px] rounded-full"
+              />
+            )}
           </div>
           <div className="w-full text-right">
             <h3 className="line-clamp-1 h-[10px] text-xs leading-[10px]">
@@ -990,14 +1008,16 @@ const ItemCollection = ({ collection, gridList }) => {
                 ? truncateAddress(collection.tokenAddress)
                 : ''}
             </h3>
-            <h3 className="text-sm font-semibold">{collection.totalOwners} Owner</h3>
+            <h3 className="text-sm font-semibold">
+              {collection.totalOwners} Owner
+            </h3>
           </div>
         </div>
       </div>
       <div className="relative -top-[85px] inline-flex w-full flex-col items-center justify-center lg:items-start">
         <div className="relative flex w-full flex-row px-3">
-          <div className="inline-flex w-full flex-col items-start justify-start rounded-bl-2xl rounded-br-2xl bg-gray-50 dark:bg-zinc-700 dark:text-white p-3 backdrop-blur-xl">
-            <div className="flex w-full flex-col justify-between rounded-md bg-gray-100 dark:bg-zinc-600 px-2 py-2 sm:flex-col md:flex-row">
+          <div className="inline-flex w-full flex-col items-start justify-start rounded-bl-2xl rounded-br-2xl bg-gray-50 p-3 backdrop-blur-xl dark:bg-zinc-700 dark:text-white">
+            <div className="flex w-full flex-col justify-between rounded-md bg-gray-100 px-2 py-2 dark:bg-zinc-600 sm:flex-col md:flex-row">
               <div className="flex shrink-0 flex-col truncate text-sm leading-5 sm:items-start">
                 <p>Total Volume</p>
                 <p className="font-bold">

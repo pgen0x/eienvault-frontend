@@ -443,13 +443,15 @@ export default function NFTDetails({ dataNFTs }) {
                             Share
                           </span>
                         </button>
-                        <button className="group text-primary-500 hover:text-primary-300"
+                        <button
+                          className="group text-primary-500 hover:text-primary-300"
                           onClick={() =>
                             handleOpenModalReport(
                               dataNFTs?.tokenId,
                               dataNFTs?.collectionAddress,
                             )
-                          }>
+                          }
+                        >
                           <FontAwesomeIcon icon={faFlag} />{' '}
                           <span className="2xl-text-black font-semibold text-black group-hover:text-primary-300">
                             Report
@@ -528,28 +530,42 @@ export default function NFTDetails({ dataNFTs }) {
                   <h2 className="text-2xl font-bold">
                     {dataNFTs?.name} #{dataNFTs?.tokenId}
                   </h2>
-                  <div className="flex w-full justify-around rounded-xl bg-white dark:bg-zinc-700 p-5">
+                  <div className="flex w-full justify-around rounded-xl bg-white p-5 dark:bg-zinc-700">
                     <div className="px-5">
                       <h3 className="font-semibold md:text-lg">Creator</h3>
                       <div className="flex">
                         <div className="flex w-fit items-center justify-center gap-2">
-                          <ImageWithFallback
-                            className="h-full w-full rounded-2xl "
-                            width={28}
-                            height={28}
-                            alt={
-                              dataNFTs?.User?.username ||
-                              truncateAddress4char(
-                                dataNFTs?.User?.walletAddress,
-                              ) ||
-                              truncateAddress4char(dataNFTs?.owner)
-                            }
-                            diameter={28}
-                            address={
-                              dataNFTs?.User?.walletAddress || dataNFTs?.owner
-                            }
-                            src={`/uploads/users/${dataNFTs?.collectionData.User?.logo}`}
-                          />
+                          {dataNFTs?.collectionData.User?.logo ? (
+                            <>
+                              <ImageWithFallback
+                                className="h-full w-full rounded-2xl "
+                                width={28}
+                                height={28}
+                                alt={
+                                  dataNFTs?.User?.username ||
+                                  truncateAddress4char(
+                                    dataNFTs?.User?.walletAddress,
+                                  ) ||
+                                  truncateAddress4char(
+                                    dataNFTs?.User?.walletAddress,
+                                  )
+                                }
+                                diameter={28}
+                                address={
+                                  dataNFTs?.User?.walletAddress ||
+                                  dataNFTs?.owner
+                                }
+                                src={`/uploads/users/${dataNFTs?.collectionData.User?.logo}`}
+                              />
+                            </>
+                          ) : (
+                            <JazzIcon
+                              diameter={28}
+                              seed={dataNFTs?.User?.walletAddress}
+                              useGradientFallback={true}
+                              className="h-[28px] w-[280px] rounded-full"
+                            />
+                          )}
                           <div
                             onClick={() =>
                               router.push(
@@ -581,24 +597,33 @@ export default function NFTDetails({ dataNFTs }) {
                         Current Owner
                       </h3>
                       <div className="flex w-fit items-center justify-center gap-2">
-                        <ImageWithFallback
-                          className="h-full w-full rounded-2xl "
-                          width={28}
-                          height={28}
-                          alt={
-                            dataNFTs?.ownerData?.username ||
-                            truncateAddress4char(
-                              dataNFTs?.ownerData?.walletAddress,
-                            ) ||
-                            truncateAddress4char(dataNFTs?.owner)
-                          }
-                          diameter={28}
-                          address={
-                            dataNFTs?.ownerData?.walletAddress ||
-                            dataNFTs?.owner
-                          }
-                          src={`/uploads/users/${dataNFTs?.ownerData?.logo}`}
-                        />
+                        {dataNFTs?.ownerData?.logo ? (
+                          <ImageWithFallback
+                            className="h-full w-full rounded-2xl "
+                            width={28}
+                            height={28}
+                            alt={
+                              dataNFTs?.ownerData?.username ||
+                              truncateAddress4char(
+                                dataNFTs?.ownerData?.walletAddress,
+                              ) ||
+                              truncateAddress4char(dataNFTs?.owner)
+                            }
+                            diameter={28}
+                            address={
+                              dataNFTs?.ownerData?.walletAddress ||
+                              dataNFTs?.owner
+                            }
+                            src={`/uploads/users/${dataNFTs?.ownerData?.logo}`}
+                          />
+                        ) : (
+                          <JazzIcon
+                            diameter={28}
+                            seed={dataNFTs?.User?.walletAddress}
+                            useGradientFallback={true}
+                            className="h-[28px] w-[28px] rounded-full"
+                          />
+                        )}
                         <div
                           onClick={() =>
                             router.push(
@@ -769,7 +794,7 @@ export default function NFTDetails({ dataNFTs }) {
                         </>
                       ) : (
                         <>
-                          <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5">
+                          <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5 dark:bg-zinc-600">
                             <h3 className="md:text-lg">Floor Price</h3>
                             <h4 className="text-sm font-bold md:text-lg">
                               {dataNFTs?.itemDetails
@@ -788,7 +813,7 @@ export default function NFTDetails({ dataNFTs }) {
                                   )}
                             </h5>
                           </div>
-                          <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5">
+                          <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5 dark:bg-zinc-600">
                             <h3 className="md:text-lg">Price</h3>
                             <h4 className="text-sm md:text-lg">
                               Listing price at{' '}
@@ -1329,19 +1354,28 @@ const Collateral = ({ dataNFTs }) => {
         <div>
           <h3 className="md:text-lg">Current Owner</h3>
           <div className="flex w-fit items-center justify-center gap-2">
-            <ImageWithFallback
-              className="h-full w-full rounded-2xl "
-              width={28}
-              height={28}
-              alt={
-                dataNFTs.ownerData?.username ||
-                truncateAddress4char(dataNFTs.ownerData?.walletAddress) ||
-                truncateAddress4char(dataNFTs.owner)
-              }
-              diameter={28}
-              address={dataNFTs.ownerData?.walletAddress || dataNFTs.owner}
-              src={`/uploads/users/${dataNFTs.ownerData?.logo}`}
-            />
+            {dataNFTs?.ownerData?.logo ? (
+              <ImageWithFallback
+                className="h-full w-full rounded-2xl "
+                width={28}
+                height={28}
+                alt={
+                  dataNFTs.ownerData?.username ||
+                  truncateAddress4char(dataNFTs.ownerData?.walletAddress) ||
+                  truncateAddress4char(dataNFTs.owner)
+                }
+                diameter={28}
+                address={dataNFTs.ownerData?.walletAddress || dataNFTs.owner}
+                src={`/uploads/users/${dataNFTs.ownerData?.logo}`}
+              />
+            ) : (
+              <JazzIcon
+                diameter={28}
+                seed={dataNFTs?.User?.walletAddress}
+                useGradientFallback={true}
+                className="h-[28px] w-[28px] rounded-full"
+              />
+            )}
             <div className="font-medium leading-none text-neutral-700">
               {dataNFTs.ownerData?.username ||
                 truncateAddress4char(dataNFTs.ownerData?.walletAddress) ||
@@ -1367,7 +1401,7 @@ const Collateral = ({ dataNFTs }) => {
 const Overview = ({ dataOverview, onSeeAllClick }) => {
   const limitedOffers = dataOverview.itemDetails?.listOffers?.slice(0, 3);
   return (
-    <div className="bg-gray-50 p-3 rounded-lg dark:bg-zinc-700 dark:text-white">
+    <div className="rounded-lg bg-gray-50 p-3 dark:bg-zinc-700 dark:text-white">
       <h1 className="text-xl font-semibold">Description</h1>
       <p className="text-base">{dataOverview.description || '-'}</p>
       <div className="flex justify-between">
@@ -1382,51 +1416,60 @@ const Overview = ({ dataOverview, onSeeAllClick }) => {
         )}
       </div>
       <div className="flex flex-col gap-2">
-      {limitedOffers && limitedOffers.length > 0 ? (
-        limitedOffers.map((offer, index) => {
-          return (
-            <div
-              className="inline-flex w-full items-center justify-start gap-5 self-stretch rounded-lg p-2 bg-gray-100 hover:bg-gray-200 dark:bg-zinc-600 hover:dark:bg-zinc-500"
-              key={index}
-            >
-              <div className="flex shrink grow basis-0 items-center justify-between text-center text-base font-bold leading-loose">
-                <div className="inline-flex h-14 w-full items-center justify-center">
-                  <div className="text-md inline-flex shrink grow basis-0 flex-row gap-3 font-medium leading-loose">
-                    <div className="h-8 w-8 rounded-full bg-gray-300">
-                      <ImageWithFallback
-                        className="h-full w-full rounded-2xl "
-                        width={32}
-                        height={32}
-                        alt={
-                          offer?.userDetails?.username ||
-                          truncateAddress4char(
-                            offer?.userDetails?.walletAddress,
-                          )
-                        }
-                        diameter={32}
-                        address={offer?.userDetails?.walletAddress}
-                        src={`/uploads/users/${offer?.userDetails?.logo}`}
-                      />
-                    </div>
-                    <div className="inline-flex cursor-pointer items-center justify-center">
-                      {offer?.userDetails?.username ||
-                        truncateAddress(offer?.userDetails?.walletAddress)}
-                    </div>
-                    <div className="justify-start">
-                      {'- '}Bid At {formatEther(offer?.value)}{' '}
-                      {dataOverview?.collectionData.Chain.symbol}
+        {limitedOffers && limitedOffers.length > 0 ? (
+          limitedOffers.map((offer, index) => {
+            return (
+              <div
+                className="inline-flex w-full items-center justify-start gap-5 self-stretch rounded-lg bg-gray-100 p-2 hover:bg-gray-200 dark:bg-zinc-600 hover:dark:bg-zinc-500"
+                key={index}
+              >
+                <div className="flex shrink grow basis-0 items-center justify-between text-center text-base font-bold leading-loose">
+                  <div className="inline-flex h-14 w-full items-center justify-center">
+                    <div className="text-md inline-flex shrink grow basis-0 flex-row gap-3 font-medium leading-loose">
+                      <div className="h-8 w-8 rounded-full bg-gray-300">
+                        {offer?.userDetails?.logo ? (
+                          <ImageWithFallback
+                            className="h-full w-full rounded-2xl "
+                            width={32}
+                            height={32}
+                            alt={
+                              offer?.userDetails?.username ||
+                              truncateAddress4char(
+                                offer?.userDetails?.walletAddress,
+                              )
+                            }
+                            diameter={32}
+                            address={offer?.userDetails?.walletAddress}
+                            src={`/uploads/users/${offer?.userDetails?.logo}`}
+                          />
+                        ) : (
+                          <JazzIcon
+                            diameter={32}
+                            seed={dataNFTs?.User?.walletAddress}
+                            useGradientFallback={true}
+                            className="h-[32px] w-[32px] rounded-full"
+                          />
+                        )}
+                      </div>
+                      <div className="inline-flex cursor-pointer items-center justify-center">
+                        {offer?.userDetails?.username ||
+                          truncateAddress(offer?.userDetails?.walletAddress)}
+                      </div>
+                      <div className="justify-start">
+                        {'- '}Bid At {formatEther(offer?.value)}{' '}
+                        {dataOverview?.collectionData.Chain.symbol}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          );
-        })
-      ) : (
-        <div className="w-full gap-5 self-stretch rounded-xl lg:inline-flex">
-          No bids yet
-        </div>
-      )}
+            );
+          })
+        ) : (
+          <div className="w-full gap-5 self-stretch rounded-xl lg:inline-flex">
+            No bids yet
+          </div>
+        )}
       </div>
     </div>
   );
@@ -1434,33 +1477,42 @@ const Overview = ({ dataOverview, onSeeAllClick }) => {
 
 const Bids = ({ dataBid }) => {
   return (
-    <div className="flex flex-col gap-3 bg-white dark:bg-zinc-700 p-3 rounded-lg">
+    <div className="flex flex-col gap-3 rounded-lg bg-white p-3 dark:bg-zinc-700">
       {dataBid.itemDetails?.listOffers?.length > 0 ? (
         <>
           {dataBid.itemDetails?.listOffers.map((offer, index) => {
             return (
               <div
-                className="w-full items-center justify-start gap-5 self-stretch rounded-xl bg-gray-50 hover:bg-gray-100 dark:bg-zinc-600 hover:dark:bg-zinc-500 dark:text-white p-3 lg:inline-flex"
+                className="w-full items-center justify-start gap-5 self-stretch rounded-xl bg-gray-50 p-3 hover:bg-gray-100 dark:bg-zinc-600 dark:text-white hover:dark:bg-zinc-500 lg:inline-flex"
                 key={index}
               >
                 <div className="flex shrink grow basis-0 items-center justify-between text-center text-base font-bold leading-loose">
                   <div className="inline-flex h-14 w-1/2 items-center justify-center">
                     <div className="text-md inline-flex shrink grow basis-0 flex-row gap-3 font-medium leading-loose">
                       <div className="h-12 w-12 rounded-full bg-gray-300 dark:bg-zinc-600">
-                        <ImageWithFallback
-                          className="h-full w-full rounded-2xl "
-                          width={48}
-                          height={48}
-                          alt={
-                            offer?.userDetails?.username ||
-                            truncateAddress4char(
-                              offer?.userDetails?.walletAddress,
-                            )
-                          }
-                          diameter={48}
-                          address={offer?.userDetails?.walletAddress}
-                          src={`/uploads/users/${offer?.userDetails?.logo}`}
-                        />
+                        {offer?.userDetails?.logo ? (
+                          <ImageWithFallback
+                            className="h-full w-full rounded-2xl "
+                            width={48}
+                            height={48}
+                            alt={
+                              offer?.userDetails?.username ||
+                              truncateAddress4char(
+                                offer?.userDetails?.walletAddress,
+                              )
+                            }
+                            diameter={48}
+                            address={offer?.userDetails?.walletAddress}
+                            src={`/uploads/users/${offer?.userDetails?.logo}`}
+                          />
+                        ) : (
+                          <JazzIcon
+                            diameter={48}
+                            seed={dataNFTs?.User?.walletAddress}
+                            useGradientFallback={true}
+                            className="h-[48px] w-[48px] rounded-full"
+                          />
+                        )}
                       </div>
                       <div className="inline-flex cursor-pointer items-center justify-center ">
                         {offer?.userDetails?.username ||
@@ -1839,7 +1891,7 @@ const History = ({ collection, tokenId }) => {
           </div>
         </div>
       )}
-      <div className="flex flex-col gap-3 text-sm text-black dark:text-white overflow-y-auto max-h-96 px-3">
+      <div className="flex max-h-96 flex-col gap-3 overflow-y-auto px-3 text-sm text-black dark:text-white">
         {events.map((event, index) => {
           return <ActivityItemDetail key={index} event={event} />;
         })}

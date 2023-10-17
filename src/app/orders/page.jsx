@@ -1,12 +1,11 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Footer from '../../components/footer/main';
 import { useAccount, useWaitForTransaction, useWalletClient } from 'wagmi';
 import Image from 'next/legacy/image';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCartPlus,
   faCheck,
   faHourglass,
   faXmark,
@@ -291,7 +290,7 @@ export default function OrdersPage() {
 
   return (
     <>
-      <div className="container m-auto min-h-screen p-3 text-gray-900">
+      <div className="container m-auto min-h-screen p-3 text-gray-900 dark:text-white">
         <section>
           <div className="my-5 grid grid-cols-12 gap-1">
             <div className="col-span-12 sm:col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 2xl:col-span-2">
@@ -370,7 +369,7 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
             </div>
           </div>
         </div>
-        <div className="mt-5 rounded-lg border border-gray-200 bg-gray-100 p-3">
+        <div className="mt-5 rounded-lg border border-gray-200 bg-gray-100 dark:bg-zinc-700 dark:text-white dark:border-zinc-500 p-3">
           {isLoading ? (
             <div className="flex h-full w-full flex-col items-start justify-start gap-2">
               <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
@@ -452,7 +451,7 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
               return (
                 <div className="m-2" key={index}>
                   <div
-                    className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex"
+                    className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white dark:bg-zinc-600 p-2 lg:inline-flex"
                     key={index}
                   >
                     <div className="flex shrink grow basis-0 items-center justify-center text-center text-base font-bold leading-loose">
@@ -548,7 +547,7 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
             </div>
           </div>
         </div>
-        <div className="mt-5 rounded-lg border border-gray-200 bg-gray-100 p-3">
+        <div className="mt-5 rounded-lg border border-gray-200 bg-gray-100 dark:bg-zinc-700 dark:text-white dark:border-zinc-500 p-3">
           {isLoadingBidMade ? (
             <div className="flex h-full w-full flex-col items-start justify-start gap-2">
               <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
@@ -631,7 +630,7 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
               return (
                 <div className="m-2" key={index}>
                   <div
-                    className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex"
+                    className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white dark:bg-zinc-600 p-2 lg:inline-flex"
                     key={index}
                   >
                     <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
@@ -734,7 +733,7 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
             </div>
           </div>
         </div>
-        <div className="mt-5 rounded-lg border border-gray-200 bg-gray-100 p-3">
+        <div className="mt-5 rounded-lg border border-gray-200 bg-gray-100 dark:bg-zinc-700 dark:text-white dark:border-zinc-500 p-3">
           {isLoadingReceived ? (
             <div className="flex h-full w-full flex-col items-start justify-start gap-2">
               <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
@@ -818,7 +817,7 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
                   {data.Bids.map((dataBids, indexBids) => (
                     <div className="m-2" key={index}>
                       <div
-                        className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex"
+                        className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white dark:bg-zinc-600 p-2 lg:inline-flex"
                         key={indexBids}
                       >
                         <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">

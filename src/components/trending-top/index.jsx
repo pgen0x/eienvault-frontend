@@ -255,7 +255,8 @@ export const TrendingTop = ({ dataCollections }) => {
                           collection?.priceChangePercentage1h,
                         )}
                       >
-                        {collection?.priceChangePercentage1h}%
+                        {Number(collection?.priceChangePercentage1h).toFixed(2)}
+                        %
                       </p>
                     </div>
                     <div className="flex w-full gap-2">
@@ -268,7 +269,10 @@ export const TrendingTop = ({ dataCollections }) => {
                           collection?.volumeChangePercentage1h,
                         )}
                       >
-                        {collection?.volumeChangePercentage1h}%
+                        {Number(collection?.volumeChangePercentage1h).toFixed(
+                          2,
+                        )}
+                        %
                       </p>
                     </div>
                   </div>
@@ -542,7 +546,7 @@ export const TrendingTopMobile = ({ dataCollections }) => {
                 <span
                   className={classMovement(collection.volumeChangePercentage1h)}
                 >
-                  {collection.volumeChangePercentage1h}%
+                  {Number(collection.volumeChangePercentage1h).toFixed(2)}%
                 </span>
               </div>
             </div>

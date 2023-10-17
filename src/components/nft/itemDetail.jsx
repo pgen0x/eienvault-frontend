@@ -501,6 +501,16 @@ const Nft = ({
                         <button className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300">
                           Owned By You
                         </button>
+                      ) : itemDetails?.listOffers &&
+                        itemDetails?.listOffers.some(
+                          (offer) => offer.address === address,
+                        ) ? (
+                        <button
+                          className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300"
+                          disabled
+                        >
+                          Offer Already Made
+                        </button>
                       ) : (
                         <button
                           className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300"

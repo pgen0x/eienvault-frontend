@@ -25,7 +25,12 @@ import moment from 'moment';
 
 const images = [1, 2, 3, 4];
 
-export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
+export const Slideshow = ({
+  auctions,
+  placeBid,
+  refreshMetadata,
+  refreshData,
+}) => {
   const router = useRouter();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [auctionData, setAcutionData] = useState({});
@@ -273,33 +278,35 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
                           : `Welcome to our ${auction.collectionData.name} collection! Explore a world of digital art and assets that represent unique and exclusive tokens on the blockchain. You'll find something special in our collection. Each NFT is a one-of-a-kind piece, verified and secured on the blockchain, making it a valuable addition to your digital asset portfolio. Join us on this journey of innovation and creativity in the world of non-fungible tokens. Start collecting, trading, and owning a piece of the digital future with our NFTs!`}
                       </div>
                     </div>
-                    {isNotRelease ? <div className="h-[35px]" /> : (
-                    <div className="inline-flex items-center justify-start gap-4 self-stretch">
-                      <div className="inline-flex shrink grow basis-0 flex-col items-start justify-center gap-2">
-                        <div className="flex flex-col self-stretch text-sm font-normal leading-tight text-neutral-700 dark:text-white">
-                          Highest Bid{' '}
-                          <span className="text-sm font-bold leading-tight text-neutral-700 dark:text-white">
-                            {formatEther(
-                              Number(getHighestBid(auction).highestBid),
-                            )}{' '}
-                            {auction.collectionData?.Chain?.symbol}
-                          </span>
+                    {isNotRelease ? (
+                      <div className="h-[35px]" />
+                    ) : (
+                      <div className="inline-flex items-center justify-start gap-4 self-stretch">
+                        <div className="inline-flex shrink grow basis-0 flex-col items-start justify-center gap-2">
+                          <div className="flex flex-col self-stretch text-sm font-normal leading-tight text-neutral-700 dark:text-white">
+                            Highest Bid{' '}
+                            <span className="text-sm font-bold leading-tight text-neutral-700 dark:text-white">
+                              {formatEther(
+                                Number(getHighestBid(auction).highestBid),
+                              )}{' '}
+                              {auction.collectionData?.Chain?.symbol}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                      <div className="inline-flex shrink grow basis-0 flex-col items-center justify-center gap-2">
-                        <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
-                          <span className="mr-2 text-sm font-normal leading-tight text-neutral-700 dark:text-white">
-                            By
-                          </span>
+                        <div className="inline-flex shrink grow basis-0 flex-col items-center justify-center gap-2">
+                          <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
+                            <span className="mr-2 text-sm font-normal leading-tight text-neutral-700 dark:text-white">
+                              By
+                            </span>
 
-                          <span className="text-sm font-bold leading-tight text-neutral-700 dark:text-white">
-                            {truncateAddress4char(
-                              getHighestBid(auction).highestBidder,
-                            )}
-                          </span>
+                            <span className="text-sm font-bold leading-tight text-neutral-700 dark:text-white">
+                              {truncateAddress4char(
+                                getHighestBid(auction).highestBidder,
+                              )}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
                     )}
                     <button
                       className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300 disabled:bg-primary-300"
@@ -414,12 +421,18 @@ export const Slideshow = ({ auctions, placeBid, refreshMetadata }) => {
         auction={auctionData}
         placeBid={placeBid}
         onModalClose={closeModal}
+        refreshData={refreshData}
       />
     </>
   );
 };
 
-export const SlideshowMobile = ({ auctions, placeBid, refreshMetadata }) => {
+export const SlideshowMobile = ({
+  auctions,
+  placeBid,
+  refreshMetadata,
+  refreshData,
+}) => {
   const router = useRouter();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [auctionData, setAcutionData] = useState({});

@@ -850,8 +850,18 @@ export default function NFTDetails({ dataNFTs }) {
                       dataNFTs?.itemDetails?.isAuctioned ? (
                         <div className="mt-5 flex w-full items-center gap-4">
                           {address === dataNFTs.owner ? (
-                            <button className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300">
+                            <button className="hover-bg-primary-300 w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500">
                               Owned By You
+                            </button>
+                          ) : dataNFTs?.itemDetails?.listOffers &&
+                            dataNFTs?.itemDetails?.listOffers.some(
+                              (offer) => offer.address === address,
+                            ) ? (
+                            <button
+                              className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300"
+                              disabled
+                            >
+                              Offer Already Made
                             </button>
                           ) : (
                             <button
@@ -890,12 +900,12 @@ export default function NFTDetails({ dataNFTs }) {
                       ) : (
                         <div className="mt-5 flex w-full items-center gap-4">
                           {address === dataNFTs.owner ? (
-                            <button className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300">
+                            <button className="hover-bg-primary-300 w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500">
                               Owned By You
                             </button>
                           ) : (
                             <button
-                              className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
+                              className="hover-bg-primary-300 w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white"
                               onClick={() =>
                                 handleOpenModalBuy(
                                   dataNFTs?.itemDetails?.marketId,
@@ -924,12 +934,12 @@ export default function NFTDetails({ dataNFTs }) {
                                 dataNFTs?.collectionAddress,
                               )
                             }
-                            className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
+                            className="hover-bg-primary-300 w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white"
                           >
                             Put On Sale
                           </button>
                         ) : (
-                          <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
+                          <button className="hover-bg-primary-300 w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white">
                             Not For Sale
                           </button>
                         )}
@@ -1321,6 +1331,7 @@ export default function NFTDetails({ dataNFTs }) {
         auction={auctionData}
         placeBid={placeBid}
         onModalClose={closeModalBid}
+        refreshData={refreshData}
       />
       <ModalBuy
         isOpenModal={isOpenModalBuy}
@@ -1328,6 +1339,7 @@ export default function NFTDetails({ dataNFTs }) {
         dataBuy={buyData}
         buyAction={buyAction}
         onModalClose={closeModalBuy}
+        refreshData={refreshData}
       />
       <ModalPutOnSale
         isOpenModal={isOpenModalPutonsale}
@@ -1504,7 +1516,7 @@ const Bids = ({ dataBid }) => {
                         ) : (
                           <JazzIcon
                             diameter={48}
-                            seed={dataNFTs?.User?.walletAddress}
+                            seed={offer?.userDetails?.walletAddress}
                             useGradientFallback={true}
                             className="h-[48px] w-[48px] rounded-full"
                           />

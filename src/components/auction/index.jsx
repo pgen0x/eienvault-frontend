@@ -18,37 +18,37 @@ const Auction = () => {
 
   const { data: walletClient } = useWalletClient();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/market/marketauction`,
-          {
-            cache: 'no-store',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
+  const fetchData = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/market/marketauction`,
+        {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
           },
-        );
+        },
+      );
 
-        if (!res.ok) {
-          setErrorAuctions(true);
-          console.error('Fetch failed:', res);
-          throw new Error('Network response was not ok');
-        }
-
-        const responseData = await res.json();
-
-        setAuctions(responseData);
-      } catch (error) {
+      if (!res.ok) {
         setErrorAuctions(true);
-        console.error('Fetch failed:', error);
-      } finally {
-        setErrorAuctions(false); // Set isLoading to false after fetching data
+        console.error('Fetch failed:', res);
+        throw new Error('Network response was not ok');
       }
-    };
 
+      const responseData = await res.json();
+
+      setAuctions(responseData);
+    } catch (error) {
+      setErrorAuctions(true);
+      console.error('Fetch failed:', error);
+    } finally {
+      setErrorAuctions(false); // Set isLoading to false after fetching data
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, [token, address, refreshMetada]);
 
@@ -100,6 +100,12 @@ const Auction = () => {
     }
   }
 
+  const refreshData = async () => {
+    console.log('Trigger refreshData auction');
+    setAuctions([]);
+    await fetchData();
+  };
+
   return (
     <>
       <section className="relative -top-24 flex h-auto w-full items-center justify-center bg-[url('/images/hero-section-background.png')] bg-cover bg-bottom md:h-[600px]">
@@ -140,6 +146,7 @@ const Auction = () => {
               auctions={auctions}
               placeBid={placeBid}
               refreshMetadata={refreshMetadata}
+              refreshData={refreshData}
             />
           </div>
           <div className="relative mb-5 flex w-full flex-initial items-center justify-center sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden">
@@ -147,6 +154,7 @@ const Auction = () => {
               auctions={auctions}
               placeBid={placeBid}
               refreshMetadata={refreshMetadata}
+              refreshData={refreshData}
             />
           </div>
         </div>

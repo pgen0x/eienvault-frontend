@@ -659,6 +659,7 @@ export default function NftPage() {
         auction={auctionData}
         placeBid={placeBid}
         onModalClose={closeModalBid}
+        refreshData={refreshData}
       />
       <ModalBuy
         isOpenModal={isOpenModalBuy}
@@ -666,6 +667,7 @@ export default function NftPage() {
         dataBuy={buyData}
         buyAction={buyAction}
         onModalClose={closeModalBuy}
+        refreshData={refreshData}
       />
       <ModalPutOnSale
         isOpenModal={isOpenModalPutonsale}

@@ -39,6 +39,7 @@ export default function ModalBuy({
   dataBuy,
   buyAction,
   onModalClose,
+  refreshData,
 }) {
   const router = useRouter();
   const { data: walletClient } = useWalletClient({
@@ -135,8 +136,10 @@ export default function ModalBuy({
         }
 
         if (dataBuyNative) {
+          await onSave();
           setIsloadingBuyNativeModal(false);
           setIsCompleted(true);
+          refreshData();
         }
       }
     };
@@ -144,30 +147,18 @@ export default function ModalBuy({
     fetchData();
   }, [buyNativeHash, dataBuyNative, isLoadingBuyNative, isErrorApp]);
 
-  // TODO: Integration buy to API
   const onSave = async () => {
     try {
-      const payload = {
-        collectionAddress: 'any',
-        tokenId: 'any',
-        bidAmount: 'any',
-        chainId: '',
-        marketId: '',
-        txHash: '',
-      };
-
       const options = {
-        method: 'POST',
-        body: JSON.stringify(payload), // Convert the payload to JSON
+        method: 'GET',
         headers: {
           Accept: 'application/json',
-          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json', // Set the content type to JSON
         },
       };
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/create`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/market/updatemarketevent`,
         options,
       );
 
@@ -427,7 +418,11 @@ export default function ModalBuy({
                           <span>check your profile to see the asset</span>
                         </div>
                         <button
-                          onClick={() => router.push(`/nft/${dataBuy?.collectionAddress}/${dataBuy?.tokenId}`)}
+                          onClick={() =>
+                            router.push(
+                              `/nft/${dataBuy?.collectionAddress}/${dataBuy?.tokenId}`,
+                            )
+                          }
                           className="rounded-full border border-primary-500 px-5 py-1 font-bold text-primary-500 hover:border-primary-400 hover:text-primary-400"
                         >
                           View asset

@@ -44,8 +44,8 @@ const sliderBreakPoints = {
 };
 
 export const SlideshowCreator = ({ dataUsers }) => {
-  const [followings, setFollowings] = useState([]);
   const { address } = useAccount();
+  const [followings, setFollowings] = useState([]);
 
   useEffect(() => {
     getFollowings();

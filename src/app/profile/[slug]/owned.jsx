@@ -731,6 +731,7 @@ export default function Owned({
         auction={auctionData}
         placeBid={placeBid}
         onModalClose={closeModalBid}
+        refreshData={refreshData}
       />
       <ModalBuy
         isOpenModal={isOpenModalBuy}
@@ -738,6 +739,7 @@ export default function Owned({
         dataBuy={buyData}
         buyAction={buyAction}
         onModalClose={closeModalBuy}
+        refreshData={refreshData}
       />
       <ModalPutOnSale
         isOpenModal={isOpenModalPutonsale}

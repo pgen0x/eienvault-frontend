@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Collection from '../collection/page';
 import NftPage from '../nft/page';
+import UserPage from '../user/page';
 
 const SearchPage = () => {
   const [groupOptions, setGroupOptions] = useState('collection');
@@ -11,7 +12,7 @@ const SearchPage = () => {
     <>
       <section>
         <div className="container mx-auto">
-          <ul className="mt-5 flex items-center justify-start gap-3 text-black">
+          <ul className="mt-5 flex items-center justify-start gap-3 text-black dark:text-white">
             <li
               className={`${groupOptions === 'collection' ? 'font-bold' : ''}`}
               onClick={() => setGroupOptions('collection')}
@@ -31,6 +32,7 @@ const SearchPage = () => {
       </section>
       <section>{groupOptions == 'collection' && <Collection />}</section>
       <section>{groupOptions == 'nft' && <NftPage />}</section>
+      <section>{groupOptions == 'user' && <UserPage />}</section>
     </>
   );
 };

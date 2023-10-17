@@ -52,10 +52,15 @@ export default function Navbar() {
     setIsClient(true);
   }, []);
 
+  const handlePushSidebar = (url) => {
+    setOpenMenu(false);
+    router.push(url);
+  }
+
   return (
     <>
-      <div className="sticky group top-0 z-40 inline-flex w-full items-center justify-center md:px-10 lg:px-10 xl:px-10 2xl:px-10 transition-all">
-        <nav className="3xl:h-24 dark:from-black/50 dark:to-black/40 top-0 z-10 mt-4 h-16 w-full max-w-full md:rounded-2xl lg:rounded-2xl xl:rounded-2xl 2xl:rounded-2xl bg-gradient-to-b from-white to-white/60 px-4 backdrop-blur transition-all duration-300 sm:h-20">
+      <div className="group sticky top-0 z-40 inline-flex w-full items-center justify-center transition-all md:px-10 lg:px-10 xl:px-10 2xl:px-10">
+        <nav className="3xl:h-24 top-0 z-10 mt-4 h-16 w-full max-w-full bg-gradient-to-b from-white to-white/60 px-4 backdrop-blur transition-all duration-300 dark:from-black/50 dark:to-black/40 sm:h-20 md:rounded-2xl lg:rounded-2xl xl:rounded-2xl 2xl:rounded-2xl">
           <div className="flex h-full items-center justify-between px-4">
             <div className="flex items-center gap-4">
               <Logo />
@@ -64,7 +69,10 @@ export default function Navbar() {
             </div>
             <div className="flex items-center gap-2">
               <RightArea suppressHydrationWarning />
-              <button onClick={() => setOpenMenu(!openMenu)} className="ml-3 flex-col items-center justify-center rounded-xl text-xl text-primary-500 block sm:block md:block lg:hidden xl:hidden 2xl:hidden">
+              <button
+                onClick={() => setOpenMenu(!openMenu)}
+                className="ml-3 block flex-col items-center justify-center rounded-xl text-xl text-primary-500 sm:block md:block lg:hidden xl:hidden 2xl:hidden"
+              >
                 <FontAwesomeIcon icon={faBars} />
               </button>
             </div>
@@ -72,19 +80,31 @@ export default function Navbar() {
         </nav>
       </div>
       <section>
-        <div className={`bg-black/30 backdrop-blur-sm backdrop-opacity-60 fixed top-0 w-full transition-all max-w-full h-screen z-40 ${openMenu ? 'left-0 right-0' : '-right-[100%]'}`} onClick={() => setOpenMenu(!openMenu)} />
-        <div className={`h-screen grid place-items-top w-[418px] max-w-full bg-white fixed z-40 transition-all duration-500 top-0 ${openMenu ? 'right-0' : '-right-[100%]'}`}>
-          <div className="w-full flex flex-col justify-end items-end bg-neutral-100">
-            <button className="w-fit mt-10 mr-10 text-2xl text-black" onClick={() => setOpenMenu(!openMenu)}>
+        <div
+          className={`fixed top-0 z-40 h-screen w-full max-w-full bg-black/30 backdrop-blur-sm backdrop-opacity-60 transition-all ${
+            openMenu ? 'left-0 right-0' : '-right-[100%]'
+          }`}
+          onClick={() => setOpenMenu(!openMenu)}
+        />
+        <div
+          className={`place-items-top fixed top-0 z-40 grid h-screen w-[418px] max-w-full bg-white transition-all duration-500 ${
+            openMenu ? 'right-0' : '-right-[100%]'
+          }`}
+        >
+          <div className="flex w-full flex-col items-end justify-end bg-neutral-100">
+            <button
+              className="mr-10 mt-10 w-fit text-2xl text-black"
+              onClick={() => setOpenMenu(!openMenu)}
+            >
               <FontAwesomeIcon icon={faXmark} />
             </button>
-            <nav className="w-full max-w-[418px] text-2xl flex flex-grow flex-col justify-start px-10 pb-4 md:pb-0 bg-neutral-100 transition-all delay-1000 duration-500">
+            <nav className="flex w-full max-w-[418px] flex-grow flex-col justify-start bg-neutral-100 px-10 pb-4 text-2xl transition-all delay-1000 duration-500 md:pb-0">
               <span className="mt-2 py-2 font-semibold text-primary-500 hover:text-primary-300">
                 Home
               </span>
               <div className="group mt-2">
                 <span className="flex justify-between py-2 font-semibold text-primary-500 hover:text-primary-300">
-                  <span>Trending</span>{' '}
+                  <span>Discover</span>{' '}
                   <FontAwesomeIcon
                     className="hidden group-hover:block"
                     icon={faChevronDown}
@@ -95,20 +115,26 @@ export default function Navbar() {
                   />
                 </span>
                 <ul className="mt-2 hidden flex-col gap-4 px-4 group-hover:flex">
-                  <li className="font-semibold text-primary-500 hover:text-primary-300">
-                    <span>Trending</span>
+                  <li
+                    className="font-semibold text-primary-500 hover:text-primary-300"
+                    onClick={() => handlePushSidebar('/collection')}
+                  >
+                    <span>Collections</span>
                   </li>
-                  <li className="font-semibold text-primary-500 hover:text-primary-300">
-                    <span>Status</span>
+                  <li
+                    className="font-semibold text-primary-500 hover:text-primary-300"
+                    onClick={() => handlePushSidebar('/nft')}
+                  >
+                    <span>NFTs</span>
                   </li>
-                  <li className="font-semibold text-primary-500 hover:text-primary-300">
-                    <span>Marketplace</span>
-                  </li>
+                  {/* <li className="font-semibold text-primary-500 hover:text-primary-300">
+                    <span>Users</span>
+                  </li> */}
                 </ul>
               </div>
-              <div className="group mt-2">
+              {/* <div className="group mt-2">
                 <span className="flex justify-between py-2 font-semibold text-primary-500 hover:text-primary-300">
-                  <span>Status</span>{' '}
+                  <span>Stats</span>{' '}
                   <FontAwesomeIcon
                     className="hidden group-hover:block"
                     icon={faChevronDown}
@@ -120,29 +146,45 @@ export default function Navbar() {
                 </span>
                 <ul className="mt-2 hidden flex-col gap-4 px-4 group-hover:flex">
                   <li className="font-semibold text-primary-500 hover:text-primary-300">
-                    <span>Trending</span>
+                    <span>Collections</span>
                   </li>
                   <li className="font-semibold text-primary-500 hover:text-primary-300">
-                    <span>Status</span>
+                    <span>NFTs</span>
                   </li>
                   <li className="font-semibold text-primary-500 hover:text-primary-300">
-                    <span>Marketplace</span>
+                    <span>Users</span>
                   </li>
                 </ul>
-              </div>
-              <span className="py-2 mt-2 font-semibold text-primary-500 hover:text-primary-300">Marketplace</span>
+              </div> */}
               {isClient && (
                 <>
                   {(isConnect || isConnected) && chain?.id !== 666888 && (
-                    <div className="flex justify-between border-t-2 flex-row items-center py-2 mt-2 text-xl font-semibold text-primary-500">
-                      <span className="text-md text-xl hover:text-primary-300">Wrong network!</span>
-                      <span className="text-md px-3 py-2 cursor-pointer hover:text-primary-300" onClick={() => switchNetwork?.(666888)}>Switch</span>
+                    <div className="mt-2 flex flex-row items-center justify-between border-t-2 py-2 text-xl font-semibold text-primary-500">
+                      <span className="text-md text-xl hover:text-primary-300">
+                        Wrong network!
+                      </span>
+                      <span
+                        className="text-md cursor-pointer px-3 py-2 hover:text-primary-300"
+                        onClick={() => switchNetwork?.(666888)}
+                      >
+                        Switch
+                      </span>
                     </div>
                   )}
                   {isConnect || isConnected ? (
-                    <span className="py-2 mt-2 font-semibold text-primary-500 hover:text-primary-300" onClick={toggleSidebar}>Account</span>
+                    <span
+                      className="mt-2 py-2 font-semibold text-primary-500 hover:text-primary-300"
+                      onClick={toggleSidebar}
+                    >
+                      Account
+                    </span>
                   ) : (
-                    <span onClick={() => open()} className="py-2 mt-2 font-semibold text-primary-500 hover:text-primary-300"><FontAwesomeIcon icon={faWallet} /> Connect your wallet</span>
+                    <span
+                      onClick={() => open()}
+                      className="mt-2 py-2 font-semibold text-primary-500 hover:text-primary-300"
+                    >
+                      <FontAwesomeIcon icon={faWallet} /> Connect your wallet
+                    </span>
                   )}
                 </>
               )}

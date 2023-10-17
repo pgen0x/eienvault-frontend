@@ -151,7 +151,7 @@ export default function ModalReportNft({
                       Report
                     </button>
                     <button
-                      className="w-full rounded-full bg-zinc-600 px-4 py-2 text-center text-base font-bold text-white hover:bg-zinc-500"
+                      className="w-full rounded-full bg-gray-100 hover:bg-primary-100 text-primary-500 dark:bg-zinc-600 px-4 py-2 text-center text-base font-bold dark:text-white hover:dark:bg-zinc-500"
                       onClick={closeModal}
                     >
                       Cancel

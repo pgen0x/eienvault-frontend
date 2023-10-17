@@ -59,7 +59,7 @@ const Main = () => {
     <>
       <div className="flex items-center justify-between">
         <div className="flex max-w-min flex-col gap-3 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
-          <div className="flex space-x-1 rounded-full bg-white px-1 dark:bg-gray-700 dark:text-white">
+          <div className="flex space-x-1 rounded-full bg-white px-1 dark:bg-zinc-700 dark:text-white">
             <label className={classRadio(TrendingTop, 'trending')}>
               Trending
               <input
@@ -79,7 +79,7 @@ const Main = () => {
               />
             </label>
           </div>
-          <div className="flex space-x-1 rounded-full bg-white px-1 dark:bg-gray-700">
+          <div className="flex space-x-1 rounded-full bg-white px-1 dark:bg-zinc-700">
             <label className={classRadio(Range, '1h')}>
               1h
               <input
@@ -111,7 +111,7 @@ const Main = () => {
           <div className="w-52 flex-none space-x-1 px-1">
             <Listbox value={selectedServer} onChange={setSelectedServer}>
               <div className="relative">
-                <Listbox.Button className="relative w-full cursor-default rounded-full bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 dark:bg-gray-700 sm:text-sm">
+                <Listbox.Button className="relative w-full cursor-default rounded-full bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 dark:bg-zinc-700 sm:text-sm">
                   <span className="block truncate text-gray-600 dark:text-white">
                     {selectedServer}
                   </span>
@@ -130,7 +130,7 @@ const Main = () => {
                     </svg>
                   </span>
                 </Listbox.Button>
-                <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-700 sm:text-sm">
+                <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-700 sm:text-sm">
                   {servers.map((server, index) => (
                     <Listbox.Option
                       key={index}
@@ -138,7 +138,7 @@ const Main = () => {
                         `relative cursor-default select-none px-4 py-2 ${
                           active
                             ? 'bg-primary-500 text-white'
-                            : 'text-gray-900 dark:bg-gray-700 dark:text-white'
+                            : 'text-gray-900 dark:bg-zinc-700 dark:text-white'
                         }`
                       }
                       value={server}
@@ -218,7 +218,7 @@ export const TrendingTop = ({ dataCollections }) => {
       >
         {dataCollections.slice(0, limit).map((collection, index) => (
           <li key={index} className="w-full">
-            <div className="flex w-full justify-between rounded-md bg-white px-5 py-2 dark:bg-gray-700">
+            <div className="flex w-full justify-between rounded-md bg-white px-5 py-2 dark:bg-zinc-700">
               <div className="flex w-full items-center gap-x-4">
                 <p className="text-sm font-bold text-primary-500 dark:text-white">
                   {index + 1}.
@@ -373,7 +373,7 @@ const MainMobile = () => {
     <>
       <div className="flex items-center justify-between">
         <div className="flex w-full flex-col gap-3">
-          <div className="flex justify-between rounded-full bg-white px-1 py-2 dark:bg-gray-700 dark:text-white">
+          <div className="flex justify-between rounded-full bg-white px-1 py-2 dark:bg-zinc-700 dark:text-white">
             <label className={classRadio(TrendingTop, 'trending')}>
               Trending
               <input
@@ -393,7 +393,7 @@ const MainMobile = () => {
               />
             </label>
           </div>
-          <div className="flex space-x-1 rounded-full bg-white px-1 py-2 dark:bg-gray-700 dark:text-white">
+          <div className="flex space-x-1 rounded-full bg-white px-1 py-2 dark:bg-zinc-700 dark:text-white">
             <label className={classRadio(Range, '1h')}>
               1h
               <input
@@ -422,7 +422,7 @@ const MainMobile = () => {
               />
             </label>
           </div>
-          <div className="flex space-x-1 rounded-full bg-white px-1 py-2 dark:bg-gray-700 dark:text-white">
+          <div className="flex space-x-1 rounded-full bg-white px-1 py-2 dark:bg-zinc-700 dark:text-white">
             <label className={classRadio(Coin, 'ethereum')}>
               <Ethereum />
               <input
@@ -497,7 +497,7 @@ export const TrendingTopMobile = ({ dataCollections }) => {
         {dataCollections.map((collection, index) => (
           <div
             key={index}
-            className="flex flex-col gap-3 rounded-xl bg-white p-5 dark:bg-gray-700 dark:text-white"
+            className="flex flex-col gap-3 rounded-xl bg-white p-5 dark:bg-zinc-700 dark:text-white"
           >
             <div className="flex w-full items-center gap-3 border-b border-gray-300 pb-2">
               <div className="h-11 w-11">

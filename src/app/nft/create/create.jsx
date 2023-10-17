@@ -676,8 +676,8 @@ export default function Create({ chains }) {
                   className="mt-2"
                 >
                   <div className="relative z-20">
-                    <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none sm:text-sm">
-                      <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                    <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white text-gray-900 dark:bg-zinc-700 dark:text-white dark:hover:bg-zinc-600 dark:hover:text-gray-300 py-2 pl-3 pr-10 text-left focus:outline-none sm:text-sm">
+                      <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                         {selectedChain.chainId === 1 ||
                         selectedChain.chainId === 11155111 ? (
                           <Ethereum />
@@ -688,7 +688,7 @@ export default function Create({ chains }) {
                           ''
                         )}
                       </span>
-                      <span className="block truncate pl-6 text-gray-600">
+                      <span className="block truncate pl-6">
                         {
                           chains.find(
                             (chain) => chain.chainId === selectedChain.chainId,
@@ -698,11 +698,11 @@ export default function Create({ chains }) {
                       <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 ">
                         <FontAwesomeIcon
                           icon={faChevronDown}
-                          className="text-gray-600"
+                          className=""
                         />
                       </span>
                     </Listbox.Button>
-                    <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                    <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-zinc-700 dark:hover:text-gray-300 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                       {chains.map((chain) => (
                         <Listbox.Option
                           key={chain.chainId}
@@ -710,7 +710,7 @@ export default function Create({ chains }) {
                             `relative cursor-default select-none px-4 py-2 ${
                               active
                                 ? 'bg-primary-500 text-white'
-                                : 'text-gray-900'
+                                : 'text-gray-900 dark:text-white'
                             }`
                           }
                           value={chain}
@@ -824,7 +824,7 @@ export default function Create({ chains }) {
                   <span className="text-semantic-red-500">*</span> Upload your
                   item
                 </label>
-                <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-5 text-center">
+                <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white dark:bg-zinc-700 dark:border-zinc-500 py-5 text-center">
                   {selectedImage && selectedImage.length > 0 ? (
                     <>
                       <button
@@ -887,7 +887,7 @@ export default function Create({ chains }) {
                 <input
                   type="text"
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500"
+                  className="mt-2 w-full rounded-full border-0 bg-white dark:bg-zinc-700 focus:ring-primary-500"
                   placeholder="E.g, Mickey mouse riding a car"
                   {...register('name', { required: 'Name is required.' })}
                 />
@@ -900,7 +900,7 @@ export default function Create({ chains }) {
                   Description (optional)
                 </label>
                 <textarea
-                  className="mt-2 w-full rounded-2xl border-0 bg-white focus:ring-primary-500"
+                  className="mt-2 w-full rounded-2xl border-0 bg-white dark:bg-zinc-700 focus:ring-primary-500"
                   placeholder="e. g. This art is created by handraw without any help from ai"
                   {...register('description', {
                     maxLength: {
@@ -983,7 +983,7 @@ export default function Create({ chains }) {
                   <span className="text-semantic-red-500">*</span> Price
                 </label>
                 <p>Enter price to allow users instantly purchase your NFT</p>
-                <div className="mt-2 flex w-full items-center rounded-full border border-gray-200 bg-white">
+                <div className="mt-2 flex w-full items-center rounded-full border border-gray-200 bg-white dark:bg-zinc-700">
                   <input
                     type="number"
                     className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
@@ -1023,8 +1023,8 @@ export default function Create({ chains }) {
               </div>
               {selectedOptionMarket === 'auction' && (
                 <>
-                  <div className="mt-4 flex w-full flex-col rounded-xl bg-white p-5">
-                    <label className="block text-sm font-medium leading-6 text-gray-900">
+                  <div className="mt-4 flex w-full flex-col rounded-xl bg-white dark:bg-zinc-600 p-5">
+                    <label className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
                       <span className="text-semantic-red-500">*</span> Release
                       Date
                     </label>
@@ -1034,7 +1034,7 @@ export default function Create({ chains }) {
                         name="release_date"
                         id="release_date"
                         autoComplete="release_date"
-                        className="flex-1 rounded-xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:text-sm sm:leading-6"
+                        className="flex-1 rounded-full border-0 bg-gray-50 dark:bg-zinc-700 dark:text-white py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:text-sm sm:leading-6"
                         value={customValueReleaseDate}
                         disabled={selectedOptionReleaseDate !== 'Custom'}
                         onChange={(e) =>
@@ -1042,7 +1042,7 @@ export default function Create({ chains }) {
                         }
                       />
                       <select
-                        className="rounded-3xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:max-w-md sm:text-sm sm:leading-6"
+                        className="rounded-3xl border-0 bg-gray-50 py-3 text-gray-900 dark:text-white dark:bg-zinc-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:max-w-md sm:text-sm sm:leading-6"
                         onChange={handleReleaseDateSelectChange}
                         value={selectedOptionReleaseDate}
                       >
@@ -1060,8 +1060,8 @@ export default function Create({ chains }) {
                 </>
               )}
 
-              <div className="mt-4 flex w-full flex-col rounded-xl bg-white p-5">
-                <label className="block text-sm font-medium leading-6 text-gray-900">
+              <div className="mt-4 flex w-full flex-col rounded-xl bg-white dark:bg-zinc-600 p-5">
+                <label className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
                   <span className="text-semantic-red-500">*</span> Date of
                   listing expiration
                 </label>
@@ -1071,13 +1071,13 @@ export default function Create({ chains }) {
                     name="duration_date"
                     id="duration_date"
                     autoComplete="duration_date"
-                    className="flex-1 rounded-xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:text-sm sm:leading-6"
+                    className="flex-1 rounded-full border-0 bg-gray-50 py-3 text-gray-900 dark:bg-zinc-700 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:text-sm sm:leading-6"
                     value={customValueDate}
                     disabled={selectedOptionDate !== 'Custom'}
                     onChange={(e) => setCustomValueDate(e.target.value)}
                   />
                   <select
-                    className="rounded-3xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:max-w-md sm:text-sm sm:leading-6"
+                    className="rounded-3xl border-0 bg-gray-50 py-3 text-gray-900 dark:bg-zinc-700 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:max-w-md sm:text-sm sm:leading-6"
                     onChange={handleDateSelectChange}
                     value={selectedOptionDate}
                   >
@@ -1229,7 +1229,7 @@ export default function Create({ chains }) {
               <div className="mt-4 w-full">
                 <label>
                   <span className="font-semibold">Royalties</span>
-                  <div className="mt-2 flex w-full items-center rounded-full border border-gray-200 bg-white">
+                  <div className="mt-2 flex w-full items-center rounded-full border border-gray-200 bg-white dark:bg-zinc-700 dark:text-white">
                     <input
                       type="number"
                       className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
@@ -1274,7 +1274,7 @@ export default function Create({ chains }) {
                         type="text"
                         name="trait_type"
                         placeholder="Trait Type"
-                        className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500"
+                        className="mt-2 w-full rounded-full border-0 bg-white dark:bg-zinc-700 dark:text-white focus:ring-primary-500"
                         value={field.trait_type}
                         onChange={(e) => handleInputChange(index, e)}
                       />
@@ -1282,7 +1282,7 @@ export default function Create({ chains }) {
                         type="text"
                         name="value"
                         placeholder="Value"
-                        className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500"
+                        className="mt-2 w-full rounded-full border-0 bg-white dark:bg-zinc-700 dark:text-white focus:ring-primary-500"
                         value={field.value}
                         onChange={(e) => handleInputChange(index, e)}
                       />
@@ -1317,7 +1317,7 @@ export default function Create({ chains }) {
             Input the NFT Data field to see the preview of how your NFT product
             looks like in the marketplace
           </p>
-          <div className="flex flex-col gap-3 rounded-xl bg-white p-5">
+          <div className="flex flex-col gap-3 rounded-xl bg-white dark:bg-zinc-700 p-5">
             {selectedImage && selectedImage.length > 0 ? (
               <Image
                 src={URL.createObjectURL(getValues('file')[0])}
@@ -1346,7 +1346,7 @@ export default function Create({ chains }) {
                   {address}
                 </div>
               </div>
-              <FontAwesomeIcon icon={faEllipsis} className="text-primary-500" />
+              <FontAwesomeIcon icon={faEllipsis} className="text-gray-900 dark:text-white" />
             </div>
             <div className="flex items-center justify-between">
               <h4 className="font-semibold">
@@ -1366,7 +1366,7 @@ export default function Create({ chains }) {
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col">
                 <div className="font-semibold">Price</div>
-                <div className="font-semibold text-primary-500">
+                <div className="font-semibold text-gray-900 dark:text-white">
                   {price === '' ? '0.0' : price} {selectedChain.symbol}
                 </div>
               </div>
@@ -1376,10 +1376,10 @@ export default function Create({ chains }) {
               </div>
             </div>
             <div className="mt-5 flex w-full items-center">
-              <FontAwesomeIcon
+              {/* <FontAwesomeIcon
                 className="mr-5 h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 "
                 icon={faCartPlus}
-              />
+              /> */}
               <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
                 Buy Now
               </button>

@@ -97,41 +97,41 @@ export default function ModalShareSocialMedia({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-50 p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-50 text-gray-900 dark:text-white dark:bg-zinc-800 p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="text-xl font-bold text-gray-900"
+                    className="text-xl font-bold"
                   >
                     Share to Social Media
                   </Dialog.Title>
-                  <div className="flex flex-col gap-2 pt-5 text-sm text-gray-900 bg-gray-50">
+                  <div className="flex flex-col gap-2 pt-5 text-sm">
                     <div className="flex gap-3">
-                      <button className="w-full flex flex-col gap-2 justify-center items-center bg-white text-primary-500 hover:bg-primary-50 p-3 rounded-lg border border-gray-200" onClick={shareFacebook}>
+                      <button className="w-full flex flex-col gap-2 justify-center items-center bg-white dark:bg-zinc-700 dark:border-zinc-500 text-primary-500 hover:bg-primary-50 p-3 rounded-lg border border-gray-200" onClick={shareFacebook}>
                         <span className="flex justify-center items-center">
                           <FontAwesomeIcon icon={faFacebook} className="text-2xl" />
                         </span>
                         Facebook
                       </button>
-                      <button className="w-full flex flex-col gap-2 justify-center items-center bg-white text-primary-500 hover:bg-primary-50 p-3 rounded-lg border border-gray-200" onClick={shareTwitter}>
+                      <button className="w-full flex flex-col gap-2 justify-center items-center bg-white dark:bg-zinc-700 dark:border-zinc-500 text-primary-500 hover:bg-primary-50 p-3 rounded-lg border border-gray-200" onClick={shareTwitter}>
                         <span className="flex justify-center items-center">
                           <FontAwesomeIcon icon={faXTwitter} className="text-2xl" />
                         </span>
                         Twitter
                       </button>
-                      <button className="w-full flex flex-col gap-2 justify-center items-center bg-white text-primary-500 hover:bg-primary-50 p-3 rounded-lg border border-gray-200" onClick={shareTelegram}>
+                      <button className="w-full flex flex-col gap-2 justify-center items-center bg-white dark:bg-zinc-700 dark:border-zinc-500 text-primary-500 hover:bg-primary-50 p-3 rounded-lg border border-gray-200" onClick={shareTelegram}>
                         <span className="flex justify-center items-center">
                           <FontAwesomeIcon icon={faTelegram} className="text-2xl" />
                         </span>
                         Telegram
                       </button>
-                      <button className="w-full flex flex-col gap-2 justify-center items-center bg-white text-primary-500 hover:bg-primary-50 p-3 rounded-lg border border-gray-200" onClick={shareWhatsapp}>
+                      <button className="w-full flex flex-col gap-2 justify-center items-center bg-white dark:bg-zinc-700 dark:border-zinc-500 text-primary-500 hover:bg-primary-50 p-3 rounded-lg border border-gray-200" onClick={shareWhatsapp}>
                         <span className="flex justify-center items-center">
                           <FontAwesomeIcon icon={faWhatsapp} className="text-2xl" />
                         </span>
                         Whatsapp
                       </button>
                     </div>
-                    <button className="w-full flex justify-between gap-2 items-center bg-white text-primary-500 hover:bg-primary-50 p-3 rounded-lg border border-gray-200" onClick={shareCopyClipboard}>
+                    <button className="w-full flex justify-between gap-2 items-center bg-white dark:bg-zinc-700 dark:border-zinc-500 text-primary-500 hover:bg-primary-50 p-3 rounded-lg border border-gray-200" onClick={shareCopyClipboard}>
                       <span className="text-ellipsis w-full overflow-hidden">{url}</span>
                       <span className="w-fit flex justify-center items-center">
                         <FontAwesomeIcon icon={faCopy} className="text-2xl" />

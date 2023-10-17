@@ -421,7 +421,7 @@ export default function Collection() {
                 </div>
                 <div className="col-span-12 grid grid-cols-12 gap-3 rounded-lg border-2 border-gray-200 bg-gray-100 p-3 dark:border-zinc-500 dark:bg-zinc-700">
                   {collections.length == 0 && (
-                    <div className="col-span-12 w-full text-center font-semibold text-black">
+                    <div className="col-span-12 w-full text-center font-semibold text-black dark:text-white">
                       Collection not found
                     </div>
                   )}
@@ -483,17 +483,28 @@ export default function Collection() {
                               priceChangePercentage(collection),
                             )}
                           >
-                            {priceChangePercentage(collection)}%
+                            {Number(priceChangePercentage(collection)).toFixed(
+                              2,
+                            )}
+                            %
                           </p>
                         </div>
                         <div className="col-span-2 flex items-center">
-                          ${formatter(collection.volume)}
+                          $
+                          {collection.floorPrice
+                            ? Number(
+                                formatEther(Number(collection.volume)),
+                              ).toFixed(0)
+                            : '0'}
                           <p
                             className={classMovement(
                               volumeChangePercentage(collection),
                             )}
                           >
-                            {volumeChangePercentage(collection)}%
+                            {Number(volumeChangePercentage(collection)).toFixed(
+                              2,
+                            )}
+                            %
                           </p>
                         </div>
                         <div className="col-span-1 flex items-center">

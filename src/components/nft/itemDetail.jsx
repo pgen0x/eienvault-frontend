@@ -376,11 +376,11 @@ const Nft = ({
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white p-2 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white p-2 text-gray-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-600 dark:text-white">
                       <div className="py-1">
                         <Menu.Item>
                           <button
-                            className="block w-full rounded-md px-4 py-2 text-left text-sm text-black hover:bg-gray-50 hover:text-primary-500"
+                            className="block w-full rounded-md px-4 py-2 text-left text-sm hover:bg-gray-50 hover:text-primary-500"
                             onClick={() =>
                               refreshMetadata(
                                 nft?.collectionAddress,
@@ -393,7 +393,7 @@ const Nft = ({
                         </Menu.Item>
                         <Menu.Item>
                           <button
-                            className="block w-full rounded-md px-4 py-2 text-left text-sm text-black hover:bg-gray-50 hover:text-primary-500"
+                            className="block w-full rounded-md px-4 py-2 text-left text-sm hover:bg-gray-50 hover:text-primary-500"
                             onClick={() =>
                               handleOpenModalShare(
                                 nft?.tokenId,
@@ -406,7 +406,7 @@ const Nft = ({
                         </Menu.Item>
                         <Menu.Item>
                           <button
-                            className="block w-full rounded-md px-4 py-2 text-left text-sm text-black hover:bg-gray-50 hover:text-primary-500"
+                            className="block w-full rounded-md px-4 py-2 text-left text-sm hover:bg-gray-50 hover:text-primary-500"
                             onClick={() =>
                               likes(nft?.collectionAddress, nft?.tokenId)
                             }
@@ -416,7 +416,7 @@ const Nft = ({
                         </Menu.Item>
                         <Menu.Item>
                           <button
-                            className="block w-full rounded-md px-4 py-2 text-left text-sm text-black hover:bg-gray-50 hover:text-primary-500"
+                            className="block w-full rounded-md px-4 py-2 text-left text-sm hover:bg-gray-50 hover:text-primary-500"
                             onClick={() => openOriginal(nft?.imageUri)}
                           >
                             Open Original
@@ -424,7 +424,7 @@ const Nft = ({
                         </Menu.Item>
                         <Menu.Item>
                           <button
-                            className="block w-full rounded-md px-4 py-2 text-left text-sm text-black hover:bg-gray-50 hover:text-primary-500"
+                            className="block w-full rounded-md px-4 py-2 text-left text-sm hover:bg-gray-50 hover:text-primary-500"
                             onClick={() =>
                               handleOpenModalReport(
                                 nft?.tokenId,

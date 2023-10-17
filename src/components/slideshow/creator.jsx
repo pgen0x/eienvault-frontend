@@ -9,6 +9,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UserItemDetail, { UserItemDetailSkeleton } from '../user/itemDetail';
+import axios from 'axios';
+import { useAccount } from 'wagmi';
 
 const sliderBreakPoints = {
   640: {
@@ -43,6 +45,7 @@ const sliderBreakPoints = {
 
 export const SlideshowCreator = ({ dataUsers }) => {
   const [followings, setFollowings] = useState([]);
+  const { address } = useAccount();
 
   useEffect(() => {
     getFollowings();
@@ -68,7 +71,7 @@ export const SlideshowCreator = ({ dataUsers }) => {
 
   const refresh = () => {
     getFollowings();
-  }
+  };
 
   return (
     <>
@@ -95,15 +98,15 @@ export const SlideshowCreator = ({ dataUsers }) => {
         }}
       >
         {dataUsers.map((data, index) => (
-            <SwiperSlide key={index}>
-              <UserItemDetail
-                key={index}
-                user={data}
-                followings={followings}
-                refresh={refresh}
-              />
-            </SwiperSlide>
-          ))}
+          <SwiperSlide key={index}>
+            <UserItemDetail
+              key={index}
+              user={data}
+              followings={followings}
+              refresh={refresh}
+            />
+          </SwiperSlide>
+        ))}
       </Swiper>
       <button className="swiper-next-discover absolute -right-5 z-10 ml-2 hidden rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronRight} />

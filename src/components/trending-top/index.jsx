@@ -31,10 +31,7 @@ const servers = [
   'Katelyn Rohan',
 ];
 
-const Main = () => {
-  const [TrendingTop, setTrendingTop] = useState('trending');
-  const [Range, setRange] = useState('1h');
-  const [selectedServer, setSelectedServer] = useState(servers[0]);
+const Main = ({TrendingTop, setTrendingTop, Range, setRange}) => {
   const router = useRouter();
 
   const handleTrendingTop = (event, target) => {
@@ -108,58 +105,6 @@ const Main = () => {
               />
             </label>
           </div>
-          <div className="w-52 flex-none space-x-1 px-1">
-            <Listbox value={selectedServer} onChange={setSelectedServer}>
-              <div className="relative">
-                <Listbox.Button className="relative w-full cursor-default rounded-full bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 dark:bg-zinc-700 sm:text-sm">
-                  <span className="block truncate text-gray-600 dark:text-white">
-                    {selectedServer}
-                  </span>
-                  <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                    <svg
-                      width="16"
-                      height="9"
-                      viewBox="0 0 16 9"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8 9C7.71875 9 7.46875 8.90625 7.28125 8.71875L1.28125 2.71875C0.875 2.34375 0.875 1.6875 1.28125 1.3125C1.65625 0.90625 2.3125 0.90625 2.6875 1.3125L8 6.59375L13.2812 1.3125C13.6562 0.90625 14.3125 0.90625 14.6875 1.3125C15.0938 1.6875 15.0938 2.34375 14.6875 2.71875L8.6875 8.71875C8.5 8.90625 8.25 9 8 9Z"
-                        fill="#7D778A"
-                      />
-                    </svg>
-                  </span>
-                </Listbox.Button>
-                <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-700 sm:text-sm">
-                  {servers.map((server, index) => (
-                    <Listbox.Option
-                      key={index}
-                      className={({ active }) =>
-                        `relative cursor-default select-none px-4 py-2 ${
-                          active
-                            ? 'bg-primary-500 text-white'
-                            : 'text-gray-900 dark:bg-zinc-700 dark:text-white'
-                        }`
-                      }
-                      value={server}
-                    >
-                      {({ selectedServer }) => (
-                        <>
-                          <span
-                            className={`block truncate ${
-                              selectedServer ? 'font-medium' : 'font-normal'
-                            }`}
-                          >
-                            {server}
-                          </span>
-                        </>
-                      )}
-                    </Listbox.Option>
-                  ))}
-                </Listbox.Options>
-              </div>
-            </Listbox>
-          </div>
         </div>
         <div className="flex items-end px-3">
           <button
@@ -176,6 +121,8 @@ const Main = () => {
 
 export const TrendingTop = ({ dataCollections }) => {
   const [limit, setLimit] = useState(0);
+  const [TrendingTop, setTrendingTop] = useState('trending');
+  const [Range, setRange] = useState('1h');
   const router = useRouter();
   const classFloor = (value) => {
     return Number(value) < 0
@@ -209,9 +156,17 @@ export const TrendingTop = ({ dataCollections }) => {
     };
   }, []);
 
+  const volumeChangePercentage = (collection) => {
+    return collection['volumeChangePercentage' + Range];
+  };
+
+  const priceChangePercentage = (collection) => {
+    return collection['priceChangePercentage' + Range];
+  };
+
   return (
     <>
-      <Main />
+      <Main Range={Range} setRange={setRange} TrendingTop={TrendingTop} setTrendingTop={setTrendingTop} />
       <ul
         role="list"
         className="mt-4 grid w-full grid-flow-col grid-rows-5 gap-3"
@@ -248,31 +203,37 @@ export const TrendingTop = ({ dataCollections }) => {
                     <div className="flex w-full gap-2">
                       <p className="w-full">Floor</p>
                       <p className="w-full">
-                        ${formatEther(Number(collection?.floorPrice))}
+                        $
+                        {collection.floorPrice
+                          ? Number(
+                              formatEther(Number(collection.floorPrice)),
+                            ).toFixed(2)
+                          : '0.00'}
                       </p>
                       <p
                         className={classFloor(
-                          collection?.priceChangePercentage1h,
+                          priceChangePercentage(collection),
                         )}
                       >
-                        {Number(collection?.priceChangePercentage1h).toFixed(2)}
-                        %
+                        {Number(priceChangePercentage(collection)).toFixed(2)}%
                       </p>
                     </div>
                     <div className="flex w-full gap-2">
                       <span className="w-full">Volume</span>
                       <p className="w-full">
-                        ${formatEther(Number(collection?.volume))}
+                        $
+                        {collection.floorPrice
+                          ? Number(
+                              formatEther(Number(collection.volume)),
+                            ).toFixed(0)
+                          : '0'}
                       </p>
                       <p
                         className={classMovement(
-                          collection?.volumeChangePercentage1h,
+                          volumeChangePercentage(collection),
                         )}
                       >
-                        {Number(collection?.volumeChangePercentage1h).toFixed(
-                          2,
-                        )}
-                        %
+                        {Number(volumeChangePercentage(collection)).toFixed(2)}%
                       </p>
                     </div>
                   </div>
@@ -494,6 +455,14 @@ export const TrendingTopMobile = ({ dataCollections }) => {
       : 'font-semibold text-green-500';
   };
 
+  const volumeChangePercentage = (collection) => {
+    return collection['volumeChangePercentage' + Range];
+  };
+
+  const priceChangePercentage = (collection) => {
+    return collection['priceChangePercentage' + Range];
+  };
+
   return (
     <>
       <MainMobile />
@@ -530,23 +499,30 @@ export const TrendingTopMobile = ({ dataCollections }) => {
                 <span>Floor</span>
                 <span>
                   $
-                  {Number(formatEther(Number(collection.floorPrice))).toFixed(
-                    2,
-                  )}
+                  {collection.floorPrice
+                    ? Number(
+                        formatEther(Number(collection.floorPrice)),
+                      ).toFixed(2)
+                    : '0.00'}
                 </span>
                 <span
                   className={classFloor(collection.priceChangePercentage1h)}
                 >
-                  {collection.priceChangePercentage1h}%
+                  {Number(priceChangePercentage(collection)).toFixed(2)}%
                 </span>
               </div>
               <div className="flex w-full flex-col gap-3">
                 <span>Volume</span>
-                <span>${formatter(collection.volume)}</span>
+                <span>
+                  $
+                  {collection.floorPrice
+                    ? Number(formatEther(Number(collection.volume))).toFixed(0)
+                    : '0'}
+                </span>
                 <span
                   className={classMovement(collection.volumeChangePercentage1h)}
                 >
-                  {Number(collection.volumeChangePercentage1h).toFixed(2)}%
+                  {Number(volumeChangePercentage(collection)).toFixed(2)}
                 </span>
               </div>
             </div>

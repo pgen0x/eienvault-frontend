@@ -63,18 +63,33 @@ export default function Collection() {
   const filterQuery = useSearchParams();
   const [filterCollapse, setFilterCollapse] = useState({
     blockchain: false,
-    category: false,
-    price: false,
-    status: false,
-    currency: false,
-    collection: false,
+    floorPrice: false,
+    volume: false,
   });
   const [openFilter, setOpenFilter] = useState(true);
   const [collections, setCollections] = useState([]);
   const [collectionPage, setCollectionPage] = useState(1);
+  const [collectionLast, setCollectionLast] = useState(false);
+
   const [TrendingTop, setTrendingTop] = useState('trending');
   const [Range, setRange] = useState('1h');
-  const [collectionLast, setCollectionLast] = useState(false);
+
+  const [sortedCollections, setSortedCollections] = useState([]);
+  const [chains, setChains] = useState([]);
+  const [filterBlockchain, setFilterBlockchain] = useState('');
+  const [filterFloorPrice, setFilterFloorPrice] = useState({
+    start: '',
+    end: '',
+  });
+  const [filterVolume, setFilterVolume] = useState({
+    start: '',
+    end: '',
+  });
+  const [startFloorPrice, setStartFloorPrice] = useState('');
+  const [endFloorPrice, setEndFloorPrice] = useState('');
+  const [startVolume, setStartVolume] = useState('');
+  const [endVolume, setEndVolume] = useState('');
+
   const [search, setSearch] = useState(
     filterQuery.get('search') === null ? '' : filterQuery.get('search'),
   );
@@ -142,6 +157,31 @@ export default function Collection() {
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
+
+    const getChains = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/chain/getall`,
+          {
+            cache: 'no-store',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+
+        if (!res.ok) {
+          console.error('Fetch failed:', res);
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await res.json();
+        setChains(responseData);
+      } catch (error) {
+        console.error('Fetch failed:', error);
+      }
+    };
+    getChains();
   }, []);
 
   const handleSearch = (event) => {
@@ -219,6 +259,60 @@ export default function Collection() {
           }
         });
     }
+  };
+
+  useEffect(() => {
+    if (collections.length > 0) {
+      setSortedCollections(filterCollections());
+    }
+  }, [collections, filterBlockchain, filterFloorPrice, filterVolume]);
+
+  const filterCollections = () => {
+    let result = [];
+
+    for (const collection of collections) {
+      if (filterBlockchain !== '') {
+        if (collection.chainId !== filterBlockchain) {
+          continue;
+        }
+      }
+
+      if (filterFloorPrice.start !== '' && filterFloorPrice.end !== '') {
+        if (
+          parseFloat(formatEther(collection.floorPrice)) >=
+            parseFloat(filterFloorPrice.start) &&
+          parseFloat(formatEther(collection.floorPrice)) <=
+            parseFloat(filterFloorPrice.end)
+        ) {
+        } else {
+          continue;
+        }
+      }
+
+      if (filterVolume.start !== '' && filterVolume.end !== '') {
+        if (
+          parseFloat(formatEther(collection.volume)) >=
+            parseFloat(filterVolume.start) &&
+          parseFloat(formatEther(collection.volume)) <=
+            parseFloat(filterVolume.end)
+        ) {
+        } else {
+          continue;
+        }
+      }
+
+      result.push(collection);
+    }
+
+    return result;
+  };
+
+  const handleFilterFloorPrice = (start, end) => {
+    setFilterFloorPrice({ start, end });
+  };
+
+  const handleFilterVolume = (start, end) => {
+    setFilterVolume({ start, end });
   };
 
   const volumeChangePercentage = (collection) => {
@@ -339,66 +433,137 @@ export default function Collection() {
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
                     <div
-                      className={`target py-5 ${
-                        filterCollapse.blockchain ? 'block' : 'hidden'
+                      className={`gap-1 pb-5 ${
+                        filterCollapse.blockchain ? 'flex' : 'hidden'
                       }`}
                     >
-                      <select
-                        id="country"
-                        name="country"
-                        autoComplete="country-name"
-                        className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                      >
-                        <option>United States</option>
-                        <option>Canada</option>
-                        <option>Mexico</option>
-                      </select>
+                      {chains.length == 0 && (
+                        <>
+                          {[...Array(8)].map((nft, index) => (
+                            <div
+                              className="col-span-4 h-8 w-full animate-pulse rounded-xl bg-gray-300 px-3 py-1"
+                              key={index}
+                            />
+                          ))}
+                        </>
+                      )}
+                      {chains.length > 0 &&
+                        chains
+                          .filter(
+                            (filterChain) => filterChain.mode == 'testnet',
+                          )
+                          .map((chain, index) => {
+                            return (
+                              <button
+                                key={index}
+                                onClick={() =>
+                                  filterBlockchain === chain.chainId
+                                    ? setFilterBlockchain('')
+                                    : setFilterBlockchain(chain.chainId)
+                                }
+                                className={`col-span-3 flex h-8 w-full min-w-[2rem] cursor-pointer items-center justify-center rounded-lg text-xs font-medium leading-5 text-white shadow ${
+                                  filterBlockchain === chain.chainId
+                                    ? 'bg-primary-300'
+                                    : 'bg-primary-500 lg:hover:bg-primary-300'
+                                }`}
+                              >
+                                {chain.symbol}
+                              </button>
+                            );
+                          })}
                     </div>
                   </li>
                   <li>
                     <button
                       className="action flex w-full cursor-pointer items-center justify-between py-3"
-                      onClick={(event) => handleFilterCollapse('category')}
-                    >
-                      <span>Category</span>
-                      <FontAwesomeIcon icon={faChevronDown} />
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      className="action flex w-full cursor-pointer items-center justify-between py-3"
-                      onClick={(event) => handleFilterCollapse('price')}
+                      onClick={(event) => handleFilterCollapse('floorPrice')}
                     >
                       <span>Floor price</span>
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
+                    <div
+                      className={`target flex flex-col gap-3 pb-2  ${
+                        filterCollapse.floorPrice ? 'block' : 'hidden'
+                      }`}
+                    >
+                      <div className="flex flex-row gap-2">
+                        <input
+                          type="number"
+                          placeholder="Start Price"
+                          value={startFloorPrice}
+                          min={0}
+                          onWheel={(e) => e.target.blur()}
+                          onChange={(e) => setStartFloorPrice(e.target.value)}
+                          className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                        />
+                        <div className="flex items-center justify-center">
+                          -
+                        </div>
+                        <input
+                          type="number"
+                          placeholder="End Price"
+                          value={endFloorPrice}
+                          min={0}
+                          onWheel={(e) => e.target.blur()}
+                          onChange={(e) => setEndFloorPrice(e.target.value)}
+                          className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                        />
+                      </div>
+                      <button
+                        className="mb-2 inline-flex w-full justify-center rounded-full bg-primary-500 px-4 py-2 text-sm text-white hover:bg-primary-300"
+                        onClick={() =>
+                          handleFilterFloorPrice(startFloorPrice, endFloorPrice)
+                        }
+                      >
+                        Apply
+                      </button>
+                    </div>
                   </li>
                   <li>
                     <button
                       className="action flex w-full cursor-pointer items-center justify-between py-3"
-                      onClick={(event) => handleFilterCollapse('status')}
+                      onClick={(event) => handleFilterCollapse('volume')}
                     >
-                      <span>Status</span>
+                      <span>Volume</span>
                       <FontAwesomeIcon icon={faChevronDown} />
                     </button>
-                  </li>
-                  <li>
-                    <button
-                      className="action flex w-full cursor-pointer items-center justify-between py-3"
-                      onClick={(event) => handleFilterCollapse('currency')}
+                    <div
+                      className={`target flex flex-col gap-3 pb-2  ${
+                        filterCollapse.volume ? 'block' : 'hidden'
+                      }`}
                     >
-                      <span>Currency</span>
-                      <FontAwesomeIcon icon={faChevronDown} />
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      className="action flex w-full cursor-pointer items-center justify-between py-3"
-                      onClick={(event) => handleFilterCollapse('collection')}
-                    >
-                      <span>Collection</span>
-                      <FontAwesomeIcon icon={faChevronDown} />
-                    </button>
+                      <div className="flex flex-row gap-2">
+                        <input
+                          type="number"
+                          placeholder="Start Price"
+                          value={startVolume}
+                          min={0}
+                          onWheel={(e) => e.target.blur()}
+                          onChange={(e) => setStartVolume(e.target.value)}
+                          className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                        />
+                        <div className="flex items-center justify-center">
+                          -
+                        </div>
+                        <input
+                          type="number"
+                          placeholder="End Price"
+                          value={endVolume}
+                          min={0}
+                          onWheel={(e) => e.target.blur()}
+                          onChange={(e) => setEndVolume(e.target.value)}
+                          className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                        />
+                      </div>
+                      <button
+                        className="mb-2 inline-flex w-full justify-center rounded-full bg-primary-500 px-4 py-2 text-sm text-white hover:bg-primary-300"
+                        onClick={() =>
+                          handleFilterVolume(startVolume, endVolume)
+                        }
+                      >
+                        Apply
+                      </button>
+                    </div>
                   </li>
                 </ul>
               </div>
@@ -420,13 +585,13 @@ export default function Collection() {
                   <div className="col-span-1 grid">Owner</div>
                 </div>
                 <div className="col-span-12 grid grid-cols-12 gap-3 rounded-lg border-2 border-gray-200 bg-gray-100 p-3 dark:border-zinc-500 dark:bg-zinc-700">
-                  {collections.length == 0 && (
+                  {sortedCollections.length == 0 && (
                     <div className="col-span-12 w-full text-center font-semibold text-black dark:text-white">
                       Collection not found
                     </div>
                   )}
-                  {collections.length > 0 &&
-                    collections.map((collection, index) => (
+                  {sortedCollections.length > 0 &&
+                    sortedCollections.map((collection, index) => (
                       <div
                         key={index}
                         className={`group col-span-12 grid w-full cursor-pointer grid-cols-12 rounded-xl bg-gray-50 p-3 px-5 py-2 hover:bg-gray-200 dark:bg-zinc-600 dark:text-white hover:dark:bg-zinc-500`}

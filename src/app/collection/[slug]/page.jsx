@@ -1382,9 +1382,9 @@ const Items = ({ params, collection }) => {
                 : 'md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12'
             }`}
           >
-            <div className="grid w-full grid-cols-12 gap-7 text-gray-900">
+            <div className="grid w-full grid-cols-12 gap-7 text-gray-900 dark:text-white">
               {sortedNFTs.length === 0 && !isLoading && (
-                <div className="col-span-12 w-full text-center font-semibold text-black">
+                <div className="col-span-12 w-full text-center font-semibold">
                   No results found
                 </div>
               )}

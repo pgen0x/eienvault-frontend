@@ -1,11 +1,14 @@
 'use client';
-import UserItemDetail from '@/components/user/itemDetail';
+import UserItemDetail, {
+  UserItemDetailSkeleton,
+} from '@/components/user/itemDetail';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { useRouter } from 'next-nprogress-bar';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useAccount } from 'wagmi';
 import Footer from '../../components/footer/main';
 
@@ -17,6 +20,7 @@ const UserPage = () => {
   const [users, setUsers] = useState([]);
   const [userPage, setUserPage] = useState(1);
   const [userLast, setUserLast] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState(
     filterQuery.get('search') === null ? '' : filterQuery.get('search'),
   );
@@ -68,6 +72,7 @@ const UserPage = () => {
 
   const getUsers = async () => {
     if (userLast === true) return;
+    setIsLoading(true);
 
     await axios
       .request({
@@ -84,10 +89,16 @@ const UserPage = () => {
             setUsers([...response.data.users]);
           }
         } else {
-          setUserLast(true);
+          if (userPage > 1) {
+            setUserLast(true);
+          } else {
+            setUsers([]);
+          }
         }
+        setIsLoading(false);
       })
       .catch((error) => {
+        setIsLoading(false);
         toast.error(error.message);
       });
   };
@@ -112,7 +123,7 @@ const UserPage = () => {
 
   const refresh = () => {
     getFollowings();
-  }
+  };
 
   return (
     <>
@@ -150,14 +161,26 @@ const UserPage = () => {
             <div className="col-span-12 overflow-auto sm:col-span-12">
               <div className="grid w-full min-w-[720px] grid-cols-12 text-gray-900">
                 <div className="col-span-12 grid grid-cols-12 gap-3 rounded-lg p-3">
-                  {users.length == 0 && (
+                  {users.length == 0 && !isLoading && (
                     <div className="col-span-12 w-full text-center font-semibold text-black">
                       User not found
                     </div>
                   )}
+                  {users.length == 0 && isLoading && (
+                    <>
+                      {[...Array(12)].map((nft, index) => (
+                        <UserItemDetailSkeleton key={index} />
+                      ))}
+                    </>
+                  )}
                   {users.length > 0 &&
                     users.map((user, index) => (
-                      <UserItemDetail key={index} user={user} followings={followings} refresh={refresh} />
+                      <UserItemDetail
+                        key={index}
+                        user={user}
+                        followings={followings}
+                        refresh={refresh}
+                      />
                     ))}
                 </div>
               </div>

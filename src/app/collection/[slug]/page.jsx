@@ -1634,8 +1634,8 @@ const Activity = ({ collection }) => {
       type = 'Burn';
     } else if (
       (event?.item?.From !== '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
-        isAddress(event?.item?.From)) ||
-      (event?.item?.To == '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
+        isAddress(event?.item?.From)) &&
+      (event?.item?.To !== '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
         isAddress(event?.item?.To))
     ) {
       description = (

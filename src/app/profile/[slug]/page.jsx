@@ -43,6 +43,7 @@ import Liked from './liked';
 import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
 import ModalReportNft from '@/components/modal/reportNft';
 import { JazzIcon } from '@/components/jazzicon';
+import { useLocation } from 'react-use';
 
 const servers = [
   'All Mainnet',
@@ -77,7 +78,7 @@ export default function ProfilePage({ params }) {
   const { token } = useAuth();
   const [selectedServer, setSelectedServer] = useState(servers[0]);
   const [limitCollection, setLimitCollection] = useState(5);
-  const [activePage, setActivePage] = useState('Collections');
+  const [activePage, setActivePage] = useState('owned');
   const [renderPage, setRenderPage] = useState();
   const [profile, setProfile] = useState({});
 
@@ -93,6 +94,8 @@ export default function ProfilePage({ params }) {
     'https://placehold.co/1920x266.png',
   );
   const [logoImage, setLogoImage] = useState('');
+  const queryString = useLocation();
+  const urlParams = new URLSearchParams(queryString.search);
 
   const handleResize = () => {
     const screen = window.innerWidth;
@@ -138,8 +141,8 @@ export default function ProfilePage({ params }) {
   }, []);
 
   const handleChangePage = (collection) => {
-    setActivePage(collection.slug);
     router.push(`?${collection.slug.toLowerCase()}`);
+    setActivePage(collection.slug);
   };
 
   if (params?.slug === undefined && address === undefined) {
@@ -204,24 +207,13 @@ export default function ProfilePage({ params }) {
     },
   ];
 
-  // useEffect(() => {
-  //   const queryString = window.location.search;
-  //   const urlParams = new URLSearchParams(queryString);
-
-  //   listCollections.map((collection) => {
-  //     if (urlParams.get(collection.slug.toLowerCase()) === '') {
-  //       setActivePage(collection.name);
-  //     }
-  //   });
-  // }, []);
-
-  // useEffect(() => {
-  //   listCollections.map((collection) => {
-  //     if (collection.name === activePage) {
-  //       setRenderPage(collection.page);
-  //     }
-  //   });
-  // }, [activePage]);
+  useEffect(() => {
+    listCollections.map((collection) => {
+      if (urlParams.get(collection.slug.toLowerCase()) === '') {
+        setActivePage(collection.slug);
+      }
+    });
+  }, [queryString.search]);
 
   const renderActiveTab = () => {
     const listTabs = {
@@ -616,8 +608,6 @@ const Collection = ({ userAccount }) => {
   useEffect(() => {
     getCollections();
   }, [collectionPage]);
-
-  console.log(userAccount);
 
   const getCollections = async () => {
     if (collectionLast === true) return;

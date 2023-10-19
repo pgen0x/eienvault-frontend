@@ -83,17 +83,17 @@ const Sidebar = () => {
 
   const handleMyNft = () => {
     closeSidebar();
-    router.push('/profile?view=owned'); // Navigate to the profile page
+    router.push('/profile?owned'); // Navigate to the profile page
   };
 
   const handleMyCollection = () => {
     closeSidebar();
-    router.push(`/profile?view=collection`); // Navigate to the profile page
+    router.push(`/profile?collections`); // Navigate to the profile page
   };
 
   const handleMyActivity = () => {
     closeSidebar();
-    router.push('/profile/activity'); // Navigate to the profile page
+    router.push('/profile?activity'); // Navigate to the profile page
   };
 
   const handleDisconnect = () => {

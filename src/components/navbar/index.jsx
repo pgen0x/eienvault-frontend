@@ -55,7 +55,7 @@ export default function Navbar() {
   const handlePushSidebar = (url) => {
     setOpenMenu(false);
     router.push(url);
-  }
+  };
 
   return (
     <>
@@ -127,9 +127,12 @@ export default function Navbar() {
                   >
                     <span>NFTs</span>
                   </li>
-                  {/* <li className="font-semibold text-primary-500 hover:text-primary-300">
+                  <li
+                    className="font-semibold text-primary-500 hover:text-primary-300"
+                    onClick={() => handlePushSidebar('/user')}
+                  >
                     <span>Users</span>
-                  </li> */}
+                  </li>
                 </ul>
               </div>
               {/* <div className="group mt-2">

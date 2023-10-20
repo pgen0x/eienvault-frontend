@@ -120,10 +120,14 @@ export default function ProfilePage({ params }) {
       .then((response) => {
         setProfile(response.data);
         if (response.data.banner !== null) {
-          setBannerImage(`/uploads/users/banner/${response.data.banner}`);
+          setBannerImage(
+            `${process.env.NEXT_PUBLIC_CDN_URL}/users/banner/${response.data.banner}`,
+          );
         }
         if (response.data.logo !== null) {
-          setLogoImage(`/uploads/users/${response.data.logo}`);
+          setLogoImage(
+            `${process.env.NEXT_PUBLIC_CDN_URL}/users/${response.data.logo}`,
+          );
         }
       })
       .catch((error) => {

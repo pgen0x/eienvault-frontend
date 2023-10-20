@@ -61,7 +61,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
         <Image
           src={
             user?.banner
-              ? `/uploads/users/banner/${user?.banner}`
+              ? `${process.env.NEXT_PUBLIC_CDN_URL}/users/banner/${user?.banner}`
               : 'https://fakeimg.pl/358x149'
           }
           alt={user?.username ? user?.username : ''}
@@ -78,7 +78,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
           <div className="absolute top-24 flex items-center justify-center rounded-full border-2 border-white">
             {user?.logo ? (
               <ImageWithFallback
-                src={`/uploads/users/${user?.logo}`}
+                src={`${process.env.NEXT_PUBLIC_CDN_URL}/users/${user?.logo}`}
                 alt={user?.username}
                 width={90}
                 height={90}

@@ -240,7 +240,7 @@ export const Slideshow = ({
                             alt={auction.collectionData?.userAddress}
                             diameter={15}
                             address={auction.collectionData?.userAddress}
-                            src={`/uploads/collections/${auction.collectionData?.logo}`}
+                            src={`${process.env.NEXT_PUBLIC_CDN_URL}/users/${auction.collectionData?.User.logo}`}
                           />
                           <div className="flex items-start justify-start gap-2">
                             <div className="text-xs font-bold leading-none text-neutral-700">
@@ -616,7 +616,7 @@ export const SlideshowMobile = ({
                             height={15}
                             diameter={15}
                             address={auction.collectionData?.tokenAddress}
-                            src={`/uploads/collections/${auction.collectionData?.logo}`}
+                            src={`${process.env.NEXT_PUBLIC_CDN_URL}/collections/${auction.collectionData?.logo}`}
                             alt={
                               auction.nftDetails?.name ||
                               auction.collectionData?.name

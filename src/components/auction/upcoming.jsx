@@ -68,7 +68,7 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                 alt={dataUpcoming[0].collectionData.name}
                 diameter={15}
                 address={dataUpcoming[0].collectionData?.tokenAddress}
-                src={`/uploads/collections/${dataUpcoming[0].collectionData?.logo}`}
+                src={`${process.env.NEXT_PUBLIC_CDN_URL}/${dataUpcoming[0].collectionData?.logo}`}
               />
               <div className="flex items-start justify-start gap-2">
                 <div className="text-xs font-medium leading-none text-neutral-700">
@@ -170,7 +170,7 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                     alt={nft.collectionData.name}
                     diameter={15}
                     address={nft.collectionData?.tokenAddress}
-                    src={`/uploads/collections/${nft.collectionData?.logo}`}
+                    src={`${process.env.NEXT_PUBLIC_CDN_URL}/collections/${nft.collectionData?.logo}`}
                   />
                   <div className="flex items-start justify-start gap-2">
                     <div className="text-xs font-medium leading-none text-neutral-700">
@@ -431,7 +431,7 @@ export const UpcomingAuctionMobile = ({ dataUpcoming }) => {
                   alt={nft.collectionData.name}
                   diameter={15}
                   address={nft.collectionData?.tokenAddress}
-                  src={`/uploads/collections/${nft.collectionData?.logo}`}
+                  src={`${process.env.NEXT_PUBLIC_CDN_URL}/collections/${nft.collectionData?.logo}`}
                 />
                 <div className="flex items-start justify-start gap-2">
                   <div className="text-xs font-medium leading-none text-neutral-700">

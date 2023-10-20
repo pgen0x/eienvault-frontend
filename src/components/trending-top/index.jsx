@@ -31,7 +31,7 @@ const servers = [
   'Katelyn Rohan',
 ];
 
-const Main = ({TrendingTop, setTrendingTop, Range, setRange}) => {
+const Main = ({ TrendingTop, setTrendingTop, Range, setRange }) => {
   const router = useRouter();
 
   const handleTrendingTop = (event, target) => {
@@ -166,7 +166,12 @@ export const TrendingTop = ({ dataCollections }) => {
 
   return (
     <>
-      <Main Range={Range} setRange={setRange} TrendingTop={TrendingTop} setTrendingTop={setTrendingTop} />
+      <Main
+        Range={Range}
+        setRange={setRange}
+        TrendingTop={TrendingTop}
+        setTrendingTop={setTrendingTop}
+      />
       <ul
         role="list"
         className="mt-4 grid w-full grid-flow-col grid-rows-5 gap-3"
@@ -180,7 +185,7 @@ export const TrendingTop = ({ dataCollections }) => {
                 </p>
                 <div className="h-11 w-11">
                   <ImageWithFallback
-                    src={`/uploads/collections/${collection.logo}`}
+                    src={`${process.env.NEXT_PUBLIC_CDN_URL}/collections/${collection.logo}`}
                     alt={collection.name}
                     width={48}
                     height={48}
@@ -475,7 +480,7 @@ export const TrendingTopMobile = ({ dataCollections }) => {
             <div className="flex w-full items-center gap-3 border-b border-gray-300 pb-2">
               <div className="h-11 w-11">
                 <ImageWithFallback
-                  src={`/uploads/collections/${collection.logo}`}
+                  src={`${process.env.NEXT_PUBLIC_CDN_URL}/collections/${collection.logo}`}
                   alt={collection.name}
                   width={48}
                   height={48}

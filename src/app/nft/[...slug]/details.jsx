@@ -559,7 +559,7 @@ export default function NFTDetails({ dataNFTs }) {
                                   dataNFTs?.User?.walletAddress ||
                                   dataNFTs?.owner
                                 }
-                                src={`/uploads/users/${dataNFTs?.collectionData.User?.logo}`}
+                                src={`${process.env.NEXT_PUBLIC_CDN_URL}/users/${dataNFTs?.collectionData.User?.logo}`}
                               />
                             </>
                           ) : (
@@ -618,7 +618,7 @@ export default function NFTDetails({ dataNFTs }) {
                               dataNFTs?.ownerData?.walletAddress ||
                               dataNFTs?.owner
                             }
-                            src={`/uploads/users/${dataNFTs?.ownerData?.logo}`}
+                            src={`${process.env.NEXT_PUBLIC_CDN_URL}/${dataNFTs?.ownerData?.logo}`}
                           />
                         ) : (
                           <JazzIcon
@@ -1383,7 +1383,7 @@ const Collateral = ({ dataNFTs }) => {
                 }
                 diameter={28}
                 address={dataNFTs.ownerData?.walletAddress || dataNFTs.owner}
-                src={`/uploads/users/${dataNFTs.ownerData?.logo}`}
+                src={`${process.env.NEXT_PUBLIC_CDN_URL}/${dataNFTs.ownerData?.logo}`}
               />
             ) : (
               <JazzIcon
@@ -1456,7 +1456,7 @@ const Overview = ({ dataOverview, onSeeAllClick }) => {
                           }
                           diameter={32}
                           address={offer?.userDetails?.walletAddress}
-                          src={`/uploads/users/${offer?.userDetails?.logo}`}
+                          src={`${process.env.NEXT_PUBLIC_CDN_URL}/${offer?.userDetails?.logo}`}
                         />
                       </div>
                       <div className="inline-flex cursor-pointer items-center justify-center">
@@ -1511,7 +1511,7 @@ const Bids = ({ dataBid }) => {
                             }
                             diameter={48}
                             address={offer?.userDetails?.walletAddress}
-                            src={`/uploads/users/${offer?.userDetails?.logo}`}
+                            src={`${process.env.NEXT_PUBLIC_CDN_URL}/${offer?.userDetails?.logo}`}
                           />
                         ) : (
                           <JazzIcon
@@ -1595,10 +1595,10 @@ const History = ({ collection, tokenId }) => {
       );
       type = 'Burn';
     } else if (
-      (event?.item?.From !== '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
-        isAddress(event?.item?.From)) &&
-      (event?.item?.To !== '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
-        isAddress(event?.item?.To))
+      event?.item?.From !== '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
+      isAddress(event?.item?.From) &&
+      event?.item?.To !== '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
+      isAddress(event?.item?.To)
     ) {
       description = (
         <div className="flex gap-1">

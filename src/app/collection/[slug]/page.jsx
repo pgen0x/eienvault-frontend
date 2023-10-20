@@ -117,7 +117,7 @@ export default function CollectionDetail({ params }) {
         setCollection(response.data);
         if (response.data.bannerImage !== null) {
           setBannerImage(
-            `/uploads/collections/banner/${response.data.bannerImage}`,
+            `${process.env.NEXT_PUBLIC_CDN_URL}/collections/${response.data.bannerImage}`,
           );
         }
       })
@@ -239,7 +239,7 @@ export default function CollectionDetail({ params }) {
                     <div className="relative -mt-[5rem]">
                       {collection?.logo ? (
                         <ImageWithFallback
-                          src={`/uploads/collections/${collection?.logo}`}
+                          src={`${process.env.NEXT_PUBLIC_CDN_URL}/collections/${collection?.logo}`}
                           alt={collection?.name}
                           width={100}
                           height={100}
@@ -1633,10 +1633,10 @@ const Activity = ({ collection }) => {
       );
       type = 'Burn';
     } else if (
-      (event?.item?.From !== '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
-        isAddress(event?.item?.From)) &&
-      (event?.item?.To !== '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
-        isAddress(event?.item?.To))
+      event?.item?.From !== '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
+      isAddress(event?.item?.From) &&
+      event?.item?.To !== '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
+      isAddress(event?.item?.To)
     ) {
       description = (
         <div className="flex gap-1">

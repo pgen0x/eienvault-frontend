@@ -344,7 +344,7 @@ const Nft = ({
                     }
                     diameter={16}
                     address={nft?.collectionAddress}
-                    src={`/uploads/collections/${collection?.logo}`}
+                    src={`${process.env.NEXT_PUBLIC_CDN_URL}/collections/${collection?.logo}`}
                   />
                   <div className="flex items-start justify-start gap-2">
                     <div className="text-xs font-medium leading-none text-neutral-700 dark:text-white">

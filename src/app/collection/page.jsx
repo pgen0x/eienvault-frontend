@@ -613,7 +613,7 @@ export default function Collection() {
                             <div className="h-[48px] w-[48px]">
                               {collection?.logo ? (
                                 <ImageWithFallback
-                                  src={`/uploads/collections/${collection.logo}`}
+                                  src={`${process.env.NEXT_PUBLIC_CDN_URL}/collections/${collection.logo}`}
                                   alt={collection?.name}
                                   width={48}
                                   height={48}

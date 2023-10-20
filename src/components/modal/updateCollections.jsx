@@ -2,9 +2,11 @@
 import Ethereum from '@/assets/icon/ethereum';
 import HelaIcon from '@/assets/icon/hela';
 import {
+  faCheck,
   faChevronDown,
   faClose,
   faImage,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Listbox, Transition } from '@headlessui/react';
@@ -38,6 +40,8 @@ export default function ModalUpdateCollection({
   const { token } = useAuth();
   const [isSubmit, setIsSubmit] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [errorOnUpload, setErrorOnUpload] = useState(false);
+
   const { address, isConnected } = useAccount();
   const { chain } = useNetwork();
   const [tmpSave, setTmpSave] = useState(Date.now());
@@ -56,28 +60,37 @@ export default function ModalUpdateCollection({
   const tokenSymbol = watch('tokenSymbol');
   const description = watch('description');
 
-  const onUpload = async (file, filename) => {
+  const onUpload = async (file) => {
     try {
       // Create a new FormData object
       const formData = new FormData();
-      formData.append('file', file);
-      formData.append('filename', filename);
+      formData.append('image', file);
+      formData.append('tokenAddress', collectionAddress);
+      formData.append('type', 'logo');
 
       // Use the fetch API to send the FormData to the server
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/collection/upload`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        },
+      );
 
       if (response.ok) {
         return await response.json();
       } else {
         // Handle the error here
+        setErrorOnUpload(true);
         toast.error('File upload failed:', response.statusText);
-        console.error('File upload failed:', response.statusText);
+        console.error('File upload failed:', response);
       }
     } catch (error) {
       // Handle any unexpected errors
+      setErrorOnUpload(true);
       console.error('Error during file upload:', error);
     }
   };
@@ -86,7 +99,6 @@ export default function ModalUpdateCollection({
     try {
       setCollection((oldCollection) => {
         for (let key in payload) {
-          console.log(payload, oldCollection, '%%%%%%%%%%%%%%%%');
           oldCollection[key] = payload[key];
         }
         return oldCollection;
@@ -110,11 +122,13 @@ export default function ModalUpdateCollection({
       if (response.ok) {
         setIsSubmit(false);
         setIsCompleted(true);
-        console.log(collection, '@@@@@@@@@@@@@');
-        // Data was saved successfully
+        setErrorOnUpload(false);
         console.log('Data saved successfully.');
       } else {
         // Handle the error here
+        setIsSubmit(false);
+        setIsCompleted(true);
+        setErrorOnUpload(true);
         console.error('Data saved failed:', response.statusText);
       }
     } catch (error) {
@@ -132,17 +146,13 @@ export default function ModalUpdateCollection({
     setIsSubmit(true);
     closeModal();
 
-    const filenameBase64 = await onUpload(
-      selectedImage[0],
-      selectedImage[0].name,
-    );
-    
+    const resUpload = await onUpload(selectedImage[0]);
+
     const onSaveData = await onSave({
       name: name,
       tokenSymbol: tokenSymbol,
       description: description,
       chainId: chain?.id,
-      logo: filenameBase64.filename,
     });
   };
 
@@ -151,7 +161,7 @@ export default function ModalUpdateCollection({
     onClose(false);
     onModalClose();
     reset();
-    setTmpSave(Date.now())
+    setTmpSave(Date.now());
   }
 
   const allowedFileTypes = [
@@ -185,17 +195,23 @@ export default function ModalUpdateCollection({
   useEffect(() => {
     const fetchImage = async () => {
       try {
-        const response = await fetch(`/uploads/collections/${collection.logo}`);
-        // const response = await fetch("/uploads/collections/YWZkOGI0NGU3NWUxZGRjOTczZjY2MGI3ZDBlOTg3NTUtMTY2ODA0NDQ3OC02NjQucG5n.png");
-        const blob = await response.blob();
-  
-        // Create a File object from the Blob
-        const ext = blob.type.split("/");
-        const file = new File([blob], `image.${ext[ext.length - 1]}`, { type: blob.type });
-        // Set the value of the 'file' field using setValue
-        setValue('file', [file]);
+        if (collection.logo) {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_CDN_URL}/collections/${collection.logo}`,
+          );
+
+          const blob = await response.blob();
+
+          // Create a File object from the Blob
+          const ext = blob.type.split('/');
+          const file = new File([blob], `image.${ext[ext.length - 1]}`, {
+            type: blob.type,
+          });
+          // Set the value of the 'file' field using setValue
+          setValue('file', [file]);
+        }
       } catch (error) {
-        console.error("Error fetching the image:", error);
+        console.error('Error fetching the image:', error);
       }
     };
 
@@ -204,7 +220,7 @@ export default function ModalUpdateCollection({
       setValue('tokenSymbol', collection.tokenSymbol);
       setValue('description', collection.description);
       setValue('chainId', collection.chainId);
-    }
+    };
 
     fetchImage();
     fetchCollection();
@@ -298,7 +314,7 @@ export default function ModalUpdateCollection({
                                         className="hidden"
                                         onChange={(e) => {
                                           const file = e.target.files[0];
-                                          console.log(file, "*************");
+                                          console.log(file, '*************');
                                           setValue('file', file); // Set the value of 'file' field using setValue
                                         }}
                                         {...register('file', {
@@ -592,7 +608,7 @@ export default function ModalUpdateCollection({
                     as="h3"
                     className="text-center text-xl font-bold text-gray-900"
                   >
-                    Deploying your contract
+                    Awaiting Collection Data Update
                   </Dialog.Title>
 
                   <div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
@@ -603,8 +619,7 @@ export default function ModalUpdateCollection({
                             <div className="h-10 w-10 animate-ping rounded-lg bg-primary-100"></div>
                             <div className="text-center text-base leading-6">
                               <span>
-                                Check your wallet and do an approvement to
-                                continue deploying your contract
+                                Stay Patient, Exciting Updates on the Way
                               </span>
                             </div>
                           </div>
@@ -649,13 +664,27 @@ export default function ModalUpdateCollection({
                       <div className="text-gray-900">
                         <section className="step-2 flex flex-col gap-3 bg-gray-100 p-5">
                           <div className="flex flex-col items-center gap-5">
-                            <img
-                              src="https://fakeimg.pl/84x84"
-                              className="h-20 w-20 rounded-lg"
-                            />
+                            {errorOnUpload ? (
+                              <div className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full border-[8px] border-primary-500">
+                                <FontAwesomeIcon
+                                  icon={faXmark}
+                                  className="text-6xl font-bold text-primary-500"
+                                />
+                              </div>
+                            ) : (
+                              <div className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full border-[8px] border-green-400">
+                                <FontAwesomeIcon
+                                  icon={faCheck}
+                                  className="text-6xl font-bold text-green-400"
+                                />
+                              </div>
+                            )}
+
                             <div className="text-center">
                               <h3 className="text-lg font-bold">
-                                Your collections is now successfully updated!
+                                {errorOnUpload
+                                  ? 'Failed to update data'
+                                  : 'Your collections is now successfully updated!'}
                               </h3>
                             </div>
                             <div className="justiry-between flex w-full gap-2">

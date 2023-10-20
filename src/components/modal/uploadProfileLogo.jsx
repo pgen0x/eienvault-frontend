@@ -42,33 +42,33 @@ export default function ModalUploadProfileLogo({
 
   const onUpload = async (data) => {
     const file = data.file[0];
-    const filename = `${address}-banner-${Date.now()}`;
     try {
       // Create a new FormData object
       const formData = new FormData();
-      formData.append('file', file);
-      formData.append('filename', filename);
+      formData.append('image', file);
+      formData.append('type', 'logo');
 
       // Use the fetch API to send the FormData to the server
-      const response = await fetch('/api/uploadprofilelogo', {
-        method: 'POST',
-        body: formData,
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/upload`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        },
+      );
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.error);
+
         if (data.success) {
-          const res = await onSave(data.filename);
-          if (res.success) {
-            const newImageURL = `/uploads/users/${data.filename}`;
-            updateLogoImage(newImageURL);
-            toast.success('Update Cover Successfully');
-            reset();
-            closeModal();
-          } else {
-            toast.error(`File upload failed: ${data.error}`);
-          }
+          const newImageURL = `${process.env.NEXT_PUBLIC_CDN_URL}/users/${data.success.filename}`;
+          updateLogoImage(newImageURL);
+          toast.success('Update Logo Successfully');
+          reset();
+          closeModal();
         } else {
           toast.error(`File upload failed: ${data.error}`);
         }
@@ -183,8 +183,8 @@ export default function ModalUploadProfileLogo({
                   </Dialog.Title>
                   <div className="flex flex-col text-sm text-gray-900">
                     <div className="mt-4 flex max-w-full shrink-0 flex-row items-center gap-4">
-                      Upload new cover. We recommend to upload images in
-                      100x100 resolution. Max 2 MB in JPEG or PNG format
+                      We recommend to upload images in 100x100 resolution. Max 2
+                      MB in JPEG or PNG format
                     </div>
                     <form>
                       <div className="w-full">

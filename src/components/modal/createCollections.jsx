@@ -42,6 +42,7 @@ export default function ModalCreateCollection({
   const [isErrorDeploy, setIsErrorDeploy] = useState();
   const [deployedContractAddress, setDeployedContractAddress] = useState();
   const [onSaveData, setOnsaveData] = useState();
+  const [errorOnUpload, setErrorOnUpload] = useState(false);
 
   const { data: walletClient } = useWalletClient();
   const { address, isConnected } = useAccount();
@@ -65,28 +66,37 @@ export default function ModalCreateCollection({
   const description = watch('description');
   const router = useRouter();
 
-  const onUpload = async (file, filename) => {
+  const onUpload = async (file) => {
     try {
       // Create a new FormData object
       const formData = new FormData();
-      formData.append('file', file);
-      formData.append('filename', filename);
+      formData.append('image', file);
+      formData.append('tokenAddress', collectionAddress);
+      formData.append('type', 'logo');
 
       // Use the fetch API to send the FormData to the server
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/collection/upload`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        },
+      );
 
       if (response.ok) {
         return await response.json();
       } else {
         // Handle the error here
+        setErrorOnUpload(true);
         toast.error('File upload failed:', response.statusText);
-        console.error('File upload failed:', response.statusText);
+        console.error('File upload failed:', response);
       }
     } catch (error) {
       // Handle any unexpected errors
+      setErrorOnUpload(true);
       console.error('Error during file upload:', error);
     }
   };
@@ -120,7 +130,6 @@ export default function ModalCreateCollection({
       if (response.ok) {
         // Data was saved successfully
         return response.json();
-        console.log('Data saved successfully.');
       } else {
         // Handle the error here
         console.error('Data saved failed:', response.statusText);
@@ -165,18 +174,13 @@ export default function ModalCreateCollection({
           setIsErrorDeploy(true);
         }
         if (data) {
-          const filenameBase64 = await onUpload(
-            selectedImage[0],
-            selectedImage[0].name,
-          );
-          console.log(data);
-          console.log(selectedImage[0]);
+          const filenameBase64 = await onUpload(selectedImage[0]);
+
           const onSaveDataRes = await onSave({
             name: name,
             tokenSymbol: tokenSymbol,
             description: description,
             chainId: chain?.id,
-            logo: filenameBase64.filename,
             tokenAddress: data.contractAddress,
           });
           setDeployedContractAddress(data.contractAddress);
@@ -676,9 +680,11 @@ export default function ModalCreateCollection({
                             <div className="h-12 w-12 animate-ping rounded-lg bg-primary-100"></div>
                             <div className="text-center">
                               <h3 className="text-lg font-bold">
-                                Your contract has been deploying
+                                Your contract is deploying
                               </h3>
-                              <span>Wait a moment, deploying on progress.</span>
+                              <span>
+                                Wait a moment, Deployment in progress.
+                              </span>
                             </div>
                             {hash && (
                               <a

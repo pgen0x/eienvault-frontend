@@ -78,7 +78,7 @@ export default function ProfilePage({ params }) {
   const { token } = useAuth();
   const [selectedServer, setSelectedServer] = useState(servers[0]);
   const [limitCollection, setLimitCollection] = useState(5);
-  const [activePage, setActivePage] = useState('owned');
+  const [activePage, setActivePage] = useState('Owned');
   const [renderPage, setRenderPage] = useState();
   const [profile, setProfile] = useState({});
 
@@ -211,13 +211,13 @@ export default function ProfilePage({ params }) {
     },
   ];
 
-  useEffect(() => {
-    listCollections.map((collection) => {
-      if (urlParams.get(collection.slug.toLowerCase()) === '') {
-        setActivePage(collection.slug);
-      }
-    });
-  }, [queryString.search]);
+  // useEffect(() => {
+  //   listCollections.map((collection) => {
+  //     if (urlParams.get(collection.slug.toLowerCase()) === '') {
+  //       setActivePage(collection.slug);
+  //     }
+  //   });
+  // }, [queryString.search]);
 
   const renderActiveTab = () => {
     const listTabs = {

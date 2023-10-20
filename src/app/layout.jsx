@@ -1,6 +1,6 @@
 import Navbar from '@/components/navbar';
 import './globals.css';
-import { Inter } from 'next/font/google';
+// import { Inter } from 'next/font/google';
 import { Providers } from './provider';
 import 'react-slideshow-image/dist/styles.css';
 import 'swiper/css';
@@ -10,7 +10,7 @@ import Sidebar from '../components/sidebar';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-const inter = Inter({ subsets: ['latin'] });
+// const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   title: 'EienVault - The forefront of the digital revolution in the art world',
@@ -20,7 +20,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className + ' bg-gray-100 dark:bg-zinc-800'}>
+      <body className={'bg-gray-100 dark:bg-zinc-800'}>
         <Providers>
           <Navbar />
           <Sidebar />

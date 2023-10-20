@@ -48,6 +48,11 @@ const nextConfig = {
         port: '',
         pathname: '/ipfs/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdeien.codermatter.com',
+        port: '',
+      },
     ],
   },
 };

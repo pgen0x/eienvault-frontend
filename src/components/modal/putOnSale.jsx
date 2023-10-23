@@ -799,7 +799,7 @@ export default function ModalPutOnSale({
                     <div className="mt-4 inline-flex ">
                       <button
                         type="button"
-                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:bg-primary-50"
+                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-500 px-4 py-2 text-sm font-medium text-white hover:bg-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:bg-primary-300 disabled:text-primary-500"
                         onClick={closeModalProcessing}
                         disabled={isProcessing}
                       >

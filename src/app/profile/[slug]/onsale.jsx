@@ -1,3 +1,4 @@
+import ModalRemove from '@/components/modal/remove';
 import {
   NftItemDetail,
   NftItemDetailSkeleton,
@@ -54,6 +55,9 @@ const Onsale = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) =>
   const [startPrice, setStartPrice] = useState('');
   const [endPrice, setEndPrice] = useState('');
   const [priceFilter, setPriceFilter] = useState({ start: '', end: '' });
+  
+  const [removeData, setRemoveData] = useState({});
+  const [isOpenModalRemove, setisOpenModalRemove] = useState(false);
 
   const handleFilterCollapse = (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
@@ -305,6 +309,32 @@ const Onsale = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) =>
 
   const handleApplyPriceFilter = (start, end) => {
     setPriceFilter({ start, end });
+  };
+
+  const handleOpenModalRemove = async (
+    marketId,
+    tokenId,
+    collectionAddress
+  ) => {
+    setRemoveData({
+      marketId,
+      tokenId,
+      collectionAddress
+    });
+    setisOpenModalRemove(true);
+  };
+
+  function closeModalRemove() {
+    setisOpenModalRemove(false);
+  }
+
+  const refreshData = async () => {
+    console.log('Trigger refreshData');
+    setNfts([]);
+    setOnsalePage(1);
+    setLastOnsale(false);
+    setIsLoading(true);
+    await getNfts();
   };
 
   return (
@@ -586,6 +616,9 @@ const Onsale = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) =>
                       openFilter={openFilter}
                       isNotExpired={isNotExpired}
                       isNotRelease={isNotRelease}
+                      releaseDate={nft?.releaseDate}
+                      endDate={nft?.endDate}
+                      handleOpenModalRemove={handleOpenModalRemove}
                       handleOpenModalShare={handleOpenModalShare}
                       handleOpenModalReport={handleOpenModalReport}
                     />
@@ -595,6 +628,12 @@ const Onsale = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) =>
           </div>
         </div>
       </section>
+      <ModalRemove
+        isOpenModal={isOpenModalRemove}
+        onClose={closeModalRemove}
+        removeData={removeData}
+        refreshData={refreshData}
+      />
     </>
   );
 };

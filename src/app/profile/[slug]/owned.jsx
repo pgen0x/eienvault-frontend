@@ -23,6 +23,7 @@ import { toast } from 'react-toastify';
 import { formatEther } from 'viem';
 import { useAccount, useWalletClient } from 'wagmi';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import ModalRemove from '@/components/modal/remove';
 
 const filters = [
   'All',
@@ -65,9 +66,12 @@ export default function Owned({
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
   const [putOnSaleData, setPutonsaleData] = useState({});
+  const [removeData, setRemoveData] = useState({});
+
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
+  const [isOpenModalRemove, setisOpenModalRemove] = useState(false);
 
   const { data: walletClient } = useWalletClient();
 
@@ -348,6 +352,19 @@ export default function Owned({
     setisOpenModalBuy(true);
   };
 
+  const handleOpenModalRemove = async (
+    marketId,
+    tokenId,
+    collectionAddress,
+  ) => {
+    setRemoveData({
+      marketId,
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalRemove(true);
+  };
+
   const handleOpenModalBid = async (
     marketId,
     listingPrice,
@@ -387,6 +404,10 @@ export default function Owned({
 
   function closeModalBuy() {
     setisOpenModalBuy(false);
+  }
+
+  function closeModalRemove() {
+    setisOpenModalRemove(false);
   }
 
   function closeModalPutonsale() {
@@ -713,6 +734,9 @@ export default function Owned({
                       openFilter={openFilter}
                       isNotExpired={isNotExpired}
                       isNotRelease={isNotRelease}
+                      releaseDate={nft?.itemDetails?.releaseDate}
+                      endDate={nft?.itemDetails?.endDate}
+                      handleOpenModalRemove={handleOpenModalRemove}
                       handleOpenModalBid={handleOpenModalBid}
                       handleOpenModalBuy={handleOpenModalBuy}
                       handleOpenModalPutonsale={handleOpenModalPutonsale}
@@ -739,6 +763,12 @@ export default function Owned({
         dataBuy={buyData}
         buyAction={buyAction}
         onModalClose={closeModalBuy}
+        refreshData={refreshData}
+      />
+      <ModalRemove
+        isOpenModal={isOpenModalRemove}
+        onClose={closeModalRemove}
+        removeData={removeData}
         refreshData={refreshData}
       />
       <ModalPutOnSale

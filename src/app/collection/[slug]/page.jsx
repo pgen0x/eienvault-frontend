@@ -58,6 +58,7 @@ import {
 import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
 import formatter from '@/utils/shortNumberFormatter';
 import ModalReportNft from '@/components/modal/reportNft';
+import ModalRemove from '@/components/modal/remove';
 
 const filters = [
   'All',
@@ -519,12 +520,14 @@ const Items = ({ params, collection }) => {
   const [putOnSaleData, setPutonsaleData] = useState({});
   const [shareData, setShareData] = useState({});
   const [reportData, setReportData] = useState({});
+  const [removeData, setRemoveData] = useState({});
 
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
   const [isOpenModalReport, setisOpenModalReport] = useState(false);
+  const [isOpenModalRemove, setisOpenModalRemove] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -737,6 +740,19 @@ const Items = ({ params, collection }) => {
     setisOpenModalReport(true);
   };
 
+  const handleOpenModalRemove = async (
+    marketId,
+    tokenId,
+    collectionAddress,
+  ) => {
+    setRemoveData({
+      marketId,
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalRemove(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
@@ -755,6 +771,10 @@ const Items = ({ params, collection }) => {
 
   function closeModalReport() {
     setisOpenModalReport(false);
+  }
+
+  function closeModalRemove() {
+    setisOpenModalRemove(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -1423,6 +1443,9 @@ const Items = ({ params, collection }) => {
                       handleOpenModalPutonsale={handleOpenModalPutonsale}
                       handleOpenModalShare={handleOpenModalShare}
                       handleOpenModalReport={handleOpenModalReport}
+                      handleOpenModalRemove={handleOpenModalRemove}
+                      releaseDate={nft?.itemDetails?.releaseDate}
+                      endDate={nft?.itemDetails?.endDate}
                       isNotExpired={isNotExpired}
                       isNotRelease={isNotRelease}
                     />
@@ -1466,6 +1489,12 @@ const Items = ({ params, collection }) => {
         onClose={closeModalReport}
         onModalClose={closeModalReport}
         reportData={reportData}
+      />
+      <ModalRemove
+        isOpenModal={isOpenModalRemove}
+        onClose={closeModalRemove}
+        removeData={removeData}
+        refreshData={refreshData}
       />
     </>
   );

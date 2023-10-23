@@ -1,3 +1,4 @@
+import ModalRemove from '@/components/modal/remove';
 import {
   NftItemDetail,
   NftItemDetailSkeleton,
@@ -61,8 +62,9 @@ const Liked = ({
   const [startPrice, setStartPrice] = useState('');
   const [endPrice, setEndPrice] = useState('');
   const [priceFilter, setPriceFilter] = useState({ start: '', end: '' });
-  const [dataProperties, setDataProperties] = useState([]);
-  const [selectedValues, setSelectedValues] = useState([]);
+  
+  const [removeData, setRemoveData] = useState({});
+  const [isOpenModalRemove, setisOpenModalRemove] = useState(false);
 
   const handleFilterCollapse = (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
@@ -304,6 +306,32 @@ const Liked = ({
 
   const handleApplyPriceFilter = (start, end) => {
     setPriceFilter({ start, end });
+  };
+
+  const handleOpenModalRemove = async (
+    marketId,
+    tokenId,
+    collectionAddress
+  ) => {
+    setRemoveData({
+      marketId,
+      tokenId,
+      collectionAddress
+    });
+    setisOpenModalRemove(true);
+  };
+
+  function closeModalRemove() {
+    setisOpenModalRemove(false);
+  }
+
+  const refreshData = async () => {
+    console.log('Trigger refreshData');
+    setNfts([]);
+    setNftPage(1);
+    setNftLast(false);
+    setIsLoading(true);
+    await getNfts();
   };
 
   return (
@@ -589,8 +617,11 @@ const Liked = ({
                       handleOpenModalPutonsale={handleOpenModalPutonsale}
                       handleOpenModalShare={handleOpenModalShare}
                       handleOpenModalReport={handleOpenModalReport}
+                      handleOpenModalRemove={handleOpenModalRemove}
                       isNotExpired={isNotExpired}
                       isNotRelease={isNotRelease}
+                      releaseDate={nft?.releaseDate}
+                      endDate={nft?.endDate}
                     />
                   );
                 })}
@@ -598,6 +629,12 @@ const Liked = ({
           </div>
         </div>
       </section>
+      <ModalRemove
+        isOpenModal={isOpenModalRemove}
+        onClose={closeModalRemove}
+        removeData={removeData}
+        refreshData={refreshData}
+      />
     </>
   );
 };

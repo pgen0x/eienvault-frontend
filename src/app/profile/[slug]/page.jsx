@@ -25,7 +25,7 @@ import axios from 'axios';
 import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { useAccount, useNetwork } from 'wagmi';
-import { useSearchParams } from 'next/navigation';
+import { useParams, usePathname, useSearchParams } from 'next/navigation';
 import { formatEther, isAddress } from 'viem';
 import { ImageWithFallback } from '@/components/imagewithfallback';
 import ModalCreateCollection from '@/components/modal/createCollections';
@@ -95,7 +95,6 @@ export default function ProfilePage({ params }) {
   );
   const [logoImage, setLogoImage] = useState('');
   const queryString = useLocation();
-  const urlParams = new URLSearchParams(queryString.search);
 
   const handleResize = () => {
     const screen = window.innerWidth;
@@ -211,13 +210,25 @@ export default function ProfilePage({ params }) {
     },
   ];
 
-  // useEffect(() => {
-  //   listCollections.map((collection) => {
-  //     if (urlParams.get(collection.slug.toLowerCase()) === '') {
-  //       setActivePage(collection.slug);
-  //     }
-  //   });
-  // }, [queryString.search]);
+  
+  useEffect(() => {
+    loadActivePage();
+  }, []);
+
+  useEffect(() => {
+    loadActivePage();
+  }, [window.location.search, queryString.search]);
+
+  const loadActivePage = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlManualParams = new URLSearchParams(queryString.search)
+
+    listCollections.map((collection) => {
+      if (urlParams.get(collection.slug.toLowerCase()) === '' || urlManualParams.get(collection.slug.toLowerCase()) === '') {
+        setActivePage(collection.slug);
+      }
+    });
+  }
 
   const renderActiveTab = () => {
     const listTabs = {
@@ -254,7 +265,7 @@ export default function ProfilePage({ params }) {
       ),
     };
 
-    return listTabs[activePage];
+    return activePage == "" ? listTabs['Owned'] : listTabs[activePage];
   };
 
   const editBanner = () => {

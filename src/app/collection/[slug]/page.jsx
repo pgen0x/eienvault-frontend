@@ -1710,6 +1710,7 @@ const Activity = ({ collection }) => {
       collection: event?.collectionData,
       nft: event?.nftDetails,
       tokenAddress: event?.collectionAddress,
+      txHash: event?.txHash,
     };
   };
 
@@ -1882,6 +1883,7 @@ const Activity = ({ collection }) => {
       collection: event?.collectionData,
       nft: event?.nftDetails,
       tokenAddress: event?.collection,
+      txHash: event?.txHash,
     };
   };
 

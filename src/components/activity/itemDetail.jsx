@@ -43,7 +43,7 @@ export const ActivityItemDetail = ({ event }) => {
     }
   };
   return (
-    <div className="w-full justify-between items-center flex gap-2 bg-white hover:bg-primary-50 dark:bg-zinc-600 dark:hover:bg-zinc-500 p-3 rounded-lg">
+    <div className="flex w-full items-center justify-between gap-2 rounded-lg bg-white p-3 hover:bg-primary-50 dark:bg-zinc-600 dark:hover:bg-zinc-500">
       <div className="flex gap-3">
         <div className="w-fit">
           {event?.nft?.imageUri ? (
@@ -99,7 +99,12 @@ export const ActivityItemDetail = ({ event }) => {
       <div className="text-primary-500">
         <button
           onClick={() =>
-            router.push(`/nft/${event?.tokenAddress}/${event?.tokenId}`)
+            window
+              .open(
+                `https://testnet-blockexplorer.helachain.com/tx/${event?.txHash}`,
+                '_blank',
+              )
+              .focus()
           }
         >
           <FontAwesomeIcon icon={faArrowUpRightFromSquare} />

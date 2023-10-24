@@ -1643,6 +1643,7 @@ const History = ({ collection, tokenId }) => {
       collection: event?.collectionData,
       nft: event?.nftDetails,
       tokenAddress: event?.collectionAddress,
+      txHash: event?.txHash,
     };
   };
 
@@ -1815,6 +1816,7 @@ const History = ({ collection, tokenId }) => {
       collection: event?.collectionData,
       nft: event?.nftDetails,
       tokenAddress: event?.collection,
+      txHash: event?.txHash,
     };
   };
 
@@ -1835,7 +1837,7 @@ const History = ({ collection, tokenId }) => {
           response.data.events.map((event, index) => {
             const activity = parsingMintTransferEvents(event);
             if (activity) {
-              result.push(activity);
+              result.unshift(activity);
             }
           });
 
@@ -1867,12 +1869,12 @@ const History = ({ collection, tokenId }) => {
           response.data.map((event, index) => {
             const activity = parsingBidsSalesListing(event);
             if (activity) {
-              result.push(activity);
+              result.unshift(activity);
             }
           });
 
           setEvents((oldEvent) => {
-            return [...oldEvent, ...result];
+            return [...result, ...oldEvent];
           });
           setIsLoading(false);
         })

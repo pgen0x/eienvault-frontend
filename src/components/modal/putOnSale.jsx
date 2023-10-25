@@ -428,17 +428,17 @@ export default function ModalPutOnSale({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-zinc-800">
                   <Dialog.Title
                     as="h3"
-                    className="text-xl font-bold text-gray-900"
+                    className="text-xl font-bold text-gray-900 dark:text-white"
                   >
                     Listing Your NFT
                   </Dialog.Title>
 
                   <div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
                     <div className="relative mt-2 transform overflow-hidden text-left transition-all sm:w-full sm:max-w-lg">
-                      <div className="text-gray-900">
+                      <div className="text-gray-900 dark:text-white">
                         <section className="flex flex-col gap-2 overflow-y-auto">
                           <form>
                             <div className="w-full">
@@ -462,10 +462,10 @@ export default function ModalPutOnSale({
                                     />
                                     <label
                                       htmlFor="fixed-method"
-                                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 ${
+                                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-gray-300 ${
                                         selectedOptionMarket === 'fixed'
                                           ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
-                                          : 'dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300'
+                                          : ''
                                       }`}
                                     >
                                       <FontAwesomeIcon
@@ -495,10 +495,10 @@ export default function ModalPutOnSale({
                                     />
                                     <label
                                       htmlFor="auction-method"
-                                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 ${
+                                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-gray-400 dark:hover:bg-zinc-700 dark:hover:text-gray-300 ${
                                         selectedOptionMarket === 'auction'
                                           ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
-                                          : 'dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300'
+                                          : ''
                                       }`}
                                     >
                                       <FontAwesomeIcon
@@ -525,7 +525,7 @@ export default function ModalPutOnSale({
                                   Enter price to allow users instantly purchase
                                   your NFT
                                 </p>
-                                <div className="mt-2 flex w-full items-center rounded-full border border-gray-200 bg-white">
+                                <div className="mt-2 flex w-full items-center rounded-full border border-gray-200 bg-white dark:text-gray-900">
                                   <input
                                     type="number"
                                     className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
@@ -570,8 +570,8 @@ export default function ModalPutOnSale({
                             </div>
                             {selectedOptionMarket === 'auction' && (
                               <>
-                                <div className="mt-4 flex w-full flex-col rounded-xl bg-white">
-                                  <label className="block text-sm font-medium leading-6 text-gray-900">
+                                <div className="mt-4 flex w-full flex-col rounded-xl bg-white dark:bg-zinc-800">
+                                  <label className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
                                     <span className="text-semantic-red-500">
                                       *
                                     </span>{' '}
@@ -612,8 +612,8 @@ export default function ModalPutOnSale({
                                 </div>
                               </>
                             )}
-                            <div className="mt-4 flex w-full flex-col rounded-xl bg-white ">
-                              <label className="block text-sm font-medium leading-6 text-gray-900">
+                            <div className="mt-4 flex w-full flex-col rounded-xl bg-white dark:bg-zinc-800">
+                              <label className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
                                 <span className="text-semantic-red-500">*</span>{' '}
                                 Date of listing expiration
                               </label>

@@ -590,6 +590,7 @@ const Sold = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) => {
                     <NftItemDetail
                       key={index}
                       nft={nft.nftDetails}
+                      showButton={false}
                       collection={nft.collectionData}
                       itemDetails={nft}
                       gridList={gridList}

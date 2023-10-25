@@ -23,11 +23,16 @@ import { formatEther } from 'viem';
 import { useAccount, useNetwork } from 'wagmi';
 import { ImageWithFallback } from '../imagewithfallback';
 import LiveCountdown from '../slideshow/countdown';
+import ButtonPrimary from '../button/buttonPrimary';
+import ButtonTertiary from '../button/buttonTertiary';
+import ButtonSecondary from '../button/buttonSecondary';
+import NftMarker from '../marker/nftMarker';
 
 export const NftItemDetail = ({
   gridList,
   openFilter,
   nft,
+  showButton = true,
   collection,
   itemDetails,
   handleOpenModalBid,
@@ -57,6 +62,7 @@ export const NftItemDetail = ({
         >
           <Nft
             nft={nft}
+            showButton={showButton}
             collection={collection}
             itemDetails={itemDetails}
             handleOpenModalBid={handleOpenModalBid}
@@ -75,6 +81,7 @@ export const NftItemDetail = ({
       {gridList === undefined && openFilter === undefined && (
         <Nft
           nft={nft}
+          showButton={showButton}
           collection={collection}
           itemDetails={itemDetails}
           handleOpenModalBid={handleOpenModalBid}
@@ -152,6 +159,7 @@ export const NftItemDetailSkeleton = ({ gridList, openFilter }) => {
 
 const Nft = ({
   nft,
+  showButton,
   collection,
   itemDetails,
   handleOpenModalBid,
@@ -258,7 +266,7 @@ const Nft = ({
         toast.error(errorMessage.error.messages);
       } else {
         const responseData = await res.json();
-        toast.success(responseData.success.messages);
+        toast.success(responseData.success.message);
 
         setCountLikes(countLikes + 1);
       }
@@ -315,7 +323,7 @@ const Nft = ({
       >
         {nft?.imageUri !== null ? (
           <Image
-            className="z-10 h-[290px] w-full rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all"
+            className="z-10 h-[290px] w-full rounded-2xl bg-white dark:bg-zinc-900 object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all"
             width={600}
             height={600}
             placeholder="blur"
@@ -330,7 +338,7 @@ const Nft = ({
             }
           />
         ) : (
-          <div className="z-10 flex h-[290px] w-full items-center justify-center rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all">
+          <div className="z-10 flex h-[290px] w-full items-center justify-center rounded-2xl bg-white dark:bg-zinc-900 object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all">
             <button
               className="rounded-full border border-primary-500 bg-transparent px-2 py-2 text-sm font-semibold text-primary-500 hover:border-primary-300 hover:text-primary-300"
               onClick={() =>
@@ -346,228 +354,258 @@ const Nft = ({
         <div className="relative flex w-full flex-row">
           <div className="text-md absolute -top-[80px] z-10 w-full">
             <div className="flex h-[72px] w-full flex-col justify-end gap-2">
-              {itemDetails ? (
-                itemDetails?.isAuctioned ? (
-                  <>
-                    {address === nft?.owner ? (
+              {showButton && (
+                <>
+                  {itemDetails ? (
+                    itemDetails?.isAuctioned ? (
                       <>
-                        {isNotRelease ? (
+                        {address === nft?.owner ? (
                           <>
-                            <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                              <div className="flex items-center gap-2">
-                                <FontAwesomeIcon size="xs" icon={faGavel} />
-                                <span>Auction</span>
-                              </div>
-                            </div>
-                            <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                              <div className="flex items-center gap-2">
-                                <FontAwesomeIcon size="2xs" icon={faCircle} />
-                                <span>
-                                  {isNotExpired ? (
-                                    <>
-                                      Starts in{' '}
-                                      <LiveCountdown endDate={releaseDate} />
-                                    </>
-                                  ) : (
-                                    <>
+                            {isNotRelease ? (
+                              <>
+                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon size="xs" icon={faGavel} />
+                                    <span>Auction</span>
+                                  </div>
+                                </div>
+                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon
+                                      size="2xs"
+                                      icon={faCircle}
+                                    />
+                                    <span>
+                                      {isNotExpired ? (
+                                        <>
+                                          Starts in{' '}
+                                          <LiveCountdown
+                                            endDate={releaseDate}
+                                          />
+                                        </>
+                                      ) : (
+                                        <>
+                                          Ends in{' '}
+                                          <LiveCountdown endDate={endDate} />
+                                        </>
+                                      )}
+                                    </span>
+                                  </div>
+                                </div>
+                              </>
+                            ) : isNotExpired ? (
+                              <>
+                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon size="xs" icon={faGavel} />
+                                    <span>Auction</span>
+                                  </div>
+                                </div>
+                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon
+                                      size="2xs"
+                                      icon={faCircle}
+                                    />
+                                    <span>
                                       Ends in{' '}
                                       <LiveCountdown endDate={endDate} />
-                                    </>
-                                  )}
-                                </span>
+                                    </span>
+                                  </div>
+                                </div>
+                              </>
+                            ) : (
+                              <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                <div className="flex items-center gap-2">
+                                  <FontAwesomeIcon size="xs" icon={faGavel} />
+                                  <span>Auction</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <FontAwesomeIcon size="2xs" icon={faCircle} />
+                                  <span>Ended</span>
+                                </div>
                               </div>
-                            </div>
+                            )}
                           </>
-                        ) : isNotExpired ? (
-                          <>
-                            <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                              <div className="flex items-center gap-2">
-                                <FontAwesomeIcon size="xs" icon={faGavel} />
-                                <span>Auction</span>
-                              </div>
-                            </div>
-                            <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                              <div className="flex items-center gap-2">
-                                <FontAwesomeIcon size="2xs" icon={faCircle} />
-                                <span>
-                                  Ends in <LiveCountdown endDate={endDate} />
-                                </span>
-                              </div>
-                            </div>
-                          </>
-                        ) : (
-                          <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                        ) : itemDetails?.listOffers &&
+                          itemDetails?.listOffers.some(
+                            (offer) => offer.address === address,
+                          ) ? (
+                          <NftMarker size="small">
                             <div className="flex items-center gap-2">
                               <FontAwesomeIcon size="xs" icon={faGavel} />
-                              <span>Auction</span>
+                              <span>Offer Already Made</span>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <FontAwesomeIcon size="2xs" icon={faCircle} />
-                              <span>Ended</span>
-                            </div>
-                          </div>
-                        )}
-                      </>
-                    ) : itemDetails?.listOffers &&
-                      itemDetails?.listOffers.some(
-                        (offer) => offer.address === address,
-                      ) ? (
-                      <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                        <div className="flex items-center gap-2">
-                          <FontAwesomeIcon size="xs" icon={faGavel} />
-                          <span>Offer Already Made</span>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        {isNotRelease ? (
+                          </NftMarker>
+                        ) : (
                           <>
-                            <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                              <div className="flex items-center gap-2">
-                                <FontAwesomeIcon size="xs" icon={faGavel} />
-                                <span>Auction</span>
-                              </div>
-                            </div>
-                            <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                              <div className="flex items-center gap-2">
-                                <FontAwesomeIcon size="2xs" icon={faCircle} />
-                                <span>
-                                  {isNotExpired ? (
-                                    <>
-                                      Starts in{' '}
-                                      <LiveCountdown endDate={releaseDate} />
-                                    </>
-                                  ) : (
-                                    <>
+                            {isNotRelease ? (
+                              <>
+                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon size="xs" icon={faGavel} />
+                                    <span>Auction</span>
+                                  </div>
+                                </div>
+                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon
+                                      size="2xs"
+                                      icon={faCircle}
+                                    />
+                                    <span>
+                                      {isNotExpired ? (
+                                        <>
+                                          Starts in{' '}
+                                          <LiveCountdown
+                                            endDate={releaseDate}
+                                          />
+                                        </>
+                                      ) : (
+                                        <>
+                                          Ends in{' '}
+                                          <LiveCountdown endDate={endDate} />
+                                        </>
+                                      )}
+                                    </span>
+                                  </div>
+                                </div>
+                              </>
+                            ) : isNotExpired ? (
+                              <>
+                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon size="xs" icon={faGavel} />
+                                    <span>Auction</span>
+                                  </div>
+                                </div>
+                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon
+                                      size="2xs"
+                                      icon={faCircle}
+                                    />
+                                    <span>
                                       Ends in{' '}
                                       <LiveCountdown endDate={endDate} />
-                                    </>
-                                  )}
-                                </span>
+                                    </span>
+                                  </div>
+                                </div>
+                              </>
+                            ) : (
+                              <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                <div className="flex items-center gap-2">
+                                  <FontAwesomeIcon size="xs" icon={faGavel} />
+                                  <span>Auction</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <FontAwesomeIcon size="2xs" icon={faCircle} />
+                                  <span>Ended</span>
+                                </div>
                               </div>
-                            </div>
+                            )}
                           </>
-                        ) : isNotExpired ? (
-                          <>
-                            <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                              <div className="flex items-center gap-2">
-                                <FontAwesomeIcon size="xs" icon={faGavel} />
-                                <span>Auction</span>
-                              </div>
-                            </div>
-                            <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                              <div className="flex items-center gap-2">
-                                <FontAwesomeIcon size="2xs" icon={faCircle} />
-                                <span>
-                                  Ends in <LiveCountdown endDate={endDate} />
-                                </span>
-                              </div>
-                            </div>
-                          </>
-                        ) : (
-                          <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                            <div className="flex items-center gap-2">
-                              <FontAwesomeIcon size="xs" icon={faGavel} />
-                              <span>Auction</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <FontAwesomeIcon size="2xs" icon={faCircle} />
-                              <span>Ended</span>
-                            </div>
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    {address === nft?.owner ? (
-                      <>
-                        {isNotExpired ? (
-                          <>
-                            <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                              <div className="flex items-center gap-2">
-                                <FontAwesomeIcon size="xs" icon={faTags} />
-                                <span>On Sale</span>
-                              </div>
-                            </div>
-                            <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                              <div className="flex items-center gap-2">
-                                <FontAwesomeIcon size="2xs" icon={faCircle} />
-                                <span>
-                                  Ends in <LiveCountdown endDate={endDate} />
-                                </span>
-                              </div>
-                            </div>
-                          </>
-                        ) : (
-                          <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                            <div className="flex items-center gap-2">
-                              <FontAwesomeIcon size="xs" icon={faTags} />
-                              <span>On Sale</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <FontAwesomeIcon size="2xs" icon={faCircle} />
-                              <span>Expired</span>
-                            </div>
-                          </div>
                         )}
                       </>
                     ) : (
                       <>
-                        {isNotExpired ? (
+                        {address === nft?.owner ? (
                           <>
-                            <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                              <div className="flex items-center gap-2">
-                                <FontAwesomeIcon size="xs" icon={faTags} />
-                                <span>On Sale</span>
+                            {isNotExpired ? (
+                              <>
+                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon size="xs" icon={faTags} />
+                                    <span>On Sale</span>
+                                  </div>
+                                </div>
+                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon
+                                      size="2xs"
+                                      icon={faCircle}
+                                    />
+                                    <span>
+                                      Ends in{' '}
+                                      <LiveCountdown endDate={endDate} />
+                                    </span>
+                                  </div>
+                                </div>
+                              </>
+                            ) : (
+                              <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                <div className="flex items-center gap-2">
+                                  <FontAwesomeIcon size="xs" icon={faTags} />
+                                  <span>On Sale</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <FontAwesomeIcon size="2xs" icon={faCircle} />
+                                  <span>Expired</span>
+                                </div>
                               </div>
-                            </div>
-                            <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                              <div className="flex items-center gap-2">
-                                <FontAwesomeIcon size="2xs" icon={faCircle} />
-                                <span>
-                                  Ends in <LiveCountdown endDate={endDate} />
-                                </span>
-                              </div>
-                            </div>
+                            )}
                           </>
                         ) : (
-                          <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                            <div className="flex items-center gap-2">
-                              <FontAwesomeIcon
-                                className="w-[14px]"
-                                icon={faTags}
-                              />
-                              <span>On Sale</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <FontAwesomeIcon
-                                className="w-[6px]"
-                                icon={faCircle}
-                              />
-                              <span>Expired</span>
-                            </div>
-                          </div>
+                          <>
+                            {isNotExpired ? (
+                              <>
+                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon size="xs" icon={faTags} />
+                                    <span>On Sale</span>
+                                  </div>
+                                </div>
+                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon
+                                      size="2xs"
+                                      icon={faCircle}
+                                    />
+                                    <span>
+                                      Ends in{' '}
+                                      <LiveCountdown endDate={endDate} />
+                                    </span>
+                                  </div>
+                                </div>
+                              </>
+                            ) : (
+                              <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                <div className="flex items-center gap-2">
+                                  <FontAwesomeIcon
+                                    className="w-[14px]"
+                                    icon={faTags}
+                                  />
+                                  <span>On Sale</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <FontAwesomeIcon
+                                    className="w-[6px]"
+                                    icon={faCircle}
+                                  />
+                                  <span>Expired</span>
+                                </div>
+                              </div>
+                            )}
+                          </>
                         )}
                       </>
-                    )}
-                  </>
-                )
-              ) : (
-                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
-                  {address === nft?.owner ? (
-                    <div className="flex items-center gap-2">
-                      <FontAwesomeIcon size="xs" icon={faBan} />
-                      <span>Not for sale</span>
-                    </div>
+                    )
                   ) : (
-                    <div className="flex items-center gap-2">
-                      <FontAwesomeIcon size="xs" icon={faBan} />
-                      <span>Not for sale</span>
+                    <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                      {address === nft?.owner ? (
+                        <div className="flex items-center gap-2">
+                          <FontAwesomeIcon size="xs" icon={faBan} />
+                          <span>Not for sale</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <FontAwesomeIcon size="xs" icon={faBan} />
+                          <span>Not for sale</span>
+                        </div>
+                      )}
                     </div>
                   )}
-                </div>
+                </>
               )}
               {/* <div className="flex items-center gap-2">
               <FontAwesomeIcon size="xs" icon={faGavel} />
@@ -585,11 +623,11 @@ const Nft = ({
             </div> */}
             </div>
           </div>
-          <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 p-3 backdrop-blur-xl dark:bg-zinc-700">
+          <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white p-3 backdrop-blur-xl dark:bg-zinc-700">
             <div className="flex w-full flex-col items-start justify-start">
               <div className="inline-flex items-center justify-between self-stretch">
                 <div
-                  className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2 dark:bg-zinc-500"
+                  className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary-50 bg-opacity-70 p-2 dark:bg-zinc-500"
                   onClick={() =>
                     router.push(`/collection/${nft.collectionAddress}`)
                   }
@@ -623,7 +661,7 @@ const Nft = ({
                   </div>
                 </div>
                 <Menu as="div" className="relative inline-block text-left">
-                  <Menu.Button className="inline-flex w-full justify-center font-semibold text-gray-900 hover:text-primary-500 dark:text-white">
+                  <Menu.Button className="inline-flex w-full justify-center font-semibold text-gray-900 hover:text-primary-500 dark:hover:text-zinc-300 dark:text-white">
                     <FontAwesomeIcon
                       icon={faEllipsis}
                       aria-hidden="true"
@@ -705,7 +743,7 @@ const Nft = ({
               </div>
               <div className="inline-flex w-full items-center justify-between gap-2 pt-1">
                 <div
-                  className="line-clamp-2 flex h-[40px] items-center font-medium leading-[20px] text-gray-600 dark:text-white"
+                  className="line-clamp-2 flex h-[40px] items-center font-medium leading-[20px] text-gray-900 dark:text-white"
                   title={`${nft?.name} #${nft?.tokenId}`}
                 >
                   {nft?.name} #{nft?.tokenId}
@@ -717,7 +755,7 @@ const Nft = ({
                   )}
                 </div>
               </div>
-              <div className="mt-5 flex w-full justify-between rounded-md bg-white px-2 py-2 dark:bg-zinc-500 dark:text-white">
+              <div className="mt-5 flex w-full justify-between rounded-md bg-gray-100 px-2 py-2 dark:bg-zinc-500 dark:text-white">
                 <div className="flex flex-col items-start truncate text-sm leading-5">
                   <p>Price</p>
                   <p className="font-bold">
@@ -756,131 +794,132 @@ const Nft = ({
                 </div>
               </div>
 
-              <div className="mt-5 flex w-full items-center gap-2">
-                {itemDetails ? (
-                  itemDetails?.isAuctioned ? (
-                    <div className="mt-5 flex w-full items-center gap-4">
-                      {address === nft?.owner ? (
-                        <button
-                          className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300"
-                          onClick={() =>
-                            handleOpenModalRemove(
-                              itemDetails?.marketId,
-                              nft?.tokenId,
-                              collection?.tokenAddress,
-                            )
-                          }
-                        >
-                          Remove Listing
-                        </button>
-                      ) : itemDetails?.listOffers &&
-                        itemDetails?.listOffers.some(
-                          (offer) => offer.address === address,
-                        ) ? (
-                        <button
-                          className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-300 disabled:text-white"
-                          disabled
-                        >
-                          Place Bid
-                        </button>
+              <div className="flex flex-col w-full items-center group-hover:gap-2">
+                {showButton && (
+                  <>
+                    {itemDetails ? (
+                      itemDetails?.isAuctioned ? (
+                        <div className="mt-5 flex w-full items-center gap-4">
+                          {address === nft?.owner ? (
+                            <ButtonPrimary
+                              onClick={() =>
+                                handleOpenModalRemove(
+                                  itemDetails?.marketId,
+                                  nft?.tokenId,
+                                  collection?.tokenAddress,
+                                )
+                              }
+                            >
+                              Remove Listing
+                            </ButtonPrimary>
+                          ) : itemDetails?.listOffers &&
+                            itemDetails?.listOffers.some(
+                              (offer) => offer.address === address,
+                            ) ? (
+                            <ButtonPrimary
+                              disabled
+                            >
+                              Place Bid
+                            </ButtonPrimary>
+                          ) : (
+                            <ButtonPrimary
+                              onClick={() =>
+                                handleOpenModalBid(
+                                  itemDetails?.marketId,
+                                  itemDetails?.listingPrice,
+                                  nft?.imageUri,
+                                  nft?.tokenId,
+                                  itemDetails?.price,
+                                  nft?.name,
+                                  collection,
+                                  getHighestBid(itemDetails),
+                                  formatEther(getLowestBid(itemDetails)),
+                                )
+                              }
+                              disabled={
+                                isNotRelease
+                                  ? true
+                                  : isNotExpired
+                                  ? false
+                                  : true
+                              }
+                            >
+                              {isNotRelease
+                                ? 'Upcoming'
+                                : isNotExpired
+                                ? 'Place a Bid'
+                                : 'Expired'}
+                            </ButtonPrimary>
+                          )}
+                        </div>
                       ) : (
-                        <button
-                          className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300"
-                          onClick={() =>
-                            handleOpenModalBid(
-                              itemDetails?.marketId,
-                              itemDetails?.listingPrice,
-                              nft?.imageUri,
-                              nft?.tokenId,
-                              itemDetails?.price,
-                              nft?.name,
-                              collection,
-                              getHighestBid(itemDetails),
-                              formatEther(getLowestBid(itemDetails)),
-                            )
-                          }
-                          disabled={
-                            isNotRelease ? true : isNotExpired ? false : true
-                          }
-                        >
-                          {isNotRelease
-                            ? 'Upcoming'
-                            : isNotExpired
-                            ? 'Place a Bid'
-                            : 'Expired'}
-                        </button>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="mt-5 flex w-full items-center gap-4">
-                      {address === nft?.owner ? (
-                        <button
-                          className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300"
-                          onClick={() =>
-                            handleOpenModalRemove(
-                              itemDetails?.marketId,
-                              nft?.tokenId,
-                              collection?.tokenAddress,
-                            )
-                          }
-                        >
-                          Remove Listing
-                        </button>
-                      ) : (
-                        <button
-                          className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-300 disabled:text-white"
-                          onClick={() =>
-                            handleOpenModalBuy(
-                              itemDetails?.marketId,
-                              itemDetails?.price,
-                              nft?.imageUri,
-                              nft?.name,
-                              nft?.tokenId,
-                              collection?.tokenAddress,
-                              collection?.Chain?.symbol,
-                              collection?.Chain?.name,
-                            )
-                          }
-                          disabled={!isNotExpired}
-                        >
-                          {isNotExpired ? 'Buy Now' : 'Expired'}
-                        </button>
-                      )}
-                    </div>
-                  )
-                ) : (
-                  <div className="mt-5 flex w-full items-center gap-4">
-                    {address === nft?.owner ? (
-                      <button
-                        onClick={() =>
-                          handleOpenModalPutonsale(
-                            nft?.tokenId,
-                            nft?.collectionAddress,
-                          )
-                        }
-                        className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300"
-                      >
-                        Put On Sale
-                      </button>
+                        <div className="mt-5 flex w-full items-center gap-4">
+                          {address === nft?.owner ? (
+                            <ButtonPrimary
+                              onClick={() =>
+                                handleOpenModalRemove(
+                                  itemDetails?.marketId,
+                                  nft?.tokenId,
+                                  collection?.tokenAddress,
+                                )
+                              }
+                            >
+                              Remove Listing
+                            </ButtonPrimary>
+                          ) : (
+                            <ButtonPrimary
+                              onClick={() =>
+                                handleOpenModalBuy(
+                                  itemDetails?.marketId,
+                                  itemDetails?.price,
+                                  nft?.imageUri,
+                                  nft?.name,
+                                  nft?.tokenId,
+                                  collection?.tokenAddress,
+                                  collection?.Chain?.symbol,
+                                  collection?.Chain?.name,
+                                )
+                              }
+                              disabled={!isNotExpired}
+                            >
+                              {isNotExpired ? 'Buy Now' : 'Expired'}
+                            </ButtonPrimary>
+                          )}
+                        </div>
+                      )
                     ) : (
-                      <button
-                        disabled={true}
-                        className="w-full rounded-full px-4 py-2 text-center text-base font-bold text-white disabled:cursor-not-allowed disabled:bg-primary-300 disabled:text-white"
-                      >
-                        Buy Now
-                      </button>
+                      <div className="mt-5 flex w-full items-center gap-4">
+                        {address === nft?.owner ? (
+                          <ButtonPrimary
+                            onClick={() =>
+                              handleOpenModalPutonsale(
+                                nft?.tokenId,
+                                nft?.collectionAddress,
+                              )
+                            }
+                          >
+                            Put On Sale
+                          </ButtonPrimary>
+                        ) : (
+                          <ButtonPrimary
+                            disabled={true}
+                          >
+                            Buy Now
+                          </ButtonPrimary>
+                        )}
+                      </div>
                     )}
-                  </div>
+                  </>
                 )}
+                <ButtonSecondary
+                  className="duration-800 !py-0 h-0 overflow-hidden opacity-0 group-hover:ease-in-out group-hover:duration-300 group-hover:h-auto group-hover:!py-2 group-hover:opacity-100 group-hover:transition-all"
+                  onClick={() =>
+                    router.push(`/nft/${nft.collectionAddress}/${nft.tokenId}`)
+                  }
+                >
+                  View Detail
+                </ButtonSecondary>
               </div>
-              <button
-                onClick={() =>
-                  router.push(`/nft/${nft.collectionAddress}/${nft.tokenId}`)
-                }
-                className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white text-center font-bold text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all dark:bg-zinc-600 dark:text-white dark:hover:bg-zinc-500"
-              >
-                View Detail
-              </button>
             </div>
           </div>
         </div>

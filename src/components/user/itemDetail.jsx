@@ -12,6 +12,8 @@ import { toast } from 'react-toastify';
 import { useAccount } from 'wagmi';
 import { ImageWithFallback } from '../imagewithfallback';
 import { JazzIcon } from '../jazzicon';
+import ButtonSecondary from '../button/buttonSecondary';
+import ButtonPrimary from '../button/buttonPrimary';
 
 const UserItemDetail = ({ user, followings, refresh }) => {
   const router = useRouter();
@@ -144,16 +146,14 @@ const UserItemDetail = ({ user, followings, refresh }) => {
           </div>
         </div>
         <div className="flex w-full items-center justify-between gap-2 font-bold">
-          <button
-            className="flex w-full items-center justify-center gap-2 rounded-3xl bg-primary-500 px-4 py-2 text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-300"
+          <ButtonPrimary className="flex w-full items-center justify-center gap-2"
             onClick={() => {
               follow(user?.walletAddress);
             }}
-            disabled={checkFollowing(user?.walletAddress) ? true : false}
           >
             {checkFollowing(user?.walletAddress) ? (
               <>
-                <span>Folowing</span>
+                <span>Following</span>
               </>
             ) : (
               <>
@@ -161,13 +161,12 @@ const UserItemDetail = ({ user, followings, refresh }) => {
                 <span>Follow</span>
               </>
             )}
-          </button>
-          <button
-            className="w-full rounded-3xl border border-primary-500 bg-white px-4 py-2 text-primary-500 hover:bg-primary-100"
+          </ButtonPrimary>
+          <ButtonSecondary
             onClick={() => router.push(`/profile/${user.walletAddress}`)}
           >
             Visit profile
-          </button>
+          </ButtonSecondary>
         </div>
       </div>
     </div>

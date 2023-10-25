@@ -33,6 +33,7 @@ import moment from 'moment';
 import { NftItemDetail, NftItemDetailSkeleton } from '../nft/itemDetail';
 import ModalPutOnSale from '../modal/putOnSale';
 import ModalShareSocialMedia from '../modal/shareSocialMedia';
+import ModalRemove from '../modal/remove';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
@@ -67,7 +68,7 @@ const sliderBreakPoints = {
   },
 };
 
-export const RelatedNFTs = ({ dataRelatedNFTs }) => {
+export const RelatedNFTs = ({ dataRelatedNFTs, refreshData }) => {
   const { address } = useAccount();
   const { data: walletClient } = useWalletClient();
 
@@ -75,11 +76,13 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
   const [buyData, setBuyData] = useState({});
   const [putOnSaleData, setPutonsaleData] = useState({});
   const [shareData, setShareData] = useState({});
+  const [removeData, setRemoveData] = useState({});
 
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
+  const [isOpenModalRemove, setisOpenModalRemove] = useState(false);
 
   const handleOpenModalBuy = async (
     marketId,
@@ -145,6 +148,19 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
     setisOpenModalShare(true);
   };
 
+  const handleOpenModalRemove = async (
+    marketId,
+    tokenId,
+    collectionAddress,
+  ) => {
+    setRemoveData({
+      marketId,
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalRemove(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
@@ -159,6 +175,10 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
 
   function closeModalShare() {
     setisOpenModalShare(false);
+  }
+
+  function closeModalRemove() {
+    setisOpenModalRemove(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -234,6 +254,9 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
                   handleOpenModalBid={handleOpenModalBid}
                   handleOpenModalPutonsale={handleOpenModalPutonsale}
                   handleOpenModalShare={handleOpenModalShare}
+                  handleOpenModalRemove={handleOpenModalRemove}
+                  releaseDate={nft?.releaseDate}
+                  endDate={nft?.endDate}
                   isNotExpired={isNotExpired}
                   isNotRelease={isNotRelease}
                 />
@@ -269,6 +292,12 @@ export const RelatedNFTs = ({ dataRelatedNFTs }) => {
         onClose={closeModalShare}
         onModalClose={closeModalShare}
         shareData={shareData}
+      />
+      <ModalRemove
+        isOpenModal={isOpenModalRemove}
+        onClose={closeModalRemove}
+        removeData={removeData}
+        refreshData={refreshData}
       />
     </>
   );

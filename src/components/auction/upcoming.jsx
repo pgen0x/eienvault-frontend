@@ -9,6 +9,7 @@ import { truncateAddress } from '@/utils/truncateAddress';
 import UpcomingCountdown from '../slideshow/upcomingcountdown';
 import { ImageWithFallback } from '../imagewithfallback';
 import { formatEther } from 'viem';
+import ButtonTertiary from '../button/buttonTertiary';
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
 const getHighestBid = (auctionData) => {
@@ -124,16 +125,15 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                   Place a bid
                 </button>
               </div>
-              <button
+              <ButtonTertiary
                 onClick={() =>
                   router.push(
                     `/nft/${dataUpcoming[0].collectionData?.tokenAddress}/${dataUpcoming[0].tokenId}`,
                   )
                 }
-                className="w-full rounded-full py-1 text-center font-bold text-primary-500 hover:bg-primary-50 dark:bg-zinc-600 dark:text-white dark:hover:bg-zinc-500"
               >
                 View Detail
-              </button>
+              </ButtonTertiary>
             </div>
           </div>
         </div>

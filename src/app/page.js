@@ -49,6 +49,8 @@ import { Suspense, useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/AuthContext';
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next-nprogress-bar';
+import ButtonPrimary from '@/components/button/buttonPrimary';
+import ButtonTertiary from '@/components/button/buttonTertiary';
 
 export default function Home() {
   const router = useRouter();
@@ -342,9 +344,9 @@ export default function Home() {
                   Eien vault is a marketplace for nft, a one of a kind digital
                   asset that you can truly own.
                 </p>
-                <button className="mt-5 rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
+                <ButtonPrimary className="!w-fit mt-5">
                   Discover more
-                </button>
+                </ButtonPrimary>
               </div>
               <div className="relative my-5 flex w-full flex-initial items-center justify-center sm:w-full md:w-[50%] lg:w-[69%] xl:w-[69%] 2xl:w-[69%]">
                 {isLoadingDiscover || dataDiscover.length <= 0 ? (
@@ -352,7 +354,7 @@ export default function Home() {
                 ) : (
                   <SlideshowDiscover
                     dataDiscover={dataDiscover}
-                    refreshDataDiscover={refreshDataDiscover}
+                    refreshData={refreshDataDiscover}
                   />
                 )}
               </div>
@@ -474,12 +476,12 @@ export default function Home() {
                       className="w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-500 dark:focus:ring-gray-500"
                       placeholder="Your email address"
                     />
-                    <button
+                    <ButtonPrimary
                       type="submit"
-                      className="rounded-full bg-primary-500 px-5 text-white hover:bg-primary-300"
+                      className="!w-fit"
                     >
                       Subscribe
-                    </button>
+                    </ButtonPrimary>
                   </form>
                 </div>
               </div>
@@ -548,12 +550,11 @@ export default function Home() {
                     collection of NFTs created by talented artists from around
                     the globe.
                   </p>
-                  <button
+                  <ButtonPrimary
                     onClick={() => router.push('/nft')}
-                    className="w-full rounded-full bg-primary-500 px-3 py-2 text-center text-lg font-bold text-white hover:bg-primary-300"
                   >
                     Learn more
-                  </button>
+                  </ButtonPrimary>
                 </div>
               </div>
             </div>
@@ -572,12 +573,12 @@ export default function Home() {
                   auto-liquidations! 0% borrower fees!
                 </p>
                 <div className="my-5 flex flex-col gap-3 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
-                  <button className="w-full rounded-full bg-primary-500 px-5 py-2 font-bold text-white hover:bg-primary-300 md:w-fit">
+                  <ButtonPrimary className="!w-fit">
                     Get loan now
-                  </button>
-                  <button className="ml-1 w-full rounded-full bg-white px-5 py-2 font-bold text-primary-500 hover:bg-primary-50 md:w-fit">
+                  </ButtonPrimary>
+                  <ButtonTertiary className="!w-fit">
                     I want to lend
-                  </button>
+                  </ButtonTertiary>
                 </div>
                 <div className="flex w-full flex-col items-center justify-between gap-5 p-5 md:flex-row">
                   <div className="">
@@ -598,7 +599,7 @@ export default function Home() {
                 <Image
                   width={660}
                   height={365}
-                  src="/images/watchformore.png"
+                  src="/images/watchformore.svg"
                   className="w-full"
                   alt="watchformore"
                 />

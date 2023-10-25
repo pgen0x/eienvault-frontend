@@ -2,19 +2,23 @@
 import Footer from '@/components/footer/main';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faBan,
   faBell,
   faCartPlus,
   faCheck,
   faChevronDown,
   faChevronLeft,
   faChevronRight,
+  faCircle,
   faCircleCheck,
   faEllipsisVertical,
   faEye,
   faFingerprint,
+  faGavel,
   faList,
   faPenToSquare,
   faRotate,
+  faTags,
   faUpRightFromSquare,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
@@ -64,6 +68,10 @@ import {
 import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
 import { JazzIcon } from '@/components/jazzicon';
 import ModalReportNft from '@/components/modal/reportNft';
+import ModalRemove from '@/components/modal/remove';
+import ButtonPrimary from '@/components/button/buttonPrimary';
+import NftMarker from '@/components/marker/nftMarker';
+import ButtonTertiary from '@/components/button/buttonTertiary';
 
 export default function NFTDetails({ dataNFTs }) {
   const router = useRouter();
@@ -74,6 +82,7 @@ export default function NFTDetails({ dataNFTs }) {
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
   const [isOpenModalReport, setisOpenModalReport] = useState(false);
+  const [isOpenModalRemove, setisOpenModalRemove] = useState(false);
 
   const [countLikes, setCountLikes] = useState(dataNFTs?.likeCount);
   const [dataRelatedNFTs, setDataRelatedNFTs] = useState([]);
@@ -85,6 +94,7 @@ export default function NFTDetails({ dataNFTs }) {
   const [putOnSaleData, setPutonsaleData] = useState({});
   const [shareData, setShareData] = useState({});
   const [reportData, setReportData] = useState({});
+  const [removeData, setRemoveData] = useState({});
 
   const { data: walletClient } = useWalletClient();
 
@@ -227,6 +237,19 @@ export default function NFTDetails({ dataNFTs }) {
     setisOpenModalReport(true);
   };
 
+  const handleOpenModalRemove = async (
+    marketId,
+    tokenId,
+    collectionAddress,
+  ) => {
+    setRemoveData({
+      marketId,
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalRemove(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
@@ -245,6 +268,10 @@ export default function NFTDetails({ dataNFTs }) {
 
   function closeModalReport() {
     setisOpenModalReport(false);
+  }
+
+  function closeModalRemove() {
+    setisOpenModalRemove(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -389,10 +416,10 @@ export default function NFTDetails({ dataNFTs }) {
         {dataNFTs ? (
           <section>
             <div className="mt-5 flex w-full flex-col gap-4 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
-              <div className="flex w-full flex-col gap-4">
+              <div className="flex w-full flex-col">
                 {dataNFTs?.imageUri !== null ? (
                   <Image
-                    className="w-full rounded-2xl bg-white object-contain lg:w-96"
+                    className="w-full rounded-2xl bg-white object-contain dark:bg-zinc-700 lg:w-96"
                     width={600}
                     height={600}
                     placeholder="blur"
@@ -415,56 +442,264 @@ export default function NFTDetails({ dataNFTs }) {
                     </button>
                   </div>
                 )}
-                <div className="relative -mt-20 w-fit self-center px-5">
-                  <div className="flex rounded-lg border border-white/20 bg-white/50 px-5 py-2 text-gray-900 backdrop-blur-sm">
-                    <div className="flex w-full justify-between">
-                      <div className="flex w-full justify-around gap-4 md:gap-6 lg:gap-20">
-                        <button
-                          className="group text-primary-500 hover:text-primary-300 sm:text-primary-500"
-                          onClick={() =>
-                            likes(
-                              dataNFTs?.collectionAddress,
-                              dataNFTs?.tokenId,
-                            )
-                          }
-                        >
-                          <FontAwesomeIcon icon={faHeart} />{' '}
-                          <span className="2xl-text-black font-semibold text-black group-hover:text-primary-300">
-                            {countLikes} likes
-                          </span>
-                        </button>
-                        <button
-                          className="group text-primary-500 hover:text-primary-300"
-                          onClick={() =>
-                            handleOpenModalShare(
-                              dataNFTs?.tokenId,
-                              dataNFTs?.collectionAddress,
-                            )
-                          }
-                        >
-                          <FontAwesomeIcon icon={faShareFromSquare} />{' '}
-                          <span className="2xl-text-black font-semibold text-black group-hover:text-primary-300">
-                            Share
-                          </span>
-                        </button>
-                        <button
-                          className="group text-primary-500 hover:text-primary-300"
-                          onClick={() =>
-                            handleOpenModalReport(
-                              dataNFTs?.tokenId,
-                              dataNFTs?.collectionAddress,
-                            )
-                          }
-                        >
-                          <FontAwesomeIcon icon={faFlag} />{' '}
-                          <span className="2xl-text-black font-semibold text-black group-hover:text-primary-300">
-                            Report
-                          </span>
-                        </button>
-                      </div>
-                      {/* <button className="hidden rounded-full px-2 text-primary-500 hover:bg-primary-50 hover:text-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
+                <div className="relative w-full self-center">
+                  <div className="absolute -top-24 flex w-full flex-col gap-2 px-5">
+                    {dataNFTs?.itemDetails ? (
+                      dataNFTs?.itemDetails?.isAuctioned ? (
+                        <>
+                          {address === dataNFTs?.owner ? (
+                            <>
+                              {isNotRelease ? (
+                                <NftMarker className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 font-semibold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon size="xs" icon={faGavel} />
+                                    {isNotExpired ? (
+                                      <span className="text-sm">
+                                        Upcoming auction
+                                      </span>
+                                    ) : (
+                                      <span className="text-sm">
+                                        Live auction
+                                      </span>
+                                    )}
+                                  </div>
+                                </NftMarker>
+                              ) : isNotExpired ? (
+                                <>
+                                  <NftMarker>
+                                    <div className="flex items-center gap-2">
+                                      <FontAwesomeIcon
+                                        size="xs"
+                                        icon={faGavel}
+                                      />
+                                      <span className="text-sm">
+                                        Live auction
+                                      </span>
+                                    </div>
+                                  </NftMarker>
+                                </>
+                              ) : (
+                                <NftMarker>
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon size="xs" icon={faGavel} />
+                                    <span className="text-sm">Auction</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon
+                                      size="2xs"
+                                      icon={faCircle}
+                                    />
+                                    <span className="text-sm">Ended</span>
+                                  </div>
+                                </NftMarker>
+                              )}
+                            </>
+                          ) : dataNFTs?.itemDetails?.listOffers &&
+                            dataNFTs?.itemDetails?.listOffers.some(
+                              (offer) => offer.address === address,
+                            ) ? (
+                            <NftMarker>
+                              <div className="flex items-center gap-2">
+                                <FontAwesomeIcon size="xs" icon={faGavel} />
+                                <span className="text-sm">
+                                  Offer Already Made
+                                </span>
+                              </div>
+                            </NftMarker>
+                          ) : (
+                            <>
+                              {isNotRelease ? (
+                                <>
+                                  <NftMarker>
+                                    <div className="flex items-center gap-2">
+                                      <FontAwesomeIcon
+                                        size="xs"
+                                        icon={faGavel}
+                                      />
+                                      {isNotExpired ? (
+                                        <span className="text-sm">
+                                          Upcoming auction
+                                        </span>
+                                      ) : (
+                                        <span className="text-sm">
+                                          Live auction
+                                        </span>
+                                      )}
+                                    </div>
+                                  </NftMarker>
+                                </>
+                              ) : isNotExpired ? (
+                                <>
+                                  <NftMarker>
+                                    <div className="flex items-center gap-2">
+                                      <FontAwesomeIcon
+                                        size="xs"
+                                        icon={faGavel}
+                                      />
+                                      <span className="text-sm">Auction</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <FontAwesomeIcon
+                                        size="2xs"
+                                        icon={faCircle}
+                                      />
+                                      <span className="text-sm">
+                                        Live auction
+                                      </span>
+                                    </div>
+                                  </NftMarker>
+                                </>
+                              ) : (
+                                <NftMarker>
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon size="xs" icon={faGavel} />
+                                    <span className="text-sm">Auction</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon
+                                      size="2xs"
+                                      icon={faCircle}
+                                    />
+                                    <span className="text-sm">Ended</span>
+                                  </div>
+                                </NftMarker>
+                              )}
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          {address === dataNFTs?.owner ? (
+                            <>
+                              {isNotExpired ? (
+                                <>
+                                  <NftMarker>
+                                    <div className="flex items-center gap-2">
+                                      <FontAwesomeIcon
+                                        size="xs"
+                                        icon={faTags}
+                                      />
+                                      <span className="text-sm">On Sale</span>
+                                    </div>
+                                  </NftMarker>
+                                </>
+                              ) : (
+                                <NftMarker>
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon size="xs" icon={faTags} />
+                                    <span className="text-sm">On Sale</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon
+                                      size="2xs"
+                                      icon={faCircle}
+                                    />
+                                    <span className="text-sm">Expired</span>
+                                  </div>
+                                </NftMarker>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              {isNotExpired ? (
+                                <>
+                                  <NftMarker>
+                                    <div className="flex items-center gap-2">
+                                      <FontAwesomeIcon
+                                        size="xs"
+                                        icon={faTags}
+                                      />
+                                      <span className="text-sm">On Sale</span>
+                                    </div>
+                                  </NftMarker>
+                                </>
+                              ) : (
+                                <NftMarker>
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon
+                                      className="w-[14px]"
+                                      icon={faTags}
+                                    />
+                                    <span className="text-sm">On Sale</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <FontAwesomeIcon
+                                      className="w-[6px]"
+                                      icon={faCircle}
+                                    />
+                                    <span className="text-sm">Expired</span>
+                                  </div>
+                                </NftMarker>
+                              )}
+                            </>
+                          )}
+                        </>
+                      )
+                    ) : (
+                      <NftMarker>
+                        {address === dataNFTs?.owner ? (
+                          <div className="flex items-center gap-2">
+                            <FontAwesomeIcon size="xs" icon={faBan} />
+                            <span className="text-sm">Not for sale</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <FontAwesomeIcon size="xs" icon={faBan} />
+                            <span className="text-sm">Not for sale</span>
+                          </div>
+                        )}
+                      </NftMarker>
+                    )}
+                    <div className="flex rounded-lg bg-gray-50 bg-opacity-80 px-5 py-2 text-gray-900 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80">
+                      <div className="flex w-full justify-between">
+                        <div className="flex w-full justify-around md:gap-6 lg:gap-20">
+                          <button
+                            className="text-primary-500 hover:text-primary-300 sm:text-primary-500"
+                            onClick={() =>
+                              likes(
+                                dataNFTs?.collectionAddress,
+                                dataNFTs?.tokenId,
+                              )
+                            }
+                          >
+                            <FontAwesomeIcon icon={faHeart} />{' '}
+                            <span className="font-semibold text-black dark:text-white">
+                              {countLikes} likes
+                            </span>
+                          </button>
+                          <button
+                            className="text-primary-500 hover:text-primary-300"
+                            onClick={() =>
+                              handleOpenModalShare(
+                                dataNFTs?.tokenId,
+                                dataNFTs?.collectionAddress,
+                              )
+                            }
+                          >
+                            <FontAwesomeIcon icon={faShareFromSquare} />{' '}
+                            <span className="font-semibold text-black dark:text-white">
+                              Share
+                            </span>
+                          </button>
+                          <button
+                            className="text-primary-500 hover:text-primary-300"
+                            onClick={() =>
+                              handleOpenModalReport(
+                                dataNFTs?.tokenId,
+                                dataNFTs?.collectionAddress,
+                              )
+                            }
+                          >
+                            <FontAwesomeIcon icon={faFlag} />{' '}
+                            <span className="font-semibold text-black dark:text-white">
+                              Report
+                            </span>
+                          </button>
+                        </div>
+                        {/* <button className="hidden rounded-full px-2 text-primary-500 hover:bg-primary-50 hover:text-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
                         <FontAwesomeIcon icon={faEllipsisVertical} />{' '}
                       </button> */}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -850,22 +1085,26 @@ export default function NFTDetails({ dataNFTs }) {
                       dataNFTs?.itemDetails?.isAuctioned ? (
                         <div className="mt-5 flex w-full items-center gap-4">
                           {address === dataNFTs.owner ? (
-                            <button className="hover-bg-primary-300 w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500">
-                              Owned By You
-                            </button>
+                            <ButtonPrimary
+                              onClick={() =>
+                                handleOpenModalRemove(
+                                  dataNFTs?.itemDetails?.marketId,
+                                  dataNFTs?.tokenId,
+                                  dataNFTs?.collectionAddress,
+                                )
+                              }
+                            >
+                              Remove Listing
+                            </ButtonPrimary>
                           ) : dataNFTs?.itemDetails?.listOffers &&
                             dataNFTs?.itemDetails?.listOffers.some(
                               (offer) => offer.address === address,
                             ) ? (
-                            <button
-                              className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300"
-                              disabled
-                            >
+                            <ButtonPrimary disabled>
                               Offer Already Made
-                            </button>
+                            </ButtonPrimary>
                           ) : (
-                            <button
-                              className="w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500 hover:bg-primary-300"
+                            <ButtonPrimary
                               onClick={() =>
                                 handleOpenModalBid(
                                   dataNFTs?.itemDetails?.marketId,
@@ -894,18 +1133,25 @@ export default function NFTDetails({ dataNFTs }) {
                                 : isNotExpired
                                 ? 'Place a Bid'
                                 : 'Expired'}
-                            </button>
+                            </ButtonPrimary>
                           )}
                         </div>
                       ) : (
                         <div className="mt-5 flex w-full items-center gap-4">
                           {address === dataNFTs.owner ? (
-                            <button className="hover-bg-primary-300 w-full rounded-full border border-primary-500 bg-white px-4 py-2 text-center text-base font-bold text-primary-500">
-                              Owned By You
-                            </button>
+                            <ButtonPrimary
+                              onClick={() =>
+                                handleOpenModalRemove(
+                                  dataNFTs?.itemDetails?.marketId,
+                                  dataNFTs?.tokenId,
+                                  dataNFTs?.collectionAddress,
+                                )
+                              }
+                            >
+                              Remove Listing
+                            </ButtonPrimary>
                           ) : (
-                            <button
-                              className="hover-bg-primary-300 w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white"
+                            <ButtonPrimary
                               onClick={() =>
                                 handleOpenModalBuy(
                                   dataNFTs?.itemDetails?.marketId,
@@ -920,28 +1166,26 @@ export default function NFTDetails({ dataNFTs }) {
                               disabled={!isNotExpired}
                             >
                               {isNotExpired ? 'Buy Now' : 'Expired'}
-                            </button>
+                            </ButtonPrimary>
                           )}
                         </div>
                       )
                     ) : (
                       <div className="mt-5 flex w-full items-center gap-4">
                         {address === dataNFTs.owner ? (
-                          <button
+                          <ButtonPrimary
                             onClick={() =>
                               handleOpenModalPutonsale(
                                 dataNFTs?.tokenId,
                                 dataNFTs?.collectionAddress,
                               )
                             }
-                            className="hover-bg-primary-300 w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white"
+                            className="w-full rounded-full border bg-primary-500 px-4 py-2 text-center text-base font-bold hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-300 disabled:text-white disabled:hover:bg-primary-200"
                           >
                             Put On Sale
-                          </button>
+                          </ButtonPrimary>
                         ) : (
-                          <button className="hover-bg-primary-300 w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white">
-                            Not For Sale
-                          </button>
+                          <ButtonPrimary disabled>Not For Sale</ButtonPrimary>
                         )}
                       </div>
                     )}
@@ -1024,13 +1268,13 @@ export default function NFTDetails({ dataNFTs }) {
                 <h2 className="mt-5 text-xl font-semibold">
                   NFTs you might like
                 </h2>
-                <button
+                <ButtonTertiary
                   onClick={() => router.push('/collection')}
                   title="See all"
-                  className="hidden rounded-full bg-white px-4 py-2 font-semibold text-primary-500 hover:bg-primary-50 sm:hidden md:block md:text-lg lg:block xl:block 2xl:block"
+                  className="!w-fit hidden sm:hidden md:block lg:block xl:block 2xl:block"
                 >
                   View collection
-                </button>
+                </ButtonTertiary>
               </div>
               <div className="relative w-full flex-initial items-center justify-center">
                 {isLoadingRelatedNFTs || dataRelatedNFTs.length <= 0 ? (
@@ -1359,6 +1603,12 @@ export default function NFTDetails({ dataNFTs }) {
         onClose={closeModalReport}
         onModalClose={closeModalReport}
         reportData={reportData}
+      />
+      <ModalRemove
+        isOpenModal={isOpenModalRemove}
+        onClose={closeModalRemove}
+        removeData={removeData}
+        refreshData={refreshData}
       />
     </>
   );

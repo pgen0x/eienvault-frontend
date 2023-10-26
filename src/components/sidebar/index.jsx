@@ -19,6 +19,8 @@ import { truncateAddress } from '@/utils/truncateAddress';
 import { useWeb3Modal } from '@web3modal/react';
 import HelaIcon from '@/assets/icon/hela';
 import ModalCreateCollection from '../modal/createCollections';
+import ButtonPrimary from '../button/buttonPrimary';
+import ButtonSecondary from '../button/buttonSecondary';
 
 const Sidebar = () => {
   const { isSidebarOpen, closeSidebar } = useSidebar();
@@ -322,28 +324,19 @@ const Sidebar = () => {
                   </div>
                 </div> */}
                 </div>
-                <button
-                  className="inline-flex items-start justify-start gap-2 self-stretch rounded-3xl bg-primary-500 hover:bg-primary-300"
-                  onClick={open}
-                >
-                  <div className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 px-4 py-2">
-                    <div className="text-center text-base font-bold leading-normal text-white">
-                      Manage Wallet
-                    </div>
-                  </div>
-                </button>
+                <ButtonPrimary onClick={open}>Manage Wallet</ButtonPrimary>
                 <div className="inline-flex items-start justify-start gap-2 self-stretch">
-                  <button
-                    className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl px-4 py-2 hover:bg-primary-200 hover:text-primary-200"
+                  <ButtonSecondary
+                    className="flex items-center justify-center gap-2"
                     onClick={handleDisconnect}
                   >
-                    <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500 ">
+                    <div className="h-4 w-4 text-center text-base leading-none text-primary-500 ">
                       <FontAwesomeIcon icon={faPlugCircleXmark} />
                     </div>
                     <span className="text-base font-bold leading-normal text-primary-500 ">
                       Disconnect wallet
                     </span>
-                  </button>
+                  </ButtonSecondary>
                 </div>
               </div>
             </div>

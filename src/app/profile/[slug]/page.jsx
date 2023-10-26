@@ -137,6 +137,28 @@ export default function ProfilePage({ params }) {
   };
 
   useEffect(() => {
+    loadActivePage();
+  }, []);
+
+  useEffect(() => {
+    loadActivePage();
+  }, [window.location.search, queryString.search]);
+
+  const loadActivePage = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlManualParams = new URLSearchParams(queryString.search);
+
+    listCollections.map((collection) => {
+      if (
+        urlParams.get(collection.slug.toLowerCase()) === '' ||
+        urlManualParams.get(collection.slug.toLowerCase()) === ''
+      ) {
+        setActivePage(collection.slug);
+      }
+    });
+  };
+
+  useEffect(() => {
     handleResize();
     window.addEventListener('resize', handleResize);
 
@@ -211,28 +233,6 @@ export default function ProfilePage({ params }) {
       badge: 0,
     },
   ];
-
-  useEffect(() => {
-    loadActivePage();
-  }, []);
-
-  useEffect(() => {
-    loadActivePage();
-  }, [window.location.search, queryString.search]);
-
-  const loadActivePage = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlManualParams = new URLSearchParams(queryString.search);
-
-    listCollections.map((collection) => {
-      if (
-        urlParams.get(collection.slug.toLowerCase()) === '' ||
-        urlManualParams.get(collection.slug.toLowerCase()) === ''
-      ) {
-        setActivePage(collection.slug);
-      }
-    });
-  };
 
   const renderActiveTab = () => {
     const listTabs = {

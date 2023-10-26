@@ -340,7 +340,7 @@ export default function CollectionDetail({ params }) {
                     )}
                   </div>
                   <div className="col-span-12 flex h-fit justify-end sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
-                    <div className="flex w-96 flex-col gap-2 rounded-lg border-2 border-gray-200 bg-white p-5 text-sm text-gray-900 dark:border-zinc-500 dark:bg-zinc-700 dark:text-white">
+                    <div className="flex w-96 flex-col gap-2 rounded-lg bg-white p-5 text-sm text-gray-900 dark:border-zinc-500 dark:bg-zinc-700 dark:text-white">
                       <div className="flex justify-between">
                         <span className="font-semibold">Floor</span>
                         <span>
@@ -1940,7 +1940,7 @@ const Activity = ({ collection }) => {
                   {Object.keys(datafilters).map((key) => (
                     <button
                       key={key}
-                      className={`w-fit rounded-lg px-3 py-2 font-semibold text-primary-500 hover:bg-primary-100 hover:dark:bg-zinc-500 ${
+                      className={`w-fit rounded-lg px-3 py-2 font-semibold text-primary-500 hover:bg-primary-100 hover:dark:bg-neutral-500 ${
                         activeFilter.indexOf(key) !== -1
                           ? 'bg-primary-100 dark:bg-zinc-500'
                           : 'bg-white dark:bg-zinc-600'

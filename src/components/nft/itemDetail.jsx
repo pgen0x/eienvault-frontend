@@ -339,14 +339,14 @@ const Nft = ({
           />
         ) : (
           <div className="z-10 flex h-[290px] w-full items-center justify-center rounded-2xl bg-white dark:bg-zinc-900 object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all">
-            <button
-              className="rounded-full border border-primary-500 bg-transparent px-2 py-2 text-sm font-semibold text-primary-500 hover:border-primary-300 hover:text-primary-300"
+            <ButtonTertiary
+              className="!w-fit"
               onClick={() =>
                 refreshMetadata(nft.collectionAddress, nft.tokenId)
               }
             >
-              Refresh Metadadata
-            </button>
+              Refresh Metadata
+            </ButtonTertiary>
           </div>
         )}
       </Suspense>

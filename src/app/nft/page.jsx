@@ -423,7 +423,7 @@ export default function NftPage() {
                   </div>
                 </div>
               </form>
-              <div className="hidden space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1  dark:border-zinc-500 dark:bg-zinc-700 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+              <div className="hidden space-x-1 rounded-full bg-white px-1 py-1  dark:border-zinc-500 dark:bg-zinc-700 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
                 <div>
                   <input
                     className="hidden"

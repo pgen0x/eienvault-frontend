@@ -17,6 +17,8 @@ import { toast } from 'react-toastify';
 import ModalUploadProfileCover from '@/components/modal/uploadProfileCover';
 import Image from 'next/image';
 import ModalUploadProfileLogo from '@/components/modal/uploadProfileLogo';
+import ButtonPrimary from '@/components/button/buttonPrimary';
+import ButtonTertiary from '@/components/button/buttonTertiary';
 
 const ProfileSetting = () => {
   const { token } = useAuth();
@@ -316,26 +318,22 @@ const Profile = ({
               placeholder="https://instagram.com/username"
             />
           </label>
-          <button
-            className="mt-2 w-full rounded-full bg-primary-500 py-2 text-white hover:bg-primary-300"
+          <ButtonPrimary
             onClick={() => saveProfile()}
           >
             Save Setting
-          </button>
+          </ButtonPrimary>
         </div>
-        <div className="col-span-12 flex h-fit flex-col gap-4 rounded-xl bg-white p-5 dark:bg-zinc-700 dark:text-white sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4">
+        <div className="sticky col-span-12 flex h-fit flex-col gap-4 rounded-xl bg-white p-5 dark:bg-zinc-700 dark:text-white sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4">
           <img className="rounded-xl" src="https://fakeimg.pl/290x130" />
           <h3 className="text-lg font-bold">Verify your account</h3>
           <p>
             Proceed with verification process to get more visibility and gain
             trust on Rarible
           </p>
-          <a
-            href="#"
-            className="rounded-full bg-primary-500 py-1 text-center font-semibold text-white hover:bg-primary-300"
-          >
+          <ButtonPrimary>
             Get verified
-          </a>
+          </ButtonPrimary>
         </div>
       </div>
       <ModalUploadProfileCover
@@ -371,9 +369,9 @@ const Account = () => {
               Please check anything@gmail.com and verify your email address.
               Still no email?
             </p>
-            <button className="w-fit rounded-full bg-primary-500 px-4 py-2 font-semibold text-white hover:bg-primary-300">
+            <ButtonPrimary className="!w-fit">
               Resend verifications link
-            </button>
+            </ButtonPrimary>
           </div>
         </div>
         <div>
@@ -382,9 +380,9 @@ const Account = () => {
             Once you delete your account, there is no boing back. Please be
             certain.
           </p>
-          <button className="mt-2 w-fit rounded-full border-[1px] border-primary-500 px-4 py-2 font-semibold text-primary-500 hover:text-primary-300">
+          <ButtonTertiary className="!w-fit mt-2">
             Delete Account
-          </button>
+          </ButtonTertiary>
         </div>
       </div>
     </div>
@@ -447,9 +445,9 @@ const Wallets = () => {
                 className="text-xl text-primary-500"
               />
             </div>
-            <button className="col-span-12 w-full rounded-full bg-primary-500 py-2 text-lg font-bold text-white hover:bg-primary-300">
+            <ButtonPrimary className="col-span-12">
               Link another wallet
-            </button>
+            </ButtonPrimary>
           </div>
         </div>
       </div>

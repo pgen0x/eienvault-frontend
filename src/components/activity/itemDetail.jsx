@@ -16,6 +16,8 @@ import { useEffect, useState } from 'react';
 import { formatEther } from 'viem';
 import { ImageWithFallback } from '../imagewithfallback';
 import { JazzIcon } from '../jazzicon';
+import ButtonTertiary from '../button/buttonTertiary';
+import ButtonSecondary from '../button/buttonSecondary';
 
 export const ActivityItemDetail = ({ event }) => {
   const router = useRouter();
@@ -96,20 +98,19 @@ export const ActivityItemDetail = ({ event }) => {
           <div>{timeAgo(event?.timestamp)}</div>
         </div>
       </div>
-      <div className="text-primary-500">
-        <button
-          onClick={() =>
-            window
-              .open(
-                `https://testnet-blockexplorer.helachain.com/tx/${event?.txHash}`,
-                '_blank',
-              )
-              .focus()
-          }
-        >
-          <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
-        </button>
-      </div>
+      <ButtonSecondary
+      className="!w-[40px] !h-[40px] !p-0"
+        onClick={() =>
+          window
+            .open(
+              `https://testnet-blockexplorer.helachain.com/tx/${event?.txHash}`,
+              '_blank',
+            )
+            .focus()
+        }
+      >
+        <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+      </ButtonSecondary>
     </div>
   );
 };

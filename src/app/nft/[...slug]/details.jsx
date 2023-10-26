@@ -74,7 +74,7 @@ import ButtonPrimary from '@/components/button/buttonPrimary';
 import NftMarker from '@/components/marker/nftMarker';
 import ButtonTertiary from '@/components/button/buttonTertiary';
 
-export default function NFTDetails({ dataNFTs }) {
+export default function NFTDetails({ collectionAddress, tokenId }) {
   const router = useRouter();
   const { address } = useAccount();
   const { token } = useAuth();
@@ -99,6 +99,36 @@ export default function NFTDetails({ dataNFTs }) {
   const [removeData, setRemoveData] = useState({});
 
   const { data: walletClient } = useWalletClient();
+
+  const getDataNFTs = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbytokenid/${collectionAddress}/${tokenId}?userAddress=${address}`,
+        {
+          next: { revalidate: 0 },
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+  
+      if (res.status === 404) {
+        dataNFTs = [];
+      } else if (!res.ok) {
+        console.error('Fetch failed:', res);
+      } else {
+        const responseData = await res.json();
+        dataNFTs = responseData;
+      }
+    } catch (error) {
+      dataNFTs = [];
+      console.error('Fetch failed:', error);
+    }
+  }
+
+  useEffect(() => {
+    getDataNFTs();
+  }, [])
 
   const handleModalPropose = () => {
     if (modalPropose) {

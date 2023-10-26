@@ -342,7 +342,7 @@ export default function Collection() {
                     <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
                   </button>
                 </div>
-                <div className="flex w-fit space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 dark:border-zinc-500 dark:bg-zinc-700">
+                <div className="flex w-fit space-x-1 rounded-full bg-white px-1 py-1 dark:border-zinc-500 dark:bg-zinc-700">
                   <label
                     className={`px-3 ${classRadio(TrendingTop, 'trending')}`}
                   >
@@ -364,7 +364,7 @@ export default function Collection() {
                     />
                   </label>
                 </div>
-                <div className="flex w-fit space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 dark:border-zinc-500 dark:bg-zinc-700">
+                <div className="flex w-fit space-x-1 rounded-full bg-white px-1 py-1 dark:border-zinc-500 dark:bg-zinc-700">
                   <label className={classRadio(Range, '1h')}>
                     1h
                     <input
@@ -423,7 +423,7 @@ export default function Collection() {
           <div className="my-5 grid grid-cols-12 gap-6">
             {openFilter && (
               <div className="col-span-12 sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                <ul className="divide-y rounded-xl bg-white p-5 font-bold text-gray-900 dark:bg-zinc-700 dark:text-white">
+                <ul className="divide-y rounded-xl bg-white p-5 font-bold text-gray-900 dark:bg-neutral-700 dark:text-white">
                   <li>
                     <button
                       className="action flex w-full cursor-pointer items-center justify-between py-3"
@@ -569,22 +569,22 @@ export default function Collection() {
               </div>
             )}
             <div
-              className={`col-span-12 overflow-auto sm:col-span-12 ${
+              className={`col-span-12 overflow-auto sm:col-span-12 bg-gray-50 p-3 dark:bg-zinc-700 rounded-lg ${
                 openFilter
                   ? 'md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9'
                   : 'md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12'
               }`}
             >
               <div className="grid w-full min-w-[720px] grid-cols-12 text-gray-900">
-                <div className="col-span-12 grid grid-cols-12 gap-4 rounded-2xl px-10 py-4 font-bold text-primary-500">
-                  <div className="col-span-1 grid">Rank</div>
-                  <div className="col-span-5 grid">Collection</div>
-                  <div className="col-span-2 grid">Floor price</div>
-                  <div className="col-span-2 grid">Volume</div>
-                  <div className="col-span-1 grid">Items</div>
-                  <div className="col-span-1 grid">Owner</div>
+                <div className="col-span-12 grid grid-cols-12 gap-4 rounded-2xl p-4 font-bold text-primary-500">
+                  <div className="col-span-1 grid text-center">Rank</div>
+                  <div className="col-span-5 grid text-center">Collection</div>
+                  <div className="col-span-2 grid text-center">Floor price</div>
+                  <div className="col-span-2 grid text-center">Volume</div>
+                  <div className="col-span-1 grid text-center">Items</div>
+                  <div className="col-span-1 grid text-center">Owner</div>
                 </div>
-                <div className="col-span-12 grid grid-cols-12 gap-3 rounded-lg border-2 border-gray-200 bg-gray-100 p-3 dark:border-zinc-500 dark:bg-zinc-700">
+                <div className="col-span-12 grid grid-cols-12 gap-2">
                   {sortedCollections.length == 0 && (
                     <div className="col-span-12 w-full text-center font-semibold text-black dark:text-white">
                       Collection not found
@@ -594,7 +594,7 @@ export default function Collection() {
                     sortedCollections.map((collection, index) => (
                       <div
                         key={index}
-                        className={`group col-span-12 grid w-full cursor-pointer grid-cols-12 rounded-xl bg-gray-50 p-3 px-5 py-2 hover:bg-gray-200 dark:bg-zinc-600 dark:text-white hover:dark:bg-zinc-500`}
+                        className={`group col-span-12 grid w-full cursor-pointer grid-cols-12 rounded-xl bg-white p-2 hover:bg-gray-200 dark:bg-neutral-500 dark:text-white hover:dark:bg-zinc-500`}
                         onClick={() =>
                           router.push(
                             `/collection/${
@@ -637,7 +637,7 @@ export default function Collection() {
                               : collection?.userAddress}
                           </span>
                         </div>
-                        <div className="col-span-2 flex items-center gap-2">
+                        <div className="col-span-2 flex items-center gap-2 justify-center">
                           {collection.floorPrice
                             ? Number(
                                 formatEther(Number(collection.floorPrice)),
@@ -654,7 +654,7 @@ export default function Collection() {
                             %
                           </p>
                         </div>
-                        <div className="col-span-2 flex items-center">
+                        <div className="col-span-2 flex items-center justify-center">
                           $
                           {collection.floorPrice
                             ? Number(
@@ -672,10 +672,10 @@ export default function Collection() {
                             %
                           </p>
                         </div>
-                        <div className="col-span-1 flex items-center">
+                        <div className="col-span-1 flex items-center justify-center">
                           {collection.totalItems}
                         </div>
-                        <div className="col-span-1 flex items-center">
+                        <div className="col-span-1 flex items-center justify-center">
                           {collection.totalOwners}
                         </div>
                       </div>

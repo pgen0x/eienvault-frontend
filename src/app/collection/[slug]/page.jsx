@@ -59,6 +59,7 @@ import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
 import formatter from '@/utils/shortNumberFormatter';
 import ModalReportNft from '@/components/modal/reportNft';
 import ModalRemove from '@/components/modal/remove';
+import ButtonPrimary from '@/components/button/buttonPrimary';
 
 const filters = [
   'All',
@@ -382,20 +383,20 @@ export default function CollectionDetail({ params }) {
                   </div>
                   <div className="col-span-12 flex gap-1 font-semibold text-white">
                     {address === collection.userAddress && (
-                      <button
-                        className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
+                      <ButtonPrimary
+                        className="!w-fit"
                         onClick={() => handleModalUpdate()}
                       >
                         <FontAwesomeIcon icon={faPenToSquare} /> Edit Collection
-                      </button>
+                      </ButtonPrimary>
                     )}
 
-                    <button className="h-[40px] w-[40px] rounded-full bg-primary-500 hover:bg-primary-300">
+                    <ButtonPrimary className="!h-[40px] !w-[40px] !px-0">
                       <FontAwesomeIcon icon={faShare} />
-                    </button>
-                    <button className="h-[40px] w-[40px] rounded-full bg-primary-500 hover:bg-primary-300">
+                    </ButtonPrimary>
+                    <ButtonPrimary className="!h-[40px] !w-[40px] !px-0">
                       <FontAwesomeIcon icon={faEllipsisVertical} />
-                    </button>
+                    </ButtonPrimary>
                   </div>
                 </div>
               </div>
@@ -1127,7 +1128,7 @@ const Items = ({ params, collection }) => {
                 className="hidden sm:hidden md:block lg:block xl:block 2xl:block"
               >
                 <div className="relative z-20">
-                  <Listbox.Button className="relative w-[200px] cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-500 dark:border-zinc-500 dark:bg-zinc-700 sm:text-sm">
+                  <Listbox.Button className="relative w-[200px] cursor-default rounded-full bg-white py-2.5 pl-3 pr-10 text-left focus:outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-500 dark:border-zinc-500 dark:bg-zinc-700 sm:text-sm">
                     <span className="block truncate text-gray-600 dark:text-white">
                       {sortFilter}
                     </span>
@@ -1176,7 +1177,7 @@ const Items = ({ params, collection }) => {
                 </div>
               </Listbox>
             </form>
-            <div className="hidden items-center space-x-1 rounded-full border border-gray-200 bg-white px-1 dark:border-zinc-500 dark:bg-zinc-700 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+            <div className="hidden items-center space-x-1 rounded-full bg-white px-1 dark:border-zinc-500 dark:bg-zinc-700 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
               <div>
                 <input
                   className="hidden"

@@ -1,15 +1,18 @@
+'use client'
 import Footer from '@/components/footer/main';
 import { notFound } from 'next/navigation';
 import NFTDetails from './details';
+import { useAccount } from 'wagmi';
 
 export default async function Page({ params }) {
+  const { address } = useAccount();
   const collectionAddress = params.slug[0];
   const tokenId = params.slug[1];
   let dataNFTs = [];
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbytokenid/${collectionAddress}/${tokenId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbytokenid/${collectionAddress}/${tokenId}?userAddress=${address}`,
       {
         next: { revalidate: 0 },
         headers: {

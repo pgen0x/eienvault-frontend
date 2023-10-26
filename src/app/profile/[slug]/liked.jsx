@@ -381,7 +381,7 @@ const Liked = ({
                 className="hidden sm:hidden md:block lg:block xl:block 2xl:block"
               >
                 <div className="relative z-20">
-                  <Listbox.Button className="relative w-[200px] cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-500 dark:border-zinc-500 dark:bg-zinc-700 sm:text-sm">
+                  <Listbox.Button className="relative w-[200px] cursor-default rounded-full bg-white py-2.5 pl-3 pr-10 text-left focus:outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-500 dark:border-zinc-500 dark:bg-zinc-700 sm:text-sm">
                     <span className="block truncate text-gray-600 dark:text-white">
                       {sortFilter}
                     </span>
@@ -430,7 +430,7 @@ const Liked = ({
                 </div>
               </Listbox>
             </form>
-            <div className="hidden items-center space-x-1 rounded-full border border-gray-200 bg-white px-1 dark:border-zinc-500 dark:bg-zinc-700 dark:text-white sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+            <div className="hidden items-center space-x-1 rounded-full bg-white px-1 dark:border-zinc-500 dark:bg-zinc-700 dark:text-white sm:hidden md:flex lg:flex xl:flex 2xl:flex">
               <div>
                 <input
                   className="hidden"

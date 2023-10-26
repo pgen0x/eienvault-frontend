@@ -44,6 +44,8 @@ import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
 import ModalReportNft from '@/components/modal/reportNft';
 import { JazzIcon } from '@/components/jazzicon';
 import { useLocation } from 'react-use';
+import ButtonSecondary from '@/components/button/buttonSecondary';
+import ButtonPrimary from '@/components/button/buttonPrimary';
 
 const servers = [
   'All Mainnet',
@@ -210,7 +212,6 @@ export default function ProfilePage({ params }) {
     },
   ];
 
-  
   useEffect(() => {
     loadActivePage();
   }, []);
@@ -221,14 +222,17 @@ export default function ProfilePage({ params }) {
 
   const loadActivePage = () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const urlManualParams = new URLSearchParams(queryString.search)
+    const urlManualParams = new URLSearchParams(queryString.search);
 
     listCollections.map((collection) => {
-      if (urlParams.get(collection.slug.toLowerCase()) === '' || urlManualParams.get(collection.slug.toLowerCase()) === '') {
+      if (
+        urlParams.get(collection.slug.toLowerCase()) === '' ||
+        urlManualParams.get(collection.slug.toLowerCase()) === ''
+      ) {
         setActivePage(collection.slug);
       }
     });
-  }
+  };
 
   const renderActiveTab = () => {
     const listTabs = {
@@ -265,7 +269,7 @@ export default function ProfilePage({ params }) {
       ),
     };
 
-    return activePage == "" ? listTabs['Owned'] : listTabs[activePage];
+    return activePage == '' ? listTabs['Owned'] : listTabs[activePage];
   };
 
   const editBanner = () => {
@@ -315,7 +319,7 @@ export default function ProfilePage({ params }) {
           )}
         </div>
       </section>
-      <div className="container m-auto p-3">
+      <div className="container m-auto p-3 min-h-screen">
         <section>
           <div className="mt-5 flex justify-between">
             <div className="flex w-full flex-col">
@@ -446,24 +450,22 @@ export default function ProfilePage({ params }) {
                 </div>
                 {address === params.slug && (
                   <div className="col-span-12 flex gap-1 font-semibold text-white">
-                    <button
-                      className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
+                    <ButtonPrimary
+                      className="!w-fit"
                       onClick={() => router.push(`/profile/setting`)}
                     >
                       <FontAwesomeIcon icon={faPenToSquare} /> Edit Profile
-                    </button>
-                    <button
-                      className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
-                      href="#"
+                    </ButtonPrimary>
+                    <ButtonPrimary
+                      className="!w-fit"
                     >
                       Sell
-                    </button>
-                    <button
-                      className="rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
-                      href="#"
+                    </ButtonPrimary>
+                    <ButtonPrimary
+                      className="!w-fit"
                     >
                       <FontAwesomeIcon icon={faShare} />
-                    </button>
+                    </ButtonPrimary>
                   </div>
                 )}
               </div>
@@ -734,7 +736,7 @@ const Collection = ({ userAccount }) => {
                 </div>
               </div>
             </form>
-            <div className="hidden space-x-1 rounded-full border border-gray-200 bg-white px-1 py-1 dark:border-zinc-500 dark:bg-zinc-700 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+            <div className="hidden space-x-1 rounded-full bg-white px-1 py-1 dark:border-zinc-500 dark:bg-zinc-700 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
               <div>
                 <input
                   className="hidden"
@@ -774,12 +776,12 @@ const Collection = ({ userAccount }) => {
               {address === userAccount && (
                 <div className="col-span-12 mb-4 h-[280px] w-full sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
                   <div className="flex h-full w-full flex-col items-center justify-center rounded-2xl border-2 border-gray-200 dark:border-zinc-500">
-                    <button
-                      className="w-fit rounded-full bg-primary-500 px-4 py-1 text-white hover:bg-primary-300"
+                    <ButtonPrimary
+                      className="!w-fit"
                       onClick={handleModalCreate}
                     >
                       Create a new collection
-                    </button>
+                    </ButtonPrimary>
                     {/* <button className="w-fit px-4 py-1 font-semibold text-primary-500 hover:text-primary-300">
                       Import existing collection
                     </button> */}
@@ -856,7 +858,7 @@ const ItemCollection = ({ collection, gridList }) => {
       )}
 
       <div className="grid grid-cols-12 p-3">
-        <div className="relative -top-[60px] z-10 col-span-12 flex gap-1 rounded-tl-2xl rounded-tr-2xl bg-white bg-opacity-50 p-2 dark:bg-zinc-700 dark:text-white sm:col-span-12 md:col-span-10 lg:col-span-8 xl:col-span-8 2xl:col-span-8">
+        <div className="relative -top-[62px] z-10 col-span-12 flex gap-1 rounded-tl-2xl rounded-tr-2xl bg-white bg-opacity-50 p-2 dark:bg-neutral-700 dark:text-white sm:col-span-12 md:col-span-10 lg:col-span-8 xl:col-span-8 2xl:col-span-8">
           <div className="w-fit">
             {collection?.logo ? (
               <ImageWithFallback
@@ -893,8 +895,8 @@ const ItemCollection = ({ collection, gridList }) => {
       </div>
       <div className="relative -top-[85px] inline-flex w-full flex-col items-center justify-center lg:items-start">
         <div className="relative flex w-full flex-row px-3">
-          <div className="inline-flex w-full flex-col items-start justify-start rounded-bl-2xl rounded-br-2xl bg-gray-50 p-3 backdrop-blur-xl dark:bg-zinc-700 dark:text-white">
-            <div className="flex w-full flex-col justify-between rounded-md bg-gray-100 px-2 py-2 dark:bg-zinc-600 sm:flex-col md:flex-row">
+          <div className="inline-flex w-full flex-col items-start justify-start rounded-bl-2xl rounded-br-2xl bg-gray-50 p-3 backdrop-blur-xl dark:bg-neutral-700 dark:text-white gap-2">
+            <div className="flex w-full flex-col justify-between rounded-md bg-gray-100 px-2 py-2 dark:bg-neutral-500 sm:flex-col md:flex-row">
               <div className="flex shrink-0 flex-col truncate text-sm leading-5 sm:items-start">
                 <p>Total Volume</p>
                 <p className="font-bold">
@@ -916,7 +918,8 @@ const ItemCollection = ({ collection, gridList }) => {
                 </p>
               </div>
             </div>
-            <button
+            <ButtonSecondary
+              className="duration-800 h-0 overflow-hidden !py-0 opacity-0 group-hover:h-auto group-hover:!py-2 group-hover:opacity-100 group-hover:transition-all group-hover:duration-300 group-hover:ease-in-out"
               onClick={() =>
                 router.push(
                   `/collection/${
@@ -926,10 +929,9 @@ const ItemCollection = ({ collection, gridList }) => {
                   }`,
                 )
               }
-              className="duration-800 mt-2 h-0 w-full overflow-hidden rounded-full bg-white py-0 text-center text-primary-500 opacity-0 ease-in-out hover:bg-primary-50 group-hover:h-auto group-hover:py-2 group-hover:opacity-100 group-hover:transition-all"
             >
               View Detail
-            </button>
+            </ButtonSecondary>
           </div>
         </div>
       </div>

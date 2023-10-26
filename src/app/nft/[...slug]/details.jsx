@@ -21,6 +21,7 @@ import {
   faTags,
   faUpRightFromSquare,
   faXmark,
+  faHeart as faHeartSolid,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faCalendar,
@@ -84,6 +85,7 @@ export default function NFTDetails({ dataNFTs }) {
   const [isOpenModalReport, setisOpenModalReport] = useState(false);
   const [isOpenModalRemove, setisOpenModalRemove] = useState(false);
 
+  const [isLiked, setIsLiked] = useState(dataNFTs?.isLiked);
   const [countLikes, setCountLikes] = useState(dataNFTs?.likeCount);
   const [dataRelatedNFTs, setDataRelatedNFTs] = useState([]);
   const [isLoadingRelatedNFTs, setIsLoadingRelatedNFTs] = useState(true);
@@ -319,9 +321,10 @@ export default function NFTDetails({ dataNFTs }) {
         toast.error(errorMessage.error.messages);
       } else {
         const responseData = await res.json();
-        toast.success(responseData.success.messages);
+        toast.success(responseData.success.message);
 
-        setCountLikes(countLikes + 1);
+        setCountLikes(isLiked ? countLikes - 1 : countLikes + 1);
+        setIsLiked(!isLiked);
       }
     } catch (error) {
       console.error('error likes:', error);
@@ -662,7 +665,7 @@ export default function NFTDetails({ dataNFTs }) {
                               )
                             }
                           >
-                            <FontAwesomeIcon icon={faHeart} />{' '}
+                            <FontAwesomeIcon icon={isLiked ? faHeartSolid : faHeart} />{' '}
                             <span className="font-semibold text-black dark:text-white">
                               {countLikes} likes
                             </span>

@@ -364,7 +364,7 @@ const Sold = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) => {
                 className="hidden sm:hidden md:block lg:block xl:block 2xl:block"
               >
                 <div className="relative z-20">
-                  <Listbox.Button className="relative w-[200px] cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-500 dark:border-zinc-500 dark:bg-zinc-700 sm:text-sm">
+                  <Listbox.Button className="relative w-[200px] cursor-default rounded-full bg-white py-2.5 pl-3 pr-10 text-left focus:outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-500 dark:border-zinc-500 dark:bg-zinc-700 sm:text-sm">
                     <span className="block truncate text-gray-600 dark:text-white">
                       {sortFilter}
                     </span>
@@ -383,7 +383,7 @@ const Sold = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) => {
                       </svg>
                     </span>
                   </Listbox.Button>
-                  <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-700 sm:text-sm">
+                  <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-700 sm:text-sm">
                     {filters.map((server, index) => (
                       <Listbox.Option
                         key={index}
@@ -413,7 +413,7 @@ const Sold = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) => {
                 </div>
               </Listbox>
             </form>
-            <div className="hidden items-center space-x-1 rounded-full border border-gray-200 bg-white px-1 dark:border-zinc-500 dark:bg-zinc-700 dark:text-white sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+            <div className="hidden items-center space-x-1 rounded-full bg-white px-1 dark:border-zinc-500 dark:bg-zinc-700 dark:text-white sm:hidden md:flex lg:flex xl:flex 2xl:flex">
               <div>
                 <input
                   className="hidden"
@@ -564,7 +564,7 @@ const Sold = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) => {
           >
             <div className="grid w-full grid-cols-12 gap-7 text-gray-900">
               {sortedNFTs.length == 0 && !isLoading && (
-                <div className="col-span-12 w-full text-center font-semibold text-black">
+                <div className="col-span-12 w-full text-center font-semibold text-black dark:text-white">
                   NFT not found
                 </div>
               )}

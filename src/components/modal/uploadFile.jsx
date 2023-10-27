@@ -17,6 +17,10 @@ export default function ModalUploadDFile({
   isErrorMint,
   isErrorApprove,
   isErrorPutonsale,
+  isCompletedIPFS,
+  isCompletedMint,
+  isCompletedApprove,
+  isCompletedPutonsale,
   isProcessing,
   onModalClose,
 }) {
@@ -86,10 +90,15 @@ export default function ModalUploadDFile({
                             icon={faCircleXmark}
                             className="h-7 w-7 text-primary-500"
                           />
-                        ) : (
+                        ) : isCompletedIPFS ? (
                           <FontAwesomeIcon
                             icon={faCheckCircle}
                             className="h-7 w-7 text-green-500"
+                          />
+                        ) : (
+                          <FontAwesomeIcon
+                            icon={faCheckCircle}
+                            className="h-7 w-7 text-gray-400"
                           />
                         )}
                       </div>
@@ -132,10 +141,15 @@ export default function ModalUploadDFile({
                             icon={faCircleXmark}
                             className="h-7 w-7 text-primary-500"
                           />
-                        ) : (
+                        ) : isCompletedMint ? (
                           <FontAwesomeIcon
                             icon={faCheckCircle}
                             className="h-7 w-7 text-green-500"
+                          />
+                        ) : (
+                          <FontAwesomeIcon
+                            icon={faCheckCircle}
+                            className="h-7 w-7 text-gray-400"
                           />
                         )}
                       </div>
@@ -175,10 +189,15 @@ export default function ModalUploadDFile({
                             icon={faCircleXmark}
                             className="h-7 w-7 text-primary-500"
                           />
-                        ) : (
+                        ) : isCompletedApprove ? (
                           <FontAwesomeIcon
                             icon={faCheckCircle}
                             className="h-7 w-7 text-green-500"
+                          />
+                        ) : (
+                          <FontAwesomeIcon
+                            icon={faCheckCircle}
+                            className="h-7 w-7 text-gray-400"
                           />
                         )}
                       </div>
@@ -221,10 +240,15 @@ export default function ModalUploadDFile({
                             icon={faCircleXmark}
                             className="h-7 w-7 text-primary-500"
                           />
-                        ) : (
+                        ) : isCompletedPutonsale ? (
                           <FontAwesomeIcon
                             icon={faCheckCircle}
                             className="h-7 w-7 text-green-500"
+                          />
+                        ) : (
+                          <FontAwesomeIcon
+                            icon={faCheckCircle}
+                            className="h-7 w-7 text-gray-400"
                           />
                         )}
                       </div>
@@ -250,7 +274,7 @@ export default function ModalUploadDFile({
                         onClick={closeModal}
                         disabled={isProcessing}
                       >
-                        {isProcessing ? 'Cancel' : 'Completed'} 
+                        {isProcessing ? 'Please wait...' : 'Completed'}
                       </button>
                     </div>
                   </div>

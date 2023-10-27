@@ -126,6 +126,12 @@ export default function Create({ chains }) {
     isError: false,
     message: '',
   });
+  const [isCompleted, setIsCompleted] = useState({
+    ipfs: false,
+    mint: false,
+    approve: false,
+    putonsale: false,
+  });
   const {
     register,
     handleSubmit,
@@ -313,6 +319,12 @@ export default function Create({ chains }) {
             putonsale: false,
           });
           setTokenId(hexToNumber(data.logs[0].topics[3]));
+          setIsCompleted({
+            ipfs: true,
+            mint: true,
+            approve: false,
+            putonsale: false,
+          });
           await approve(data.logs[0].topics[3]);
         }
       }
@@ -346,6 +358,12 @@ export default function Create({ chains }) {
             approve: false,
             putonsale: true,
           });
+          setIsCompleted({
+            ipfs: true,
+            mint: true,
+            approve: true,
+            putonsale: false,
+          });
           await putOnSale();
         }
       }
@@ -378,6 +396,12 @@ export default function Create({ chains }) {
             mint: false,
             approve: false,
             putonsale: false,
+          });
+          setIsCompleted({
+            ipfs: true,
+            mint: true,
+            approve: true,
+            putonsale: true,
           });
           await onSave();
           setIsProcessing(false);
@@ -596,6 +620,13 @@ export default function Create({ chains }) {
       const ipfsLink = `https://ipfs.io/ipfs/${jsonResponse.IpfsHash}`;
       setIpfsHash(ipfsLink);
 
+      setIsCompleted({
+        ipfs: true,
+        mint: false,
+        approve: false,
+        putonsale: false,
+      });
+
       setIsLoadingModal({
         ipfs: false,
         mint: true,
@@ -632,6 +663,8 @@ export default function Create({ chains }) {
   const allowedFileTypes = [
     'image/png',
     'image/jpeg',
+    'image/jpg',
+    'image/gif',
     'image/webp',
     'video/mp4',
     'audio/mp3',
@@ -639,6 +672,7 @@ export default function Create({ chains }) {
   const maxFileSize = 100 * 1024 * 1024; // 100MB
 
   const validateFile = (value) => {
+    console.log(value.type, 'value.type');
     if (!value) {
       setValue('file', '');
       return 'File is required.';
@@ -1396,6 +1430,10 @@ export default function Create({ chains }) {
         isErrorMint={isErrorMint}
         isErrorApprove={isErrorApprove}
         isErrorPutonsale={isErrorPutonsale}
+        isCompletedIPFS={isCompleted.ipfs}
+        isCompletedApprove={isCompleted.approve}
+        isCompletedMint={isCompleted.mint}
+        isCompletedPutonsale={isCompleted.putonsale}
         onModalClose={closeModal}
         isProcessing={isProcessing}
       />

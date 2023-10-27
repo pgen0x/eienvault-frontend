@@ -14,6 +14,7 @@ import {
   faEllipsis,
   faEllipsisVertical,
   faFire,
+  faFlag,
   faGavel,
   faGrip,
   faGripVertical,
@@ -77,13 +78,18 @@ export default function CollectionDetail({ params }) {
   const [profile, setProfile] = useState({});
   const [showDescription, setShowDescription] = useState(false);
   const [activeTab, setActiveTab] = useState('items');
+
+  const [isUpdateCollection, setIsUpdateCollection] = useState(false);
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
+  const [isOpenModalShare, setisOpenModalShare] = useState(false);
+
+  const [shareData, setShareData] = useState({});
+
   const { address, isConnected } = useAccount();
   const [bannerImage, setBannerImage] = useState(
     'https://placehold.co/1920x266.png',
   );
 
-  const [isUpdateCollection, setIsUpdateCollection] = useState(false);
   const [chains, setChains] = useState([]);
   const [selectedBlockchain, setSelectedBlockchain] = useState({
     chainId: chain?.id || 666888,
@@ -206,6 +212,29 @@ export default function CollectionDetail({ params }) {
     setBannerImage(newImageURL);
   };
 
+  const handleOpenModalShare = async (tokenId, collectionAddress) => {
+    let url;
+    if(tokenId == null && collectionAddress == null){
+      let collectionSlug;
+      if (isAddress(params.slug)) {
+        collectionSlug = getAddress(params.slug);
+      } else {
+        collectionSlug = params.slug;
+      }
+      url = `${window.location.protocol}//${window.location.host}/collection/${collectionSlug}`
+    }
+    setShareData({
+      tokenId,
+      collectionAddress,
+      url
+    });
+    setisOpenModalShare(true);
+  };
+
+  function closeModalShare() {
+    setisOpenModalShare(false);
+  }
+
   return (
     <>
       <section>
@@ -221,13 +250,13 @@ export default function CollectionDetail({ params }) {
 
           {collection.userAddress !== undefined &&
             address === collection.userAddress && (
-              <button
+              <ButtonPrimary
                 onClick={editBanner}
-                className="absolute right-0 top-0 m-4 rounded-full bg-primary-500 px-4 py-2 opacity-0 hover:bg-primary-300 group-hover:opacity-100"
+                className="absolute !w-fit right-2 top-2 m-4opacity-0 group-hover:opacity-100"
               >
                 <FontAwesomeIcon className="mr-2" icon={faPenToSquare} />
                 Edit Cover
-              </button>
+              </ButtonPrimary>
             )}
         </div>
       </section>
@@ -391,11 +420,11 @@ export default function CollectionDetail({ params }) {
                       </ButtonPrimary>
                     )}
 
-                    <ButtonPrimary className="!h-[40px] !w-[40px] !px-0">
+                    <ButtonPrimary className="!h-[40px] !w-[40px] !px-0" onClick={() => handleOpenModalShare(null, null)}>
                       <FontAwesomeIcon icon={faShare} />
                     </ButtonPrimary>
                     <ButtonPrimary className="!h-[40px] !w-[40px] !px-0">
-                      <FontAwesomeIcon icon={faEllipsisVertical} />
+                      <FontAwesomeIcon icon={faFlag} />
                     </ButtonPrimary>
                   </div>
                 </div>
@@ -489,6 +518,13 @@ export default function CollectionDetail({ params }) {
         onModalClose={closeModalUpdateCollection}
         collection={collection}
         setCollection={setCollection}
+      />
+
+      <ModalShareSocialMedia
+        isOpenModal={isOpenModalShare}
+        onClose={closeModalShare}
+        onModalClose={closeModalShare}
+        shareData={shareData}
       />
       <Footer />
     </>

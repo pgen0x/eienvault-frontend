@@ -148,7 +148,7 @@ const Sidebar = () => {
       >
         <div
           ref={sidebarContentRef}
-          className={`absolute inset-0 top-0 max-h-full w-full max-w-full flex-row overflow-hidden bg-neutral-100 transition-transform duration-300 md:left-auto md:right-0 md:max-w-[418px] ${
+          className={`absolute inset-0 top-0 max-h-full w-full max-w-full flex-row overflow-hidden bg-neutral-100 transition-transform duration-300 dark:bg-neutral-900 md:left-auto md:right-0 md:max-w-[418px] ${
             isSidebarOpen
               ? 'translate-x-0 transform'
               : 'translate-x-full transform'
@@ -162,12 +162,12 @@ const Sidebar = () => {
                     <FontAwesomeIcon icon={faUserAlt} />
                   </button>
                   <div className="inline-flex flex-col items-start justify-start">
-                    <div className="truncate text-center text-xl font-medium leading-loose text-gray-900 hover:text-gray-500">
+                    <div className="truncate text-center text-xl font-medium leading-loose text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300">
                       {(isConnected && dataUser.username) ||
                         truncateAddress(address)}
                     </div>
                     <button
-                      className="text-center text-sm font-light leading-tight text-gray-900 hover:text-gray-500"
+                      className="text-center text-sm font-light leading-tight text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300"
                       onClick={handleViewProfileClick}
                     >
                       View Profile
@@ -185,19 +185,19 @@ const Sidebar = () => {
               </div>
               <div className="ml-8 inline-flex flex-col items-start justify-start gap-2">
                 <div
-                  className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500"
+                  className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300"
                   onClick={() => handleMyNft()}
                 >
                   My NFTs
                 </div>
                 <div
-                  className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500"
+                  className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300"
                   onClick={() => handleMyCollection()}
                 >
                   My Collections
                 </div>
                 <div
-                  className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500"
+                  className="cursor-pointer self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300"
                   onClick={() => handleMyBidandListiong()}
                 >
                   My Bid and Listings
@@ -214,12 +214,12 @@ const Sidebar = () => {
                     onClick={() => setShowDropdown(!showDropdown)}
                   >
                     <div className="flex items-start justify-start gap-4">
-                      <div className="text-center text-xl font-medium leading-8 text-gray-900 hover:text-gray-500">
+                      <div className="text-center text-xl font-medium leading-8 text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300">
                         Create
                       </div>
                     </div>
                     <div className="flex h-6 w-6 items-center justify-center">
-                      <div className="text-md h-6 w-6 text-center font-black leading-normal text-gray-900 hover:text-gray-500">
+                      <div className="text-md h-6 w-6 text-center font-black leading-normal text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300">
                         {showDropdown ? (
                           <FontAwesomeIcon icon={faChevronUp} />
                         ) : (
@@ -233,7 +233,7 @@ const Sidebar = () => {
                       <div className="inline-flex items-center justify-start gap-2 self-stretch">
                         <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
                         <div
-                          className="shrink grow basis-0 cursor-pointer text-xl font-medium leading-normal text-gray-900 hover:text-gray-500"
+                          className="shrink grow basis-0 cursor-pointer text-xl font-medium leading-normal text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300"
                           onClick={() => handleNftCreate()}
                         >
                           NFT
@@ -242,7 +242,7 @@ const Sidebar = () => {
                       <div className="inline-flex items-center justify-start gap-2">
                         <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
                         <div
-                          className="w-48 cursor-pointer text-xl font-medium leading-normal text-gray-900 hover:text-gray-500"
+                          className="w-48 cursor-pointer text-xl font-medium leading-normal text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300"
                           onClick={() => handleCollectionCreate()}
                         >
                           Collections
@@ -251,7 +251,7 @@ const Sidebar = () => {
                     </div>
                   )}
                 </div>
-                <div className="self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500">
+                <div className="self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300">
                   <button onClick={() => handleSetting()}>Setting</button>
                 </div>
               </div>
@@ -259,7 +259,7 @@ const Sidebar = () => {
 
             <div className="bottom-10 m-8 mb-8 inline-flex h-80 flex-col items-start justify-start gap-2">
               <div className="inline-flex h-5 w-full items-center justify-center">
-                <div className="shrink grow basis-0 text-sm font-bold leading-tight text-gray-900 hover:text-gray-500">
+                <div className="shrink grow basis-0 text-sm font-bold leading-tight text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300">
                   Connected wallet
                 </div>
                 <div className="flex h-5 shrink grow basis-0 items-center justify-center gap-2 rounded-lg py-2">
@@ -271,15 +271,15 @@ const Sidebar = () => {
                   </button>
                 </div>
               </div>
-              <div className="flex h-72 w-full flex-col items-start justify-start gap-4 rounded-2xl bg-white bg-opacity-50 p-4">
+              <div className="flex h-72 w-full flex-col items-start justify-start gap-4 rounded-2xl bg-white bg-opacity-50 dark:bg-neutral-700 p-4">
                 <div className="flex h-12 flex-col items-start justify-start gap-2 self-stretch">
                   <div className="inline-flex items-center justify-start gap-2 self-stretch">
                     <div className="flex h-12 shrink grow basis-0 items-center justify-start gap-2">
                       <div className="inline-flex flex-row items-center justify-between gap-4">
-                        <div className="font-light leading-normal text-gray-900 hover:text-gray-500">
+                        <div className="font-light leading-normal">
                           <HelaIcon className="h-12 w-12" />
                         </div>
-                        <div className="font-medium leading-normal text-gray-900 hover:text-gray-500">
+                        <div className="font-medium leading-normal text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300">
                           {isConnected && truncateAddress(address)}
                         </div>
                       </div>
@@ -291,7 +291,7 @@ const Sidebar = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex h-20 flex-col items-center justify-center gap-2 self-stretch rounded-lg bg-neutral-100 p-2">
+                <div className="flex h-20 flex-col items-center justify-center gap-2 self-stretch rounded-lg bg-neutral-100 dark:bg-neutral-500 p-2">
                   <div className="inline-flex items-center justify-start self-stretch">
                     <div className="flex h-8 shrink grow basis-0 items-center justify-start gap-2">
                       <div className="flex items-center justify-start gap-1">
@@ -299,11 +299,11 @@ const Sidebar = () => {
                           <HelaIcon className="h-6 w-6" />
                         </div>
                       </div>
-                      <div className="text-center text-base font-normal leading-normal text-gray-900 hover:text-gray-500">
+                      <div className="text-center text-base font-normal leading-normal text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300">
                         {Number(data?.formatted).toFixed()} {data?.symbol}
                       </div>
                     </div>
-                    <div className="text-center text-base font-normal leading-normal text-gray-900 hover:text-gray-500">
+                    <div className="text-center text-base font-normal leading-normal text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300">
                       ${Number(data?.formatted).toFixed()}
                     </div>
                   </div>

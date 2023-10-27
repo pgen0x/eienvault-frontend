@@ -97,7 +97,9 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
   const [shareData, setShareData] = useState({});
   const [reportData, setReportData] = useState({});
   const [removeData, setRemoveData] = useState({});
-  const [dataNFTs, setDataNFTs] = useState([])
+  const [dataNFTs, setDataNFTs] = useState([]);
+
+  const [errorActivities, setErrorActivities] = useState(false);
 
   const { data: walletClient } = useWalletClient();
 
@@ -427,7 +429,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
     };
 
     getRelatedNFTs();
-  }, [token, address]);
+  }, [dataNFTs]);
 
   const currentDate = moment();
 

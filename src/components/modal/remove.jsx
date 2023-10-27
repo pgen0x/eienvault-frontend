@@ -32,6 +32,7 @@ import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { getApprovedAddress } from '@/utils/getApprovedAddress';
 import { useRouter } from 'next-nprogress-bar';
+import ButtonPrimary from '../button/buttonPrimary';
 
 export default function ModalRemove({
   isOpenModal,
@@ -199,8 +200,8 @@ export default function ModalRemove({
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                    <Dialog.Title className="flex justify-between text-xl font-bold text-neutral-800">
+                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-gray-900 dark:bg-neutral-900 dark:text-white p-6 text-left align-middle shadow-xl transition-all">
+                    <Dialog.Title className="flex justify-between text-xl font-bold">
                       <div className="flex w-full justify-start">
                         Remove Listing
                       </div>
@@ -214,18 +215,17 @@ export default function ModalRemove({
                       </div>
                     </Dialog.Title>
 
-                    <section className="step-1 flex flex-col gap-3 pt-5 text-gray-700">
-                      <div className="flex flex-col justify-between gap-1 rounded-lg bg-gray-50 p-3">
+                    <section className="step-1 flex flex-col gap-3 pt-5">
+                      <div className="flex flex-col justify-between gap-1 rounded-lg bg-gray-50 dark:bg-neutral-700 p-3">
                         Check your wallet and do an approvement to continue
                         remove your listing
                       </div>
 
-                      <button
-                        className="w-full rounded-full bg-primary-500 py-3 font-semibold text-white"
+                      <ButtonPrimary
                         onClick={() => BuyNative(removeData?.marketId)}
                       >
                         Process
-                      </button>
+                      </ButtonPrimary>
                     </section>
                   </Dialog.Panel>
                 </Transition.Child>

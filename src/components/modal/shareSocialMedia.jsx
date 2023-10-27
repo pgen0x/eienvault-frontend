@@ -1,6 +1,12 @@
 'use client';
 import { useAuth } from '@/hooks/AuthContext';
-import { faFacebook, faTelegram, faTwitter, faWhatsapp, faXTwitter } from '@fortawesome/free-brands-svg-icons';
+import {
+  faFacebook,
+  faTelegram,
+  faTwitter,
+  faWhatsapp,
+  faXTwitter,
+} from '@fortawesome/free-brands-svg-icons';
 import {
   faCheckCircle,
   faCircleXmark,
@@ -23,10 +29,11 @@ export default function ModalShareSocialMedia({
   shareData,
   onModalClose,
 }) {
-
   const tokenId = shareData.tokenId;
   const collectionAddress = shareData.collectionAddress;
-  const url = `${window.location.protocol}//${window.location.host}/nft/${collectionAddress}/${tokenId}`;
+  const url = shareData?.url
+    ? shareData.url
+    : `${window.location.protocol}//${window.location.host}/nft/${collectionAddress}/${tokenId}`;
 
   function closeModal() {
     onClose(false);
@@ -44,19 +51,25 @@ export default function ModalShareSocialMedia({
 
   const shareFacebook = () => {
     shareLink(`https://www.facebook.com/sharer/sharer.php?u=${url}`);
-  }
+  };
 
   const shareTwitter = () => {
-    shareLink(`https://twitter.com/intent/tweet?url=${url}&text=Check%20out%20these%20interesting%20NFTs%21`);
-  }
+    shareLink(
+      `https://twitter.com/intent/tweet?url=${url}&text=Check%20out%20these%20interesting%20NFTs%21`,
+    );
+  };
 
   const shareTelegram = () => {
-    shareLink(`https://t.me/share/url?url=${url}&text=Check%20out%20these%20interesting%20NFTs%21`);
-  }
+    shareLink(
+      `https://t.me/share/url?url=${url}&text=Check%20out%20these%20interesting%20NFTs%21`,
+    );
+  };
 
   const shareWhatsapp = () => {
-    shareLink(`https://api.whatsapp.com/send?text=${url}%20Check%20out%20these%20interesting%20NFTs%21`);
-  }
+    shareLink(
+      `https://api.whatsapp.com/send?text=${url}%20Check%20out%20these%20interesting%20NFTs%21`,
+    );
+  };
 
   const shareCopyClipboard = () => {
     const textArea = document.createElement('textarea');
@@ -67,8 +80,8 @@ export default function ModalShareSocialMedia({
     document.execCommand('copy');
 
     document.body.removeChild(textArea);
-    toast.success("Shared link copied to clipboard");
-  }
+    toast.success('Shared link copied to clipboard');
+  };
 
   return (
     <>
@@ -97,43 +110,69 @@ export default function ModalShareSocialMedia({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-50 text-gray-900 dark:text-white dark:bg-zinc-800 p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-xl font-bold"
-                  >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-50 p-6 text-left align-middle text-gray-900 shadow-xl transition-all dark:bg-zinc-800 dark:text-white">
+                  <Dialog.Title as="h3" className="text-xl font-bold">
                     Share to Social Media
                   </Dialog.Title>
                   <div className="flex flex-col gap-2 pt-5 text-sm">
                     <div className="flex gap-3">
-                      <button className="w-full flex flex-col gap-2 justify-center items-center bg-white dark:bg-zinc-500 dark:border-zinc-500 hover:dark:text-primary-500 hover:bg-primary-50 hover:dark:bg-zinc-700 dark:text-white p-3 rounded-lg border border-gray-200" onClick={shareFacebook}>
-                        <span className="flex justify-center items-center">
-                          <FontAwesomeIcon icon={faFacebook} className="text-2xl" />
+                      <button
+                        className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-zinc-500 dark:bg-zinc-500 dark:text-white hover:dark:bg-zinc-700 hover:dark:text-primary-500"
+                        onClick={shareFacebook}
+                      >
+                        <span className="flex items-center justify-center">
+                          <FontAwesomeIcon
+                            icon={faFacebook}
+                            className="text-2xl"
+                          />
                         </span>
                         Facebook
                       </button>
-                      <button className="w-full flex flex-col gap-2 justify-center items-center bg-white dark:bg-zinc-500 dark:border-zinc-500 hover:dark:text-primary-500 hover:bg-primary-50 hover:dark:bg-zinc-700 dark:text-white p-3 rounded-lg border border-gray-200" onClick={shareTwitter}>
-                        <span className="flex justify-center items-center">
-                          <FontAwesomeIcon icon={faXTwitter} className="text-2xl" />
+                      <button
+                        className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-zinc-500 dark:bg-zinc-500 dark:text-white hover:dark:bg-zinc-700 hover:dark:text-primary-500"
+                        onClick={shareTwitter}
+                      >
+                        <span className="flex items-center justify-center">
+                          <FontAwesomeIcon
+                            icon={faXTwitter}
+                            className="text-2xl"
+                          />
                         </span>
                         Twitter
                       </button>
-                      <button className="w-full flex flex-col gap-2 justify-center items-center bg-white dark:bg-zinc-500 dark:border-zinc-500 hover:dark:text-primary-500 hover:bg-primary-50 hover:dark:bg-zinc-700 dark:text-white p-3 rounded-lg border border-gray-200" onClick={shareTelegram}>
-                        <span className="flex justify-center items-center">
-                          <FontAwesomeIcon icon={faTelegram} className="text-2xl" />
+                      <button
+                        className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-zinc-500 dark:bg-zinc-500 dark:text-white hover:dark:bg-zinc-700 hover:dark:text-primary-500"
+                        onClick={shareTelegram}
+                      >
+                        <span className="flex items-center justify-center">
+                          <FontAwesomeIcon
+                            icon={faTelegram}
+                            className="text-2xl"
+                          />
                         </span>
                         Telegram
                       </button>
-                      <button className="w-full flex flex-col gap-2 justify-center items-center bg-white dark:bg-zinc-500 dark:border-zinc-500 hover:dark:text-primary-500 hover:bg-primary-50 hover:dark:bg-zinc-700 dark:text-white p-3 rounded-lg border border-gray-200" onClick={shareWhatsapp}>
-                        <span className="flex justify-center items-center">
-                          <FontAwesomeIcon icon={faWhatsapp} className="text-2xl" />
+                      <button
+                        className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-zinc-500 dark:bg-zinc-500 dark:text-white hover:dark:bg-zinc-700 hover:dark:text-primary-500"
+                        onClick={shareWhatsapp}
+                      >
+                        <span className="flex items-center justify-center">
+                          <FontAwesomeIcon
+                            icon={faWhatsapp}
+                            className="text-2xl"
+                          />
                         </span>
                         Whatsapp
                       </button>
                     </div>
-                    <button className="w-full flex justify-between gap-2 items-center bg-white dark:bg-zinc-500 dark:border-zinc-500 hover:dark:text-primary-500 hover:bg-primary-50 hover:dark:bg-zinc-700 dark:text-white p-3 rounded-lg border border-gray-200" onClick={shareCopyClipboard}>
-                      <span className="text-ellipsis w-full overflow-hidden">{url}</span>
-                      <span className="w-fit flex justify-center items-center">
+                    <button
+                      className="flex w-full items-center justify-between gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-zinc-500 dark:bg-zinc-500 dark:text-white hover:dark:bg-zinc-700 hover:dark:text-primary-500"
+                      onClick={shareCopyClipboard}
+                    >
+                      <span className="w-full overflow-hidden text-ellipsis">
+                        {url}
+                      </span>
+                      <span className="flex w-fit items-center justify-center">
                         <FontAwesomeIcon icon={faCopy} className="text-2xl" />
                       </span>
                     </button>

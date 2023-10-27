@@ -14,6 +14,7 @@ import Image from 'next/legacy/image';
 import { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import ButtonPrimary from '../button/buttonPrimary';
 
 export default function ModaluploadCover({
   isOpenModal,
@@ -82,42 +83,6 @@ export default function ModaluploadCover({
     }
   };
 
-  const onSave = async (filename) => {
-    try {
-      const payload = {
-        bannerImage: filename,
-      };
-
-      const options = {
-        method: 'PUT',
-        body: JSON.stringify(payload), // Convert the payload to JSON
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json', // Set the content type to JSON
-        },
-      };
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/collection/edit/${address}`,
-        options,
-      );
-
-      if (response.ok) {
-        console.log('Data saved successfully.');
-        return await response.json();
-        // Data was saved successfully
-      } else {
-        // Handle the error here
-        console.error('Data saved failed:', response.statusText);
-        return await response.json();
-      }
-    } catch (error) {
-      // Handle any unexpected errors
-      console.error('Error during data save:', error);
-    }
-  };
-
   const allowedFileTypes = [
     'image/png',
     'image/jpeg',
@@ -179,21 +144,21 @@ export default function ModaluploadCover({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-700">
                   <Dialog.Title
                     as="h3"
-                    className="text-xl font-bold text-gray-900"
+                    className="text-xl font-bold text-gray-900 dark:text-white"
                   >
                     Update Cover
                   </Dialog.Title>
-                  <div className="flex flex-col text-sm text-gray-900">
+                  <div className="flex flex-col text-sm text-gray-900 dark:text-white">
                     <div className="mt-4 flex max-w-full shrink-0 flex-row items-center gap-4">
                       Upload new cover. We recommend to upload images in
                       1440x260 resolution. Max 15 MB in JPEG or PNG format
                     </div>
                     <form>
                       <div className="w-full">
-                        <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-3 text-center">
+                        <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-3 text-center dark:bg-neutral-700">
                           {selectedImage && selectedImage.length > 0 ? (
                             <>
                               <button
@@ -247,13 +212,9 @@ export default function ModaluploadCover({
                         <ErrorMessage errors={errors} name="file" />
                       </div>
                       <div className="mt-4 inline-flex w-full">
-                        <button
-                          type="button"
-                          onClick={handleSubmit(onUpload)}
-                          className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:bg-primary-50"
-                        >
+                        <ButtonPrimary onClick={handleSubmit(onUpload)}>
                           Submit
-                        </button>
+                        </ButtonPrimary>
                       </div>
                     </form>
                   </div>

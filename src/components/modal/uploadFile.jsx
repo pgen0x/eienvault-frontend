@@ -155,7 +155,9 @@ export default function ModalUploadDFile({
                       </div>
                       <div className="flex max-w-full flex-1 shrink-0 flex-col items-stretch">
                         <span className="text-lg font-semibold">Mint</span>
-                        <span>Initiate a transaction to generate your NFT</span>
+                        <span>
+                          Initiating a transaction to generate your NFT
+                        </span>
                         {isErrorMint.isError && (
                           <div className="text-primary-500">
                             {isErrorMint.message}
@@ -203,10 +205,7 @@ export default function ModalUploadDFile({
                       </div>
                       <div className="flex max-w-full flex-1 shrink-0 flex-col items-stretch">
                         <span className="text-lg font-semibold">Approve</span>
-                        <span>
-                          Confirming a transaction, typically performed once per
-                          collection
-                        </span>
+                        <span>Confirming the transaction</span>
                         {isErrorApprove.isError && (
                           <div className="text-primary-500">
                             {isErrorApprove.message.error}
@@ -270,7 +269,7 @@ export default function ModalUploadDFile({
                     <div className="mt-4 inline-flex ">
                       <button
                         type="button"
-                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-500 px-4 py-2 text-sm font-medium text-white hover:bg-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:bg-primary-300 disabled:text-primary-500"
+                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-500 px-4 py-2 text-sm font-medium text-white hover:bg-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:bg-primary-300 "
                         onClick={closeModal}
                         disabled={isProcessing}
                       >

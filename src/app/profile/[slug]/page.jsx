@@ -144,6 +144,34 @@ export default function ProfilePage({ params }) {
     loadActivePage();
   }, [window.location.search, queryString.search]);
 
+  const listCollections = [
+    {
+      name: 'Owned',
+      slug: 'Owned',
+      badge: 0,
+    },
+    {
+      name: 'Collections',
+      slug: 'Collections',
+      badge: 0,
+    },
+    {
+      name: 'On sale',
+      slug: 'Onsale',
+      badge: 0,
+    },
+    {
+      name: 'Sold',
+      slug: 'Sold',
+      badge: 0,
+    },
+    {
+      name: 'Liked',
+      slug: 'Liked',
+      badge: 0,
+    },
+  ];
+
   const loadActivePage = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const urlManualParams = new URLSearchParams(queryString.search);
@@ -199,40 +227,6 @@ export default function ProfilePage({ params }) {
   function closeModalReport() {
     setisOpenModalReport(false);
   }
-
-  const listCollections = [
-    {
-      name: 'Owned',
-      slug: 'Owned',
-      badge: 0,
-      page: (
-        <Owned
-          userAccount={params?.slug ? params.slug : address}
-          handleOpenModalShare={handleOpenModalShare}
-        />
-      ),
-    },
-    {
-      name: 'Collections',
-      slug: 'Collections',
-      badge: 0,
-    },
-    {
-      name: 'On sale',
-      slug: 'Onsale',
-      badge: 0,
-    },
-    {
-      name: 'Sold',
-      slug: 'Sold',
-      badge: 0,
-    },
-    {
-      name: 'Liked',
-      slug: 'Liked',
-      badge: 0,
-    },
-  ];
 
   const renderActiveTab = () => {
     const listTabs = {

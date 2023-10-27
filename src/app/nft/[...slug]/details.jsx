@@ -85,8 +85,8 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
   const [isOpenModalReport, setisOpenModalReport] = useState(false);
   const [isOpenModalRemove, setisOpenModalRemove] = useState(false);
 
-  const [isLiked, setIsLiked] = useState(dataNFTs?.isLiked);
-  const [countLikes, setCountLikes] = useState(dataNFTs?.likeCount);
+  const [isLiked, setIsLiked] = useState();
+  const [countLikes, setCountLikes] = useState();
   const [dataRelatedNFTs, setDataRelatedNFTs] = useState([]);
   const [isLoadingRelatedNFTs, setIsLoadingRelatedNFTs] = useState(true);
   const [activeTab, setActiveTab] = useState('history');
@@ -97,6 +97,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
   const [shareData, setShareData] = useState({});
   const [reportData, setReportData] = useState({});
   const [removeData, setRemoveData] = useState({});
+  const [dataNFTs, setDataNFTs] = useState([])
 
   const { data: walletClient } = useWalletClient();
 
@@ -113,15 +114,15 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
       );
   
       if (res.status === 404) {
-        dataNFTs = [];
+        setDataNFTs([]);
       } else if (!res.ok) {
         console.error('Fetch failed:', res);
       } else {
         const responseData = await res.json();
-        dataNFTs = responseData;
+        setDataNFTs(responseData);
       }
     } catch (error) {
-      dataNFTs = [];
+      setDataNFTs([]);
       console.error('Fetch failed:', error);
     }
   }
@@ -129,6 +130,11 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
   useEffect(() => {
     getDataNFTs();
   }, [])
+
+  useEffect(() => {
+    setIsLiked(dataNFTs?.isLiked);
+    setCountLikes(dataNFTs?.likeCount);
+  }, [dataNFTs])
 
   const handleModalPropose = () => {
     if (modalPropose) {
@@ -807,33 +813,33 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                       <h3 className="font-semibold md:text-lg">Creator</h3>
                       <div className="flex">
                         <div className="flex w-fit items-center justify-center gap-2">
-                          {dataNFTs?.collectionData.User?.logo ? (
+                          {dataNFTs?.collectionData?.User?.logo ? (
                             <>
                               <ImageWithFallback
                                 className="h-full w-full rounded-2xl "
                                 width={28}
                                 height={28}
                                 alt={
-                                  dataNFTs?.User?.username ||
+                                  dataNFTs?.collectionData?.User?.username ||
                                   truncateAddress4char(
-                                    dataNFTs?.User?.walletAddress,
+                                    dataNFTs?.collectionData?.User?.walletAddress,
                                   ) ||
                                   truncateAddress4char(
-                                    dataNFTs?.User?.walletAddress,
+                                    dataNFTs?.collectionData?.User?.walletAddress,
                                   )
                                 }
                                 diameter={28}
                                 address={
-                                  dataNFTs?.User?.walletAddress ||
+                                  dataNFTs?.collectionData?.User?.walletAddress ||
                                   dataNFTs?.owner
                                 }
-                                src={`${process.env.NEXT_PUBLIC_CDN_URL}/users/${dataNFTs?.collectionData.User?.logo}`}
+                                src={`${process.env.NEXT_PUBLIC_CDN_URL}/users/${dataNFTs?.collectionData?.User?.logo}`}
                               />
                             </>
                           ) : (
                             <JazzIcon
                               diameter={28}
-                              seed={dataNFTs?.User?.walletAddress}
+                              seed={dataNFTs?.collectionData?.User?.walletAddress}
                               useGradientFallback={true}
                               className="h-[28px] w-[280px] rounded-full"
                             />
@@ -841,7 +847,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                           <div
                             onClick={() =>
                               router.push(
-                                `/profile/${dataNFTs?.collectionData?.userAddress}`,
+                                `/profile/${dataNFTs?.collectionData?.User?.walletAddress}`,
                               )
                             }
                             className="flex cursor-pointer items-center gap-2"
@@ -850,7 +856,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                               {dataNFTs?.collectionData?.User?.username
                                 ? dataNFTs?.collectionData?.User?.username
                                 : truncateAddress4char(
-                                    dataNFTs?.collectionData?.userAddress,
+                                  dataNFTs?.collectionData?.User?.walletAddress,
                                   )}
                             </div>
 
@@ -891,7 +897,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                         ) : (
                           <JazzIcon
                             diameter={28}
-                            seed={dataNFTs?.User?.walletAddress}
+                            seed={dataNFTs?.owner}
                             useGradientFallback={true}
                             className="h-[28px] w-[28px] rounded-full"
                           />
@@ -899,7 +905,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                         <div
                           onClick={() =>
                             router.push(
-                              `/profile/${dataNFTs?.ownerData?.walletAddress}`,
+                              `/profile/${dataNFTs?.owner}`,
                             )
                           }
                           className="flex cursor-pointer items-center gap-2"
@@ -907,7 +913,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                           <div className="text-sm font-medium text-neutral-700 dark:text-white">
                             {dataNFTs?.ownerData?.username ||
                               truncateAddress4char(
-                                dataNFTs?.ownerData?.walletAddress,
+                                dataNFTs?.owner,
                               ) ||
                               truncateAddress4char(dataNFTs?.owner)}
                           </div>
@@ -927,7 +933,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                         <HelaIcon className="h-6 w-6" />
                       )}
                       <span className="text-sm font-semibold md:text-base">
-                        {dataNFTs?.collectionData.Chain.name}
+                        {dataNFTs?.collectionData?.Chain?.name}
                         {dataNFTs?.ContractType &&
                           `(${dataNFTs?.ContractType})`}
                       </span>
@@ -1070,18 +1076,18 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                             <h3 className="md:text-lg">Floor Price</h3>
                             <h4 className="text-sm font-bold md:text-lg">
                               {dataNFTs?.itemDetails
-                                ? formatEther(dataNFTs?.itemDetails?.price)
+                                ? formatEther(dataNFTs?.itemDetails?.price || 0)
                                 : formatEther(
-                                    dataNFTs?.collectionData.floorPrice,
+                                    dataNFTs?.collectionData?.floorPrice || 0,
                                   )}{' '}
-                              {dataNFTs?.collectionData.Chain.symbol}
+                              {dataNFTs?.collectionData?.Chain?.symbol}
                             </h4>
                             <h5>
                               $
                               {dataNFTs?.itemDetails
-                                ? formatEther(dataNFTs?.itemDetails?.price)
+                                ? formatEther(dataNFTs?.itemDetails?.price || 0)
                                 : formatEther(
-                                    dataNFTs?.collectionData.floorPrice,
+                                    dataNFTs?.collectionData?.floorPrice || 0,
                                   )}
                             </h5>
                           </div>
@@ -1091,11 +1097,11 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                               Listing price at{' '}
                               <span className="font-bold">
                                 {dataNFTs?.itemDetails
-                                  ? formatEther(dataNFTs?.itemDetails?.price)
+                                  ? formatEther(dataNFTs?.itemDetails?.price || 0)
                                   : formatEther(
-                                      dataNFTs?.collectionData.floorPrice,
+                                      dataNFTs?.collectionData?.floorPrice || 0,
                                     )}{' '}
-                                {dataNFTs?.collectionData.Chain.symbol}
+                                {dataNFTs?.collectionData?.Chain?.symbol}
                               </span>
                             </h4>
                             <div className="flex w-full flex-col gap-1 md:flex-row">
@@ -1190,10 +1196,10 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                   dataNFTs?.itemDetails?.marketId,
                                   dataNFTs?.itemDetails?.price,
                                   dataNFTs?.imageUri,
-                                  dataNFTs.name,
+                                  dataNFTs?.name,
                                   dataNFTs.tokenId,
-                                  dataNFTs?.collectionData.Chain.symbol,
-                                  dataNFTs?.collectionData.Chain.name,
+                                  dataNFTs?.collectionData?.Chain?.symbol,
+                                  dataNFTs?.collectionData?.Chain?.name,
                                 )
                               }
                               disabled={!isNotExpired}
@@ -1661,7 +1667,7 @@ const Collateral = ({ dataNFTs }) => {
                 height={28}
                 alt={
                   dataNFTs.ownerData?.username ||
-                  truncateAddress4char(dataNFTs.ownerData?.walletAddress) ||
+                  truncateAddress4char(dataNFTs?.ownerData?.walletAddress) ||
                   truncateAddress4char(dataNFTs.owner)
                 }
                 diameter={28}
@@ -2110,7 +2116,7 @@ const History = ({ collection, tokenId }) => {
         .request({
           method: 'get',
           maxBodyLength: Infinity,
-          url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/geteventsbycollectionid/${collection.tokenAddress}/${tokenId}`,
+          url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/geteventsbycollectionid/${collection?.tokenAddress}/${tokenId}`,
           headers: {
             'Content-Type': 'application/json',
           },
@@ -2142,7 +2148,7 @@ const History = ({ collection, tokenId }) => {
         .request({
           method: 'get',
           maxBodyLength: Infinity,
-          url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/eventbycollectiontokenId/${collection.tokenAddress}/${tokenId}`,
+          url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/eventbycollectiontokenId/${collection?.tokenAddress}/${tokenId}`,
           headers: {
             'Content-Type': 'application/json',
           },
@@ -2166,7 +2172,7 @@ const History = ({ collection, tokenId }) => {
           setIsLoading(false);
         });
     };
-  }, []);
+  }, [collection]);
 
   return (
     <>
@@ -2176,8 +2182,8 @@ const History = ({ collection, tokenId }) => {
         </div>
       )}
       {events.length == 0 && isLoading && (
-        <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
-          <div className="flex flex-col gap-3 rounded-lg border border-gray-300">
+        <div className="flex flex-col gap-5 text-sm text-black dark:text-white px-3">
+          <div className="flex flex-col gap-3 rounded-lg">
             {[...Array(5)].map((nft, index) => (
               <ActivityItemDetailSkeleton key={index} />
             ))}

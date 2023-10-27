@@ -79,7 +79,7 @@ const ProfileSetting = () => {
                     Profile
                   </button>
                 </li>
-                <li className={activeTab == 'account' && 'font-semibold'}>
+                {/* <li className={activeTab == 'account' && 'font-semibold'}>
                   <button onClick={() => setActiveTab('account')}>
                     Account
                   </button>
@@ -88,7 +88,7 @@ const ProfileSetting = () => {
                   <button onClick={() => setActiveTab('wallets')}>
                     Wallets
                   </button>
-                </li>
+                </li> */}
               </ul>
             </div>
             <div className="col-span-12 sm:col-span-8 md:col-span-10 lg:col-span-10 xl:col-span-10 2xl:col-span-10">
@@ -103,8 +103,8 @@ const ProfileSetting = () => {
                   setLogoImage={setLogoImage}
                 />
               )}
-              {activeTab == 'account' && <Account />}
-              {activeTab == 'wallets' && <Wallets />}
+              {/* {activeTab == 'account' && <Account />}
+              {activeTab == 'wallets' && <Wallets />} */}
             </div>
           </div>
         </section>
@@ -322,7 +322,7 @@ const Profile = ({
             Save Setting
           </ButtonPrimary>
         </div>
-        <div className="sticky col-span-12 flex h-fit flex-col gap-4 rounded-xl bg-white p-5 dark:bg-zinc-700 dark:text-white sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4">
+        <div className="sticky top-24 col-span-12 flex h-fit flex-col gap-4 rounded-xl bg-white p-5 dark:bg-zinc-700 dark:text-white sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4">
           <img className="rounded-xl" src="https://fakeimg.pl/290x130" />
           <h3 className="text-lg font-bold">Verify your account</h3>
           <p>

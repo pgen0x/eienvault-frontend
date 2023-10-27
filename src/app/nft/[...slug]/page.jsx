@@ -1,11 +1,12 @@
 import Footer from '@/components/footer/main';
 import { notFound } from 'next/navigation';
 import NFTDetails from './details';
-import { useAccount } from 'wagmi';
 
 export default async function Page({ params }) {
-  let dataNFTs = [];
-  if (dataNFTs.length <= 0) {
+  const collectionAddress = params.slug[0];
+  const tokenId = params.slug[1];
+
+  if(collectionAddress == "" || collectionAddress == undefined || tokenId == "" || tokenId == undefined){
     notFound();
   }
 

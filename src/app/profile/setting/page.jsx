@@ -50,7 +50,7 @@ const ProfileSetting = () => {
         setProfile(response.data);
         if (response.data.banner !== null) {
           setBannerImage(
-            `${process.env.NEXT_PUBLIC_CDN_URL}/users/banner/${response.data.banner}`,
+            `${process.env.NEXT_PUBLIC_CDN_URL}/users/${response.data.banner}`,
           );
         }
         if (response.data.logo !== null) {
@@ -318,9 +318,7 @@ const Profile = ({
               placeholder="https://instagram.com/username"
             />
           </label>
-          <ButtonPrimary
-            onClick={() => saveProfile()}
-          >
+          <ButtonPrimary onClick={() => saveProfile()}>
             Save Setting
           </ButtonPrimary>
         </div>
@@ -331,9 +329,7 @@ const Profile = ({
             Proceed with verification process to get more visibility and gain
             trust on Rarible
           </p>
-          <ButtonPrimary>
-            Get verified
-          </ButtonPrimary>
+          <ButtonPrimary>Get verified</ButtonPrimary>
         </div>
       </div>
       <ModalUploadProfileCover
@@ -380,7 +376,7 @@ const Account = () => {
             Once you delete your account, there is no boing back. Please be
             certain.
           </p>
-          <ButtonTertiary className="!w-fit mt-2">
+          <ButtonTertiary className="mt-2 !w-fit">
             Delete Account
           </ButtonTertiary>
         </div>

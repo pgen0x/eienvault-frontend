@@ -122,7 +122,7 @@ export default function ProfilePage({ params }) {
         setProfile(response.data);
         if (response.data.banner !== null) {
           setBannerImage(
-            `${process.env.NEXT_PUBLIC_CDN_URL}/users/banner/${response.data.banner}`,
+            `${process.env.NEXT_PUBLIC_CDN_URL}/users/${response.data.banner}`,
           );
         }
         if (response.data.logo !== null) {
@@ -319,7 +319,7 @@ export default function ProfilePage({ params }) {
           )}
         </div>
       </section>
-      <div className="container m-auto p-3 min-h-screen">
+      <div className="container m-auto min-h-screen p-3">
         <section>
           <div className="mt-5 flex justify-between">
             <div className="flex w-full flex-col">
@@ -456,14 +456,8 @@ export default function ProfilePage({ params }) {
                     >
                       <FontAwesomeIcon icon={faPenToSquare} /> Edit Profile
                     </ButtonPrimary>
-                    <ButtonPrimary
-                      className="!w-fit"
-                    >
-                      Sell
-                    </ButtonPrimary>
-                    <ButtonPrimary
-                      className="!w-fit"
-                    >
+                    <ButtonPrimary className="!w-fit">Sell</ButtonPrimary>
+                    <ButtonPrimary className="!w-fit">
                       <FontAwesomeIcon icon={faShare} />
                     </ButtonPrimary>
                   </div>
@@ -844,7 +838,7 @@ const ItemCollection = ({ collection, gridList }) => {
         <Image
           src={
             collection.bannerImage
-              ? `/uploads/collections/banner/${collection?.bannerImage}`
+              ? `/uploads/collections/${collection?.bannerImage}`
               : 'https://fakeimg.pl/325x175'
           }
           alt={collection.name ? collection.name : ''}
@@ -895,7 +889,7 @@ const ItemCollection = ({ collection, gridList }) => {
       </div>
       <div className="relative -top-[85px] inline-flex w-full flex-col items-center justify-center lg:items-start">
         <div className="relative flex w-full flex-row px-3">
-          <div className="inline-flex w-full flex-col items-start justify-start rounded-bl-2xl rounded-br-2xl bg-gray-50 p-3 backdrop-blur-xl dark:bg-neutral-700 dark:text-white gap-2">
+          <div className="inline-flex w-full flex-col items-start justify-start gap-2 rounded-bl-2xl rounded-br-2xl bg-gray-50 p-3 backdrop-blur-xl dark:bg-neutral-700 dark:text-white">
             <div className="flex w-full flex-col justify-between rounded-md bg-gray-100 px-2 py-2 dark:bg-neutral-500 sm:flex-col md:flex-row">
               <div className="flex shrink-0 flex-col truncate text-sm leading-5 sm:items-start">
                 <p>Total Volume</p>

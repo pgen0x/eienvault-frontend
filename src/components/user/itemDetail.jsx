@@ -63,7 +63,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
         <Image
           src={
             user?.banner
-              ? `${process.env.NEXT_PUBLIC_CDN_URL}/users/banner/${user?.banner}`
+              ? `${process.env.NEXT_PUBLIC_CDN_URL}/users/${user?.banner}`
               : 'https://fakeimg.pl/358x149'
           }
           alt={user?.username ? user?.username : ''}
@@ -146,7 +146,8 @@ const UserItemDetail = ({ user, followings, refresh }) => {
           </div>
         </div>
         <div className="flex w-full items-center justify-between gap-2 font-bold">
-          <ButtonPrimary className="flex w-full items-center justify-center gap-2"
+          <ButtonPrimary
+            className="flex w-full items-center justify-center gap-2"
             onClick={() => {
               follow(user?.walletAddress);
             }}

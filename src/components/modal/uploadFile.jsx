@@ -8,6 +8,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
+import ButtonPrimary from '../button/buttonPrimary';
 
 export default function ModalUploadDFile({
   isOpenModal,
@@ -267,14 +268,12 @@ export default function ModalUploadDFile({
                       </div>
                     </div>
                     <div className="mt-4 inline-flex ">
-                      <button
-                        type="button"
-                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-500 px-4 py-2 text-sm font-medium text-white hover:bg-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:bg-primary-300 "
+                      <ButtonPrimary
                         onClick={closeModal}
                         disabled={isProcessing}
                       >
                         {isProcessing ? 'Please wait...' : 'Completed'}
-                      </button>
+                      </ButtonPrimary>
                     </div>
                   </div>
                 </Dialog.Panel>

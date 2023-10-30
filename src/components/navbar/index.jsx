@@ -87,23 +87,23 @@ export default function Navbar() {
           onClick={() => setOpenMenu(!openMenu)}
         />
         <div
-          className={`place-items-top fixed top-0 z-40 grid h-screen w-[418px] max-w-full bg-white transition-all duration-500 ${
+          className={`place-items-top fixed top-0 z-40 grid h-screen w-[418px] max-w-full transition-all duration-500 ${
             openMenu ? 'right-0' : '-right-[100%]'
           }`}
         >
-          <div className="flex w-full flex-col items-end justify-end bg-neutral-100">
+          <div className="flex w-full flex-col items-end justify-end bg-neutral-100 dark:bg-neutral-900">
             <button
-              className="mr-10 mt-10 w-fit text-2xl text-black"
+              className="mr-10 mt-10 w-fit text-2xl text-gray-900 dark:text-white"
               onClick={() => setOpenMenu(!openMenu)}
             >
               <FontAwesomeIcon icon={faXmark} />
             </button>
-            <nav className="flex w-full max-w-[418px] flex-grow flex-col justify-start bg-neutral-100 px-10 pb-4 text-2xl transition-all delay-1000 duration-500 md:pb-0">
-              <span className="mt-2 py-2 font-semibold text-primary-500 hover:text-primary-300">
+            <nav className="flex w-full max-w-[418px] flex-grow flex-col justify-start px-10 pb-4 text-2xl transition-all delay-1000 duration-500 md:pb-0">
+              <span className="mt-2 py-2 font-semibold text-gray-900 hover:text-neutral-500">
                 Home
               </span>
               <div className="group mt-2">
-                <span className="flex justify-between py-2 font-semibold text-primary-500 hover:text-primary-300">
+                <span className="flex justify-between py-2 font-semibold text-gray-900 hover:text-neutral-500">
                   <span>Discover</span>{' '}
                   <FontAwesomeIcon
                     className="hidden group-hover:block"
@@ -116,19 +116,19 @@ export default function Navbar() {
                 </span>
                 <ul className="mt-2 hidden flex-col gap-4 px-4 group-hover:flex">
                   <li
-                    className="font-semibold text-primary-500 hover:text-primary-300"
+                    className="font-semibold  text-gray-900 hover:text-neutral-500"
                     onClick={() => handlePushSidebar('/collection')}
                   >
                     <span>Collections</span>
                   </li>
                   <li
-                    className="font-semibold text-primary-500 hover:text-primary-300"
+                    className="font-semibold  text-gray-900 hover:text-neutral-500"
                     onClick={() => handlePushSidebar('/nft')}
                   >
                     <span>NFTs</span>
                   </li>
                   <li
-                    className="font-semibold text-primary-500 hover:text-primary-300"
+                    className="font-semibold  text-gray-900 hover:text-neutral-500"
                     onClick={() => handlePushSidebar('/user')}
                   >
                     <span>Users</span>
@@ -162,12 +162,12 @@ export default function Navbar() {
               {isClient && (
                 <>
                   {(isConnect || isConnected) && chain?.id !== 666888 && (
-                    <div className="mt-2 flex flex-row items-center justify-between border-t-2 py-2 text-xl font-semibold text-primary-500">
-                      <span className="text-md text-xl hover:text-primary-300">
+                    <div className="mt-2 flex flex-row items-center justify-between border-t-2 py-2 text-xl font-semibold text-gray-900 hover:text-neutral-500">
+                      <span className="text-md text-xl">
                         Wrong network!
                       </span>
                       <span
-                        className="text-md cursor-pointer px-3 py-2 hover:text-primary-300"
+                        className="text-md cursor-pointer px-3 py-2"
                         onClick={() => switchNetwork?.(666888)}
                       >
                         Switch
@@ -176,7 +176,7 @@ export default function Navbar() {
                   )}
                   {isConnect || isConnected ? (
                     <span
-                      className="mt-2 py-2 font-semibold text-primary-500 hover:text-primary-300"
+                      className="mt-2 py-2 font-semibold text-gray-900 hover:text-neutral-500"
                       onClick={toggleSidebar}
                     >
                       Account
@@ -184,7 +184,7 @@ export default function Navbar() {
                   ) : (
                     <span
                       onClick={() => open()}
-                      className="mt-2 py-2 font-semibold text-primary-500 hover:text-primary-300"
+                      className="mt-2 py-2 font-semibold text-gray-900 hover:text-neutral-500"
                     >
                       <FontAwesomeIcon icon={faWallet} /> Connect your wallet
                     </span>

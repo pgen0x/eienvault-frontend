@@ -22,6 +22,7 @@ import { formatEther } from 'viem';
 import { useRouter } from 'next-nprogress-bar';
 import { ImageWithFallback } from '../imagewithfallback';
 import moment from 'moment';
+import ButtonPrimary from '../button/buttonPrimary';
 
 const images = [1, 2, 3, 4];
 
@@ -34,6 +35,7 @@ export const Slideshow = ({
   const router = useRouter();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [auctionData, setAcutionData] = useState({});
+  const { address } = useAccount();
 
   const sliderBreakPoints = {
     640: {
@@ -138,8 +140,6 @@ export const Slideshow = ({
     setIsOpenModal(false);
   }
 
-  const currentDate = moment();
-
   return (
     <>
       <button className="swiper-prev absolute -left-5 z-10 mr-2 hidden rounded-full bg-primary-400 px-4 py-2 text-white sm:hidden md:block lg:block xl:block 2xl:block">
@@ -159,12 +159,13 @@ export const Slideshow = ({
           dynamicBullets: true,
         }}
         modules={[Autoplay, Pagination, Navigation]}
-        // autoplay={{
-        //   delay: 3000,
-        //   disableOnInteraction: false,
-        // }}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
       >
         {auctions.map((auction, index) => {
+          const currentDate = moment();
           const endDate = moment.unix(auction.endDate);
           const releaseDate = moment.unix(auction.releaseDate);
           const isNotExpired = endDate.isAfter(currentDate);
@@ -308,8 +309,7 @@ export const Slideshow = ({
                         </div>
                       </div>
                     )}
-                    <button
-                      className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300 disabled:bg-primary-300"
+                    <ButtonPrimary
                       onClick={() =>
                         handleOpenModalBid(
                           auction.marketId,
@@ -324,15 +324,33 @@ export const Slideshow = ({
                         )
                       }
                       disabled={
-                        isNotRelease ? true : isNotExpired ? false : true
+                        isNotRelease
+                          ? true
+                          : isNotExpired
+                          ? address === auction?.nftDetails?.owner
+                            ? true
+                            : auction?.listOffers &&
+                              auction?.listOffers.some(
+                                (offer) => offer.address === address,
+                              )
+                            ? true
+                            : false
+                          : true
                       }
                     >
                       <span className="text-center text-base font-bold leading-normal text-white">
-                        Place Bid
+                        {address === auction?.nftDetails?.owner
+                          ? 'Owned By You'
+                          : auction?.listOffers &&
+                            auction?.listOffers.some(
+                              (offer) => offer.address === address,
+                            )
+                          ? 'Offer Already Made'
+                          : 'Place Bid'}
                       </span>
-                    </button>
+                    </ButtonPrimary>
                     <div className="inline-flex items-center justify-center gap-2 self-center">
-                      <div className="text-center text-sm font-medium leading-tight text-gray-600">
+                      <div className="text-center text-sm font-medium leading-tight text-gray-600 dark:text-white">
                         {isNotRelease ? (
                           <>
                             {' '}
@@ -436,6 +454,7 @@ export const SlideshowMobile = ({
   const router = useRouter();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [auctionData, setAcutionData] = useState({});
+  const { address } = useAccount();
   const sliderBreakPoints = {
     640: {
       slidesPerView: 1,
@@ -549,172 +568,199 @@ export const SlideshowMobile = ({
           dynamicBullets: true,
         }}
         modules={[Autoplay, Pagination, Navigation]}
-        // autoplay={{
-        //   delay: 3000,
-        //   disableOnInteraction: false,
-        // }}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
       >
-        {auctions.map((auction, index) => (
-          <SwiperSlide key={index}>
-            <div className="inline-flex w-[375px] flex-col items-center justify-center gap-2 p-2 lg:items-start lg:px-10 lg:pt-16">
-              <div className="mt-[6rem] flex flex-row self-start rounded-lg bg-[#fff1d4] px-2 py-2">
-                <span className="mr-2 h-1 w-1 animate-ping rounded-full bg-red-400 opacity-90"></span>
-                <div className="whitespace-nowrap text-xs font-semibold text-gray-900">
-                  Live mint and auction
-                </div>
-              </div>
-              <div className="relative flex w-[340px] flex-col">
-                {auction.nftDetails?.imageUri !== null ? (
-                  <Image
-                    className="h-96 w-full rounded-2xl bg-white object-cover lg:w-96"
-                    width={500}
-                    height={404}
-                    placeholder="blur"
-                    blurDataURL={auction.nftDetails?.imageUri}
-                    src={auction.nftDetails?.imageUri}
-                    alt={
-                      auction.nftDetails?.name || auction.collectionData?.name
-                    }
-                  />
-                ) : (
-                  <div className="flex h-96 w-[340px]  flex-col justify-end rounded-2xl bg-gray-300">
-                    <button
-                      className="mb-4 inline-flex justify-center gap-2 self-center rounded-full border border-primary-500 bg-transparent px-2 py-2 text-sm font-semibold text-primary-500 hover:border-primary-300 hover:text-primary-300"
-                      onClick={() =>
-                        refreshMetadata(auction.collection, auction.tokenId)
-                      }
-                    >
-                      Refresh Metadadata
-                    </button>
+        {auctions.map((auction, index) => {
+          const currentDate = moment();
+          const endDate = moment.unix(auction.endDate);
+          const releaseDate = moment.unix(auction.releaseDate);
+          const isNotExpired = endDate.isAfter(currentDate);
+          const isNotRelease = currentDate.isBefore(releaseDate);
+          return (
+            <SwiperSlide key={index}>
+              <div className="inline-flex w-[375px] flex-col items-center justify-center gap-2 p-2 lg:items-start lg:px-10 lg:pt-16">
+                <div className="mt-[6rem] flex flex-row self-start rounded-lg bg-[#fff1d4] px-2 py-2">
+                  <span className="mr-2 h-1 w-1 animate-ping rounded-full bg-red-400 opacity-90"></span>
+                  <div className="whitespace-nowrap text-xs font-semibold text-gray-900">
+                    Live mint and auction
                   </div>
-                )}
-                <div className="w-full px-5">
-                  <div className="inline-flex w-full flex-col justify-center gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
-                    <div className="flex flex-col items-start justify-start">
-                      <div className="inline-flex items-center justify-start self-stretch">
-                        <div className="flex h-full shrink grow basis-0 items-end justify-start gap-2">
-                          <div
-                            className="text-2xl font-bold leading-9 text-neutral-700"
-                            onClick={() =>
-                              router.push(
-                                `/nft/${auction.collection}/${auction.tokenId}`,
-                              )
-                            }
-                          >
-                            {auction.nftDetails?.name}
-                          </div>
-                        </div>
-                      </div>
+                </div>
+                <div className="relative flex w-[340px] flex-col">
+                  {auction.nftDetails?.imageUri !== null ? (
+                    <Image
+                      className="h-96 w-full rounded-2xl bg-white object-cover lg:w-96"
+                      width={500}
+                      height={404}
+                      placeholder="blur"
+                      blurDataURL={auction.nftDetails?.imageUri}
+                      src={auction.nftDetails?.imageUri}
+                      alt={
+                        auction.nftDetails?.name || auction.collectionData?.name
+                      }
+                    />
+                  ) : (
+                    <div className="flex h-96 w-[340px]  flex-col justify-end rounded-2xl bg-gray-300">
+                      <button
+                        className="mb-4 inline-flex justify-center gap-2 self-center rounded-full border border-primary-500 bg-transparent px-2 py-2 text-sm font-semibold text-primary-500 hover:border-primary-300 hover:text-primary-300"
+                        onClick={() =>
+                          refreshMetadata(auction.collection, auction.tokenId)
+                        }
+                      >
+                        Refresh Metadadata
+                      </button>
                     </div>
-                    <div className="flex flex-col items-start justify-start gap-1">
-                      <div className="inline-flex items-center justify-start gap-4">
-                        <span className="text-gray-900">By</span>
-                        <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2">
-                          <ImageWithFallback
-                            className="h-full w-full rounded-2xl "
-                            width={15}
-                            height={15}
-                            diameter={15}
-                            address={auction.collectionData?.tokenAddress}
-                            src={`${process.env.NEXT_PUBLIC_CDN_URL}/collections/${auction.collectionData?.logo}`}
-                            alt={
-                              auction.nftDetails?.name ||
-                              auction.collectionData?.name
-                            }
-                          />
-                          <div className="flex items-start justify-start gap-2">
-                            <div className="text-xs font-medium leading-none text-neutral-700">
-                              {auction.collectionData?.User.username
-                                ? auction.collectionData?.User.username
-                                : truncateAddress4char(
-                                    auction.collectionData?.userAddress,
-                                  )}
+                  )}
+                  <div className="w-full px-5">
+                    <div className="inline-flex w-full flex-col justify-center gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
+                      <div className="flex flex-col items-start justify-start">
+                        <div className="inline-flex items-center justify-start self-stretch">
+                          <div className="flex h-full shrink grow basis-0 items-end justify-start gap-2">
+                            <div
+                              className="text-2xl font-bold leading-9 text-neutral-700"
+                              onClick={() =>
+                                router.push(
+                                  `/nft/${auction.collection}/${auction.tokenId}`,
+                                )
+                              }
+                            >
+                              {auction.nftDetails?.name}
                             </div>
-                            {auction.collectionData?.User.isVerified && (
-                              <div className="text-xs font-black leading-none text-primary-500">
-                                <FontAwesomeIcon icon={faCircleCheck} />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-start justify-start gap-1">
+                        <div className="inline-flex items-center justify-start gap-4">
+                          <span className="text-gray-900">By</span>
+                          <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2">
+                            <ImageWithFallback
+                              className="h-full w-full rounded-2xl "
+                              width={15}
+                              height={15}
+                              diameter={15}
+                              address={auction.collectionData?.tokenAddress}
+                              src={`${process.env.NEXT_PUBLIC_CDN_URL}/collections/${auction.collectionData?.logo}`}
+                              alt={
+                                auction.nftDetails?.name ||
+                                auction.collectionData?.name
+                              }
+                            />
+                            <div className="flex items-start justify-start gap-2">
+                              <div className="text-xs font-medium leading-none text-neutral-700">
+                                {auction.collectionData?.User.username
+                                  ? auction.collectionData?.User.username
+                                  : truncateAddress4char(
+                                      auction.collectionData?.userAddress,
+                                    )}
                               </div>
-                            )}
+                              {auction.collectionData?.User.isVerified && (
+                                <div className="text-xs font-black leading-none text-primary-500">
+                                  <FontAwesomeIcon icon={faCircleCheck} />
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                        <div className="text-sm font-normal leading-tight text-neutral-700">
-                          On{' '}
-                        </div>
-                        <div className="flex items-start justify-start gap-2">
                           <div className="text-sm font-normal leading-tight text-neutral-700">
-                            {(auction.collectionData?.chainId === 666888 ||
-                              auction.collectionData?.chainId === 8668) && (
-                              <HelaIcon className="h-4 w-4" />
-                            )}
+                            On{' '}
                           </div>
-                          <div className="text-sm font-medium leading-tight text-neutral-700">
-                            {auction.collectionData?.Chain?.symbol}
+                          <div className="flex items-start justify-start gap-2">
+                            <div className="text-sm font-normal leading-tight text-neutral-700">
+                              {(auction.collectionData?.chainId === 666888 ||
+                                auction.collectionData?.chainId === 8668) && (
+                                <HelaIcon className="h-4 w-4" />
+                              )}
+                            </div>
+                            <div className="text-sm font-medium leading-tight text-neutral-700">
+                              {auction.collectionData?.Chain?.symbol}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="line-clamp-5 h-full w-full text-sm font-light leading-tight text-neutral-700">
-                        {auction.collectionData?.description}
-                      </div>
-                    </div>
-                    <div className="inline-flex items-center justify-start gap-4 self-stretch">
-                      <div className="inline-flex shrink grow basis-0 flex-col items-start justify-center gap-2">
-                        <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
-                          Highest Bid{' '}
-                          <span className="flex flex-col text-sm font-bold leading-tight text-neutral-700">
-                            {formatEther(
-                              Number(getHighestBid(auction).highestBid),
-                            )}{' '}
-                            {auction.collectionData?.Chain?.symbol}
-                          </span>
+                        <div className="line-clamp-5 h-full w-full text-sm font-light leading-tight text-neutral-700">
+                          {auction.collectionData?.description}
                         </div>
                       </div>
-                      <div className="inline-flex shrink grow basis-0 flex-col items-start justify-start gap-2">
-                        <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
-                          <span className="mr-2 text-sm font-normal leading-tight text-neutral-700">
-                            By
-                          </span>
+                      <div className="inline-flex items-center justify-start gap-4 self-stretch">
+                        <div className="inline-flex shrink grow basis-0 flex-col items-start justify-center gap-2">
+                          <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
+                            Highest Bid{' '}
+                            <span className="flex flex-col text-sm font-bold leading-tight text-neutral-700">
+                              {formatEther(
+                                Number(getHighestBid(auction).highestBid),
+                              )}{' '}
+                              {auction.collectionData?.Chain?.symbol}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="inline-flex shrink grow basis-0 flex-col items-start justify-start gap-2">
+                          <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
+                            <span className="mr-2 text-sm font-normal leading-tight text-neutral-700">
+                              By
+                            </span>
 
-                          <span className="text-sm font-bold leading-tight text-neutral-700">
-                            {truncateAddress4char(
-                              getHighestBid(auction).highestBidder,
-                            )}
-                          </span>
+                            <span className="text-sm font-bold leading-tight text-neutral-700">
+                              {truncateAddress4char(
+                                getHighestBid(auction).highestBidder,
+                              )}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <button
-                      className="inline-flex h-11 items-center justify-center gap-2 self-stretch rounded-full bg-primary-500 px-4 py-2 hover:bg-primary-300"
-                      onClick={() =>
-                        handleOpenModalBid(
-                          auction.marketId,
-                          auction.listingPrice,
-                          auction.nftDetails?.imageUri,
-                          auction.nftDetails?.tokenId,
-                          auction.price,
-                          auction.nftDetails?.name,
-                          auction.collectionData,
-                          getHighestBid(auction),
-                          formatEther(Number(getLowestBid(auction))),
-                        )
-                      }
-                    >
-                      <span className="text-center text-base font-bold leading-normal text-white">
-                        Place Bid
-                      </span>
-                    </button>
-                    <div className="flex w-full flex-col">
-                      <div className="inline-flex w-full items-center justify-center gap-2">
-                        <div className="text-sm font-medium leading-tight text-gray-600">
-                          <Countdown endDate={auction.endDate} />
+                      <ButtonPrimary
+                        onClick={() =>
+                          handleOpenModalBid(
+                            auction.marketId,
+                            auction.listingPrice,
+                            auction.nftDetails?.imageUri,
+                            auction.nftDetails?.tokenId,
+                            auction.price,
+                            auction.nftDetails?.name,
+                            auction.collectionData,
+                            getHighestBid(auction),
+                            formatEther(Number(getLowestBid(auction))),
+                          )
+                        }
+                        disabled={
+                          isNotRelease
+                            ? true
+                            : isNotExpired
+                            ? address === auction?.nftDetails?.owner
+                              ? true
+                              : auction?.listOffers &&
+                                auction?.listOffers.some(
+                                  (offer) => offer.address === address,
+                                )
+                              ? true
+                              : false
+                            : true
+                        }
+                      >
+                        <span className="text-center text-base font-bold leading-normal text-white">
+                          {address === auction?.nftDetails?.owner
+                            ? 'Owned By You'
+                            : auction?.listOffers &&
+                              auction?.listOffers.some(
+                                (offer) => offer.address === address,
+                              )
+                            ? 'Offer Already Made'
+                            : 'Place Bid'}
+                        </span>
+                      </ButtonPrimary>
+                      <div className="flex w-full flex-col">
+                        <div className="inline-flex w-full items-center justify-center gap-2">
+                          <div className="text-sm font-medium leading-tight text-gray-600">
+                            <Countdown endDate={auction.endDate} />
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </SwiperSlide>
-        ))}
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
       <ModalBid
         isOpenModal={isOpenModal}

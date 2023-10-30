@@ -29,6 +29,7 @@ import { useWeb3Modal } from '@web3modal/react';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
 import moment from 'moment';
+import ButtonPrimary from '../button/buttonPrimary';
 
 export default function ModalPutOnSale({
   isOpenModal,
@@ -688,14 +689,14 @@ export default function ModalPutOnSale({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-900 p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="text-xl font-bold text-gray-900"
                   >
                     Just a few steps left
                   </Dialog.Title>
-                  <div className="mx-5 flex flex-col text-sm text-gray-900">
+                  <div className="mx-5 flex flex-col text-sm text-gray-900 dark:text-white">
                     <div className="mt-4 flex max-w-full shrink-0 flex-row items-center gap-4">
                       <div className="flex max-w-full shrink-0 flex-col items-center">
                         {isLoadingModal.approve ? (
@@ -797,14 +798,13 @@ export default function ModalPutOnSale({
                       </div>
                     </div>
                     <div className="mt-4 inline-flex ">
-                      <button
+                      <ButtonPrimary
                         type="button"
-                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-500 px-4 py-2 text-sm font-medium text-white hover:bg-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:bg-primary-300 disabled:text-primary-500"
                         onClick={closeModalProcessing}
                         disabled={isProcessing}
                       >
                         {isProcessing ? 'Please wait ...' : 'Completed'}
-                      </button>
+                      </ButtonPrimary>
                     </div>
                   </div>
                 </Dialog.Panel>

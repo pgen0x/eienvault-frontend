@@ -2,17 +2,23 @@ import Ethereum from '@/assets/icon/ethereum';
 import HelaIcon from '@/assets/icon/hela';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { truncateAddress4char } from '@/utils/truncateAddress4char';
-import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faXmark, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
 import Image from 'next/legacy/image';
 import { Fragment, useEffect, useState } from 'react';
 import { formatEther, parseEther } from 'viem';
-import { useAccount, useBalance, useWaitForTransaction } from 'wagmi';
+import {
+  useAccount,
+  useBalance,
+  useWaitForTransaction,
+  useWalletClient,
+} from 'wagmi';
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { useWeb3Modal } from '@web3modal/react';
 import { useRouter } from 'next-nprogress-bar';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 
 export default function ModalBid({
   isOpenModal,
@@ -26,11 +32,20 @@ export default function ModalBid({
   const [isSubmit, setIsSubmit] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const router = useRouter();
+  const [isErrorBid, setErrorBid] = useState({
+    isError: false,
+    message: '',
+  });
 
   const [bidHash, setBidHash] = useState();
 
   const { data } = useBalance({
     address: address,
+  });
+  const { data: walletClient } = useWalletClient({
+    onError(error) {
+      console.log('Error', error);
+    },
   });
   const { open } = useWeb3Modal();
   const {
@@ -42,11 +57,30 @@ export default function ModalBid({
   });
 
   function closeModal() {
-    reset();
-    setIsSubmit(false);
-    setIsCompleted(false);
-    onClose(false);
-    onModalClose();
+    // reset();
+    // setIsSubmit(false);
+    // setIsCompleted(false);
+    // onClose(false);
+    // onModalClose();
+    if (isErrorBid.isError || isCompleted || !isSubmit) {
+      if (isErrorBid.isError) {
+        setIsSubmit(false);
+        setErrorBid({
+          isError: false,
+          message: '',
+        });
+      } else {
+        reset();
+        setErrorBid({
+          isError: false,
+          message: '',
+        });
+        setIsSubmit(false);
+        setIsCompleted(false);
+        onClose(false);
+        onModalClose();
+      }
+    }
   }
 
   const {
@@ -63,14 +97,36 @@ export default function ModalBid({
       open();
       return;
     }
+
     setIsSubmit(true);
+    setErrorBid({
+      isError: false,
+      message: '',
+    });
 
     try {
-      const hash = await placeBid(auction.marketId, parseEther(data.amount));
+      const hash = await walletClient.writeContract({
+        ...marketplaceABI,
+        functionName: 'makeAnOfferNative',
+        args: [auction.marketId, parseEther(data.amount)],
+        account: address,
+        value: parseEther(data.amount),
+      });
+
       setBidHash(hash);
+      return hash;
     } catch (error) {
-      setIsSubmit(false);
-      console.error('Error Place a Bid:', error);
+      if (error.message.includes('User denied transaction signature')) {
+        setErrorBid({
+          isError: true,
+          message: 'Transaction rejected by the user.',
+        });
+      } else {
+        setErrorBid({
+          isError: true,
+          message: error.message,
+        });
+      }
     }
   };
 
@@ -152,8 +208,8 @@ export default function ModalBid({
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                    <Dialog.Title className="flex justify-between text-xl font-bold text-neutral-800">
+                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-900">
+                    <Dialog.Title className="flex justify-between text-xl font-bold text-neutral-800 dark:text-white">
                       <div className="flex w-full justify-start">Bid</div>
                       <div className="flex w-full justify-end">
                         <button
@@ -165,7 +221,7 @@ export default function ModalBid({
                       </div>
                     </Dialog.Title>
 
-                    <section className="step-1 flex flex-col gap-3 pt-5 text-neutral-800">
+                    <section className="step-1 flex flex-col gap-3 pt-5 text-neutral-800 dark:text-white">
                       <div className="flex w-full items-center justify-center gap-3">
                         {auction?.imageUri !== null ? (
                           <Image
@@ -185,7 +241,7 @@ export default function ModalBid({
                           {auction?.name}
                         </div>
                       </div>
-                      <div className="flex flex-col gap-2 rounded-lg border border-gray-200 p-3">
+                      <div className="flex flex-col gap-2 rounded-lg bg-neutral-700 p-3">
                         <div className="flex justify-between">
                           <div className="flex items-center gap-2">
                             <div className="rounded-lg  p-1 text-white">
@@ -218,7 +274,7 @@ export default function ModalBid({
                           </span>
                         </div>
                       </div>
-                      <div className="flex flex-col justify-between gap-1 rounded-lg bg-gray-50 p-3">
+                      <div className="flex flex-col justify-between gap-1 rounded-lg bg-gray-50 p-3 dark:bg-neutral-700">
                         <div className="flex justify-between">
                           <span>
                             {auction.lowestBid !== '0'
@@ -253,7 +309,7 @@ export default function ModalBid({
                       </div>
                       <form>
                         <div className="flex flex-col">
-                          <label className="block text-sm font-medium leading-6 text-gray-900">
+                          <label className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400">
                             Enter amount of your bid
                           </label>
                           <div className="mt-2">
@@ -342,23 +398,59 @@ export default function ModalBid({
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                    <Dialog.Title className="flex justify-between text-xl font-bold text-neutral-800">
+                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-900 dark:text-white">
+                    {isErrorBid.isError && (
+                      <Dialog.Title className="flex justify-end text-xl font-bold text-neutral-800 dark:text-white">
+                        <div className="flex w-full justify-end">
+                          <button
+                            className="text-primary-500"
+                            onClick={closeModal}
+                          >
+                            <FontAwesomeIcon icon={faXmark} />
+                          </button>
+                        </div>
+                      </Dialog.Title>
+                    )}
+                    {/* <Dialog.Title className="flex justify-between text-xl font-bold">
                       <div className="flex w-full justify-start">
                         Loading Your Bid
                       </div>
-                    </Dialog.Title>
+                    </Dialog.Title> */}
 
                     <section className="step-2 mt-5 flex flex-col gap-3 p-5">
                       <div className="flex flex-col items-center gap-5">
-                        <div className="h-12 w-12 animate-ping rounded-lg bg-primary-100"></div>
+                        {isErrorBid.isError ? (
+                          <>
+                            <FontAwesomeIcon
+                              icon={faXmarkCircle}
+                              className="h-8 w-8 text-primary-500"
+                            />
+                            <h3 className="text-center text-lg font-bold">
+                              Error
+                            </h3>
+                            <span className="text-primary-500">
+                              {isErrorBid.message}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <div className="h-12 w-12 animate-ping rounded-lg bg-primary-100"></div>
+                            <h3 className="text-center text-lg font-bold">
+                            Loading Your Bid
+                            </h3>
+                            <span>
+                              Sign your wallet to continue the transaction
+                            </span>
+                          </>
+                        )}
+                        {/* <div className="h-12 w-12 animate-ping rounded-lg bg-primary-100"></div>
                         <div className="text-center">
                           <h3 className="text-lg font-bold">Loading</h3>
 
                           <span>
                             Sign your wallet to continue the transaction
                           </span>
-                        </div>
+                        </div> */}
                       </div>
                     </section>
                   </Dialog.Panel>

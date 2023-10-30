@@ -32,6 +32,7 @@ import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { getApprovedAddress } from '@/utils/getApprovedAddress';
 import { useRouter } from 'next-nprogress-bar';
+import ButtonPrimary from '../button/buttonPrimary';
 
 export default function ModalBuy({
   isOpenModal,
@@ -67,14 +68,26 @@ export default function ModalBuy({
   });
 
   function closeModal() {
-    setErrorBuyNative({
-      isError: false,
-      message: '',
-    });
-    setIsloadingBuyNativeModal(false);
-    setIsCompleted(false);
-    onClose(false);
-    onModalClose();
+    if (isErrorBuyNative.isError || isCompleted || !isLoadingBuyNativeModal) {
+      if (isErrorBuyNative.isError) {
+        setIsloadingBuyNativeModal(false);
+        setErrorBuyNative({
+          isError: false,
+          message: '',
+        });
+      } else if (isCompleted) {
+        refreshData();
+      } else {
+        setErrorBuyNative({
+          isError: false,
+          message: '',
+        });
+        setIsloadingBuyNativeModal(false);
+        setIsCompleted(false);
+        onClose(false);
+        onModalClose();
+      }
+    }
   }
 
   const {
@@ -139,7 +152,6 @@ export default function ModalBuy({
           await onSave();
           setIsloadingBuyNativeModal(false);
           setIsCompleted(true);
-          refreshData();
         }
       }
     };
@@ -203,8 +215,8 @@ export default function ModalBuy({
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                    <Dialog.Title className="flex justify-between text-xl font-bold text-neutral-800">
+                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-900">
+                    <Dialog.Title className="flex justify-between text-xl font-bold text-neutral-800 dark:text-white">
                       <div className="flex w-full justify-start">Buy</div>
                       <div className="flex w-full justify-end">
                         <button
@@ -216,7 +228,7 @@ export default function ModalBuy({
                       </div>
                     </Dialog.Title>
 
-                    <section className="step-1 flex flex-col gap-3 pt-5 text-gray-700">
+                    <section className="step-1 text-gray-700dark:text-white flex flex-col gap-3 pt-5 text-gray-900 dark:text-gray-400">
                       <div className="flex w-full items-center justify-center gap-3">
                         {dataBuy.imageUri !== null ? (
                           <Image
@@ -231,7 +243,7 @@ export default function ModalBuy({
                         ) : (
                           <div className="h-96 w-[192px] animate-pulse rounded-2xl bg-gray-300" />
                         )}
-                        <div className="font w-full text-2xl text-gray-400">
+                        <div className="font w-full text-2xl text-gray-900 dark:text-gray-400">
                           #{dataBuy?.tokenId}
                           <br />
                           {dataBuy?.name}
@@ -243,7 +255,7 @@ export default function ModalBuy({
                           <span>EienVault</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-gray-400">
+                          <span className="text-gray-900 dark:text-gray-400">
                             {dataBuy?.price && formatEther(dataBuy?.price)}{' '}
                             {dataBuy?.ChainSymbol}
                           </span>
@@ -272,7 +284,7 @@ export default function ModalBuy({
                           </span>
                         </div>
                       </div>
-                      <div className="flex flex-col justify-between gap-1 rounded-lg bg-gray-50 p-3">
+                      <div className="flex flex-col justify-between gap-1 rounded-lg bg-gray-50 p-3 dark:bg-neutral-700">
                         <div className="flex justify-between">
                           <span>Price</span>
                           <span className="font-semibold">
@@ -291,14 +303,13 @@ export default function ModalBuy({
                         </div>
                       </div>
 
-                      <button
-                        className="w-full rounded-full bg-primary-500 py-3 font-semibold text-white"
+                      <ButtonPrimary
                         onClick={() =>
                           BuyNative(dataBuy.marketId, dataBuy.price)
                         }
                       >
                         Buy Now
-                      </button>
+                      </ButtonPrimary>
                     </section>
                   </Dialog.Panel>
                 </Transition.Child>
@@ -331,19 +342,21 @@ export default function ModalBuy({
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                    <Dialog.Title className="flex justify-end text-xl font-bold text-neutral-800">
-                      <div className="flex w-full justify-end">
-                        <button
-                          className="text-primary-500"
-                          onClick={closeModal}
-                        >
-                          <FontAwesomeIcon icon={faXmark} />
-                        </button>
-                      </div>
-                    </Dialog.Title>
+                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-900">
+                    {isErrorBuyNative.isError && (
+                      <Dialog.Title className="flex justify-end text-xl font-bold text-neutral-800 dark:text-white">
+                        <div className="flex w-full justify-end">
+                          <button
+                            className="text-primary-500"
+                            onClick={closeModal}
+                          >
+                            <FontAwesomeIcon icon={faXmark} />
+                          </button>
+                        </div>
+                      </Dialog.Title>
+                    )}
 
-                    <section className="step-2 mt-5 flex flex-col gap-3 p-5">
+                    <section className="step-2 mt-5 flex flex-col gap-3 p-5 text-neutral-800 dark:text-white">
                       <div className="flex flex-col items-center gap-5">
                         {isErrorBuyNative.isError ? (
                           <>

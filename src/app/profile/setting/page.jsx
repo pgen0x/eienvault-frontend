@@ -19,6 +19,7 @@ import Image from 'next/image';
 import ModalUploadProfileLogo from '@/components/modal/uploadProfileLogo';
 import ButtonPrimary from '@/components/button/buttonPrimary';
 import ButtonTertiary from '@/components/button/buttonTertiary';
+import ModalVerifyUser from '@/components/modal/verifyUser';
 
 const ProfileSetting = () => {
   const { token } = useAuth();
@@ -125,6 +126,7 @@ const Profile = ({
 }) => {
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
   const [IsOpenModalLogo, setIsOpenModalLogo] = useState(false);
+  const [IsOpenModalVerifyUser, setIsOpenModalVerifyUser] = useState(false);
   const handleChangeProfile = (event, attribute) => {
     setProfile((oldProfile) => {
       oldProfile[attribute] = event.target.value;
@@ -179,6 +181,40 @@ const Profile = ({
 
   const updateLogoImage = (newImageURL) => {
     setLogoImage(newImageURL);
+  };
+
+  const handleSubmitVerifyUser = () => {
+    setIsOpenModalVerifyUser(true);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/chain/getall`,
+          {
+            cache: 'force-cache',
+          },
+        );
+
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const dataChain = await res.json();
+        setChains(dataChain);
+        // Continue with your code
+      } catch (error) {
+        console.error('Fetch failed:', error);
+        // Handle the error gracefully, e.g., show an error message to the user
+      }
+    };
+
+    fetchData();
+  }, [IsOpenModalVerifyUser]);
+
+  const closeModalVerifyUser = () => {
+    setIsOpenModalVerifyUser(false);
   };
 
   return (
@@ -329,7 +365,7 @@ const Profile = ({
             Proceed with verification process to get more visibility and gain
             trust on Rarible
           </p>
-          <ButtonPrimary>Get verified</ButtonPrimary>
+          <ButtonPrimary onClick={() => handleSubmitVerifyUser()}>Get verified</ButtonPrimary>
         </div>
       </div>
       <ModalUploadProfileCover
@@ -341,6 +377,12 @@ const Profile = ({
         isOpenModal={IsOpenModalLogo}
         onModalClose={closeModalLogo}
         updateLogoImage={updateLogoImage}
+      />
+      <ModalVerifyUser
+        isOpenModal={IsOpenModalVerifyUser}
+        onClose={closeModalVerifyUser}
+        onModalClose={closeModalVerifyUser}
+        profile={profile}
       />
     </>
   );

@@ -392,12 +392,11 @@ export default function ModalVerifyUser({
                                 <ErrorMessage errors={errors} name="comments" />
                               </div>
                             </div>
-                            <button
+                            <ButtonPrimary
                               onClick={handleSubmit(onSave)}
-                              className="mt-4 w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300 disabled:bg-primary-200"
                             >
                               Submit Verification
-                            </button>
+                            </ButtonPrimary>
                           </form>
                         </section>
                       </div>

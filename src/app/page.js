@@ -124,7 +124,7 @@ export default function Home() {
       }
 
       const responseData = await res.json();
-      setDataActivities(responseData);
+      setDataActivities(responseData.nfts);
     } catch (error) {
       setErrorActivities(true);
       console.error('Fetch failed:', error);

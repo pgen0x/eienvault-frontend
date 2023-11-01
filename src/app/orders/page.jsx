@@ -7,7 +7,9 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCheck,
+  faGavel,
   faHourglass,
+  faTags,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { formatEther } from 'viem';
@@ -16,6 +18,9 @@ import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { useRouter } from 'next-nprogress-bar';
+import ButtonSecondary from '@/components/button/buttonSecondary';
+import { toast } from 'react-toastify';
+import ButtonPrimary from '@/components/button/buttonPrimary';
 
 export default function OrdersPage() {
   const searchParams = useSearchParams();
@@ -68,9 +73,11 @@ export default function OrdersPage() {
       });
       console.log(hash);
       setRemoveListingHash(hash);
+      toast.success('Bid successfully removed');
       return hash;
     } catch (error) {
       console.error('Error Make an Offer', error);
+      toast.error(error);
     }
   };
 
@@ -83,9 +90,11 @@ export default function OrdersPage() {
         account: address,
       });
       setCancelBidHash(hash);
+      toast.success('Bid successfully cancel');
       return hash;
     } catch (error) {
       console.error('Error Make an Offer', error);
+      toast.error(error);
     }
   };
 
@@ -98,9 +107,11 @@ export default function OrdersPage() {
         account: address,
       });
       setApproveBidHash(hash);
+      toast.success('Bid successfully accepted');
       return hash;
     } catch (error) {
       console.error('Error Approve Bid', error);
+      toast.error(error);
     }
   };
 
@@ -348,350 +359,256 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
   const currentDate = moment();
 
   return (
-    <>
-      <div className="min-h-full w-full ">
-        <div className="flex h-full w-full flex-col items-start justify-start gap-2 ">
-          <div className="hidden w-full items-start justify-start self-stretch rounded-xl bg-primary-500 py-2 lg:inline-flex">
-            <div className="shrink grow basis-0 text-center text-lg font-bold leading-loose text-white">
-              Item{' '}
-            </div>
-            <div className="shrink grow basis-0 text-center text-lg font-bold leading-loose text-white">
-              Price{' '}
-            </div>
-            <div className="shrink grow basis-0 text-center text-lg font-bold leading-loose text-white">
-              Is Auction?
-            </div>
-            <div className="shrink grow basis-0 text-center text-lg font-bold leading-loose text-white">
-              Expiration
-            </div>
-            <div className="shrink grow basis-0 text-center text-lg font-bold leading-loose text-white">
-              Action
-            </div>
-          </div>
-        </div>
-        <div className="mt-5 rounded-lg border border-gray-200 bg-gray-100 dark:bg-zinc-700 dark:text-white dark:border-zinc-500 p-3">
-          {isLoading ? (
-            <div className="flex h-full w-full flex-col items-start justify-start gap-2">
-              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                    </div>
-                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
+    <div className="min-h-full w-full ">
+      <div className="mt-5 flex flex-col gap-4 rounded-lg bg-white/60 p-3 text-gray-900 dark:bg-neutral-900 dark:text-white">
+        {isLoading ? (
+          <>
+            {[...Array(5)].map((nft, index) => (
+              <div className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row">
+                <div className="flex w-full items-center justify-between gap-4">
+                  <div className="flex items-center justify-center gap-4">
+                    <div className="relative h-20 w-20 animate-pulse rounded-lg bg-gray-300" />
+                    <div className="h-4 w-24 animate-pulse rounded-lg bg-gray-300 lg:w-36" />
+                  </div>
+                  <div className="flex flex-col items-end justify-center gap-2">
+                    <div className="h-4 w-16 animate-pulse rounded-lg bg-gray-300" />
+                    <div className="h-4 w-24 animate-pulse rounded-lg bg-gray-300" />
                   </div>
                 </div>
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              </div>
-              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                    </div>
-                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
+                <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 py-2 dark:bg-neutral-600 lg:bg-white dark:lg:bg-neutral-700">
+                  <div className="flex flex-col items-center justify-start gap-2">
+                    <div className="h-4 w-20 animate-pulse rounded-lg bg-gray-300" />
+                    <div className="h-4 w-32 animate-pulse rounded-lg bg-gray-300" />
+                  </div>
+                  <div className="flex flex-col items-center justify-start gap-2">
+                    <div className="h-4 w-20 animate-pulse rounded-lg bg-gray-300" />
+                    <div className="h-4 w-32 animate-pulse rounded-lg bg-gray-300" />
                   </div>
                 </div>
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              </div>
-              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                    </div>
-                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                  </div>
+                <div className="flex w-1/2 items-center justify-center gap-2 rounded-lg px-4 py-2">
+                  <div className="h-6 w-32 animate-pulse rounded-lg bg-gray-300" />
                 </div>
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
               </div>
-              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+            ))}
+          </>
+        ) : dataListing.length > 0 ? (
+          dataListing.map((data, index) => {
+            const endDate = moment.unix(data.endDate); // Convert the end date from Unix timestamp
+            const timeDifference = endDate.diff(currentDate);
+            const isEndDateInFuture = timeDifference > 0;
+            return (
+              <div
+                className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row"
+                key={index}
+              >
+                <div
+                  className="flex w-full cursor-pointer items-center justify-between gap-4"
+                  onClick={() =>
+                    router.push(
+                      `/nft/${data.collectionData?.tokenAddress}/${data.tokenId}`,
+                    )
+                  }
+                >
+                  <div className="flex items-center justify-center gap-4">
+                    <div className="h-14 w-14">
+                      <Image
+                        className="w-full rounded-2xl bg-white object-cover lg:w-96"
+                        width={54}
+                        height={54}
+                        placeholder="blur"
+                        blurDataURL={data.nftDetails?.imageUri}
+                        src={data.nftDetails?.imageUri}
+                        alt={data.nftDetails?.name}
+                      />
                     </div>
-                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
+                    <span>
+                      {data.nftDetails?.name} #{data.tokenId}
+                    </span>
                   </div>
-                </div>
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              </div>
-              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                    </div>
-                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                  </div>
-                </div>
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              </div>
-            </div>
-          ) : dataListing.length > 0 ? (
-            dataListing.map((data, index) => {
-              const endDate = moment.unix(data.endDate); // Convert the end date from Unix timestamp
-              const timeDifference = endDate.diff(currentDate);
-              const isEndDateInFuture = timeDifference > 0;
-              return (
-                <div className="m-2" key={index}>
-                  <div
-                    className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white dark:bg-zinc-600 p-2 lg:inline-flex"
-                    key={index}
-                  >
-                    <div className="flex shrink grow basis-0 items-center justify-center text-center text-base font-bold leading-loose">
-                      <div
-                        className="inline-flex h-14 w-48 cursor-pointer items-center justify-center gap-4"
-                        onClick={() =>
-                          router.push(
-                            `/nft/${data.collectionData?.tokenAddress}/${data.tokenId}`,
-                          )
-                        }
-                      >
-                        <div className="inline-flex h-14 w-12 flex-col items-center justify-center">
-                          <div className="h-12 w-12 rounded-full bg-gray-300">
-                            <Image
-                              className="w-full rounded-2xl bg-white object-cover lg:w-96"
-                              width={48}
-                              height={48}
-                              placeholder="blur"
-                              blurDataURL={data.nftDetails?.imageUri}
-                              src={data.nftDetails?.imageUri}
-                              alt={data.nftDetails?.name}
-                            />
-                          </div>
-                        </div>
-                        <div className="text-md shrink grow basis-0 font-medium leading-loose">
-                          {data.nftDetails?.name} #{data.tokenId}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
+                  <div className="flex flex-col items-end justify-center gap-2">
+                    <div className="font-bold">Bid Listings</div>
+                    <div>
                       {formatEther(data.price)}{' '}
                       {data.collectionData.Chain.symbol}
                     </div>
-                    <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                      {data?.isAuctioned ? 'Yes' : 'No'}
-                    </div>
-                    <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                      {data?.isAuctioned && isEndDateInFuture
-                        ? moment
-                            .unix(data?.endDate)
-                            .format('Do MMM YYYY, h:mm:ss A')
-                        : '-'}
-                    </div>
-
-                    <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                      <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
-                        <button
-                          onClick={() => removeListing(data.marketId)}
-                          className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl px-4 py-2 hover:bg-primary-200 hover:text-primary-200"
-                        >
-                          <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
-                            <FontAwesomeIcon icon={faXmark} />
-                          </div>
-                          <span className="text-base font-bold leading-normal text-primary-500">
-                            Remove Listing
-                          </span>
-                        </button>
-                      </div>
+                  </div>
+                </div>
+                <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 py-2 dark:bg-neutral-600 lg:bg-white dark:lg:bg-neutral-700">
+                  <div className="flex w-full flex-col items-center justify-start gap-2">
+                    <span className="font-bold">Expiration</span>
+                    <span className="text-center">
+                      {data?.isAuctioned && isEndDateInFuture ? (
+                        <>
+                          {moment.unix(data?.endDate).format('Do MMM YYYY')}
+                          <br />
+                          {moment.unix(data?.endDate).format('h:mm:ss A')}
+                        </>
+                      ) : (
+                        '-'
+                      )}
+                    </span>
+                  </div>
+                  <div className="flex w-full flex-col items-center justify-start gap-2">
+                    <span className="font-bold">Status</span>
+                    <div className="flex items-center gap-2 text-primary-500">
+                      <FontAwesomeIcon
+                        size="xs"
+                        icon={data?.isAuctioned ? faGavel : faTags}
+                      />
+                      <span className="text-xs font-bold">
+                        {data?.isAuctioned ? 'Auction' : 'On Sale'}
+                      </span>
                     </div>
                   </div>
                 </div>
-              );
-            })
-          ) : (
-            <div className="shrink grow basis-0 py-4 text-center text-base font-bold leading-loose">
-              Data Not Found
-            </div>
-          )}
-        </div>
+                <div className="flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 lg:w-1/2">
+                  <ButtonSecondary
+                    className="flex !w-fit items-center justify-center gap-2"
+                    onClick={() => removeListing(data.marketId)}
+                  >
+                    <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
+                      <FontAwesomeIcon icon={faXmark} />
+                    </div>
+                    <span className="text-base font-bold leading-normal text-primary-500">
+                      Remove Listing
+                    </span>
+                  </ButtonSecondary>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className="shrink grow basis-0 py-4 text-center text-base font-bold leading-loose">
+            Data Not Found
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 
 const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
+  const currentDate = moment();
+  const router = useRouter();
+
   return (
     <>
-      <div className="min-h-full w-full">
-        <div className="flex h-full w-full flex-col items-start justify-start gap-2">
-          <div className="hidden w-full items-start justify-start self-stretch rounded-xl bg-primary-500 py-2 lg:inline-flex">
-            <div className="shrink grow basis-0 text-center text-lg font-bold leading-loose text-white">
-              Item{' '}
-            </div>
-            <div className="shrink grow basis-0 text-center text-lg font-bold leading-loose text-white">
-              Bid Amount
-            </div>
-
-            <div className="shrink grow basis-0 text-center text-lg font-bold leading-loose text-white">
-              Expiration
-            </div>
-            <div className="shrink grow basis-0 text-center text-lg font-bold leading-loose text-white">
-              Action
-            </div>
-          </div>
-        </div>
-        <div className="mt-5 rounded-lg border border-gray-200 bg-gray-100 dark:bg-zinc-700 dark:text-white dark:border-zinc-500 p-3">
+      <div className="min-h-full w-full ">
+        <div className="mt-5 flex flex-col gap-4 rounded-lg bg-white/60 p-3 text-gray-900 dark:bg-neutral-900 dark:text-white">
           {isLoadingBidMade ? (
-            <div className="flex h-full w-full flex-col items-start justify-start gap-2">
-              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+            <>
+              {[...Array(5)].map((nft, index) => (
+                <div className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row">
+                  <div className="flex w-full items-center justify-between gap-4">
+                    <div className="flex items-center justify-center gap-4">
+                      <div className="relative h-20 w-20 animate-pulse rounded-lg bg-gray-300" />
+                      <div className="h-4 w-24 animate-pulse rounded-lg bg-gray-300 lg:w-36" />
                     </div>
-                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
+                    <div className="flex flex-col items-end justify-center gap-2">
+                      <div className="h-4 w-16 animate-pulse rounded-lg bg-gray-300" />
+                      <div className="h-4 w-24 animate-pulse rounded-lg bg-gray-300" />
+                    </div>
+                  </div>
+                  <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 py-2 dark:bg-neutral-600 lg:bg-white dark:lg:bg-neutral-700">
+                    <div className="flex flex-col items-center justify-start gap-2">
+                      <div className="h-4 w-20 animate-pulse rounded-lg bg-gray-300" />
+                      <div className="h-4 w-32 animate-pulse rounded-lg bg-gray-300" />
+                    </div>
+                    <div className="flex flex-col items-center justify-start gap-2">
+                      <div className="h-4 w-20 animate-pulse rounded-lg bg-gray-300" />
+                      <div className="h-4 w-32 animate-pulse rounded-lg bg-gray-300" />
+                    </div>
+                  </div>
+                  <div className="flex w-1/2 items-center justify-center gap-2 rounded-lg px-4 py-2">
+                    <div className="h-6 w-32 animate-pulse rounded-lg bg-gray-300" />
                   </div>
                 </div>
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              </div>
-              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                    </div>
-                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                  </div>
-                </div>
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              </div>
-              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                    </div>
-                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                  </div>
-                </div>
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              </div>
-              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                    </div>
-                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                  </div>
-                </div>
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              </div>
-              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                    </div>
-                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                  </div>
-                </div>
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              </div>
-            </div>
+              ))}
+            </>
           ) : dataBidMade.length > 0 ? (
             dataBidMade.map((data, index) => {
-              const currentDate = moment();
-              const endDate = moment.unix(data?.itemsDetails?.endDate); // Convert the end date from Unix timestamp
+              const endDate = moment.unix(data.endDate); // Convert the end date from Unix timestamp
               const timeDifference = endDate.diff(currentDate);
               const isEndDateInFuture = timeDifference > 0;
               return (
-                <div className="m-2" key={index}>
+                <div
+                  className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row"
+                  key={index}
+                >
                   <div
-                    className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white dark:bg-zinc-600 p-2 lg:inline-flex"
-                    key={index}
+                    className="flex w-full cursor-pointer items-center justify-between gap-4"
+                    onClick={() =>
+                      router.push(`/nft/${data.Collection}/${data.TokenId}`)
+                    }
                   >
-                    <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                      <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
-                        <div className="inline-flex h-14 w-12 flex-col py-0.5">
-                          <div className="h-12 w-12 rounded-full bg-gray-300">
-                            <Image
-                              className="w-full rounded-2xl object-cover lg:w-96"
-                              width={48}
-                              height={48}
-                              placeholder="blur"
-                              blurDataURL={data.nftDetails?.imageUri}
-                              src={data.nftDetails?.imageUri}
-                            />
-                          </div>
-                        </div>
-                        <div className="text-md shrink grow basis-0 font-medium leading-loose">
-                          {data.nftDetails?.name}
-                        </div>
+                    <div className="flex items-center justify-center gap-4">
+                      <div className="h-14 w-14">
+                        <Image
+                          className="w-full rounded-2xl object-cover lg:w-96"
+                          width={54}
+                          height={54}
+                          placeholder="blur"
+                          blurDataURL={data.nftDetails?.imageUri}
+                          src={data.nftDetails?.imageUri}
+                        />
+                      </div>
+                      <span>{data.nftDetails?.name}</span>
+                    </div>
+                    <div className="flex flex-col items-end justify-center gap-2">
+                      <div className="font-bold">Bid Amount</div>
+                      <div>{formatEther(data.BidAmount)} HLUSD</div>
+                    </div>
+                  </div>
+                  <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 py-2 dark:bg-neutral-600 lg:bg-white dark:lg:bg-neutral-700">
+                    <div className="flex w-full flex-col items-center justify-start gap-2">
+                      <span className="font-bold">Expiration</span>
+                      <span className="text-center">
+                        {data?.isAuctioned && isEndDateInFuture ? (
+                          <>
+                            {moment.unix(data?.endDate).format('Do MMM YYYY')}
+                            <br />
+                            {moment.unix(data?.endDate).format('h:mm:ss A')}
+                          </>
+                        ) : (
+                          '-'
+                        )}
+                      </span>
+                    </div>
+                    <div className="flex w-full flex-col items-center justify-start gap-2">
+                      <span className="font-bold">Status</span>
+                      <div className="flex items-center gap-2 text-primary-500">
+                        <FontAwesomeIcon
+                          size="xs"
+                          icon={data?.isAuctioned ? faGavel : faTags}
+                        />
+                        <span className="text-xs font-bold">
+                          {data?.isAuctioned ? 'Auction' : 'On Sale'}
+                        </span>
                       </div>
                     </div>
-                    <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                      {formatEther(data.BidAmount)} HLUSD
-                    </div>
-
-                    <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                      {data?.itemsDetails !== null
-                        ? moment
-                            .unix(data?.itemsDetails?.endDate)
-                            .format('Do MMM YYYY, h:mm:ss A')
-                        : '-'}
-                    </div>
+                  </div>
+                  <div className="flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 lg:w-1/2">
                     {data?.itemsDetails !== null ? (
-                      <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                        <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
-                          <button
-                            onClick={() => cancelBid(data.ItemId)}
-                            className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl px-4 py-2 hover:bg-primary-200 hover:text-primary-200"
-                          >
-                            <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
-                              <FontAwesomeIcon icon={faXmark} />
-                            </div>
-                            <span className="text-base font-bold leading-normal text-primary-500">
-                              Cancel Bid
-                            </span>
-                          </button>
+                      <ButtonSecondary
+                        onClick={() => cancelBid(data.ItemId)}
+                        className="flex !w-fit items-center justify-center gap-2 lg:w-full"
+                      >
+                        <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
+                          <FontAwesomeIcon icon={faXmark} />
                         </div>
-                      </div>
+                        <span className="text-base font-bold leading-normal text-primary-500">
+                          Cancel Bid
+                        </span>
+                      </ButtonSecondary>
                     ) : (
-                      <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                        <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
-                          <button className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl bg-primary-500 px-4 py-2 hover:bg-primary-200 hover:text-primary-200">
-                            <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
-                              <FontAwesomeIcon icon={faHourglass} />
-                            </div>
-                            <span className="text-base font-bold leading-normal text-white">
-                              Expired
-                            </span>
-                          </button>
+                      <ButtonPrimary className="flex !w-fit items-center justify-center gap-2 lg:w-full">
+                        <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
+                          <FontAwesomeIcon icon={faHourglass} />
                         </div>
-                      </div>
+                        <span className="text-base font-bold leading-normal text-white">
+                          Expired
+                        </span>
+                      </ButtonPrimary>
                     )}
                   </div>
                 </div>
@@ -710,180 +627,153 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
 
 const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
   const currentDate = moment();
+  const router = useRouter();
   console.log('Received', dataReceived);
   return (
     <>
       <div className="min-h-full w-full">
-        <div className="flex h-full w-full flex-col items-start justify-start gap-2">
-          <div className="hidden w-full items-start justify-start self-stretch rounded-xl bg-primary-500 py-2 lg:inline-flex">
-            <div className="shrink grow basis-0 text-center text-lg font-bold leading-loose text-white">
-              Item{' '}
-            </div>
-            <div className="shrink grow basis-0 text-center text-lg font-bold leading-loose text-white">
-              Bid Amount
-            </div>
-            <div className="shrink grow basis-0 text-center text-lg font-bold leading-loose text-white">
-              From
-            </div>
-            <div className="shrink grow basis-0 text-center text-lg font-bold leading-loose text-white">
-              Expiration
-            </div>
-            <div className="shrink grow basis-0 text-center text-lg font-bold leading-loose text-white">
-              Action
-            </div>
-          </div>
-        </div>
-        <div className="mt-5 rounded-lg border border-gray-200 bg-gray-100 dark:bg-zinc-700 dark:text-white dark:border-zinc-500 p-3">
+        <div className="mt-5 flex flex-col gap-4 rounded-lg bg-white/60 p-3 text-gray-900 dark:bg-neutral-900 dark:text-white">
           {isLoadingReceived ? (
-            <div className="flex h-full w-full flex-col items-start justify-start gap-2">
-              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
+            <>
+              {[...Array(5)].map((nft, index) => (
+                <div className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row">
+                  <div className="flex w-full items-center justify-between gap-4">
+                    <div className="flex items-center justify-center gap-4">
+                      <div className="relative h-20 w-20 animate-pulse rounded-lg bg-gray-300" />
+                      <div className="h-4 w-24 animate-pulse rounded-lg bg-gray-300 lg:w-36" />
                     </div>
-                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
+                    <div className="flex flex-col items-end justify-center gap-2">
+                      <div className="h-4 w-16 animate-pulse rounded-lg bg-gray-300" />
+                      <div className="h-4 w-24 animate-pulse rounded-lg bg-gray-300" />
+                    </div>
+                  </div>
+                  <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 py-2 dark:bg-neutral-600 lg:bg-white dark:lg:bg-neutral-700">
+                    <div className="flex flex-col items-center justify-start gap-2">
+                      <div className="h-4 w-20 animate-pulse rounded-lg bg-gray-300" />
+                      <div className="h-4 w-32 animate-pulse rounded-lg bg-gray-300" />
+                    </div>
+                    <div className="flex flex-col items-center justify-start gap-2">
+                      <div className="h-4 w-20 animate-pulse rounded-lg bg-gray-300" />
+                      <div className="h-4 w-32 animate-pulse rounded-lg bg-gray-300" />
+                    </div>
+                  </div>
+                  <div className="flex w-1/2 items-center justify-center gap-2 rounded-lg px-4 py-2">
+                    <div className="h-6 w-32 animate-pulse rounded-lg bg-gray-300" />
                   </div>
                 </div>
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              </div>
-              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                    </div>
-                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                  </div>
-                </div>
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              </div>
-              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                    </div>
-                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                  </div>
-                </div>
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              </div>
-              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                    </div>
-                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                  </div>
-                </div>
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              </div>
-              <div className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl py-2 lg:inline-flex">
-                <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-48 items-center justify-center gap-4 px-4">
-                    <div className="inline-flex h-14 w-12 flex-col items-center justify-center py-0.5">
-                      <div className="h-12 w-12 animate-pulse rounded-full bg-gray-300" />
-                    </div>
-                    <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-xl font-medium leading-loose text-black" />
-                  </div>
-                </div>
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-                <div className="h-4 shrink grow basis-0 animate-pulse rounded-2xl bg-gray-300 text-center text-base font-bold leading-loose" />
-              </div>
-            </div>
+              ))}
+            </>
           ) : dataReceived.length > 0 ? (
             dataReceived.map((data, index) => {
               const endDate = moment.unix(data?.itemsEndDate); // Convert the end date from Unix timestamp
               const timeDifference = endDate.diff(currentDate);
               const isEndDateInFuture = timeDifference > 0;
               return (
-                <React.Fragment key={index}>
-                  {data.Bids.map((dataBids, indexBids) => (
-                    <div className="m-2" key={index}>
+                <>
+                  <React.Fragment key={index}>
+                    {data.Bids.map((dataBids, indexBids) => (
                       <div
-                        className="hidden w-full items-center justify-start gap-5 self-stretch rounded-xl bg-white dark:bg-zinc-600 p-2 lg:inline-flex"
+                        className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row"
                         key={indexBids}
                       >
-                        <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                          <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
-                            <div className="inline-flex h-14 w-12 flex-col py-0.5">
-                              <div className="h-12 w-12 rounded-full bg-gray-300">
-                                <Image
-                                  className="w-full rounded-2xl object-cover lg:w-96"
-                                  width={48}
-                                  height={48}
-                                  placeholder="blur"
-                                  blurDataURL={data.nftDetails?.imageUri}
-                                  src={data.nftDetails?.imageUri}
-                                />
-                              </div>
+                        <div
+                          className="flex w-full cursor-pointer items-center justify-between gap-4"
+                          onClick={() =>
+                            router.push(
+                              `/nft/${data.Collection}/${data.TokenId}`,
+                            )
+                          }
+                        >
+                          <div className="flex items-center justify-center gap-4">
+                            <div className="h-14 w-14">
+                              <Image
+                                className="w-full rounded-2xl object-cover lg:w-96"
+                                width={54}
+                                height={54}
+                                placeholder="blur"
+                                blurDataURL={data.nftDetails?.imageUri}
+                                src={data.nftDetails?.imageUri}
+                              />
                             </div>
-                            <div className="text-md shrink grow basis-0 font-medium leading-loose">
-                              {data.nftDetails?.name}
-                            </div>
+                            <span>{data.nftDetails?.name}</span>
+                          </div>
+                          <div className="flex flex-col items-end justify-center gap-2">
+                            <div className="font-bold">Bid Amount</div>
+                            <div>{formatEther(dataBids.BidAmount)} HLUSD</div>
                           </div>
                         </div>
-                        <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                          {formatEther(dataBids.BidAmount)} HLUSD
+                        <div className="flex w-full items-center justify-between gap-4">
+                          <div className="flex w-full flex-col items-center justify-start gap-2">
+                            <span className="font-bold">From</span>
+                            <button
+                              className="flex items-center gap-2 font-bold text-primary-500"
+                              onClick={() =>
+                                router.push(
+                                  `/profile/${dataBids.BidderAddress}`,
+                                )
+                              }
+                            >
+                              {truncateAddress(dataBids.BidderAddress)}
+                            </button>
+                          </div>
                         </div>
-                        <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                          {truncateAddress(dataBids.BidderAddress)}
-                        </div>
-                        <div className="text-md shrink grow basis-0 text-center font-medium leading-loose">
-                          {data?.itemsEndDate === '' ? (
-                            <span className="rounded-2xl bg-primary-500 px-3 py-2 text-sm font-bold leading-normal text-white">
-                              Expired or Closed
-                            </span>
-                          ) : (
-                            moment
-                              .unix(data?.itemsEndDate)
-                              .format('Do MMM YYYY, h:mm:ss A')
-                          )}
+                        <div className="flex w-full items-center justify-around gap-4 p-4 rounded-lg bg-neutral-50 dark:bg-neutral-600 lg:bg-white dark:lg:bg-neutral-700">
+                          <div className="flex w-full flex-col items-center justify-start gap-2">
+                            <span className="font-bold">Expiration</span>
+                            <div className="text-center">
+                              {data?.itemsEndDate === '' ? (
+                                <div className="whitespace-nowrap rounded-full bg-primary-500 px-3 py-2 text-sm font-bold leading-normal text-white">
+                                  Expired or Closed
+                                </div>
+                              ) : (
+                                <>
+                                  {moment
+                                    .unix(data?.itemsEndDate)
+                                    .format('Do MMM YYYY')}
+                                  <br />
+                                  {moment
+                                    .unix(data?.itemsEndDate)
+                                    .format('h:mm:ss A')}
+                                </>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex w-full flex-col items-center justify-start gap-2">
+                            <span className="font-bold">Status</span>
+                            <div className="flex items-center gap-2 text-primary-500">
+                              <FontAwesomeIcon
+                                size="xs"
+                                icon={data?.isAuctioned ? faGavel : faTags}
+                              />
+                              <span className="text-xs font-bold">
+                                {data?.isAuctioned ? 'Auction' : 'On Sale'}
+                              </span>
+                            </div>
+                          </div>
                         </div>
                         {isEndDateInFuture ? (
-                          <div className="shrink grow basis-0 text-center text-base font-bold leading-loose">
-                            <div className="inline-flex h-14 w-48 items-center justify-center gap-4">
-                              <button
-                                onClick={() =>
-                                  approveBid(
-                                    data.ItemId,
-                                    dataBids.BidderAddress,
-                                  )
-                                }
-                                className="flex h-8 shrink grow basis-0 items-center justify-center gap-2 rounded-3xl px-4 py-2 hover:bg-primary-200 hover:text-primary-200"
-                              >
-                                <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
-                                  <FontAwesomeIcon icon={faCheck} />
-                                </div>
-                                <span className="text-base font-bold leading-normal text-primary-500">
-                                  Approve Bid
-                                </span>
-                              </button>
-                            </div>
+                          <div className="flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 lg:w-1/2">
+                            <ButtonSecondary
+                              className="flex !w-fit items-center justify-center gap-2"
+                              onClick={() =>
+                                approveBid(data.ItemId, dataBids.BidderAddress)
+                              }
+                            >
+                              <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
+                                <FontAwesomeIcon icon={faCheck} />
+                              </div>
+                              <span className="whitespace-nowrap text-base font-bold leading-normal text-primary-500">
+                                Approve Bid
+                              </span>
+                            </ButtonSecondary>
                           </div>
                         ) : (
-                          <div className="shrink grow basis-0 text-center text-base font-bold leading-loose"></div>
+                          <></>
                         )}
                       </div>
-                    </div>
-                  ))}
-                </React.Fragment>
+                    ))}
+                  </React.Fragment>
+                </>
               );
             })
           ) : (

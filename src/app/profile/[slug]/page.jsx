@@ -9,6 +9,7 @@ import {
   faChevronUp,
   faCircleCheck,
   faEllipsis,
+  faGlobe,
   faGrip,
   faGripVertical,
   faPenToSquare,
@@ -47,6 +48,13 @@ import { JazzIcon } from '@/components/jazzicon';
 import { useLocation } from 'react-use';
 import ButtonSecondary from '@/components/button/buttonSecondary';
 import ButtonPrimary from '@/components/button/buttonPrimary';
+import {
+  faDiscord,
+  faInstagram,
+  faMedium,
+  faTelegram,
+  faTwitter,
+} from '@fortawesome/free-brands-svg-icons';
 
 const servers = [
   'All Mainnet',
@@ -375,59 +383,121 @@ export default function ProfilePage({ params }) {
                   </div>
                   <div className="mt-3 text-lg text-gray-900 dark:text-white">
                     {profile?.bio ? (
-                    <div>
-                      <p
-                        className={`text-black dark:text-white ${
-                          showDescription
-                            ? ''
-                            : 'line-clamp-2'
-                        }`}
-                      >
-                        {profile.bio}
-                      </p>
-                      <button
-                        onClick={() => setShowDescription(!showDescription)}
-                        className="text-left text-gray-900 dark:text-white"
-                      >
-                        See {showDescription ? 'less' : 'more'}{' '}
-                        <FontAwesomeIcon
-                          icon={showDescription ? faChevronUp : faChevronDown}
-                        />
-                      </button>
-                    </div>
+                      <div>
+                        <p
+                          className={`text-black dark:text-white ${
+                            showDescription ? '' : 'line-clamp-2'
+                          }`}
+                        >
+                          {profile.bio}
+                        </p>
+                        <button
+                          onClick={() => setShowDescription(!showDescription)}
+                          className="text-left text-gray-900 dark:text-white"
+                        >
+                          See {showDescription ? 'less' : 'more'}{' '}
+                          <FontAwesomeIcon
+                            icon={showDescription ? faChevronUp : faChevronDown}
+                          />
+                        </button>
+                      </div>
                     ) : (
-                    <div>
-                      <p
-                        className={`text-black dark:text-white ${
-                          showDescription
-                            ? ''
-                            : 'line-clamp-2'
-                        }`}
-                      >
-                        {`A digital art enthusiast exploring the world of NFTs on EienVault. I enjoy sharing and collecting unique digital artworks on this platform. Let's explore the world of creativity together at EienVault`}
-                      </p>
-                      <button
-                        onClick={() => setShowDescription(!showDescription)}
-                        className="text-left text-gray-900 dark:text-white"
-                      >
-                        See {showDescription ? 'less' : 'more'}{' '}
-                        <FontAwesomeIcon
-                          icon={showDescription ? faChevronUp : faChevronDown}
-                        />
-                      </button>
-                    </div>
+                      <div>
+                        <p
+                          className={`text-black dark:text-white ${
+                            showDescription ? '' : 'line-clamp-2'
+                          }`}
+                        >
+                          {`A digital art enthusiast exploring the world of NFTs on EienVault. I enjoy sharing and collecting unique digital artworks on this platform. Let's explore the world of creativity together at EienVault`}
+                        </p>
+                        <button
+                          onClick={() => setShowDescription(!showDescription)}
+                          className="text-left text-gray-900 dark:text-white"
+                        >
+                          See {showDescription ? 'less' : 'more'}{' '}
+                          <FontAwesomeIcon
+                            icon={showDescription ? faChevronUp : faChevronDown}
+                          />
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
                 <div className="col-span-12 flex justify-end sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
                   <div className="flex w-full flex-col gap-5 rounded-xl bg-white sm:w-full sm:bg-white md:w-56 md:bg-transparent lg:w-56 lg:bg-transparent xl:w-56 xl:bg-transparent 2xl:w-56 2xl:bg-transparent">
+                    <div class="inline-flex w-full items-start justify-start gap-4 rounded-2xl bg-white dark:bg-neutral-700 p-4 text-primary-500 dark:text-white text-xs">
+                      {profile?.websiteUrl && (
+                        <button
+                          class="h-6 w-6"
+                          onClick={() =>
+                            window.open(profile?.websiteUrl, 'blank')
+                          }
+                        >
+                          <FontAwesomeIcon icon={faGlobe} />
+                        </button>
+                      )}
+                      {profile?.twitterUrl && (
+                        <button
+                          class="h-6 w-6"
+                          onClick={() =>
+                            window.open(profile?.twitterUrl, 'blank')
+                          }
+                        >
+                          <FontAwesomeIcon icon={faTwitter} />
+                        </button>
+                      )}
+                      {profile?.mediumUrl && (
+                        <button
+                          class="h-6 w-6"
+                          onClick={() =>
+                            window.open(profile?.mediumUrl, 'blank')
+                          }
+                        >
+                          <FontAwesomeIcon icon={faMedium} />
+                        </button>
+                      )}
+                      {profile?.telegramUrl && (
+                        <button
+                          class="h-6 w-6"
+                          onClick={() =>
+                            window.open(profile?.telegramUrl, 'blank')
+                          }
+                        >
+                          <FontAwesomeIcon icon={faTelegram} />
+                        </button>
+                      )}
+                      {profile?.discordUrl && (
+                        <button
+                          class="h-6 w-6"
+                          onClick={() =>
+                            window.open(profile?.discordUrl, 'blank')
+                          }
+                        >
+                          <FontAwesomeIcon icon={faDiscord} />
+                        </button>
+                      )}
+                      {profile?.instagramUrl && (
+                        <button
+                          class="h-6 w-6"
+                          onClick={() =>
+                            window.open(profile?.instagramUrl, 'blank')
+                          }
+                        >
+                          <FontAwesomeIcon icon={faInstagram} />
+                        </button>
+                      )}
+                    </div>
                     <div className="flex w-full divide-x divide-gray-200 rounded-xl bg-white p-5 text-gray-900 dark:divide-zinc-600 dark:bg-zinc-700 dark:text-white">
                       <div className="w-full text-center">
-                        <h2>2</h2>
+                        <h2>
+                          {profile?.followersCount ? profile.followersCount : 0}
+                        </h2>
                         <p>Followers</p>
                       </div>
                       <div className="w-full text-center">
-                        <h2>129</h2>
+                        <h2>
+                          {profile?.followingCount ? profile.followingCount : 0}
+                        </h2>
                         <p>Following</p>
                       </div>
                     </div>
@@ -832,7 +902,7 @@ const Collection = ({ userAccount }) => {
               )}
               {collections.length == 0 && !isLoading && (
                 <div
-                  className={`w-full text-center font-semibold text-black ${
+                  className={`w-full text-center font-semibold text-gray-900 dark:text-white ${
                     address === userAccount
                       ? 'sm:col-span-6 md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9'
                       : 'col-span-12'

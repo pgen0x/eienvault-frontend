@@ -124,7 +124,7 @@ export default function Home() {
       }
 
       const responseData = await res.json();
-      setDataActivities(responseData);
+      setDataActivities(responseData.nfts);
     } catch (error) {
       setErrorActivities(true);
       console.error('Fetch failed:', error);
@@ -344,7 +344,7 @@ export default function Home() {
                   Eien vault is a marketplace for nft, a one of a kind digital
                   asset that you can truly own.
                 </p>
-                <ButtonPrimary className="!w-fit mt-5">
+                <ButtonPrimary className="mt-5 !w-fit">
                   Discover more
                 </ButtonPrimary>
               </div>
@@ -476,10 +476,7 @@ export default function Home() {
                       className="w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-500 dark:focus:ring-gray-500"
                       placeholder="Your email address"
                     />
-                    <ButtonPrimary
-                      type="submit"
-                      className="!w-fit"
-                    >
+                    <ButtonPrimary type="submit" className="!w-fit">
                       Subscribe
                     </ButtonPrimary>
                   </form>
@@ -550,9 +547,7 @@ export default function Home() {
                     collection of NFTs created by talented artists from around
                     the globe.
                   </p>
-                  <ButtonPrimary
-                    onClick={() => router.push('/nft')}
-                  >
+                  <ButtonPrimary onClick={() => router.push('/nft')}>
                     Learn more
                   </ButtonPrimary>
                 </div>
@@ -573,9 +568,7 @@ export default function Home() {
                   auto-liquidations! 0% borrower fees!
                 </p>
                 <div className="my-5 flex flex-col gap-3 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
-                  <ButtonPrimary className="!w-fit">
-                    Get loan now
-                  </ButtonPrimary>
+                  <ButtonPrimary className="!w-fit">Get loan now</ButtonPrimary>
                   <ButtonTertiary className="!w-fit">
                     I want to lend
                   </ButtonTertiary>

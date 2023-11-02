@@ -101,7 +101,7 @@ export const SlideshowActivities = ({ dataActivities, refreshData }) => {
         url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/items?limit=10`,
       })
       .then((response) => {
-        setNfts(response.data);
+        setNfts(response.data.nfts);
       })
       .catch((error) => {
         toast.error(JSON.stringify(error));

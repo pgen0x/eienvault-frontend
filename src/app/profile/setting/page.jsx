@@ -19,6 +19,9 @@ import Image from 'next/image';
 import ModalUploadProfileLogo from '@/components/modal/uploadProfileLogo';
 import ButtonPrimary from '@/components/button/buttonPrimary';
 import ButtonTertiary from '@/components/button/buttonTertiary';
+import ModalVerifyUser from '@/components/modal/verifyUser';
+import { useForm } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 
 const ProfileSetting = () => {
   const { token } = useAuth();
@@ -125,14 +128,25 @@ const Profile = ({
 }) => {
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
   const [IsOpenModalLogo, setIsOpenModalLogo] = useState(false);
-  const handleChangeProfile = (event, attribute) => {
-    setProfile((oldProfile) => {
-      oldProfile[attribute] = event.target.value;
-      return oldProfile;
-    });
-  };
+  const [IsOpenModalVerifyUser, setIsOpenModalVerifyUser] = useState(false);
 
-  const saveProfile = async () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setValue,
+    getValues,
+    reset,
+  } = useForm();
+
+  useEffect(() => {
+    for(const data in profile){
+      setValue(data, profile[data]);
+    }
+  }, [profile])
+
+  const onSave = async (data) => {
     await axios
       .request({
         method: 'put',
@@ -142,7 +156,7 @@ const Profile = ({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        data: profile,
+        data: data,
       })
       .then((response) => {
         if (response.data.hasOwnProperty('success')) {
@@ -179,6 +193,40 @@ const Profile = ({
 
   const updateLogoImage = (newImageURL) => {
     setLogoImage(newImageURL);
+  };
+
+  const handleSubmitVerifyUser = () => {
+    setIsOpenModalVerifyUser(true);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/chain/getall`,
+          {
+            cache: 'force-cache',
+          },
+        );
+
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const dataChain = await res.json();
+        setChains(dataChain);
+        // Continue with your code
+      } catch (error) {
+        console.error('Fetch failed:', error);
+        // Handle the error gracefully, e.g., show an error message to the user
+      }
+    };
+
+    fetchData();
+  }, [IsOpenModalVerifyUser]);
+
+  const closeModalVerifyUser = () => {
+    setIsOpenModalVerifyUser(false);
   };
 
   return (
@@ -219,117 +267,181 @@ const Profile = ({
         </div>
       </div>
       <div className="my-5 grid grid-cols-12 gap-5">
-        <div className="col-span-12 flex flex-col gap-4 dark:text-white sm:col-span-6 md:col-span-8 lg:col-span-8 xl:col-span-8 2xl:col-span-8">
-          {/* <label>
-            Display name
-            <input type="text" value={profile?.displayName} onChange={(event) => handleChangeProfile(event, 'displayName')} className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500" placeholder="Search any specific nft of yours" />
-          </label> */}
-          <label>
-            Username
-            <input
-              type="text"
-              defaultValue={profile?.username}
-              onChange={(event) => handleChangeProfile(event, 'username')}
-              className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
-              placeholder="Enter your username"
-            />
-          </label>
-          <label>
-            Email
-            <input
-              type="text"
-              defaultValue={profile?.email}
-              onChange={(event) => handleChangeProfile(event, 'email')}
-              className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
-              placeholder="you@domain.com"
-            />
-          </label>
-          <label>
-            Your Bio
-            <input
-              type="text"
-              defaultValue={profile?.bio}
-              onChange={(event) => handleChangeProfile(event, 'bio')}
-              className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
-              placeholder="Tell about yourself"
-            />
-          </label>
-          <div>
-            <h3 className="text-lg font-semibold">Social Links</h3>
-            <p>Add your existing social links to strenghten your reputation</p>
-          </div>
-          <label>
-            Your Website
-            <input
-              type="text"
-              defaultValue={profile?.websiteUrl}
-              onChange={(event) => handleChangeProfile(event, 'websiteUrl')}
-              className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
-              placeholder="https://domain.com"
-            />
-          </label>
-          <label>
-            Your Twitter
-            <input
-              type="text"
-              defaultValue={profile?.twitterUrl}
-              onChange={(event) => handleChangeProfile(event, 'twitterUrl')}
-              className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
-              placeholder="https://twitter.com/username"
-            />
-          </label>
-          <label>
-            Your Medium
-            <input
-              type="text"
-              defaultValue={profile?.mediumUrl}
-              onChange={(event) => handleChangeProfile(event, 'mediumUrl')}
-              className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
-              placeholder="https://medium.com/@username"
-            />
-          </label>
-          <label>
-            Your Telegram
-            <input
-              type="text"
-              defaultValue={profile?.telegramUrl}
-              onChange={(event) => handleChangeProfile(event, 'telegramUrl')}
-              className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
-              placeholder="https://t.me/username"
-            />
-          </label>
-          <label>
-            Your Discord
-            <input
-              type="text"
-              defaultValue={profile?.discordUrl}
-              onChange={(event) => handleChangeProfile(event, 'discordUrl')}
-              className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
-              placeholder="https://discordapp.com/users/username"
-            />
-          </label>
-          <label>
-            Your Instagram
-            <input
-              type="text"
-              defaultValue={profile?.instagramUrl}
-              onChange={(event) => handleChangeProfile(event, 'instagramUrl')}
-              className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
-              placeholder="https://instagram.com/username"
-            />
-          </label>
-          <ButtonPrimary onClick={() => saveProfile()}>
-            Save Setting
-          </ButtonPrimary>
+        <div className="col-span-12 dark:text-white sm:col-span-6 md:col-span-8 lg:col-span-8 xl:col-span-8 2xl:col-span-8">
+          <form className="flex flex-col gap-4">
+            <div>
+              <label>
+                Username
+                <input
+                  type="text"
+                  {...register('username', {
+                    required: 'Username wajib diisi',
+                  })}
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  placeholder="Enter your username"
+                />
+              </label>
+              <div className="mt-1 text-sm text-primary-500">
+                <ErrorMessage errors={errors} name="username" />
+              </div>
+            </div>
+            <div>
+              <label>
+                Email
+                <input
+                  type="text"
+                  {...register('email', {
+                    required: false,
+                    pattern: {
+                      value: /\S+@\S+\.\S+/,
+                      message: 'Entered value does not match email format',
+                    },
+                  })}
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  placeholder="you@domain.com"
+                />
+              </label>
+              <div className="mt-1 text-sm text-primary-500">
+                <ErrorMessage errors={errors} name="email" />
+              </div>
+            </div>
+            <div>
+              <label>
+                Your Bio
+                <input
+                  type="text"
+                  {...register('bio', {
+                    required: false,
+                  })}
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  placeholder="Tell about yourself"
+                />
+              </label>
+              <div className="mt-1 text-sm text-primary-500">
+                <ErrorMessage errors={errors} name="bio" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold">Social Links</h3>
+              <p>
+                Add your existing social links to strenghten your reputation
+              </p>
+            </div>
+            <div>
+              <label>
+                Your Website
+                <input
+                  type="text"
+                  {...register('websiteUrl', {
+                    required: false,
+                    pattern: {
+                      value: /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi,
+                      message: 'Entered value does not match url format',
+                    },
+                  })}
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  placeholder="https://domain.com"
+                />
+              </label>
+              <div className="mt-1 text-sm text-primary-500">
+                <ErrorMessage errors={errors} name="websiteUrl" />
+              </div>
+            </div>
+            <div>
+              <label>
+                Your Twitter
+                <input
+                  type="text"
+                  {...register('twitterUrl', {
+                    required: false,
+                  })}
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  placeholder="https://twitter.com/username"
+                />
+              </label>
+              <div className="mt-1 text-sm text-primary-500">
+                <ErrorMessage errors={errors} name="twitterUrl" />
+              </div>
+            </div>
+            <div>
+              <label>
+                Your Medium
+                <input
+                  type="text"
+                  {...register('mediumUrl', {
+                    required: false,
+                  })}
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  placeholder="https://medium.com/@username"
+                />
+              </label>
+              <div className="mt-1 text-sm text-primary-500">
+                <ErrorMessage errors={errors} name="mediumUrl" />
+              </div>
+            </div>
+            <div>
+              <label>
+                Your Telegram
+                <input
+                  type="text"
+                  {...register('telegramUrl', {
+                    required: false,
+                  })}
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  placeholder="https://t.me/username"
+                />
+              </label>
+              <div className="mt-1 text-sm text-primary-500">
+                <ErrorMessage errors={errors} name="telegramUrl" />
+              </div>
+            </div>
+            <div>
+              <label>
+                Your Discord
+                <input
+                  type="text"
+                  {...register('discordUrl', {
+                    required: false,
+                  })}
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  placeholder="https://discordapp.com/users/username"
+                />
+              </label>
+              <div className="mt-1 text-sm text-primary-500">
+                <ErrorMessage errors={errors} name="discordUrl" />
+              </div>
+            </div>
+            <div>
+              <label>
+                Your Instagram
+                <input
+                  type="text"
+                  {...register('instagramUrl', {
+                    required: false,
+                  })}
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  placeholder="https://instagram.com/username"
+                />
+              </label>
+              <div className="mt-1 text-sm text-primary-500">
+                <ErrorMessage errors={errors} name="instagramUrl" />
+              </div>
+            </div>
+            <ButtonPrimary onClick={handleSubmit(onSave)}>
+              Save Setting
+            </ButtonPrimary>
+          </form>
         </div>
-        <div className="sticky top-24 col-span-12 flex h-fit flex-col gap-4 rounded-xl bg-white p-5 dark:bg-zinc-700 dark:text-white sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4">
-          <img className="rounded-xl" src="https://fakeimg.pl/290x130" />
+        <div className="sticky top-28 col-span-12 flex h-fit flex-col gap-4 rounded-xl bg-white p-5 dark:bg-zinc-700 dark:text-white sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4">
+          <img className="rounded-xl" src="/verify.svg" />
           <h3 className="text-lg font-bold">Verify your account</h3>
           <p>
             Proceed with verification process to get more visibility and gain
             trust on Rarible
           </p>
-          <ButtonPrimary>Get verified</ButtonPrimary>
+          <ButtonPrimary onClick={() => handleSubmitVerifyUser()}>
+            Get verified
+          </ButtonPrimary>
         </div>
       </div>
       <ModalUploadProfileCover
@@ -341,6 +453,12 @@ const Profile = ({
         isOpenModal={IsOpenModalLogo}
         onModalClose={closeModalLogo}
         updateLogoImage={updateLogoImage}
+      />
+      <ModalVerifyUser
+        isOpenModal={IsOpenModalVerifyUser}
+        onClose={closeModalVerifyUser}
+        onModalClose={closeModalVerifyUser}
+        profile={profile}
       />
     </>
   );

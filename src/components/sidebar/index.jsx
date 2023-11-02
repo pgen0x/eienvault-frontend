@@ -156,12 +156,12 @@ const Sidebar = () => {
         >
           <div className="flex h-full flex-col justify-between gap-4">
             <div className="flex flex-col gap-8">
-              <div className="mx-8 inline-flex items-center justify-between gap-2.5 pt-8">
-                <div className="flex flex-row items-center justify-center gap-4">
-                  <button className="inline-flex w-full justify-center rounded-full bg-primary-500 px-3 py-3 text-sm font-semibold">
+              <div className="mx-8 flex items-center justify-between gap-2.5 pt-8">
+                <div className="w-full flex flex-row items-center justify-center gap-4">
+                  <button className="flex w-fit justify-center rounded-full bg-primary-500 px-3 py-3 text-sm font-semibold">
                     <FontAwesomeIcon icon={faUserAlt} />
                   </button>
-                  <div className="inline-flex flex-col items-start justify-start">
+                  <div className="w-full flex flex-col items-start justify-start">
                     <div className="truncate text-center text-xl font-medium leading-loose text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300">
                       {(isConnected && dataUser.username) ||
                         truncateAddress(address)}

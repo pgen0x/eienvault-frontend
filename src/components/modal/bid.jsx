@@ -241,7 +241,7 @@ export default function ModalBid({
                           {auction?.name}
                         </div>
                       </div>
-                      <div className="flex flex-col gap-2 rounded-lg bg-neutral-700 p-3">
+                      <div className="flex flex-col gap-2 rounded-lg bg-neutral-50 dark:bg-neutral-700 p-3">
                         <div className="flex justify-between">
                           <div className="flex items-center gap-2">
                             <div className="rounded-lg  p-1 text-white">

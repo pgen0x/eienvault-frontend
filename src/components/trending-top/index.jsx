@@ -20,6 +20,7 @@ import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
+import ButtonPrimary from '../button/buttonPrimary';
 
 const servers = [
   'All Mainnet',
@@ -536,12 +537,11 @@ export const TrendingTopMobile = ({ dataCollections }) => {
             </div>
           </div>
         ))}
-        <button
+        <ButtonPrimary
           onClick={() => router.push('/collection')}
-          className="rounded-full bg-primary-500 py-2 text-white hover:bg-primary-300"
         >
           View more collections
-        </button>
+        </ButtonPrimary>
       </div>
     </>
   );

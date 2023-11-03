@@ -99,11 +99,11 @@ export default function Navbar() {
               <FontAwesomeIcon icon={faXmark} />
             </button>
             <nav className="flex w-full max-w-[418px] flex-grow flex-col justify-start px-10 pb-4 text-2xl transition-all delay-1000 duration-500 md:pb-0">
-              <span className="mt-2 py-2 font-semibold text-gray-900 hover:text-neutral-500">
+              <span className="mt-2 py-2 font-semibold dark:text-white text-gray-900 hover:text-neutral-500">
                 Home
               </span>
               <div className="group mt-2">
-                <span className="flex justify-between py-2 font-semibold text-gray-900 hover:text-neutral-500">
+                <span className="flex justify-between py-2 font-semibold dark:text-whitetext-gray-900 hover:text-neutral-500">
                   <span>Discover</span>{' '}
                   <FontAwesomeIcon
                     className="hidden group-hover:block"
@@ -116,19 +116,19 @@ export default function Navbar() {
                 </span>
                 <ul className="mt-2 hidden flex-col gap-4 px-4 group-hover:flex">
                   <li
-                    className="font-semibold  text-gray-900 hover:text-neutral-500"
+                    className="font-semibold dark:text-white text-gray-900 hover:text-neutral-500"
                     onClick={() => handlePushSidebar('/collection')}
                   >
                     <span>Collections</span>
                   </li>
                   <li
-                    className="font-semibold  text-gray-900 hover:text-neutral-500"
+                    className="font-semibold dark:text-white text-gray-900 hover:text-neutral-500"
                     onClick={() => handlePushSidebar('/nft')}
                   >
                     <span>NFTs</span>
                   </li>
                   <li
-                    className="font-semibold  text-gray-900 hover:text-neutral-500"
+                    className="font-semibold dark:text-white text-gray-900 hover:text-neutral-500"
                     onClick={() => handlePushSidebar('/user')}
                   >
                     <span>Users</span>
@@ -163,9 +163,7 @@ export default function Navbar() {
                 <>
                   {(isConnect || isConnected) && chain?.id !== 666888 && (
                     <div className="mt-2 flex flex-row items-center justify-between border-t-2 py-2 text-xl font-semibold text-gray-900 hover:text-neutral-500">
-                      <span className="text-md text-xl">
-                        Wrong network!
-                      </span>
+                      <span className="text-md text-xl">Wrong network!</span>
                       <span
                         className="text-md cursor-pointer px-3 py-2"
                         onClick={() => switchNetwork?.(666888)}
@@ -176,15 +174,18 @@ export default function Navbar() {
                   )}
                   {isConnect || isConnected ? (
                     <span
-                      className="mt-2 py-2 font-semibold text-gray-900 hover:text-neutral-500"
-                      onClick={toggleSidebar}
+                      className="mt-2 py-2 font-semibold dark:text-white text-gray-900 hover:text-neutral-500"
+                      onClick={() => {
+                        toggleSidebar();
+                        setOpenMenu(false);
+                      }}
                     >
                       Account
                     </span>
                   ) : (
                     <span
                       onClick={() => open()}
-                      className="mt-2 py-2 font-semibold text-gray-900 hover:text-neutral-500"
+                      className="mt-2 py-2 font-semibold dark:text-white text-gray-900 hover:text-neutral-500"
                     >
                       <FontAwesomeIcon icon={faWallet} /> Connect your wallet
                     </span>

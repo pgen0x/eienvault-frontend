@@ -8,6 +8,7 @@ import { useAccount, useWalletClient } from 'wagmi';
 import { useAuth } from '@/hooks/AuthContext';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import Image from 'next/image';
+import Wave from '@/assets/icon/wave';
 
 const Auction = () => {
   const { token } = useAuth();
@@ -108,8 +109,11 @@ const Auction = () => {
 
   return (
     <>
-      <section className="relative -top-24 flex h-auto w-full items-center justify-center bg-[url('/images/hero-section-background.png')] bg-cover bg-bottom md:h-[600px]">
-        <div className="absolute bottom-28 right-[12%] h-[532px] w-[532px] translate-y-1/3 items-center justify-center rounded-full bg-red-400" />
+      <section className="relative -top-24 flex h-auto w-full items-center justify-center bg-gradient-to-t from-[#FFF1D4] via-[#FFF1D4] to-[#FFCFD1] bg-cover bg-bottom dark:from-[#C96E6E] dark:via-[#A68647] dark:to-black/40 md:h-[600px]">
+        <div className="absolute bottom-0 w-full text-center">
+          <Wave className="fill-primary-500 dark:fill-primary-50" />
+        </div>
+        <div className="absolute bottom-28 h-[532px] w-[532px] translate-y-1/3 items-center justify-center rounded-full bg-red-400 dark:bg-semantic-orange-400 lg:right-[12%]" />
         <div className="absolute right-[2vw] top-32">
           <Image
             width={398}

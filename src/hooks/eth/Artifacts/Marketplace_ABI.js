@@ -1,20 +1,46 @@
 export const marketplaceABI = {
-  address: '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc',
+  address: '0xab90D9c1CbE9AFFaDCEbbDe3652A9871cb61C68c',
   abi: [
     {
-      inputs: [
-        {
-          internalType: 'uint256',
-          name: '_listingPrice',
-          type: 'uint256',
-        },
-      ],
+      inputs: [],
       stateMutability: 'nonpayable',
       type: 'constructor',
     },
     {
       inputs: [],
+      name: 'AccessControlBadConfirmation',
+      type: 'error',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'address',
+          name: 'account',
+          type: 'address',
+        },
+        {
+          internalType: 'bytes32',
+          name: 'neededRole',
+          type: 'bytes32',
+        },
+      ],
+      name: 'AccessControlUnauthorizedAccount',
+      type: 'error',
+    },
+    {
+      inputs: [],
       name: 'Address0',
+      type: 'error',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'address',
+          name: 'target',
+          type: 'address',
+        },
+      ],
+      name: 'AddressEmptyCode',
       type: 'error',
     },
     {
@@ -33,13 +59,34 @@ export const marketplaceABI = {
       type: 'error',
     },
     {
+      inputs: [
+        {
+          internalType: 'address',
+          name: 'implementation',
+          type: 'address',
+        },
+      ],
+      name: 'ERC1967InvalidImplementation',
+      type: 'error',
+    },
+    {
       inputs: [],
-      name: 'EndBeforeRelease',
+      name: 'ERC1967NonPayable',
       type: 'error',
     },
     {
       inputs: [],
       name: 'Ended',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'FailedInnerCall',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'InvalidInitialization',
       type: 'error',
     },
     {
@@ -50,6 +97,11 @@ export const marketplaceABI = {
     {
       inputs: [],
       name: 'NotFound',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'NotInitializing',
       type: 'error',
     },
     {
@@ -76,6 +128,35 @@ export const marketplaceABI = {
       inputs: [],
       name: 'TransferFailed',
       type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'UUPSUnauthorizedCallContext',
+      type: 'error',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'bytes32',
+          name: 'slot',
+          type: 'bytes32',
+        },
+      ],
+      name: 'UUPSUnsupportedProxiableUUID',
+      type: 'error',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: false,
+          internalType: 'uint64',
+          name: 'version',
+          type: 'uint64',
+        },
+      ],
+      name: 'Initialized',
+      type: 'event',
     },
     {
       anonymous: false,
@@ -333,19 +414,26 @@ export const marketplaceABI = {
       anonymous: false,
       inputs: [
         {
-          indexed: true,
+          indexed: false,
           internalType: 'address',
-          name: 'previousOwner',
-          type: 'address',
-        },
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'newOwner',
+          name: 'account',
           type: 'address',
         },
       ],
-      name: 'OwnershipTransferred',
+      name: 'Paused',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: false,
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
+        },
+      ],
+      name: 'ReceivedFunds',
       type: 'event',
     },
     {
@@ -353,27 +441,21 @@ export const marketplaceABI = {
       inputs: [
         {
           indexed: true,
-          internalType: 'address',
-          name: 'Collection',
-          type: 'address',
-        },
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'Seller',
-          type: 'address',
+          internalType: 'uint256',
+          name: 'ItemId',
+          type: 'uint256',
         },
         {
           indexed: false,
           internalType: 'uint256',
-          name: 'TokenId',
+          name: 'Amount',
           type: 'uint256',
         },
         {
-          indexed: true,
-          internalType: 'uint256',
-          name: 'ItemId',
-          type: 'uint256',
+          indexed: false,
+          internalType: 'address',
+          name: 'PaidWith',
+          type: 'address',
         },
         {
           indexed: false,
@@ -384,6 +466,204 @@ export const marketplaceABI = {
       ],
       name: 'RemoveOffer',
       type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'role',
+          type: 'bytes32',
+        },
+        {
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'previousAdminRole',
+          type: 'bytes32',
+        },
+        {
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'newAdminRole',
+          type: 'bytes32',
+        },
+      ],
+      name: 'RoleAdminChanged',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'role',
+          type: 'bytes32',
+        },
+        {
+          indexed: true,
+          internalType: 'address',
+          name: 'account',
+          type: 'address',
+        },
+        {
+          indexed: true,
+          internalType: 'address',
+          name: 'sender',
+          type: 'address',
+        },
+      ],
+      name: 'RoleGranted',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: 'bytes32',
+          name: 'role',
+          type: 'bytes32',
+        },
+        {
+          indexed: true,
+          internalType: 'address',
+          name: 'account',
+          type: 'address',
+        },
+        {
+          indexed: true,
+          internalType: 'address',
+          name: 'sender',
+          type: 'address',
+        },
+      ],
+      name: 'RoleRevoked',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: false,
+          internalType: 'address',
+          name: 'account',
+          type: 'address',
+        },
+      ],
+      name: 'Unpaused',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: 'address',
+          name: 'implementation',
+          type: 'address',
+        },
+      ],
+      name: 'Upgraded',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: 'address',
+          name: 'newAddress',
+          type: 'address',
+        },
+      ],
+      name: 'VaultUpdated',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: false,
+          internalType: 'address',
+          name: 'token',
+          type: 'address',
+        },
+        {
+          indexed: false,
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
+        },
+      ],
+      name: 'rescue',
+      type: 'event',
+    },
+    {
+      inputs: [],
+      name: 'DEFAULT_ADMIN_ROLE',
+      outputs: [
+        {
+          internalType: 'bytes32',
+          name: '',
+          type: 'bytes32',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [],
+      name: 'PAUSER_ROLE',
+      outputs: [
+        {
+          internalType: 'bytes32',
+          name: '',
+          type: 'bytes32',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [],
+      name: 'UPGRADER_ROLE',
+      outputs: [
+        {
+          internalType: 'bytes32',
+          name: '',
+          type: 'bytes32',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [],
+      name: 'UPGRADE_INTERFACE_VERSION',
+      outputs: [
+        {
+          internalType: 'string',
+          name: '',
+          type: 'string',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [],
+      name: 'Vault',
+      outputs: [
+        {
+          internalType: 'contract IVault',
+          name: '',
+          type: 'address',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
     },
     {
       inputs: [
@@ -468,19 +748,6 @@ export const marketplaceABI = {
     },
     {
       inputs: [],
-      name: 'getApprovedAddress',
-      outputs: [
-        {
-          internalType: 'address',
-          name: '',
-          type: 'address',
-        },
-      ],
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      inputs: [],
       name: 'getItems',
       outputs: [
         {
@@ -536,7 +803,7 @@ export const marketplaceABI = {
               type: 'uint256',
             },
           ],
-          internalType: 'struct Marketplace.MarketItem[]',
+          internalType: 'struct IVault.MarketItem[]',
           name: '',
           type: 'tuple[]',
         },
@@ -566,8 +833,13 @@ export const marketplaceABI = {
               name: 'user',
               type: 'address',
             },
+            {
+              internalType: 'address',
+              name: 'paidWith',
+              type: 'address',
+            },
           ],
-          internalType: 'struct Marketplace.Auction[]',
+          internalType: 'struct IVault.Auction[]',
           name: '',
           type: 'tuple[]',
         },
@@ -578,65 +850,85 @@ export const marketplaceABI = {
     {
       inputs: [
         {
-          internalType: 'uint256',
-          name: '',
-          type: 'uint256',
+          internalType: 'bytes32',
+          name: 'role',
+          type: 'bytes32',
         },
       ],
-      name: 'items',
+      name: 'getRoleAdmin',
       outputs: [
         {
-          internalType: 'bool',
-          name: 'auctioned',
-          type: 'bool',
-        },
-        {
-          internalType: 'address payable',
-          name: 'seller',
-          type: 'address',
-        },
-        {
-          internalType: 'address',
-          name: 'collection',
-          type: 'address',
-        },
-        {
-          internalType: 'address',
-          name: 'paidWith',
-          type: 'address',
-        },
-        {
-          internalType: 'uint256',
-          name: 'releaseDate',
-          type: 'uint256',
-        },
-        {
-          internalType: 'uint256',
-          name: 'endDate',
-          type: 'uint256',
-        },
-        {
-          internalType: 'uint256',
-          name: 'price',
-          type: 'uint256',
-        },
-        {
-          internalType: 'uint256',
-          name: 'listingPrice',
-          type: 'uint256',
-        },
-        {
-          internalType: 'uint256',
-          name: 'tokenId',
-          type: 'uint256',
-        },
-        {
-          internalType: 'uint256',
-          name: 'marketId',
-          type: 'uint256',
+          internalType: 'bytes32',
+          name: '',
+          type: 'bytes32',
         },
       ],
       stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'bytes32',
+          name: 'role',
+          type: 'bytes32',
+        },
+        {
+          internalType: 'address',
+          name: 'account',
+          type: 'address',
+        },
+      ],
+      name: 'grantRole',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'bytes32',
+          name: 'role',
+          type: 'bytes32',
+        },
+        {
+          internalType: 'address',
+          name: 'account',
+          type: 'address',
+        },
+      ],
+      name: 'hasRole',
+      outputs: [
+        {
+          internalType: 'bool',
+          name: '',
+          type: 'bool',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'uint256',
+          name: '_listingPrice',
+          type: 'uint256',
+        },
+        {
+          internalType: 'uint256',
+          name: '_commisonBP',
+          type: 'uint256',
+        },
+        {
+          internalType: 'address',
+          name: '_vault',
+          type: 'address',
+        },
+      ],
+      name: 'initialize',
+      outputs: [],
+      stateMutability: 'nonpayable',
       type: 'function',
     },
     {
@@ -751,12 +1043,32 @@ export const marketplaceABI = {
     },
     {
       inputs: [],
-      name: 'owner',
+      name: 'pause',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
+      inputs: [],
+      name: 'paused',
       outputs: [
         {
-          internalType: 'address',
+          internalType: 'bool',
           name: '',
-          type: 'address',
+          type: 'bool',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [],
+      name: 'proxiableUUID',
+      outputs: [
+        {
+          internalType: 'bytes32',
+          name: '',
+          type: 'bytes32',
         },
       ],
       stateMutability: 'view',
@@ -776,8 +1088,107 @@ export const marketplaceABI = {
       type: 'function',
     },
     {
+      inputs: [
+        {
+          internalType: 'bytes32',
+          name: 'role',
+          type: 'bytes32',
+        },
+        {
+          internalType: 'address',
+          name: 'callerConfirmation',
+          type: 'address',
+        },
+      ],
+      name: 'renounceRole',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'address',
+          name: '_contract_address',
+          type: 'address',
+        },
+      ],
+      name: 'rescue_erc20',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'address',
+          name: '_contract_address',
+          type: 'address',
+        },
+        {
+          internalType: 'uint256',
+          name: '_tokenID',
+          type: 'uint256',
+        },
+      ],
+      name: 'rescue_erc721',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'bytes32',
+          name: 'role',
+          type: 'bytes32',
+        },
+        {
+          internalType: 'address',
+          name: 'account',
+          type: 'address',
+        },
+      ],
+      name: 'revokeRole',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
       inputs: [],
-      name: 'renounceOwnership',
+      name: 'saleCommission',
+      outputs: [
+        {
+          internalType: 'uint256',
+          name: '',
+          type: 'uint256',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'bytes4',
+          name: 'interfaceId',
+          type: 'bytes4',
+        },
+      ],
+      name: 'supportsInterface',
+      outputs: [
+        {
+          internalType: 'bool',
+          name: '',
+          type: 'bool',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [],
+      name: 'unpause',
       outputs: [],
       stateMutability: 'nonpayable',
       type: 'function',
@@ -785,26 +1196,19 @@ export const marketplaceABI = {
     {
       inputs: [
         {
-          internalType: 'address',
-          name: 'newOwner',
-          type: 'address',
+          internalType: 'uint256',
+          name: '_newCommissionBP',
+          type: 'uint256',
         },
       ],
-      name: 'transferOwnership',
-      outputs: [],
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      inputs: [
+      name: 'updateCommission',
+      outputs: [
         {
-          internalType: 'address',
-          name: '_newApprovedAddress',
-          type: 'address',
+          internalType: 'bool',
+          name: '',
+          type: 'bool',
         },
       ],
-      name: 'updateApprovedAddress',
-      outputs: [],
       stateMutability: 'nonpayable',
       type: 'function',
     },
@@ -831,14 +1235,36 @@ export const marketplaceABI = {
       inputs: [
         {
           internalType: 'address',
-          name: '_wallet',
+          name: '_newVault',
           type: 'address',
         },
       ],
-      name: 'updateWallet',
+      name: 'updateVault',
       outputs: [],
       stateMutability: 'nonpayable',
       type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'address',
+          name: 'newImplementation',
+          type: 'address',
+        },
+        {
+          internalType: 'bytes',
+          name: 'data',
+          type: 'bytes',
+        },
+      ],
+      name: 'upgradeToAndCall',
+      outputs: [],
+      stateMutability: 'payable',
+      type: 'function',
+    },
+    {
+      stateMutability: 'payable',
+      type: 'receive',
     },
   ],
 };

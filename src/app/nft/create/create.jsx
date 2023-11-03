@@ -544,16 +544,9 @@ export default function Create({ chains }) {
         (field) => field.trait_type !== '' && field.value !== '',
       );
       const payload = {
-        chainid: chain?.id,
-        ContractType: selectedOptionEdition ? 'ERC721' : 'ERC1155',
         imageUri: imageUri,
         name: name,
         description: description,
-        isFixedPrice: selectedOptionMarket === 'fixed' ? false : true,
-        price: parseEther(price),
-        listingExpiration: moment(customValueDate),
-        startDate: moment(),
-        endDate: moment(customValueDate),
         collectionAddress: selectedOptionCollection,
         tokenId: tokenId,
         ipfsHash: ipfsHash,

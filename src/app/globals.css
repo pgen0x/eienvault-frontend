@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-white text-neutral-50 antialiased dark:bg-gray-900 dark:text-neutral-200;
+    @apply bg-white text-neutral-50 antialiased transition-colors duration-1000 dark:bg-gray-900 dark:text-neutral-200;
   }
   .swiper {
     @apply flex flex-col;
@@ -47,13 +47,19 @@
   }
 }
 
-.homepage .section-discover{
+.homepage .section-discover {
   /* background: url('/images/waveline-white.svg'), linear-gradient(90deg, #FFDFA9 0%, rgba(255, 100, 103, 0.2) 100%, rgba(255, 100, 103, 0.2) 100%, #F9D8D9 100%); */
-  background: linear-gradient(90deg, #FFDFA9 0%, rgba(255, 100, 103, 0.2) 100%, rgba(255, 100, 103, 0.2) 100%, #F9D8D9 100%);
+  background: linear-gradient(
+    90deg,
+    #ffdfa9 0%,
+    rgba(255, 100, 103, 0.2) 100%,
+    rgba(255, 100, 103, 0.2) 100%,
+    #f9d8d9 100%
+  );
   background-repeat: no-repeat;
 }
 
-.swiper-pagination .swiper-pagination-bullet-active{
+.swiper-pagination .swiper-pagination-bullet-active {
   width: 30px;
   border-radius: 10px;
   background-color: #e22644;
@@ -61,15 +67,15 @@
 
 @keyframes graphicx {
   50% {
-	animation-timing-function: cubic-bezier(0.3, 0.27, 0.07, 1.64);
-	transform: translateX(150px);
+    animation-timing-function: cubic-bezier(0.3, 0.27, 0.07, 1.64);
+    transform: translateX(150px);
   }
 }
 
 @keyframes graphicy {
   50% {
-	animation-timing-function: cubic-bezier(0.02, 0.01, 0.21, 1);
-	transform: translateY(-50px);
+    animation-timing-function: cubic-bezier(0.02, 0.01, 0.21, 1);
+    transform: translateY(-50px);
   }
 }
 
@@ -81,14 +87,14 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 
-.awan-3{
+.awan-3 {
   animation: graphicx 10s infinite cubic-bezier(0.3, 0.27, 0.07, 1.04);
 }
 
-.awan-4{
+.awan-4 {
   animation: graphicy 10s infinite cubic-bezier(0.3, 0.27, 0.07, 1.04);
 }

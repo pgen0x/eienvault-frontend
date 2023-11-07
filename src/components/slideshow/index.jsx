@@ -23,6 +23,7 @@ import { useRouter } from 'next-nprogress-bar';
 import { ImageWithFallback } from '../imagewithfallback';
 import moment from 'moment';
 import ButtonPrimary from '../button/buttonPrimary';
+import { NftItemDetailSkeleton } from '../nft/itemDetail';
 
 const images = [1, 2, 3, 4];
 
@@ -766,17 +767,16 @@ export const SlideshowMobile = ({
           [...Array(1)].map((image, index) => (
             <SwiperSlide key={index}>
               <div className="flex flex-col items-center justify-center gap-4 py-4 lg:flex-row lg:items-start lg:px-10 lg:pt-16">
-                <div className="flex flex-col justify-start gap-3">
+                <div className="flex flex-col justify-start gap-3 ">
                   <div className="mt-[6rem] flex flex-row items-center self-start rounded-lg bg-[#fff1d4] px-2 py-2">
                     <span className="mr-2 h-1 w-1 animate-ping rounded-full bg-red-400 opacity-90"></span>
                     <div className="whitespace-nowrap text-xs font-semibold text-gray-900">
                       Live auction
                     </div>
                   </div>
-                  <div className="relative flex w-[300px] flex-col">
-                    <div className="h-96 w-full animate-pulse rounded-2xl bg-gray-300 object-cover lg:w-96" />
-
-                    <div className="w-full px-5">
+                  <div className="relative flex max-w-fit flex-col">
+                    <div className="h-72 w-full animate-pulse rounded-2xl bg-gray-300 object-cover lg:w-96" />
+                    <div className="h-56 w-full px-5">
                       <div className="inline-flex w-full flex-col justify-center gap-4 rounded-bl-2xl rounded-br-2xl bg-white bg-opacity-50 p-5 backdrop-blur-xl">
                         <div className="flex flex-col items-start justify-start">
                           <div className="inline-flex items-center justify-start self-stretch">

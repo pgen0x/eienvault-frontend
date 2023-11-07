@@ -12,7 +12,6 @@ import {
   SlideshowCreator,
   SlideshowCreatorSkeleton,
 } from '@/components/slideshow/creator';
-import Avatar from '@/assets/images/avatar.jpg';
 import Image from 'next/image';
 import {
   TrendingTop,
@@ -27,30 +26,26 @@ import {
   UpcomingAuctionSkeleton,
 } from '@/components/auction/upcoming';
 import { Tab } from '@headlessui/react';
-import Line from '@/assets/icon/line3';
-import LineRound from '@/assets/icon/line4';
-import {
-  faCircleCheck,
-  faChevronRight,
-  faChevronLeft,
-  faMinus,
-  faPlus,
-  faEllipsis,
-  faCartPlus,
-  faEnvelope,
-} from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import {
   faDiscord,
   faMedium,
   faTwitter,
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/AuthContext';
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next-nprogress-bar';
 import ButtonPrimary from '@/components/button/buttonPrimary';
 import ButtonTertiary from '@/components/button/buttonTertiary';
+import CloudDiscover from '@/assets/icon/cloud-discover';
+import CloudDiscover1 from '@/assets/icon/cloud-discover1';
+import CloudSubscribe from '@/assets/icon/cloudsubscribe';
+import Wave from '@/assets/icon/wave';
+import LineL from '@/assets/icon/linel';
+import CastleDiscover from '@/assets/icon/castlediscover';
+import CastleDiscover2 from '@/assets/icon/castlediscover2';
 
 export default function Home() {
   const router = useRouter();
@@ -259,7 +254,7 @@ export default function Home() {
     <>
       <div className="homepage relative">
         <Auction />
-        <section className="relative z-10 -mt-24 flex h-auto w-full flex-col gap-4 bg-gray-100 pb-10 pt-10 text-black dark:bg-zinc-800 dark:text-white sm:h-auto md:h-[690px] lg:h-[690px] xl:h-[690px] 2xl:h-[690px]">
+        <section className="relative z-10 -mt-24 flex h-auto w-full flex-col gap-4 bg-gray-100 px-3 pb-10 pt-10 text-black dark:bg-zinc-800 dark:text-white sm:h-auto md:h-[690px] lg:h-[690px] xl:h-[690px] 2xl:h-[690px]">
           <div className="container mx-auto">
             <Tab.Group>
               <Tab.List className="flex gap-5">
@@ -303,44 +298,21 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="w-full bg-[url('/images/discover-section-clean-background.png')] bg-cover bg-left-bottom text-black">
-            <div className="-mt-[20]md:ml-[20px] absolute md:mt-20">
-              <Image
-                width={398}
-                height={121}
-                objectFit="cover"
-                src="/images/cloud-discover-1.png"
-                className="h-full"
-                alt="cloud-discover"
-              />
+          <div className="w-full bg-gradient-to-t from-[#FFF1D4] via-[#FFF1D4] to-[#FFCFD1] bg-left-bottom text-black dark:from-[#C96E6E] dark:via-[#A68647] dark:to-neutral-800">
+            <div className="absolute -ml-12 mt-[20px] hidden lg:block">
+              <CloudDiscover1 className="text-primary-500 dark:text-primary-200" />
             </div>
-            <div className="absolute -mt-[90px] hidden md:ml-[350px] md:block lg:ml-[450px]">
-              <Image
-                width={326}
-                height={207}
-                objectFit="cover"
-                src="/images/cloud-discover-3.png"
-                className="h-full"
-                alt="cloud-discover"
-              />
+            <div className="absolute mt-[75px] hidden lg:ml-[180px] lg:block">
+              <CloudDiscover className="text-primary-500 dark:text-primary-200" />
             </div>
-            <div className="absolute mt-[190px] hidden -translate-x-16 translate-y-4 md:ml-[340px] md:block lg:ml-[500px]">
-              <Image
-                width={354}
-                height={99}
-                objectFit="cover"
-                src="/images/cloud-discover-2.png"
-                className="h-full"
-                alt="cloud-discover"
-              />
-            </div>
+
             <div className="container relative z-20 mx-auto flex flex-col items-center justify-center sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
               <div className="w-full flex-initial p-5 sm:w-full md:w-[50%] lg:w-[29%] xl:w-[29%] 2xl:w-[29%]">
-                <h2 className="text-3xl">
+                <h2 className="text-3xl font-semibold text-black dark:text-white">
                   Discover Our Best <br />
                   Collections For you to buy.
                 </h2>
-                <p>
+                <p className="text-black dark:text-white">
                   Eien vault is a marketplace for nft, a one of a kind digital
                   asset that you can truly own.
                 </p>
@@ -348,7 +320,7 @@ export default function Home() {
                   Discover more
                 </ButtonPrimary>
               </div>
-              <div className="relative my-5 px-4 flex w-full flex-initial items-center justify-center sm:w-full md:w-[50%] lg:w-[69%] xl:w-[69%] 2xl:w-[69%]">
+              <div className="relative my-5 flex w-full flex-initial items-center justify-center px-4 sm:w-full md:w-[50%] lg:w-[69%] xl:w-[69%] 2xl:w-[69%]">
                 {isLoadingDiscover || dataDiscover.length <= 0 ? (
                   <SlideshowDiscoverSkeleton />
                 ) : (
@@ -359,25 +331,11 @@ export default function Home() {
                 )}
               </div>
             </div>
-            <div className="absolute -mt-[290px] ml-[400px]">
-              <Image
-                width={332}
-                height={218}
-                objectFit="cover"
-                src="/images/discover-castle-1.png"
-                className="h-full"
-                alt="discover-castle"
-              />
+            <div className="absolute -mt-[290px] ml-[400px]  hidden lg:block">
+              <CastleDiscover className="text-primary-300 dark:text-primary-200" />
             </div>
-            <div className="absolute -ml-[60px] -mt-[140px]">
-              <Image
-                width={332}
-                height={218}
-                objectFit="cover"
-                src="/images/discover-castle-2.png"
-                className="h-full"
-                alt="discover-castle"
-              />
+            <div className="absolute -mt-[190px]">
+              <CastleDiscover2 className="text-primary-400 dark:text-primary-200" />
             </div>
           </div>
         </section>
@@ -428,62 +386,36 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="flex h-[400px] w-full justify-between overflow-hidden bg-[url('/images/subscribe-section-background.png')] bg-cover bg-bottom text-black">
-            <div className="absolute z-10 mt-20 hidden md:-left-[8vw] md:block lg:left-[23vw]">
-              <Image
-                width={518}
-                height={156}
-                objectFit="cover"
-                src="/images/cloud-subscribe-1.png"
-                className="h-full"
-                alt="cloud"
-              />
+          <div className="relative flex h-[400px] w-full justify-between overflow-hidden bg-gradient-to-t from-[#FFF1D4] via-[#FFF1D4] to-[#FFCFD1] px-3 text-black dark:from-[#C96E6E] dark:via-[#A68647] dark:to-neutral-800">
+            <div className="absolute hidden lg:ml-[63%] lg:block">
+              <CloudSubscribe className="text-primary-500 dark:text-primary-200" />
             </div>
-            <div className="absolute left-[44vw] z-10 mt-[310px]">
-              <Image
-                width={210}
-                height={60}
-                objectFit="cover"
-                src="/images/cloud-subscribe-2.png"
-                className="h-full"
-                alt="cloud"
-              />
+            <div className="absolute mt-[75px] hidden lg:ml-[180px] lg:block">
+              <CloudDiscover className="text-primary-500 dark:text-primary-200" />
             </div>
-            <div className="md: absolute right-[8vw] z-10 -mt-[10px] lg:right-[28vw]">
-              <Image
-                width={326}
-                height={207}
-                objectFit="cover"
-                src="/images/cloud-subscribe-3.png"
-                className="h-full"
-                alt="cloud"
-              />
+            <div className="absolute bottom-0 hidden w-full text-center md:block">
+              <Wave className="fill-primary-500 dark:fill-primary-200" />
             </div>
-            <div className="relative top-0 mx-auto block h-[30rem] max-h-full w-full max-w-full rounded-full bg-red-400 sm:top-0 md:-top-[50px] md:max-h-[30rem] md:max-w-[30rem] lg:-top-[50px] xl:-top-[50px] 2xl:-top-[50px]">
-              <div className="relative top-[50px] mx-auto flex w-[90%] items-center justify-center sm:top-[50px] md:top-[130px] md:w-full lg:top-[130px] xl:top-[130px] 2xl:top-[130px]">
-                <div className="z-10 w-full rounded-lg bg-white/60 p-10 px-3 text-center text-gray-800 backdrop-blur-md dark:bg-zinc-800 dark:bg-opacity-50 dark:text-white">
-                  <h2 className="text-2xl font-bold">
-                    Don&lsquo;t miss a drop
-                  </h2>
-                  <p>
-                    Subscribe to our real time newspaper and be the first to
-                    know
-                    <br /> about upcoming drops
-                  </p>
-                  <form className="mt-5 flex w-full gap-2">
-                    <input
-                      type="text"
-                      className="w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-500 dark:focus:ring-gray-500"
-                      placeholder="Your email address"
-                    />
-                    <ButtonPrimary type="submit" className="!w-fit">
-                      Subscribe
-                    </ButtonPrimary>
-                  </form>
-                </div>
+            <div class="absolute left-1/2 h-[666px] w-[666px] -translate-x-1/2 transform items-center justify-center rounded-full bg-red-400 dark:bg-semantic-orange-400 md:left-1/2 md:block" />
+            <div className="mx-auto flex max-w-fit items-center justify-center md:w-full md:max-w-lg">
+              <div className="z-10 w-full rounded-lg bg-white/60 p-10 px-3 text-center text-gray-800 backdrop-blur-md dark:bg-zinc-800 dark:bg-opacity-50 dark:text-white">
+                <h2 className="text-2xl font-bold">Don&lsquo;t miss a drop</h2>
+                <p>
+                  Subscribe to our real time newspaper and be the first to know
+                  <br /> about upcoming drops
+                </p>
+                <form className="mt-5 flex w-full flex-col gap-2 md:flex-row">
+                  <input
+                    type="text"
+                    className="w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-500 dark:focus:ring-gray-500"
+                    placeholder="Your email address"
+                  />
+                  <ButtonPrimary type="submit" className="w-full md:w-fit">
+                    Subscribe
+                  </ButtonPrimary>
+                </form>
               </div>
             </div>
-            {/* <BgSubscribe className="relative w-full max-h-[30rem] object-cover" /> */}
           </div>
         </section>
         <section>
@@ -556,9 +488,9 @@ export default function Home() {
           </div>
         </section>
         <section>
-          <div className="w-full bg-amber-100 bg-[url('/images/nft-lending-section-background.png')] bg-cover bg-right-bottom p-5 pb-20">
-            <div className="container relative z-[1] mx-auto flex flex-col justify-between gap-5 rounded-2xl bg-white bg-opacity-50 p-5 backdrop-blur-sm dark:bg-zinc-800 dark:bg-opacity-50 sm:flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row">
-              <div className="w-full text-slate-600 dark:text-white md:px-20">
+          <div className="relative flex h-full w-full justify-between overflow-hidden bg-gradient-to-t from-[#FFF1D4] via-[#FFF1D4] to-[#FFCFD1] px-3 pb-[50px] text-black dark:from-[#C96E6E] dark:via-[#A68647] dark:to-neutral-800">
+            <div className="container relative z-[1] mx-auto my-4 flex max-w-fit flex-col justify-between gap-5 rounded-2xl bg-white bg-opacity-50 p-5 backdrop-blur-sm dark:bg-zinc-800 dark:bg-opacity-50 sm:flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row">
+              <div className="w-full text-slate-600 dark:text-white">
                 <h2 className="text-3xl font-bold">
                   Use your NFTs to get a crypto loan
                 </h2>
@@ -598,7 +530,10 @@ export default function Home() {
                 />
               </div>
             </div>
-            <div className="absolute -left-[30px] -mt-[240px] h-64 w-64 rounded-full bg-red-400"></div>
+            <div className="absolute bottom-[-120px] h-[304px] w-[304px] rounded-full bg-red-400 dark:bg-semantic-orange-400 " />
+            <div className="absolute -top-[31rem] w-full text-center md:block">
+              <LineL className="text-primary-500 dark:text-primary-200" />
+            </div>
           </div>
         </section>
         <section className="relative z-10 -mt-[50px] w-full px-[10px] sm:px-[10px] md:px-[50px] lg:px-[50px] xl:px-[50px] 2xl:px-[50px]">

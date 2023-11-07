@@ -9,6 +9,9 @@ import { useAuth } from '@/hooks/AuthContext';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import Image from 'next/image';
 import Wave from '@/assets/icon/wave';
+import Cloud1 from '@/assets/icon/cloud1';
+import Cloud2 from '@/assets/icon/cloud2';
+import Cloud3 from '@/assets/icon/cloud3';
 
 const Auction = () => {
   const { token } = useAuth();
@@ -111,39 +114,19 @@ const Auction = () => {
     <>
       <section className="relative -top-24 flex h-auto w-full items-center justify-center bg-gradient-to-t from-[#FFF1D4] via-[#FFF1D4] to-[#FFCFD1] bg-cover bg-bottom dark:from-[#C96E6E] dark:via-[#A68647] dark:to-black/40 md:h-[600px]">
         <div className="absolute bottom-0 w-full text-center">
-          <Wave className="fill-primary-500 dark:fill-primary-50" />
+          <Wave className="fill-primary-500 dark:fill-primary-200" />
         </div>
-        <div className="absolute bottom-28 h-[532px] w-[532px] translate-y-1/3 items-center justify-center rounded-full bg-red-400 dark:bg-semantic-orange-400 lg:right-[12%]" />
-        <div className="absolute right-[2vw] top-32">
-          <Image
-            width={398}
-            height={121}
-            objectFit="cover"
-            src="/images/cloud-hero-1.png"
-            className="h-full"
-            alt="cloud-hero"
-          />
+        <div className="absolute left-0 top-36">
+          <Cloud1 className="text-primary-500 dark:text-primary-200" />
         </div>
-        <div className="absolute bottom-20 right-[45vw]">
-          <Image
-            width={500}
-            height={151}
-            objectFit="cover"
-            src="/images/cloud-hero-3.png"
-            className="h-full"
-            alt="cloud-hero"
-          />
+        <div className="absolute bottom-32 right-[45vw]">
+          <Cloud2 className="text-primary-500 dark:text-primary-200" />
         </div>
-        <div className="absolute bottom-60 left-0 -translate-x-16 translate-y-4">
-          <Image
-            width={270}
-            height={76}
-            objectFit="cover"
-            src="/images/cloud-hero-2.png"
-            className="h-full"
-            alt="cloud-hero"
-          />
+        <div className="absolute right-[-3vw] top-32 hidden -translate-x-16 translate-y-4 md:block">
+          <Cloud3 className="text-primary-500 dark:text-primary-200" />
         </div>
+        <div className="absolute bottom-28 right-[12%] h-[532px] w-[532px] translate-y-1/3 items-center justify-center rounded-full bg-red-400 dark:bg-semantic-orange-400" />
+
         <div className="container m-auto">
           <div className="md: relative mb-5 hidden w-full flex-initial items-center justify-center pt-24 sm:hidden md:flex lg:flex lg:pt-10 xl:flex 2xl:flex">
             <Slideshow

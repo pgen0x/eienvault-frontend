@@ -32,7 +32,7 @@ export default function ModalVerifyUser({
   isOpenModal,
   onClose,
   onModalClose,
-  profile
+  profile,
 }) {
   const { token } = useAuth();
   const [isSubmit, setIsSubmit] = useState(false);
@@ -377,7 +377,8 @@ export default function ModalVerifyUser({
                                 Comments
                               </label>
                               <span className="text-xs">
-                                Is there anything else you'd like to share?
+                                Is there anything else you&lsquo;d like to
+                                share?
                               </span>
 
                               <div className="flex w-full items-center rounded-2xl bg-white dark:bg-neutral-700">
@@ -392,9 +393,7 @@ export default function ModalVerifyUser({
                                 <ErrorMessage errors={errors} name="comments" />
                               </div>
                             </div>
-                            <ButtonPrimary
-                              onClick={handleSubmit(onSave)}
-                            >
+                            <ButtonPrimary onClick={handleSubmit(onSave)}>
                               Submit Verification
                             </ButtonPrimary>
                           </form>
@@ -514,7 +513,7 @@ export default function ModalVerifyUser({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-100 text-gray-900 p-3 text-left align-middle shadow-xl transition-all dark:bg-neutral-900 dark:text-white">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-100 p-3 text-left align-middle text-gray-900 shadow-xl transition-all dark:bg-neutral-900 dark:text-white">
                   <div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
                     <div className="relative mt-2 transform overflow-hidden text-left transition-all sm:w-full sm:max-w-lg">
                       <section className="step-2 flex flex-col gap-3 p-5">

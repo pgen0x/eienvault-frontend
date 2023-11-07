@@ -364,7 +364,10 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
         {isLoading ? (
           <>
             {[...Array(5)].map((nft, index) => (
-              <div className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row">
+              <div
+                key={index}
+                className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row"
+              >
                 <div className="flex w-full items-center justify-between gap-4">
                   <div className="flex items-center justify-center gap-4">
                     <div className="relative h-20 w-20 animate-pulse rounded-lg bg-gray-300" />
@@ -498,7 +501,10 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
           {isLoadingBidMade ? (
             <>
               {[...Array(5)].map((nft, index) => (
-                <div className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row">
+                <div
+                  key={index}
+                  className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row"
+                >
                   <div className="flex w-full items-center justify-between gap-4">
                     <div className="flex items-center justify-center gap-4">
                       <div className="relative h-20 w-20 animate-pulse rounded-lg bg-gray-300" />
@@ -636,7 +642,10 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
           {isLoadingReceived ? (
             <>
               {[...Array(5)].map((nft, index) => (
-                <div className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row">
+                <div
+                  key={index}
+                  className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row"
+                >
                   <div className="flex w-full items-center justify-between gap-4">
                     <div className="flex items-center justify-center gap-4">
                       <div className="relative h-20 w-20 animate-pulse rounded-lg bg-gray-300" />
@@ -717,7 +726,7 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
                             </button>
                           </div>
                         </div>
-                        <div className="flex w-full items-center justify-around gap-4 p-4 rounded-lg bg-neutral-50 dark:bg-neutral-600 lg:bg-white dark:lg:bg-neutral-700">
+                        <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 p-4 dark:bg-neutral-600 lg:bg-white dark:lg:bg-neutral-700">
                           <div className="flex w-full flex-col items-center justify-start gap-2">
                             <span className="font-bold">Expiration</span>
                             <div className="text-center">

@@ -30,7 +30,7 @@ const Sidebar = () => {
   const sidebarRef = useRef();
   const sidebarContentRef = useRef();
   const router = useRouter();
-  const { disconnectAsync } = useDisconnect();
+  const { disconnect } = useDisconnect();
   const { dataUser } = useAuth();
   const { address, isConnected } = useAccount();
   const { open } = useWeb3Modal();
@@ -100,7 +100,7 @@ const Sidebar = () => {
 
   const handleDisconnect = () => {
     closeSidebar();
-    disconnectAsync();
+    disconnect();
   };
 
   const handleSetting = () => {
@@ -157,11 +157,11 @@ const Sidebar = () => {
           <div className="flex h-full flex-col justify-between gap-4">
             <div className="flex flex-col gap-8">
               <div className="mx-8 flex items-center justify-between gap-2.5 pt-8">
-                <div className="w-full flex flex-row items-center justify-center gap-4">
+                <div className="flex w-full flex-row items-center justify-center gap-4">
                   <button className="flex w-fit justify-center rounded-full bg-primary-500 px-3 py-3 text-sm font-semibold">
                     <FontAwesomeIcon icon={faUserAlt} />
                   </button>
-                  <div className="w-full flex flex-col items-start justify-start">
+                  <div className="flex w-full flex-col items-start justify-start">
                     <div className="truncate text-center text-xl font-medium leading-loose text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300">
                       {(isConnected && dataUser.username) ||
                         truncateAddress(address)}
@@ -265,13 +265,13 @@ const Sidebar = () => {
                 <div className="flex h-5 shrink grow basis-0 items-center justify-center gap-2 rounded-lg py-2">
                   <button
                     className="shrink grow basis-0 text-right text-sm font-bold leading-tight text-rose-500"
-                    onClick={open}
+                    onClick={() => open()}
                   >
                     Manage wallet
                   </button>
                 </div>
               </div>
-              <div className="flex h-72 w-full flex-col items-start justify-start gap-4 rounded-2xl bg-white bg-opacity-50 dark:bg-neutral-700 p-4">
+              <div className="flex h-72 w-full flex-col items-start justify-start gap-4 rounded-2xl bg-white bg-opacity-50 p-4 dark:bg-neutral-700">
                 <div className="flex h-12 flex-col items-start justify-start gap-2 self-stretch">
                   <div className="inline-flex items-center justify-start gap-2 self-stretch">
                     <div className="flex h-12 shrink grow basis-0 items-center justify-start gap-2">
@@ -291,7 +291,7 @@ const Sidebar = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex h-20 flex-col items-center justify-center gap-2 self-stretch rounded-lg bg-neutral-100 dark:bg-neutral-500 p-2">
+                <div className="flex h-20 flex-col items-center justify-center gap-2 self-stretch rounded-lg bg-neutral-100 p-2 dark:bg-neutral-500">
                   <div className="inline-flex items-center justify-start self-stretch">
                     <div className="flex h-8 shrink grow basis-0 items-center justify-start gap-2">
                       <div className="flex items-center justify-start gap-1">
@@ -324,7 +324,9 @@ const Sidebar = () => {
                   </div>
                 </div> */}
                 </div>
-                <ButtonPrimary onClick={open}>Manage Wallet</ButtonPrimary>
+                <ButtonPrimary onClick={() => open()}>
+                  Manage Wallet
+                </ButtonPrimary>
                 <div className="inline-flex items-start justify-start gap-2 self-stretch">
                   <ButtonSecondary
                     className="flex items-center justify-center gap-2"

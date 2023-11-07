@@ -27,7 +27,7 @@ import { useAuth } from '@/hooks/AuthContext';
 export default function Navbar() {
   const router = useRouter();
   const { logout } = useAuth();
-  const { disconnectAsync } = useDisconnect();
+  const { disconnect } = useDisconnect();
   const [openMenu, setOpenMenu] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isConnect, setIsConnect] = useState(false);
@@ -38,11 +38,12 @@ export default function Navbar() {
   const { switchNetwork } = useSwitchNetwork();
 
   useWeb3ModalEvents((event) => {
+    console.log(event);
     if (event.name === 'ACCOUNT_CONNECTED') {
       setIsConnect(true);
     }
     if (event.name === 'ACCOUNT_DISCONNECTED') {
-      disconnectAsync();
+      disconnect();
       setIsConnect(false);
       logout();
     }

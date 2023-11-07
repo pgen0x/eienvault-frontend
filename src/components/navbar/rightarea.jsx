@@ -15,18 +15,17 @@ import { useDisconnect, useSignMessage } from 'wagmi';
 import { useSidebar } from '../../hooks/SidebarContext';
 import { useAccount } from 'wagmi';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
-import { SiweMessage } from 'siwe';
 import { useAuth } from '@/hooks/AuthContext';
 
 export default function RightArea() {
-  const token = useAuth();
+  const { hasSigned, handleSign } = useAuth();
   const { theme, setTheme } = useTheme();
   const [enabled, setEnabled] = useState(theme === 'dark'); // Set initial state based on the current theme
   const toggleTheme = () => {
     setEnabled(!enabled); // Toggle the state
     setTheme(enabled ? 'light' : 'dark'); // Update the theme
   };
-  const { disconnectAsync } = useDisconnect();
+  const { disconnect } = useDisconnect();
   const [isClient, setIsClient] = useState(false);
   const [isConnect, setIsConnect] = useState(false);
   const { toggleSidebar } = useSidebar();
@@ -35,7 +34,6 @@ export default function RightArea() {
   const { chain } = useNetwork();
   const { signMessageAsync } = useSignMessage();
   const { switchNetwork } = useSwitchNetwork();
-  const [hasSigned, setHasSigned] = useState(false);
 
   useWeb3ModalEvents((event) => {
     console.log(event);
@@ -43,7 +41,7 @@ export default function RightArea() {
       setIsConnect(true);
     }
     if (event.name === 'ACCOUNT_DISCONNECTED') {
-      disconnectAsync();
+      disconnect();
       setIsConnect(false);
     }
   });
@@ -51,31 +49,6 @@ export default function RightArea() {
   useEffect(() => {
     setIsClient(true);
   }, []);
-
-  const handleSign = async () => {
-    if (!isConnected) open();
-    try {
-      const message = new SiweMessage({
-        domain: window.location.host,
-        uri: window.location.origin,
-        version: '1',
-        address: address,
-        statement: process.env.NEXT_PUBLIC_SIGNIN_MESSAGE,
-        nonce: 2323,
-        chainId: 666888,
-      });
-
-      const signedMessage = await signMessageAsync({
-        message: message.prepareMessage(),
-      });
-
-      console.log(signedMessage);
-
-      setHasSigned(true);
-    } catch (error) {
-      console.log('Error Occured', error);
-    }
-  };
 
   const classRadio = (value) => {
     const defaultCssRadio =
@@ -109,10 +82,10 @@ export default function RightArea() {
             </div>
           )}
 
-          {/* {isConnected && !hasSigned && (
+          {isConnected && !hasSigned && (
             <div as="div" className="relative inline-block text-left">
               <button
-                onClick={handleSign}
+                onClick={() => handleSign()}
                 className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 hover:bg-primary-300"
               >
                 <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
@@ -123,7 +96,7 @@ export default function RightArea() {
                 </div>
               </button>
             </div>
-          )} */}
+          )}
 
           {isConnected && (
             <div as="div" className="relative inline-block text-left">
@@ -171,7 +144,7 @@ export default function RightArea() {
           </Switch> */}
         </div>
       )}
-      <div className="space-x-1 rounded-full dark:bg-zinc-700 bg-white px-1 py-1 flex">
+      <div className="flex space-x-1 rounded-full bg-white px-1 py-1 dark:bg-zinc-700">
         <div>
           <input
             className="hidden"

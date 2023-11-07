@@ -1,12 +1,15 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { SiweMessage } from 'siwe';
+import { useAccount, useSignMessage } from 'wagmi';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [dataUser, setDataUser] = useState([]);
+  const [hasSigned, setHasSigned] = useState(false);
   const { isConnected, address } = useAccount();
+  const { signMessageAsync } = useSignMessage();
 
   const login = async (newToken) => {
     setToken(newToken);
@@ -14,44 +17,17 @@ export function AuthProvider({ children }) {
 
   const logout = () => {
     setToken(null);
+    setHasSigned(false);
   };
 
   useEffect(() => {
-    if (isConnected) {
-      handleLogin();
+    if (isConnected && !hasSigned) {
+      handleSign();
     }
     if (!isConnected) {
       logout();
     }
-  }, [isConnected, token, address]);
-
-  const handleLogin = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/user/login`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            walletAddress: address,
-          }),
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error('Login request failed');
-      }
-
-      const data = await response.json();
-      await login(data.token);
-      await getUserInformation(data.token);
-    } catch (error) {
-      logout();
-      console.error('Login error:', error.message);
-    }
-  };
+  }, [isConnected, hasSigned, address]);
 
   const getUserInformation = async (datatoken) => {
     try {
@@ -79,8 +55,60 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const handleSign = async () => {
+    if (!isConnected) open();
+    try {
+      const nonce = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/nonce`,
+        {
+          cache: 'no-store',
+        },
+      );
+
+      const nonceText = await nonce.text();
+
+      const message = new SiweMessage({
+        domain: window.location.host,
+        uri: window.location.origin,
+        version: '1',
+        address: address,
+        statement: process.env.NEXT_PUBLIC_SIGNIN_MESSAGE,
+        nonce: nonceText,
+        chainId: 666888,
+      });
+
+      const signature = await signMessageAsync({
+        message: message.prepareMessage(),
+      });
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message, signature }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('Login request failed');
+      }
+
+      const data = await response.json();
+      await login(data.token);
+      await getUserInformation(data.token);
+      setHasSigned(true);
+    } catch (error) {
+      console.log('Error Occured', error);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ token, dataUser, login, logout }}>
+    <AuthContext.Provider
+      value={{ token, dataUser, login, logout, hasSigned, handleSign }}
+    >
       {children}
     </AuthContext.Provider>
   );

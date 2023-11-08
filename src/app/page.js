@@ -396,7 +396,7 @@ export default function Home() {
             <div className="absolute bottom-0 hidden w-full text-center md:block">
               <Wave className="fill-primary-500 dark:fill-primary-200" />
             </div>
-            <div class="absolute left-1/2 h-[666px] w-[666px] -translate-x-1/2 transform items-center justify-center rounded-full bg-red-400 dark:bg-semantic-orange-400 md:left-1/2 md:block" />
+            <div className="absolute left-1/2 h-[666px] w-[666px] -translate-x-1/2 transform items-center justify-center rounded-full bg-red-400 dark:bg-semantic-orange-400 md:left-1/2 md:block" />
             <div className="mx-auto flex max-w-fit items-center justify-center md:w-full md:max-w-lg">
               <div className="z-10 w-full rounded-lg bg-white/60 p-10 px-3 text-center text-gray-800 backdrop-blur-md dark:bg-zinc-800 dark:bg-opacity-50 dark:text-white">
                 <h2 className="text-2xl font-bold">Don&lsquo;t miss a drop</h2>

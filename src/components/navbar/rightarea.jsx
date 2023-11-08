@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCartShopping,
   faMoon,
   faSignIn,
   faSun,
   faUserAlt,
   faWallet,
+  faWifi,
 } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect, Fragment } from 'react';
 import { Switch } from '@headlessui/react';
@@ -66,19 +66,18 @@ export default function RightArea() {
       {isClient && (
         <div className="hidden h-8 w-full items-center justify-start gap-4 lg:inline-flex">
           {isConnected && chain?.id !== 666888 && (
-            <div className="flex flex-row items-center">
-              <div className="flex-1 rounded-l-lg  bg-primary-500 py-2 pl-3">
-                <span className="border-r-2 pr-3 text-sm">Wrong network!</span>
-              </div>
-              <div className="flex flex-shrink-0 flex-col">
-                <button
-                  type="button"
-                  className="rounded-r-lg bg-primary-500 px-3 py-2"
-                  onClick={() => switchNetwork?.(666888)}
-                >
-                  <span className="text-md">Switch</span>
-                </button>
-              </div>
+            <div as="div" className="relative inline-block text-left">
+              <button
+                onClick={() => switchNetwork?.(666888)}
+                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 hover:bg-primary-300"
+              >
+                <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
+                  <FontAwesomeIcon icon={faWifi} />
+                </div>
+                <div className="text-base font-bold leading-normal text-white">
+                  Wrong network! <span className="text-md">Switch</span>
+                </div>
+              </button>
             </div>
           )}
 

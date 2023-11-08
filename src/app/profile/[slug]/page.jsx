@@ -425,10 +425,10 @@ export default function ProfilePage({ params }) {
                 </div>
                 <div className="col-span-12 flex justify-end sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
                   <div className="flex w-full flex-col gap-5 rounded-xl bg-white sm:w-full sm:bg-white md:w-56 md:bg-transparent lg:w-56 lg:bg-transparent xl:w-56 xl:bg-transparent 2xl:w-56 2xl:bg-transparent">
-                    <div class="inline-flex w-full items-start justify-start gap-4 rounded-2xl bg-white dark:bg-neutral-700 p-4 text-primary-500 dark:text-white text-xs">
+                    <div className="inline-flex w-full items-start justify-start gap-4 rounded-2xl bg-white dark:bg-neutral-700 p-4 text-primary-500 dark:text-white text-xs">
                       {profile?.websiteUrl && (
                         <button
-                          class="h-6 w-6"
+                          className="h-6 w-6"
                           onClick={() =>
                             window.open(profile?.websiteUrl, 'blank')
                           }
@@ -438,7 +438,7 @@ export default function ProfilePage({ params }) {
                       )}
                       {profile?.twitterUrl && (
                         <button
-                          class="h-6 w-6"
+                          className="h-6 w-6"
                           onClick={() =>
                             window.open(profile?.twitterUrl, 'blank')
                           }
@@ -448,7 +448,7 @@ export default function ProfilePage({ params }) {
                       )}
                       {profile?.mediumUrl && (
                         <button
-                          class="h-6 w-6"
+                          className="h-6 w-6"
                           onClick={() =>
                             window.open(profile?.mediumUrl, 'blank')
                           }
@@ -458,7 +458,7 @@ export default function ProfilePage({ params }) {
                       )}
                       {profile?.telegramUrl && (
                         <button
-                          class="h-6 w-6"
+                          className="h-6 w-6"
                           onClick={() =>
                             window.open(profile?.telegramUrl, 'blank')
                           }
@@ -468,7 +468,7 @@ export default function ProfilePage({ params }) {
                       )}
                       {profile?.discordUrl && (
                         <button
-                          class="h-6 w-6"
+                          className="h-6 w-6"
                           onClick={() =>
                             window.open(profile?.discordUrl, 'blank')
                           }
@@ -478,7 +478,7 @@ export default function ProfilePage({ params }) {
                       )}
                       {profile?.instagramUrl && (
                         <button
-                          class="h-6 w-6"
+                          className="h-6 w-6"
                           onClick={() =>
                             window.open(profile?.instagramUrl, 'blank')
                           }

@@ -18,41 +18,43 @@ export function Providers({ children }) {
   const { wagmiConfig, projectId, ethereumClient, helachain } = initializeApp();
   return (
     <WagmiConfig config={wagmiConfig}>
-      <AuthProvider>
-        <ThemeProvider
-          attribute="class"
-          enableSystem={false}
-          defaultTheme="light"
-        >
-          <ProgressBar
-            height="4px"
-            color="#f34054"
-            options={{ showSpinner: false }}
-            shallowRouting
-          />
-          <SidebarProvider>
-            {mounted && children}
-            <Web3Modal
-              projectId={projectId}
-              defaultChain={helachain}
-              ethereumClient={ethereumClient}
-              themeMode={isDarkMode ? 'dark' : 'light'}
-              chainImages={{
-                666888: '/helaicon.svg',
-                42261:
-                  'https://cryptologos.cc/logos/oasis-network-rose-logo.png',
-              }}
-              tokenImages={{ HLUSD: '/helaicon.svg' }}
-              themeVariables={{
-                '--w3m-accent-color': '#F34054',
-                '--w3m-overlay-backdrop-filter': 'blur(8px)',
-                '--w3m-background-color': '#F34054',
-                '--w3m-logo-image-url': '/logowhite.svg',
-              }}
+      {mounted && (
+        <AuthProvider>
+          <ThemeProvider
+            attribute="class"
+            enableSystem={false}
+            defaultTheme="light"
+          >
+            <ProgressBar
+              height="4px"
+              color="#f34054"
+              options={{ showSpinner: false }}
+              shallowRouting
             />
-          </SidebarProvider>
-        </ThemeProvider>
-      </AuthProvider>
+            <SidebarProvider>
+              {children}
+              <Web3Modal
+                projectId={projectId}
+                defaultChain={helachain}
+                ethereumClient={ethereumClient}
+                themeMode={isDarkMode ? 'dark' : 'light'}
+                chainImages={{
+                  666888: '/helaicon.svg',
+                  42261:
+                    'https://cryptologos.cc/logos/oasis-network-rose-logo.png',
+                }}
+                tokenImages={{ HLUSD: '/helaicon.svg' }}
+                themeVariables={{
+                  '--w3m-accent-color': '#F34054',
+                  '--w3m-overlay-backdrop-filter': 'blur(8px)',
+                  '--w3m-background-color': '#F34054',
+                  '--w3m-logo-image-url': '/logowhite.svg',
+                }}
+              />
+            </SidebarProvider>
+          </ThemeProvider>
+        </AuthProvider>
+      )}
     </WagmiConfig>
   );
 }

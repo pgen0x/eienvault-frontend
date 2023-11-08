@@ -1,23 +1,35 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { SiweMessage } from 'siwe';
 import { useAccount, useSignMessage } from 'wagmi';
+import { signMessage } from 'wagmi/actions';
+import { watchAccount } from '@wagmi/core';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem('token') || null);
   const [dataUser, setDataUser] = useState([]);
-  const [hasSigned, setHasSigned] = useState(false);
-  const { isConnected, address } = useAccount();
+  const [hasSigned, setHasSigned] = useState(
+    localStorage.getItem('hasSigned') === 'true' || false,
+  );
+  const [addressHasSigned, setAddressHasSigned] = useState(
+    localStorage.getItem('addressHasSigned') || null,
+  );
+  const { isConnected, address, isConnecting } = useAccount();
   const { signMessageAsync } = useSignMessage();
 
   const login = async (newToken) => {
     setToken(newToken);
+    localStorage.setItem('token', newToken); // Store token in localStorage
   };
 
   const logout = () => {
     setToken(null);
+    localStorage.removeItem('token'); // Remove token from localStorage
     setHasSigned(false);
+    localStorage.removeItem('hasSigned'); // Remove hasSigned from localStorage
+    setAddressHasSigned(null);
+    localStorage.removeItem('addressHasSigned'); // Remove addressHasSigned from localStorage
   };
 
   useEffect(() => {
@@ -27,7 +39,7 @@ export function AuthProvider({ children }) {
     if (!isConnected) {
       logout();
     }
-  }, [isConnected, hasSigned, address]);
+  }, [isConnected, hasSigned]);
 
   const getUserInformation = async (datatoken) => {
     try {
@@ -77,7 +89,7 @@ export function AuthProvider({ children }) {
         chainId: 666888,
       });
 
-      const signature = await signMessageAsync({
+      const signature = await signMessage({
         message: message.prepareMessage(),
       });
 
@@ -99,11 +111,20 @@ export function AuthProvider({ children }) {
       const data = await response.json();
       await login(data.token);
       await getUserInformation(data.token);
+      localStorage.setItem('hasSigned', true);
+      localStorage.setItem('addressHasSigned', address);
       setHasSigned(true);
+      setAddressHasSigned(address);
     } catch (error) {
       console.log('Error Occured', error);
     }
   };
+
+  watchAccount((account) => {
+    if (account.address !== addressHasSigned) {
+      logout();
+    }
+  });
 
   return (
     <AuthContext.Provider

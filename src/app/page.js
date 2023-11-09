@@ -407,7 +407,7 @@ export default function Home() {
                 <form className="mt-5 flex w-full flex-col gap-2 md:flex-row">
                   <input
                     type="text"
-                    className="w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-500 dark:focus:ring-gray-500"
+                    className="w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-500 dark:focus:ring-gray-500"
                     placeholder="Your email address"
                   />
                   <ButtonPrimary type="submit" className="w-full md:w-fit">
@@ -648,7 +648,7 @@ export default function Home() {
                   <li className="text-2xl">
                     <a
                       href="#"
-                      className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:hover:bg-zinc-700"
+                      className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:hover:bg-neutral-900"
                     >
                       <FontAwesomeIcon icon={faTwitter} />
                     </a>
@@ -656,7 +656,7 @@ export default function Home() {
                   <li className="text-2xl">
                     <a
                       href="#"
-                      className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:hover:bg-zinc-700"
+                      className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:hover:bg-neutral-900"
                     >
                       <FontAwesomeIcon icon={faDiscord} />
                     </a>
@@ -664,7 +664,7 @@ export default function Home() {
                   <li className="text-2xl">
                     <a
                       href="#"
-                      className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:hover:bg-zinc-700"
+                      className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:hover:bg-neutral-900"
                     >
                       <FontAwesomeIcon icon={faMedium} />
                     </a>
@@ -672,7 +672,7 @@ export default function Home() {
                   <li className="text-2xl">
                     <a
                       href="#"
-                      className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:hover:bg-zinc-700"
+                      className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:hover:bg-neutral-900"
                     >
                       <FontAwesomeIcon icon={faEnvelope} />
                     </a>
@@ -695,7 +695,7 @@ export default function Home() {
                 <div className="w-full text-4xl font-bold leading-[57.60px] text-neutral-800 dark:text-neutral-100 xl:text-5xl">
                   Discover the largest NFT Marketplace
                 </div>
-                <div className="my-4 w-full text-2xl font-medium leading-9 text-neutral-600 dark:text-neutral-100">
+                <div className="my-4 w-full text-2xl font-medium leading-9 text-neutral-800 dark:text-neutral-100">
                   Snap marketplace is a marketplace for nft, a one of a kind
                   digital asset that you can truly own, Digital has been around
                   for a long time, but never like this.

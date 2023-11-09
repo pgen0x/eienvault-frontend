@@ -215,7 +215,7 @@ export default function ModalBuy({
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-900">
+                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-950">
                     <Dialog.Title className="flex justify-between text-xl font-bold text-neutral-800 dark:text-white">
                       <div className="flex w-full justify-start">Buy</div>
                       <div className="flex w-full justify-end">
@@ -284,7 +284,7 @@ export default function ModalBuy({
                           </span>
                         </div>
                       </div>
-                      <div className="flex flex-col justify-between gap-1 rounded-lg bg-gray-50 p-3 dark:bg-neutral-700">
+                      <div className="flex flex-col justify-between gap-1 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900">
                         <div className="flex justify-between">
                           <span>Price</span>
                           <span className="font-semibold">
@@ -342,7 +342,7 @@ export default function ModalBuy({
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-900">
+                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-950">
                     {isErrorBuyNative.isError && (
                       <Dialog.Title className="flex justify-end text-xl font-bold text-neutral-800 dark:text-white">
                         <div className="flex w-full justify-end">

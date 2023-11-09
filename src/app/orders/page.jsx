@@ -360,13 +360,13 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
 
   return (
     <div className="min-h-full w-full ">
-      <div className="mt-5 flex flex-col gap-4 rounded-lg bg-white/60 p-3 text-gray-900 dark:bg-neutral-900 dark:text-white">
+      <div className="mt-5 flex flex-col gap-4 rounded-lg bg-white/60 p-3 text-gray-900 dark:bg-neutral-950 dark:text-white">
         {isLoading ? (
           <>
             {[...Array(5)].map((nft, index) => (
               <div
                 key={index}
-                className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row"
+                className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-900 lg:flex-row"
               >
                 <div className="flex w-full items-center justify-between gap-4">
                   <div className="flex items-center justify-center gap-4">
@@ -378,7 +378,7 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
                     <div className="h-4 w-24 animate-pulse rounded-lg bg-gray-300" />
                   </div>
                 </div>
-                <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 py-2 dark:bg-neutral-600 lg:bg-white dark:lg:bg-neutral-700">
+                <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 py-2 dark:bg-neutral-800 lg:bg-white dark:lg:bg-neutral-900">
                   <div className="flex flex-col items-center justify-start gap-2">
                     <div className="h-4 w-20 animate-pulse rounded-lg bg-gray-300" />
                     <div className="h-4 w-32 animate-pulse rounded-lg bg-gray-300" />
@@ -401,7 +401,7 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
             const isEndDateInFuture = timeDifference > 0;
             return (
               <div
-                className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row"
+                className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-900 lg:flex-row"
                 key={index}
               >
                 <div
@@ -436,7 +436,7 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
                     </div>
                   </div>
                 </div>
-                <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 py-2 dark:bg-neutral-600 lg:bg-white dark:lg:bg-neutral-700">
+                <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 py-2 dark:bg-neutral-800 lg:bg-white dark:lg:bg-neutral-900">
                   <div className="flex w-full flex-col items-center justify-start gap-2">
                     <span className="font-bold">Expiration</span>
                     <span className="text-center">
@@ -497,13 +497,13 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
   return (
     <>
       <div className="min-h-full w-full ">
-        <div className="mt-5 flex flex-col gap-4 rounded-lg bg-white/60 p-3 text-gray-900 dark:bg-neutral-900 dark:text-white">
+        <div className="mt-5 flex flex-col gap-4 rounded-lg bg-white/60 p-3 text-gray-900 dark:bg-neutral-950 dark:text-white">
           {isLoadingBidMade ? (
             <>
               {[...Array(5)].map((nft, index) => (
                 <div
                   key={index}
-                  className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row"
+                  className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-900 lg:flex-row"
                 >
                   <div className="flex w-full items-center justify-between gap-4">
                     <div className="flex items-center justify-center gap-4">
@@ -515,7 +515,7 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
                       <div className="h-4 w-24 animate-pulse rounded-lg bg-gray-300" />
                     </div>
                   </div>
-                  <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 py-2 dark:bg-neutral-600 lg:bg-white dark:lg:bg-neutral-700">
+                  <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 py-2 dark:bg-neutral-800 lg:bg-white dark:lg:bg-neutral-900">
                     <div className="flex flex-col items-center justify-start gap-2">
                       <div className="h-4 w-20 animate-pulse rounded-lg bg-gray-300" />
                       <div className="h-4 w-32 animate-pulse rounded-lg bg-gray-300" />
@@ -538,7 +538,7 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
               const isEndDateInFuture = timeDifference > 0;
               return (
                 <div
-                  className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row"
+                  className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-900 lg:flex-row"
                   key={index}
                 >
                   <div
@@ -565,7 +565,7 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
                       <div>{formatEther(data.BidAmount)} HLUSD</div>
                     </div>
                   </div>
-                  <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 py-2 dark:bg-neutral-600 lg:bg-white dark:lg:bg-neutral-700">
+                  <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 py-2 dark:bg-neutral-800 lg:bg-white dark:lg:bg-neutral-900">
                     <div className="flex w-full flex-col items-center justify-start gap-2">
                       <span className="font-bold">Expiration</span>
                       <span className="text-center">
@@ -638,13 +638,13 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
   return (
     <>
       <div className="min-h-full w-full">
-        <div className="mt-5 flex flex-col gap-4 rounded-lg bg-white/60 p-3 text-gray-900 dark:bg-neutral-900 dark:text-white">
+        <div className="mt-5 flex flex-col gap-4 rounded-lg bg-white/60 p-3 text-gray-900 dark:bg-neutral-950 dark:text-white">
           {isLoadingReceived ? (
             <>
               {[...Array(5)].map((nft, index) => (
                 <div
                   key={index}
-                  className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row"
+                  className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-900 lg:flex-row"
                 >
                   <div className="flex w-full items-center justify-between gap-4">
                     <div className="flex items-center justify-center gap-4">
@@ -656,7 +656,7 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
                       <div className="h-4 w-24 animate-pulse rounded-lg bg-gray-300" />
                     </div>
                   </div>
-                  <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 py-2 dark:bg-neutral-600 lg:bg-white dark:lg:bg-neutral-700">
+                  <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 py-2 dark:bg-neutral-800 lg:bg-white dark:lg:bg-neutral-900">
                     <div className="flex flex-col items-center justify-start gap-2">
                       <div className="h-4 w-20 animate-pulse rounded-lg bg-gray-300" />
                       <div className="h-4 w-32 animate-pulse rounded-lg bg-gray-300" />
@@ -682,7 +682,7 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
                   <React.Fragment key={index}>
                     {data.Bids.map((dataBids, indexBids) => (
                       <div
-                        className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-700 lg:flex-row"
+                        className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 dark:bg-neutral-900 lg:flex-row"
                         key={indexBids}
                       >
                         <div
@@ -726,7 +726,7 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
                             </button>
                           </div>
                         </div>
-                        <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 p-4 dark:bg-neutral-600 lg:bg-white dark:lg:bg-neutral-700">
+                        <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 p-4 dark:bg-neutral-800 lg:bg-white dark:lg:bg-neutral-900">
                           <div className="flex w-full flex-col items-center justify-start gap-2">
                             <span className="font-bold">Expiration</span>
                             <div className="text-center">

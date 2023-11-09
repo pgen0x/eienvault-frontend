@@ -15,6 +15,7 @@ import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useAccount } from 'wagmi';
+import ButtonPrimary from '../button/buttonPrimary';
 
 export default function ModalUploadProfileCover({
   isOpenModal,
@@ -184,7 +185,7 @@ export default function ModalUploadProfileCover({
                   <div className="flex flex-col text-sm text-gray-900">
                     <div className="mt-4 flex max-w-full shrink-0 flex-row items-center gap-4">
                       Upload new cover. We recommend to upload images in
-                      1440x260 resolution. Max 15 MB in JPEG or PNG format
+                      1920x266 resolution. Max 15 MB in JPEG or PNG format
                     </div>
                     <form>
                       <div className="w-full">
@@ -216,7 +217,7 @@ export default function ModalUploadProfileCover({
                                 className="text-6xl"
                               />
                               <div className="text-sm">
-                                1440 x 260 pixel is recommended
+                                1920 x 266 pixel is recommended
                               </div>
                               <label className="cursor-pointer rounded-full bg-primary-500 px-4 py-1 font-semibold text-white hover:bg-primary-300">
                                 Choose file
@@ -242,13 +243,11 @@ export default function ModalUploadProfileCover({
                         <ErrorMessage errors={errors} name="file" />
                       </div>
                       <div className="mt-4 inline-flex w-full">
-                        <button
-                          type="button"
+                        <ButtonPrimary
                           onClick={handleSubmit(onUpload)}
-                          className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:bg-primary-50"
                         >
                           Submit
-                        </button>
+                        </ButtonPrimary>
                       </div>
                     </form>
                   </div>

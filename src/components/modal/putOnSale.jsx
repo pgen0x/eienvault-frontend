@@ -124,6 +124,7 @@ export default function ModalPutOnSale({
     });
     setIsSubmit(false);
     setIsProcessing(false);
+    closeModal();
   }
 
   const {
@@ -463,7 +464,7 @@ export default function ModalPutOnSale({
                                     />
                                     <label
                                       htmlFor="fixed-method"
-                                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-gray-300 ${
+                                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-neutral-800 dark:border-neutral-900 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-neutral-900 dark:hover:text-gray-300 ${
                                         selectedOptionMarket === 'fixed'
                                           ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
                                           : ''
@@ -496,7 +497,7 @@ export default function ModalPutOnSale({
                                     />
                                     <label
                                       htmlFor="auction-method"
-                                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-gray-400 dark:hover:bg-zinc-700 dark:hover:text-gray-300 ${
+                                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-neutral-800 dark:border-neutral-900 dark:bg-zinc-800 dark:text-gray-400 dark:hover:bg-neutral-900 dark:hover:text-gray-300 ${
                                         selectedOptionMarket === 'auction'
                                           ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
                                           : ''
@@ -624,7 +625,7 @@ export default function ModalPutOnSale({
                                   name="duration_date"
                                   id="duration_date"
                                   autoComplete="duration_date"
-                                  className="flex-1 rounded-xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:text-sm sm:leading-6"
+                                  className="flex-1 rounded-full border-0 bg-gray-50 dark:bg-neutral-900 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-neutral-700 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:text-sm sm:leading-6"
                                   value={customValueDate}
                                   disabled={selectedOptionDate !== 'Custom'}
                                   onChange={(e) =>
@@ -632,7 +633,7 @@ export default function ModalPutOnSale({
                                   }
                                 />
                                 <select
-                                  className="rounded-3xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:max-w-md sm:text-sm sm:leading-6"
+                                  className="rounded-full border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:max-w-md sm:text-sm sm:leading-6"
                                   onChange={handleDateSelectChange}
                                   value={selectedOptionDate}
                                 >
@@ -689,10 +690,10 @@ export default function ModalPutOnSale({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-900 p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-950 p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="text-xl font-bold text-gray-900"
+                    className="text-xl font-bold text-gray-900 dark:text-white"
                   >
                     Just a few steps left
                   </Dialog.Title>

@@ -11,7 +11,7 @@ const Footer = () => {
   return (
     <>
       <section>
-        <div className="flex w-full justify-between bg-white dark:bg-zinc-700 px-[50px] py-[20px]">
+        <div className="flex w-full justify-between bg-white dark:bg-neutral-900 px-[50px] py-[20px]">
           <div className="flex-between flex items-center gap-6 text-primary-500 dark:text-white">
             <div className="flex w-fit dark:hidden">
               <img src="/logo.svg" className="w-24" />

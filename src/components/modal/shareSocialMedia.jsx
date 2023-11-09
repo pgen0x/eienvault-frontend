@@ -117,7 +117,7 @@ export default function ModalShareSocialMedia({
                   <div className="flex flex-col gap-2 pt-5 text-sm">
                     <div className="flex gap-3">
                       <button
-                        className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-zinc-500 dark:bg-zinc-500 dark:text-white hover:dark:bg-zinc-700 hover:dark:text-primary-500"
+                        className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-neutral-700 dark:bg-neutral-700 dark:text-white hover:dark:bg-neutral-900 hover:dark:text-primary-500"
                         onClick={shareFacebook}
                       >
                         <span className="flex items-center justify-center">
@@ -129,7 +129,7 @@ export default function ModalShareSocialMedia({
                         Facebook
                       </button>
                       <button
-                        className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-zinc-500 dark:bg-zinc-500 dark:text-white hover:dark:bg-zinc-700 hover:dark:text-primary-500"
+                        className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-neutral-700 dark:bg-neutral-700 dark:text-white hover:dark:bg-neutral-900 hover:dark:text-primary-500"
                         onClick={shareTwitter}
                       >
                         <span className="flex items-center justify-center">
@@ -141,7 +141,7 @@ export default function ModalShareSocialMedia({
                         Twitter
                       </button>
                       <button
-                        className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-zinc-500 dark:bg-zinc-500 dark:text-white hover:dark:bg-zinc-700 hover:dark:text-primary-500"
+                        className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-neutral-700 dark:bg-neutral-700 dark:text-white hover:dark:bg-neutral-900 hover:dark:text-primary-500"
                         onClick={shareTelegram}
                       >
                         <span className="flex items-center justify-center">
@@ -153,7 +153,7 @@ export default function ModalShareSocialMedia({
                         Telegram
                       </button>
                       <button
-                        className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-zinc-500 dark:bg-zinc-500 dark:text-white hover:dark:bg-zinc-700 hover:dark:text-primary-500"
+                        className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-neutral-700 dark:bg-neutral-700 dark:text-white hover:dark:bg-neutral-900 hover:dark:text-primary-500"
                         onClick={shareWhatsapp}
                       >
                         <span className="flex items-center justify-center">
@@ -166,7 +166,7 @@ export default function ModalShareSocialMedia({
                       </button>
                     </div>
                     <button
-                      className="flex w-full items-center justify-between gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-zinc-500 dark:bg-zinc-500 dark:text-white hover:dark:bg-zinc-700 hover:dark:text-primary-500"
+                      className="flex w-full items-center justify-between gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-neutral-700 dark:bg-neutral-700 dark:text-white hover:dark:bg-neutral-900 hover:dark:text-primary-500"
                       onClick={shareCopyClipboard}
                     >
                       <span className="w-full overflow-hidden text-ellipsis">

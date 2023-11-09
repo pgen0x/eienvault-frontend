@@ -277,7 +277,7 @@ const Profile = ({
                   {...register('username', {
                     required: 'Username wajib diisi',
                   })}
-                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900"
                   placeholder="Enter your username"
                 />
               </label>
@@ -297,7 +297,7 @@ const Profile = ({
                       message: 'Entered value does not match email format',
                     },
                   })}
-                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900"
                   placeholder="you@domain.com"
                 />
               </label>
@@ -313,7 +313,7 @@ const Profile = ({
                   {...register('bio', {
                     required: false,
                   })}
-                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900"
                   placeholder="Tell about yourself"
                 />
               </label>
@@ -339,7 +339,7 @@ const Profile = ({
                       message: 'Entered value does not match url format',
                     },
                   })}
-                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900"
                   placeholder="https://domain.com"
                 />
               </label>
@@ -355,7 +355,7 @@ const Profile = ({
                   {...register('twitterUrl', {
                     required: false,
                   })}
-                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900"
                   placeholder="https://twitter.com/username"
                 />
               </label>
@@ -371,7 +371,7 @@ const Profile = ({
                   {...register('mediumUrl', {
                     required: false,
                   })}
-                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900"
                   placeholder="https://medium.com/@username"
                 />
               </label>
@@ -387,7 +387,7 @@ const Profile = ({
                   {...register('telegramUrl', {
                     required: false,
                   })}
-                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900"
                   placeholder="https://t.me/username"
                 />
               </label>
@@ -403,7 +403,7 @@ const Profile = ({
                   {...register('discordUrl', {
                     required: false,
                   })}
-                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900"
                   placeholder="https://discordapp.com/users/username"
                 />
               </label>
@@ -419,7 +419,7 @@ const Profile = ({
                   {...register('instagramUrl', {
                     required: false,
                   })}
-                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900"
                   placeholder="https://instagram.com/username"
                 />
               </label>
@@ -432,7 +432,7 @@ const Profile = ({
             </ButtonPrimary>
           </form>
         </div>
-        <div className="sticky top-28 col-span-12 flex h-fit flex-col gap-4 rounded-xl bg-white p-5 dark:bg-zinc-700 dark:text-white sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4">
+        <div className="sticky top-28 col-span-12 flex h-fit flex-col gap-4 rounded-xl bg-white p-5 dark:bg-neutral-900 dark:text-white sm:col-span-6 md:col-span-4 lg:col-span-4 xl:col-span-4 2xl:col-span-4">
           <img className="rounded-xl" src="/verify.svg" />
           <h3 className="text-lg font-bold">Verify your account</h3>
           <p>
@@ -474,7 +474,7 @@ const Account = () => {
             Your email for any notifications from marketplace
             <input
               type="text"
-              className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700 dark:text-white"
+              className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900 dark:text-white"
               placeholder="Search any specific nft of yours"
             />
           </label>
@@ -510,8 +510,8 @@ const Wallets = () => {
         <div className="flex flex-col gap-3">
           <h3 className="text-xl font-semibold">Manage wallet</h3>
           <p>Add one or more wallets to showcase all your NFTs in one place.</p>
-          <div className="grid grid-cols-12 gap-4 rounded-xl bg-white p-5 dark:bg-zinc-700">
-            <div className="col-span-12 flex items-center justify-between rounded-3xl bg-gray-100 p-5 dark:bg-zinc-600 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
+          <div className="grid grid-cols-12 gap-4 rounded-xl bg-white p-5 dark:bg-neutral-900">
+            <div className="col-span-12 flex items-center justify-between rounded-3xl bg-gray-100 p-5 dark:bg-neutral-800 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
               <div className="flex w-fit gap-3 text-gray-600 dark:text-white">
                 <Ethereum />
                 <p>0x30756...Fb179</p>
@@ -527,7 +527,7 @@ const Wallets = () => {
                 className="text-xl text-primary-500"
               />
             </div>
-            <div className="col-span-12 flex items-center justify-between rounded-3xl bg-gray-100 p-5 dark:bg-zinc-600 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
+            <div className="col-span-12 flex items-center justify-between rounded-3xl bg-gray-100 p-5 dark:bg-neutral-800 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
               <div className="flex w-fit gap-3">
                 <Bitcoin className="text-orange-400" />
                 <p className="text-orange-400">0x30756...Fb179</p>
@@ -543,7 +543,7 @@ const Wallets = () => {
                 className="text-xl text-primary-500"
               />
             </div>
-            <div className="col-span-12 flex items-center justify-between rounded-3xl bg-gray-100 p-5 dark:bg-zinc-600 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
+            <div className="col-span-12 flex items-center justify-between rounded-3xl bg-gray-100 p-5 dark:bg-neutral-800 sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
               <div className="flex w-fit gap-3">
                 <Ggtoken className="text-green-400" />
                 <p className="text-green-400">0x30756...Fb179</p>

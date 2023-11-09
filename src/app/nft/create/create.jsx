@@ -703,7 +703,7 @@ export default function Create({ chains }) {
                   className="mt-2"
                 >
                   <div className="relative z-20">
-                    <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left text-gray-900 focus:outline-none dark:bg-zinc-700 dark:text-white dark:hover:bg-zinc-600 dark:hover:text-gray-300 sm:text-sm">
+                    <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left text-gray-900 focus:outline-none dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800 dark:hover:text-gray-300 sm:text-sm">
                       <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                         {selectedChain.chainId === 1 ||
                         selectedChain.chainId === 11155111 ? (
@@ -726,7 +726,7 @@ export default function Create({ chains }) {
                         <FontAwesomeIcon icon={faChevronDown} className="" />
                       </span>
                     </Listbox.Button>
-                    <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-700 dark:hover:text-gray-300 sm:text-sm">
+                    <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-900 dark:hover:text-gray-300 sm:text-sm">
                       {chains.map((chain) => (
                         <Listbox.Option
                           key={chain.chainId}
@@ -782,10 +782,10 @@ export default function Create({ chains }) {
                     />
                     <label
                       htmlFor="single-edition"
-                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-t-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-zinc-500 ${
+                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-t-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-neutral-700 ${
                         selectedOptionEdition === 'single'
                           ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
-                          : 'dark:border-zinc-600 dark:bg-zinc-700 dark:text-gray-400 dark:hover:bg-zinc-600 dark:hover:text-gray-300 dark:peer-checked:text-primary-500'
+                          : 'dark:border-neutral-800 dark:bg-neutral-900 dark:text-gray-400 dark:hover:bg-neutral-800 dark:hover:text-gray-300 dark:peer-checked:text-primary-500'
                       }`}
                     >
                       <FontAwesomeIcon icon={faUsers} className="text-5xl" />
@@ -818,10 +818,10 @@ export default function Create({ chains }) {
                     />
                     <label
                       htmlFor="community-edition"
-                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-t-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-zinc-500 ${
+                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-t-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-neutral-700 ${
                         selectedOptionEdition === 'community'
                           ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
-                          : 'dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-600 dark:hover:text-gray-300 dark:peer-checked:text-primary-500'
+                          : 'dark:border-neutral-800 dark:bg-neutral-900 dark:text-zinc-400 dark:hover:bg-neutral-800 dark:hover:text-gray-300 dark:peer-checked:text-primary-500'
                       }`}
                     >
                       <FontAwesomeIcon icon={faUser} className="text-5xl" />
@@ -848,7 +848,7 @@ export default function Create({ chains }) {
                   <span className="text-semantic-red-500">*</span> Upload your
                   item
                 </label>
-                <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-5 text-center dark:border-zinc-500 dark:bg-zinc-700">
+                <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-5 text-center dark:border-neutral-700 dark:bg-neutral-900">
                   {selectedImage && selectedImage.length > 0 ? (
                     <>
                       <button
@@ -911,7 +911,7 @@ export default function Create({ chains }) {
                 <input
                   type="text"
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900"
                   placeholder="E.g, Mickey mouse riding a car"
                   {...register('name', { required: 'Name is required.' })}
                 />
@@ -924,7 +924,7 @@ export default function Create({ chains }) {
                   Description (optional)
                 </label>
                 <textarea
-                  className="mt-2 w-full rounded-2xl border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700"
+                  className="mt-2 w-full rounded-2xl border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900"
                   placeholder="e. g. This art is created by handraw without any help from ai"
                   {...register('description', {
                     maxLength: {
@@ -983,10 +983,10 @@ export default function Create({ chains }) {
                     />
                     <label
                       htmlFor="auction-method"
-                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-zinc-400 hover:bg-gray-100 hover:text-zinc-500 ${
+                      className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-zinc-400 hover:bg-gray-100 hover:text-neutral-700 ${
                         selectedOptionMarket === 'auction'
                           ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
-                          : 'dark:border-zinc-600 dark:bg-zinc-700 dark:text-gray-400 dark:hover:bg-zinc-600 dark:hover:text-gray-300'
+                          : 'dark:border-neutral-800 dark:bg-neutral-900 dark:text-gray-400 dark:hover:bg-neutral-800 dark:hover:text-gray-300'
                       }`}
                     >
                       <FontAwesomeIcon
@@ -1007,7 +1007,7 @@ export default function Create({ chains }) {
                   <span className="text-semantic-red-500">*</span> Price
                 </label>
                 <p>Enter price to allow users instantly purchase your NFT</p>
-                <div className="mt-2 flex w-full items-center rounded-full border border-gray-200 bg-white dark:bg-zinc-700">
+                <div className="mt-2 flex w-full items-center rounded-full border border-gray-200 bg-white dark:bg-neutral-900">
                   <input
                     type="number"
                     className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
@@ -1047,7 +1047,7 @@ export default function Create({ chains }) {
               </div>
               {selectedOptionMarket === 'auction' && (
                 <>
-                  <div className="mt-4 flex w-full flex-col rounded-xl bg-white p-5 dark:bg-zinc-600">
+                  <div className="mt-4 flex w-full flex-col rounded-xl bg-white p-5 dark:bg-neutral-800">
                     <label className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
                       <span className="text-semantic-red-500">*</span> Release
                       Date
@@ -1058,7 +1058,7 @@ export default function Create({ chains }) {
                         name="release_date"
                         id="release_date"
                         autoComplete="release_date"
-                        className="flex-1 rounded-full border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 dark:bg-zinc-700 dark:text-white sm:text-sm sm:leading-6"
+                        className="flex-1 rounded-full border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 dark:bg-neutral-900 dark:text-white sm:text-sm sm:leading-6"
                         value={customValueReleaseDate}
                         disabled={selectedOptionReleaseDate !== 'Custom'}
                         onChange={(e) =>
@@ -1066,7 +1066,7 @@ export default function Create({ chains }) {
                         }
                       />
                       <select
-                        className="rounded-3xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 dark:bg-zinc-700 dark:text-white sm:max-w-md sm:text-sm sm:leading-6"
+                        className="rounded-3xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 dark:bg-neutral-900 dark:text-white sm:max-w-md sm:text-sm sm:leading-6"
                         onChange={handleReleaseDateSelectChange}
                         value={selectedOptionReleaseDate}
                       >
@@ -1084,7 +1084,7 @@ export default function Create({ chains }) {
                 </>
               )}
 
-              <div className="mt-4 flex w-full flex-col rounded-xl bg-white p-5 dark:bg-zinc-600">
+              <div className="mt-4 flex w-full flex-col rounded-xl bg-white p-5 dark:bg-neutral-800">
                 <label className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
                   <span className="text-semantic-red-500">*</span> Date of
                   listing expiration
@@ -1095,13 +1095,13 @@ export default function Create({ chains }) {
                     name="duration_date"
                     id="duration_date"
                     autoComplete="duration_date"
-                    className="flex-1 rounded-full border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 dark:bg-zinc-700 dark:text-white sm:text-sm sm:leading-6"
+                    className="flex-1 rounded-full border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 dark:bg-neutral-900 dark:text-white sm:text-sm sm:leading-6"
                     value={customValueDate}
                     disabled={selectedOptionDate !== 'Custom'}
                     onChange={(e) => setCustomValueDate(e.target.value)}
                   />
                   <select
-                    className="rounded-3xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 dark:bg-zinc-700 dark:text-white sm:max-w-md sm:text-sm sm:leading-6"
+                    className="rounded-3xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 dark:bg-neutral-900 dark:text-white sm:max-w-md sm:text-sm sm:leading-6"
                     onChange={handleDateSelectChange}
                     value={selectedOptionDate}
                   >
@@ -1128,7 +1128,7 @@ export default function Create({ chains }) {
                         e.preventDefault();
                         handleModalCreate();
                       }}
-                      className="flex h-full w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-zinc-500 hover:bg-gray-100 hover:text-zinc-500 focus:border-primary-500 focus:text-primary-500 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-600 dark:hover:text-gray-300 dark:focus:text-primary-500"
+                      className="flex h-full w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-neutral-700 hover:bg-gray-100 hover:text-neutral-700 focus:border-primary-500 focus:text-primary-500 dark:border-neutral-800 dark:bg-neutral-900 dark:text-zinc-400 dark:hover:bg-neutral-800 dark:hover:text-gray-300 dark:focus:text-primary-500"
                     >
                       <FontAwesomeIcon
                         icon={faPlusCircle}
@@ -1162,7 +1162,7 @@ export default function Create({ chains }) {
                         />
                         <label
                           htmlFor={`collection-${collection.tokenAddress}`} // Match the input's ID
-                          className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-zinc-500 hover:bg-gray-100 hover:text-zinc-500 peer-checked:border-primary-500 peer-checked:text-primary-500 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-600 dark:hover:text-gray-300 dark:peer-checked:text-primary-500`}
+                          className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-neutral-700 hover:bg-gray-100 hover:text-neutral-700 peer-checked:border-primary-500 peer-checked:text-primary-500 dark:border-neutral-800 dark:bg-neutral-900 dark:text-zinc-400 dark:hover:bg-neutral-800 dark:hover:text-gray-300 dark:peer-checked:text-primary-500`}
                         >
                           {collection?.logo ? (
                             <ImageWithFallback
@@ -1253,7 +1253,7 @@ export default function Create({ chains }) {
               <div className="mt-4 w-full">
                 <label>
                   <span className="font-semibold">Royalties</span>
-                  <div className="mt-2 flex w-full items-center rounded-full border border-gray-200 bg-white dark:bg-zinc-700 dark:text-white">
+                  <div className="mt-2 flex w-full items-center rounded-full border border-gray-200 bg-white dark:bg-neutral-900 dark:text-white">
                     <input
                       type="number"
                       className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
@@ -1298,7 +1298,7 @@ export default function Create({ chains }) {
                         type="text"
                         name="trait_type"
                         placeholder="Trait Type"
-                        className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700 dark:text-white"
+                        className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900 dark:text-white"
                         value={field.trait_type}
                         onChange={(e) => handleInputChange(index, e)}
                       />
@@ -1306,7 +1306,7 @@ export default function Create({ chains }) {
                         type="text"
                         name="value"
                         placeholder="Value"
-                        className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-zinc-700 dark:text-white"
+                        className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900 dark:text-white"
                         value={field.value}
                         onChange={(e) => handleInputChange(index, e)}
                       />
@@ -1341,7 +1341,7 @@ export default function Create({ chains }) {
             Input the NFT Data field to see the preview of how your NFT product
             looks like in the marketplace
           </p>
-          <div className="flex flex-col gap-3 rounded-xl bg-white p-5 dark:bg-zinc-700">
+          <div className="flex flex-col gap-3 rounded-xl bg-white p-5 dark:bg-neutral-900">
             {selectedImage && selectedImage.length > 0 ? (
               <Image
                 src={URL.createObjectURL(getValues('file')[0])}
@@ -1366,7 +1366,7 @@ export default function Create({ chains }) {
                   className="h-4 w-4 rounded-2xl"
                   src="https://fakeimg.pl/16x16"
                 />
-                <div className="truncate text-xs font-medium leading-none text-neutral-700">
+                <div className="truncate text-xs font-medium leading-none text-neutral-900">
                   {address}
                 </div>
               </div>

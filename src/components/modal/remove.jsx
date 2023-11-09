@@ -200,7 +200,7 @@ export default function ModalRemove({
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-gray-900 dark:bg-neutral-900 dark:text-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-gray-900 dark:bg-neutral-950 dark:text-white p-6 text-left align-middle shadow-xl transition-all">
                     <Dialog.Title className="flex justify-between text-xl font-bold">
                       <div className="flex w-full justify-start">
                         Remove Listing
@@ -216,7 +216,7 @@ export default function ModalRemove({
                     </Dialog.Title>
 
                     <section className="step-1 flex flex-col gap-3 pt-5">
-                      <div className="flex flex-col justify-between gap-1 rounded-lg bg-gray-50 dark:bg-neutral-700 p-3">
+                      <div className="flex flex-col justify-between gap-1 rounded-lg bg-gray-50 dark:bg-neutral-900 p-3">
                         Check your wallet and do an approvement to continue
                         remove your listing
                       </div>

@@ -156,7 +156,7 @@ export default function ModalVerifyUser({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all dark:bg-neutral-900 dark:text-white">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all dark:bg-neutral-950 dark:text-white">
                   <Dialog.Title as="h3" className="px-6 pt-6 text-xl font-bold">
                     Create collection
                   </Dialog.Title>
@@ -177,7 +177,7 @@ export default function ModalVerifyUser({
                                 Profile Link
                               </label>
 
-                              <div className="flex w-full items-center rounded-full bg-white dark:bg-neutral-700">
+                              <div className="flex w-full items-center rounded-full bg-white dark:bg-neutral-900">
                                 <input
                                   type="text"
                                   className="w-full rounded-full border-0 bg-transparent focus:outline-none focus:ring-primary-500"
@@ -206,7 +206,7 @@ export default function ModalVerifyUser({
                                 the space
                               </span>
 
-                              <div className="flex w-full items-center rounded-2xl bg-white dark:bg-neutral-700">
+                              <div className="flex w-full items-center rounded-2xl bg-white dark:bg-neutral-900">
                                 <textarea
                                   type="text"
                                   className="w-full resize-none rounded-2xl border-0 bg-transparent focus:outline-none focus:ring-primary-500"
@@ -239,13 +239,13 @@ export default function ModalVerifyUser({
                                     type="radio"
                                     value="creator"
                                     name="type"
-                                    class="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-600 dark:bg-neutral-700 dark:ring-offset-neutral-800 dark:focus:ring-red-600"
+                                    class="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:ring-offset-neutral-800 dark:focus:ring-red-600"
                                     {...register('type', {
                                       required: 'This field was required',
                                     })}
                                   />
                                   <label
-                                    for="creator"
+                                    htmlFor="creator"
                                     class="ml-2 text-sm font-medium text-gray-900 dark:text-white"
                                   >
                                     Creator
@@ -257,13 +257,13 @@ export default function ModalVerifyUser({
                                     type="radio"
                                     value="collector"
                                     name="type"
-                                    class="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-600 dark:bg-neutral-700 dark:ring-offset-neutral-800 dark:focus:ring-red-600"
+                                    class="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:ring-offset-neutral-800 dark:focus:ring-red-600"
                                     {...register('type', {
                                       required: 'This field was required',
                                     })}
                                   />
                                   <label
-                                    for="collector"
+                                    htmlFor="collector"
                                     class="ml-2 text-sm font-medium text-gray-900 dark:text-white"
                                   >
                                     Collector
@@ -284,7 +284,7 @@ export default function ModalVerifyUser({
                                 https://twitter.com/eienvault
                               </span>
 
-                              <div className="flex w-full items-center rounded-full bg-white dark:bg-neutral-700">
+                              <div className="flex w-full items-center rounded-full bg-white dark:bg-neutral-900">
                                 <input
                                   type="text"
                                   className="w-full rounded-full border-0 bg-transparent focus:outline-none focus:ring-primary-500"
@@ -311,7 +311,7 @@ export default function ModalVerifyUser({
                                 https://instagram.com/eienvault
                               </span>
 
-                              <div className="flex w-full items-center rounded-full bg-white dark:bg-neutral-700">
+                              <div className="flex w-full items-center rounded-full bg-white dark:bg-neutral-900">
                                 <input
                                   type="text"
                                   className="w-full rounded-full border-0 bg-transparent focus:outline-none focus:ring-primary-500"
@@ -338,7 +338,7 @@ export default function ModalVerifyUser({
                                 https://eienvault.com
                               </span>
 
-                              <div className="flex w-full items-center rounded-full bg-white dark:bg-neutral-700">
+                              <div className="flex w-full items-center rounded-full bg-white dark:bg-neutral-900">
                                 <input
                                   type="text"
                                   className="w-full rounded-full border-0 bg-transparent focus:outline-none focus:ring-primary-500"
@@ -359,7 +359,7 @@ export default function ModalVerifyUser({
                                 Your email address. ex: you@yourdomain.com
                               </span>
 
-                              <div className="flex w-full items-center rounded-full bg-white dark:bg-neutral-700">
+                              <div className="flex w-full items-center rounded-full bg-white dark:bg-neutral-900">
                                 <input
                                   type="text"
                                   className="w-full rounded-full border-0 bg-transparent focus:outline-none focus:ring-primary-500"
@@ -381,7 +381,7 @@ export default function ModalVerifyUser({
                                 share?
                               </span>
 
-                              <div className="flex w-full items-center rounded-2xl bg-white dark:bg-neutral-700">
+                              <div className="flex w-full items-center rounded-2xl bg-white dark:bg-neutral-900">
                                 <textarea
                                   type="text"
                                   className="w-full resize-none rounded-2xl border-0 bg-transparent focus:outline-none focus:ring-primary-500"
@@ -432,7 +432,7 @@ export default function ModalVerifyUser({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-100 p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-900">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-100 p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-950">
                   <Dialog.Title className="flex justify-between text-xl font-bold text-neutral-800 dark:text-white">
                     <span>
                       {errorVerify.isError
@@ -513,7 +513,7 @@ export default function ModalVerifyUser({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-100 p-3 text-left align-middle text-gray-900 shadow-xl transition-all dark:bg-neutral-900 dark:text-white">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-100 p-3 text-left align-middle text-gray-900 shadow-xl transition-all dark:bg-neutral-950 dark:text-white">
                   <div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
                     <div className="relative mt-2 transform overflow-hidden text-left transition-all sm:w-full sm:max-w-lg">
                       <section className="step-2 flex flex-col gap-3 p-5">

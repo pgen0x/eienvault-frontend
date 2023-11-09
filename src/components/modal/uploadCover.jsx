@@ -144,7 +144,7 @@ export default function ModaluploadCover({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-700">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-900">
                   <Dialog.Title
                     as="h3"
                     className="text-xl font-bold text-gray-900 dark:text-white"
@@ -154,11 +154,11 @@ export default function ModaluploadCover({
                   <div className="flex flex-col text-sm text-gray-900 dark:text-white">
                     <div className="mt-4 flex max-w-full shrink-0 flex-row items-center gap-4">
                       Upload new cover. We recommend to upload images in
-                      1440x260 resolution. Max 15 MB in JPEG or PNG format
+                      1920x266 resolution. Max 15 MB in JPEG or PNG format
                     </div>
                     <form>
                       <div className="w-full">
-                        <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-3 text-center dark:bg-neutral-700">
+                        <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-3 text-center dark:bg-neutral-900">
                           {selectedImage && selectedImage.length > 0 ? (
                             <>
                               <button
@@ -186,7 +186,7 @@ export default function ModaluploadCover({
                                 className="text-6xl"
                               />
                               <div className="text-sm">
-                                1440 x 260 pixel is recommended
+                                1920 x 266 pixel is recommended
                               </div>
                               <label className="cursor-pointer rounded-full bg-primary-500 px-4 py-1 font-semibold text-white hover:bg-primary-300">
                                 Choose file

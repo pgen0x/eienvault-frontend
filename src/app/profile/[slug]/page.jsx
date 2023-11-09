@@ -55,6 +55,7 @@ import {
   faTelegram,
   faTwitter,
 } from '@fortawesome/free-brands-svg-icons';
+import ModalFollowers from '@/components/modal/followers';
 
 const servers = [
   'All Mainnet',
@@ -96,10 +97,11 @@ export default function ProfilePage({ params }) {
 
   const [shareData, setShareData] = useState({});
   const [reportData, setReportData] = useState({});
+  const [followersData, setFollowersData] = useState({});
 
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
   const [isOpenModalReport, setisOpenModalReport] = useState(false);
-
+  const [isOpenModalFollowers, setisOpenModalFollowers] = useState(false);
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
   const [IsOpenModalLogo, setIsOpenModalLogo] = useState(false);
   const [bannerImage, setBannerImage] = useState(
@@ -237,12 +239,23 @@ export default function ProfilePage({ params }) {
     setisOpenModalReport(true);
   };
 
+  const handleOpenModalFollowers = async (walletAddress) => {
+    setFollowersData({
+      walletAddress
+    });
+    setisOpenModalFollowers(true);
+  };
+
   function closeModalShare() {
     setisOpenModalShare(false);
   }
 
   function closeModalReport() {
     setisOpenModalReport(false);
+  }
+
+  function closeModalFollowers() {
+    setisOpenModalFollowers(false);
   }
 
   const renderActiveTab = () => {
@@ -425,70 +438,77 @@ export default function ProfilePage({ params }) {
                 </div>
                 <div className="col-span-12 flex justify-end sm:col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 2xl:col-span-6">
                   <div className="flex w-full flex-col gap-5 rounded-xl bg-white sm:w-full sm:bg-white md:w-56 md:bg-transparent lg:w-56 lg:bg-transparent xl:w-56 xl:bg-transparent 2xl:w-56 2xl:bg-transparent">
-                    <div class="inline-flex w-full items-start justify-start gap-4 rounded-2xl bg-white dark:bg-neutral-700 p-4 text-primary-500 dark:text-white text-xs">
-                      {profile?.websiteUrl && (
-                        <button
-                          class="h-6 w-6"
-                          onClick={() =>
-                            window.open(profile?.websiteUrl, 'blank')
-                          }
-                        >
-                          <FontAwesomeIcon icon={faGlobe} />
-                        </button>
-                      )}
-                      {profile?.twitterUrl && (
-                        <button
-                          class="h-6 w-6"
-                          onClick={() =>
-                            window.open(profile?.twitterUrl, 'blank')
-                          }
-                        >
-                          <FontAwesomeIcon icon={faTwitter} />
-                        </button>
-                      )}
-                      {profile?.mediumUrl && (
-                        <button
-                          class="h-6 w-6"
-                          onClick={() =>
-                            window.open(profile?.mediumUrl, 'blank')
-                          }
-                        >
-                          <FontAwesomeIcon icon={faMedium} />
-                        </button>
-                      )}
-                      {profile?.telegramUrl && (
-                        <button
-                          class="h-6 w-6"
-                          onClick={() =>
-                            window.open(profile?.telegramUrl, 'blank')
-                          }
-                        >
-                          <FontAwesomeIcon icon={faTelegram} />
-                        </button>
-                      )}
-                      {profile?.discordUrl && (
-                        <button
-                          class="h-6 w-6"
-                          onClick={() =>
-                            window.open(profile?.discordUrl, 'blank')
-                          }
-                        >
-                          <FontAwesomeIcon icon={faDiscord} />
-                        </button>
-                      )}
-                      {profile?.instagramUrl && (
-                        <button
-                          class="h-6 w-6"
-                          onClick={() =>
-                            window.open(profile?.instagramUrl, 'blank')
-                          }
-                        >
-                          <FontAwesomeIcon icon={faInstagram} />
-                        </button>
-                      )}
-                    </div>
-                    <div className="flex w-full divide-x divide-gray-200 rounded-xl bg-white p-5 text-gray-900 dark:divide-zinc-600 dark:bg-zinc-700 dark:text-white">
-                      <div className="w-full text-center">
+                    {(profile?.websiteUrl ||
+                      profile?.twitterUrl ||
+                      profile?.mediumUrl ||
+                      profile?.telegramUrl ||
+                      profile?.discordUrl ||
+                      profile?.instagramUrl) && (
+                      <div className="inline-flex w-full items-start justify-start gap-4 rounded-2xl bg-white p-4 text-xs text-primary-500 dark:bg-neutral-900 dark:text-white">
+                        {profile?.websiteUrl && (
+                          <button
+                            class="h-6 w-6"
+                            onClick={() =>
+                              window.open(profile?.websiteUrl, 'blank')
+                            }
+                          >
+                            <FontAwesomeIcon icon={faGlobe} />
+                          </button>
+                        )}
+                        {profile?.twitterUrl && (
+                          <button
+                            class="h-6 w-6"
+                            onClick={() =>
+                              window.open(profile?.twitterUrl, 'blank')
+                            }
+                          >
+                            <FontAwesomeIcon icon={faTwitter} />
+                          </button>
+                        )}
+                        {profile?.mediumUrl && (
+                          <button
+                            class="h-6 w-6"
+                            onClick={() =>
+                              window.open(profile?.mediumUrl, 'blank')
+                            }
+                          >
+                            <FontAwesomeIcon icon={faMedium} />
+                          </button>
+                        )}
+                        {profile?.telegramUrl && (
+                          <button
+                            class="h-6 w-6"
+                            onClick={() =>
+                              window.open(profile?.telegramUrl, 'blank')
+                            }
+                          >
+                            <FontAwesomeIcon icon={faTelegram} />
+                          </button>
+                        )}
+                        {profile?.discordUrl && (
+                          <button
+                            class="h-6 w-6"
+                            onClick={() =>
+                              window.open(profile?.discordUrl, 'blank')
+                            }
+                          >
+                            <FontAwesomeIcon icon={faDiscord} />
+                          </button>
+                        )}
+                        {profile?.instagramUrl && (
+                          <button
+                            class="h-6 w-6"
+                            onClick={() =>
+                              window.open(profile?.instagramUrl, 'blank')
+                            }
+                          >
+                            <FontAwesomeIcon icon={faInstagram} />
+                          </button>
+                        )}
+                      </div>
+                    )}
+                    <div className="flex w-full divide-x divide-gray-200 rounded-xl bg-white p-5 text-gray-900 dark:divide-neutral-800 dark:bg-neutral-900 dark:text-white">
+                      <div className="w-full text-center cursor-pointer" onClick={handleOpenModalFollowers}>
                         <h2>
                           {profile?.followersCount ? profile.followersCount : 0}
                         </h2>
@@ -501,7 +521,7 @@ export default function ProfilePage({ params }) {
                         <p>Following</p>
                       </div>
                     </div>
-                    {/* <div className="w-full justify-between rounded-xl bg-white p-5 text-gray-900 dark:bg-zinc-700 dark:text-white">
+                    {/* <div className="w-full justify-between rounded-xl bg-white p-5 text-gray-900 dark:bg-neutral-900 dark:text-white">
                       <p>Address</p>
                       <div>
                         <Listbox
@@ -509,7 +529,7 @@ export default function ProfilePage({ params }) {
                           onChange={setSelectedServer}
                         >
                           <div className="relative z-30">
-                            <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 dark:border-zinc-600 dark:bg-zinc-700 sm:text-sm">
+                            <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 dark:border-neutral-800 dark:bg-neutral-900 sm:text-sm">
                               <span className="block truncate text-gray-600 dark:text-white">
                                 {selectedServer}
                               </span>
@@ -528,7 +548,7 @@ export default function ProfilePage({ params }) {
                                 </svg>
                               </span>
                             </Listbox.Button>
-                            <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-700 sm:text-sm">
+                            <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-900 sm:text-sm">
                               {servers.map((server, index) => (
                                 <Listbox.Option
                                   key={index}
@@ -667,6 +687,12 @@ export default function ProfilePage({ params }) {
         isOpenModal={IsOpenModalLogo}
         onModalClose={closeModalLogo}
         updateLogoImage={updateLogoImage}
+      />
+      
+      <ModalFollowers
+        isOpenModal={isOpenModalFollowers}
+        onModalClose={closeModalFollowers}
+        followersData={followersData}
       />
       <Footer />
     </>
@@ -828,12 +854,12 @@ const Collection = ({ userAccount }) => {
               onSubmit={(event) => handleSearch(event)}
               className="flex w-full gap-4"
             >
-              <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-zinc-700">
-                <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
+              <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-neutral-900">
+                <div className="text-xl font-black text-neutral-700 dark:text-zinc-200">
                   <FontAwesomeIcon icon={faSearch} />
                 </div>
                 <input
-                  className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-gray-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-gray-600 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                   type="text"
                   placeholder="Search ..."
                   aria-label="Search"
@@ -842,13 +868,13 @@ const Collection = ({ userAccount }) => {
                   onChange={(event) => setSearch(event.target.value)}
                 />
                 <div className="inline-flex flex-col items-center justify-center gap-2 rounded-md bg-zinc-200 px-2">
-                  <div className="text-base font-light leading-normal text-zinc-500">
+                  <div className="text-base font-light leading-normal text-neutral-700">
                     /
                   </div>
                 </div>
               </div>
             </form>
-            <div className="hidden space-x-1 rounded-full bg-white px-1 py-1 dark:border-zinc-500 dark:bg-zinc-700 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+            <div className="hidden space-x-1 rounded-full bg-white px-1 py-1 dark:border-neutral-700 dark:bg-neutral-900 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
               <div>
                 <input
                   className="hidden"
@@ -887,7 +913,7 @@ const Collection = ({ userAccount }) => {
             <div className="grid w-full grid-cols-12 gap-6 text-gray-900">
               {address === userAccount && (
                 <div className="col-span-12 mb-4 h-[280px] w-full sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                  <div className="flex h-full w-full flex-col items-center justify-center rounded-2xl border-2 border-gray-200 dark:border-zinc-500">
+                  <div className="flex h-full w-full flex-col items-center justify-center rounded-2xl border-2 border-gray-200 dark:border-neutral-700">
                     <ButtonPrimary
                       className="!w-fit"
                       onClick={handleModalCreate}
@@ -956,7 +982,7 @@ const ItemCollection = ({ collection, gridList }) => {
         <Image
           src={
             collection.bannerImage
-              ? `/uploads/collections/${collection?.bannerImage}`
+              ? `${process.env.NEXT_PUBLIC_CDN_URL}/collections/${collection.bannerImage}`
               : 'https://fakeimg.pl/325x175'
           }
           alt={collection.name ? collection.name : ''}
@@ -970,11 +996,11 @@ const ItemCollection = ({ collection, gridList }) => {
       )}
 
       <div className="grid grid-cols-12 p-3">
-        <div className="relative -top-[62px] z-10 col-span-12 flex gap-1 rounded-tl-2xl rounded-tr-2xl bg-white bg-opacity-50 p-2 dark:bg-neutral-700 dark:text-white sm:col-span-12 md:col-span-10 lg:col-span-8 xl:col-span-8 2xl:col-span-8">
+        <div className="relative -top-[62px] z-10 col-span-12 flex gap-1 rounded-tl-2xl rounded-tr-2xl bg-white bg-opacity-50 p-2 dark:bg-neutral-900 dark:text-white sm:col-span-12 md:col-span-10 lg:col-span-8 xl:col-span-8 2xl:col-span-8">
           <div className="w-fit">
             {collection?.logo ? (
               <ImageWithFallback
-                src={`/uploads/collections/${collection?.logo}`}
+                src={`${process.env.NEXT_PUBLIC_CDN_URL}/collections/${collection.logo}`}
                 alt={collection?.name}
                 width={36}
                 height={36}
@@ -992,7 +1018,7 @@ const ItemCollection = ({ collection, gridList }) => {
             )}
           </div>
           <div className="w-full text-right">
-            <h3 className="line-clamp-1 h-[10px] text-xs leading-[10px]">
+            <h3 className="line-clamp-1 text-xs">
               {collection.name
                 ? collection.name
                 : collection.tokenAddress
@@ -1007,8 +1033,8 @@ const ItemCollection = ({ collection, gridList }) => {
       </div>
       <div className="relative -top-[85px] inline-flex w-full flex-col items-center justify-center lg:items-start">
         <div className="relative flex w-full flex-row px-3">
-          <div className="inline-flex w-full flex-col items-start justify-start gap-2 rounded-bl-2xl rounded-br-2xl bg-gray-50 p-3 backdrop-blur-xl dark:bg-neutral-700 dark:text-white">
-            <div className="flex w-full flex-col justify-between rounded-md bg-gray-100 px-2 py-2 dark:bg-neutral-500 sm:flex-col md:flex-row">
+          <div className="inline-flex w-full flex-col items-start justify-start gap-2 rounded-bl-2xl rounded-br-2xl bg-gray-50 p-3 backdrop-blur-xl dark:bg-neutral-900 dark:text-white">
+            <div className="flex w-full flex-col justify-between rounded-md bg-gray-100 px-2 py-2 dark:bg-neutral-700 sm:flex-col md:flex-row">
               <div className="flex shrink-0 flex-col truncate text-sm leading-5 sm:items-start">
                 <p>Total Volume</p>
                 <p className="font-bold">

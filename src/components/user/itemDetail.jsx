@@ -58,7 +58,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
   };
 
   return (
-    <div className="col-span-3 flex w-full flex-col items-end justify-center gap-2 rounded-lg bg-gray-50 shadow backdrop-blur-xl dark:bg-neutral-900">
+    <div className="col-span-12 md:col-span-6 lg:col-span-3 flex w-full flex-col items-end justify-center gap-2 rounded-lg bg-gray-50 shadow backdrop-blur-xl dark:bg-neutral-900">
       {user?.banner ? (
         <Image
           src={
@@ -145,7 +145,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
             </div>
           </div>
         </div>
-        <div className="flex w-full items-center justify-between gap-2 font-bold">
+        <div className="flex flex-row lg:flex-col xl:flex-row w-full items-center justify-between gap-2 font-bold">
           <ButtonPrimary
             className="flex w-full items-center justify-center gap-2"
             onClick={() => {

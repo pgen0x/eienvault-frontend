@@ -26,7 +26,7 @@ import {
   UpcomingAuctionSkeleton,
 } from '@/components/auction/upcoming';
 import { Tab } from '@headlessui/react';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faAt, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import {
   faDiscord,
   faMedium,
@@ -46,6 +46,9 @@ import Wave from '@/assets/icon/wave';
 import LineL from '@/assets/icon/linel';
 import CastleDiscover from '@/assets/icon/castlediscover';
 import CastleDiscover2 from '@/assets/icon/castlediscover2';
+import ButtonSecondary from '@/components/button/buttonSecondary';
+import TooltipTriangle from '@/assets/icon/tooltipTriangle';
+import TopTooltip from '@/components/tooltip/topTooltip';
 
 export default function Home() {
   const router = useRouter();
@@ -423,9 +426,9 @@ export default function Home() {
             <div className="container mx-auto px-4 py-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold">Trending creator</h2>
-                <a href="#" title="See all" className="text-primary-500">
+                <button onClick={() => router.push("/user")} title="See all" className="text-primary-500">
                   See all
-                </a>
+                </button>
               </div>
               <div className="relative my-5 flex w-full flex-initial items-center justify-center gap-5">
                 {isLoadingUsers || dataUsers.length <= 0 ? (
@@ -501,9 +504,9 @@ export default function Home() {
                 </p>
                 <div className="my-5 flex flex-col gap-3 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
                   <ButtonPrimary className="!w-fit">Get loan now</ButtonPrimary>
-                  <ButtonTertiary className="!w-fit">
+                  <ButtonSecondary className="!w-fit">
                     I want to lend
-                  </ButtonTertiary>
+                  </ButtonSecondary>
                 </div>
                 <div className="flex w-full flex-col items-center justify-between gap-5 p-5 md:flex-row">
                   <div className="">
@@ -556,39 +559,43 @@ export default function Home() {
                     offers
                   </p>
                 </div>
-                <div className="hidden flex-col py-5 text-primary-500 sm:hidden md:block lg:block xl:block 2xl:block">
+                <div className="hidden flex-col py-5 text-primary-500 dark:text-white sm:hidden md:block lg:block xl:block 2xl:block">
                   <h4 className="text-xl font-bold">Join our community</h4>
-                  <ul className="mt-3 flex w-fit justify-between gap-2">
-                    <li className="text-2xl">
+                  <ul className="mt-3 flex w-fit justify-between gap-4">
+                    <li className="text-xl">
                       <a
                         href="#"
-                        className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:bg-white dark:hover:bg-zinc-300"
+                        className="group relative flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 active:bg-primary-200 dark:hover:bg-neutral-500"
                       >
                         <FontAwesomeIcon icon={faTwitter} />
+                        <TopTooltip title="Twitter" />
                       </a>
                     </li>
-                    <li className="text-2xl">
+                    <li className="text-xl">
                       <a
                         href="#"
-                        className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:bg-white dark:hover:bg-zinc-300"
+                        className="group relative flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 active:bg-primary-200 dark:hover:bg-neutral-500"
                       >
                         <FontAwesomeIcon icon={faDiscord} />
+                        <TopTooltip title="Discord" />
                       </a>
                     </li>
-                    <li className="text-2xl">
+                    <li className="text-xl">
                       <a
                         href="#"
-                        className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:bg-white dark:hover:bg-zinc-300"
+                        className="group relative flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 active:bg-primary-200 dark:hover:bg-neutral-500"
                       >
                         <FontAwesomeIcon icon={faMedium} />
+                        <TopTooltip title="Medium" />
                       </a>
                     </li>
-                    <li className="text-2xl">
+                    <li className="text-xl">
                       <a
                         href="#"
-                        className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:bg-white dark:hover:bg-zinc-300"
+                        className="group relative flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 active:bg-primary-200 dark:hover:bg-neutral-500"
                       >
-                        <FontAwesomeIcon icon={faEnvelope} />
+                        <FontAwesomeIcon icon={faAt} />
+                        <TopTooltip title="Mail" />
                       </a>
                     </li>
                   </ul>
@@ -597,7 +604,7 @@ export default function Home() {
               <div className="flex w-full flex-col justify-evenly sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
                 <div className="flex w-full gap-5">
                   <div className="w-full">
-                    <h2 className="text-xl font-bold text-primary-500">
+                    <h2 className="text-xl font-bold text-primary-500 dark:text-white">
                       Company
                     </h2>
                     <ul className="mt-5 text-gray-900 dark:text-white">
@@ -609,7 +616,7 @@ export default function Home() {
                     </ul>
                   </div>
                   <div className="w-full">
-                    <h2 className="text-xl font-bold text-primary-500">
+                    <h2 className="text-xl font-bold text-primary-500 dark:text-white">
                       EienVault
                     </h2>
                     <ul className="mt-5 text-gray-900 dark:text-white">
@@ -621,7 +628,7 @@ export default function Home() {
                 </div>
                 <div className="flex w-full gap-5">
                   <div className="w-full">
-                    <h2 className="text-xl font-bold text-primary-500">
+                    <h2 className="text-xl font-bold text-primary-500 dark:text-white">
                       Other
                     </h2>
                     <ul className="mt-5 text-gray-900 dark:text-white">
@@ -632,7 +639,7 @@ export default function Home() {
                     </ul>
                   </div>
                   <div className="w-full">
-                    <h2 className="text-xl font-bold text-primary-500">
+                    <h2 className="text-xl font-bold text-primary-500 dark:text-white">
                       Stats
                     </h2>
                     <ul className="mt-5 text-gray-900 dark:text-white">
@@ -642,45 +649,49 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="flex w-full flex-col py-5 text-primary-500 sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
+              <div className="flex w-full flex-col py-5 text-primary-500 dark:text-white sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
                 <h4 className="text-xl font-bold">Join our community</h4>
-                <ul className="mt-3 flex w-fit justify-between gap-2">
-                  <li className="text-2xl">
+                <ul className="mt-3 flex w-fit justify-between gap-4">
+                  <li className="text-xl">
                     <a
                       href="#"
-                      className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:hover:bg-neutral-900"
+                      className="group relative flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 active:bg-primary-200 dark:hover:bg-neutral-500"
                     >
                       <FontAwesomeIcon icon={faTwitter} />
+                      <TopTooltip title="Discord" />
                     </a>
                   </li>
-                  <li className="text-2xl">
+                  <li className="text-xl">
                     <a
                       href="#"
-                      className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:hover:bg-neutral-900"
+                      className="group relative flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 active:bg-primary-200 dark:hover:bg-neutral-500"
                     >
                       <FontAwesomeIcon icon={faDiscord} />
+                      <TopTooltip title="Discord" />
                     </a>
                   </li>
-                  <li className="text-2xl">
+                  <li className="text-xl">
                     <a
                       href="#"
-                      className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:hover:bg-neutral-900"
+                      className="group relative flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 active:bg-primary-200 dark:hover:bg-neutral-500"
                     >
                       <FontAwesomeIcon icon={faMedium} />
+                      <TopTooltip title="Medium" />
                     </a>
                   </li>
-                  <li className="text-2xl">
+                  <li className="text-xl">
                     <a
                       href="#"
-                      className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 dark:hover:bg-neutral-900"
+                      className="group relative flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 active:bg-primary-200 dark:hover:bg-neutral-500"
                     >
-                      <FontAwesomeIcon icon={faEnvelope} />
+                      <FontAwesomeIcon icon={faAt} />
+                      <TopTooltip title="Mail" />
                     </a>
                   </li>
                 </ul>
               </div>
             </div>
-            <div className="mt-5 border-t border-primary-500 py-5 text-gray-900 dark:text-white">
+            <div className="mt-5 border-t border-primary-500 py-5 text-gray-900 dark:border-white dark:text-white">
               2023 EienVault, inc
             </div>
           </div>

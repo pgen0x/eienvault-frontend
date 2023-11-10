@@ -159,7 +159,7 @@ const UserPage = () => {
           </div>
           <div className="my-5 grid grid-cols-12 gap-6">
             <div className="col-span-12 overflow-auto sm:col-span-12">
-              <div className="grid w-full min-w-[720px] grid-cols-12 text-gray-900">
+              <div className="grid w-full grid-cols-12 text-gray-900">
                 <div className="col-span-12 grid grid-cols-12 gap-3 rounded-lg p-3">
                   {users.length == 0 && !isLoading && (
                     <div className="col-span-12 w-full text-center font-semibold text-black dark:text-white">

@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UserItemDetail, { UserItemDetailSkeleton } from '../user/itemDetail';
 import axios from 'axios';
 import { useAccount } from 'wagmi';
+import ButtonPrimary from '../button/buttonPrimary';
 
 const sliderBreakPoints = {
   640: {
@@ -75,9 +76,9 @@ export const SlideshowCreator = ({ dataUsers }) => {
 
   return (
     <>
-      <button className="swiper-prev-discover absolute -left-5 z-10 mr-2 hidden rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
+      <ButtonPrimary className="swiper-prev-discover absolute -left-5 z-10 mr-2 hidden !w-fit sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronLeft} />
-      </button>
+      </ButtonPrimary>
       <Swiper
         className="!pb-10"
         slidesPerView={1}
@@ -98,7 +99,7 @@ export const SlideshowCreator = ({ dataUsers }) => {
         }}
       >
         {dataUsers.map((data, index) => (
-          <SwiperSlide key={index}>
+          <SwiperSlide key={index} className="px-2">
             <UserItemDetail
               key={index}
               user={data}
@@ -108,9 +109,9 @@ export const SlideshowCreator = ({ dataUsers }) => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <button className="swiper-next-discover absolute -right-5 z-10 ml-2 hidden rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
+      <ButtonPrimary className="swiper-next-discover absolute -right-5 z-10 ml-2 hidden !w-fit sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronRight} />
-      </button>
+      </ButtonPrimary>
     </>
   );
 };

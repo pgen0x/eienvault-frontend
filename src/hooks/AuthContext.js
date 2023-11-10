@@ -3,6 +3,7 @@ import { SiweMessage } from 'siwe';
 import { useAccount, useSignMessage } from 'wagmi';
 import { signMessage } from 'wagmi/actions';
 import { watchAccount } from '@wagmi/core';
+import moment from 'moment';
 
 const AuthContext = createContext();
 
@@ -15,8 +16,7 @@ export function AuthProvider({ children }) {
   const [addressHasSigned, setAddressHasSigned] = useState(
     localStorage.getItem('addressHasSigned') || null,
   );
-  const { isConnected, address, isConnecting } = useAccount();
-  const { signMessageAsync } = useSignMessage();
+  const { isConnected, address } = useAccount();
 
   const login = async (newToken) => {
     setToken(newToken);
@@ -69,6 +69,9 @@ export function AuthProvider({ children }) {
 
   const handleSign = async () => {
     if (!isConnected) open();
+    const currentDate = moment();
+    const tomorrow = currentDate.add(1, 'day');
+    const isoDateString = tomorrow.toISOString();
     try {
       const nonce = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/nonce`,
@@ -87,6 +90,7 @@ export function AuthProvider({ children }) {
         statement: process.env.NEXT_PUBLIC_SIGNIN_MESSAGE,
         nonce: nonceText,
         chainId: 666888,
+        expirationTime: isoDateString,
       });
 
       const signature = await signMessage({

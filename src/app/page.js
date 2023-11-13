@@ -26,7 +26,7 @@ import {
   UpcomingAuctionSkeleton,
 } from '@/components/auction/upcoming';
 import { Tab } from '@headlessui/react';
-import { faAt, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import {
   faDiscord,
   faMedium,
@@ -594,7 +594,7 @@ export default function Home() {
                         href="#"
                         className="group relative flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 active:bg-primary-200 dark:hover:bg-neutral-500"
                       >
-                        <FontAwesomeIcon icon={faAt} />
+                        <FontAwesomeIcon icon={faEnvelope} />
                         <TopTooltip title="Mail" />
                       </a>
                     </li>
@@ -684,7 +684,7 @@ export default function Home() {
                       href="#"
                       className="group relative flex h-11 w-11 items-center justify-center rounded-full hover:bg-primary-100 active:bg-primary-200 dark:hover:bg-neutral-500"
                     >
-                      <FontAwesomeIcon icon={faAt} />
+                      <FontAwesomeIcon icon={faEnvelope} />
                       <TopTooltip title="Mail" />
                     </a>
                   </li>

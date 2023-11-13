@@ -8,11 +8,13 @@ import {
   faChevronDown,
   faChevronUp,
   faCircleCheck,
+  faCopy,
   faEllipsis,
   faGlobe,
   faGrip,
   faGripVertical,
   faPenToSquare,
+  faPlus,
   faSearch,
   faShare,
   faSliders,
@@ -55,7 +57,9 @@ import {
   faTelegram,
   faTwitter,
 } from '@fortawesome/free-brands-svg-icons';
-import ModalFollowers from '@/components/modal/followers';
+import ModalFollow from '@/components/modal/follow';
+import { useWeb3Modal } from '@web3modal/react';
+import SwitchGrid from '@/components/switch/grid';
 
 const servers = [
   'All Mainnet',
@@ -85,7 +89,7 @@ const filters = [
 ];
 
 export default function ProfilePage({ params }) {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const router = useRouter();
   const { token } = useAuth();
   const [selectedServer, setSelectedServer] = useState(servers[0]);
@@ -97,11 +101,11 @@ export default function ProfilePage({ params }) {
 
   const [shareData, setShareData] = useState({});
   const [reportData, setReportData] = useState({});
-  const [followersData, setFollowersData] = useState({});
+  const [followData, setFollowData] = useState({});
 
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
   const [isOpenModalReport, setisOpenModalReport] = useState(false);
-  const [isOpenModalFollowers, setisOpenModalFollowers] = useState(false);
+  const [isOpenModalFollow, setisOpenModalFollow] = useState(false);
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
   const [IsOpenModalLogo, setIsOpenModalLogo] = useState(false);
   const [bannerImage, setBannerImage] = useState(
@@ -109,6 +113,7 @@ export default function ProfilePage({ params }) {
   );
   const [logoImage, setLogoImage] = useState('');
   const queryString = useLocation();
+  const { open } = useWeb3Modal();
 
   const handleResize = () => {
     const screen = window.innerWidth;
@@ -128,7 +133,7 @@ export default function ProfilePage({ params }) {
       .request({
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/user/get/${params.slug}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/user/get/${params.slug}?signerAddress=${address}`,
       })
       .then((response) => {
         setProfile(response.data);
@@ -239,11 +244,17 @@ export default function ProfilePage({ params }) {
     setisOpenModalReport(true);
   };
 
-  const handleOpenModalFollowers = async (walletAddress) => {
-    setFollowersData({
-      walletAddress
+  const handleOpenModalFollow = async (
+    walletAddress,
+    followers,
+    followings,
+  ) => {
+    setFollowData({
+      walletAddress,
+      followers,
+      followings,
     });
-    setisOpenModalFollowers(true);
+    setisOpenModalFollow(true);
   };
 
   function closeModalShare() {
@@ -254,8 +265,8 @@ export default function ProfilePage({ params }) {
     setisOpenModalReport(false);
   }
 
-  function closeModalFollowers() {
-    setisOpenModalFollowers(false);
+  function closeModalFollow() {
+    setisOpenModalFollow(false);
   }
 
   const renderActiveTab = () => {
@@ -320,6 +331,50 @@ export default function ProfilePage({ params }) {
     setLogoImage(newImageURL);
   };
 
+  const follow = async (wallletAddress) => {
+    if (!token) {
+      open();
+      return;
+    }
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/follow`, {
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          followingWallet: wallletAddress,
+        }),
+      });
+
+      if (!res.ok) {
+        const errorMessage = await res.json();
+        toast.error(errorMessage.error.message);
+      } else {
+        const responseData = await res.json();
+        toast.success(responseData.success.message);
+        getProfile();
+      }
+    } catch (error) {
+      console.error('error likes:', error);
+    }
+  };
+
+  const copyAddressClipboard = () => {
+    const textArea = document.createElement('textarea');
+    textArea.value = params.slug;
+    document.body.appendChild(textArea);
+
+    textArea.select();
+    document.execCommand('copy');
+
+    document.body.removeChild(textArea);
+    toast.success('Adress copied to clipboard');
+  };
+
   return (
     <>
       <section>
@@ -333,13 +388,13 @@ export default function ProfilePage({ params }) {
             className="h-[266px] object-cover"
           />
           {params.slug === address && (
-            <button
+            <ButtonPrimary
               onClick={editBanner}
-              className="absolute right-0 top-0 m-4 rounded-full bg-primary-500 px-4 py-2 text-white opacity-0 hover:bg-primary-300 group-hover:opacity-100"
+              className="absolute right-0 top-0 m-4 opacity-0 group-hover:opacity-100 !w-fit"
             >
               <FontAwesomeIcon className="mr-2" icon={faPenToSquare} />
               Edit Cover
-            </button>
+            </ButtonPrimary>
           )}
         </div>
       </section>
@@ -370,23 +425,40 @@ export default function ProfilePage({ params }) {
                     )}
 
                     {params.slug === address && (
-                      <button
+                      <ButtonPrimary
                         onClick={editLogo}
-                        className="absolute right-0 top-0 m-4 flex h-8 w-8 items-center justify-center rounded-full bg-primary-500 text-white opacity-0 hover:bg-primary-300 group-hover:opacity-100"
+                        className="absolute right-0 top-0 m-4 h-8 !w-8 !p-0 opacity-0 group-hover:opacity-100"
                       >
                         <FontAwesomeIcon icon={faPenToSquare} />
-                      </button>
+                      </ButtonPrimary>
                     )}
                   </div>
-                  <div className="mt-3 flex w-full items-center text-xl font-semibold text-gray-900 dark:text-white">
+                  <div className="mt-3 flex w-full items-center gap-2 text-gray-900 dark:text-white">
                     {profile.username ? (
-                      <span>{profile.username}</span>
+                      <>
+                        <span className="h-8 text-xl font-semibold">
+                          {profile.username} -
+                        </span>
+                        <span className="flex h-8 items-center ">
+                          {profile.walletAddress
+                            ? truncateAddress(profile.walletAddress)
+                            : ''}
+                        </span>
+                        <ButtonSecondary className="!w-8 !h-8 !p-0" onClick={copyAddressClipboard}>
+                          <FontAwesomeIcon icon={faCopy} fontSize={16} />
+                        </ButtonSecondary>
+                      </>
                     ) : (
-                      <span>
-                        {profile.walletAddress
-                          ? truncateAddress(profile.walletAddress)
-                          : ''}
-                      </span>
+                      <>
+                        <span>
+                          {profile.walletAddress
+                            ? truncateAddress(profile.walletAddress)
+                            : ''}
+                        </span>
+                        <ButtonSecondary className="!w-8 !h-8 !p-0" onClick={copyAddressClipboard}>
+                          <FontAwesomeIcon icon={faCopy} fontSize={16} />
+                        </ButtonSecondary>
+                      </>
                     )}
                     {profile.isVerified && (
                       <div className="ml-2 text-xl font-black leading-none text-primary-500">
@@ -444,13 +516,17 @@ export default function ProfilePage({ params }) {
                       profile?.telegramUrl ||
                       profile?.discordUrl ||
                       profile?.instagramUrl) && (
-                      <div className="inline-flex w-full items-start justify-start gap-4 rounded-2xl bg-white p-4 text-xs text-primary-500 dark:bg-neutral-900 dark:text-white">
+                      <div className="flex w-full items-start justify-center gap-4 rounded-2xl bg-white p-4 text-xs text-primary-500 dark:bg-neutral-900 dark:text-white">
                         {profile?.websiteUrl && (
                           <button
                             class="h-6 w-6"
-                            onClick={() =>
-                              window.open(profile?.websiteUrl, 'blank')
-                            }
+                            onClick={() => {
+                              let targetUrl = profile?.websiteUrl;
+                              if (!targetUrl.match(/^https?:\/\//i)) {
+                                targetUrl = 'https://' + targetUrl;
+                              }
+                              window.open(targetUrl, 'blank');
+                            }}
                           >
                             <FontAwesomeIcon icon={faGlobe} />
                           </button>
@@ -508,7 +584,16 @@ export default function ProfilePage({ params }) {
                       </div>
                     )}
                     <div className="flex w-full divide-x divide-gray-200 rounded-xl bg-white p-5 text-gray-900 dark:divide-neutral-800 dark:bg-neutral-900 dark:text-white">
-                      <div className="w-full text-center cursor-pointer" onClick={handleOpenModalFollowers}>
+                      <div
+                        className="w-full cursor-pointer text-center"
+                        onClick={() =>
+                          handleOpenModalFollow(
+                            profile.walletAddress,
+                            profile.followersCount,
+                            profile.followingCount,
+                          )
+                        }
+                      >
                         <h2>
                           {profile?.followersCount ? profile.followersCount : 0}
                         </h2>
@@ -583,29 +668,36 @@ export default function ProfilePage({ params }) {
                     </div> */}
                   </div>
                 </div>
-                {address === params.slug && (
-                  <div className="col-span-12 flex gap-1 font-semibold text-white">
+                <div className="col-span-12 flex gap-1 font-semibold text-white">
+                  {address !== params.slug && (
+                    <ButtonPrimary
+                      className="!w-fit"
+                      onClick={() => follow(params.slug)}
+                    >
+                      {profile.isFollowedBySigner ? 'Unfollow' : 'Follow'}
+                    </ButtonPrimary>
+                  )}
+                  {address === params.slug && (
                     <ButtonPrimary
                       className="!w-fit"
                       onClick={() => router.push(`/profile/setting`)}
                     >
                       <FontAwesomeIcon icon={faPenToSquare} /> Edit Profile
                     </ButtonPrimary>
-                    {/* <ButtonPrimary className="!w-fit">Sell</ButtonPrimary> */}
-                    <ButtonPrimary
-                      className="!w-fit"
-                      onClick={() => handleOpenModalShare(null, null)}
-                    >
-                      <FontAwesomeIcon icon={faShare} />
-                    </ButtonPrimary>
-                  </div>
-                )}
+                  )}
+                  <ButtonPrimary
+                    className="!w-fit"
+                    onClick={() => handleOpenModalShare(null, null)}
+                  >
+                    <FontAwesomeIcon icon={faShare} />
+                  </ButtonPrimary>
+                </div>
               </div>
             </div>
           </div>
         </section>
         <section className="inline">
-          <ul className="my-5 flex w-full gap-10 border-b border-gray-200 text-primary-500">
+          <ul className="my-5 flex w-full gap-10 border-b border-gray-200 text-primary-500 dark:text-white">
             {listCollections
               .slice(0, limitCollection)
               .map((collection, index) => {
@@ -618,13 +710,13 @@ export default function ProfilePage({ params }) {
                     onClick={() => handleChangePage(collection)}
                     className={`flex cursor-pointer gap-2 pb-3 ${
                       activePage === collection.slug
-                        ? 'border-b-4 border-primary-500'
+                        ? 'border-b-4 border-primary-500 dark:border-white'
                         : ''
                     }`}
                   >
                     <span className="line-clamp-1">{collection.name}</span>
                     {collection.badge > 0 && (
-                      <span className="h-4 w-4 rounded-full bg-red-400 text-center text-xs font-semibold text-white">
+                      <span className="h-4 w-4 rounded-full bg-primary-400 text-center text-xs font-semibold text-white dark:bg-white dark:text-gray-900">
                         {collection.badge}
                       </span>
                     )}
@@ -688,11 +780,11 @@ export default function ProfilePage({ params }) {
         onModalClose={closeModalLogo}
         updateLogoImage={updateLogoImage}
       />
-      
-      <ModalFollowers
-        isOpenModal={isOpenModalFollowers}
-        onModalClose={closeModalFollowers}
-        followersData={followersData}
+
+      <ModalFollow
+        isOpenModal={isOpenModalFollow}
+        onModalClose={closeModalFollow}
+        followData={followData}
       />
       <Footer />
     </>
@@ -792,21 +884,6 @@ const Collection = ({ userAccount }) => {
       });
   };
 
-  const classRadio = (params, value) => {
-    const defaultCssRadio =
-      'cursor-pointer flex w-8 h-8 justify-center items-center rounded-full text-sm font-medium leading-5 ';
-    return (
-      defaultCssRadio +
-      (params === value
-        ? 'text-white bg-primary-500 shadow'
-        : 'text-primary-500 hover:bg-primary-300')
-    );
-  };
-
-  const handleGridList = (event, target) => {
-    setGridList(target);
-  };
-
   const handleModalCreate = () => {
     if (!token) {
       open();
@@ -874,38 +951,7 @@ const Collection = ({ userAccount }) => {
                 </div>
               </div>
             </form>
-            <div className="hidden space-x-1 rounded-full bg-white px-1 py-1 dark:border-neutral-700 dark:bg-neutral-900 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
-              <div>
-                <input
-                  className="hidden"
-                  type="radio"
-                  name="rangeOptions"
-                  id="optionGrid"
-                  onChange={(event) => handleGridList(event, 'grid')}
-                />
-                <label
-                  className={classRadio(gridList, 'grid')}
-                  htmlFor="optionGrid"
-                >
-                  <FontAwesomeIcon icon={faGrip} />
-                </label>
-              </div>
-              <div>
-                <input
-                  className="hidden"
-                  type="radio"
-                  name="rangeOptions"
-                  id="optionList"
-                  onChange={(event) => handleGridList(event, 'list')}
-                />
-                <label
-                  className={classRadio(gridList, 'list')}
-                  htmlFor="optionList"
-                >
-                  <FontAwesomeIcon icon={faGripVertical} />
-                </label>
-              </div>
-            </div>
+            <SwitchGrid gridList={gridList} setGridList={setGridList} />
           </div>
         </div>
         <div className="my-5 grid grid-cols-12 gap-6">

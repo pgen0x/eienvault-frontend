@@ -24,6 +24,10 @@ import { formatEther } from 'viem';
 import { useAccount, useWalletClient } from 'wagmi';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import ModalRemove from '@/components/modal/remove';
+import SwitchGrid from '@/components/switch/grid';
+import ButtonPrimary from '@/components/button/buttonPrimary';
+import ButtonSecondary from '@/components/button/buttonSecondary';
+import ButtonTertiary from '@/components/button/buttonTertiary';
 
 const filters = [
   'All',
@@ -77,21 +81,6 @@ export default function Owned({
 
   const handleFilterCollapse = async (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
-  };
-
-  const classRadio = (params, value) => {
-    const defaultCssRadio =
-      'cursor-pointer flex w-8 h-8 justify-center items-center rounded-full text-sm font-medium leading-5 ';
-    return (
-      defaultCssRadio +
-      (params === value
-        ? 'text-white bg-primary-500 shadow'
-        : 'text-primary-500 hover:bg-primary-300')
-    );
-  };
-
-  const handleGridList = (event, target) => {
-    setGridList(target);
   };
 
   const handleOpenFilter = () => {
@@ -460,16 +449,15 @@ export default function Owned({
           <div className="col-span-12 flex flex-col gap-2 md:flex-row">
             <div className="flex w-4/12 gap-1">
               <div className="w-fit">
-                <button
-                  className={`flex items-center gap-1 rounded-full px-4 py-2 hover:bg-primary-300 ${
-                    openFilter
-                      ? 'bg-primary-500 text-white'
-                      : 'bg-white text-primary-500'
-                  }`}
-                  onClick={handleOpenFilter}
-                >
-                  <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
-                </button>
+                {openFilter ? (
+                  <ButtonPrimary onClick={handleOpenFilter}>
+                    <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
+                  </ButtonPrimary>
+                ) : (
+                  <ButtonTertiary onClick={handleOpenFilter}>
+                    <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
+                  </ButtonTertiary>
+                )}
               </div>
             </div>
             <form
@@ -549,38 +537,7 @@ export default function Owned({
                 </div>
               </Listbox>
             </form>
-            <div className="hidden items-center space-x-1 rounded-full bg-white px-1 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white sm:hidden md:flex lg:flex xl:flex 2xl:flex">
-              <div>
-                <input
-                  className="hidden"
-                  type="radio"
-                  name="rangeOptions"
-                  id="optionGrid"
-                  onChange={(event) => handleGridList(event, 'grid')}
-                />
-                <label
-                  className={classRadio(gridList, 'grid')}
-                  htmlFor="optionGrid"
-                >
-                  <FontAwesomeIcon icon={faGrip} />
-                </label>
-              </div>
-              <div>
-                <input
-                  className="hidden"
-                  type="radio"
-                  name="rangeOptions"
-                  id="optionList"
-                  onChange={(event) => handleGridList(event, 'list')}
-                />
-                <label
-                  className={classRadio(gridList, 'list')}
-                  htmlFor="optionList"
-                >
-                  <FontAwesomeIcon icon={faGripVertical} />
-                </label>
-              </div>
-            </div>
+            <SwitchGrid gridList={gridList} setGridList={setGridList} />
           </div>
         </div>
         <div className="my-5 grid min-h-[93px] grid-cols-12 gap-6">
@@ -700,7 +657,7 @@ export default function Owned({
           >
             <div className="grid w-full grid-cols-12 gap-7 text-gray-900">
               {sortedNFTs.length == 0 && !isLoading && (
-                <div className="col-span-12 w-full text-center font-semibold text-black">
+                <div className="col-span-12 w-full text-center font-semibold text-black dark:text-white">
                   NFT not found
                 </div>
               )}

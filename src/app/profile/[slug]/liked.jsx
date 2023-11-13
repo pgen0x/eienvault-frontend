@@ -3,6 +3,7 @@ import {
   NftItemDetail,
   NftItemDetailSkeleton,
 } from '@/components/nft/itemDetail';
+import SwitchGrid from '@/components/switch/grid';
 import {
   faChevronDown,
   faGrip,
@@ -34,7 +35,7 @@ const Liked = ({
   handleOpenModalBid,
   handleOpenModalPutonsale,
   handleOpenModalShare,
-  handleOpenModalReport
+  handleOpenModalReport,
 }) => {
   const router = useRouter();
   const [sortFilter, setSortFilter] = useState(filters[0]);
@@ -62,27 +63,12 @@ const Liked = ({
   const [startPrice, setStartPrice] = useState('');
   const [endPrice, setEndPrice] = useState('');
   const [priceFilter, setPriceFilter] = useState({ start: '', end: '' });
-  
+
   const [removeData, setRemoveData] = useState({});
   const [isOpenModalRemove, setisOpenModalRemove] = useState(false);
 
   const handleFilterCollapse = (filter) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
-  };
-
-  const classRadio = (params, value) => {
-    const defaultCssRadio =
-      'cursor-pointer flex w-8 h-8 justify-center items-center rounded-full text-sm font-medium leading-5 ';
-    return (
-      defaultCssRadio +
-      (params === value
-        ? 'text-white bg-primary-500 shadow'
-        : 'text-primary-500 hover:bg-primary-300')
-    );
-  };
-
-  const handleGridList = (event, target) => {
-    setGridList(target);
   };
 
   const handleOpenFilter = () => {
@@ -311,12 +297,12 @@ const Liked = ({
   const handleOpenModalRemove = async (
     marketId,
     tokenId,
-    collectionAddress
+    collectionAddress,
   ) => {
     setRemoveData({
       marketId,
       tokenId,
-      collectionAddress
+      collectionAddress,
     });
     setisOpenModalRemove(true);
   };
@@ -430,38 +416,7 @@ const Liked = ({
                 </div>
               </Listbox>
             </form>
-            <div className="hidden items-center space-x-1 rounded-full bg-white px-1 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white sm:hidden md:flex lg:flex xl:flex 2xl:flex">
-              <div>
-                <input
-                  className="hidden"
-                  type="radio"
-                  name="rangeOptions"
-                  id="optionGrid"
-                  onChange={(event) => handleGridList(event, 'grid')}
-                />
-                <label
-                  className={classRadio(gridList, 'grid')}
-                  htmlFor="optionGrid"
-                >
-                  <FontAwesomeIcon icon={faGrip} />
-                </label>
-              </div>
-              <div>
-                <input
-                  className="hidden"
-                  type="radio"
-                  name="rangeOptions"
-                  id="optionList"
-                  onChange={(event) => handleGridList(event, 'list')}
-                />
-                <label
-                  className={classRadio(gridList, 'list')}
-                  htmlFor="optionList"
-                >
-                  <FontAwesomeIcon icon={faGripVertical} />
-                </label>
-              </div>
-            </div>
+            <SwitchGrid gridList={gridList} setGridList={setGridList} />
           </div>
         </div>
         <div className="my-5 grid grid-cols-12 gap-6">
@@ -581,7 +536,7 @@ const Liked = ({
           >
             <div className="grid w-full grid-cols-12 gap-7 text-gray-900">
               {sortedNFTs.length == 0 && !isLoading && (
-                <div className="col-span-12 w-full text-center font-semibold text-black">
+                <div className="col-span-12 w-full text-center font-semibold text-black dark:text-white">
                   NFT not found
                 </div>
               )}

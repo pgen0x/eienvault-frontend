@@ -240,13 +240,13 @@ const Profile = ({
           objectFit="cover"
           className="h-[266px] rounded-2xl object-cover"
         />
-        <button
+        <ButtonPrimary
           onClick={editBanner}
-          className="absolute right-0 top-0 m-4 rounded-full bg-primary-500 px-4 py-2 text-white opacity-0 hover:bg-primary-300 group-hover:opacity-100"
+          className="absolute right-0 top-0 m-4 rounded-full opacity-0 group-hover:opacity-100 !w-fit"
         >
           <FontAwesomeIcon className="mr-2" icon={faPenToSquare} />
           Edit Cover
-        </button>
+        </ButtonPrimary>
       </div>
       <div className="mt-5 flex justify-between">
         <div className="flex max-w-xs flex-col">
@@ -257,12 +257,12 @@ const Profile = ({
               width={100}
               height={100}
             />
-            <button
+            <ButtonPrimary
               onClick={editLogo}
-              className="absolute right-0 top-0 m-6 flex h-8 w-8 items-center justify-center rounded-full bg-primary-500 text-white opacity-0 hover:bg-primary-300 group-hover:opacity-100"
+              className="absolute right-0 top-0 m-6 h-8 !w-8 !p-0 opacity-0 group-hover:opacity-100"
             >
               <FontAwesomeIcon icon={faPenToSquare} />
-            </button>
+            </ButtonPrimary>
           </div>
         </div>
       </div>

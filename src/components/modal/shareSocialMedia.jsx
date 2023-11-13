@@ -9,7 +9,6 @@ import {
   faXTwitter,
 } from '@fortawesome/free-brands-svg-icons';
 import {
-  faAt,
   faCheckCircle,
   faCircleXmark,
   faClose,
@@ -132,7 +131,7 @@ export default function ModalShareSocialMedia({
                     Share to Social Media
                   </Dialog.Title>
                   <div className="flex flex-col gap-2 pt-5 text-sm">
-                    <div className="flex gap-5 overflow-x-auto p-3">
+                    <div className="flex gap-5 overflow-x-auto py-3">
                       <Swiper
                         slidesPerView={1}
                         breakpoints={{
@@ -146,76 +145,46 @@ export default function ModalShareSocialMedia({
                         autoplay={false}
                       >
                         <SwiperSlide>
-                          <button
-                            className="flex h-16 w-16 flex-col items-center justify-center gap-2 rounded-lg bg-white p-3 hover:bg-primary-50 dark:bg-neutral-700 dark:text-white hover:dark:bg-neutral-400"
-                            onClick={shareFacebook}
-                          >
-                            <span className="flex w-16 items-center justify-center text-3xl">
-                              <FontAwesomeIcon icon={faFacebook} />
-                            </span>
-                          </button>
+                          <ButtonShare onClick={shareFacebook}>
+                            <FontAwesomeIcon icon={faFacebook} />
+                          </ButtonShare>
                         </SwiperSlide>
                         <SwiperSlide>
-                          <button
-                            className="flex h-16 w-16 flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-neutral-700 dark:bg-neutral-700 dark:text-white hover:dark:bg-neutral-900 hover:dark:text-primary-500"
-                            onClick={shareTwitter}
-                          >
-                            <span className="flex w-16 items-center justify-center text-3xl">
-                              <FontAwesomeIcon icon={faXTwitter} />
-                            </span>
-                          </button>
+                          <ButtonShare onClick={shareTwitter}>
+                            <FontAwesomeIcon icon={faXTwitter} />
+                          </ButtonShare>
                         </SwiperSlide>
                         <SwiperSlide>
-                          <button
-                            className="flex h-16 w-16 flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-neutral-700 dark:bg-neutral-700 dark:text-white hover:dark:bg-neutral-900 hover:dark:text-primary-500"
-                            onClick={shareTelegram}
-                          >
-                            <span className="flex w-16 items-center justify-center text-3xl">
-                              <FontAwesomeIcon icon={faTelegram} />
-                            </span>
-                          </button>
+                          <ButtonShare onClick={shareTelegram}>
+                            <FontAwesomeIcon icon={faTelegram} />
+                          </ButtonShare>
                         </SwiperSlide>
                         <SwiperSlide>
-                          <button
-                            className="flex h-16 w-16 flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-neutral-700 dark:bg-neutral-700 dark:text-white hover:dark:bg-neutral-900 hover:dark:text-primary-500"
-                            onClick={shareWhatsapp}
-                          >
-                            <span className="flex w-16 items-center justify-center text-3xl">
-                              <FontAwesomeIcon icon={faWhatsapp} />
-                            </span>
-                          </button>
+                          <ButtonShare onClick={shareWhatsapp}>
+                            <FontAwesomeIcon icon={faWhatsapp} />
+                          </ButtonShare>
                         </SwiperSlide>
                         <SwiperSlide>
-                          <button
-                            className="flex h-16 w-16 flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-neutral-700 dark:bg-neutral-700 dark:text-white hover:dark:bg-neutral-900 hover:dark:text-primary-500"
-                            onClick={shareMail}
-                          >
-                            <span className="flex w-16 items-center justify-center text-3xl">
-                              <FontAwesomeIcon icon={faAt} />
-                            </span>
-                          </button>
+                          <ButtonShare onClick={shareMail}>
+                            <FontAwesomeIcon icon={faEnvelope} />
+                          </ButtonShare>
                         </SwiperSlide>
                         <SwiperSlide>
-                          <button
-                            className="flex h-16 w-16 flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-neutral-700 dark:bg-neutral-700 dark:text-white hover:dark:bg-neutral-900 hover:dark:text-primary-500"
-                            onClick={shareDiscord}
-                          >
-                            <span className="flex w-16 items-center justify-center text-3xl">
-                              <FontAwesomeIcon icon={faDiscord} />
-                            </span>
-                          </button>
+                          <ButtonShare onClick={shareDiscord}>
+                            <FontAwesomeIcon icon={faDiscord} />
+                          </ButtonShare>
                         </SwiperSlide>
                       </Swiper>
                     </div>
                     <button
-                      className="flex w-full items-center justify-between gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-neutral-700 dark:bg-neutral-700 dark:text-white hover:dark:bg-neutral-900 hover:dark:text-primary-500"
+                      className="flex w-full items-center justify-between gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-neutral-700 dark:bg-neutral-700 dark:text-white hover:dark:bg-neutral-400"
                       onClick={shareCopyClipboard}
                     >
                       <span className="w-full overflow-hidden text-ellipsis">
                         {url}
                       </span>
-                      <span className="flex w-fit items-center justify-center">
-                        <FontAwesomeIcon icon={faCopy} className="text-2xl" />
+                      <span className="flex w-fit items-center justify-center ml-2">
+                        <FontAwesomeIcon icon={faCopy} className="!text-2xl" />
                       </span>
                     </button>
                   </div>
@@ -228,3 +197,14 @@ export default function ModalShareSocialMedia({
     </>
   );
 }
+
+const ButtonShare = ({ children, ...attributes }) => {
+  return (
+    <button
+      {...attributes}
+      className={`flex h-16 w-16 flex-col items-center justify-center gap-2 rounded-lg bg-white p-3 text-3xl hover:bg-primary-50 dark:bg-neutral-700 dark:text-white hover:dark:bg-neutral-400 ${attributes.className}`}
+    >
+      {children}
+    </button>
+  );
+};

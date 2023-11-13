@@ -5,7 +5,7 @@ import {
   faMedium,
   faTwitter,
 } from '@fortawesome/free-brands-svg-icons';
-import { faAt, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TopTooltip from '../tooltip/topTooltip';
 
@@ -66,7 +66,7 @@ const Footer = () => {
               href="#"
               className="group relative flex h-9 w-9 items-center justify-center rounded-full hover:bg-primary-100 active:bg-primary-200 dark:hover:bg-neutral-500"
             >
-              <FontAwesomeIcon icon={faAt} />
+              <FontAwesomeIcon icon={faEnvelope} />
               <TopTooltip title="Mail" />
             </a>
           </div>
@@ -130,7 +130,7 @@ const FooterMobile = () => {
                 href="#"
                 className="group relative flex h-9 w-9 items-center justify-center rounded-full hover:bg-primary-100 active:bg-primary-200 dark:hover:bg-neutral-500"
               >
-                <FontAwesomeIcon icon={faAt} />
+                <FontAwesomeIcon icon={faEnvelope} />
                 <TopTooltip title="Mail" />
               </a>
             </div>

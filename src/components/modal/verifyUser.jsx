@@ -239,14 +239,14 @@ export default function ModalVerifyUser({
                                     type="radio"
                                     value="creator"
                                     name="type"
-                                    class="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:ring-offset-neutral-800 dark:focus:ring-red-600"
+                                    className="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:ring-offset-neutral-800 dark:focus:ring-red-600"
                                     {...register('type', {
                                       required: 'This field was required',
                                     })}
                                   />
                                   <label
                                     htmlFor="creator"
-                                    class="ml-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    className="ml-2 text-sm font-medium text-gray-900 dark:text-white"
                                   >
                                     Creator
                                   </label>
@@ -257,14 +257,14 @@ export default function ModalVerifyUser({
                                     type="radio"
                                     value="collector"
                                     name="type"
-                                    class="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:ring-offset-neutral-800 dark:focus:ring-red-600"
+                                    className="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:ring-offset-neutral-800 dark:focus:ring-red-600"
                                     {...register('type', {
                                       required: 'This field was required',
                                     })}
                                   />
                                   <label
                                     htmlFor="collector"
-                                    class="ml-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    className="ml-2 text-sm font-medium text-gray-900 dark:text-white"
                                   >
                                     Collector
                                   </label>

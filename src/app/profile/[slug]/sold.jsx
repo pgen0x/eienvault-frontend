@@ -2,6 +2,7 @@ import {
   NftItemDetail,
   NftItemDetailSkeleton,
 } from '@/components/nft/itemDetail';
+import SwitchGrid from '@/components/switch/grid';
 import {
   faChevronDown,
   faGrip,
@@ -71,21 +72,6 @@ const Sold = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) => {
     setFilterCollapse({ ...filterCollapse, [filter]: !filterCollapse[filter] });
   };
   const [countNfts, setCountNfts] = useState();
-
-  const classRadio = (params, value) => {
-    const defaultCssRadio =
-      'cursor-pointer flex w-8 h-8 justify-center items-center rounded-full text-sm font-medium leading-5 ';
-    return (
-      defaultCssRadio +
-      (params === value
-        ? 'text-white bg-primary-500 shadow'
-        : 'text-primary-500 hover:bg-primary-300')
-    );
-  };
-
-  const handleGridList = (event, target) => {
-    setGridList(target);
-  };
 
   const handleOpenFilter = () => {
     setOpenFilter(!openFilter);
@@ -340,12 +326,12 @@ const Sold = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) => {
               onSubmit={(event) => handleSearch(event)}
               className="flex w-full gap-4"
             >
-              <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-zinc-700">
-                <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
+              <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-neutral-900">
+                <div className="text-xl font-black text-neutral-700 dark:text-zinc-200">
                   <FontAwesomeIcon icon={faSearch} />
                 </div>
                 <input
-                  className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                   type="text"
                   placeholder="Search ..."
                   aria-label="Search"
@@ -353,7 +339,7 @@ const Sold = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) => {
                   onChange={(event) => setSearch(event.target.value)}
                 />
                 <div className="inline-flex flex-col items-center justify-center gap-2 rounded-md bg-zinc-200 px-2">
-                  <div className="text-base font-light leading-normal text-zinc-500">
+                  <div className="text-base font-light leading-normal text-neutral-700">
                     /
                   </div>
                 </div>
@@ -364,7 +350,7 @@ const Sold = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) => {
                 className="hidden sm:hidden md:block lg:block xl:block 2xl:block"
               >
                 <div className="relative z-20">
-                  <Listbox.Button className="relative w-[200px] cursor-default rounded-full bg-white py-2.5 pl-3 pr-10 text-left focus:outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-500 dark:border-zinc-500 dark:bg-zinc-700 sm:text-sm">
+                  <Listbox.Button className="relative w-[200px] cursor-default rounded-full bg-white py-2.5 pl-3 pr-10 text-left focus:outline-none focus-visible:border-neutral-700 focus-visible:ring-2 focus-visible:ring-neutral-700 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-700 dark:border-neutral-700 dark:bg-neutral-900 sm:text-sm">
                     <span className="block truncate text-gray-600 dark:text-white">
                       {sortFilter}
                     </span>
@@ -383,7 +369,7 @@ const Sold = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) => {
                       </svg>
                     </span>
                   </Listbox.Button>
-                  <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-700 sm:text-sm">
+                  <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-900 sm:text-sm">
                     {filters.map((server, index) => (
                       <Listbox.Option
                         key={index}
@@ -413,44 +399,13 @@ const Sold = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) => {
                 </div>
               </Listbox>
             </form>
-            <div className="hidden items-center space-x-1 rounded-full bg-white px-1 dark:border-zinc-500 dark:bg-zinc-700 dark:text-white sm:hidden md:flex lg:flex xl:flex 2xl:flex">
-              <div>
-                <input
-                  className="hidden"
-                  type="radio"
-                  name="rangeOptions"
-                  id="optionGrid"
-                  onChange={(event) => handleGridList(event, 'grid')}
-                />
-                <label
-                  className={classRadio(gridList, 'grid')}
-                  htmlFor="optionGrid"
-                >
-                  <FontAwesomeIcon icon={faGrip} />
-                </label>
-              </div>
-              <div>
-                <input
-                  className="hidden"
-                  type="radio"
-                  name="rangeOptions"
-                  id="optionList"
-                  onChange={(event) => handleGridList(event, 'list')}
-                />
-                <label
-                  className={classRadio(gridList, 'list')}
-                  htmlFor="optionList"
-                >
-                  <FontAwesomeIcon icon={faGripVertical} />
-                </label>
-              </div>
-            </div>
+            <SwitchGrid gridList={gridList} setGridList={setGridList} />
           </div>
         </div>
         <div className="my-5 grid grid-cols-12 gap-6">
           {openFilter && (
             <div className="col-span-12 sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-              <ul className="divide-y rounded-xl bg-white p-5 font-bold text-gray-900 dark:bg-zinc-700 dark:text-white">
+              <ul className="divide-y rounded-xl bg-white p-5 font-bold text-gray-900 dark:bg-neutral-900 dark:text-white">
                 <li>
                   <button
                     className="action flex w-full cursor-pointer items-center justify-between py-3"
@@ -529,7 +484,7 @@ const Sold = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) => {
                         min={0}
                         onWheel={(e) => e.target.blur()}
                         onChange={(e) => setStartPrice(e.target.value)}
-                        className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                        className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                       />
                       <div className="flex items-center justify-center">-</div>
                       <input
@@ -539,7 +494,7 @@ const Sold = ({ userAccount, handleOpenModalShare, handleOpenModalReport }) => {
                         min={0}
                         onWheel={(e) => e.target.blur()}
                         onChange={(e) => setEndPrice(e.target.value)}
-                        className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                        className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                       />
                     </div>
                     <button

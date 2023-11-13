@@ -404,12 +404,12 @@ export default function NftPage() {
                 onSubmit={(event) => handleSearch(event)}
                 className="w-full"
               >
-                <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-zinc-700">
-                  <div className="text-xl font-black text-zinc-500 dark:text-zinc-200">
+                <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-neutral-900">
+                  <div className="text-xl font-black text-neutral-700 dark:text-zinc-200">
                     <FontAwesomeIcon icon={faSearch} />
                   </div>
                   <input
-                    className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                    className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                     type="text"
                     placeholder="Search ..."
                     aria-label="Search"
@@ -417,13 +417,13 @@ export default function NftPage() {
                     onChange={(event) => setSearch(event.target.value)}
                   />
                   <div className="inline-flex flex-col items-center justify-center gap-2 rounded-md bg-zinc-200 px-2">
-                    <div className="text-base font-light leading-normal text-zinc-500">
+                    <div className="text-base font-light leading-normal text-neutral-700">
                       /
                     </div>
                   </div>
                 </div>
               </form>
-              <div className="hidden space-x-1 rounded-full bg-white px-1 py-1  dark:border-zinc-500 dark:bg-zinc-700 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+              <div className="hidden space-x-1 rounded-full bg-white px-1 py-1  dark:border-neutral-700 dark:bg-neutral-900 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
                 <div>
                   <input
                     className="hidden"
@@ -460,7 +460,7 @@ export default function NftPage() {
           <div className="my-5 grid grid-cols-12 gap-6">
             {openFilter && (
               <div className="col-span-12 sm:col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3">
-                <ul className="divide-y rounded-xl bg-white p-5 font-bold text-gray-900 dark:bg-zinc-700 dark:text-white">
+                <ul className="divide-y rounded-xl bg-white p-5 font-bold text-gray-900 dark:bg-neutral-900 dark:text-white">
                   <li>
                     <button
                       className="action flex w-full cursor-pointer items-center justify-between py-3"

@@ -210,7 +210,7 @@ export const Slideshow = ({
                       <div className="inline-flex items-center justify-start self-stretch">
                         <div className="flex h-full shrink grow basis-0 items-end justify-start gap-2">
                           <div
-                            className="cursor-pointer text-2xl font-bold leading-9 text-neutral-700 dark:text-white"
+                            className="cursor-pointer text-2xl font-bold leading-9 text-neutral-900 dark:text-white"
                             onClick={() =>
                               router.push(
                                 `/nft/${auction.collection}/${auction.tokenId}`,
@@ -231,7 +231,7 @@ export const Slideshow = ({
                           className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2"
                           onClick={() =>
                             router.push(
-                              `/profile/${auction.collectionData?.userAddress}`,
+                              `/profile/${auction?.seller}`,
                             )
                           }
                         >
@@ -239,42 +239,42 @@ export const Slideshow = ({
                             className="h-full w-full rounded-2xl "
                             width={15}
                             height={15}
-                            alt={auction.collectionData?.userAddress}
+                            alt={auction?.seller}
                             diameter={15}
-                            address={auction.collectionData?.userAddress}
-                            src={`${process.env.NEXT_PUBLIC_CDN_URL}/users/${auction.collectionData?.User.logo}`}
+                            address={auction?.seller}
+                            src={`${process.env.NEXT_PUBLIC_CDN_URL}/users/${auction?.sellerData?.logo}`}
                           />
                           <div className="flex items-start justify-start gap-2">
-                            <div className="text-xs font-bold leading-none text-neutral-700">
-                              {auction.collectionData?.User.username
-                                ? auction.collectionData?.User.username
+                            <div className="text-xs font-bold leading-none text-neutral-900">
+                              {auction?.sellerData?.username
+                                ? auction?.sellerData?.username
                                 : truncateAddress4char(
-                                    auction.collectionData?.userAddress,
+                                  auction?.seller,
                                   )}
                             </div>
-                            {auction.collectionData?.User.isVerified && (
+                            {auction?.sellerData?.isVerified && (
                               <div className="text-xs font-black leading-none text-primary-500">
                                 <FontAwesomeIcon icon={faCircleCheck} />
                               </div>
                             )}
                           </div>
                         </div>
-                        <div className="text-sm font-normal leading-tight text-neutral-700 dark:text-white">
+                        <div className="text-sm font-normal leading-tight text-neutral-900 dark:text-white">
                           On{' '}
                         </div>
                         <div className="flex items-start justify-start gap-2">
-                          <div className="text-sm font-normal leading-tight text-neutral-700 dark:text-white">
+                          <div className="text-sm font-normal leading-tight text-neutral-900 dark:text-white">
                             {(auction.collectionData?.chainId === 666888 ||
                               auction.collectionData?.chainId === 8668) && (
                               <HelaIcon className="h-4 w-4" />
                             )}
                           </div>
-                          <div className="text-sm font-medium leading-tight text-neutral-700 dark:text-white">
+                          <div className="text-sm font-medium leading-tight text-neutral-900 dark:text-white">
                             {auction.collectionData?.Chain?.symbol}
                           </div>
                         </div>
                       </div>
-                      <div className="line-clamp-5 w-72 text-sm font-light leading-tight text-neutral-700 dark:text-white">
+                      <div className="line-clamp-5 w-72 text-sm font-light leading-tight text-neutral-900 dark:text-white">
                         {auction.collectionData?.description
                           ? auction.collectionData?.description
                           : `Welcome to our ${auction.collectionData.name} collection! Explore a world of digital art and assets that represent unique and exclusive tokens on the blockchain. You'll find something special in our collection. Each NFT is a one-of-a-kind piece, verified and secured on the blockchain, making it a valuable addition to your digital asset portfolio. Join us on this journey of innovation and creativity in the world of non-fungible tokens. Start collecting, trading, and owning a piece of the digital future with our NFTs!`}
@@ -285,9 +285,9 @@ export const Slideshow = ({
                     ) : (
                       <div className="inline-flex items-center justify-start gap-4 self-stretch">
                         <div className="inline-flex shrink grow basis-0 flex-col items-start justify-center gap-2">
-                          <div className="flex flex-col self-stretch text-sm font-normal leading-tight text-neutral-700 dark:text-white">
+                          <div className="flex flex-col self-stretch text-sm font-normal leading-tight text-neutral-900 dark:text-white">
                             Highest Bid{' '}
-                            <span className="text-sm font-bold leading-tight text-neutral-700 dark:text-white">
+                            <span className="text-sm font-bold leading-tight text-neutral-900 dark:text-white">
                               {formatEther(
                                 Number(getHighestBid(auction).highestBid),
                               )}{' '}
@@ -296,12 +296,12 @@ export const Slideshow = ({
                           </div>
                         </div>
                         <div className="inline-flex shrink grow basis-0 flex-col items-center justify-center gap-2">
-                          <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
-                            <span className="mr-2 text-sm font-normal leading-tight text-neutral-700 dark:text-white">
+                          <div className="self-stretch text-sm font-normal leading-tight text-neutral-900">
+                            <span className="mr-2 text-sm font-normal leading-tight text-neutral-900 dark:text-white">
                               By
                             </span>
 
-                            <span className="text-sm font-bold leading-tight text-neutral-700 dark:text-white">
+                            <span className="text-sm font-bold leading-tight text-neutral-900 dark:text-white">
                               {truncateAddress4char(
                                 getHighestBid(auction).highestBidder,
                               )}
@@ -355,20 +355,20 @@ export const Slideshow = ({
                         {isNotRelease ? (
                           <>
                             {' '}
-                            <span className="mr-2 text-sm font-normal leading-tight text-neutral-700 dark:text-white">
+                            <span className="mr-2 text-sm font-normal leading-tight text-neutral-900 dark:text-white">
                               Starts in
                             </span>
-                            <span className="text-neutral-700 dark:text-white">
+                            <span className="text-neutral-900 dark:text-white">
                               <Countdown endDate={auction.releaseDate} />
                             </span>
                           </>
                         ) : isNotExpired ? (
                           <>
                             {' '}
-                            <span className="mr-2 text-sm font-normal leading-tight text-neutral-700 dark:text-white">
+                            <span className="mr-2 text-sm font-normal leading-tight text-neutral-900 dark:text-white">
                               Ends in
                             </span>
-                            <span className="text-neutral-700 dark:text-white">
+                            <span className="text-neutral-900 dark:text-white">
                               <Countdown endDate={auction.endDate} />
                             </span>
                           </>
@@ -620,7 +620,7 @@ export const SlideshowMobile = ({
                         <div className="inline-flex items-center justify-start self-stretch">
                           <div className="flex h-full shrink grow basis-0 items-end justify-start gap-2">
                             <div
-                              className="text-2xl font-bold leading-9 text-neutral-700"
+                              className="text-2xl font-bold leading-9 text-neutral-900"
                               onClick={() =>
                                 router.push(
                                   `/nft/${auction.collection}/${auction.tokenId}`,
@@ -649,7 +649,7 @@ export const SlideshowMobile = ({
                               }
                             />
                             <div className="flex items-start justify-start gap-2">
-                              <div className="text-xs font-medium leading-none text-neutral-700">
+                              <div className="text-xs font-medium leading-none text-neutral-900">
                                 {auction.collectionData?.User.username
                                   ? auction.collectionData?.User.username
                                   : truncateAddress4char(
@@ -663,30 +663,30 @@ export const SlideshowMobile = ({
                               )}
                             </div>
                           </div>
-                          <div className="text-sm font-normal leading-tight text-neutral-700">
+                          <div className="text-sm font-normal leading-tight text-neutral-900">
                             On{' '}
                           </div>
                           <div className="flex items-start justify-start gap-2">
-                            <div className="text-sm font-normal leading-tight text-neutral-700">
+                            <div className="text-sm font-normal leading-tight text-neutral-900">
                               {(auction.collectionData?.chainId === 666888 ||
                                 auction.collectionData?.chainId === 8668) && (
                                 <HelaIcon className="h-4 w-4" />
                               )}
                             </div>
-                            <div className="text-sm font-medium leading-tight text-neutral-700">
+                            <div className="text-sm font-medium leading-tight text-neutral-900">
                               {auction.collectionData?.Chain?.symbol}
                             </div>
                           </div>
                         </div>
-                        <div className="line-clamp-5 h-full w-full text-sm font-light leading-tight text-neutral-700">
+                        <div className="line-clamp-5 h-full w-full text-sm font-light leading-tight text-neutral-900">
                           {auction.collectionData?.description}
                         </div>
                       </div>
                       <div className="inline-flex items-center justify-start gap-4 self-stretch">
                         <div className="inline-flex shrink grow basis-0 flex-col items-start justify-center gap-2">
-                          <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
+                          <div className="self-stretch text-sm font-normal leading-tight text-neutral-900">
                             Highest Bid{' '}
-                            <span className="flex flex-col text-sm font-bold leading-tight text-neutral-700">
+                            <span className="flex flex-col text-sm font-bold leading-tight text-neutral-900">
                               {formatEther(
                                 Number(getHighestBid(auction).highestBid),
                               )}{' '}
@@ -695,12 +695,12 @@ export const SlideshowMobile = ({
                           </div>
                         </div>
                         <div className="inline-flex shrink grow basis-0 flex-col items-start justify-start gap-2">
-                          <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
-                            <span className="mr-2 text-sm font-normal leading-tight text-neutral-700">
+                          <div className="self-stretch text-sm font-normal leading-tight text-neutral-900">
+                            <span className="mr-2 text-sm font-normal leading-tight text-neutral-900">
                               By
                             </span>
 
-                            <span className="text-sm font-bold leading-tight text-neutral-700">
+                            <span className="text-sm font-bold leading-tight text-neutral-900">
                               {truncateAddress4char(
                                 getHighestBid(auction).highestBidder,
                               )}
@@ -781,7 +781,7 @@ export const SlideshowMobile = ({
                         <div className="flex flex-col items-start justify-start">
                           <div className="inline-flex items-center justify-start self-stretch">
                             <div className="flex h-full shrink grow basis-0 items-end justify-start gap-2">
-                              <div className="h-4 w-20 animate-pulse rounded-full bg-gray-400 text-2xl font-bold leading-9 text-neutral-700"></div>
+                              <div className="h-4 w-20 animate-pulse rounded-full bg-gray-400 text-2xl font-bold leading-9 text-neutral-900"></div>
                             </div>
                           </div>
                         </div>
@@ -791,14 +791,14 @@ export const SlideshowMobile = ({
                             <span className="h-4 w-12 animate-pulse rounded-full bg-gray-400"></span>
                             <span className="h-4 w-24 animate-pulse rounded-full bg-gray-400"></span>
                           </div>
-                          <div className="line-clamp-5 h-full w-full text-sm font-light leading-tight text-neutral-700"></div>
+                          <div className="line-clamp-5 h-full w-full text-sm font-light leading-tight text-neutral-900"></div>
                         </div>
                         <div className="inline-flex items-center justify-start gap-4 self-stretch">
                           <div className="inline-flex shrink grow basis-0 flex-col items-start justify-center gap-2">
                             <div className="h-4 w-28 animate-pulse self-stretch rounded-full bg-gray-400 text-sm font-normal leading-tight"></div>
                           </div>
                           <div className="inline-flex shrink grow basis-0 flex-col items-start justify-start gap-2">
-                            <div className="self-stretch text-sm font-normal leading-tight text-neutral-700">
+                            <div className="self-stretch text-sm font-normal leading-tight text-neutral-900">
                               <span className="mr-2 h-4 w-24 animate-pulse rounded-full bg-gray-400 text-sm font-normal leading-tight"></span>
                             </div>
                           </div>

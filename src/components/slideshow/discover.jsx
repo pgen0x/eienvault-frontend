@@ -216,9 +216,9 @@ export const SlideshowDiscover = ({ dataDiscover, refreshData }) => {
 
   return (
     <>
-      <button className="swiper-prev-discover absolute -left-5 z-10 mr-2 hidden rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
+      <ButtonPrimary className="swiper-prev-discover absolute -left-5 z-10 mr-2 hidden !w-fit sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronLeft} />
-      </button>
+      </ButtonPrimary>
       <Swiper
         className="!pb-10"
         slidesPerView={1}
@@ -266,9 +266,9 @@ export const SlideshowDiscover = ({ dataDiscover, refreshData }) => {
           );
         })}
       </Swiper>
-      <button className="swiper-next-discover absolute -right-5 z-10 ml-2 hidden rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
+      <ButtonPrimary className="swiper-next-discover absolute -left-5 z-10 mr-2 hidden !w-fit sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronRight} />
-      </button>
+      </ButtonPrimary>
       <ModalBid
         isOpenModal={isOpenModalBid}
         onClose={closeModalBid}

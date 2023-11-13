@@ -45,7 +45,7 @@ export const ActivityItemDetail = ({ event }) => {
     }
   };
   return (
-    <div className="flex w-full items-center justify-between gap-2 rounded-lg bg-white p-3 hover:bg-primary-50 dark:bg-zinc-600 dark:hover:bg-zinc-500">
+    <div className="flex w-full items-center justify-between gap-2 rounded-lg bg-white p-3 hover:bg-primary-50 dark:bg-neutral-800 dark:hover:bg-neutral-700">
       <div className="flex gap-3">
         <div className="w-fit">
           {event?.nft?.imageUri ? (

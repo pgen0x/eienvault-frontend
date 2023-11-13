@@ -300,6 +300,8 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
 
   function closeModalPutonsale() {
     setisOpenModalPutonsale(false);
+    console.log("Masuk pak");
+    getDataNFTs();
   }
 
   function closeModalShare() {
@@ -312,6 +314,8 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
 
   function closeModalRemove() {
     setisOpenModalRemove(false);
+    console.log("Masuk pak");
+    getDataNFTs();
   }
 
   const placeBid = async (marketId, price) => {
@@ -460,7 +464,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
               <div className="flex w-full flex-col">
                 {dataNFTs?.imageUri !== null ? (
                   <Image
-                    className="w-full rounded-2xl bg-white object-contain dark:bg-zinc-700 lg:w-96"
+                    className="w-full rounded-2xl bg-white object-contain dark:bg-neutral-900 lg:w-96"
                     width={600}
                     height={600}
                     placeholder="blur"
@@ -810,7 +814,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                   <h2 className="text-2xl font-bold">
                     {dataNFTs?.name} #{dataNFTs?.tokenId}
                   </h2>
-                  <div className="flex w-full justify-around rounded-xl bg-white p-5 dark:bg-zinc-700">
+                  <div className="flex w-full justify-around rounded-xl bg-white p-5 dark:bg-neutral-900">
                     <div className="px-5">
                       <h3 className="font-semibold md:text-lg">Creator</h3>
                       <div className="flex">
@@ -854,7 +858,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                             }
                             className="flex cursor-pointer items-center gap-2"
                           >
-                            <div className="text-sm font-medium text-neutral-700 dark:text-white">
+                            <div className="text-sm font-medium text-neutral-900 dark:text-white">
                               {dataNFTs?.collectionData?.User?.username
                                 ? dataNFTs?.collectionData?.User?.username
                                 : truncateAddress4char(
@@ -894,7 +898,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                               dataNFTs?.ownerData?.walletAddress ||
                               dataNFTs?.owner
                             }
-                            src={`${process.env.NEXT_PUBLIC_CDN_URL}/${dataNFTs?.ownerData?.logo}`}
+                            src={`${process.env.NEXT_PUBLIC_CDN_URL}/users/${dataNFTs?.ownerData?.logo}`}
                           />
                         ) : (
                           <JazzIcon
@@ -912,7 +916,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                           }
                           className="flex cursor-pointer items-center gap-2"
                         >
-                          <div className="text-sm font-medium text-neutral-700 dark:text-white">
+                          <div className="text-sm font-medium text-neutral-900 dark:text-white">
                             {dataNFTs?.ownerData?.username ||
                               truncateAddress4char(
                                 dataNFTs?.owner,
@@ -928,7 +932,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                       </div>
                     </div>
                   </div>
-                  <div className="flex w-full flex-wrap items-start justify-between gap-4 rounded-xl bg-white p-5 text-gray-900 dark:bg-zinc-700 dark:text-white md:flex-row">
+                  <div className="flex w-full flex-wrap items-start justify-between gap-4 rounded-xl bg-white p-5 text-gray-900 dark:bg-neutral-900 dark:text-white md:flex-row">
                     <div className="flex items-center gap-2 self-stretch sm:w-full md:w-full lg:w-1/4 xl:w-1/4 2xl:w-1/4">
                       {(dataNFTs?.collectionData?.chainId === 666888 ||
                         dataNFTs?.collectionData?.chainId === 8668) && (
@@ -974,7 +978,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                     </div>
                   </div>
 
-                  <div className="w-full rounded-xl bg-white p-5 text-gray-900 dark:bg-zinc-700 dark:text-white">
+                  <div className="w-full rounded-xl bg-white p-5 text-gray-900 dark:bg-neutral-900 dark:text-white">
                     <div className="flex items-center gap-2">
                       <h3 className="font-bold md:text-lg">Royalties</h3>
                       <span className="h-6 rounded-lg bg-gray-600 p-1 text-xs text-white">
@@ -986,7 +990,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                       recipient&lsquo;s wallet.
                     </p>
                   </div>
-                  <div className="flex w-full flex-col  gap-4 rounded-xl bg-white p-5 text-gray-900 dark:bg-zinc-700 dark:text-white">
+                  <div className="flex w-full flex-col  gap-4 rounded-xl bg-white p-5 text-gray-900 dark:bg-neutral-900 dark:text-white">
                     <div className="flex justify-between gap-2">
                       {dataNFTs?.itemDetails?.isAuctioned && (
                         <div>
@@ -1028,7 +1032,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                     <div className="flex gap-4">
                       {dataNFTs?.itemDetails?.isAuctioned ? (
                         <>
-                          <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5 dark:bg-zinc-600">
+                          <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5 dark:bg-neutral-800">
                             <h3 className="md:text-lg">Floor Price</h3>
                             <h4 className="text-sm font-bold md:text-lg">
                               {dataNFTs?.itemDetails
@@ -1047,7 +1051,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                   )}
                             </h5>
                           </div>
-                          <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5 dark:bg-zinc-600">
+                          <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5 dark:bg-neutral-800">
                             <h3 className="md:text-lg">Bid</h3>
                             <h4 className="md:text-lg">
                               Highest bid at{' '}
@@ -1074,7 +1078,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                         </>
                       ) : (
                         <>
-                          <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5 dark:bg-zinc-600">
+                          <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5 dark:bg-neutral-800">
                             <h3 className="md:text-lg">Floor Price</h3>
                             <h4 className="text-sm font-bold md:text-lg">
                               {dataNFTs?.itemDetails
@@ -1093,7 +1097,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                   )}
                             </h5>
                           </div>
-                          <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5 dark:bg-zinc-600">
+                          <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5 dark:bg-neutral-800">
                             <h3 className="md:text-lg">Price</h3>
                             <h4 className="text-sm md:text-lg">
                               Listing price at{' '}
@@ -1684,7 +1688,7 @@ const Collateral = ({ dataNFTs }) => {
                 className="h-[28px] w-[28px] rounded-full"
               />
             )}
-            <div className="font-medium leading-none text-neutral-700">
+            <div className="font-medium leading-none text-neutral-900">
               {dataNFTs.ownerData?.username ||
                 truncateAddress4char(dataNFTs.ownerData?.walletAddress) ||
                 truncateAddress4char(dataNFTs.owner)}
@@ -1709,7 +1713,7 @@ const Collateral = ({ dataNFTs }) => {
 const Overview = ({ dataOverview, onSeeAllClick }) => {
   const limitedOffers = dataOverview.itemDetails?.listOffers?.slice(0, 3);
   return (
-    <div className="rounded-lg bg-gray-50 p-3 dark:bg-zinc-700 dark:text-white">
+    <div className="rounded-lg bg-gray-50 p-3 dark:bg-neutral-900 dark:text-white">
       <h1 className="text-xl font-semibold">Description</h1>
       <p className="text-base">{dataOverview.description || '-'}</p>
       <div className="flex justify-between">
@@ -1728,7 +1732,7 @@ const Overview = ({ dataOverview, onSeeAllClick }) => {
           limitedOffers.map((offer, index) => {
             return (
               <div
-                className="inline-flex w-full items-center justify-start gap-5 self-stretch rounded-lg bg-gray-100 p-2 hover:bg-gray-200 dark:bg-zinc-600 hover:dark:bg-zinc-500"
+                className="inline-flex w-full items-center justify-start gap-5 self-stretch rounded-lg bg-gray-100 p-2 hover:bg-gray-200 dark:bg-neutral-800 hover:dark:bg-neutral-700"
                 key={index}
               >
                 <div className="flex shrink grow basis-0 items-center justify-between text-center text-base font-bold leading-loose">
@@ -1776,19 +1780,19 @@ const Overview = ({ dataOverview, onSeeAllClick }) => {
 
 const Bids = ({ dataBid }) => {
   return (
-    <div className="flex flex-col gap-3 rounded-lg bg-white p-3 dark:bg-zinc-700">
+    <div className="flex flex-col gap-3 rounded-lg bg-white p-3 dark:bg-neutral-900">
       {dataBid.itemDetails?.listOffers?.length > 0 ? (
         <>
           {dataBid.itemDetails?.listOffers.map((offer, index) => {
             return (
               <div
-                className="w-full items-center justify-start gap-5 self-stretch rounded-xl bg-gray-50 p-3 hover:bg-gray-100 dark:bg-zinc-600 dark:text-white hover:dark:bg-zinc-500 lg:inline-flex"
+                className="w-full items-center justify-start gap-5 self-stretch rounded-xl bg-gray-50 p-3 hover:bg-gray-100 dark:bg-neutral-800 dark:text-white hover:dark:bg-neutral-700 lg:inline-flex"
                 key={index}
               >
                 <div className="flex shrink grow basis-0 items-center justify-between text-center text-base font-bold leading-loose">
                   <div className="inline-flex h-14 w-1/2 items-center justify-center">
                     <div className="text-md inline-flex shrink grow basis-0 flex-row gap-3 font-medium leading-loose">
-                      <div className="h-12 w-12 rounded-full bg-gray-300 dark:bg-zinc-600">
+                      <div className="h-12 w-12 rounded-full bg-gray-300 dark:bg-neutral-800">
                         {offer?.userDetails?.logo ? (
                           <ImageWithFallback
                             className="h-full w-full rounded-2xl "
@@ -1886,9 +1890,9 @@ const History = ({ collection, tokenId }) => {
       );
       type = 'Burn';
     } else if (
-      event?.item?.From !== '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
+      event?.item?.From !== marketplaceABI &&
       isAddress(event?.item?.From) &&
-      event?.item?.To !== '0xCF36Ff82F557be9EC7eb2B209B6ba4C60f65acAc' &&
+      event?.item?.To !== marketplaceABI &&
       isAddress(event?.item?.To)
     ) {
       description = (

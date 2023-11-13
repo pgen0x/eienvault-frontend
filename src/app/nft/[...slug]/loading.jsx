@@ -135,7 +135,7 @@ export default function Loading() {
                           className="h-7 w-7 rounded-2xl"
                           src="https://via.placeholder.com/48x48"
                         />
-                        <div className="font-medium leading-none text-neutral-700">
+                        <div className="font-medium leading-none text-neutral-900">
                           Ron31
                         </div>
                       </div>

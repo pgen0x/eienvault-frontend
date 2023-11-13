@@ -148,7 +148,7 @@ const Sidebar = () => {
       >
         <div
           ref={sidebarContentRef}
-          className={`absolute inset-0 top-0 max-h-full w-full max-w-full flex-row overflow-hidden bg-neutral-100 transition-transform duration-300 dark:bg-neutral-900 md:left-auto md:right-0 md:max-w-[418px] ${
+          className={`absolute inset-0 top-0 max-h-full w-full max-w-full flex-row overflow-hidden bg-neutral-100 transition-transform duration-300 dark:bg-neutral-950 md:left-auto md:right-0 md:max-w-[418px] ${
             isSidebarOpen
               ? 'translate-x-0 transform'
               : 'translate-x-full transform'
@@ -271,7 +271,7 @@ const Sidebar = () => {
                   </button>
                 </div>
               </div>
-              <div className="flex h-72 w-full flex-col items-start justify-start gap-4 rounded-2xl bg-white bg-opacity-50 p-4 dark:bg-neutral-700">
+              <div className="flex h-72 w-full flex-col items-start justify-start gap-4 rounded-2xl bg-white bg-opacity-50 p-4 dark:bg-neutral-900">
                 <div className="flex h-12 flex-col items-start justify-start gap-2 self-stretch">
                   <div className="inline-flex items-center justify-start gap-2 self-stretch">
                     <div className="flex h-12 shrink grow basis-0 items-center justify-start gap-2">
@@ -291,11 +291,11 @@ const Sidebar = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex h-20 flex-col items-center justify-center gap-2 self-stretch rounded-lg bg-neutral-100 p-2 dark:bg-neutral-500">
+                <div className="flex h-20 flex-col items-center justify-center gap-2 self-stretch rounded-lg bg-neutral-100 p-2 dark:bg-neutral-700">
                   <div className="inline-flex items-center justify-start self-stretch">
                     <div className="flex h-8 shrink grow basis-0 items-center justify-start gap-2">
                       <div className="flex items-center justify-start gap-1">
-                        <div className="h-6 w-6 text-center text-sm font-normal leading-snug text-zinc-500">
+                        <div className="h-6 w-6 text-center text-sm font-normal leading-snug text-neutral-700">
                           <HelaIcon className="h-6 w-6" />
                         </div>
                       </div>

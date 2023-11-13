@@ -58,7 +58,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
   };
 
   return (
-    <div className="col-span-3 flex w-full flex-col items-end justify-center gap-2 rounded-lg bg-gray-50 shadow backdrop-blur-xl dark:bg-zinc-700">
+    <div className="col-span-12 md:col-span-6 lg:col-span-3 flex w-full flex-col items-end justify-center gap-2 rounded-lg bg-gray-50 shadow backdrop-blur-xl dark:bg-neutral-900">
       {user?.banner ? (
         <Image
           src={
@@ -73,7 +73,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
           className="relative h-[150px] w-full rounded-t-lg object-cover duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all"
         />
       ) : (
-        <div className="relative h-[150px] w-full rounded-t-lg bg-gray-300 object-cover duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all dark:bg-zinc-600" />
+        <div className="relative h-[150px] w-full rounded-t-lg bg-gray-300 object-cover duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all dark:bg-neutral-800" />
       )}
       <div className="flex w-full flex-col items-center justify-center gap-6 p-4">
         <div className="flex w-full flex-col gap-2">
@@ -100,7 +100,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
           <div className="mt-7 flex w-full flex-col gap-4">
             <div className="flex w-full flex-col">
               <div className="flex gap-2">
-                <div className="text-lg font-bold leading-relaxed text-zinc-500 dark:text-white">
+                <div className="text-lg font-bold leading-relaxed text-neutral-700 dark:text-white">
                   {user?.username
                     ? user.username
                     : truncateAddress4char(user?.walletAddress)}
@@ -111,7 +111,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
                   </div>
                 )}
               </div>
-              <div className="line-clamp-2 h-12 w-full font-semibold text-zinc-500 dark:text-white">
+              <div className="line-clamp-2 h-12 w-full font-semibold text-neutral-700 dark:text-white">
                 {user?.bio ? (
                   user.bio
                 ) : (
@@ -130,7 +130,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
                 <div className="font-bold dark:text-white">
                   {user?.followersCount}
                 </div>
-                <div className="text-sm font-bold text-zinc-500 dark:text-zinc-400">
+                <div className="text-sm font-bold text-neutral-700 dark:text-zinc-400">
                   Followers
                 </div>
               </div>
@@ -138,14 +138,14 @@ const UserItemDetail = ({ user, followings, refresh }) => {
                 <div className="font-bold dark:text-white">
                   {user?.totalCollections}
                 </div>
-                <div className="text-sm font-bold text-zinc-500 dark:text-zinc-400">
+                <div className="text-sm font-bold text-neutral-700 dark:text-zinc-400">
                   Collections
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="flex w-full items-center justify-between gap-2 font-bold">
+        <div className="flex flex-row lg:flex-col xl:flex-row w-full items-center justify-between gap-2 font-bold">
           <ButtonPrimary
             className="flex w-full items-center justify-center gap-2"
             onClick={() => {
@@ -176,7 +176,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
 
 export const UserItemDetailSkeleton = () => {
   return (
-    <div className="col-span-3 flex w-full flex-col items-end justify-center gap-2 rounded-lg bg-gray-50 shadow backdrop-blur-xl dark:bg-zinc-700">
+    <div className="col-span-3 flex w-full flex-col items-end justify-center gap-2 rounded-lg bg-gray-50 shadow backdrop-blur-xl dark:bg-neutral-900">
       <div className="relative h-[150px] w-full animate-pulse rounded-t-lg bg-gray-300 object-cover duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all" />
       <div className="flex w-full flex-col items-center justify-center gap-6 p-4">
         <div className="flex w-full flex-col gap-2">
@@ -188,7 +188,7 @@ export const UserItemDetailSkeleton = () => {
               <div className="flex gap-2">
                 <div className="h-5 w-1/2 animate-pulse rounded-lg bg-gray-300 text-lg font-bold leading-relaxed" />
               </div>
-              <div className="line-clamp-2 flex h-12 w-full flex-col gap-2 font-semibold text-zinc-500 dark:text-white">
+              <div className="line-clamp-2 flex h-12 w-full flex-col gap-2 font-semibold text-neutral-700 dark:text-white">
                 <div className="h-5 w-8/12 animate-pulse rounded-lg bg-gray-300 text-lg font-bold leading-relaxed" />
                 <div className="h-5 w-7/12 animate-pulse rounded-lg bg-gray-300 text-lg font-bold leading-relaxed" />
               </div>

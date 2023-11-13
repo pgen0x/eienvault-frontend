@@ -623,11 +623,11 @@ const Nft = ({
             </div> */}
             </div>
           </div>
-          <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white p-3 backdrop-blur-xl dark:bg-zinc-700">
+          <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white p-3 backdrop-blur-xl dark:bg-neutral-900">
             <div className="flex w-full flex-col items-start justify-start">
               <div className="inline-flex items-center justify-between self-stretch">
                 <div
-                  className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary-50 bg-opacity-70 p-2 dark:bg-zinc-500"
+                  className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary-50 bg-opacity-70 p-2 dark:bg-neutral-700"
                   onClick={() =>
                     router.push(`/collection/${nft.collectionAddress}`)
                   }
@@ -648,7 +648,7 @@ const Nft = ({
                     src={`${process.env.NEXT_PUBLIC_CDN_URL}/collections/${collection?.logo}`}
                   />
                   <div className="flex items-start justify-start gap-2">
-                    <div className="text-xs font-medium leading-none text-neutral-700 dark:text-white">
+                    <div className="text-xs font-medium leading-none text-neutral-900 dark:text-white">
                       {collection?.name
                         ? collection.name
                         : collection?.tokenAddress
@@ -677,7 +677,7 @@ const Nft = ({
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white p-2 text-gray-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-600 dark:text-white">
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white p-2 text-gray-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-800 dark:text-white">
                       <div className="py-1">
                         <Menu.Item>
                           <button
@@ -748,14 +748,14 @@ const Nft = ({
                 >
                   {nft?.name} #{nft?.tokenId}
                 </div>
-                <div className="text-sm font-normal leading-tight text-neutral-700">
+                <div className="text-sm font-normal leading-tight text-neutral-900">
                   {(collection?.chainId === 666888 ||
                     collection?.chainId === 8668) && (
                     <HelaIcon className="h-6 w-6" />
                   )}
                 </div>
               </div>
-              <div className="mt-5 flex w-full justify-between rounded-md bg-gray-100 px-2 py-2 dark:bg-zinc-500 dark:text-white">
+              <div className="mt-5 flex w-full justify-between rounded-md bg-gray-100 px-2 py-2 dark:bg-neutral-700 dark:text-white">
                 <div className="flex flex-col items-start truncate text-sm leading-5">
                   <p>Price</p>
                   <p className="font-bold">

@@ -15,6 +15,7 @@ import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useAccount } from 'wagmi';
+import ButtonPrimary from '../button/buttonPrimary';
 
 export default function ModalUploadProfileLogo({
   isOpenModal,
@@ -242,13 +243,12 @@ export default function ModalUploadProfileLogo({
                         <ErrorMessage errors={errors} name="file" />
                       </div>
                       <div className="mt-4 inline-flex w-full">
-                        <button
+                        <ButtonPrimary
                           type="button"
                           onClick={handleSubmit(onUpload)}
-                          className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:bg-primary-50"
                         >
                           Submit
-                        </button>
+                        </ButtonPrimary>
                       </div>
                     </form>
                   </div>

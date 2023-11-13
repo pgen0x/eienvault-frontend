@@ -62,7 +62,13 @@
 .swiper-pagination .swiper-pagination-bullet-active {
   width: 30px;
   border-radius: 10px;
+}
+
+html.light .swiper-pagination .swiper-pagination-bullet-active{
   background-color: #e22644;
+}
+html.dark .swiper-pagination .swiper-pagination-bullet-active{
+  background-color: #ffffff;
 }
 
 @keyframes graphicx {

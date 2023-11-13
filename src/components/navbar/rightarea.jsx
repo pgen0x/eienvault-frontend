@@ -143,7 +143,7 @@ export default function RightArea() {
           </Switch> */}
         </div>
       )}
-      <div className="flex space-x-1 rounded-full bg-white px-1 py-1 dark:bg-zinc-700">
+      <div className="flex space-x-1 rounded-full bg-white px-1 py-1 dark:bg-neutral-900">
         <div>
           <input
             className="hidden"

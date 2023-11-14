@@ -248,11 +248,15 @@ export default function ProfilePage({ params }) {
     walletAddress,
     followers,
     followings,
+    followTab,
+    follow
   ) => {
     setFollowData({
       walletAddress,
       followers,
       followings,
+      followTab,
+      follow
     });
     setisOpenModalFollow(true);
   };
@@ -390,7 +394,7 @@ export default function ProfilePage({ params }) {
           {params.slug === address && (
             <ButtonPrimary
               onClick={editBanner}
-              className="absolute right-0 top-0 m-4 opacity-0 group-hover:opacity-100 !w-fit"
+              className="absolute right-0 top-0 m-4 !w-fit opacity-0 group-hover:opacity-100"
             >
               <FontAwesomeIcon className="mr-2" icon={faPenToSquare} />
               Edit Cover
@@ -444,7 +448,10 @@ export default function ProfilePage({ params }) {
                             ? truncateAddress(profile.walletAddress)
                             : ''}
                         </span>
-                        <ButtonSecondary className="!w-8 !h-8 !p-0" onClick={copyAddressClipboard}>
+                        <ButtonSecondary
+                          className="!h-8 !w-8 !p-0"
+                          onClick={copyAddressClipboard}
+                        >
                           <FontAwesomeIcon icon={faCopy} fontSize={16} />
                         </ButtonSecondary>
                       </>
@@ -455,7 +462,10 @@ export default function ProfilePage({ params }) {
                             ? truncateAddress(profile.walletAddress)
                             : ''}
                         </span>
-                        <ButtonSecondary className="!w-8 !h-8 !p-0" onClick={copyAddressClipboard}>
+                        <ButtonSecondary
+                          className="!h-8 !w-8 !p-0"
+                          onClick={copyAddressClipboard}
+                        >
                           <FontAwesomeIcon icon={faCopy} fontSize={16} />
                         </ButtonSecondary>
                       </>
@@ -591,6 +601,8 @@ export default function ProfilePage({ params }) {
                             profile.walletAddress,
                             profile.followersCount,
                             profile.followingCount,
+                            'followers',
+                            follow
                           )
                         }
                       >
@@ -599,7 +611,18 @@ export default function ProfilePage({ params }) {
                         </h2>
                         <p>Followers</p>
                       </div>
-                      <div className="w-full text-center">
+                      <div
+                        className="w-full cursor-pointer text-center"
+                        onClick={() =>
+                          handleOpenModalFollow(
+                            profile.walletAddress,
+                            profile.followersCount,
+                            profile.followingCount,
+                            'following',
+                            follow
+                          )
+                        }
+                      >
                         <h2>
                           {profile?.followingCount ? profile.followingCount : 0}
                         </h2>

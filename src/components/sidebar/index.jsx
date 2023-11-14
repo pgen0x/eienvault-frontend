@@ -21,6 +21,7 @@ import HelaIcon from '@/assets/icon/hela';
 import ModalCreateCollection from '../modal/createCollections';
 import ButtonPrimary from '../button/buttonPrimary';
 import ButtonSecondary from '../button/buttonSecondary';
+import { toast } from 'react-toastify';
 
 const Sidebar = () => {
   const { isSidebarOpen, closeSidebar } = useSidebar();
@@ -137,6 +138,18 @@ const Sidebar = () => {
   const closeModal = () => {
     setIsCreateCollection(false);
   };
+
+  const actionCopy = () => {
+    const textArea = document.createElement('textarea');
+    textArea.value = address;
+    document.body.appendChild(textArea);
+
+    textArea.select();
+    document.execCommand('copy');
+
+    document.body.removeChild(textArea);
+    toast.success('Address copied to clipboard');
+  }
 
   return (
     <>
@@ -285,7 +298,7 @@ const Sidebar = () => {
                       </div>
                     </div>
                     <div className="inline-flex h-8 w-8 flex-col items-center justify-center gap-2 rounded-3xl bg-rose-500 p-2">
-                      <button className="text-sm font-black leading-tight text-white">
+                      <button className="text-sm font-black leading-tight text-white" onClick={actionCopy}>
                         <FontAwesomeIcon icon={faCopy} />
                       </button>
                     </div>

@@ -13,33 +13,20 @@ import ButtonPrimary from '../button/buttonPrimary';
 import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import { JazzIcon } from '../jazzicon';
 import { ImageWithFallback } from '../imagewithfallback';
+import SwitchFollow from '../switch/follow';
+import { useAccount } from 'wagmi';
 
 export default function ModalFollow({ isOpenModal, onModalClose, followData }) {
   const router = useRouter();
-  const [followTab, setFollowTab] = useState('followers');
+  const [followTab, setFollowTab] = useState('');
 
   function closeModal() {
     onModalClose();
   }
 
-  const classRadio = (params, value) => {
-    const defaultCssRadio =
-      'cursor-pointer flex w-fit px-5 h-9 justify-center items-center rounded-full text-sm font-medium leading-5 ';
-    return (
-      defaultCssRadio +
-      (params === value
-        ? 'text-white bg-primary-500 shadow'
-        : 'text-primary-500 hover:bg-primary-300')
-    );
-  };
-
-  const handleFollowTab = (event, target) => {
-    setFollowTab(target);
-  };
-
   useEffect(() => {
-    console.log('###', followData);
-  }, []);
+    setFollowTab(followData.followTab);
+  }, [followData]);
 
   return (
     <>
@@ -71,45 +58,16 @@ export default function ModalFollow({ isOpenModal, onModalClose, followData }) {
                 <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle text-gray-900 shadow-xl transition-all dark:bg-neutral-950 dark:text-white">
                   <Dialog.Title className="flex justify-between text-xl font-bold">
                     <div className="flex w-full justify-start">
-                      <div className="flex w-fit gap-1 rounded-full bg-white px-1 py-1 dark:border-neutral-700 dark:bg-neutral-900">
-                        <div>
-                          <input
-                            className="hidden"
-                            type="radio"
-                            name="rangeOptions"
-                            id="optionFollowers"
-                            onChange={(event) =>
-                              handleFollowTab(event, 'followers')
-                            }
-                          />
-                          <label
-                            className={classRadio(followTab, 'followers')}
-                            htmlFor="optionFollowers"
-                          >
-                            Followers
-                          </label>
-                        </div>
-                        <div>
-                          <input
-                            className="hidden"
-                            type="radio"
-                            name="rangeOptions"
-                            id="optionFollowing"
-                            onChange={(event) =>
-                              handleFollowTab(event, 'following')
-                            }
-                          />
-                          <label
-                            className={classRadio(followTab, 'following')}
-                            htmlFor="optionFollowing"
-                          >
-                            Following
-                          </label>
-                        </div>
-                      </div>
+                      <SwitchFollow
+                        followTab={followTab}
+                        setFollowTab={setFollowTab}
+                      />
                     </div>
                     <div className="flex w-full justify-end">
-                      <button className="text-primary-500" onClick={closeModal}>
+                      <button
+                        className="text-primary-500 dark:text-white"
+                        onClick={closeModal}
+                      >
                         <FontAwesomeIcon icon={faXmark} />
                       </button>
                     </div>
@@ -140,32 +98,38 @@ export default function ModalFollow({ isOpenModal, onModalClose, followData }) {
 const Following = ({ followData }) => {
   const [search, setSearch] = useState('');
   const [users, setUsers] = useState([]);
+  const { address } = useAccount();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/follow/${followData.walletAddress}/followings`,
-          {
-            cache: 'force-cache',
-          },
-        );
-
-        if (!res.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await res.json();
-        setUsers(data);
-        // Continue with your code
-      } catch (error) {
-        console.error('Fetch failed:', error);
-        // Handle the error gracefully, e.g., show an error message to the user
-      }
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/follow/${followData.walletAddress}/followings?signerAddress=${address}`,
+        {
+          cache: 'force-cache',
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await res.json();
+      setUsers(data);
+      // Continue with your code
+    } catch (error) {
+      console.error('Fetch failed:', error);
+      // Handle the error gracefully, e.g., show an error message to the user
+    }
+  };
+
+  const follow = async (walletAddress) => {
+    await followData.follow(walletAddress);
+    fetchData();
+  };
 
   return (
     <div className="flex flex-col gap-4 rounded-xl bg-white/60 p-5 text-gray-900 dark:bg-neutral-900 dark:text-white">
@@ -190,15 +154,20 @@ const Following = ({ followData }) => {
       </form> */}
       <div className="flex w-full items-center justify-center gap-2">
         <FontAwesomeIcon icon={faUsers} size="sm" />
-        <span className="text-sm font-semibold">{followData.followings} Folllowing</span>
+        <span className="text-sm font-semibold">
+          {followData.followings} Folllowing
+        </span>
       </div>
       <div className="flex items-center justify-center rounded-xl">
         <div className="flex w-full flex-col items-center gap-5">
           {users.map((user, index) => {
             return (
-              <div className="flex w-full items-center justify-start gap-5 rounded-2xl bg-neutral-700 p-4 backdrop-blur-xl">
+              <div
+                key={index}
+                className="flex w-full items-center justify-start gap-5 rounded-2xl bg-neutral-700 p-4 backdrop-blur-xl"
+              >
                 <div className="flex w-full items-start justify-end">
-                  <div className="flex items-start gap-2">
+                  <div className="w-full flex items-start justify-between gap-2">
                     <div className="relative h-16 w-16">
                       {user?.following?.logo ? (
                         <ImageWithFallback
@@ -223,7 +192,7 @@ const Following = ({ followData }) => {
                     </div>
                     <div className="flex w-full flex-col items-start justify-center gap-1">
                       <div className="flex w-full items-center justify-between gap-2">
-                        <div className="flex items-center justify-start gap-2 text-sm">
+                        <div className="flex items-center justify-between gap-2 text-sm">
                           {user?.following?.username ? (
                             <>
                               <span className="font-semibold">
@@ -243,23 +212,23 @@ const Following = ({ followData }) => {
                             </>
                           )}
                         </div>
-                        <ButtonPrimary className="!w-fit text-sm">
-                          Follow
-                        </ButtonPrimary>
+                        {address == undefined ? (
+                          ''
+                        ) : (
+                          <ButtonPrimary
+                            className="!w-fit text-sm"
+                            onClick={() => follow(user?.followingWallet)}
+                          >
+                            {user?.isFollowedBySigner ? 'Unfollow' : 'Follow'}
+                          </ButtonPrimary>
+                        )}
                       </div>
                       <div className="flex flex-col items-start justify-center self-stretch">
                         <h3>Bio</h3>
                         <p className="line-clamp-2">
-                          Welcome to our hela_test collection! Explore a world
-                          of digital art and assets that represent unique and
-                          exclusive tokens on the blockchain. You'll find
-                          something special in our collection. Each NFT is a
-                          one-of-a-kind piece, verified and secured on the
-                          blockchain, making it a valuable addition to your
-                          digital asset portfolio. Join us on this journey of
-                          innovation and creativity in the world of non-fungible
-                          tokens. Start collecting, trading, and owning a piece
-                          of the digital future with our NFTs!
+                          {user?.following?.bio == null
+                            ? `A digital art enthusiast exploring the world of NFTs on EienVault. I enjoy sharing and collecting unique digital artworks on this platform. Let's explore the world of creativity together at EienVault`
+                            : user?.following?.bio}
                         </p>
                       </div>
                     </div>
@@ -277,32 +246,38 @@ const Following = ({ followData }) => {
 const Followers = ({ followData }) => {
   const [search, setSearch] = useState('');
   const [users, setUsers] = useState([]);
+  const { address } = useAccount();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/follow/${followData.walletAddress}/followers`,
-          {
-            cache: 'force-cache',
-          },
-        );
-
-        if (!res.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await res.json();
-        setUsers(data);
-        // Continue with your code
-      } catch (error) {
-        console.error('Fetch failed:', error);
-        // Handle the error gracefully, e.g., show an error message to the user
-      }
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/follow/${followData.walletAddress}/followers?signerAddress=${address}`,
+        {
+          cache: 'force-cache',
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await res.json();
+      setUsers(data);
+      // Continue with your code
+    } catch (error) {
+      console.error('Fetch failed:', error);
+      // Handle the error gracefully, e.g., show an error message to the user
+    }
+  };
+
+  const follow = async (walletAddress) => {
+    await followData.follow(walletAddress);
+    fetchData();
+  };
 
   return (
     <div className="flex flex-col gap-4 rounded-xl bg-white/60 p-5 text-gray-900 dark:bg-neutral-900 dark:text-white">
@@ -327,22 +302,25 @@ const Followers = ({ followData }) => {
       </form> */}
       <div className="flex w-full items-center justify-center gap-2">
         <FontAwesomeIcon icon={faUsers} size="sm" />
-        <span className="text-sm font-semibold">{followData.followers} Followers</span>
+        <span className="text-sm font-semibold">
+          {followData.followers} Followers
+        </span>
       </div>
       <div className="flex items-center justify-center rounded-xl">
         <div className="flex w-full flex-col items-center gap-5">
           {users.map((user, index) => {
             return (
-              <div className="flex w-full items-center justify-start gap-5 rounded-2xl bg-neutral-700 p-4 backdrop-blur-xl">
+              <div
+                key={index}
+                className="flex w-full items-center justify-start gap-5 rounded-2xl bg-neutral-700 p-4 backdrop-blur-xl"
+              >
                 <div className="flex w-full items-start justify-end">
-                  <div className="flex items-start gap-2">
+                  <div className="w-full flex items-start justify-between gap-2">
                     <div className="relative h-16 w-16">
-                      {user?.following?.logo ? (
+                      {user?.follower?.logo ? (
                         <ImageWithFallback
-                          src={`${process.env.NEXT_PUBLIC_CDN_URL}/users/${user?.following?.logo}`}
-                          alt={
-                            user?.following?.username || user?.followerWallet
-                          }
+                          src={`${process.env.NEXT_PUBLIC_CDN_URL}/users/${user?.follower?.logo}`}
+                          alt={user?.follower?.username || user?.followerWallet}
                           width={48}
                           height={48}
                           diameter={48}
@@ -360,11 +338,11 @@ const Followers = ({ followData }) => {
                     </div>
                     <div className="flex w-full flex-col items-start justify-center gap-1">
                       <div className="flex w-full items-center justify-between gap-2">
-                        <div className="flex items-center justify-start gap-2 text-sm">
-                          {user?.following?.username ? (
+                        <div className="flex items-center justify-between gap-2 text-sm">
+                          {user?.follower?.username ? (
                             <>
                               <span className="font-semibold">
-                                {user?.following?.username}
+                                {user?.follower?.username}
                               </span>
                               <FontAwesomeIcon icon={faCheckCircle} />
                               <span>-</span>
@@ -380,23 +358,23 @@ const Followers = ({ followData }) => {
                             </>
                           )}
                         </div>
-                        <ButtonPrimary className="!w-fit text-sm">
-                          Follow
-                        </ButtonPrimary>
+                        {address == undefined ? (
+                          ''
+                        ) : (
+                          <ButtonPrimary
+                            className="!w-fit text-sm"
+                            onClick={() => follow(user?.followerWallet)}
+                          >
+                            {user?.isFollowedBySigner ? 'Unfollow' : 'Follow'}
+                          </ButtonPrimary>
+                        )}
                       </div>
                       <div className="flex flex-col items-start justify-center self-stretch">
                         <h3>Bio</h3>
                         <p className="line-clamp-2">
-                          Welcome to our hela_test collection! Explore a world
-                          of digital art and assets that represent unique and
-                          exclusive tokens on the blockchain. You'll find
-                          something special in our collection. Each NFT is a
-                          one-of-a-kind piece, verified and secured on the
-                          blockchain, making it a valuable addition to your
-                          digital asset portfolio. Join us on this journey of
-                          innovation and creativity in the world of non-fungible
-                          tokens. Start collecting, trading, and owning a piece
-                          of the digital future with our NFTs!
+                        {user?.follower?.bio == null
+                            ? `A digital art enthusiast exploring the world of NFTs on EienVault. I enjoy sharing and collecting unique digital artworks on this platform. Let's explore the world of creativity together at EienVault`
+                            : user?.follower?.bio}
                         </p>
                       </div>
                     </div>

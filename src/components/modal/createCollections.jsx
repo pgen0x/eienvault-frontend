@@ -24,6 +24,7 @@ import { useForm } from 'react-hook-form';
 import { useAuth } from '@/hooks/AuthContext';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import ButtonPrimary from '../button/buttonPrimary';
 
 export default function ModalCreateCollection({
   isOpenModal,
@@ -266,254 +267,250 @@ export default function ModalCreateCollection({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-xl font-bold text-gray-900"
-                  >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle text-gray-900 shadow-xl transition-all dark:bg-neutral-950 dark:text-white">
+                  <Dialog.Title as="h3" className="text-xl font-bold">
                     Create collection
                   </Dialog.Title>
 
                   <div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
                     <div className="relative mt-2 transform overflow-hidden text-left transition-all sm:w-full sm:max-w-lg">
-                      <div className="text-gray-900">
-                        <section className="flex flex-col gap-2 overflow-y-auto">
+                      <section className="flex flex-col gap-2 overflow-y-auto">
+                        <div className="w-full">
+                          Deploying your own contract requires uploading your
+                          metadata outside of EienVault.
+                        </div>
+                        <form>
                           <div className="w-full">
-                            Deploying your own contract requires uploading your
-                            metadata outside of EienVault.
-                          </div>
-                          <form>
-                            <div className="w-full">
-                              <label className="block text-sm font-bold leading-6 text-gray-900">
-                                <span className="text-semantic-red-500">*</span>{' '}
-                                Upload your item
-                              </label>
-                              <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-3 text-center">
-                                {selectedImage && selectedImage.length > 0 ? (
-                                  <>
-                                    <button
-                                      className="absolute right-1.5 top-1.5 z-30 h-10 w-10 rounded-full text-rose-500 hover:bg-primary-50"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        setValue('file', null);
+                            <label className="block text-sm font-bold leading-6">
+                              <span className="text-semantic-red-500">*</span>{' '}
+                              Upload your item
+                            </label>
+                            <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white dark:bg-neutral-900 py-3 text-center">
+                              {selectedImage && selectedImage.length > 0 ? (
+                                <>
+                                  <button
+                                    className="absolute right-1.5 top-1.5 z-30 h-10 w-10 rounded-full text-primary-500 dark:text-neutral-500 hover:bg-primary-50 dark:hover:text-neutral-50"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      setValue('file', null);
+                                    }}
+                                  >
+                                    <FontAwesomeIcon icon={faClose} />
+                                  </button>
+                                  <Image
+                                    src={URL.createObjectURL(
+                                      getValues('file')[0],
+                                    )}
+                                    alt="Selected Preview"
+                                    width={200}
+                                    height={200}
+                                    className="rounded-lg"
+                                    objectFit="contain"
+                                  />
+                                </>
+                              ) : (
+                                <>
+                                  <FontAwesomeIcon
+                                    icon={faImage}
+                                    className="text-6xl"
+                                  />
+                                  <div className="text-sm">
+                                    400 x 400 pixel is recommended
+                                  </div>
+                                  <label className="cursor-pointer rounded-full bg-primary-500 dark:bg-neutral-500 px-4 py-1 font-semibold text-white hover:bg-primary-300 dark:hover:bg-neutral-300">
+                                    Choose file
+                                    <input
+                                      type="file"
+                                      className="hidden"
+                                      onChange={(e) => {
+                                        const file = e.target.files[0];
+                                        setValue('file', file); // Set the value of 'file' field using setValue
                                       }}
-                                    >
-                                      <FontAwesomeIcon icon={faClose} />
-                                    </button>
-                                    <Image
-                                      src={URL.createObjectURL(
-                                        getValues('file')[0],
-                                      )}
-                                      alt="Selected Preview"
-                                      width={200}
-                                      height={200}
-                                      className="rounded-lg"
-                                      objectFit="contain"
+                                      {...register('file', {
+                                        required: 'File is required.',
+                                        validate: validateFile,
+                                      })}
                                     />
-                                  </>
-                                ) : (
-                                  <>
-                                    <FontAwesomeIcon
-                                      icon={faImage}
-                                      className="text-6xl"
-                                    />
-                                    <div className="text-sm">
-                                      400 x 400 pixel is recommended
-                                    </div>
-                                    <label className="cursor-pointer rounded-full bg-primary-500 px-4 py-1 font-semibold text-white hover:bg-primary-300">
-                                      Choose file
-                                      <input
-                                        type="file"
-                                        className="hidden"
-                                        onChange={(e) => {
-                                          const file = e.target.files[0];
-                                          setValue('file', file); // Set the value of 'file' field using setValue
-                                        }}
-                                        {...register('file', {
-                                          required: 'File is required.',
-                                          validate: validateFile,
-                                        })}
-                                      />
-                                    </label>
-                                  </>
-                                )}
-                              </div>
-                              <div className="mt-1 text-sm text-primary-500">
-                                <ErrorMessage errors={errors} name="file" />
-                              </div>
+                                  </label>
+                                </>
+                              )}
                             </div>
-                            <div className="mt-2 w-full">
-                              <label className="block text-sm font-bold leading-6 text-gray-900">
-                                Blockchain
-                              </label>
-                              <Listbox
-                                value={selectedChain}
-                                onChange={setSelectedChain}
-                                className="mt-2"
-                              >
-                                <div className="relative z-20">
-                                  <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left focus:outline-none sm:text-sm">
-                                    <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                                      {selectedChain.chainId === 1 ||
-                                      selectedChain.chainId === 11155111 ? (
-                                        <Ethereum />
-                                      ) : selectedChain.chainId === 8668 ||
-                                        selectedChain.chainId === 666888 ? (
-                                        <HelaIcon className="h-5 w-5" />
-                                      ) : (
-                                        ''
-                                      )}
-                                    </span>
-                                    <span className="block truncate pl-6 text-gray-600">
-                                      {
-                                        chains.find(
-                                          (chain) =>
-                                            chain.chainId ===
-                                            selectedChain.chainId,
-                                        )?.name
-                                      }
-                                    </span>
-                                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 ">
-                                      <FontAwesomeIcon
-                                        icon={faChevronDown}
-                                        className="text-gray-600"
-                                      />
-                                    </span>
-                                  </Listbox.Button>
-                                  <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                    {chains.map((chain) => (
-                                      <Listbox.Option
-                                        key={chain.chainId}
-                                        className={({ active }) =>
-                                          `relative cursor-default select-none px-4 py-2 ${
-                                            active
-                                              ? 'bg-primary-500 text-white'
-                                              : 'text-gray-900'
-                                          }`
-                                        }
-                                        value={chain}
-                                        disabled={
-                                          chain.chainId === 666888 ||
-                                          chain.chainId === 8668
-                                            ? false
-                                            : true
-                                        }
-                                      >
-                                        {({ selectedChain }) => (
-                                          <>
-                                            <span
-                                              className={`block truncate ${
-                                                selectedChain
-                                                  ? 'font-medium'
-                                                  : 'font-normal'
-                                              } ${
-                                                chain.chainId === 666888 ||
-                                                chain.chainId === 8668
-                                                  ? ''
-                                                  : 'text-gray-400'
-                                              }`}
-                                            >
-                                              {chain.name}{' '}
-                                              <span className="text-sm ">
-                                                {chain.chainId === 666888 ||
-                                                chain.chainId === 8668
-                                                  ? ''
-                                                  : '[currently not supported]'}
-                                              </span>
-                                            </span>
-                                          </>
-                                        )}
-                                      </Listbox.Option>
-                                    ))}
-                                  </Listbox.Options>
-                                </div>
-                              </Listbox>
+                            <div className="mt-1 text-sm text-primary-500">
+                              <ErrorMessage errors={errors} name="file" />
                             </div>
-                            <div className="mt-2 w-full">
-                              <label className="block text-sm font-bold leading-6 text-gray-900">
-                                <span className="text-semantic-red-500">*</span>{' '}
-                                Name
-                              </label>
-                              <span className="text-xs">
-                                Token name cannot be changed in future
-                              </span>
-
-                              <div className="flex w-full items-center rounded-full border border-gray-200 bg-white">
-                                <input
-                                  type="text"
-                                  className="w-full rounded-full border-0 bg-transparent focus:outline-none focus:ring-primary-500"
-                                  placeholder="Name of your collection"
-                                  {...register('name', {
-                                    required: 'Name is required.',
-                                  })}
-                                />
-                              </div>
-                              <div className="mt-1 text-sm text-primary-500">
-                                <ErrorMessage errors={errors} name="name" />
-                              </div>
-                            </div>
-                            <div className="mt-2 w-full">
-                              <label className="block text-sm font-bold leading-6 text-gray-900">
-                                <span className="text-semantic-red-500">*</span>{' '}
-                                Token Symbol
-                              </label>
-                              <span className="text-xs">
-                                The token symbol is shown on the block explorer
-                                when others view your smart contract. e.g
-                                Bitcoin shown as BTC
-                              </span>
-                              <div className="flex w-full items-center rounded-full border border-gray-200 bg-white">
-                                <input
-                                  type="text"
-                                  className="w-full rounded-full border-0 bg-transparent focus:outline-none focus:ring-primary-500"
-                                  placeholder="AAA"
-                                  {...register('tokenSymbol', {
-                                    required: 'Token Symbol is required.',
-                                  })}
-                                />
-                              </div>
-                              <div className="mt-1 text-sm text-primary-500">
-                                <ErrorMessage
-                                  errors={errors}
-                                  name="tokenSymbol"
-                                />
-                              </div>
-                            </div>
-                            <div className="mt-2 w-full">
-                              <label className="block text-sm font-bold leading-6 text-gray-900">
-                                Description
-                              </label>
-                              <div className="flex w-full items-center rounded-2xl border border-gray-200 bg-white">
-                                <textarea
-                                  className="w-full rounded-2xl border-0 bg-transparent focus:outline-none focus:ring-primary-500"
-                                  placeholder="Description of your NFT collection"
-                                  {...register('description', {
-                                    maxLength: {
-                                      value: 500,
-                                      message:
-                                        'Description must not exceed 500 characters.',
-                                    },
-                                  })}
-                                />
-                              </div>
-                              <div className="mt-1 text-sm text-primary-500">
-                                <ErrorMessage
-                                  errors={errors}
-                                  name="description"
-                                />
-                              </div>
-                            </div>
-
-                            <button
-                              onClick={handleSubmit(onSubmit)}
-                              className="mt-4 w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300 disabled:bg-primary-200"
+                          </div>
+                          <div className="mt-2 w-full">
+                            <label className="block text-sm font-bold leading-6">
+                              Blockchain
+                            </label>
+                            <Listbox
+                              value={selectedChain}
+                              onChange={setSelectedChain}
+                              className="mt-2"
                             >
-                              Create Collection
-                            </button>
-                          </form>
-                        </section>
+                              <div className="relative z-20">
+                                <Listbox.Button className="relative w-full cursor-default rounded-full border-0 bg-white dark:bg-neutral-900 py-2 pl-3 pr-10 text-left focus:outline-none sm:text-sm">
+                                  <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                    {selectedChain.chainId === 1 ||
+                                    selectedChain.chainId === 11155111 ? (
+                                      <Ethereum />
+                                    ) : selectedChain.chainId === 8668 ||
+                                      selectedChain.chainId === 666888 ? (
+                                      <HelaIcon className="h-5 w-5" />
+                                    ) : (
+                                      ''
+                                    )}
+                                  </span>
+                                  <span className="block truncate pl-6">
+                                    {
+                                      chains.find(
+                                        (chain) =>
+                                          chain.chainId ===
+                                          selectedChain.chainId,
+                                      )?.name
+                                    }
+                                  </span>
+                                  <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 ">
+                                    <FontAwesomeIcon
+                                      icon={faChevronDown}
+                                      className="text-gray-600"
+                                    />
+                                  </span>
+                                </Listbox.Button>
+                                <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                  {chains.map((chain) => (
+                                    <Listbox.Option
+                                      key={chain.chainId}
+                                      className={({ active }) =>
+                                        `relative cursor-default select-none px-4 py-2 ${
+                                          active
+                                            ? 'bg-primary-500 text-white dark:bg-neutral-900'
+                                            : 'text-gray-900'
+                                        }`
+                                      }
+                                      value={chain}
+                                      disabled={
+                                        chain.chainId === 666888 ||
+                                        chain.chainId === 8668
+                                          ? false
+                                          : true
+                                      }
+                                    >
+                                      {({ selectedChain }) => (
+                                        <>
+                                          <span
+                                            className={`block truncate ${
+                                              selectedChain
+                                                ? 'font-medium'
+                                                : 'font-normal'
+                                            } ${
+                                              chain.chainId === 666888 ||
+                                              chain.chainId === 8668
+                                                ? ''
+                                                : 'text-gray-400'
+                                            }`}
+                                          >
+                                            {chain.name}{' '}
+                                            <span className="text-sm ">
+                                              {chain.chainId === 666888 ||
+                                              chain.chainId === 8668
+                                                ? ''
+                                                : '[currently not supported]'}
+                                            </span>
+                                          </span>
+                                        </>
+                                      )}
+                                    </Listbox.Option>
+                                  ))}
+                                </Listbox.Options>
+                              </div>
+                            </Listbox>
+                          </div>
+                          <div className="mt-2 w-full">
+                            <label className="block text-sm font-bold leading-6">
+                              <span className="text-semantic-red-500">*</span>{' '}
+                              Name
+                            </label>
+                            <span className="text-xs">
+                              Token name cannot be changed in future
+                            </span>
 
-                        {/* {stepCreate == 2 && (
+                            <div className="flex w-full items-center rounded-full border-0 bg-white dark:bg-neutral-900">
+                              <input
+                                type="text"
+                                className="w-full rounded-full border-0 bg-transparent focus:ring-0"
+                                placeholder="Name of your collection"
+                                {...register('name', {
+                                  required: 'Name is required.',
+                                })}
+                              />
+                            </div>
+                            <div className="mt-1 text-sm text-primary-500">
+                              <ErrorMessage errors={errors} name="name" />
+                            </div>
+                          </div>
+                          <div className="mt-2 w-full">
+                            <label className="block text-sm font-bold leading-6">
+                              <span className="text-semantic-red-500">*</span>{' '}
+                              Token Symbol
+                            </label>
+                            <span className="text-xs">
+                              The token symbol is shown on the block explorer
+                              when others view your smart contract. e.g Bitcoin
+                              shown as BTC
+                            </span>
+                            <div className="flex w-full items-center rounded-full border-0 bg-white dark:bg-neutral-900">
+                              <input
+                                type="text"
+                                className="w-full rounded-full border-0 bg-transparent focus:ring-0"
+                                placeholder="AAA"
+                                {...register('tokenSymbol', {
+                                  required: 'Token Symbol is required.',
+                                })}
+                              />
+                            </div>
+                            <div className="mt-1 text-sm text-primary-500">
+                              <ErrorMessage
+                                errors={errors}
+                                name="tokenSymbol"
+                              />
+                            </div>
+                          </div>
+                          <div className="mt-2 w-full">
+                            <label className="block text-sm font-bold leading-6">
+                              Description
+                            </label>
+                            <div className="flex w-full items-center rounded-2xl border-0 bg-white dark:bg-neutral-900">
+                              <textarea
+                                className="w-full rounded-2xl border-0 bg-transparent focus:ring-0"
+                                placeholder="Description of your NFT collection"
+                                {...register('description', {
+                                  maxLength: {
+                                    value: 500,
+                                    message:
+                                      'Description must not exceed 500 characters.',
+                                  },
+                                })}
+                              />
+                            </div>
+                            <div className="mt-1 text-sm text-primary-500">
+                              <ErrorMessage
+                                errors={errors}
+                                name="description"
+                              />
+                            </div>
+                          </div>
+
+                          <ButtonPrimary
+                            onClick={handleSubmit(onSubmit)}
+                            className="mt-4"
+                          >
+                            Create Collection
+                          </ButtonPrimary>
+                        </form>
+                      </section>
+
+                      {/* {stepCreate == 2 && (
                             <section className="step-2 flex flex-col gap-3 bg-gray-100 p-5">
                               <div className="flex flex-col items-center gap-5">
                                 <div className="h-12 w-12 animate-ping rounded-lg bg-primary-100"></div>
@@ -581,7 +578,6 @@ export default function ModalCreateCollection({
                               </div>
                             </section>
                           )} */}
-                      </div>
                     </div>
                   </div>
                 </Dialog.Panel>

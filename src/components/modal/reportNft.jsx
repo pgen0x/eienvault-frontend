@@ -25,6 +25,8 @@ import { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useAccount } from 'wagmi';
+import ButtonPrimary from '../button/buttonPrimary';
+import ButtonSecondary from '../button/buttonSecondary';
 
 export default function ModalReportNft({
   isOpenModal,
@@ -141,21 +143,19 @@ export default function ModalReportNft({
                       autoComplete="message"
                       placeholder="Tell us about the issue min 10 chars"
                       onChange={(event) => setMessage(event.target.value)}
-                      className="block w-full rounded-md border-0 py-2 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-500 dark:bg-neutral-800 sm:text-sm sm:leading-6"
+                      className="block w-full rounded-full border-0 py-2 px-5 ring-0 placeholder:text-gray-400 focus:ring-0 dark:bg-neutral-800 sm:text-sm sm:leading-6"
                     />
-                    <button
-                      className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300 disabled:bg-primary-300 disabled:cursor-not-allowed"
+                    <ButtonPrimary
                       disabled={message.length<=10}
                       onClick={sendReport}
                     >
                       Report
-                    </button>
-                    <button
-                      className="w-full rounded-full bg-gray-100 hover:bg-primary-100 text-primary-500 dark:bg-neutral-800 px-4 py-2 text-center text-base font-bold dark:text-white hover:dark:bg-neutral-700"
+                    </ButtonPrimary>
+                    <ButtonSecondary
                       onClick={closeModal}
                     >
                       Cancel
-                    </button>
+                    </ButtonSecondary>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

@@ -61,6 +61,9 @@ import formatter from '@/utils/shortNumberFormatter';
 import ModalReportNft from '@/components/modal/reportNft';
 import ModalRemove from '@/components/modal/remove';
 import ButtonPrimary from '@/components/button/buttonPrimary';
+import ButtonTertiary from '@/components/button/buttonTertiary';
+import SwitchGrid from '@/components/switch/grid';
+import ButtonSecondary from '@/components/button/buttonSecondary';
 
 const filters = [
   'All',
@@ -214,19 +217,19 @@ export default function CollectionDetail({ params }) {
 
   const handleOpenModalShare = async (tokenId, collectionAddress) => {
     let url;
-    if(tokenId == null && collectionAddress == null){
+    if (tokenId == null && collectionAddress == null) {
       let collectionSlug;
       if (isAddress(params.slug)) {
         collectionSlug = getAddress(params.slug);
       } else {
         collectionSlug = params.slug;
       }
-      url = `${window.location.protocol}//${window.location.host}/collection/${collectionSlug}`
+      url = `${window.location.protocol}//${window.location.host}/collection/${collectionSlug}`;
     }
     setShareData({
       tokenId,
       collectionAddress,
-      url
+      url,
     });
     setisOpenModalShare(true);
   };
@@ -252,7 +255,7 @@ export default function CollectionDetail({ params }) {
             address === collection.userAddress && (
               <ButtonPrimary
                 onClick={editBanner}
-                className="absolute !w-fit right-2 top-2 m-4opacity-0 group-hover:opacity-100"
+                className="m-4opacity-0 absolute right-2 top-2 !w-fit group-hover:opacity-100"
               >
                 <FontAwesomeIcon className="mr-2" icon={faPenToSquare} />
                 Edit Cover
@@ -420,7 +423,10 @@ export default function CollectionDetail({ params }) {
                       </ButtonPrimary>
                     )}
 
-                    <ButtonPrimary className="!h-[40px] !w-[40px] !px-0" onClick={() => handleOpenModalShare(null, null)}>
+                    <ButtonPrimary
+                      className="!h-[40px] !w-[40px] !px-0"
+                      onClick={() => handleOpenModalShare(null, null)}
+                    >
                       <FontAwesomeIcon icon={faShare} />
                     </ButtonPrimary>
                     <ButtonPrimary className="!h-[40px] !w-[40px] !px-0">
@@ -481,10 +487,12 @@ export default function CollectionDetail({ params }) {
         )}
 
         <section>
-          <ul className="my-5 flex border-b border-gray-200 text-primary-500">
+          <ul className="my-5 flex border-b border-gray-200 text-primary-500 dark:text-white">
             <li
               className={`cursor-pointer px-5 pb-3 ${
-                activeTab == 'items' ? 'border-b-4 border-primary-500' : ''
+                activeTab == 'items'
+                  ? 'border-b-4 border-primary-500 dark:border-white'
+                  : ''
               }`}
               onClick={() => setActiveTab('items')}
             >
@@ -492,7 +500,9 @@ export default function CollectionDetail({ params }) {
             </li>
             <li
               className={`cursor-pointer px-5 pb-3 ${
-                activeTab == 'activity' ? 'border-b-4 border-primary-500' : ''
+                activeTab == 'activity'
+                  ? 'border-b-4 border-primary-500 dark:border-white'
+                  : ''
               }`}
               onClick={() => setActiveTab('activity')}
             >
@@ -1124,16 +1134,21 @@ const Items = ({ params, collection }) => {
           <div className="col-span-12 flex flex-col gap-2 md:flex-row">
             <div className="flex w-4/12 gap-1">
               <div className="w-fit">
-                <button
-                  className={`flex items-center gap-1 rounded-full px-4 py-2 hover:bg-primary-300 ${
-                    openFilter
-                      ? 'bg-primary-500 text-white'
-                      : 'bg-white text-primary-500'
-                  }`}
-                  onClick={handleOpenFilter}
-                >
-                  <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
-                </button>
+                {openFilter ? (
+                  <ButtonPrimary
+                    onClick={handleOpenFilter}
+                    className="flex items-center gap-1"
+                  >
+                    <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
+                  </ButtonPrimary>
+                ) : (
+                  <ButtonTertiary
+                    onClick={handleOpenFilter}
+                    className="flex items-center gap-1"
+                  >
+                    <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
+                  </ButtonTertiary>
+                )}
               </div>
             </div>
             <form
@@ -1213,38 +1228,7 @@ const Items = ({ params, collection }) => {
                 </div>
               </Listbox>
             </form>
-            <div className="hidden items-center space-x-1 rounded-full bg-white px-1 dark:border-neutral-700 dark:bg-neutral-900 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
-              <div>
-                <input
-                  className="hidden"
-                  type="radio"
-                  name="rangeOptions"
-                  id="optionGrid"
-                  onChange={(event) => handleGridList(event, 'grid')}
-                />
-                <label
-                  className={classRadio(gridList, 'grid')}
-                  htmlFor="optionGrid"
-                >
-                  <FontAwesomeIcon icon={faGrip} />
-                </label>
-              </div>
-              <div>
-                <input
-                  className="hidden"
-                  type="radio"
-                  name="rangeOptions"
-                  id="optionList"
-                  onChange={(event) => handleGridList(event, 'list')}
-                />
-                <label
-                  className={classRadio(gridList, 'list')}
-                  htmlFor="optionList"
-                >
-                  <FontAwesomeIcon icon={faGripVertical} />
-                </label>
-              </div>
-            </div>
+            <SwitchGrid gridList={gridList} setGridList={setGridList} />
           </div>
         </div>
         <div className="my-5 grid min-h-[53px] grid-cols-12 gap-6">
@@ -1264,48 +1248,75 @@ const Items = ({ params, collection }) => {
                       filterCollapse.status ? 'block' : 'hidden'
                     }`}
                   >
-                    <button
-                      onClick={() =>
-                        filterStatus === 'onauction'
-                          ? setFilterStatus(null)
-                          : setFilterStatus('onauction')
-                      }
-                      className={`col-span-3 flex h-8 w-fit min-w-[2rem] cursor-pointer items-center justify-center rounded-lg px-3 text-xs font-medium leading-5 text-white shadow ${
-                        filterStatus === 'onauction'
-                          ? 'bg-primary-300'
-                          : 'bg-primary-500 lg:hover:bg-primary-300'
-                      }`}
-                    >
-                      On Auction
-                    </button>
-                    <button
-                      onClick={() =>
-                        filterStatus === 'listed'
-                          ? setFilterStatus(null)
-                          : setFilterStatus('listed')
-                      }
-                      className={`col-span-3 flex h-8 w-fit min-w-[2rem] cursor-pointer items-center justify-center rounded-lg px-3 text-xs font-medium leading-5 text-white shadow ${
-                        filterStatus === 'listed'
-                          ? 'bg-primary-300'
-                          : 'bg-primary-500 lg:hover:bg-primary-300'
-                      }`}
-                    >
-                      Listed
-                    </button>
-                    <button
-                      onClick={() =>
-                        filterStatus === 'notforsale'
-                          ? setFilterStatus(null)
-                          : setFilterStatus('notforsale')
-                      }
-                      className={`col-span-3 flex h-8 w-fit min-w-[2rem] cursor-pointer items-center justify-center rounded-lg px-3 text-xs font-medium leading-5 text-white shadow ${
-                        filterStatus === 'notforsale'
-                          ? 'bg-primary-300'
-                          : 'bg-primary-500 lg:hover:bg-primary-300'
-                      }`}
-                    >
-                      Not For Sale
-                    </button>
+                    {filterStatus === 'onauction' ? (
+                      <ButtonPrimary
+                        onClick={() =>
+                          filterStatus === 'onauction'
+                            ? setFilterStatus(null)
+                            : setFilterStatus('onauction')
+                        }
+                        className="!w-fit !px-3 text-xs"
+                      >
+                        On Auction
+                      </ButtonPrimary>
+                    ) : (
+                      <ButtonSecondary
+                        onClick={() =>
+                          filterStatus === 'onauction'
+                            ? setFilterStatus(null)
+                            : setFilterStatus('onauction')
+                        }
+                        className="!w-fit !px-3 text-xs"
+                      >
+                        On Auction
+                      </ButtonSecondary>
+                    )}
+                    {filterStatus === 'listed' ? (
+                      <ButtonPrimary
+                        onClick={() =>
+                          filterStatus === 'listed'
+                            ? setFilterStatus(null)
+                            : setFilterStatus('listed')
+                        }
+                        className="!w-fit !px-3 text-xs"
+                      >
+                        Listed
+                      </ButtonPrimary>
+                    ) : (
+                      <ButtonSecondary
+                        onClick={() =>
+                          filterStatus === 'listed'
+                            ? setFilterStatus(null)
+                            : setFilterStatus('listed')
+                        }
+                        className="!w-fit !px-3 text-xs"
+                      >
+                        Listed
+                      </ButtonSecondary>
+                    )}
+                    {filterStatus === 'notforsale' ? (
+                      <ButtonPrimary
+                        onClick={() =>
+                          filterStatus === 'notforsale'
+                            ? setFilterStatus(null)
+                            : setFilterStatus('notforsale')
+                        }
+                        className="!w-fit !px-3 text-xs"
+                      >
+                        Not For Sale
+                      </ButtonPrimary>
+                    ) : (
+                      <ButtonSecondary
+                        onClick={() =>
+                          filterStatus === 'notforsale'
+                            ? setFilterStatus(null)
+                            : setFilterStatus('notforsale')
+                        }
+                        className="!w-fit !px-3 text-xs"
+                      >
+                        Not For Sale
+                      </ButtonSecondary>
+                    )}
                   </div>
                 </li>
                 <li>
@@ -1342,14 +1353,13 @@ const Items = ({ params, collection }) => {
                         className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                       />
                     </div>
-                    <button
-                      className="mb-2 inline-flex w-full justify-center rounded-full bg-primary-500 px-4 py-2 text-sm text-white hover:bg-primary-300"
+                    <ButtonPrimary className="text-sm"
                       onClick={() =>
                         handleApplyPriceFilter(startPrice, endPrice)
                       }
                     >
                       Apply
-                    </button>
+                    </ButtonPrimary>
                   </div>
                 </li>
                 <li>
@@ -1400,7 +1410,7 @@ const Items = ({ params, collection }) => {
                                 <div className="inline-flex items-center justify-center">
                                   <input
                                     type="checkbox"
-                                    className="mr-2 h-4 w-4 rounded border-gray-300 text-primary-500 ring-primary-500 focus:ring-primary-500"
+                                    className="mr-2 h-4 w-4 rounded border-gray-300 text-primary-500 ring-primary-500 focus:ring-primary-500 dark:text-neutral-500 dark:ring-neutral-500 dark:focus:ring-neutral-500"
                                     value={val.value}
                                     checked={selectedValues.some(
                                       (item) =>
@@ -1974,17 +1984,25 @@ const Activity = ({ collection }) => {
                 <h3 className="text-xl font-bold">Filter</h3>
                 <div className="flex flex-wrap gap-3 rounded-lg">
                   {Object.keys(datafilters).map((key) => (
-                    <button
-                      key={key}
-                      className={`w-fit rounded-lg px-3 py-2 font-semibold text-primary-500 hover:bg-primary-100 hover:dark:bg-neutral-700 ${
-                        activeFilter.indexOf(key) !== -1
-                          ? 'bg-primary-100 dark:bg-neutral-700'
-                          : 'bg-white dark:bg-neutral-800'
-                      }`}
-                      onClick={() => actionFilter(key)}
-                    >
-                      {datafilters[key]} {key}
-                    </button>
+                    <>
+                      {activeFilter.indexOf(key) !== -1 ? (
+                        <ButtonPrimary
+                          key={key}
+                          className="!w-fit"
+                          onClick={() => actionFilter(key)}
+                        >
+                          {datafilters[key]} {key}
+                        </ButtonPrimary>
+                      ) : (
+                        <ButtonSecondary
+                          key={key}
+                          className="!w-fit"
+                          onClick={() => actionFilter(key)}
+                        >
+                          {datafilters[key]} {key}
+                        </ButtonSecondary>
+                      )}
+                    </>
                   ))}
                 </div>
               </div>

@@ -143,9 +143,9 @@ export const Slideshow = ({
 
   return (
     <>
-      <button className="swiper-prev absolute -left-5 z-10 mr-2 hidden rounded-full bg-primary-400 px-4 py-2 text-white sm:hidden md:block lg:block xl:block 2xl:block">
+      <ButtonPrimary className="swiper-prev absolute -left-5 z-10 mr-2 !w-fit hidden sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronLeft} />
-      </button>
+      </ButtonPrimary>
       <Swiper
         className="!pb-5"
         slidesPerView={1}
@@ -431,9 +431,9 @@ export const Slideshow = ({
             </SwiperSlide>
           ))}
       </Swiper>
-      <button className="swiper-next absolute -right-5 z-10 ml-2 hidden rounded-full bg-primary-400 px-4 py-2 text-white sm:hidden md:block lg:block xl:block 2xl:block">
+      <ButtonPrimary className="swiper-next absolute -right-5 z-10 ml-2 !w-fit hidden sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronRight} />
-      </button>
+      </ButtonPrimary>
       <ModalBid
         isOpenModal={isOpenModal}
         onClose={closeModal}

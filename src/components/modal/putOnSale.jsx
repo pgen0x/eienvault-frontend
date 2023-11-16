@@ -66,6 +66,7 @@ export default function ModalPutOnSale({
   const [putOnSaleHash, setPutOnSaleHash] = useState();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isCompletedHash, setIsCompletedHash] = useState(false);
+  const [listingFee, setListingFee] = useState();
 
   useEffect(() => {
     // Calculate the date 1 day from now using Moment.js
@@ -144,6 +145,7 @@ export default function ModalPutOnSale({
       ...marketplaceABI,
       functionName: 'listingPrice',
     });
+    setListingFee(ListingPrice);
     return ListingPrice;
   };
 
@@ -403,6 +405,15 @@ export default function ModalPutOnSale({
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const price = await getListingPrice();
+      console.log(price); // This will log the updated listingFee
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <Transition appear show={isOpenModal} as={Fragment}>
@@ -555,12 +566,20 @@ export default function ModalPutOnSale({
                               </div>
                               <div className="mt-2 w-full px-2">
                                 <div className="flex w-full justify-between">
+                                  <span>Listing Fee</span>
+                                  <span className="font-semibold">
+                                    {listingFee && formatEther(listingFee)}{' '}
+                                    {chain?.nativeCurrency.symbol}
+                                  </span>
+                                </div>
+                                <div className="flex w-full justify-between">
                                   <span>Price</span>
                                   <span className="font-semibold">
                                     {watch('price')}{' '}
                                     {chain?.nativeCurrency.symbol}
                                   </span>
                                 </div>
+
                                 <div className="flex w-full justify-between">
                                   <span>You will receive</span>
                                   <span className="font-semibold">

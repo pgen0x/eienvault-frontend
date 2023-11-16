@@ -32,7 +32,7 @@ const Sidebar = () => {
   const sidebarRef = useRef();
   const sidebarContentRef = useRef();
   const router = useRouter();
-  const { disconnect } = useDisconnect();
+  const { disconnectAsync } = useDisconnect();
   const { dataUser } = useAuth();
   const { address, isConnected } = useAccount();
   const { open } = useWeb3Modal();
@@ -112,7 +112,7 @@ const Sidebar = () => {
 
   const handleDisconnect = () => {
     closeSidebar();
-    disconnect();
+    disconnectAsync();
   };
 
   const handleSetting = () => {

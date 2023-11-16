@@ -190,13 +190,18 @@ const Following = ({ followData }) => {
       </form> */}
       <div className="flex w-full items-center justify-center gap-2">
         <FontAwesomeIcon icon={faUsers} size="sm" />
-        <span className="text-sm font-semibold">{followData.followings} Folllowing</span>
+        <span className="text-sm font-semibold">
+          {followData.followings} Folllowing
+        </span>
       </div>
       <div className="flex items-center justify-center rounded-xl">
         <div className="flex w-full flex-col items-center gap-5">
           {users.map((user, index) => {
             return (
-              <div className="flex w-full items-center justify-start gap-5 rounded-2xl bg-neutral-700 p-4 backdrop-blur-xl">
+              <div
+                key={index}
+                className="flex w-full items-center justify-start gap-5 rounded-2xl bg-neutral-700 p-4 backdrop-blur-xl"
+              >
                 <div className="flex w-full items-start justify-end">
                   <div className="flex items-start gap-2">
                     <div className="relative h-16 w-16">
@@ -250,16 +255,10 @@ const Following = ({ followData }) => {
                       <div className="flex flex-col items-start justify-center self-stretch">
                         <h3>Bio</h3>
                         <p className="line-clamp-2">
-                          Welcome to our hela_test collection! Explore a world
-                          of digital art and assets that represent unique and
-                          exclusive tokens on the blockchain. You'll find
-                          something special in our collection. Each NFT is a
-                          one-of-a-kind piece, verified and secured on the
-                          blockchain, making it a valuable addition to your
-                          digital asset portfolio. Join us on this journey of
-                          innovation and creativity in the world of non-fungible
-                          tokens. Start collecting, trading, and owning a piece
-                          of the digital future with our NFTs!
+                          A digital art enthusiast exploring the world of NFTs
+                          on EienVault. I enjoy sharing and collecting unique
+                          digital artworks on this platform. Let&lsquo;s explore
+                          the world of creativity together at EienVault
                         </p>
                       </div>
                     </div>
@@ -327,13 +326,18 @@ const Followers = ({ followData }) => {
       </form> */}
       <div className="flex w-full items-center justify-center gap-2">
         <FontAwesomeIcon icon={faUsers} size="sm" />
-        <span className="text-sm font-semibold">{followData.followers} Followers</span>
+        <span className="text-sm font-semibold">
+          {followData.followers} Followers
+        </span>
       </div>
       <div className="flex items-center justify-center rounded-xl">
         <div className="flex w-full flex-col items-center gap-5">
           {users.map((user, index) => {
             return (
-              <div className="flex w-full items-center justify-start gap-5 rounded-2xl bg-neutral-700 p-4 backdrop-blur-xl">
+              <div
+                key={index}
+                className="flex w-full items-center justify-start gap-5 rounded-2xl bg-neutral-700 p-4 backdrop-blur-xl"
+              >
                 <div className="flex w-full items-start justify-end">
                   <div className="flex items-start gap-2">
                     <div className="relative h-16 w-16">
@@ -387,16 +391,10 @@ const Followers = ({ followData }) => {
                       <div className="flex flex-col items-start justify-center self-stretch">
                         <h3>Bio</h3>
                         <p className="line-clamp-2">
-                          Welcome to our hela_test collection! Explore a world
-                          of digital art and assets that represent unique and
-                          exclusive tokens on the blockchain. You'll find
-                          something special in our collection. Each NFT is a
-                          one-of-a-kind piece, verified and secured on the
-                          blockchain, making it a valuable addition to your
-                          digital asset portfolio. Join us on this journey of
-                          innovation and creativity in the world of non-fungible
-                          tokens. Start collecting, trading, and owning a piece
-                          of the digital future with our NFTs!
+                          A digital art enthusiast exploring the world of NFTs
+                          on EienVault. I enjoy sharing and collecting unique
+                          digital artworks on this platform. Let&lsquo;s explore
+                          the world of creativity together at EienVault
                         </p>
                       </div>
                     </div>

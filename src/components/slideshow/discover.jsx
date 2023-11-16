@@ -34,6 +34,7 @@ import { NftItemDetail, NftItemDetailSkeleton } from '../nft/itemDetail';
 import ModalShareSocialMedia from '../modal/shareSocialMedia';
 import ModalReportNft from '../modal/reportNft';
 import ModalRemove from '../modal/remove';
+import ButtonPrimary from '../button/buttonPrimary';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 const sliderBreakPoints = {

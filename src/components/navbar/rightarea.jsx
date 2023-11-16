@@ -26,7 +26,7 @@ export default function RightArea() {
     setEnabled(!enabled); // Toggle the state
     setTheme(enabled ? 'light' : 'dark'); // Update the theme
   };
-  const { disconnect } = useDisconnect();
+  const { disconnectAsync } = useDisconnect();
   const [isClient, setIsClient] = useState(false);
   const [isConnect, setIsConnect] = useState(false);
   const { toggleSidebar } = useSidebar();
@@ -42,7 +42,7 @@ export default function RightArea() {
       setIsConnect(true);
     }
     if (event.name === 'ACCOUNT_DISCONNECTED') {
-      disconnect();
+      disconnectAsync();
       setIsConnect(false);
     }
   });

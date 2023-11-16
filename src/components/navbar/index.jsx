@@ -27,7 +27,7 @@ import { useAuth } from '@/hooks/AuthContext';
 export default function Navbar() {
   const router = useRouter();
   const { logout } = useAuth();
-  const { disconnect } = useDisconnect();
+  const { disconnectAsync } = useDisconnect();
   const [openMenu, setOpenMenu] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isConnect, setIsConnect] = useState(false);
@@ -43,7 +43,7 @@ export default function Navbar() {
       setIsConnect(true);
     }
     if (event.name === 'ACCOUNT_DISCONNECTED') {
-      disconnect();
+      disconnectAsync();
       setIsConnect(false);
       logout();
     }

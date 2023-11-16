@@ -66,6 +66,7 @@ export default function ModalPutOnSale({
   const [putOnSaleHash, setPutOnSaleHash] = useState();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isCompletedHash, setIsCompletedHash] = useState(false);
+  const [listingFee, setListingFee] = useState();
 
   useEffect(() => {
     // Calculate the date 1 day from now using Moment.js
@@ -144,6 +145,7 @@ export default function ModalPutOnSale({
       ...marketplaceABI,
       functionName: 'listingPrice',
     });
+    setListingFee(ListingPrice);
     return ListingPrice;
   };
 
@@ -403,6 +405,15 @@ export default function ModalPutOnSale({
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const price = await getListingPrice();
+      console.log(price); // This will log the updated listingFee
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <Transition appear show={isOpenModal} as={Fragment}>
@@ -555,12 +566,20 @@ export default function ModalPutOnSale({
                               </div>
                               <div className="mt-2 w-full px-2">
                                 <div className="flex w-full justify-between">
+                                  <span>Listing Fee</span>
+                                  <span className="font-semibold">
+                                    {listingFee && formatEther(listingFee)}{' '}
+                                    {chain?.nativeCurrency.symbol}
+                                  </span>
+                                </div>
+                                <div className="flex w-full justify-between">
                                   <span>Price</span>
                                   <span className="font-semibold">
                                     {watch('price')}{' '}
                                     {chain?.nativeCurrency.symbol}
                                   </span>
                                 </div>
+
                                 <div className="flex w-full justify-between">
                                   <span>You will receive</span>
                                   <span className="font-semibold">
@@ -625,7 +644,7 @@ export default function ModalPutOnSale({
                                   name="duration_date"
                                   id="duration_date"
                                   autoComplete="duration_date"
-                                  className="flex-1 rounded-full border-0 bg-gray-50 dark:bg-neutral-900 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-neutral-700 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:text-sm sm:leading-6"
+                                  className="flex-1 rounded-full border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500  dark:ring-neutral-700 sm:text-sm sm:leading-6"
                                   value={customValueDate}
                                   disabled={selectedOptionDate !== 'Custom'}
                                   onChange={(e) =>
@@ -690,7 +709,7 @@ export default function ModalPutOnSale({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-950 p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-950">
                   <Dialog.Title
                     as="h3"
                     className="text-xl font-bold text-gray-900 dark:text-white"

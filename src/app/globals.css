@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-white text-neutral-50 antialiased transition-colors duration-1000 dark:bg-gray-900 dark:text-neutral-200;
+    @apply bg-white text-neutral-50 antialiased transition-colors duration-500 dark:bg-gray-900 dark:text-neutral-200;
   }
   .swiper {
     @apply flex flex-col;
@@ -64,10 +64,10 @@
   border-radius: 10px;
 }
 
-html.light .swiper-pagination .swiper-pagination-bullet-active{
+html.light .swiper-pagination .swiper-pagination-bullet-active {
   background-color: #e22644;
 }
-html.dark .swiper-pagination .swiper-pagination-bullet-active{
+html.dark .swiper-pagination .swiper-pagination-bullet-active {
   background-color: #ffffff;
 }
 
@@ -103,4 +103,12 @@ input[type='number'] {
 
 .awan-4 {
   animation: graphicy 10s infinite cubic-bezier(0.3, 0.27, 0.07, 1.04);
+}
+
+#duration_date {
+  color-scheme: light;
+}
+
+#release_date {
+  color-scheme: light;
 }

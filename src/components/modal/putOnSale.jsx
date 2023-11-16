@@ -625,7 +625,7 @@ export default function ModalPutOnSale({
                                   name="duration_date"
                                   id="duration_date"
                                   autoComplete="duration_date"
-                                  className="flex-1 rounded-full border-0 bg-gray-50 dark:bg-neutral-900 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-neutral-700 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:text-sm sm:leading-6"
+                                  className="flex-1 rounded-full border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500  dark:ring-neutral-700 sm:text-sm sm:leading-6"
                                   value={customValueDate}
                                   disabled={selectedOptionDate !== 'Custom'}
                                   onChange={(e) =>
@@ -690,7 +690,7 @@ export default function ModalPutOnSale({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-950 p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-950">
                   <Dialog.Title
                     as="h3"
                     className="text-xl font-bold text-gray-900 dark:text-white"

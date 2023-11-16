@@ -64,10 +64,10 @@
   border-radius: 10px;
 }
 
-html.light .swiper-pagination .swiper-pagination-bullet-active{
+html.light .swiper-pagination .swiper-pagination-bullet-active {
   background-color: #e22644;
 }
-html.dark .swiper-pagination .swiper-pagination-bullet-active{
+html.dark .swiper-pagination .swiper-pagination-bullet-active {
   background-color: #ffffff;
 }
 
@@ -103,4 +103,8 @@ input[type='number'] {
 
 .awan-4 {
   animation: graphicy 10s infinite cubic-bezier(0.3, 0.27, 0.07, 1.04);
+}
+
+#duration_date {
+  color-scheme: light;
 }

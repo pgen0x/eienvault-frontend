@@ -72,7 +72,7 @@ export default function Navbar() {
               <RightArea suppressHydrationWarning />
               <button
                 onClick={() => setOpenMenu(!openMenu)}
-                className="ml-3 block flex-col items-center justify-center rounded-xl text-xl text-primary-500 sm:block md:block lg:hidden xl:hidden 2xl:hidden"
+                className="ml-3 block flex-col items-center justify-center rounded-xl text-xl text-primary-500 dark:text-white sm:block md:block lg:hidden xl:hidden 2xl:hidden"
               >
                 <FontAwesomeIcon icon={faBars} />
               </button>

@@ -1,3 +1,5 @@
+import ButtonPrimary from '@/components/button/buttonPrimary';
+import ButtonTertiary from '@/components/button/buttonTertiary';
 import ModalRemove from '@/components/modal/remove';
 import {
   NftItemDetail,
@@ -334,16 +336,15 @@ const Onsale = ({
           <div className="col-span-12 flex flex-col gap-2 md:flex-row">
             <div className="flex w-4/12 gap-1">
               <div className="w-fit">
-                <button
-                  className={`flex items-center gap-1 rounded-full px-4 py-2 hover:bg-primary-300 ${
-                    openFilter
-                      ? 'bg-primary-500 text-white'
-                      : 'bg-white text-primary-500'
-                  }`}
-                  onClick={handleOpenFilter}
-                >
-                  <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
-                </button>
+                {openFilter ? (
+                  <ButtonPrimary onClick={handleOpenFilter}>
+                    <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
+                  </ButtonPrimary>
+                ) : (
+                  <ButtonTertiary onClick={handleOpenFilter}>
+                    <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
+                  </ButtonTertiary>
+                )}
               </div>
             </div>
             <form

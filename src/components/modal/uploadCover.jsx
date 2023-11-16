@@ -162,7 +162,7 @@ export default function ModaluploadCover({
                           {selectedImage && selectedImage.length > 0 ? (
                             <>
                               <button
-                                className="absolute right-1.5 top-1.5 z-30 h-10 w-10 rounded-full text-rose-500 hover:bg-primary-50"
+                                className="absolute right-1.5 top-1.5 z-30 h-10 w-10 rounded-full text-primary-500 hover:bg-primary-50 dark:text-neutral-500 dark:hover:bg-neutral-50"
                                 onClick={(e) => {
                                   e.preventDefault();
                                   setValue('file', null);
@@ -188,7 +188,7 @@ export default function ModaluploadCover({
                               <div className="text-sm">
                                 1920 x 266 pixel is recommended
                               </div>
-                              <label className="cursor-pointer rounded-full bg-primary-500 px-4 py-1 font-semibold text-white hover:bg-primary-300">
+                              <label className="cursor-pointer rounded-full bg-primary-500 dark:bg-neutral-500 dark:hover:bg-neutral-300 px-4 py-1 font-semibold text-white hover:bg-primary-300">
                                 Choose file
                                 <input
                                   type="file"

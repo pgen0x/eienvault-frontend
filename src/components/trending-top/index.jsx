@@ -21,6 +21,15 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import ButtonPrimary from '../button/buttonPrimary';
+import ButtonLink from '../button/buttonLink';
+import {
+  SwitchTrenndingTop,
+  SwitchTrenndingTopMobile,
+} from '../switch/trendingTop';
+import {
+  SwitchTrenndingTopTime,
+  SwitchTrenndingTopTimeMobile,
+} from '../switch/trendingTopTime';
 
 const servers = [
   'All Mainnet',
@@ -57,63 +66,16 @@ const Main = ({ TrendingTop, setTrendingTop, Range, setRange }) => {
     <>
       <div className="flex items-center justify-between">
         <div className="flex max-w-min flex-col gap-3 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
-          <div className="flex space-x-1 rounded-full bg-white px-1 dark:bg-neutral-900 dark:text-white">
-            <label className={classRadio(TrendingTop, 'trending')}>
-              Trending
-              <input
-                className="hidden"
-                type="radio"
-                name="trendingTopOptions"
-                onChange={(event) => handleTrendingTop(event, 'trending')}
-              />
-            </label>
-            <label className={classRadio(TrendingTop, 'top')}>
-              Top
-              <input
-                className="hidden"
-                type="radio"
-                name="trendingTopOptions"
-                onChange={(event) => handleTrendingTop(event, 'top')}
-              />
-            </label>
-          </div>
-          <div className="flex space-x-1 rounded-full bg-white px-1 dark:bg-neutral-900">
-            <label className={classRadio(Range, '1h')}>
-              1h
-              <input
-                className="hidden"
-                type="radio"
-                name="rangeOptions"
-                onChange={(event) => handleRange(event, '1h')}
-              />
-            </label>
-            <label className={classRadio(Range, '1d')}>
-              1d
-              <input
-                className="hidden"
-                type="radio"
-                name="rangeOptions"
-                onChange={(event) => handleRange(event, '1d')}
-              />
-            </label>
-            <label className={classRadio(Range, '7d')}>
-              7d
-              <input
-                className="hidden"
-                type="radio"
-                name="rangeOptions"
-                onChange={(event) => handleRange(event, '7d')}
-              />
-            </label>
-          </div>
+          <SwitchTrenndingTop
+            TrendingTop={TrendingTop}
+            setTrendingTop={setTrendingTop}
+          />
+          <SwitchTrenndingTopTime Range={Range} setRange={setRange} />
         </div>
         <div className="flex items-end px-3">
-          <button
-            onClick={() => router.push(`/collection`)}
-            className="font-bold text-primary-500"
-          >
+          <ButtonLink onClick={() => router.push(`/collection`)}>
             See all
-          </button>
+          </ButtonLink>
         </div>
       </div>
     </>
@@ -313,19 +275,8 @@ export const TrendingTopSkeleton = () => {
   );
 };
 
-const MainMobile = () => {
-  const [TrendingTop, setTrendingTop] = useState('trending');
-  const [Range, setRange] = useState('1h');
+const MainMobile = ({ TrendingTop, setTrendingTop, Range, setRange }) => {
   const [Coin, setCoin] = useState('ethereum');
-
-  const handleTrendingTop = (event, target) => {
-    setTrendingTop(target);
-  };
-
-  const handleRange = (event, target) => {
-    setRange(target);
-  };
-
   const handleCoin = (event, target) => {
     setCoin(target);
   };
@@ -344,56 +295,12 @@ const MainMobile = () => {
     <>
       <div className="flex items-center justify-between">
         <div className="flex w-full flex-col gap-3">
-          <div className="flex justify-between rounded-full bg-white px-1 py-2 dark:bg-neutral-900 dark:text-white">
-            <label className={classRadio(TrendingTop, 'trending')}>
-              Trending
-              <input
-                className="hidden"
-                type="radio"
-                name="trendingTopOptions"
-                onChange={(event) => handleTrendingTop(event, 'trending')}
-              />
-            </label>
-            <label className={classRadio(TrendingTop, 'top')}>
-              Top
-              <input
-                className="hidden"
-                type="radio"
-                name="trendingTopOptions"
-                onChange={(event) => handleTrendingTop(event, 'top')}
-              />
-            </label>
-          </div>
-          <div className="flex space-x-1 rounded-full bg-white px-1 py-2 dark:bg-neutral-900 dark:text-white">
-            <label className={classRadio(Range, '1h')}>
-              1h
-              <input
-                className="hidden"
-                type="radio"
-                name="rangeOptions"
-                onChange={(event) => handleRange(event, '1h')}
-              />
-            </label>
-            <label className={classRadio(Range, '1d')}>
-              1d
-              <input
-                className="hidden"
-                type="radio"
-                name="rangeOptions"
-                onChange={(event) => handleRange(event, '1d')}
-              />
-            </label>
-            <label className={classRadio(Range, '7d')}>
-              7d
-              <input
-                className="hidden"
-                type="radio"
-                name="rangeOptions"
-                onChange={(event) => handleRange(event, '7d')}
-              />
-            </label>
-          </div>
-          <div className="flex space-x-1 rounded-full bg-white px-1 py-2 dark:bg-neutral-900 dark:text-white">
+          <SwitchTrenndingTopMobile
+            TrendingTop={TrendingTop}
+            setTrendingTop={setTrendingTop}
+          />
+          <SwitchTrenndingTopTimeMobile Range={Range} setRange={setRange} />
+          {/* <div className="flex space-x-1 rounded-full bg-white px-1 py-2 dark:bg-neutral-900 dark:text-white">
             <label className={classRadio(Coin, 'ethereum')}>
               <Ethereum />
               <input
@@ -430,15 +337,12 @@ const MainMobile = () => {
                 onChange={(event) => handleCoin(event, 'monero')}
               />
             </label>
-          </div>
+          </div> */}
         </div>
         <div className="hidden items-end px-3 sm:hidden md:flex lg:flex xl:flex 2xl:flex">
-          <button
-            onClick={() => router.push(`/collection`)}
-            className="text-primary-500"
-          >
+          <ButtonLink onClick={() => router.push(`/collection`)}>
             See all
-          </button>
+          </ButtonLink>
         </div>
       </div>
     </>
@@ -448,6 +352,8 @@ const MainMobile = () => {
 export const TrendingTopMobile = ({ dataCollections }) => {
   const router = useRouter();
   const [nfts, setNfts] = useState({});
+  const [TrendingTop, setTrendingTop] = useState('trending');
+  const [Range, setRange] = useState('1h');
 
   const classFloor = (value) => {
     return Number(value) < 0
@@ -466,12 +372,18 @@ export const TrendingTopMobile = ({ dataCollections }) => {
   };
 
   const priceChangePercentage = (collection) => {
+    console.log(collection, 'priceChangePercentage' + Range);
     return collection['priceChangePercentage' + Range];
   };
 
   return (
     <>
-      <MainMobile />
+      <MainMobile
+        TrendingTop={TrendingTop}
+        setTrendingTop={setTrendingTop}
+        Range={Range}
+        setRange={setRange}
+      />
       <div className="mt-5 flex flex-col gap-5">
         {dataCollections.map((collection, index) => (
           <div
@@ -491,14 +403,14 @@ export const TrendingTopMobile = ({ dataCollections }) => {
                 />
               </div>
               <h3 className="w-full">{collection.name}</h3>
-              <button
-                className="h-8 w-12 rounded-full bg-primary-500 text-white hover:bg-primary-300"
+              <ButtonPrimary
+                className="h-8 !w-12 !p-0"
                 onClick={() =>
                   router.push(`/collection/${collection.tokenAddress}`)
                 }
               >
                 <FontAwesomeIcon icon={faArrowRight} />
-              </button>
+              </ButtonPrimary>
             </div>
             <div className="flex w-full gap-3">
               <div className="flex w-full flex-col gap-3">
@@ -537,9 +449,7 @@ export const TrendingTopMobile = ({ dataCollections }) => {
             </div>
           </div>
         ))}
-        <ButtonPrimary
-          onClick={() => router.push('/collection')}
-        >
+        <ButtonPrimary onClick={() => router.push('/collection')}>
           View more collections
         </ButtonPrimary>
       </div>
@@ -623,7 +533,9 @@ const MobileNft = ({ collection }) => {
               </div>
               <button className="-mt-5 flex w-20 rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md dark:text-white">
                 <Ethereum className="h-4 w-4" />{' '}
-                <span className="w-full">5 ETH</span>
+                <span className="w-full">
+                  5 {nft?.Collection?.Chain?.symbol}
+                </span>
               </button>
             </div>
           </SwiperSlide>

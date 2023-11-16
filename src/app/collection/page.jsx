@@ -32,6 +32,11 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSearchParams } from 'next/navigation';
 import { JazzIcon } from '@/components/jazzicon';
+import ButtonPrimary from '@/components/button/buttonPrimary';
+import ButtonTertiary from '@/components/button/buttonTertiary';
+import { SwitchTrenndingTop } from '@/components/switch/trendingTop';
+import { SwitchTrenndingTopTime } from '@/components/switch/trendingTopTime';
+import ButtonSecondary from '@/components/button/buttonSecondary';
 
 const servers = [
   'All Mainnet',
@@ -331,68 +336,27 @@ export default function Collection() {
             <div className="col-span-12 flex flex-col gap-2 md:flex-row">
               <div className="flex w-fit gap-1">
                 <div className="w-fit">
-                  <button
-                    className={`flex items-center gap-1 rounded-full px-4 py-2 hover:bg-primary-300 ${
-                      openFilter
-                        ? 'bg-primary-500 text-white'
-                        : 'bg-white text-primary-500'
-                    }`}
-                    onClick={handleOpenFilter}
-                  >
-                    <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
-                  </button>
+                  {openFilter ? (
+                    <ButtonPrimary
+                      onClick={handleOpenFilter}
+                      className="flex items-center gap-1"
+                    >
+                      <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
+                    </ButtonPrimary>
+                  ) : (
+                    <ButtonTertiary
+                      onClick={handleOpenFilter}
+                      className="flex items-center gap-1"
+                    >
+                      <FontAwesomeIcon icon={faSliders} /> <span>Filter</span>
+                    </ButtonTertiary>
+                  )}
                 </div>
-                <div className="flex w-fit space-x-1 rounded-full bg-white px-1 py-1 dark:border-neutral-700 dark:bg-neutral-900">
-                  <label
-                    className={`px-3 ${classRadio(TrendingTop, 'trending')}`}
-                  >
-                    Trending
-                    <input
-                      className="hidden"
-                      type="radio"
-                      name="trendingTopOptions"
-                      onChange={(event) => handleTrendingTop('trending')}
-                    />
-                  </label>
-                  <label className={`px-3 ${classRadio(TrendingTop, 'top')}`}>
-                    Top
-                    <input
-                      className="hidden"
-                      type="radio"
-                      name="trendingTopOptions"
-                      onChange={(event) => handleTrendingTop('top')}
-                    />
-                  </label>
-                </div>
-                <div className="flex w-fit space-x-1 rounded-full bg-white px-1 py-1 dark:bg-neutral-900">
-                  <label className={classRadio(Range, '1h')}>
-                    1h
-                    <input
-                      className="hidden"
-                      type="radio"
-                      name="rangeOptions"
-                      onChange={(event) => handleRange('1h')}
-                    />
-                  </label>
-                  <label className={classRadio(Range, '1d')}>
-                    1d
-                    <input
-                      className="hidden"
-                      type="radio"
-                      name="rangeOptions"
-                      onChange={(event) => handleRange('1d')}
-                    />
-                  </label>
-                  <label className={classRadio(Range, '7d')}>
-                    7d
-                    <input
-                      className="hidden"
-                      type="radio"
-                      name="rangeOptions"
-                      onChange={(event) => handleRange('7d')}
-                    />
-                  </label>
-                </div>
+                <SwitchTrenndingTop
+                  TrendingTop={TrendingTop}
+                  setTrendingTop={setTrendingTop}
+                />
+                <SwitchTrenndingTopTime Range={Range} setRange={setRange} />
               </div>
               <form
                 onSubmit={(event) => handleSearch(event)}
@@ -411,7 +375,7 @@ export default function Collection() {
                     defaultValue={search}
                     onChange={(event) => setSearch(event.target.value)}
                   />
-                  <div className="inline-flex flex-col items-center justify-center gap-2 rounded-md bg-neutral-200 dark:bg-neutral-700 px-2">
+                  <div className="inline-flex flex-col items-center justify-center gap-2 rounded-md bg-neutral-200 px-2 dark:bg-neutral-700">
                     <div className="text-base font-light leading-normal text-neutral-300 dark:text-neutral-200">
                       /
                     </div>
@@ -454,21 +418,33 @@ export default function Collection() {
                           )
                           .map((chain, index) => {
                             return (
-                              <button
-                                key={index}
-                                onClick={() =>
-                                  filterBlockchain === chain.chainId
-                                    ? setFilterBlockchain('')
-                                    : setFilterBlockchain(chain.chainId)
-                                }
-                                className={`col-span-3 flex h-8 w-full min-w-[2rem] cursor-pointer items-center justify-center rounded-lg text-xs font-medium leading-5 text-white shadow ${
-                                  filterBlockchain === chain.chainId
-                                    ? 'bg-primary-300'
-                                    : 'bg-primary-500 lg:hover:bg-primary-300'
-                                }`}
-                              >
-                                {chain.symbol}
-                              </button>
+                              <>
+                                {filterBlockchain === chain.chainId ? (
+                                  <ButtonPrimary
+                                    key={index}
+                                    onClick={() =>
+                                      filterBlockchain === chain.chainId
+                                        ? setFilterBlockchain('')
+                                        : setFilterBlockchain(chain.chainId)
+                                    }
+                                    className="!w-fit text-xs !px-3"
+                                  >
+                                    {chain.symbol}
+                                  </ButtonPrimary>
+                                ) : (
+                                  <ButtonSecondary
+                                    key={index}
+                                    onClick={() =>
+                                      filterBlockchain === chain.chainId
+                                        ? setFilterBlockchain('')
+                                        : setFilterBlockchain(chain.chainId)
+                                    }
+                                    className="!w-fit text-xs !px-3"
+                                  >
+                                    {chain.symbol}
+                                  </ButtonSecondary>
+                                )}
+                              </>
                             );
                           })}
                     </div>
@@ -494,7 +470,7 @@ export default function Collection() {
                           min={0}
                           onWheel={(e) => e.target.blur()}
                           onChange={(e) => setStartFloorPrice(e.target.value)}
-                          className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                          className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-500"
                         />
                         <div className="flex items-center justify-center">
                           -
@@ -506,17 +482,17 @@ export default function Collection() {
                           min={0}
                           onWheel={(e) => e.target.blur()}
                           onChange={(e) => setEndFloorPrice(e.target.value)}
-                          className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                          className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-500"
                         />
                       </div>
-                      <button
-                        className="mb-2 inline-flex w-full justify-center rounded-full bg-primary-500 px-4 py-2 text-sm text-white hover:bg-primary-300"
+                      <ButtonPrimary
+                        className="text-sm"
                         onClick={() =>
                           handleFilterFloorPrice(startFloorPrice, endFloorPrice)
                         }
                       >
                         Apply
-                      </button>
+                      </ButtonPrimary>
                     </div>
                   </li>
                   <li>
@@ -540,7 +516,7 @@ export default function Collection() {
                           min={0}
                           onWheel={(e) => e.target.blur()}
                           onChange={(e) => setStartVolume(e.target.value)}
-                          className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                          className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-500"
                         />
                         <div className="flex items-center justify-center">
                           -
@@ -552,31 +528,31 @@ export default function Collection() {
                           min={0}
                           onWheel={(e) => e.target.blur()}
                           onChange={(e) => setEndVolume(e.target.value)}
-                          className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                          className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-500"
                         />
                       </div>
-                      <button
-                        className="mb-2 inline-flex w-full justify-center rounded-full bg-primary-500 px-4 py-2 text-sm text-white hover:bg-primary-300"
+                      <ButtonPrimary
+                        className="text-sm"
                         onClick={() =>
                           handleFilterVolume(startVolume, endVolume)
                         }
                       >
                         Apply
-                      </button>
+                      </ButtonPrimary>
                     </div>
                   </li>
                 </ul>
               </div>
             )}
             <div
-              className={`col-span-12 overflow-auto sm:col-span-12 bg-white/50 p-3 dark:bg-neutral-900 rounded-lg ${
+              className={`col-span-12 overflow-auto rounded-lg bg-white/50 p-3 dark:bg-neutral-900 sm:col-span-12 ${
                 openFilter
                   ? 'md:col-span-8 lg:col-span-9 xl:col-span-9 2xl:col-span-9'
                   : 'md:col-span-12 lg:col-span-12 xl:col-span-12 2xl:col-span-12'
               }`}
             >
               <div className="grid w-full min-w-[720px] grid-cols-12 text-gray-900">
-                <div className="col-span-12 grid grid-cols-12 gap-4 rounded-2xl p-4 font-bold text-primary-500">
+                <div className="col-span-12 grid grid-cols-12 gap-4 rounded-2xl p-4 font-bold text-primary-500 dark:text-white">
                   <div className="col-span-1 grid text-center">Rank</div>
                   <div className="col-span-5 grid text-center">Collection</div>
                   <div className="col-span-2 grid text-center">Floor price</div>
@@ -605,7 +581,7 @@ export default function Collection() {
                           )
                         }
                       >
-                        <div className="col-span-1 flex items-center justify-center font-bold text-primary-500">
+                        <div className="col-span-1 flex items-center justify-center font-bold text-primary-500 dark:text-white">
                           {index + 1}.
                         </div>
                         <div className="flex-items-center col-span-5 flex gap-3">
@@ -637,7 +613,7 @@ export default function Collection() {
                               : collection?.userAddress}
                           </span>
                         </div>
-                        <div className="col-span-2 flex items-center gap-2 justify-center">
+                        <div className="col-span-2 flex items-center justify-center gap-2">
                           {collection.floorPrice
                             ? Number(
                                 formatEther(Number(collection.floorPrice)),

@@ -46,6 +46,7 @@ import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { getContract, hexToNumber, parseEther, zeroAddress } from 'viem';
 import { ImageWithFallback } from '@/components/imagewithfallback';
 import { JazzIcon } from '@/components/jazzicon';
+import ButtonPrimary from '@/components/button/buttonPrimary';
 
 export default function Create({ chains }) {
   const { token } = useAuth();
@@ -703,7 +704,7 @@ export default function Create({ chains }) {
                   className="mt-2"
                 >
                   <div className="relative z-20">
-                    <Listbox.Button className="relative w-full cursor-default rounded-full border border-gray-200 bg-white py-2 pl-3 pr-10 text-left text-gray-900 focus:outline-none dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800 dark:hover:text-gray-300 sm:text-sm">
+                    <Listbox.Button className="relative w-full cursor-default rounded-full border-0 bg-white py-2 pl-3 pr-10 text-left text-gray-900 focus:outline-none dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800 dark:hover:text-gray-300 sm:text-sm">
                       <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                         {selectedChain.chainId === 1 ||
                         selectedChain.chainId === 11155111 ? (
@@ -874,7 +875,7 @@ export default function Create({ chains }) {
                       <div className="">
                         PNG, WEBP, MP4, MP3, Max size 100MB
                       </div>
-                      <label className="cursor-pointer rounded-full bg-primary-500 px-4 py-1 font-semibold text-white">
+                      <label className="cursor-pointer rounded-full bg-primary-500 px-4 py-1 font-semibold text-white dark:bg-neutral-500">
                         Choose file
                         <input
                           type="file"
@@ -911,7 +912,7 @@ export default function Create({ chains }) {
                 <input
                   type="text"
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900"
+                  className="mt-2 w-full rounded-full border-0 bg-white focus:ring-0 dark:bg-neutral-900"
                   placeholder="E.g, Mickey mouse riding a car"
                   {...register('name', { required: 'Name is required.' })}
                 />
@@ -924,7 +925,7 @@ export default function Create({ chains }) {
                   Description (optional)
                 </label>
                 <textarea
-                  className="mt-2 w-full rounded-2xl border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900"
+                  className="mt-2 w-full rounded-2xl border-0 bg-white focus:ring-0 dark:bg-neutral-900"
                   placeholder="e. g. This art is created by handraw without any help from ai"
                   {...register('description', {
                     maxLength: {
@@ -1007,7 +1008,7 @@ export default function Create({ chains }) {
                   <span className="text-semantic-red-500">*</span> Price
                 </label>
                 <p>Enter price to allow users instantly purchase your NFT</p>
-                <div className="mt-2 flex w-full items-center rounded-full border border-gray-200 bg-white dark:bg-neutral-900">
+                <div className="mt-2 flex w-full items-center rounded-full border-0 bg-white dark:bg-neutral-900">
                   <input
                     type="number"
                     className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
@@ -1095,13 +1096,13 @@ export default function Create({ chains }) {
                     name="duration_date"
                     id="duration_date"
                     autoComplete="duration_date"
-                    className="flex-1 rounded-full border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 dark:bg-neutral-900 dark:text-white sm:text-sm sm:leading-6"
+                    className="w-full border-0 bg-gray-100 dark:bg-neutral-900 focus:outline-none focus:ring-0 rounded-full"
                     value={customValueDate}
                     disabled={selectedOptionDate !== 'Custom'}
                     onChange={(e) => setCustomValueDate(e.target.value)}
                   />
                   <select
-                    className="rounded-3xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 dark:bg-neutral-900 dark:text-white sm:max-w-md sm:text-sm sm:leading-6"
+                    className="w-fit border-0 bg-gray-100 dark:bg-neutral-900 focus:outline-none focus:ring-0 rounded-full"
                     onChange={handleDateSelectChange}
                     value={selectedOptionDate}
                   >
@@ -1253,7 +1254,7 @@ export default function Create({ chains }) {
               <div className="mt-4 w-full">
                 <label>
                   <span className="font-semibold">Royalties</span>
-                  <div className="mt-2 flex w-full items-center rounded-full border border-gray-200 bg-white dark:bg-neutral-900 dark:text-white">
+                  <div className="mt-2 flex w-full items-center rounded-full border-0 bg-white dark:bg-neutral-900 dark:text-white dark:focus:ring-neutral-500">
                     <input
                       type="number"
                       className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
@@ -1284,7 +1285,7 @@ export default function Create({ chains }) {
                   <button type="button" onClick={addInputField}>
                     <FontAwesomeIcon
                       icon={faPlusCircle}
-                      className="mr-5 h-5 w-5 cursor-pointer rounded-full text-primary-500 hover:bg-primary-50"
+                      className="mr-5 h-5 w-5 cursor-pointer rounded-full text-primary-500 hover:bg-primary-50 dark:text-white dark:hover:bg-neutral-500"
                     />
                   </button>
                 </div>
@@ -1298,7 +1299,7 @@ export default function Create({ chains }) {
                         type="text"
                         name="trait_type"
                         placeholder="Trait Type"
-                        className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900 dark:text-white"
+                        className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900 dark:text-white dark:focus:ring-neutral-500"
                         value={field.trait_type}
                         onChange={(e) => handleInputChange(index, e)}
                       />
@@ -1306,7 +1307,7 @@ export default function Create({ chains }) {
                         type="text"
                         name="value"
                         placeholder="Value"
-                        className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900 dark:text-white"
+                        className="mt-2 w-full rounded-full border-0 bg-white focus:ring-primary-500 dark:bg-neutral-900 dark:text-white dark:focus:ring-neutral-500"
                         value={field.value}
                         onChange={(e) => handleInputChange(index, e)}
                       />
@@ -1316,7 +1317,7 @@ export default function Create({ chains }) {
                       >
                         <FontAwesomeIcon
                           icon={faRemove}
-                          className="mr-5 h-5 w-5 cursor-pointer rounded-full text-primary-500 hover:bg-primary-50"
+                          className="mr-5 h-5 w-5 cursor-pointer rounded-full text-primary-500 hover:bg-primary-50 dark:text-white dark:hover:bg-neutral-500"
                         />
                       </button>
                     </div>
@@ -1324,13 +1325,12 @@ export default function Create({ chains }) {
                 </div>
               </div>
               <div className="mt-4 w-full">
-                <button
-                  className="w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300"
+                <ButtonPrimary
                   type="submit"
                   onClick={handleSubmit(onSubmit)}
                 >
                   Create Item
-                </button>
+                </ButtonPrimary>
               </div>
             </form>
           </div>
@@ -1407,9 +1407,9 @@ export default function Create({ chains }) {
                 className="mr-5 h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 "
                 icon={faCartPlus}
               /> */}
-              <button className="w-full rounded-full bg-primary-500 px-4 py-2 text-center text-base font-bold text-white hover:bg-primary-300">
+              <ButtonPrimary>
                 Buy Now
-              </button>
+              </ButtonPrimary>
             </div>
           </div>
         </div>

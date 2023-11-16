@@ -150,6 +150,18 @@ const Sidebar = () => {
     setIsCreateCollection(false);
   };
 
+  const actionCopy = () => {
+    const textArea = document.createElement('textarea');
+    textArea.value = address;
+    document.body.appendChild(textArea);
+
+    textArea.select();
+    document.execCommand('copy');
+
+    document.body.removeChild(textArea);
+    toast.success('Address copied to clipboard');
+  }
+
   return (
     <>
       <div

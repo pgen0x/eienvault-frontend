@@ -469,10 +469,10 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
                     className="flex !w-fit items-center justify-center gap-2"
                     onClick={() => removeListing(data.marketId)}
                   >
-                    <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
+                    <div className="h-4 w-4 text-center text-base font-black leading-none">
                       <FontAwesomeIcon icon={faXmark} />
                     </div>
-                    <span className="text-base font-bold leading-normal text-primary-500">
+                    <span className="text-base font-bold leading-norma">
                       Remove Listing
                     </span>
                   </ButtonSecondary>

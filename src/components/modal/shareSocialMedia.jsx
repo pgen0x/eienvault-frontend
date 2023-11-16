@@ -9,6 +9,7 @@ import {
   faXTwitter,
 } from '@fortawesome/free-brands-svg-icons';
 import {
+  faCheck,
   faCheckCircle,
   faCircleXmark,
   faClose,
@@ -28,6 +29,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import ButtonSecondary from '../button/buttonSecondary';
 import ButtonTertiary from '../button/buttonTertiary';
 import ButtonPrimary from '../button/buttonPrimary';
+import { useCopyToClipboard } from 'react-use';
 
 export default function ModalShareSocialMedia({
   isOpenModal,
@@ -40,6 +42,16 @@ export default function ModalShareSocialMedia({
   const url = shareData?.url
     ? shareData.url
     : `${window.location.protocol}//${window.location.host}/nft/${collectionAddress}/${tokenId}`;
+  const [copyButtonStatus, setCopyButtonStatus] = useState(false);
+  const [_, copyToClipboard] = useCopyToClipboard();
+
+  function handleCopyToClipboard(address) {
+    copyToClipboard(address);
+    setCopyButtonStatus(true);
+    setTimeout(() => {
+      setCopyButtonStatus(copyButtonStatus);
+    }, 2500);
+  }
 
   function closeModal() {
     onClose(false);
@@ -77,26 +89,14 @@ export default function ModalShareSocialMedia({
     );
   };
 
-  const shareDiscord = () => {
-    navigator.share(url);
-  };
+  // const shareDiscord = () => {
+  //   navigator.share(url);
+  // };
 
   const shareMail = () => {
     shareLink(
       `mailto:?subject=I have some interesting NFTs&body=Check out this NFTs on eienvalut here ${url}.`,
     );
-  };
-
-  const shareCopyClipboard = () => {
-    const textArea = document.createElement('textarea');
-    textArea.value = url;
-    document.body.appendChild(textArea);
-
-    textArea.select();
-    document.execCommand('copy');
-
-    document.body.removeChild(textArea);
-    toast.success('Shared link copied to clipboard');
   };
 
   return (
@@ -169,22 +169,32 @@ export default function ModalShareSocialMedia({
                             <FontAwesomeIcon icon={faEnvelope} />
                           </ButtonShare>
                         </SwiperSlide>
-                        <SwiperSlide>
+                        {/* <SwiperSlide>
                           <ButtonShare onClick={shareDiscord}>
                             <FontAwesomeIcon icon={faDiscord} />
                           </ButtonShare>
-                        </SwiperSlide>
+                        </SwiperSlide> */}
                       </Swiper>
                     </div>
                     <button
                       className="flex w-full items-center justify-between gap-2 rounded-lg border border-gray-200 bg-white p-3 hover:bg-primary-50 dark:border-neutral-700 dark:bg-neutral-700 dark:text-white hover:dark:bg-neutral-400"
-                      onClick={shareCopyClipboard}
+                      onClick={() => handleCopyToClipboard(url)}
                     >
                       <span className="w-full overflow-hidden text-ellipsis">
                         {url}
                       </span>
-                      <span className="flex w-fit items-center justify-center ml-2">
-                        <FontAwesomeIcon icon={faCopy} className="!text-2xl" />
+                      <span className="ml-2 flex w-fit items-center justify-center">
+                        {copyButtonStatus ? (
+                          <FontAwesomeIcon
+                            icon={faCheck}
+                            className="!text-2xl"
+                          />
+                        ) : (
+                          <FontAwesomeIcon
+                            icon={faCopy}
+                            className="!text-2xl"
+                          />
+                        )}
                       </span>
                     </button>
                   </div>

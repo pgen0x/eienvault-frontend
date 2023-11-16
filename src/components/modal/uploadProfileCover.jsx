@@ -175,25 +175,25 @@ export default function ModalUploadProfileCover({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-900 text-gray-950 dark:text-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="text-xl font-bold text-gray-900"
+                    className="text-xl font-bold"
                   >
                     Update Cover
                   </Dialog.Title>
-                  <div className="flex flex-col text-sm text-gray-900">
+                  <div className="flex flex-col text-sm">
                     <div className="mt-4 flex max-w-full shrink-0 flex-row items-center gap-4">
                       Upload new cover. We recommend to upload images in
                       1920x266 resolution. Max 15 MB in JPEG or PNG format
                     </div>
                     <form>
                       <div className="w-full">
-                        <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-3 text-center">
+                        <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white dark:bg-neutral-900 py-3 text-center">
                           {selectedImage && selectedImage.length > 0 ? (
                             <>
                               <button
-                                className="absolute right-1.5 top-1.5 z-30 h-10 w-10 rounded-full text-rose-500 hover:bg-primary-50"
+                                className="absolute right-1.5 top-1.5 z-30 h-10 w-10 rounded-full text-primary-500 hover:bg-primary-50 dark:text-neutral-500 dark:hover:bg-neutral-50"
                                 onClick={(e) => {
                                   e.preventDefault();
                                   setValue('file', null);
@@ -219,7 +219,7 @@ export default function ModalUploadProfileCover({
                               <div className="text-sm">
                                 1920 x 266 pixel is recommended
                               </div>
-                              <label className="cursor-pointer rounded-full bg-primary-500 px-4 py-1 font-semibold text-white hover:bg-primary-300">
+                              <label className="cursor-pointer rounded-full bg-primary-500 dark:bg-neutral-500 dark:hover:bg-neutral-50 px-4 py-1 font-semibold text-white hover:bg-primary-300">
                                 Choose file
                                 <input
                                   type="file"

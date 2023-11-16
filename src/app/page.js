@@ -49,6 +49,7 @@ import CastleDiscover2 from '@/assets/icon/castlediscover2';
 import ButtonSecondary from '@/components/button/buttonSecondary';
 import TooltipTriangle from '@/assets/icon/tooltipTriangle';
 import TopTooltip from '@/components/tooltip/topTooltip';
+import ButtonLink from '../components/button/buttonLink';
 
 export default function Home() {
   const router = useRouter();
@@ -367,9 +368,9 @@ export default function Home() {
             <div className="container mx-auto px-4 py-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold">Upcoming auctions</h2>
-                <a href="#" title="See all" className="text-primary-500">
+                <ButtonLink onClick={() => router.push('/nft')} title="See all">
                   See all
-                </a>
+                </ButtonLink>
               </div>
               <div className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
                 {isLoadingUpcoming || dataUpcoming.length <= 0 ? (
@@ -426,9 +427,12 @@ export default function Home() {
             <div className="container mx-auto px-4 py-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold">Trending creator</h2>
-                <button onClick={() => router.push("/user")} title="See all" className="text-primary-500">
+                <ButtonLink
+                  onClick={() => router.push('/user')}
+                  title="See all"
+                >
                   See all
-                </button>
+                </ButtonLink>
               </div>
               <div className="relative my-5 flex w-full flex-initial items-center justify-center gap-5">
                 {isLoadingUsers || dataUsers.length <= 0 ? (

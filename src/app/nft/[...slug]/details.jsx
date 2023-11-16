@@ -749,11 +749,11 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                   </div>
                 </div>
                 <div className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
-                  <ul className="my-5 flex w-full justify-around border-b border-gray-200 text-primary-500">
+                  <ul className="my-5 flex w-full justify-around border-b border-gray-200 text-primary-500 dark:text-white">
                     <li
                       className={`cursor-pointer px-5 pb-3 ${
                         activeTab == 'overview'
-                          ? 'border-b-4 border-primary-500'
+                          ? 'border-b-4 border-primary-500 dark:border-white'
                           : ''
                       }`}
                       onClick={() => setActiveTab('overview')}
@@ -763,7 +763,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                     <li
                       className={`cursor-pointer px-5 pb-3 ${
                         activeTab == 'bids'
-                          ? 'border-b-4 border-primary-500'
+                          ? 'border-b-4 border-primary-500 dark:border-white'
                           : ''
                       }`}
                       onClick={() => setActiveTab('bids')}
@@ -773,7 +773,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                     <li
                       className={`cursor-pointer px-5 pb-3 ${
                         activeTab == 'history'
-                          ? 'border-b-4 border-primary-500'
+                          ? 'border-b-4 border-primary-500 dark:border-white'
                           : ''
                       }`}
                       onClick={() => setActiveTab('history')}
@@ -1267,7 +1267,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                       >
                         History
                       </li>
-                      <li
+                      {/* <li
                         className={`cursor-pointer px-5 pb-3 ${
                           activeTab == 'collateral'
                             ? 'border-b-4 border-primary-500'
@@ -1276,9 +1276,9 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                         onClick={() => setActiveTab('collateral')}
                       >
                         Collateral
-                      </li>
+                      </li> */}
                     </ul>
-                    <div className="flex w-full flex-col gap-4 rounded-lg bg-white/70 p-5 text-gray-900">
+                    <div className="flex w-full flex-col gap-4 rounded-lg bg-white/70 p-5 text-gray-900 dark:bg-neutral-900">
                       {renderActiveTab()}
                     </div>
                   </div>
@@ -1328,13 +1328,13 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                   <RelatedNFTs dataRelatedNFTs={dataRelatedNFTs} />
                 )}
               </div>
-              <button
+              <ButtonTertiary
                 onClick={() => router.push('/collection')}
                 title="See all"
-                className="block w-full rounded-full bg-white px-4 py-2 font-semibold text-primary-500 hover:bg-primary-50 sm:block md:hidden md:text-lg lg:hidden xl:hidden 2xl:hidden"
+                className="block sm:block md:hidden md:text-lg lg:hidden xl:hidden 2xl:hidden"
               >
                 View collection
-              </button>
+              </ButtonTertiary>
             </div>
           </div>
         </section>
@@ -1769,7 +1769,7 @@ const Overview = ({ dataOverview, onSeeAllClick }) => {
             );
           })
         ) : (
-          <div className="w-full gap-5 self-stretch rounded-xl lg:inline-flex">
+          <div className="w-full gap-5 self-stretch rounded-xl lg:inline-flex dark:text-white">
             No bids yet
           </div>
         )}
@@ -1836,7 +1836,7 @@ const Bids = ({ dataBid }) => {
           })}
         </>
       ) : (
-        <div className="w-full gap-5 self-stretch rounded-xl lg:inline-flex">
+        <div className="w-full gap-5 self-stretch rounded-xl lg:inline-flex dark:text-white">
           No bids yet
         </div>
       )}
@@ -1853,7 +1853,7 @@ const History = ({ collection, tokenId }) => {
     let type;
     if (event?.item?.From === '0x0000000000000000000000000000000000000000') {
       description = (
-        <div className="flex gap-1">
+        <div className="flex gap-1 flex-wrap">
           minted by
           <JazzIcon
             diameter={16}
@@ -1873,7 +1873,7 @@ const History = ({ collection, tokenId }) => {
       event?.item?.To === '0x0000000000000000000000000000000000000000'
     ) {
       description = (
-        <div className="flex gap-1">
+        <div className="flex gap-1 flex-wrap">
           burn by
           <JazzIcon
             diameter={16}
@@ -1896,7 +1896,7 @@ const History = ({ collection, tokenId }) => {
       isAddress(event?.item?.To)
     ) {
       description = (
-        <div className="flex gap-1">
+        <div className="flex gap-1 flex-wrap">
           transfer from
           <JazzIcon
             diameter={16}
@@ -1948,7 +1948,7 @@ const History = ({ collection, tokenId }) => {
     if (event.eventType == 'ItemListed') {
       type = 'Listings';
       description = (
-        <div className="flex gap-1">
+        <div className="flex gap-1 flex-wrap">
           <span>listed by</span>{' '}
           <JazzIcon
             diameter={16}
@@ -1973,7 +1973,7 @@ const History = ({ collection, tokenId }) => {
     } else if (event.eventType == 'NewOffer') {
       type = 'Bids';
       description = (
-        <div className="flex gap-1">
+        <div className="flex gap-1 flex-wrap">
           <JazzIcon
             diameter={16}
             seed={event?.seller}
@@ -1997,7 +1997,7 @@ const History = ({ collection, tokenId }) => {
     } else if (event.eventType == 'ItemSold') {
       type = 'Sales';
       description = (
-        <div className="flex gap-1">
+        <div className="flex gap-1 flex-wrap">
           purchased by
           <JazzIcon
             diameter={16}
@@ -2036,7 +2036,7 @@ const History = ({ collection, tokenId }) => {
     } else if (event.eventType == 'RemoveOffer') {
       type = 'Bids';
       description = (
-        <div className="flex gap-1">
+        <div className="flex gap-1 flex-wrap">
           bid cancelled by
           <JazzIcon
             diameter={16}
@@ -2060,7 +2060,7 @@ const History = ({ collection, tokenId }) => {
     } else if (event.eventType == 'OfferAccepted') {
       type = 'Sales';
       description = (
-        <div className="flex gap-1">
+        <div className="flex gap-1 flex-wrap">
           <JazzIcon
             diameter={16}
             seed={event?.buyer}
@@ -2196,7 +2196,7 @@ const History = ({ collection, tokenId }) => {
           </div>
         </div>
       )}
-      <div className="flex max-h-96 flex-col gap-3 overflow-y-auto px-3 text-sm text-black dark:text-white">
+      <div className="flex max-h-96 flex-col gap-3 overflow-y-auto text-sm text-black dark:text-white">
         {events.map((event, index) => {
           return <ActivityItemDetail key={index} event={event} />;
         })}

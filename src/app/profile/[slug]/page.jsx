@@ -5,6 +5,7 @@ import Footer from '@/components/footer/main';
 import { Listbox } from '@headlessui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faCheck,
   faChevronDown,
   faChevronUp,
   faCircleCheck,
@@ -60,6 +61,7 @@ import {
 import ModalFollow from '@/components/modal/follow';
 import { useWeb3Modal } from '@web3modal/react';
 import SwitchGrid from '@/components/switch/grid';
+import { useCopyToClipboard } from 'react-use';
 
 const servers = [
   'All Mainnet',
@@ -98,6 +100,16 @@ export default function ProfilePage({ params }) {
   const [renderPage, setRenderPage] = useState();
   const [profile, setProfile] = useState({});
   const [showDescription, setShowDescription] = useState(false);
+  const [copyButtonStatus, setCopyButtonStatus] = useState(false);
+  const [_, copyToClipboard] = useCopyToClipboard();
+
+  function handleCopyToClipboard(address) {
+    copyToClipboard(address);
+    setCopyButtonStatus(true);
+    setTimeout(() => {
+      setCopyButtonStatus(copyButtonStatus);
+    }, 2500);
+  }
 
   const [shareData, setShareData] = useState({});
   const [reportData, setReportData] = useState({});
@@ -248,11 +260,15 @@ export default function ProfilePage({ params }) {
     walletAddress,
     followers,
     followings,
+    followTab,
+    follow,
   ) => {
     setFollowData({
       walletAddress,
       followers,
       followings,
+      followTab,
+      follow,
     });
     setisOpenModalFollow(true);
   };
@@ -390,7 +406,7 @@ export default function ProfilePage({ params }) {
           {params.slug === address && (
             <ButtonPrimary
               onClick={editBanner}
-              className="absolute right-0 top-0 m-4 opacity-0 group-hover:opacity-100 !w-fit"
+              className="absolute right-0 top-0 m-4 !w-fit opacity-0 group-hover:opacity-100"
             >
               <FontAwesomeIcon className="mr-2" icon={faPenToSquare} />
               Edit Cover
@@ -444,9 +460,6 @@ export default function ProfilePage({ params }) {
                             ? truncateAddress(profile.walletAddress)
                             : ''}
                         </span>
-                        <ButtonSecondary className="!w-8 !h-8 !p-0" onClick={copyAddressClipboard}>
-                          <FontAwesomeIcon icon={faCopy} fontSize={16} />
-                        </ButtonSecondary>
                       </>
                     ) : (
                       <>
@@ -455,9 +468,6 @@ export default function ProfilePage({ params }) {
                             ? truncateAddress(profile.walletAddress)
                             : ''}
                         </span>
-                        <ButtonSecondary className="!w-8 !h-8 !p-0" onClick={copyAddressClipboard}>
-                          <FontAwesomeIcon icon={faCopy} fontSize={16} />
-                        </ButtonSecondary>
                       </>
                     )}
                     {profile.isVerified && (
@@ -465,6 +475,16 @@ export default function ProfilePage({ params }) {
                         <FontAwesomeIcon icon={faCircleCheck} />
                       </div>
                     )}
+                    <ButtonSecondary
+                      className="!h-8 !w-8 !p-0"
+                      onClick={() => handleCopyToClipboard(params.slug)}
+                    >
+                      {copyButtonStatus ? (
+                        <FontAwesomeIcon icon={faCheck} fontSize={16} />
+                      ) : (
+                        <FontAwesomeIcon icon={faCopy} fontSize={16} />
+                      )}
+                    </ButtonSecondary>
                   </div>
                   <div className="mt-3 text-lg text-gray-900 dark:text-white">
                     {profile?.bio ? (
@@ -591,6 +611,8 @@ export default function ProfilePage({ params }) {
                             profile.walletAddress,
                             profile.followersCount,
                             profile.followingCount,
+                            'followers',
+                            follow,
                           )
                         }
                       >
@@ -599,7 +621,18 @@ export default function ProfilePage({ params }) {
                         </h2>
                         <p>Followers</p>
                       </div>
-                      <div className="w-full text-center">
+                      <div
+                        className="w-full cursor-pointer text-center"
+                        onClick={() =>
+                          handleOpenModalFollow(
+                            profile.walletAddress,
+                            profile.followersCount,
+                            profile.followingCount,
+                            'following',
+                            follow,
+                          )
+                        }
+                      >
                         <h2>
                           {profile?.followingCount ? profile.followingCount : 0}
                         </h2>

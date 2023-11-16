@@ -16,6 +16,7 @@ import { useSidebar } from '../../hooks/SidebarContext';
 import { useAccount } from 'wagmi';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { useAuth } from '@/hooks/AuthContext';
+import ButtonPrimary from '../button/buttonPrimary';
 
 export default function RightArea() {
   const { hasSigned, handleSign } = useAuth();
@@ -83,43 +84,43 @@ export default function RightArea() {
 
           {isConnected && !hasSigned && (
             <div as="div" className="relative inline-block text-left">
-              <button
+              <ButtonPrimary
                 onClick={() => handleSign()}
-                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 hover:bg-primary-300"
+                className="flex gap-1 items-center"
               >
-                <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
+                <div className="text-center text-base font-black leading-none">
                   <FontAwesomeIcon icon={faSignIn} />
                 </div>
-                <div className="text-base font-bold leading-normal text-white">
+                <div className="text-base font-bold leading-normal">
                   Sign Message to Login
                 </div>
-              </button>
+              </ButtonPrimary>
             </div>
           )}
 
           {isConnected && (
             <div as="div" className="relative inline-block text-left">
-              <button
-                className="inline-flex w-full justify-center rounded-full bg-primary-500 px-3 py-3 text-sm font-semibold text-white"
+              <ButtonPrimary
+                className="!w-10 !h-10 !p-0"
                 onClick={toggleSidebar}
               >
                 <FontAwesomeIcon icon={faUserAlt} />
-              </button>
+              </ButtonPrimary>
             </div>
           )}
 
           {!isConnected && (
-            <button
+            <ButtonPrimary
               onClick={() => open()}
-              className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 hover:bg-primary-300"
+              className="flex gap-2"
             >
-              <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
+              <div className="h-4 w-4">
                 <FontAwesomeIcon icon={faWallet} />
               </div>
-              <div className="text-base font-bold leading-normal text-white">
+              <div>
                 Connect your wallet
               </div>
-            </button>
+            </ButtonPrimary>
           )}
 
           {/* <Switch
@@ -152,7 +153,7 @@ export default function RightArea() {
             id="themeLight"
             onChange={() => toggleTheme()}
           />
-          <label className={classRadio(false)} htmlFor="themeLight">
+          <label className={`cursor-pointer flex w-6 h-6 md:w-8 md:h-8 justify-center items-center rounded-full text-sm font-medium leading-5 ${enabled ? "text-white bg-primary-500 shadow dark:bg-white dark:text-gray-900" : "text-primary-500 hover:bg-primary-300 dark:bg-neutral-900 dark:text-neutral-200"}`} htmlFor="themeLight">
             <FontAwesomeIcon icon={faSun} />
           </label>
         </div>
@@ -164,7 +165,7 @@ export default function RightArea() {
             id="themeDark"
             onChange={() => toggleTheme()}
           />
-          <label className={classRadio(true)} htmlFor="themeDark">
+          <label className={`cursor-pointer flex w-6 h-6 md:w-8 md:h-8 justify-center items-center rounded-full text-sm font-medium leading-5 ${enabled ? "text-primary-500 hover:bg-primary-300 dark:bg-neutral-900 dark:text-neutral-200" : "text-white bg-primary-500 shadow dark:bg-white dark:text-gray-900"}`} htmlFor="themeDark">
             <FontAwesomeIcon icon={faMoon} />
           </label>
         </div>

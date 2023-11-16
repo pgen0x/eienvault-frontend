@@ -34,6 +34,7 @@ import { NftItemDetail, NftItemDetailSkeleton } from '../nft/itemDetail';
 import ModalPutOnSale from '../modal/putOnSale';
 import ModalShareSocialMedia from '../modal/shareSocialMedia';
 import ModalRemove from '../modal/remove';
+import ButtonPrimary from '../button/buttonPrimary';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
@@ -213,9 +214,9 @@ export const RelatedNFTs = ({ dataRelatedNFTs, refreshData }) => {
 
   return (
     <>
-      <button className="swiper-prev-activities absolute -left-5 top-1/2 z-10 mr-2 hidden rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
+      <ButtonPrimary className="swiper-prev-activities absolute -left-5 top-1/2 z-10 mr-2 hidden !w-fit sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronLeft} />
-      </button>
+      </ButtonPrimary>
       <Swiper
         className="!pb-5"
         slidesPerView={1}
@@ -264,9 +265,9 @@ export const RelatedNFTs = ({ dataRelatedNFTs, refreshData }) => {
             );
           })}
       </Swiper>
-      <button className="swiper-next-activities absolute -right-5 top-1/2 z-10 ml-2 hidden rounded-full bg-primary-500 px-4 py-2 text-white hover:bg-primary-300 sm:hidden md:block lg:block xl:block 2xl:block">
+      <ButtonPrimary className="swiper-next-activities absolute -right-5 top-1/2 z-10 ml-2 hidden !w-fit sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronRight} />
-      </button>
+      </ButtonPrimary>
       <ModalBuy
         isOpenModal={isOpenModalBuy}
         onClose={closeModalBuy}

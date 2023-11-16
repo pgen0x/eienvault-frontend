@@ -100,7 +100,7 @@ export default function RightArea() {
           {isConnected && (
             <div as="div" className="relative inline-block text-left">
               <button
-                className="inline-flex w-full justify-center rounded-full bg-primary-500 px-3 py-3 text-sm font-semibold"
+                className="inline-flex w-full justify-center rounded-full bg-primary-500 px-3 py-3 text-sm font-semibold text-white"
                 onClick={toggleSidebar}
               >
                 <FontAwesomeIcon icon={faUserAlt} />

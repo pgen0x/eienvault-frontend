@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-white text-neutral-50 antialiased transition-colors duration-1000 dark:bg-gray-900 dark:text-neutral-200;
+    @apply bg-white text-neutral-50 antialiased transition-colors duration-500 dark:bg-gray-900 dark:text-neutral-200;
   }
   .swiper {
     @apply flex flex-col;
@@ -106,5 +106,9 @@ input[type='number'] {
 }
 
 #duration_date {
+  color-scheme: light;
+}
+
+#release_date {
   color-scheme: light;
 }

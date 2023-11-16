@@ -23,10 +23,12 @@ import { useState, useEffect, Fragment } from 'react';
 import { Switch } from '@headlessui/react';
 import { useRouter } from 'next-nprogress-bar';
 import { useAuth } from '@/hooks/AuthContext';
+import NavbarAdmin from './admin';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const router = useRouter();
-  const { logout } = useAuth();
+  const { logout, dataUser } = useAuth();
   const { disconnect } = useDisconnect();
   const [openMenu, setOpenMenu] = useState(false);
   const [isClient, setIsClient] = useState(false);
@@ -36,6 +38,11 @@ export default function Navbar() {
   const { open } = useWeb3Modal();
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
+  const pathname = usePathname();
+
+  if(dataUser.roles !== "USER" && pathname.includes("admin")){
+    return <></>
+  }
 
   useWeb3ModalEvents((event) => {
     console.log(event);

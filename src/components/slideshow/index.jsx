@@ -339,7 +339,7 @@ export const Slideshow = ({
                           : true
                       }
                     >
-                      <span className="text-center text-base font-bold leading-normal text-white">
+                      <span className="text-center text-base font-bold leading-normal">
                         {address === auction?.nftDetails?.owner
                           ? 'Owned By You'
                           : auction?.listOffers &&

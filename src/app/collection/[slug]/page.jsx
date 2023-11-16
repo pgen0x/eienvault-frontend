@@ -7,10 +7,12 @@ import { Listbox } from '@headlessui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCartPlus,
+  faCheck,
   faChevronDown,
   faChevronUp,
   faCircleCheck,
   faClone,
+  faCopy,
   faEllipsis,
   faEllipsisVertical,
   faFire,
@@ -64,6 +66,7 @@ import ButtonPrimary from '@/components/button/buttonPrimary';
 import ButtonTertiary from '@/components/button/buttonTertiary';
 import SwitchGrid from '@/components/switch/grid';
 import ButtonSecondary from '@/components/button/buttonSecondary';
+import { useCopyToClipboard } from 'react-use';
 
 const filters = [
   'All',
@@ -98,6 +101,16 @@ export default function CollectionDetail({ params }) {
     chainId: chain?.id || 666888,
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
+  const [copyButtonStatus, setCopyButtonStatus] = useState(false);
+  const [_, copyToClipboard] = useCopyToClipboard();
+
+  function handleCopyToClipboard(address) {
+    copyToClipboard(address);
+    setCopyButtonStatus(true);
+    setTimeout(() => {
+      setCopyButtonStatus(copyButtonStatus);
+    }, 2500);
+  }
 
   useEffect(() => {
     getCollection();
@@ -306,7 +319,7 @@ export default function CollectionDetail({ params }) {
                       </button>
                     </div>
                     <div className="flex w-full justify-start gap-4 text-gray-900 dark:text-white">
-                      <div>
+                      <div className="flex items-center gap-1">
                         Created by{' '}
                         <button
                           className="font-bold"
@@ -320,11 +333,21 @@ export default function CollectionDetail({ params }) {
                             truncateAddress(collection.User?.walletAddress)}
                         </button>
                       </div>
-                      <div>
+                      <div className="flex gap-1 items-center">
                         Address{' '}
                         <span className="font-bold">
                           {truncateAddress(collection.tokenAddress)}
                         </span>
+                        <ButtonSecondary
+                          className="!h-8 !w-8 !p-0"
+                          onClick={() => handleCopyToClipboard(params.slug)}
+                        >
+                          {copyButtonStatus ? (
+                            <FontAwesomeIcon icon={faCheck} fontSize={16} />
+                          ) : (
+                            <FontAwesomeIcon icon={faCopy} fontSize={16} />
+                          )}
+                        </ButtonSecondary>
                       </div>
                     </div>
                     {collection.description ? (

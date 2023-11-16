@@ -84,17 +84,17 @@ export default function RightArea() {
 
           {isConnected && !hasSigned && (
             <div as="div" className="relative inline-block text-left">
-              <button
+              <ButtonPrimary
                 onClick={() => handleSign()}
-                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 hover:bg-primary-300"
+                className="flex gap-1 items-center"
               >
-                <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
+                <div className="text-center text-base font-black leading-none">
                   <FontAwesomeIcon icon={faSignIn} />
                 </div>
-                <div className="text-base font-bold leading-normal text-white">
+                <div className="text-base font-bold leading-normal">
                   Sign Message to Login
                 </div>
-              </button>
+              </ButtonPrimary>
             </div>
           )}
 

@@ -158,7 +158,7 @@ export default function ModalVerifyUser({
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all dark:bg-neutral-950 dark:text-white">
                   <Dialog.Title as="h3" className="px-6 pt-6 text-xl font-bold">
-                    Create collection
+                    Get Verified
                   </Dialog.Title>
 
                   <div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
@@ -166,7 +166,7 @@ export default function ModalVerifyUser({
                       <div>
                         <section className="flex w-full flex-col gap-2 overflow-y-auto p-6">
                           <div className="w-full">
-                            Thank you for trying Rarible Profile Verification!
+                            Thank you for trying Eienvault Profile Verification!
                             Please fill out the form and we will review it as
                             soon as possible.
                           </div>

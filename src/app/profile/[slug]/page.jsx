@@ -5,6 +5,7 @@ import Footer from '@/components/footer/main';
 import { Listbox } from '@headlessui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faCheck,
   faChevronDown,
   faChevronUp,
   faCircleCheck,
@@ -60,6 +61,7 @@ import {
 import ModalFollow from '@/components/modal/follow';
 import { useWeb3Modal } from '@web3modal/react';
 import SwitchGrid from '@/components/switch/grid';
+import { useCopyToClipboard } from 'react-use';
 
 const servers = [
   'All Mainnet',
@@ -98,6 +100,16 @@ export default function ProfilePage({ params }) {
   const [renderPage, setRenderPage] = useState();
   const [profile, setProfile] = useState({});
   const [showDescription, setShowDescription] = useState(false);
+  const [copyButtonStatus, setCopyButtonStatus] = useState(false);
+  const [_, copyToClipboard] = useCopyToClipboard();
+
+  function handleCopyToClipboard(address) {
+    copyToClipboard(address);
+    setCopyButtonStatus(true);
+    setTimeout(() => {
+      setCopyButtonStatus(copyButtonStatus);
+    }, 2500);
+  }
 
   const [shareData, setShareData] = useState({});
   const [reportData, setReportData] = useState({});
@@ -249,14 +261,14 @@ export default function ProfilePage({ params }) {
     followers,
     followings,
     followTab,
-    follow
+    follow,
   ) => {
     setFollowData({
       walletAddress,
       followers,
       followings,
       followTab,
-      follow
+      follow,
     });
     setisOpenModalFollow(true);
   };
@@ -448,12 +460,6 @@ export default function ProfilePage({ params }) {
                             ? truncateAddress(profile.walletAddress)
                             : ''}
                         </span>
-                        <ButtonSecondary
-                          className="!h-8 !w-8 !p-0"
-                          onClick={copyAddressClipboard}
-                        >
-                          <FontAwesomeIcon icon={faCopy} fontSize={16} />
-                        </ButtonSecondary>
                       </>
                     ) : (
                       <>
@@ -462,12 +468,6 @@ export default function ProfilePage({ params }) {
                             ? truncateAddress(profile.walletAddress)
                             : ''}
                         </span>
-                        <ButtonSecondary
-                          className="!h-8 !w-8 !p-0"
-                          onClick={copyAddressClipboard}
-                        >
-                          <FontAwesomeIcon icon={faCopy} fontSize={16} />
-                        </ButtonSecondary>
                       </>
                     )}
                     {profile.isVerified && (
@@ -475,6 +475,16 @@ export default function ProfilePage({ params }) {
                         <FontAwesomeIcon icon={faCircleCheck} />
                       </div>
                     )}
+                    <ButtonSecondary
+                      className="!h-8 !w-8 !p-0"
+                      onClick={() => handleCopyToClipboard(params.slug)}
+                    >
+                      {copyButtonStatus ? (
+                        <FontAwesomeIcon icon={faCheck} fontSize={16} />
+                      ) : (
+                        <FontAwesomeIcon icon={faCopy} fontSize={16} />
+                      )}
+                    </ButtonSecondary>
                   </div>
                   <div className="mt-3 text-lg text-gray-900 dark:text-white">
                     {profile?.bio ? (
@@ -602,7 +612,7 @@ export default function ProfilePage({ params }) {
                             profile.followersCount,
                             profile.followingCount,
                             'followers',
-                            follow
+                            follow,
                           )
                         }
                       >
@@ -619,7 +629,7 @@ export default function ProfilePage({ params }) {
                             profile.followersCount,
                             profile.followingCount,
                             'following',
-                            follow
+                            follow,
                           )
                         }
                       >

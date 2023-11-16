@@ -10,6 +10,7 @@ import {
   faPlugCircleXmark,
   faUser,
   faUserAlt,
+  faCheck,
 } from '@fortawesome/free-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { useRouter } from 'next-nprogress-bar';
@@ -21,6 +22,7 @@ import HelaIcon from '@/assets/icon/hela';
 import ModalCreateCollection from '../modal/createCollections';
 import ButtonPrimary from '../button/buttonPrimary';
 import ButtonSecondary from '../button/buttonSecondary';
+import { useCopyToClipboard } from 'react-use';
 
 const Sidebar = () => {
   const { isSidebarOpen, closeSidebar } = useSidebar();
@@ -43,6 +45,16 @@ const Sidebar = () => {
     chainId: chain?.id || 666888,
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
+  const [copyButtonStatus, setCopyButtonStatus] = useState(false);
+  const [_, copyToClipboard] = useCopyToClipboard();
+
+  function handleCopyToClipboard(address) {
+    copyToClipboard(address);
+    setCopyButtonStatus(true);
+    setTimeout(() => {
+      setCopyButtonStatus(copyButtonStatus);
+    }, 2500);
+  }
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -285,9 +297,23 @@ const Sidebar = () => {
                       </div>
                     </div>
                     <div className="inline-flex h-8 w-8 flex-col items-center justify-center gap-2 rounded-3xl bg-rose-500 p-2">
-                      <button className="text-sm font-black leading-tight text-white">
-                        <FontAwesomeIcon icon={faCopy} />
-                      </button>
+                      <div
+                        title="Copy Address"
+                        className="flex cursor-pointer items-center px-4 text-gray-50 transition hover:text-gray-200 dark:text-gray-300 dark:hover:text-white"
+                        onClick={() => handleCopyToClipboard(address)}
+                      >
+                        {copyButtonStatus ? (
+                          <FontAwesomeIcon
+                            icon={faCheck}
+                            className="h-auto w-3.5 "
+                          />
+                        ) : (
+                          <FontAwesomeIcon
+                            icon={faCopy}
+                            className="h-auto w-3.5"
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

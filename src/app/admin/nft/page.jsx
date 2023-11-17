@@ -28,16 +28,16 @@ const AdminUserPage = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [totalPage, setTotalPage] = useState(1);
-  const [copyButtonStatus, setCopyButtonStatus] = useState(['']);
+  const [copyButtonStatus, setCopyButtonStatus] = useState([""]);
   const [_, copyToClipboard] = useCopyToClipboard();
 
-  function handleCopyToClipboard(address) {
+  function handleCopyToClipboard(address, key) {
     copyToClipboard(address);
-    setCopyButtonStatus((oldCopy) => [...oldCopy, address]);
+    setCopyButtonStatus((oldCopy) => [...oldCopy, key]);
     console.log(copyButtonStatus);
     setTimeout(() => {
       setCopyButtonStatus((oldCopy) =>
-        oldCopy.filter((item) => item != address),
+        oldCopy.filter((item) => item != key),
       );
     }, 2500);
   }
@@ -60,9 +60,9 @@ const AdminUserPage = () => {
     setIsLoading(true);
     await axios
       .request({
-        method: 'get',
+        method: 'post',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/user/getusers?query=${search}&page=${page}&limit=${perPage}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/search?query=${search}&page=${page}&limit=${perPage}`,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -70,7 +70,7 @@ const AdminUserPage = () => {
       .then((response) => {
         setIsLoading(false);
         setTotalPage(response.data.totalPages);
-        setData([...response.data.users]);
+        setData([...response.data.nfts]);
       })
       .catch((error) => {
         setIsLoading(false);
@@ -121,12 +121,15 @@ const AdminUserPage = () => {
       <Table>
         <thead>
           <tr>
-            <th>Wallet address</th>
-            <th>Email</th>
-            <th>Is verified</th>
-            <th>Followers</th>
-            <th>Total volume</th>
-            <th>Total collections</th>
+            <th>NFTs</th>
+            <th>Name</th>
+            <th>Owner</th>
+            <th>Is Live Mint</th>
+            <th>Is Live Auction</th>
+            <th>Is Discover</th>
+            <th>Is Listed</th>
+            <th>Is Blacklisted</th>
+            <th>Chain</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -135,25 +138,38 @@ const AdminUserPage = () => {
             return (
               <tr className="text-center" key={index}>
                 <Td firstElement={true}>
-                  <span>{truncateAddress(item.walletAddress)}</span>
+                  <span>{truncateAddress(item?.collectionAddress)} #${item?.tokenId}</span>
                   <ButtonSecondary
                     className="h-6 !w-6 !p-0 text-xs"
-                    onClick={() => handleCopyToClipboard(item.walletAddress)}
+                    onClick={() => handleCopyToClipboard(item?.collectionAddress, `token${item?.collectionAddress}#${item?.tokenId}`)}
                   >
-                    {copyButtonStatus.includes(item.walletAddress) ? (
+                    {copyButtonStatus.includes(`token${item?.collectionAddress}#${item?.tokenId}`) ? (
                       <FontAwesomeIcon icon={faCheck} fontSize={16} />
                     ) : (
                       <FontAwesomeIcon icon={faCopy} fontSize={16} />
                     )}
                   </ButtonSecondary>
                 </Td>
-                <Td>{item.email}</Td>
-                <Td>{item.isVerified ? 'Yes' : 'No'}</Td>
-                <Td>{item.followersCount}</Td>
+                <Td>{item?.name}</Td>
                 <Td>
-                  {parseFloat(formatEther(Number(item.totalVolume))).toFixed(2)}
+                  <span>{truncateAddress(item?.owner)}</span>
+                  <ButtonSecondary
+                    className="h-6 !w-6 !p-0 text-xs"
+                    onClick={() => handleCopyToClipboard(item?.owner, `owner${item?.collectionAddress}#${item?.tokenId}`)}
+                  >
+                    {copyButtonStatus.includes(`owner${item?.collectionAddress}#${item?.tokenId}`) ? (
+                      <FontAwesomeIcon icon={faCheck} fontSize={16} />
+                    ) : (
+                      <FontAwesomeIcon icon={faCopy} fontSize={16} />
+                    )}
+                  </ButtonSecondary>
                 </Td>
-                <Td>{item.totalCollections}</Td>
+                <Td>{item?.isLiveMint ? 'Yes' : 'No'}</Td>
+                <Td>{item?.isLiveAuction ? 'Yes' : 'No'}</Td>
+                <Td>{item?.isDiscover ? 'Yes' : 'No'}</Td>
+                <Td>{item?.isListed ? 'Yes' : 'No'}</Td>
+                <Td>{item?.isBlacklisted ? 'Yes' : 'No'}</Td>
+                <Td>{item?.Collection?.Chain?.symbol}</Td>
                 <Td lastElement={true}>
                   <ButtonPrimary className="!w-fit !py-1 text-sm">
                     Update

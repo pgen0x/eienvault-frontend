@@ -28,29 +28,15 @@ import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const router = useRouter();
-  const { logout, dataUser } = useAuth();
-  const { disconnectAsync } = useDisconnect();
+  const { dataUser } = useAuth();
   const [openMenu, setOpenMenu] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [isConnect, setIsConnect] = useState(false);
   const { toggleSidebar } = useSidebar();
   const { isConnected } = useAccount();
   const { open } = useWeb3Modal();
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
   const pathname = usePathname();
-
-  useWeb3ModalEvents((event) => {
-    console.log(event);
-    if (event.name === 'ACCOUNT_CONNECTED') {
-      setIsConnect(true);
-    }
-    if (event.name === 'ACCOUNT_DISCONNECTED') {
-      disconnectAsync();
-      setIsConnect(false);
-      logout();
-    }
-  });
 
   useEffect(() => {
     setIsClient(true);
@@ -61,8 +47,8 @@ export default function Navbar() {
     router.push(url);
   };
 
-  if(dataUser.roles !== "USER" && pathname.includes("admin")){
-    return <></>
+  if (dataUser.roles !== 'USER' && pathname.includes('admin')) {
+    return <></>;
   }
 
   return (
@@ -169,7 +155,7 @@ export default function Navbar() {
               </div> */}
               {isClient && (
                 <>
-                  {(isConnect || isConnected) && chain?.id !== 666888 && (
+                  {isConnected && chain?.id !== 666888 && (
                     <div className="mt-2 flex flex-row items-center justify-between border-t-2 py-2 text-xl font-semibold text-gray-900 hover:text-neutral-700">
                       <span className="text-md text-xl">Wrong network!</span>
                       <span
@@ -180,7 +166,7 @@ export default function Navbar() {
                       </span>
                     </div>
                   )}
-                  {isConnect || isConnected ? (
+                  {isConnected ? (
                     <span
                       className="mt-2 py-2 font-semibold text-gray-900 hover:text-neutral-700 dark:text-white"
                       onClick={() => {

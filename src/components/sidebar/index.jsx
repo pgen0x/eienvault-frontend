@@ -33,7 +33,7 @@ const Sidebar = () => {
   const sidebarContentRef = useRef();
   const router = useRouter();
   const { disconnectAsync } = useDisconnect();
-  const { dataUser } = useAuth();
+  const { dataUser, logout } = useAuth();
   const { address, isConnected } = useAccount();
   const { open } = useWeb3Modal();
   const { data } = useBalance({
@@ -110,9 +110,10 @@ const Sidebar = () => {
     router.push('/profile?activity'); // Navigate to the profile page
   };
 
-  const handleDisconnect = () => {
+  const handleDisconnect = async () => {
     closeSidebar();
-    disconnectAsync();
+    await disconnectAsync();
+    await logout();
   };
 
   const handleSetting = () => {
@@ -160,7 +161,7 @@ const Sidebar = () => {
 
     document.body.removeChild(textArea);
     toast.success('Address copied to clipboard');
-  }
+  };
 
   return (
     <>

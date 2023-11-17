@@ -26,7 +26,6 @@ export default function RightArea() {
     setEnabled(!enabled); // Toggle the state
     setTheme(enabled ? 'light' : 'dark'); // Update the theme
   };
-  const { disconnectAsync } = useDisconnect();
   const [isClient, setIsClient] = useState(false);
   const [isConnect, setIsConnect] = useState(false);
   const { toggleSidebar } = useSidebar();
@@ -35,17 +34,6 @@ export default function RightArea() {
   const { chain } = useNetwork();
   const { signMessageAsync } = useSignMessage();
   const { switchNetwork } = useSwitchNetwork();
-
-  useWeb3ModalEvents((event) => {
-    console.log(event);
-    if (event.name === 'ACCOUNT_CONNECTED') {
-      setIsConnect(true);
-    }
-    if (event.name === 'ACCOUNT_DISCONNECTED') {
-      disconnectAsync();
-      setIsConnect(false);
-    }
-  });
 
   useEffect(() => {
     setIsClient(true);
@@ -86,7 +74,7 @@ export default function RightArea() {
             <div as="div" className="relative inline-block text-left">
               <ButtonPrimary
                 onClick={() => handleSign()}
-                className="flex gap-1 items-center"
+                className="flex items-center gap-1"
               >
                 <div className="text-center text-base font-black leading-none">
                   <FontAwesomeIcon icon={faSignIn} />
@@ -101,7 +89,7 @@ export default function RightArea() {
           {isConnected && (
             <div as="div" className="relative inline-block text-left">
               <ButtonPrimary
-                className="!w-10 !h-10 !p-0"
+                className="!h-10 !w-10 !p-0"
                 onClick={toggleSidebar}
               >
                 <FontAwesomeIcon icon={faUserAlt} />
@@ -110,16 +98,11 @@ export default function RightArea() {
           )}
 
           {!isConnected && (
-            <ButtonPrimary
-              onClick={() => open()}
-              className="flex gap-2"
-            >
+            <ButtonPrimary onClick={() => open()} className="flex gap-2">
               <div className="h-4 w-4">
                 <FontAwesomeIcon icon={faWallet} />
               </div>
-              <div>
-                Connect your wallet
-              </div>
+              <div>Connect your wallet</div>
             </ButtonPrimary>
           )}
 
@@ -153,7 +136,14 @@ export default function RightArea() {
             id="themeLight"
             onChange={() => toggleTheme()}
           />
-          <label className={`cursor-pointer flex w-6 h-6 md:w-8 md:h-8 justify-center items-center rounded-full text-sm font-medium leading-5 ${enabled ? "text-white bg-primary-500 shadow dark:bg-white dark:text-gray-900" : "text-primary-500 hover:bg-primary-300 dark:bg-neutral-900 dark:text-neutral-200"}`} htmlFor="themeLight">
+          <label
+            className={`flex h-6 w-6 cursor-pointer items-center justify-center rounded-full text-sm font-medium leading-5 md:h-8 md:w-8 ${
+              enabled
+                ? 'bg-primary-500 text-white shadow dark:bg-white dark:text-gray-900'
+                : 'text-primary-500 hover:bg-primary-300 dark:bg-neutral-900 dark:text-neutral-200'
+            }`}
+            htmlFor="themeLight"
+          >
             <FontAwesomeIcon icon={faSun} />
           </label>
         </div>
@@ -165,7 +155,14 @@ export default function RightArea() {
             id="themeDark"
             onChange={() => toggleTheme()}
           />
-          <label className={`cursor-pointer flex w-6 h-6 md:w-8 md:h-8 justify-center items-center rounded-full text-sm font-medium leading-5 ${enabled ? "text-primary-500 hover:bg-primary-300 dark:bg-neutral-900 dark:text-neutral-200" : "text-white bg-primary-500 shadow dark:bg-white dark:text-gray-900"}`} htmlFor="themeDark">
+          <label
+            className={`flex h-6 w-6 cursor-pointer items-center justify-center rounded-full text-sm font-medium leading-5 md:h-8 md:w-8 ${
+              enabled
+                ? 'text-primary-500 hover:bg-primary-300 dark:bg-neutral-900 dark:text-neutral-200'
+                : 'bg-primary-500 text-white shadow dark:bg-white dark:text-gray-900'
+            }`}
+            htmlFor="themeDark"
+          >
             <FontAwesomeIcon icon={faMoon} />
           </label>
         </div>

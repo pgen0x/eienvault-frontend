@@ -79,7 +79,7 @@ export function SidebarAdmin() {
   return (
     <section className="w-fit">
       <aside
-        className={`place-items-top sticky top-0 z-40 grid h-screen max-w-full bg-white/60 dark:bg-neutral-900 transition-all duration-500 ease-in-out ${
+        className={`place-items-top sticky top-0 z-40 grid h-screen max-w-full bg-white/60 transition-all duration-500 ease-in-out dark:bg-neutral-900 ${
           openMenu ? 'w-[250px]' : 'w-24'
         }`}
       >
@@ -90,7 +90,9 @@ export function SidebarAdmin() {
               width={150}
               height={150}
               alt="Logo"
-              className={`duration-500 ease-in-out object-cover object-left h-12 ${openMenu ? "" : "w-12"}`}
+              className={`h-12 object-cover object-left duration-500 ease-in-out ${
+                openMenu ? '' : 'w-12'
+              }`}
             />
           </div>
           <ul className="mt-[20px] space-y-2">
@@ -109,24 +111,35 @@ export function SidebarAdmin() {
                 } space-y-2 py-2`}
               >
                 <li>
-                  <ListSubmenu icon={faUser} title="User" menu={+openMenu} onClick={() => router.push("/admin/user")} />
+                  <ListSubmenu
+                    icon={faUser}
+                    title="User"
+                    menu={+openMenu}
+                    onClick={() => router.push('/admin/user')}
+                  />
                 </li>
                 <li>
                   <ListSubmenu
                     icon={faCubesStacked}
                     title="Collection"
                     menu={+openMenu}
-                    onClick={() => router.push("/admin/collection")}
+                    onClick={() => router.push('/admin/collection')}
                   />
                 </li>
                 <li>
-                  <ListSubmenu icon={faDice} title="NFT" menu={+openMenu} />
+                  <ListSubmenu
+                    icon={faDice}
+                    title="NFT"
+                    menu={+openMenu}
+                    onClick={() => router.push('/admin/nft')}
+                  />
                 </li>
                 <li>
                   <ListSubmenu
                     icon={faStore}
                     title="Market item"
                     menu={+openMenu}
+                    onClick={() => router.push('/admin/market')}
                   />
                 </li>
                 <li>
@@ -157,8 +170,15 @@ export function SidebarAdmin() {
               >
                 <li>
                   <ListSubmenu
-                    icon={faXTwitter}
-                    title="Laporan X"
+                    icon={faDice}
+                    title="Report NFTs"
+                    menu={+openMenu}
+                  />
+                </li>
+                <li>
+                  <ListSubmenu
+                    icon={faCubesStacked}
+                    title="Report Collection"
                     menu={+openMenu}
                   />
                 </li>
@@ -192,7 +212,7 @@ export function SidebarAdmin() {
           </ul>
         </div>
         <div
-          className={`fixed top-1/2 flex translate-y-4 items-center justify-center rounded-full bg-white shadow text-gray-900 transition-all duration-500 ${
+          className={`fixed top-1/2 flex translate-y-4 items-center justify-center rounded-full bg-white text-gray-900 shadow transition-all duration-500 ${
             openMenu ? 'left-[235px]' : 'left-[80px]'
           }`}
         >
@@ -212,9 +232,7 @@ const ListSubmenu = ({ ...attributes }) => {
   return (
     <button
       {...attributes}
-      className={`group flex w-full items-center gap-2 rounded-lg p-2 text-base font-normal text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-700 ${
-        attributes.className
-      }`}
+      className={`group flex w-full items-center gap-2 rounded-lg p-2 text-base font-normal text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-700 ${attributes.className}`}
     >
       <FontAwesomeIcon
         icon={attributes.icon}
@@ -235,7 +253,7 @@ const ListMenu = ({ ...attributes }) => {
   return (
     <button
       {...attributes}
-      className={`group flex w-full items-center justify-left gap-2 rounded-lg p-2 text-base font-normal text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-700 ${attributes.className}`}
+      className={`justify-left group flex w-full items-center gap-2 rounded-lg p-2 text-base font-normal text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-700 ${attributes.className}`}
     >
       <FontAwesomeIcon
         icon={attributes.icon}

@@ -67,6 +67,7 @@ import ButtonTertiary from '@/components/button/buttonTertiary';
 import SwitchGrid from '@/components/switch/grid';
 import ButtonSecondary from '@/components/button/buttonSecondary';
 import { useCopyToClipboard } from 'react-use';
+import ModalReportCollection from '@/components/modal/reportCollection';
 
 const filters = [
   'All',
@@ -88,8 +89,10 @@ export default function CollectionDetail({ params }) {
   const [isUpdateCollection, setIsUpdateCollection] = useState(false);
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
+  const [isOpenModalReportCollection, setisOpenModalReportCollection] = useState(false);
 
   const [shareData, setShareData] = useState({});
+  const [reportDataCollection, setReportDataCollection] = useState({});
 
   const { address, isConnected } = useAccount();
   const [bannerImage, setBannerImage] = useState(
@@ -249,6 +252,17 @@ export default function CollectionDetail({ params }) {
 
   function closeModalShare() {
     setisOpenModalShare(false);
+  }
+
+  const handleOpenModalReportCollection = async (collectionAddress) => {
+    setReportDataCollection({
+      collectionAddress,
+    });
+    setisOpenModalReportCollection(true);
+  };
+
+  function closeModalReportCollection() {
+    setisOpenModalReportCollection(false);
   }
 
   return (
@@ -452,7 +466,7 @@ export default function CollectionDetail({ params }) {
                     >
                       <FontAwesomeIcon icon={faShare} />
                     </ButtonPrimary>
-                    <ButtonPrimary className="!h-[40px] !w-[40px] !px-0">
+                    <ButtonPrimary className="!h-[40px] !w-[40px] !px-0" onClick={() => handleOpenModalReportCollection(collection?.tokenAddress)}>
                       <FontAwesomeIcon icon={faFlag} />
                     </ButtonPrimary>
                   </div>
@@ -559,6 +573,13 @@ export default function CollectionDetail({ params }) {
         onModalClose={closeModalShare}
         shareData={shareData}
       />
+
+      <ModalReportCollection
+        isOpenModal={isOpenModalReportCollection}
+        onClose={closeModalReportCollection}
+        onModalClose={closeModalReportCollection}
+        reportData={reportDataCollection}
+      />
       <Footer />
     </>
   );
@@ -589,14 +610,14 @@ const Items = ({ params, collection }) => {
   const [buyData, setBuyData] = useState({});
   const [putOnSaleData, setPutonsaleData] = useState({});
   const [shareData, setShareData] = useState({});
-  const [reportData, setReportData] = useState({});
+  const [reportDataNft, setReportDataNft] = useState({});
   const [removeData, setRemoveData] = useState({});
 
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
-  const [isOpenModalReport, setisOpenModalReport] = useState(false);
+  const [isOpenModalReportNft, setisOpenModalReportNft] = useState(false);
   const [isOpenModalRemove, setisOpenModalRemove] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -802,12 +823,12 @@ const Items = ({ params, collection }) => {
     setisOpenModalShare(true);
   };
 
-  const handleOpenModalReport = async (tokenId, collectionAddress) => {
-    setReportData({
+  const handleOpenModalReportNft = async (tokenId, collectionAddress) => {
+    setReportDataNft({
       tokenId,
       collectionAddress,
     });
-    setisOpenModalReport(true);
+    setisOpenModalReportNft(true);
   };
 
   const handleOpenModalRemove = async (
@@ -839,8 +860,8 @@ const Items = ({ params, collection }) => {
     setisOpenModalShare(false);
   }
 
-  function closeModalReport() {
-    setisOpenModalReport(false);
+  function closeModalReportNft() {
+    setisOpenModalReportNft(false);
   }
 
   function closeModalRemove() {
@@ -1512,7 +1533,7 @@ const Items = ({ params, collection }) => {
                       handleOpenModalBid={handleOpenModalBid}
                       handleOpenModalPutonsale={handleOpenModalPutonsale}
                       handleOpenModalShare={handleOpenModalShare}
-                      handleOpenModalReport={handleOpenModalReport}
+                      handleOpenModalReport={handleOpenModalReportNft}
                       handleOpenModalRemove={handleOpenModalRemove}
                       releaseDate={nft?.itemDetails?.releaseDate}
                       endDate={nft?.itemDetails?.endDate}
@@ -1555,10 +1576,10 @@ const Items = ({ params, collection }) => {
         shareData={shareData}
       />
       <ModalReportNft
-        isOpenModal={isOpenModalReport}
-        onClose={closeModalReport}
-        onModalClose={closeModalReport}
-        reportData={reportData}
+        isOpenModal={isOpenModalReportNft}
+        onClose={closeModalReportNft}
+        onModalClose={closeModalReportNft}
+        reportData={reportDataNft}
       />
       <ModalRemove
         isOpenModal={isOpenModalRemove}

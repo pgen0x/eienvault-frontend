@@ -39,8 +39,6 @@ export default function RootLayout({ children }) {
             pauseOnHover
             theme="light"
           />
-          {/* Same as */}
-          <ToastContainer />
         </Providers>
       </body>
     </html>

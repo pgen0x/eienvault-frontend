@@ -86,6 +86,7 @@ export const TrendingTop = ({ dataCollections }) => {
   const [limit, setLimit] = useState(0);
   const [TrendingTop, setTrendingTop] = useState('trending');
   const [Range, setRange] = useState('1h');
+  const [data, setData] = useState(dataCollections);
   const router = useRouter();
   const classFloor = (value) => {
     return Number(value) < 0
@@ -110,7 +111,30 @@ export const TrendingTop = ({ dataCollections }) => {
     }
   };
 
+  const sortData = () => {
+    if(TrendingTop == "trending"){
+      var dataSort = data.slice(0);
+      dataSort.sort(function(a,b) {
+          return Number(a["volumeChangePercentag" + Range]) - Number(b["volumeChangePercentag" + Range]);
+      });
+      setData(dataSort);
+    }
+    
+    if(TrendingTop == "top"){
+      var dataSort = data.slice(0);
+      dataSort.sort(function(a,b) {
+          return a.volume - b.volume;
+      });
+      setData(dataSort);
+    }
+  }
+
   useEffect(() => {
+    sortData();
+  }, [TrendingTop])
+
+  useEffect(() => {
+    sortData();
     handleResize();
     window.addEventListener('resize', handleResize);
 
@@ -139,7 +163,7 @@ export const TrendingTop = ({ dataCollections }) => {
         role="list"
         className="mt-4 grid w-full grid-flow-col grid-rows-5 gap-3"
       >
-        {dataCollections.slice(0, limit).map((collection, index) => (
+        {data.slice(0, limit).map((collection, index) => (
           <li key={index} className="w-full">
             <div className="flex w-full justify-between rounded-md bg-white px-5 py-2 dark:bg-neutral-900">
               <div className="flex w-full items-center gap-x-4">
@@ -372,7 +396,6 @@ export const TrendingTopMobile = ({ dataCollections }) => {
   };
 
   const priceChangePercentage = (collection) => {
-    console.log(collection, 'priceChangePercentage' + Range);
     return collection['priceChangePercentage' + Range];
   };
 

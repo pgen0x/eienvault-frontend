@@ -40,10 +40,6 @@ export default function Navbar() {
   const { switchNetwork } = useSwitchNetwork();
   const pathname = usePathname();
 
-  if(dataUser.roles !== "USER" && pathname.includes("admin")){
-    return <></>
-  }
-
   useWeb3ModalEvents((event) => {
     console.log(event);
     if (event.name === 'ACCOUNT_CONNECTED') {
@@ -64,6 +60,10 @@ export default function Navbar() {
     setOpenMenu(false);
     router.push(url);
   };
+
+  if(dataUser.roles !== "USER" && pathname.includes("admin")){
+    return <></>
+  }
 
   return (
     <>

@@ -25,6 +25,8 @@ import { useRouter } from 'next-nprogress-bar';
 import { useAuth } from '@/hooks/AuthContext';
 import NavbarAdmin from './admin';
 import { usePathname } from 'next/navigation';
+import { jwtDecode } from 'jwt-decode';
+import Cookies from 'js-cookie';
 
 export default function Navbar() {
   const router = useRouter();
@@ -37,6 +39,7 @@ export default function Navbar() {
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
   const pathname = usePathname();
+  const token = Cookies.get('token');
 
   useEffect(() => {
     setIsClient(true);
@@ -47,8 +50,13 @@ export default function Navbar() {
     router.push(url);
   };
 
-  if (dataUser.roles !== 'USER' && pathname.includes('admin')) {
-    return <></>;
+  if (token && pathname.includes('admin')) {
+    const { role: userRoles } =
+      jwtDecode(token, process.env.NEXT_PUBLIC_JWT_SECRET) || {};
+
+    if (userRoles !== 'USER') {
+      return <></>;
+    }
   }
 
   return (

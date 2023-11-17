@@ -5,7 +5,8 @@ import { signMessage } from 'wagmi/actions';
 import { watchAccount } from '@wagmi/core';
 import moment from 'moment';
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { jwtDecode } from 'jwt-decode';
 
 const AuthContext = createContext();
 
@@ -19,6 +20,8 @@ export function AuthProvider({ children }) {
     Cookies.get('addressHasSigned') || null,
   );
   const { isConnected, address } = useAccount();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const login = async (newToken) => {
     setToken(newToken);
@@ -32,6 +35,9 @@ export function AuthProvider({ children }) {
     Cookies.remove('hasSigned');
     setAddressHasSigned(null);
     Cookies.remove('addressHasSigned');
+    if (pathname.includes('admin')) {
+      router.push('/login');
+    }
   };
 
   useEffect(() => {
@@ -45,7 +51,7 @@ export function AuthProvider({ children }) {
     };
 
     handleEffect();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, hasSigned]);
 
   const getUserInformation = async (datatoken) => {

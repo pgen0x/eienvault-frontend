@@ -9,13 +9,13 @@ export async function middleware(req, ev) {
       jwtDecode(token, process.env.NEXT_PUBLIC_JWT_SECRET) || {};
 
     if (userRoles === 'USER') {
-      return NextResponse.redirect(new URL('/', req.url));
+      return NextResponse.redirect(new URL('/login', req.url));
     }
 
     return NextResponse.next();
   }
 
-  return NextResponse.redirect(new URL('/', req.url));
+  return NextResponse.redirect(new URL('/login', req.url));
 }
 
 export const config = {

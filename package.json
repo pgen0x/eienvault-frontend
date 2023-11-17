@@ -28,6 +28,8 @@
     "eslint-config-next": "13.4.12",
     "eth-connect": "^6.2.1",
     "ethers": "^6.7.0",
+    "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
     "moment": "^2.29.4",
     "next": "^13.4.12",
     "next-auth": "^4.23.1",

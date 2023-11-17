@@ -4,41 +4,48 @@ import { useAccount, useSignMessage } from 'wagmi';
 import { signMessage } from 'wagmi/actions';
 import { watchAccount } from '@wagmi/core';
 import moment from 'moment';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(localStorage.getItem('token') || null);
+  const [token, setToken] = useState(Cookies.get('token') || null);
   const [dataUser, setDataUser] = useState([]);
   const [hasSigned, setHasSigned] = useState(
-    localStorage.getItem('hasSigned') === 'true' || false,
+    Cookies.get('hasSigned') === 'true' || false,
   );
   const [addressHasSigned, setAddressHasSigned] = useState(
-    localStorage.getItem('addressHasSigned') || null,
+    Cookies.get('addressHasSigned') || null,
   );
   const { isConnected, address } = useAccount();
 
   const login = async (newToken) => {
     setToken(newToken);
-    localStorage.setItem('token', newToken); // Store token in localStorage
+    Cookies.set('token', newToken);
   };
 
-  const logout = () => {
+  const logout = async () => {
     setToken(null);
-    localStorage.removeItem('token'); // Remove token from localStorage
+    Cookies.remove('token');
     setHasSigned(false);
-    localStorage.removeItem('hasSigned'); // Remove hasSigned from localStorage
+    Cookies.remove('hasSigned');
     setAddressHasSigned(null);
-    localStorage.removeItem('addressHasSigned'); // Remove addressHasSigned from localStorage
+    Cookies.remove('addressHasSigned');
   };
 
   useEffect(() => {
-    if (isConnected && !hasSigned) {
-      handleSign();
-    }
-    if (!isConnected) {
-      logout();
-    }
+    const handleEffect = async () => {
+      if (isConnected && !hasSigned) {
+        await handleSign();
+      }
+      if (!isConnected) {
+        await logout();
+      }
+    };
+
+    handleEffect();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, hasSigned]);
 
   const getUserInformation = async (datatoken) => {
@@ -115,8 +122,8 @@ export function AuthProvider({ children }) {
       const data = await response.json();
       await login(data.token);
       await getUserInformation(data.token);
-      localStorage.setItem('hasSigned', true);
-      localStorage.setItem('addressHasSigned', address);
+      Cookies.set('hasSigned', true);
+      Cookies.set('addressHasSigned', address);
       setHasSigned(true);
       setAddressHasSigned(address);
     } catch (error) {
@@ -124,9 +131,9 @@ export function AuthProvider({ children }) {
     }
   };
 
-  watchAccount((account) => {
+  watchAccount(async (account) => {
     if (account.address !== addressHasSigned) {
-      logout();
+      await logout();
     }
   });
 

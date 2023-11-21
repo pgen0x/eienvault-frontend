@@ -147,6 +147,7 @@ export function SidebarAdmin() {
                     icon={faUserCheck}
                     title="Request verify"
                     menu={+openMenu}
+                    onClick={() => router.push('/admin/verification')}
                   />
                 </li>
                 <li>

@@ -16,6 +16,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { toast } from 'react-toastify';
+import { useCopyToClipboard } from 'react-use';
 import { formatEther } from 'viem';
 
 const AdminUserPage = () => {
@@ -26,6 +27,8 @@ const AdminUserPage = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [totalPage, setTotalPage] = useState(1);
+  const [copyButtonStatus, setCopyButtonStatus] = useState(['']);
+  const [_, copyToClipboard] = useCopyToClipboard();
   // Sample data for pagination
   // const data = Array.from({ length: 500 }, (_, i) => i + 1);
 
@@ -70,17 +73,16 @@ const AdminUserPage = () => {
       });
   };
 
-  const copyAddress = (walletAddress) => {
-    const textArea = document.createElement('textarea');
-    textArea.value = walletAddress;
-    document.body.appendChild(textArea);
-
-    textArea.select();
-    document.execCommand('copy');
-
-    document.body.removeChild(textArea);
-    toast.success('Shared link copied to clipboard');
-  };
+  function handleCopyToClipboard(address, key) {
+    copyToClipboard(address);
+    setCopyButtonStatus((oldCopy) => [...oldCopy, key]);
+    console.log(copyButtonStatus);
+    setTimeout(() => {
+      setCopyButtonStatus((oldCopy) =>
+        oldCopy.filter((item) => item != key),
+      );
+    }, 2500);
+  }
 
   const handleSearch = (event) => {
     loadData();
@@ -145,7 +147,7 @@ const AdminUserPage = () => {
                       <span>{truncateAddress(item.userAddress)}</span>
                       <ButtonSecondary
                         className="h-6 !w-6 !p-0 text-xs"
-                        onClick={() => copyAddress(item.userAddress)}
+                        onClick={() => handleCopyToClipboard(item.userAddress, `user${id}`)}
                       >
                         <FontAwesomeIcon icon={faCopy} />
                       </ButtonSecondary>
@@ -160,7 +162,7 @@ const AdminUserPage = () => {
                   <span>{truncateAddress(item.tokenAddress)}</span>
                   <ButtonSecondary
                     className="h-6 !w-6 !p-0 text-xs"
-                    onClick={() => copyAddress(item.tokenAddress)}
+                    onClick={() => handleCopyToClipboard(item.tokenAddress, `token${id}`)}
                   >
                     <FontAwesomeIcon icon={faCopy} />
                   </ButtonSecondary>

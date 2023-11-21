@@ -3,6 +3,7 @@ import Table, { Td } from '@/components/admin/table/table';
 import AdminTable from '@/components/admin/table/table';
 import ButtonPrimary from '@/components/button/buttonPrimary';
 import ButtonSecondary from '@/components/button/buttonSecondary';
+import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import {
@@ -28,17 +29,16 @@ const AdminUserPage = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [totalPage, setTotalPage] = useState(1);
-  const [copyButtonStatus, setCopyButtonStatus] = useState([""]);
+  const [copyButtonStatus, setCopyButtonStatus] = useState(['']);
   const [_, copyToClipboard] = useCopyToClipboard();
+  const { token } = useAuth();
 
   function handleCopyToClipboard(address, key) {
     copyToClipboard(address);
     setCopyButtonStatus((oldCopy) => [...oldCopy, key]);
     console.log(copyButtonStatus);
     setTimeout(() => {
-      setCopyButtonStatus((oldCopy) =>
-        oldCopy.filter((item) => item != key),
-      );
+      setCopyButtonStatus((oldCopy) => oldCopy.filter((item) => item != key));
     }, 2500);
   }
   // Sample data for pagination
@@ -62,15 +62,16 @@ const AdminUserPage = () => {
       .request({
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/items?page=${page}&limit=${perPage}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/chain/getall?query=${search}&page=${page}&limit=${perPage}`,
         headers: {
-          'Content-Type': 'application/json',
+          accept: 'application/json',
+          authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
         setIsLoading(false);
         setTotalPage(response.data.totalPages);
-        setData([...response.data.nfts]);
+        setData([...response.data]);
       })
       .catch((error) => {
         setIsLoading(false);
@@ -82,26 +83,52 @@ const AdminUserPage = () => {
       });
   };
 
+  const handleSearch = (event) => {
+    loadData();
+    event.preventDefault();
+
+    return false;
+  };
+
   return (
     <div>
       {/* Display your paginated data */}
       <div className="flex items-center justify-between py-5">
         <h3 className="text-3xl font-bold text-gray-900 dark:text-white">
-          Market item lists
+          Request verification user lists
         </h3>
+        {/* <form onSubmit={(event) => handleSearch(event)}>
+          <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-neutral-900">
+            <div className="text-xl font-black text-neutral-700 dark:text-zinc-200">
+              <FontAwesomeIcon icon={faSearch} />
+            </div>
+            <input
+              className="block h-8 w-full rounded-lg border-0 bg-transparent p-2.5 text-sm text-gray-900 focus:border-0 focus:ring-0  dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              type="text"
+              placeholder="Search ..."
+              aria-label="Search"
+              name="search"
+              defaultValue={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+            <div className="inline-flex flex-col items-center justify-center gap-2 rounded-md bg-zinc-200 px-2">
+              <div className="text-base font-light leading-normal text-neutral-700">
+                /
+              </div>
+            </div>
+          </div>
+        </form> */}
       </div>
       <Table>
         <thead>
           <tr>
-            <th>NFTs</th>
+            <th>Chain ID</th>
             <th>Name</th>
-            <th>Seller</th>
-            <th>Is Live Mint</th>
-            <th>Is Live Auction</th>
-            <th>Is Discover</th>
-            <th>Is Listed</th>
-            <th>Is Blacklisted</th>
-            <th>Chain</th>
+            <th>Symbol</th>
+            <th>Mode</th>
+            <th>RPC Url</th>
+            <th>Explorer Url</th>
+            <th>Latest Block</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -109,44 +136,14 @@ const AdminUserPage = () => {
           {data.map((item, index) => {
             return (
               <tr className="text-center" key={index}>
-                <Td firstElement={true}>
-                  <span>{truncateAddress(item?.collection)} #{item?.tokenId}</span>
-                  <ButtonSecondary
-                    className="h-6 !w-6 !p-0 text-xs"
-                    onClick={() => handleCopyToClipboard(item?.collection, `token${item?.collection}#${item?.tokenId}`)}
-                  >
-                    {copyButtonStatus.includes(`token${item?.collection}#${item?.tokenId}`) ? (
-                      <FontAwesomeIcon icon={faCheck} fontSize={16} />
-                    ) : (
-                      <FontAwesomeIcon icon={faCopy} fontSize={16} />
-                    )}
-                  </ButtonSecondary>
-                </Td>
-                <Td>{item?.nftDetails?.name}</Td>
-                <Td>
-                  <span>{truncateAddress(item?.seller)}</span>
-                  <ButtonSecondary
-                    className="h-6 !w-6 !p-0 text-xs"
-                    onClick={() => handleCopyToClipboard(item?.owner, `owner${item?.collection}#${item?.tokenId}`)}
-                  >
-                    {copyButtonStatus.includes(`owner${item?.collection}#${item?.tokenId}`) ? (
-                      <FontAwesomeIcon icon={faCheck} fontSize={16} />
-                    ) : (
-                      <FontAwesomeIcon icon={faCopy} fontSize={16} />
-                    )}
-                  </ButtonSecondary>
-                </Td>
-                <Td>{item?.isLiveMint ? 'Yes' : 'No'}</Td>
-                <Td>{item?.isLiveAuction ? 'Yes' : 'No'}</Td>
-                <Td>{item?.isDiscover ? 'Yes' : 'No'}</Td>
-                <Td>{item?.isListed ? 'Yes' : 'No'}</Td>
-                <Td>{item?.isBlacklisted ? 'Yes' : 'No'}</Td>
-                <Td>{item?.Collection?.Chain?.symbol}</Td>
-                <Td lastElement={true}>
-                  <ButtonPrimary className="!w-fit !py-1 text-sm">
-                    Update
-                  </ButtonPrimary>
-                </Td>
+                <Td firstElement={true}>{item.chainId}</Td>
+                <Td>{item.name}</Td>
+                <Td>{item.symbol}</Td>
+                <Td>{item.mode}</Td>
+                <Td>{item.mode}</Td>
+                <Td>{item.rpcUrl}</Td>
+                <Td>{item.explorerUrl}</Td>
+                <Td lastElement={true}>{item.latestBlock}</Td>
               </tr>
             );
           })}

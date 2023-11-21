@@ -363,13 +363,13 @@ const Nft = ({
                           <>
                             {isNotRelease ? (
                               <>
-                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
                                   <div className="flex items-center gap-2">
                                     <FontAwesomeIcon size="xs" icon={faGavel} />
                                     <span>Auction</span>
                                   </div>
                                 </div>
-                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
                                   <div className="flex items-center gap-2">
                                     <FontAwesomeIcon
                                       size="2xs"
@@ -395,13 +395,13 @@ const Nft = ({
                               </>
                             ) : isNotExpired ? (
                               <>
-                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
                                   <div className="flex items-center gap-2">
                                     <FontAwesomeIcon size="xs" icon={faGavel} />
                                     <span>Auction</span>
                                   </div>
                                 </div>
-                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
                                   <div className="flex items-center gap-2">
                                     <FontAwesomeIcon
                                       size="2xs"
@@ -415,7 +415,7 @@ const Nft = ({
                                 </div>
                               </>
                             ) : (
-                              <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                              <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
                                 <div className="flex items-center gap-2">
                                   <FontAwesomeIcon size="xs" icon={faGavel} />
                                   <span>Auction</span>
@@ -441,13 +441,13 @@ const Nft = ({
                           <>
                             {isNotRelease ? (
                               <>
-                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
                                   <div className="flex items-center gap-2">
                                     <FontAwesomeIcon size="xs" icon={faGavel} />
                                     <span>Auction</span>
                                   </div>
                                 </div>
-                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
                                   <div className="flex items-center gap-2">
                                     <FontAwesomeIcon
                                       size="2xs"
@@ -473,13 +473,13 @@ const Nft = ({
                               </>
                             ) : isNotExpired ? (
                               <>
-                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
                                   <div className="flex items-center gap-2">
                                     <FontAwesomeIcon size="xs" icon={faGavel} />
                                     <span>Auction</span>
                                   </div>
                                 </div>
-                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
                                   <div className="flex items-center gap-2">
                                     <FontAwesomeIcon
                                       size="2xs"
@@ -493,7 +493,7 @@ const Nft = ({
                                 </div>
                               </>
                             ) : (
-                              <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                              <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
                                 <div className="flex items-center gap-2">
                                   <FontAwesomeIcon size="xs" icon={faGavel} />
                                   <span>Auction</span>
@@ -513,13 +513,13 @@ const Nft = ({
                           <>
                             {isNotExpired ? (
                               <>
-                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
                                   <div className="flex items-center gap-2">
                                     <FontAwesomeIcon size="xs" icon={faTags} />
                                     <span>On Sale</span>
                                   </div>
                                 </div>
-                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
                                   <div className="flex items-center gap-2">
                                     <FontAwesomeIcon
                                       size="2xs"
@@ -549,13 +549,13 @@ const Nft = ({
                           <>
                             {isNotExpired ? (
                               <>
-                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
                                   <div className="flex items-center gap-2">
                                     <FontAwesomeIcon size="xs" icon={faTags} />
                                     <span>On Sale</span>
                                   </div>
                                 </div>
-                                <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                                <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
                                   <div className="flex items-center gap-2">
                                     <FontAwesomeIcon
                                       size="2xs"
@@ -591,7 +591,7 @@ const Nft = ({
                       </>
                     )
                   ) : (
-                    <div className="flex w-fit items-center justify-between rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                    <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
                       {address === nft?.owner ? (
                         <div className="flex items-center gap-2">
                           <FontAwesomeIcon size="xs" icon={faBan} />

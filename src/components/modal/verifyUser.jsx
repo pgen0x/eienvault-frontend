@@ -42,6 +42,7 @@ export default function ModalVerifyUser({
     message: '',
   });
   const [hash, setHash] = useState();
+  const [formType, setFormType] = useState();
 
   const { address, isConnected } = useAccount();
 
@@ -65,8 +66,8 @@ export default function ModalVerifyUser({
 
     try {
       const payload = data;
-      payload.isCreator = data.type == 'creator';
-      payload.isCollector = data.type == 'collector';
+      payload.isCreator = formType == 'creator';
+      payload.isCollector = formType == 'collector';
 
       const options = {
         method: 'POST',
@@ -233,42 +234,26 @@ export default function ModalVerifyUser({
                                 your collection?
                               </span>
                               <div className="flex w-full items-center gap-3 rounded-full">
-                                <div>
+                                <label className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white">
                                   <input
-                                    id="creator"
                                     type="radio"
                                     value="creator"
                                     name="type"
                                     className="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:ring-offset-neutral-800 dark:focus:ring-red-600"
-                                    {...register('type', {
-                                      required: 'This field was required',
-                                    })}
+                                    onChange={(e) => setFormType(e.target.value)}
                                   />
-                                  <label
-                                    htmlFor="creator"
-                                    className="ml-2 text-sm font-medium text-gray-900 dark:text-white"
-                                  >
-                                    Creator
-                                  </label>
-                                </div>
-                                <div>
+                                  <span>Creator</span>
+                                </label>
+                                <label className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white">
                                   <input
-                                    id="collector"
                                     type="radio"
                                     value="collector"
                                     name="type"
                                     className="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:ring-offset-neutral-800 dark:focus:ring-red-600"
-                                    {...register('type', {
-                                      required: 'This field was required',
-                                    })}
+                                    onChange={(e) => setFormType(e.target.value)}
                                   />
-                                  <label
-                                    htmlFor="collector"
-                                    className="ml-2 text-sm font-medium text-gray-900 dark:text-white"
-                                  >
-                                    Collector
-                                  </label>
-                                </div>
+                                  <span>Collector</span>
+                                </label>
                               </div>
                               <div className="mt-1 text-sm text-primary-500">
                                 <ErrorMessage errors={errors} name="type" />

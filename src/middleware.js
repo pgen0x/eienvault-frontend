@@ -8,7 +8,19 @@ export async function middleware(req, ev) {
     const { role: userRoles } =
       jwtDecode(token, process.env.NEXT_PUBLIC_JWT_SECRET) || {};
 
-    if (userRoles === 'USER') {
+    const requiredRoles = [
+      'PAUSER_ROLE',
+      'UPGRADER_ROLE',
+      'DEFAULT_ADMIN_ROLE',
+      'WEB_ADMIN',
+      'SUPER_WEBADMIN',
+    ];
+
+    const hasRequiredRole = userRoles.some((role) =>
+      requiredRoles.includes(role),
+    );
+
+    if (!hasRequiredRole) {
       return NextResponse.redirect(new URL('/login', req.url));
     }
 

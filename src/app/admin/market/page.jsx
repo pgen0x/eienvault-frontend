@@ -141,7 +141,7 @@ const AdminUserPage = () => {
                 <Td>{item?.isDiscover ? 'Yes' : 'No'}</Td>
                 <Td>{item?.isListed ? 'Yes' : 'No'}</Td>
                 <Td>{item?.isBlacklisted ? 'Yes' : 'No'}</Td>
-                <Td>{item?.Collection?.Chain?.symbol}</Td>
+                <Td>{item?.collectionData?.Chain?.symbol}</Td>
                 <Td lastElement={true}>
                   <ButtonPrimary className="!w-fit !py-1 text-sm">
                     Update

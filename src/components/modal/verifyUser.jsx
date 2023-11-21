@@ -90,9 +90,10 @@ export default function ModalVerifyUser({
         return response.json();
       } else {
         // Handle the error here
+        const error = await response.json();
         setErrorVerify({
           isError: true,
-          message: response.statusText,
+          message: error.error.message,
         });
       }
     } catch (error) {
@@ -130,6 +131,8 @@ export default function ModalVerifyUser({
       reset();
     }
   }, [isOpenModal]);
+
+  useEffect(() => {console.log(errorVerify);}, [errorVerify])
   return (
     <>
       <Transition appear show={isOpenModal} as={Fragment}>
@@ -240,7 +243,9 @@ export default function ModalVerifyUser({
                                     value="creator"
                                     name="type"
                                     className="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:ring-offset-neutral-800 dark:focus:ring-red-600"
-                                    onChange={(e) => setFormType(e.target.value)}
+                                    onChange={(e) =>
+                                      setFormType(e.target.value)
+                                    }
                                   />
                                   <span>Creator</span>
                                 </label>
@@ -250,7 +255,9 @@ export default function ModalVerifyUser({
                                     value="collector"
                                     name="type"
                                     className="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:ring-offset-neutral-800 dark:focus:ring-red-600"
-                                    onChange={(e) => setFormType(e.target.value)}
+                                    onChange={(e) =>
+                                      setFormType(e.target.value)
+                                    }
                                   />
                                   <span>Collector</span>
                                 </label>
@@ -427,7 +434,7 @@ export default function ModalVerifyUser({
                     {errorVerify.isError && (
                       <div className="flex w-fit justify-end">
                         <button
-                          className="text-primary-500"
+                          className="text-primary-500 dark:text-white"
                           onClick={closeModal}
                         >
                           <FontAwesomeIcon icon={faXmark} />

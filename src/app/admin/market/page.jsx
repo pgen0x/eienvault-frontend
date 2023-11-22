@@ -28,7 +28,7 @@ const AdminUserPage = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [totalPage, setTotalPage] = useState(1);
-  const [copyButtonStatus, setCopyButtonStatus] = useState([""]);
+  const [copyButtonStatus, setCopyButtonStatus] = useState(['']);
   const [_, copyToClipboard] = useCopyToClipboard();
 
   function handleCopyToClipboard(address, key) {
@@ -36,9 +36,7 @@ const AdminUserPage = () => {
     setCopyButtonStatus((oldCopy) => [...oldCopy, key]);
     console.log(copyButtonStatus);
     setTimeout(() => {
-      setCopyButtonStatus((oldCopy) =>
-        oldCopy.filter((item) => item != key),
-      );
+      setCopyButtonStatus((oldCopy) => oldCopy.filter((item) => item != key));
     }, 2500);
   }
   // Sample data for pagination
@@ -96,10 +94,9 @@ const AdminUserPage = () => {
             <th>NFTs</th>
             <th>Name</th>
             <th>Seller</th>
-            <th>Is Live Mint</th>
+            {/* <th>Is Live Mint</th> */}
             <th>Is Live Auction</th>
             <th>Is Discover</th>
-            <th>Is Listed</th>
             <th>Is Blacklisted</th>
             <th>Chain</th>
             <th>Action</th>
@@ -110,36 +107,55 @@ const AdminUserPage = () => {
             return (
               <tr className="text-center" key={index}>
                 <Td firstElement={true}>
-                  <span>{truncateAddress(item?.collection)} #{item?.tokenId}</span>
-                  <ButtonSecondary
-                    className="h-6 !w-6 !p-0 text-xs"
-                    onClick={() => handleCopyToClipboard(item?.collection, `token${item?.collection}#${item?.tokenId}`)}
-                  >
-                    {copyButtonStatus.includes(`token${item?.collection}#${item?.tokenId}`) ? (
-                      <FontAwesomeIcon icon={faCheck} fontSize={16} />
-                    ) : (
-                      <FontAwesomeIcon icon={faCopy} fontSize={16} />
-                    )}
-                  </ButtonSecondary>
+                  <div className="flex gap-2 justify-center">
+                    <span>
+                      {truncateAddress(item?.collection)} #{item?.tokenId}
+                    </span>
+                    <ButtonPrimary
+                      className="h-6 !w-6 !p-0 text-xs"
+                      onClick={() =>
+                        handleCopyToClipboard(
+                          item?.collection,
+                          `token${item?.collection}#${item?.tokenId}`,
+                        )
+                      }
+                    >
+                      {copyButtonStatus.includes(
+                        `token${item?.collection}#${item?.tokenId}`,
+                      ) ? (
+                        <FontAwesomeIcon icon={faCheck} />
+                      ) : (
+                        <FontAwesomeIcon icon={faCopy} />
+                      )}
+                    </ButtonPrimary>
+                  </div>
                 </Td>
                 <Td>{item?.nftDetails?.name}</Td>
                 <Td>
-                  <span>{truncateAddress(item?.seller)}</span>
-                  <ButtonSecondary
-                    className="h-6 !w-6 !p-0 text-xs"
-                    onClick={() => handleCopyToClipboard(item?.owner, `owner${item?.collection}#${item?.tokenId}`)}
-                  >
-                    {copyButtonStatus.includes(`owner${item?.collection}#${item?.tokenId}`) ? (
-                      <FontAwesomeIcon icon={faCheck} fontSize={16} />
-                    ) : (
-                      <FontAwesomeIcon icon={faCopy} fontSize={16} />
-                    )}
-                  </ButtonSecondary>
+                  <div className="flex gap-2 justify-center">
+                    <span>{truncateAddress(item?.seller)}</span>
+                    <ButtonPrimary
+                      className="h-6 !w-6 !p-0 text-xs"
+                      onClick={() =>
+                        handleCopyToClipboard(
+                          item?.seller,
+                          `owner${item?.collection}#${item?.tokenId}`,
+                        )
+                      }
+                    >
+                      {copyButtonStatus.includes(
+                        `owner${item?.collection}#${item?.tokenId}`,
+                      ) ? (
+                        <FontAwesomeIcon icon={faCheck} />
+                      ) : (
+                        <FontAwesomeIcon icon={faCopy} />
+                      )}
+                    </ButtonPrimary>
+                  </div>
                 </Td>
-                <Td>{item?.isLiveMint ? 'Yes' : 'No'}</Td>
-                <Td>{item?.isLiveAuction ? 'Yes' : 'No'}</Td>
+                {/* <Td>{item?.isLiveMint ? 'Yes' : 'No'}</Td> */}
+                <Td>{item?.isAuctioned ? 'Yes' : 'No'}</Td>
                 <Td>{item?.isDiscover ? 'Yes' : 'No'}</Td>
-                <Td>{item?.isListed ? 'Yes' : 'No'}</Td>
                 <Td>{item?.isBlacklisted ? 'Yes' : 'No'}</Td>
                 <Td>{item?.collectionData?.Chain?.symbol}</Td>
                 <Td lastElement={true}>

@@ -113,7 +113,7 @@ const AdminVerificationPage = () => {
   const handleOpenUpdateModal = (id, status) => {
     setDataUpdateModal({
       id,
-      status
+      status,
     });
     setIsModalUpdateOpen(true);
   };
@@ -172,21 +172,23 @@ const AdminVerificationPage = () => {
                 <Td>{item.email}</Td>
                 <Td>{item.isCreator ? 'Creator' : 'Collector'}</Td>
                 <Td>
-                  <span>{truncateAddress(item.userAddress)}</span>
-                  {item.userAddress && (
-                    <ButtonSecondary
-                      className="h-6 !w-6 !p-0 text-xs"
-                      onClick={() =>
-                        handleCopyToClipboard(item.userAddress, item.id)
-                      }
-                    >
-                      {copyButtonStatus.includes(item.id) ? (
-                        <FontAwesomeIcon icon={faCheck} fontSize={16} />
-                      ) : (
-                        <FontAwesomeIcon icon={faCopy} fontSize={16} />
-                      )}
-                    </ButtonSecondary>
-                  )}
+                  <div className="flex gap-2 justify-center">
+                    <span>{truncateAddress(item.userAddress)}</span>
+                    {item.userAddress && (
+                      <ButtonPrimary
+                        className="h-6 !w-6 !p-0 text-xs"
+                        onClick={() =>
+                          handleCopyToClipboard(item.userAddress, item.id)
+                        }
+                      >
+                        {copyButtonStatus.includes(item.id) ? (
+                          <FontAwesomeIcon icon={faCheck} />
+                        ) : (
+                          <FontAwesomeIcon icon={faCopy} />
+                        )}
+                      </ButtonPrimary>
+                    )}
+                  </div>
                 </Td>
                 <Td>{item.status}</Td>
                 <Td lastElement={true}>
@@ -357,7 +359,7 @@ const ModalUpdate = ({ isOpenModal, onClose, dataModal, refresh }) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all dark:bg-neutral-950 dark:text-white">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle text-gray-900 shadow-xl transition-all dark:bg-neutral-950 dark:text-white">
                   <Dialog.Title as="h3" className="px-6 pt-6 text-xl font-bold">
                     Set Verified
                   </Dialog.Title>
@@ -371,47 +373,47 @@ const ModalUpdate = ({ isOpenModal, onClose, dataModal, refresh }) => {
                           </div>
                           <form className="flex flex-col gap-2">
                             <div className="mt-2 w-full">
-                              <label className="block text-sm font-bold leading-6 mb-2">
+                              <label className="mb-2 block text-sm font-bold leading-6">
                                 <span className="text-semantic-red-500">*</span>{' '}
                                 Status
                               </label>
-                              <div className="flex flex-col w-full gap-3 rounded-full">
-                                <label className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white">
+                              <div className="flex w-full flex-col gap-3 rounded-full">
+                                <label className="flex items-center gap-2 text-sm font-medium">
                                   <input
                                     type="radio"
                                     value="PENDING"
                                     name="status"
-                                    className="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 dark:text-white focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:ring-offset-neutral-800 dark:focus:ring-white"
+                                    className="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:ring-offset-neutral-800 dark:focus:ring-white"
                                     onChange={(e) =>
                                       setFormStatus(e.target.value)
                                     }
-                                    checked={formStatus == "PENDING"}
+                                    checked={formStatus == 'PENDING'}
                                   />
                                   <span>PENDING</span>
                                 </label>
-                                <label className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white">
+                                <label className="flex items-center gap-2 text-sm font-medium">
                                   <input
                                     type="radio"
                                     value="APPROVED"
                                     name="status"
-                                    className="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 dark:text-white focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:ring-offset-neutral-800 dark:focus:ring-white"
+                                    className="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:ring-offset-neutral-800 dark:focus:ring-white"
                                     onChange={(e) =>
                                       setFormStatus(e.target.value)
                                     }
-                                    checked={formStatus == "APPROVED"}
+                                    checked={formStatus == 'APPROVED'}
                                   />
                                   <span>APPROVED</span>
                                 </label>
-                                <label className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white">
+                                <label className="flex items-center gap-2 text-sm font-medium">
                                   <input
                                     type="radio"
                                     value="REJECTED"
                                     name="status"
-                                    className="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 dark:text-white focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:ring-offset-neutral-800 dark:focus:ring-white"
+                                    className="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:ring-offset-neutral-800 dark:focus:ring-white"
                                     onChange={(e) =>
                                       setFormStatus(e.target.value)
                                     }
-                                    checked={formStatus == "REJECTED"}
+                                    checked={formStatus == 'REJECTED'}
                                   />
                                   <span>REJECTED</span>
                                 </label>

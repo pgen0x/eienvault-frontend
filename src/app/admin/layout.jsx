@@ -23,7 +23,7 @@ export default function AdminLayout({ children }) {
     <div className="flex justify-between gap-5">
       <NavbarAdmin />
       <SidebarAdmin />
-      <section className="mt-20 w-full m-5">{children}</section>
+      <section className="mt-20 w-full m-5 overflow-x-hidden block">{children}</section>
     </div>
   );
 }

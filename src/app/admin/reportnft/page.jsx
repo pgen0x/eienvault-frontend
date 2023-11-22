@@ -14,6 +14,7 @@ import {
   faSearch,
   faShareFromSquare,
   faXmark,
+  faXmarkCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
@@ -98,10 +99,10 @@ const AdminUserPage = () => {
     return false;
   };
 
-  const handleOpenUpdateModal = (id, status) => {
+  const handleOpenUpdateModal = (collectionAddress, tokenId) => {
     setDataUpdateModal({
-      id,
-      status,
+      collectionAddress,
+      tokenId,
     });
     setIsModalUpdateOpen(true);
   };
@@ -115,7 +116,7 @@ const AdminUserPage = () => {
       {/* Display your paginated data */}
       <div className="flex items-center justify-between py-5">
         <h3 className="text-3xl font-bold text-gray-900 dark:text-white">
-          Request verification user lists
+          Report NFT lists
         </h3>
         {/* <form onSubmit={(event) => handleSearch(event)}>
           <div className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-full border-0 border-gray-200 bg-white px-4 dark:bg-neutral-900">
@@ -218,9 +219,9 @@ const AdminUserPage = () => {
                 <Td lastElement={true}>
                   <ButtonPrimary
                     className="!w-fit !py-1 text-sm"
-                    onClick={() => handleOpenUpdateModal(item.id, item.status)}
+                    onClick={() => handleOpenUpdateModal(item?.collectionAddress, item?.tokenId)}
                   >
-                    Update
+                    Blacklist
                   </ButtonPrimary>
                 </Td>
               </tr>
@@ -257,6 +258,248 @@ const AdminUserPage = () => {
         refresh={loadData}
       />
     </div>
+  );
+};
+
+const ModalUpdate = ({ isOpenModal, onClose, dataModal, refresh }) => {
+  const { token } = useAuth();
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [errorVerify, setErrorVerify] = useState({
+    isError: false,
+    message: '',
+  });
+  const [hash, setHash] = useState();
+  const [formStatus, setFormStatus] = useState(dataModal.status);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setValue,
+    getValues,
+    reset,
+  } = useForm();
+  const router = useRouter();
+
+  const onSave = async (data) => {
+    setIsSubmit(true);
+    setErrorVerify({
+      isError: false,
+      message: '',
+    });
+
+    try {
+      const payload = data;
+
+      const options = {
+        method: 'POST',
+        body: JSON.stringify(payload), // Convert the payload to JSON
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json', // Set the content type to JSON
+        },
+      };
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/setnftblacklist`,
+        options,
+      );
+
+      if (response.ok) {
+        // Data was saved successfully
+        refresh();
+        setIsSubmit(false);
+        setIsCompleted(true);
+        return response.json();
+      } else {
+        // Handle the error here
+        const error = await response.json();
+        setErrorVerify({
+          isError: true,
+          message: error.error.message,
+        });
+      }
+    } catch (error) {
+      // Handle any unexpected errors
+      setErrorVerify({
+        isError: true,
+        message: error,
+      });
+    }
+  };
+
+  function closeModal() {
+    if (errorVerify.isError || isCompleted || !isSubmit) {
+      if (errorVerify.isError) {
+        setIsSubmit(false);
+        setErrorVerify({
+          isError: false,
+          message: '',
+        });
+      } else {
+        setErrorVerify({
+          isError: false,
+          message: '',
+        });
+        setIsSubmit(false);
+        setIsCompleted(false);
+        onClose(false);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (isOpenModal === true) {
+      reset();
+      onSave(dataModal);
+    }
+  }, [isOpenModal]);
+  return (
+    <>
+      <Transition appear show={isSubmit} as={Fragment}>
+        <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-100 p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-950">
+                  <Dialog.Title className="flex justify-between text-xl font-bold text-neutral-800 dark:text-white">
+                    <span>
+                      {errorVerify.isError
+                        ? 'Error'
+                        : 'Submitting your request'}
+                    </span>
+                    {errorVerify.isError && (
+                      <div className="flex w-fit justify-end">
+                        <button
+                          className="text-primary-500"
+                          onClick={closeModal}
+                        >
+                          <FontAwesomeIcon icon={faXmark} />
+                        </button>
+                      </div>
+                    )}
+                  </Dialog.Title>
+
+                  <div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
+                    <div className="relative mt-2 transform overflow-hidden text-left transition-all sm:w-full sm:max-w-lg">
+                      <div className="text-gray-900 dark:text-white">
+                        <section className="step-2 flex flex-col gap-3 p-5">
+                          <div className="flex flex-col items-center gap-5">
+                            {errorVerify.isError ? (
+                              <>
+                                <FontAwesomeIcon
+                                  icon={faXmarkCircle}
+                                  className="h-8 w-8 text-primary-500"
+                                />
+                                <span className="text-primary-500">
+                                  {errorVerify.message}
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <div className="h-10 w-10 animate-ping rounded-lg bg-primary-100"></div>
+                                <div className="text-center text-base leading-6">
+                                  <span>
+                                    Please wait for the data to be processed, do
+                                    not disconnect the network
+                                  </span>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+      <Transition appear show={isCompleted} as={Fragment}>
+        <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-100 p-3 text-left align-middle text-gray-900 shadow-xl transition-all dark:bg-neutral-950 dark:text-white">
+                  <div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
+                    <div className="relative mt-2 transform overflow-hidden text-left transition-all sm:w-full sm:max-w-lg">
+                      <section className="step-2 flex flex-col gap-3 p-5">
+                        <div className="flex flex-col items-center gap-5">
+                          <div className="relative z-10 flex h-28 w-28 items-center justify-center rounded-full border-[8px] border-green-400">
+                            <FontAwesomeIcon
+                              icon={faCheck}
+                              className="text-6xl font-bold text-green-400"
+                            />
+                          </div>
+                          <div className="text-center">
+                            <h3 className="text-lg font-bold">
+                              NFTs is successfully blacklisted
+                            </h3>
+                            <span>
+                              Please check the table for latest value.
+                            </span>
+                          </div>
+                          <div className="justiry-between flex w-full gap-2">
+                            <ButtonPrimary onClick={closeModal}>
+                              Close
+                            </ButtonPrimary>
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+    </>
   );
 };
 

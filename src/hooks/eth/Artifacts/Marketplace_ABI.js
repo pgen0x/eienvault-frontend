@@ -1,5 +1,5 @@
 export const marketplaceABI = {
-  address: '0xab90D9c1CbE9AFFaDCEbbDe3652A9871cb61C68c',
+  address: '0x9029c389860D84542F36d6B9791e64051c3215cE',
   abi: [
     {
       inputs: [],
@@ -8,39 +8,7 @@ export const marketplaceABI = {
     },
     {
       inputs: [],
-      name: 'AccessControlBadConfirmation',
-      type: 'error',
-    },
-    {
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-        {
-          internalType: 'bytes32',
-          name: 'neededRole',
-          type: 'bytes32',
-        },
-      ],
-      name: 'AccessControlUnauthorizedAccount',
-      type: 'error',
-    },
-    {
-      inputs: [],
       name: 'Address0',
-      type: 'error',
-    },
-    {
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'target',
-          type: 'address',
-        },
-      ],
-      name: 'AddressEmptyCode',
       type: 'error',
     },
     {
@@ -59,34 +27,8 @@ export const marketplaceABI = {
       type: 'error',
     },
     {
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'implementation',
-          type: 'address',
-        },
-      ],
-      name: 'ERC1967InvalidImplementation',
-      type: 'error',
-    },
-    {
-      inputs: [],
-      name: 'ERC1967NonPayable',
-      type: 'error',
-    },
-    {
       inputs: [],
       name: 'Ended',
-      type: 'error',
-    },
-    {
-      inputs: [],
-      name: 'FailedInnerCall',
-      type: 'error',
-    },
-    {
-      inputs: [],
-      name: 'InvalidInitialization',
       type: 'error',
     },
     {
@@ -97,11 +39,6 @@ export const marketplaceABI = {
     {
       inputs: [],
       name: 'NotFound',
-      type: 'error',
-    },
-    {
-      inputs: [],
-      name: 'NotInitializing',
       type: 'error',
     },
     {
@@ -130,29 +67,45 @@ export const marketplaceABI = {
       type: 'error',
     },
     {
-      inputs: [],
-      name: 'UUPSUnauthorizedCallContext',
-      type: 'error',
-    },
-    {
+      anonymous: false,
       inputs: [
         {
-          internalType: 'bytes32',
-          name: 'slot',
-          type: 'bytes32',
+          indexed: false,
+          internalType: 'address',
+          name: 'previousAdmin',
+          type: 'address',
+        },
+        {
+          indexed: false,
+          internalType: 'address',
+          name: 'newAdmin',
+          type: 'address',
         },
       ],
-      name: 'UUPSUnsupportedProxiableUUID',
-      type: 'error',
+      name: 'AdminChanged',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: 'address',
+          name: 'beacon',
+          type: 'address',
+        },
+      ],
+      name: 'BeaconUpgraded',
+      type: 'event',
     },
     {
       anonymous: false,
       inputs: [
         {
           indexed: false,
-          internalType: 'uint64',
+          internalType: 'uint8',
           name: 'version',
-          type: 'uint64',
+          type: 'uint8',
         },
       ],
       name: 'Initialized',
@@ -641,19 +594,6 @@ export const marketplaceABI = {
     },
     {
       inputs: [],
-      name: 'UPGRADE_INTERFACE_VERSION',
-      outputs: [
-        {
-          internalType: 'string',
-          name: '',
-          type: 'string',
-        },
-      ],
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      inputs: [],
       name: 'Vault',
       outputs: [
         {
@@ -1096,7 +1036,7 @@ export const marketplaceABI = {
         },
         {
           internalType: 'address',
-          name: 'callerConfirmation',
+          name: 'account',
           type: 'address',
         },
       ],
@@ -1240,6 +1180,19 @@ export const marketplaceABI = {
         },
       ],
       name: 'updateVault',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'address',
+          name: 'newImplementation',
+          type: 'address',
+        },
+      ],
+      name: 'upgradeTo',
       outputs: [],
       stateMutability: 'nonpayable',
       type: 'function',

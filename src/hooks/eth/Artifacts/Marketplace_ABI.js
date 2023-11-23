@@ -1,5 +1,5 @@
 export const marketplaceABI = {
-  address: '0x9029c389860D84542F36d6B9791e64051c3215cE',
+  address: '0xe614733b89707fA4c9c1a0a7E4A41AF9745AC806',
   abi: [
     {
       inputs: [],
@@ -8,7 +8,39 @@ export const marketplaceABI = {
     },
     {
       inputs: [],
+      name: 'AccessControlBadConfirmation',
+      type: 'error',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'address',
+          name: 'account',
+          type: 'address',
+        },
+        {
+          internalType: 'bytes32',
+          name: 'neededRole',
+          type: 'bytes32',
+        },
+      ],
+      name: 'AccessControlUnauthorizedAccount',
+      type: 'error',
+    },
+    {
+      inputs: [],
       name: 'Address0',
+      type: 'error',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'address',
+          name: 'target',
+          type: 'address',
+        },
+      ],
+      name: 'AddressEmptyCode',
       type: 'error',
     },
     {
@@ -27,8 +59,44 @@ export const marketplaceABI = {
       type: 'error',
     },
     {
+      inputs: [
+        {
+          internalType: 'address',
+          name: 'implementation',
+          type: 'address',
+        },
+      ],
+      name: 'ERC1967InvalidImplementation',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'ERC1967NonPayable',
+      type: 'error',
+    },
+    {
       inputs: [],
       name: 'Ended',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'EnforcedPause',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'ExpectedPause',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'FailedInnerCall',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'InvalidInitialization',
       type: 'error',
     },
     {
@@ -39,6 +107,11 @@ export const marketplaceABI = {
     {
       inputs: [],
       name: 'NotFound',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'NotInitializing',
       type: 'error',
     },
     {
@@ -58,6 +131,11 @@ export const marketplaceABI = {
     },
     {
       inputs: [],
+      name: 'ReentrancyGuardReentrantCall',
+      type: 'error',
+    },
+    {
+      inputs: [],
       name: 'TimingError',
       type: 'error',
     },
@@ -67,45 +145,29 @@ export const marketplaceABI = {
       type: 'error',
     },
     {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: false,
-          internalType: 'address',
-          name: 'previousAdmin',
-          type: 'address',
-        },
-        {
-          indexed: false,
-          internalType: 'address',
-          name: 'newAdmin',
-          type: 'address',
-        },
-      ],
-      name: 'AdminChanged',
-      type: 'event',
+      inputs: [],
+      name: 'UUPSUnauthorizedCallContext',
+      type: 'error',
     },
     {
-      anonymous: false,
       inputs: [
         {
-          indexed: true,
-          internalType: 'address',
-          name: 'beacon',
-          type: 'address',
+          internalType: 'bytes32',
+          name: 'slot',
+          type: 'bytes32',
         },
       ],
-      name: 'BeaconUpgraded',
-      type: 'event',
+      name: 'UUPSUnsupportedProxiableUUID',
+      type: 'error',
     },
     {
       anonymous: false,
       inputs: [
         {
           indexed: false,
-          internalType: 'uint8',
+          internalType: 'uint64',
           name: 'version',
-          type: 'uint8',
+          type: 'uint64',
         },
       ],
       name: 'Initialized',
@@ -594,6 +656,19 @@ export const marketplaceABI = {
     },
     {
       inputs: [],
+      name: 'UPGRADE_INTERFACE_VERSION',
+      outputs: [
+        {
+          internalType: 'string',
+          name: '',
+          type: 'string',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [],
       name: 'Vault',
       outputs: [
         {
@@ -1036,7 +1111,7 @@ export const marketplaceABI = {
         },
         {
           internalType: 'address',
-          name: 'account',
+          name: 'callerConfirmation',
           type: 'address',
         },
       ],
@@ -1180,19 +1255,6 @@ export const marketplaceABI = {
         },
       ],
       name: 'updateVault',
-      outputs: [],
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'newImplementation',
-          type: 'address',
-        },
-      ],
-      name: 'upgradeTo',
       outputs: [],
       stateMutability: 'nonpayable',
       type: 'function',

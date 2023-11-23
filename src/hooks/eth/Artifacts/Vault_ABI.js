@@ -8,7 +8,39 @@ export const vaultABI = {
     },
     {
       inputs: [],
+      name: 'AccessControlBadConfirmation',
+      type: 'error',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'address',
+          name: 'account',
+          type: 'address',
+        },
+        {
+          internalType: 'bytes32',
+          name: 'neededRole',
+          type: 'bytes32',
+        },
+      ],
+      name: 'AccessControlUnauthorizedAccount',
+      type: 'error',
+    },
+    {
+      inputs: [],
       name: 'Address0',
+      type: 'error',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'address',
+          name: 'target',
+          type: 'address',
+        },
+      ],
+      name: 'AddressEmptyCode',
       type: 'error',
     },
     {
@@ -27,6 +59,22 @@ export const vaultABI = {
       type: 'error',
     },
     {
+      inputs: [
+        {
+          internalType: 'address',
+          name: 'implementation',
+          type: 'address',
+        },
+      ],
+      name: 'ERC1967InvalidImplementation',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'ERC1967NonPayable',
+      type: 'error',
+    },
+    {
       inputs: [],
       name: 'EndBeforeRelease',
       type: 'error',
@@ -38,12 +86,37 @@ export const vaultABI = {
     },
     {
       inputs: [],
+      name: 'EnforcedPause',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'ExpectedPause',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'FailedInnerCall',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'InvalidInitialization',
+      type: 'error',
+    },
+    {
+      inputs: [],
       name: 'NotApproved',
       type: 'error',
     },
     {
       inputs: [],
       name: 'NotFound',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'NotInitializing',
       type: 'error',
     },
     {
@@ -63,6 +136,11 @@ export const vaultABI = {
     },
     {
       inputs: [],
+      name: 'ReentrancyGuardReentrantCall',
+      type: 'error',
+    },
+    {
+      inputs: [],
       name: 'TimingError',
       type: 'error',
     },
@@ -72,45 +150,29 @@ export const vaultABI = {
       type: 'error',
     },
     {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: false,
-          internalType: 'address',
-          name: 'previousAdmin',
-          type: 'address',
-        },
-        {
-          indexed: false,
-          internalType: 'address',
-          name: 'newAdmin',
-          type: 'address',
-        },
-      ],
-      name: 'AdminChanged',
-      type: 'event',
+      inputs: [],
+      name: 'UUPSUnauthorizedCallContext',
+      type: 'error',
     },
     {
-      anonymous: false,
       inputs: [
         {
-          indexed: true,
-          internalType: 'address',
-          name: 'beacon',
-          type: 'address',
+          internalType: 'bytes32',
+          name: 'slot',
+          type: 'bytes32',
         },
       ],
-      name: 'BeaconUpgraded',
-      type: 'event',
+      name: 'UUPSUnsupportedProxiableUUID',
+      type: 'error',
     },
     {
       anonymous: false,
       inputs: [
         {
           indexed: false,
-          internalType: 'uint8',
+          internalType: 'uint64',
           name: 'version',
-          type: 'uint8',
+          type: 'uint64',
         },
       ],
       name: 'Initialized',
@@ -328,6 +390,19 @@ export const vaultABI = {
           internalType: 'bytes32',
           name: '',
           type: 'bytes32',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [],
+      name: 'UPGRADE_INTERFACE_VERSION',
+      outputs: [
+        {
+          internalType: 'string',
+          name: '',
+          type: 'string',
         },
       ],
       stateMutability: 'view',
@@ -900,7 +975,7 @@ export const vaultABI = {
         },
         {
           internalType: 'address',
-          name: 'account',
+          name: 'callerConfirmation',
           type: 'address',
         },
       ],
@@ -1051,19 +1126,6 @@ export const vaultABI = {
         },
       ],
       name: 'updateMarketAddress',
-      outputs: [],
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'newImplementation',
-          type: 'address',
-        },
-      ],
-      name: 'upgradeTo',
       outputs: [],
       stateMutability: 'nonpayable',
       type: 'function',

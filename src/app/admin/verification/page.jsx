@@ -1,27 +1,45 @@
 'use client';
 import Table, { Td } from '@/components/admin/table/table';
-import AdminTable from '@/components/admin/table/table';
 import ButtonPrimary from '@/components/button/buttonPrimary';
 import ButtonSecondary from '@/components/button/buttonSecondary';
 import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
-import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import {
   faAnglesLeft,
   faAnglesRight,
-  faCheck,
   faCopy,
   faSearch,
+  faCheck,
+  faChevronDown,
+  faClose,
+  faImage,
+  faXmark,
+  faXmarkCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { toast } from 'react-toastify';
 import { useCopyToClipboard } from 'react-use';
 import { formatEther } from 'viem';
+import Ethereum from '@/assets/icon/ethereum';
+import HelaIcon from '@/assets/icon/hela';
+import { Dialog, Listbox, Transition } from '@headlessui/react';
+import { ErrorMessage } from '@hookform/error-message';
+import Image from 'next/legacy/image';
+import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
+import {
+  useAccount,
+  useNetwork,
+  useWaitForTransaction,
+  useWalletClient,
+} from 'wagmi';
+import { useWeb3Modal } from '@web3modal/react';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
-const AdminUserPage = () => {
+const AdminVerificationPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(
     Array.from({ length: 500 }, (_, i) => i + 1),
@@ -32,15 +50,15 @@ const AdminUserPage = () => {
   const [copyButtonStatus, setCopyButtonStatus] = useState(['']);
   const [_, copyToClipboard] = useCopyToClipboard();
   const { token } = useAuth();
+  const [IsModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
+  const [dataUpdateModal, setDataUpdateModal] = useState({});
 
   function handleCopyToClipboard(address, key) {
     copyToClipboard(address);
     setCopyButtonStatus((oldCopy) => [...oldCopy, key]);
     console.log(copyButtonStatus);
     setTimeout(() => {
-      setCopyButtonStatus((oldCopy) =>
-        oldCopy.filter((item) => item != key),
-      );
+      setCopyButtonStatus((oldCopy) => oldCopy.filter((item) => item != key));
     }, 2500);
   }
   // Sample data for pagination
@@ -90,6 +108,18 @@ const AdminUserPage = () => {
     event.preventDefault();
 
     return false;
+  };
+
+  const handleOpenUpdateModal = (id, status) => {
+    setDataUpdateModal({
+      id,
+      status,
+    });
+    setIsModalUpdateOpen(true);
+  };
+
+  const closeModalUpdate = () => {
+    setIsModalUpdateOpen(false);
   };
 
   return (
@@ -142,21 +172,30 @@ const AdminUserPage = () => {
                 <Td>{item.email}</Td>
                 <Td>{item.isCreator ? 'Creator' : 'Collector'}</Td>
                 <Td>
-                  <span>{truncateAddress(item.userAddress)}</span>
-                  <ButtonSecondary
-                    className="h-6 !w-6 !p-0 text-xs"
-                    onClick={() => handleCopyToClipboard(item.userAddress, item.id)}
-                  >
-                    {copyButtonStatus.includes(item.id) ? (
-                      <FontAwesomeIcon icon={faCheck} fontSize={16} />
-                    ) : (
-                      <FontAwesomeIcon icon={faCopy} fontSize={16} />
+                  <div className="flex gap-2 justify-center">
+                    <span>{truncateAddress(item.userAddress)}</span>
+                    {item.userAddress && (
+                      <ButtonPrimary
+                        className="h-6 !w-6 !p-0 text-xs"
+                        onClick={() =>
+                          handleCopyToClipboard(item.userAddress, item.id)
+                        }
+                      >
+                        {copyButtonStatus.includes(item.id) ? (
+                          <FontAwesomeIcon icon={faCheck} />
+                        ) : (
+                          <FontAwesomeIcon icon={faCopy} />
+                        )}
+                      </ButtonPrimary>
                     )}
-                  </ButtonSecondary>
+                  </div>
                 </Td>
                 <Td>{item.status}</Td>
                 <Td lastElement={true}>
-                  <ButtonPrimary className="!w-fit !py-1 text-sm">
+                  <ButtonPrimary
+                    className="!w-fit !py-1 text-sm"
+                    onClick={() => handleOpenUpdateModal(item.id, item.status)}
+                  >
                     Update
                   </ButtonPrimary>
                 </Td>
@@ -187,8 +226,358 @@ const AdminUserPage = () => {
           />
         </div>
       </div>
+      <ModalUpdate
+        isOpenModal={IsModalUpdateOpen}
+        onClose={closeModalUpdate}
+        dataModal={dataUpdateModal}
+        refresh={loadData}
+      />
     </div>
   );
 };
 
-export default AdminUserPage;
+const ModalUpdate = ({ isOpenModal, onClose, dataModal, refresh }) => {
+  const { token } = useAuth();
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [errorVerify, setErrorVerify] = useState({
+    isError: false,
+    message: '',
+  });
+  const [hash, setHash] = useState();
+  const [formStatus, setFormStatus] = useState(dataModal.status);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setValue,
+    getValues,
+    reset,
+  } = useForm();
+  const router = useRouter();
+
+  const onSave = async (data) => {
+    setIsSubmit(true);
+    setErrorVerify({
+      isError: false,
+      message: '',
+    });
+
+    try {
+      const payload = data;
+      payload.idRequestVerify = dataModal.id;
+      payload.status = formStatus;
+
+      const options = {
+        method: 'POST',
+        body: JSON.stringify(payload), // Convert the payload to JSON
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json', // Set the content type to JSON
+        },
+      };
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/togglerequestverify`,
+        options,
+      );
+
+      if (response.ok) {
+        // Data was saved successfully
+        refresh();
+        setIsSubmit(false);
+        setIsCompleted(true);
+        return response.json();
+      } else {
+        // Handle the error here
+        setErrorVerify({
+          isError: true,
+          message: response.statusText,
+        });
+      }
+    } catch (error) {
+      // Handle any unexpected errors
+      setErrorVerify({
+        isError: true,
+        message: error,
+      });
+    }
+  };
+
+  function closeModal() {
+    if (errorVerify.isError || isCompleted || !isSubmit) {
+      if (errorVerify.isError) {
+        setIsSubmit(false);
+        setErrorVerify({
+          isError: false,
+          message: '',
+        });
+      } else {
+        setErrorVerify({
+          isError: false,
+          message: '',
+        });
+        setIsSubmit(false);
+        setIsCompleted(false);
+        onClose(false);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (isOpenModal === true) {
+      reset();
+    }
+  }, [isOpenModal]);
+  return (
+    <>
+      <Transition appear show={isOpenModal} as={Fragment}>
+        <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle text-gray-900 shadow-xl transition-all dark:bg-neutral-950 dark:text-white">
+                  <Dialog.Title as="h3" className="px-6 pt-6 text-xl font-bold">
+                    Set Verified
+                  </Dialog.Title>
+
+                  <div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
+                    <div className="relative mt-2 transform overflow-hidden text-left transition-all sm:w-full sm:max-w-lg">
+                      <div>
+                        <section className="flex w-full flex-col gap-2 overflow-y-auto p-6">
+                          <div className="w-full">
+                            You can change status user request verification.
+                          </div>
+                          <form className="flex flex-col gap-2">
+                            <div className="mt-2 w-full">
+                              <label className="mb-2 block text-sm font-bold leading-6">
+                                <span className="text-semantic-red-500">*</span>{' '}
+                                Status
+                              </label>
+                              <div className="flex w-full flex-col gap-3 rounded-full">
+                                <label className="flex items-center gap-2 text-sm font-medium">
+                                  <input
+                                    type="radio"
+                                    value="PENDING"
+                                    name="status"
+                                    className="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:ring-offset-neutral-800 dark:focus:ring-white"
+                                    onChange={(e) =>
+                                      setFormStatus(e.target.value)
+                                    }
+                                    checked={formStatus == 'PENDING'}
+                                  />
+                                  <span>PENDING</span>
+                                </label>
+                                <label className="flex items-center gap-2 text-sm font-medium">
+                                  <input
+                                    type="radio"
+                                    value="APPROVED"
+                                    name="status"
+                                    className="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:ring-offset-neutral-800 dark:focus:ring-white"
+                                    onChange={(e) =>
+                                      setFormStatus(e.target.value)
+                                    }
+                                    checked={formStatus == 'APPROVED'}
+                                  />
+                                  <span>APPROVED</span>
+                                </label>
+                                <label className="flex items-center gap-2 text-sm font-medium">
+                                  <input
+                                    type="radio"
+                                    value="REJECTED"
+                                    name="status"
+                                    className="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:ring-offset-neutral-800 dark:focus:ring-white"
+                                    onChange={(e) =>
+                                      setFormStatus(e.target.value)
+                                    }
+                                    checked={formStatus == 'REJECTED'}
+                                  />
+                                  <span>REJECTED</span>
+                                </label>
+                              </div>
+                              <div className="mt-1 text-sm text-primary-500">
+                                <ErrorMessage errors={errors} name="status" />
+                              </div>
+                            </div>
+                            <ButtonPrimary onClick={handleSubmit(onSave)}>
+                              Submit Verification
+                            </ButtonPrimary>
+                          </form>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+      <Transition appear show={isSubmit} as={Fragment}>
+        <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-100 p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-950">
+                  <Dialog.Title className="flex justify-between text-xl font-bold text-neutral-800 dark:text-white">
+                    <span>
+                      {errorVerify.isError
+                        ? 'Error'
+                        : 'Submitting your request'}
+                    </span>
+                    {errorVerify.isError && (
+                      <div className="flex w-fit justify-end">
+                        <button
+                          className="text-primary-500"
+                          onClick={closeModal}
+                        >
+                          <FontAwesomeIcon icon={faXmark} />
+                        </button>
+                      </div>
+                    )}
+                  </Dialog.Title>
+
+                  <div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
+                    <div className="relative mt-2 transform overflow-hidden text-left transition-all sm:w-full sm:max-w-lg">
+                      <div className="text-gray-900 dark:text-white">
+                        <section className="step-2 flex flex-col gap-3 p-5">
+                          <div className="flex flex-col items-center gap-5">
+                            {errorVerify.isError ? (
+                              <>
+                                <FontAwesomeIcon
+                                  icon={faXmarkCircle}
+                                  className="h-8 w-8 text-primary-500"
+                                />
+                                <span className="text-primary-500">
+                                  {errorVerify.message}
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <div className="h-10 w-10 animate-ping rounded-lg bg-primary-100"></div>
+                                <div className="text-center text-base leading-6">
+                                  <span>
+                                    Please wait for the data to be processed, do
+                                    not disconnect the network
+                                  </span>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+      <Transition appear show={isCompleted} as={Fragment}>
+        <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-100 p-3 text-left align-middle text-gray-900 shadow-xl transition-all dark:bg-neutral-950 dark:text-white">
+                  <div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
+                    <div className="relative mt-2 transform overflow-hidden text-left transition-all sm:w-full sm:max-w-lg">
+                      <section className="step-2 flex flex-col gap-3 p-5">
+                        <div className="flex flex-col items-center gap-5">
+                          <div className="relative z-10 flex h-28 w-28 items-center justify-center rounded-full border-[8px] border-green-400">
+                            <FontAwesomeIcon
+                              icon={faCheck}
+                              className="text-6xl font-bold text-green-400"
+                            />
+                          </div>
+                          <div className="text-center">
+                            <h3 className="text-lg font-bold">
+                              Verification data is successfully updated
+                            </h3>
+                            <span>
+                              Please check the table for latest value.
+                            </span>
+                          </div>
+                          <div className="justiry-between flex w-full gap-2">
+                            <ButtonPrimary onClick={closeModal}>
+                              Close
+                            </ButtonPrimary>
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+    </>
+  );
+};
+
+export default AdminVerificationPage;

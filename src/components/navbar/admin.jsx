@@ -118,7 +118,7 @@ export function SidebarAdmin() {
                     onClick={() => router.push('/admin/user')}
                   />
                 </li>
-                <li>
+                {/* <li>
                   <ListSubmenu
                     icon={faCubesStacked}
                     title="Collection"
@@ -133,7 +133,7 @@ export function SidebarAdmin() {
                     menu={+openMenu}
                     onClick={() => router.push('/admin/nft')}
                   />
-                </li>
+                </li> */}
                 <li>
                   <ListSubmenu
                     icon={faStore}
@@ -151,7 +151,12 @@ export function SidebarAdmin() {
                   />
                 </li>
                 <li>
-                  <ListSubmenu icon={faChain} title="Chain" menu={+openMenu} />
+                  <ListSubmenu
+                    icon={faChain}
+                    title="Chain"
+                    menu={+openMenu}
+                    onClick={() => router.push('/admin/chain')}
+                  />
                 </li>
               </ul>
             </li>
@@ -174,6 +179,7 @@ export function SidebarAdmin() {
                     icon={faDice}
                     title="Report NFTs"
                     menu={+openMenu}
+                    onClick={() => router.push('/admin/reportnft')}
                   />
                 </li>
                 <li>
@@ -181,6 +187,7 @@ export function SidebarAdmin() {
                     icon={faCubesStacked}
                     title="Report Collection"
                     menu={+openMenu}
+                    onClick={() => router.push('/admin/reportcollection')}
                   />
                 </li>
               </ul>

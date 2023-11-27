@@ -118,7 +118,7 @@ export function SidebarAdmin() {
                     onClick={() => router.push('/admin/user')}
                   />
                 </li>
-                <li>
+                {/* <li>
                   <ListSubmenu
                     icon={faCubesStacked}
                     title="Collection"
@@ -133,7 +133,7 @@ export function SidebarAdmin() {
                     menu={+openMenu}
                     onClick={() => router.push('/admin/nft')}
                   />
-                </li>
+                </li> */}
                 <li>
                   <ListSubmenu
                     icon={faStore}

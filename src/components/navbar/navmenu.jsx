@@ -14,7 +14,6 @@ const NavMenu = () => {
             aria-expanded="false"
           >
             Discover
-            <FontAwesomeIcon icon={faChevronDown} />
           </button>
           <div className="invisible absolute -left-6 top-full z-10 w-48 overflow-hidden pt-3 group-hover/discover:visible">
             <div className="rounded-xl shadow-lg ring-1 ring-gray-900/5 bg-gradient-to-b from-white to-white/60 backdrop-blur dark:from-black/50 dark:to-black/40">

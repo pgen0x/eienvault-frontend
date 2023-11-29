@@ -211,8 +211,17 @@ export function SidebarAdmin() {
                 <li>
                   <ListSubmenu
                     icon={faCube}
-                    title="EienVault Setting"
+                    title="Marketplace Contract"
                     menu={+openMenu}
+                    onClick={() => router.push('/admin/blockchain/marketplace')}
+                  />
+                </li>
+                <li>
+                  <ListSubmenu
+                    icon={faCube}
+                    title="Vault Contract"
+                    menu={+openMenu}
+                    onClick={() => router.push('/admin/blockchain/vault')}
                   />
                 </li>
               </ul>

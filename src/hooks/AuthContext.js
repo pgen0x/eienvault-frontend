@@ -36,7 +36,7 @@ export function AuthProvider({ children }) {
     setAddressHasSigned(null);
     Cookies.remove('addressHasSigned');
     if (pathname.includes('admin')) {
-      router.push('/login');
+      router.push('/');
     }
   };
 

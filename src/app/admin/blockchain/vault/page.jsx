@@ -1,4 +1,39 @@
+'use client';
+
+import ModalRescueERC20 from '@/components/admin/modal/rescueERC20';
+import ModalRescueERC721 from '@/components/admin/modal/rescueERC721';
+import ModalWithdrawFee from '@/components/admin/modal/withdrawFee';
+import { useState } from 'react';
+
 const VaultPage = () => {
+  const [isOpenModalERC721, setIsOpenModalERC721] = useState(false);
+  const [isOpenModalERC20, setIsOpenModalERC20] = useState(false);
+  const [isOpenModalWithdraw, setIsOpenModalWithdraw] = useState(false);
+
+  const rescueERC721 = () => {
+    setIsOpenModalERC721(true);
+  };
+
+  function closeModalERC721() {
+    setIsOpenModalERC721(false);
+  }
+
+  const rescueERC20 = () => {
+    setIsOpenModalERC20(true);
+  };
+
+  function closeModalERC20() {
+    setIsOpenModalERC20(false);
+  }
+
+  const withdrawAll = () => {
+    setIsOpenModalWithdraw(true);
+  };
+
+  function closeModalWithdraw() {
+    setIsOpenModalWithdraw(false);
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between py-5">
@@ -26,6 +61,7 @@ const VaultPage = () => {
             <div class="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
               <button
                 type="button"
+                onClick={rescueERC721}
                 class="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
               >
                 Rescue ERC-721
@@ -53,6 +89,7 @@ const VaultPage = () => {
             <div class="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
               <button
                 type="button"
+                onClick={rescueERC20}
                 class="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
               >
                 Rescue ERC-20
@@ -78,6 +115,7 @@ const VaultPage = () => {
             <div class="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
               <button
                 type="button"
+                onClick={withdrawAll}
                 class="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
               >
                 Withdraw Now
@@ -86,6 +124,21 @@ const VaultPage = () => {
           </div>
         </div>
       </div>
+      <ModalRescueERC721
+        isOpenModal={isOpenModalERC721}
+        onClose={closeModalERC721}
+        onModalClose={closeModalERC721}
+      />
+      <ModalRescueERC20
+        isOpenModal={isOpenModalERC20}
+        onClose={closeModalERC20}
+        onModalClose={closeModalERC20}
+      />
+      <ModalWithdrawFee
+        isOpenModal={isOpenModalWithdraw}
+        onClose={closeModalWithdraw}
+        onModalClose={closeModalWithdraw}
+      />
     </div>
   );
 };

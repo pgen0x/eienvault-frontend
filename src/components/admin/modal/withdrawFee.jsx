@@ -2,6 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from 'react';
 import { formatEther, parseEther, zeroAddress } from 'viem';
+import { useForm } from 'react-hook-form';
+
 import {
   useAccount,
   useBalance,
@@ -11,6 +13,7 @@ import {
   useWalletClient,
 } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/react';
+import { ErrorMessage } from '@hookform/error-message';
 
 export default function ModalWithdrawFee({
   isOpenModal,
@@ -28,6 +31,15 @@ export default function ModalWithdrawFee({
   });
 
   const { open } = useWeb3Modal();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setValue,
+    reset,
+  } = useForm();
 
   function closeModal() {
     onClose(false);
@@ -83,15 +95,68 @@ export default function ModalWithdrawFee({
                   <div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
                     <div className="relative mt-2 transform overflow-hidden text-left transition-all sm:w-full sm:max-w-lg">
                       <div className="text-gray-900 dark:text-white">
-                        <section className="flex  gap-2 overflow-y-auto">
-                          <div className="flex w-full justify-between gap-4">
-                            <button className="mt-4 w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300 disabled:bg-primary-200">
-                              Yes
+                        <section className="flex flex-col  gap-2 overflow-y-auto">
+                          <form>
+                            <div className="w-full">
+                              <div className="mt-2 w-full">
+                                <p>Please input amount and token address</p>
+                              </div>
+                              <div className="mt-4 w-full">
+                                <label className="mt-2 font-semibold">
+                                  <span className="text-semantic-red-500">
+                                    *
+                                  </span>{' '}
+                                  Amount
+                                </label>
+
+                                <div className="mt-2 flex w-full items-center rounded-full border border-gray-200 bg-white dark:text-gray-900">
+                                  <input
+                                    type="number"
+                                    className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
+                                    placeholder="0"
+                                    {...register('amount', {
+                                      required: 'Amount is required.',
+                                    })}
+                                  />
+                                </div>
+                                <div className="mt-1 text-sm font-semibold text-primary-500">
+                                  <ErrorMessage errors={errors} name="amount" />
+                                </div>
+                              </div>
+                              <div className="mt-4 w-full">
+                                <label className="mt-2 font-semibold">
+                                  <span className="text-semantic-red-500">
+                                    *
+                                  </span>{' '}
+                                  Token Address
+                                </label>
+
+                                <div className="mt-2 flex w-full items-center rounded-full border border-gray-200 bg-white dark:text-gray-900">
+                                  <input
+                                    type="text"
+                                    className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
+                                    placeholder="0x5EF0396ee2EacFD1923a1975da3aFB925fE36814"
+                                    {...register('tokenAddress', {
+                                      required: 'Token address is required.',
+                                    })}
+                                  />
+                                </div>
+                                <div className="mt-1 text-sm font-semibold text-primary-500">
+                                  <ErrorMessage
+                                    errors={errors}
+                                    name="tokenAddress"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+
+                            <button
+                              onClick={handleSubmit(onSubmit)}
+                              className="mt-4 w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300 disabled:bg-primary-200"
+                            >
+                              Withdraw Fee Commision
                             </button>
-                            <button className="mt-4 w-full rounded-full bg-white py-2 font-semibold text-neutral-700 hover:bg-neutral-300 disabled:bg-primary-200">
-                              No
-                            </button>
-                          </div>
+                          </form>
                         </section>
                       </div>
                     </div>

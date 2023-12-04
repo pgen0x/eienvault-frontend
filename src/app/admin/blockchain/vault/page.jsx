@@ -1,4 +1,4 @@
-const BlockchainPage = () => {
+const VaultPage = () => {
   return (
     <div>
       <div className="flex items-center justify-between py-5">
@@ -9,7 +9,7 @@ const BlockchainPage = () => {
       <div className="mt-4 flex items-stretch justify-evenly gap-4">
         <div className="block flex-1 rounded-lg bg-white text-center dark:bg-neutral-900">
           <div class="flex h-full flex-col rounded-lg bg-white text-center dark:bg-neutral-900">
-            <div class="border-b-2 border-neutral-100 px-6 py-3 text-xl font-medium dark:border-neutral-600 dark:text-neutral-50">
+            <div class="border-b-2 border-neutral-100 px-6 py-3 text-xl font-medium text-neutral-700 dark:border-neutral-600 dark:text-neutral-50">
               Rescue ERC-721
             </div>
             <div class="flex flex-grow flex-col justify-around p-4">
@@ -36,7 +36,7 @@ const BlockchainPage = () => {
 
         <div className="block flex-1 rounded-lg bg-white text-center dark:bg-neutral-900">
           <div class="flex h-full flex-col rounded-lg bg-white text-center dark:bg-neutral-900">
-            <div class="border-b-2 border-neutral-100 px-6 py-3 text-xl font-medium dark:border-neutral-600 dark:text-neutral-50">
+            <div class="border-b-2 border-neutral-100 px-6 py-3 text-xl font-medium text-neutral-700 dark:border-neutral-600 dark:text-neutral-50">
               Rescue ERC-20
             </div>
             <div class="flex flex-grow flex-col justify-around p-4">
@@ -63,7 +63,7 @@ const BlockchainPage = () => {
 
         <div className="block flex-1 rounded-lg bg-white text-center dark:bg-neutral-900">
           <div class="flex h-full flex-col rounded-lg bg-white text-center dark:bg-neutral-900">
-            <div class="border-b-2 border-neutral-100 px-6 py-3 text-xl font-medium dark:border-neutral-600 dark:text-neutral-50">
+            <div class="border-b-2 border-neutral-100 px-6 py-3 text-xl font-medium text-neutral-700 dark:border-neutral-600 dark:text-neutral-50">
               Withdraw Fee Commission
             </div>
             <div class="flex flex-grow flex-col justify-around p-4">
@@ -90,4 +90,4 @@ const BlockchainPage = () => {
   );
 };
 
-export default BlockchainPage;
+export default VaultPage;

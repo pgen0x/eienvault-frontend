@@ -26,6 +26,7 @@ export default function ModalRescueERC20({
   isOpenModal,
   onClose,
   onModalClose,
+  type,
 }) {
   const { address, isConnected } = useAccount();
   const [isSubmit, setIsSubmit] = useState(false);
@@ -60,8 +61,6 @@ export default function ModalRescueERC20({
     }
 
     setIsSubmit(true);
-    setIsProcessing(true);
-    setIsLoadingModal(true);
   };
 
   return (
@@ -138,8 +137,9 @@ export default function ModalRescueERC20({
                             <button
                               onClick={handleSubmit(onSubmit)}
                               className="mt-4 w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300 disabled:bg-primary-200"
+                              disabled={isSubmit}
                             >
-                              Rescue ERC-20
+                              {isSubmit ? 'Loading...' : 'Rescue ERC-20'}
                             </button>
                           </form>
                         </section>

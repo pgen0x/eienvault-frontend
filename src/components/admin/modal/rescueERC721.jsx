@@ -21,11 +21,15 @@ import {
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { useWeb3Modal } from '@web3modal/react';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
+import { roles } from '@/utils/listRoles';
 
 export default function ModalRescueERC721({
   isOpenModal,
   onClose,
   onModalClose,
+  type,
 }) {
   const { address, isConnected } = useAccount();
   const [isSubmit, setIsSubmit] = useState(false);
@@ -47,21 +51,58 @@ export default function ModalRescueERC721({
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-    setValue,
-    reset,
   } = useForm();
 
-  const onSubmit = async () => {
+  // Only DEFAULT_ADMIN_ROLE can run this action
+  const onSubmit = async (data) => {
     if (!isConnected) {
       open();
       return;
     }
 
     setIsSubmit(true);
-    setIsProcessing(true);
-    setIsLoadingModal(true);
+    console.log(marketplaceABI.address);
+    try {
+      const isAdmin = await checkRoles('DEFAULT_ADMIN_ROLE');
+      if (isAdmin) {
+        const rescueERC721 = await walletClient.writeContract({
+          abi: type === 'marketplace' ? marketplaceABI.abi : vaultABI.abi,
+          address:
+            type === 'marketplace' ? marketplaceABI.address : vaultABI.address,
+          functionName: 'rescue_erc721',
+          args: [data.contractAddress, data.tokenId],
+          account: address,
+        });
+        console.log(rescueERC721);
+      } else {
+        throw new Error("You don't have permission to perform this action");
+      }
+    } catch (error) {
+      setIsSubmit(false);
+      console.error('Error Rescue ERC-721', error);
+    }
+  };
+
+  const checkRoles = async (roleName) => {
+    try {
+      const roleAddress = roles[roleName];
+      if (!roleAddress) {
+        throw new Error('Invalid role name');
+      }
+
+      const checkroles = await publicClient.readContract({
+        abi: type === 'marketplace' ? marketplaceABI.abi : vaultABI.abi,
+        address:
+          type === 'marketplace' ? marketplaceABI.address : vaultABI.address,
+        functionName: 'hasRole',
+        args: [roleAddress, address],
+        account: address,
+      });
+      return checkroles;
+    } catch (error) {
+      throw new Error(error);
+    }
   };
 
   return (
@@ -167,8 +208,9 @@ export default function ModalRescueERC721({
                             <button
                               onClick={handleSubmit(onSubmit)}
                               className="mt-4 w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300 disabled:bg-primary-200"
+                              disabled={isSubmit}
                             >
-                              Rescue ERC-721
+                              {isSubmit ? 'Loading...' : 'Rescue ERC-721'}
                             </button>
                           </form>
                         </section>

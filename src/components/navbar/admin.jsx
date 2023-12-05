@@ -20,9 +20,11 @@ import {
   faDisplay,
   faFlag,
   faHome,
+  faShop,
   faStore,
   faUser,
   faUserCheck,
+  faVault,
   faWallet,
 } from '@fortawesome/free-solid-svg-icons';
 import { useWeb3Modal, useWeb3ModalEvents } from '@web3modal/react';
@@ -210,7 +212,7 @@ export function SidebarAdmin() {
               >
                 <li>
                   <ListSubmenu
-                    icon={faCube}
+                    icon={faShop}
                     title="Marketplace Contract"
                     menu={+openMenu}
                     onClick={() => router.push('/admin/blockchain/marketplace')}
@@ -218,7 +220,7 @@ export function SidebarAdmin() {
                 </li>
                 <li>
                   <ListSubmenu
-                    icon={faCube}
+                    icon={faVault}
                     title="Vault Contract"
                     menu={+openMenu}
                     onClick={() => router.push('/admin/blockchain/vault')}

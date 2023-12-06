@@ -21,6 +21,10 @@ import {
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { useWeb3Modal } from '@web3modal/react';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
+import { roles } from '@/utils/listRoles';
+import { toast } from 'react-toastify';
 
 export default function ModalRescueERC20({
   isOpenModal,
@@ -32,12 +36,6 @@ export default function ModalRescueERC20({
   const [isSubmit, setIsSubmit] = useState(false);
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
-  const [isLoadingModal, setIsLoadingModal] = useState(false);
-  const [isError, setError] = useState({
-    isError: false,
-    message: '',
-  });
-
   const { open } = useWeb3Modal();
 
   function closeModal() {
@@ -48,19 +46,65 @@ export default function ModalRescueERC20({
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-    setValue,
-    reset,
   } = useForm();
 
-  const onSubmit = async () => {
+  // Only DEFAULT_ADMIN_ROLE can run this action
+  const onSubmit = async (data) => {
     if (!isConnected) {
       open();
       return;
     }
-
     setIsSubmit(true);
+
+    try {
+      const isAdmin = await checkRoles('DEFAULT_ADMIN_ROLE');
+      if (isAdmin) {
+        await walletClient.writeContract({
+          abi: type === 'marketplace' ? marketplaceABI.abi : vaultABI.abi,
+          address:
+            type === 'marketplace' ? marketplaceABI.address : vaultABI.address,
+          functionName: 'rescue_erc20',
+          args: [data.contractAddress],
+          account: address,
+        });
+      } else {
+        toast.error("You don't have permission to perform this action");
+        throw new Error("You don't have permission to perform this action");
+      }
+    } catch (error) {
+      setIsSubmit(false);
+      if (error.message.includes('User denied transaction signature')) {
+        toast.error('Transaction rejected by the user.');
+      } else {
+        toast.error('Something went wrong');
+      }
+      console.error('Error rescue_erc20', error);
+    }
+  };
+
+  const checkRoles = async (roleName) => {
+    try {
+      const roleAddress = roles[roleName];
+      if (!roleAddress) {
+        toast.error('Invalid role');
+        throw new Error('Invalid role name');
+      }
+
+      const checkroles = await publicClient.readContract({
+        abi: type === 'marketplace' ? marketplaceABI.abi : vaultABI.abi,
+        address:
+          type === 'marketplace' ? marketplaceABI.address : vaultABI.address,
+        functionName: 'hasRole',
+        args: [roleAddress, address],
+        account: address,
+      });
+      return checkroles;
+    } catch (error) {
+      setIsSubmit(false);
+      toast.error('Error hasRole');
+      console.error('Error hasRole', error);
+    }
   };
 
   return (

@@ -24,6 +24,7 @@ import { useWeb3Modal } from '@web3modal/react';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
 import { roles } from '@/utils/listRoles';
+import { toast } from 'react-toastify';
 
 export default function ModalRescueERC721({
   isOpenModal,
@@ -35,12 +36,6 @@ export default function ModalRescueERC721({
   const [isSubmit, setIsSubmit] = useState(false);
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
-  const [isLoadingModal, setIsLoadingModal] = useState(false);
-  const [isError, setError] = useState({
-    isError: false,
-    message: '',
-  });
-
   const { open } = useWeb3Modal();
 
   function closeModal() {
@@ -60,13 +55,12 @@ export default function ModalRescueERC721({
       open();
       return;
     }
-
     setIsSubmit(true);
-    console.log(marketplaceABI.address);
+
     try {
       const isAdmin = await checkRoles('DEFAULT_ADMIN_ROLE');
       if (isAdmin) {
-        const rescueERC721 = await walletClient.writeContract({
+        await walletClient.writeContract({
           abi: type === 'marketplace' ? marketplaceABI.abi : vaultABI.abi,
           address:
             type === 'marketplace' ? marketplaceABI.address : vaultABI.address,
@@ -74,12 +68,17 @@ export default function ModalRescueERC721({
           args: [data.contractAddress, data.tokenId],
           account: address,
         });
-        console.log(rescueERC721);
       } else {
+        toast.error("You don't have permission to perform this action");
         throw new Error("You don't have permission to perform this action");
       }
     } catch (error) {
       setIsSubmit(false);
+      if (error.message.includes('User denied transaction signature')) {
+        toast.error('Transaction rejected by the user.');
+      } else {
+        toast.error('Something went wrong');
+      }
       console.error('Error Rescue ERC-721', error);
     }
   };
@@ -88,6 +87,7 @@ export default function ModalRescueERC721({
     try {
       const roleAddress = roles[roleName];
       if (!roleAddress) {
+        toast.error('Invalid role name');
         throw new Error('Invalid role name');
       }
 
@@ -101,7 +101,8 @@ export default function ModalRescueERC721({
       });
       return checkroles;
     } catch (error) {
-      throw new Error(error);
+      console.error(error);
+      toast.error('Error hasRole');
     }
   };
 

@@ -118,7 +118,7 @@ const VaultPage = () => {
                 onClick={withdrawAll}
                 className="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
               >
-                Withdraw Now
+                Withdraw Fee Commision
               </button>
             </div>
           </div>

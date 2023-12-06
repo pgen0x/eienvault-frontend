@@ -1,5 +1,5 @@
 export const vaultABI = {
-  address: '0xE75446f8AD776922EA40Fd5F9ab5A1b429837fCB',
+  address: '0x1206c88F7A0c4dAEEe7f932C7bd2C337b9ee21fF',
   abi: [
     {
       inputs: [],

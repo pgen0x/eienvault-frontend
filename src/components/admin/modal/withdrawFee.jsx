@@ -14,6 +14,10 @@ import {
 } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/react';
 import { ErrorMessage } from '@hookform/error-message';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
+import { toast } from 'react-toastify';
+import { roles } from '@/utils/listRoles';
 
 export default function ModalWithdrawFee({
   isOpenModal,
@@ -46,15 +50,59 @@ export default function ModalWithdrawFee({
     onModalClose();
   }
 
-  const onSubmit = async () => {
+  // Only DEFAULT_ADMIN_ROLE can run this action
+  const onSubmit = async (data) => {
     if (!isConnected) {
       open();
       return;
     }
-
     setIsSubmit(true);
-    setIsProcessing(true);
-    setIsLoadingModal(true);
+
+    try {
+      const isAdmin = await checkRoles('DEFAULT_ADMIN_ROLE');
+      if (isAdmin) {
+        await walletClient.writeContract({
+          abi: vaultABI.abi,
+          address: vaultABI.address,
+          functionName: 'withdrawFeeCommission',
+          args: [data.amount, data.tokenAddress],
+          account: address,
+        });
+      } else {
+        toast.error("You don't have permission to perform this action");
+        throw new Error("You don't have permission to perform this action");
+      }
+    } catch (error) {
+      setIsSubmit(false);
+      if (error.message.includes('User denied transaction signature')) {
+        toast.error('Transaction rejected by the user.');
+      } else {
+        toast.error('Something went wrong');
+      }
+      console.error('Error withdrawFeeCommission', error);
+    }
+  };
+
+  const checkRoles = async (roleName) => {
+    try {
+      const roleAddress = roles[roleName];
+      if (!roleAddress) {
+        toast.error('Invalid role name');
+        throw new Error('Invalid role name');
+      }
+
+      const checkroles = await publicClient.readContract({
+        abi: vaultABI.abi,
+        address: vaultABI.address,
+        functionName: 'hasRole',
+        args: [roleAddress, address],
+        account: address,
+      });
+      return checkroles;
+    } catch (error) {
+      console.error(error);
+      toast.error('Error hasRole');
+    }
   };
 
   return (
@@ -152,9 +200,12 @@ export default function ModalWithdrawFee({
 
                             <button
                               onClick={handleSubmit(onSubmit)}
+                              disabled={isSubmit}
                               className="mt-4 w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300 disabled:bg-primary-200"
                             >
-                              Withdraw Fee Commision
+                              {isSubmit
+                                ? 'Loading...'
+                                : 'Withdraw Fee Commision'}
                             </button>
                           </form>
                         </section>

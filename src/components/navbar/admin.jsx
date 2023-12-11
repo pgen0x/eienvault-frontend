@@ -35,6 +35,7 @@ import { useRouter } from 'next-nprogress-bar';
 import { useAuth } from '@/hooks/AuthContext';
 import Image from 'next/image';
 import { faXTwitter } from '@fortawesome/free-brands-svg-icons';
+import LogoAdmin from '@/assets/icon/logoadmin';
 
 export function SidebarAdmin() {
   const router = useRouter();
@@ -85,15 +86,14 @@ export function SidebarAdmin() {
       >
         <div className="h-full overflow-y-auto border-r border-gray-200 px-3 py-5 dark:border-neutral-700">
           <div className="flex justify-center">
-            <Image
-              src={'/logo-admin.svg'}
-              width={150}
-              height={150}
+            <div
               alt="Logo"
-              className={`h-12 object-cover object-left duration-500 ease-in-out ${
-                openMenu ? '' : 'w-12'
+              className={`h-12 object-cover object-left duration-500 ease-in-out transition-all overflow-x-hidden ${
+                openMenu ? 'w-36' : 'w-12'
               }`}
-            />
+            >
+              <LogoAdmin src={'/logo-admin.svg'} className="w-36 h-12 text-gray-900 dark:text-white" />
+            </div>
           </div>
           <ul className="mt-[20px] space-y-2">
             <li>

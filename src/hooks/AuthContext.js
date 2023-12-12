@@ -42,8 +42,11 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const handleEffect = async () => {
-      if (isConnected && !hasSigned) {
-        await handleSign();
+      if (token) {
+        const getUser = await getUserInformation(token);
+        if (!getUser) {
+          await logout();
+        }
       }
       if (!isConnected) {
         await logout();
@@ -52,7 +55,7 @@ export function AuthProvider({ children }) {
 
     handleEffect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isConnected, hasSigned]);
+  }, [isConnected, hasSigned, token]);
 
   const getUserInformation = async (datatoken) => {
     try {
@@ -75,6 +78,7 @@ export function AuthProvider({ children }) {
 
       const data = await response.json();
       setDataUser(data);
+      return data;
     } catch (error) {
       console.error('Get data failed:', error.message);
     }

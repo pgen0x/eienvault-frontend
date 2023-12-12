@@ -90,10 +90,10 @@ export default function OrdersPage() {
         account: address,
       });
       setCancelBidHash(hash);
-      toast.success('Bid successfully cancel');
+      toast.success('Bid successfully canceled');
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      console.error('Error cancel an Offer', error);
       toast.error(error);
     }
   };
@@ -472,7 +472,7 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
                     <div className="h-4 w-4 text-center text-base font-black leading-none">
                       <FontAwesomeIcon icon={faXmark} />
                     </div>
-                    <span className="leading-norma text-base font-bold">
+                    <span className="text-base font-bold leading-normal">
                       Remove Listing
                     </span>
                   </ButtonSecondary>
@@ -533,7 +533,7 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
             </>
           ) : dataBidMade.length > 0 ? (
             dataBidMade.map((data, index) => {
-              const endDate = moment.unix(data.endDate); // Convert the end date from Unix timestamp
+              const endDate = moment.unix(data.itemsDetails?.endDate); // Convert the end date from Unix timestamp
               const timeDifference = endDate.diff(currentDate);
               const isEndDateInFuture = timeDifference > 0;
               return (
@@ -542,7 +542,7 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
                   key={index}
                 >
                   <div
-                    className="flex w-full cursor-pointer items-center justify-between gap-4"
+                    className="flex w-full cursor-pointer items-center justify-between gap-4 pr-14"
                     onClick={() =>
                       router.push(`/nft/${data.Collection}/${data.TokenId}`)
                     }
@@ -556,6 +556,7 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
                           placeholder="blur"
                           blurDataURL={data.nftDetails?.imageUri}
                           src={data.nftDetails?.imageUri}
+                          alt={data.nftDetails?.name}
                         />
                       </div>
                       <span>{data.nftDetails?.name}</span>
@@ -569,53 +570,55 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
                     <div className="flex w-full flex-col items-center justify-start gap-2">
                       <span className="font-bold">Expiration</span>
                       <span className="text-center">
-                        {data?.isAuctioned && isEndDateInFuture ? (
+                        {data.itemsDetails?.isAuctioned && isEndDateInFuture ? (
                           <>
-                            {moment.unix(data?.endDate).format('Do MMM YYYY')}
-                            <br />
-                            {moment.unix(data?.endDate).format('h:mm:ss A')}
+                            {moment
+                              .unix(data.itemsDetails?.endDate)
+                              .format('Do MMM YYYY')}{' '}
+                            {moment
+                              .unix(data.itemsDetails?.endDate)
+                              .format('h:mm:ss A')}
                           </>
+                        ) : data.itemsDetails ? (
+                          'Auction has ended'
                         ) : (
-                          '-'
+                          'Item is no longer available'
                         )}
                       </span>
                     </div>
                     <div className="flex w-full flex-col items-center justify-start gap-2">
                       <span className="font-bold">Status</span>
-                      <div className="flex items-center gap-2 text-primary-500 dark:text-white">
-                        <FontAwesomeIcon
-                          size="xs"
-                          icon={data?.isAuctioned ? faGavel : faTags}
-                        />
-                        <span className="text-xs font-bold">
-                          {data?.isAuctioned ? 'Auction' : 'On Sale'}
-                        </span>
-                      </div>
+                      {data?.itemsDetails !== null ? (
+                        <div className="flex items-center gap-2 text-primary-500">
+                          <FontAwesomeIcon
+                            size="xs"
+                            icon={
+                              data?.itemsDetails?.isAuctioned ? faGavel : faTags
+                            }
+                          />
+                          <span className="text-xs font-bold">
+                            {data?.itemsDetails?.isAuctioned
+                              ? 'Auction'
+                              : 'On Sale'}
+                          </span>
+                        </div>
+                      ) : (
+                        <span>-</span>
+                      )}
                     </div>
                   </div>
                   <div className="flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 lg:w-1/2">
-                    {data?.itemsDetails !== null ? (
-                      <ButtonPrimary
-                        onClick={() => cancelBid(data.ItemId)}
-                        className="flex !w-fit items-center justify-center gap-2 lg:w-full"
-                      >
-                        <div className="h-4 w-4 text-center text-base font-black leading-none">
-                          <FontAwesomeIcon icon={faXmark} />
-                        </div>
-                        <span className="text-base font-bold leading-normal">
-                          Cancel Bid
-                        </span>
-                      </ButtonPrimary>
-                    ) : (
-                      <ButtonSecondary className="flex !w-fit items-center justify-center gap-2 lg:w-full">
-                        <div className="h-4 w-4 text-center text-base font-black leading-none">
-                          <FontAwesomeIcon icon={faHourglass} />
-                        </div>
-                        <span className="text-base font-bold leading-normal">
-                          Expired
-                        </span>
-                      </ButtonSecondary>
-                    )}
+                    <ButtonSecondary
+                      onClick={() => cancelBid(data.ItemId)}
+                      className="flex !w-fit items-center justify-center gap-2 lg:w-full"
+                    >
+                      <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
+                        <FontAwesomeIcon icon={faXmark} />
+                      </div>
+                      <span className="text-base font-bold leading-normal text-primary-500">
+                        Cancel Bid
+                      </span>
+                    </ButtonSecondary>
                   </div>
                 </div>
               );
@@ -702,6 +705,7 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
                                 placeholder="blur"
                                 blurDataURL={data.nftDetails?.imageUri}
                                 src={data.nftDetails?.imageUri}
+                                alt={data.nftDetails?.name}
                               />
                             </div>
                             <span>{data.nftDetails?.name}</span>

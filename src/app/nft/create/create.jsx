@@ -43,7 +43,13 @@ import { useAuth } from '@/hooks/AuthContext';
 import LoadingCollections from './loadingCollections';
 import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import { getContract, hexToNumber, parseEther, zeroAddress } from 'viem';
+import {
+  formatEther,
+  getContract,
+  hexToNumber,
+  parseEther,
+  zeroAddress,
+} from 'viem';
 import { ImageWithFallback } from '@/components/imagewithfallback';
 import { JazzIcon } from '@/components/jazzicon';
 import ButtonPrimary from '@/components/button/buttonPrimary';
@@ -104,6 +110,7 @@ export default function Create({ chains }) {
   const [tokenId, setTokenId] = useState();
   const [imageUri, setImageUri] = useState('');
   const [ipfsHash, setIpfsHash] = useState('');
+  const [listingFee, setListingFee] = useState();
 
   const [isLoadingModal, setIsLoadingModal] = useState({
     ipfs: false,
@@ -141,6 +148,7 @@ export default function Create({ chains }) {
     setValue,
     getValues,
     reset,
+    setError,
   } = useForm();
   const selectedImage = watch('file');
   const price = watch('price');
@@ -212,7 +220,7 @@ export default function Create({ chains }) {
 
       if (selectedValue === '1 Day') {
         calculatedDate.add(1, 'days');
-      } else if (selectedValue === '7 Day' || selectedValue === '1 Week') {
+      } else if (selectedValue === '1 Week') {
         calculatedDate.add(7, 'days');
       } else if (selectedValue === '1 Month') {
         calculatedDate.add(1, 'months');
@@ -231,6 +239,7 @@ export default function Create({ chains }) {
       ...marketplaceABI,
       functionName: 'listingPrice',
     });
+    setListingFee(ListingPrice);
     return ListingPrice;
   };
 
@@ -585,6 +594,34 @@ export default function Create({ chains }) {
 
   const onSubmit = async (data) => {
     try {
+      const file = data.file[0];
+      if (file) {
+        if (!allowedFileTypes.includes(file.type)) {
+          setError(
+            'file',
+            {
+              type: 'manual',
+              message: 'Invalid File Type',
+            },
+            true,
+          );
+          return;
+        }
+
+        if (file.size > maxFileSize) {
+          setValue('file', '');
+          setError(
+            'file',
+            {
+              type: 'manual',
+              message: 'File size exceeds the limit',
+            },
+            true,
+          );
+          return;
+        }
+      }
+
       if (dataCollections.length <= 0) {
         setIsDataCollections(true);
         return;
@@ -665,25 +702,13 @@ export default function Create({ chains }) {
   ];
   const maxFileSize = 100 * 1024 * 1024; // 100MB
 
-  const validateFile = (value) => {
-    console.log(value.type, 'value.type');
-    if (!value) {
-      setValue('file', '');
-      return 'File is required.';
-    }
+  useEffect(() => {
+    const fetchData = async () => {
+      const price = await getListingPrice();
+    };
 
-    if (!allowedFileTypes.includes(value.type)) {
-      setValue('file', '');
-      return 'Invalid file type';
-    }
-
-    if (value.size > maxFileSize) {
-      setValue('file', '');
-      return 'File size exceeds the limit';
-    }
-
-    return true; // Validation passed
-  };
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -880,13 +905,13 @@ export default function Create({ chains }) {
                         <input
                           type="file"
                           className="hidden"
+                          accept=".png,.jpg,.jpeg,.gif,.webp,.mp4,.mp3"
                           onChange={(e) => {
                             const file = e.target.files[0];
                             setValue('file', file); // Set the value of 'file' field using setValue
                           }}
                           {...register('file', {
                             required: 'File is required.',
-                            validate: validateFile,
                           })}
                         />
                       </label>
@@ -958,7 +983,7 @@ export default function Create({ chains }) {
                       className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 ${
                         selectedOptionMarket === 'fixed'
                           ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
-                          : 'dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300'
+                          : 'dark:border-neutral-800 dark:bg-neutral-900 dark:text-gray-400 dark:hover:bg-neutral-800 dark:hover:text-gray-300'
                       }`}
                     >
                       <FontAwesomeIcon
@@ -1021,7 +1046,7 @@ export default function Create({ chains }) {
                     })}
                   />
                   <span className="pr-3 text-gray-500">
-                    <Ethereum />
+                    <HelaIcon className="h-6 w-6" />
                   </span>
                 </div>
                 <div className="mt-1 text-sm font-semibold text-primary-500">
@@ -1030,11 +1055,19 @@ export default function Create({ chains }) {
               </div>
               <div className="mt-2 w-full px-2">
                 <div className="flex w-full justify-between">
+                  <span>Listing Fee</span>
+                  <span className="font-semibold">
+                    {listingFee && formatEther(listingFee)}{' '}
+                    {chain?.nativeCurrency.symbol}
+                  </span>
+                </div>
+                <div className="flex w-full justify-between">
                   <span>Price</span>
                   <span className="font-semibold">
                     {watch('price')} {selectedChain.symbol}
                   </span>
                 </div>
+
                 {/* <div className="mb-2 flex w-full justify-between border-b-2 pb-2">
                   <span>Snap charge fee</span>
                   <span className="font-semibold">0%</span>
@@ -1059,7 +1092,7 @@ export default function Create({ chains }) {
                         name="release_date"
                         id="release_date"
                         autoComplete="release_date"
-                        className="flex-1 rounded-full border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 dark:bg-neutral-900 dark:text-white sm:text-sm sm:leading-6"
+                        className="w-full rounded-full border-0 bg-gray-100 focus:outline-none focus:ring-0 dark:bg-neutral-900"
                         value={customValueReleaseDate}
                         disabled={selectedOptionReleaseDate !== 'Custom'}
                         onChange={(e) =>
@@ -1067,12 +1100,12 @@ export default function Create({ chains }) {
                         }
                       />
                       <select
-                        className="rounded-3xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 dark:bg-neutral-900 dark:text-white sm:max-w-md sm:text-sm sm:leading-6"
+                        className="w-fit rounded-full border-0 bg-gray-100 focus:outline-none focus:ring-0 dark:bg-neutral-900"
                         onChange={handleReleaseDateSelectChange}
                         value={selectedOptionReleaseDate}
                       >
+                        <option>Today</option>
                         <option>1 Day</option>
-                        <option>7 Day</option>
                         <option>1 Week</option>
                         <option>1 Month</option>
                         <option>Custom</option>
@@ -1096,18 +1129,17 @@ export default function Create({ chains }) {
                     name="duration_date"
                     id="duration_date"
                     autoComplete="duration_date"
-                    className="w-full border-0 bg-gray-100 dark:bg-neutral-900 focus:outline-none focus:ring-0 rounded-full"
+                    className="w-full rounded-full border-0 bg-gray-100 focus:outline-none focus:ring-0 dark:bg-neutral-900"
                     value={customValueDate}
                     disabled={selectedOptionDate !== 'Custom'}
                     onChange={(e) => setCustomValueDate(e.target.value)}
                   />
                   <select
-                    className="w-fit border-0 bg-gray-100 dark:bg-neutral-900 focus:outline-none focus:ring-0 rounded-full"
+                    className="w-fit rounded-full border-0 bg-gray-100 focus:outline-none focus:ring-0 dark:bg-neutral-900"
                     onChange={handleDateSelectChange}
                     value={selectedOptionDate}
                   >
                     <option>1 Day</option>
-                    <option>7 Day</option>
                     <option>1 Week</option>
                     <option>1 Month</option>
                     <option>Custom</option>
@@ -1325,10 +1357,7 @@ export default function Create({ chains }) {
                 </div>
               </div>
               <div className="mt-4 w-full">
-                <ButtonPrimary
-                  type="submit"
-                  onClick={handleSubmit(onSubmit)}
-                >
+                <ButtonPrimary type="submit" onClick={handleSubmit(onSubmit)}>
                   Create Item
                 </ButtonPrimary>
               </div>
@@ -1407,9 +1436,7 @@ export default function Create({ chains }) {
                 className="mr-5 h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 "
                 icon={faCartPlus}
               /> */}
-              <ButtonPrimary>
-                Buy Now
-              </ButtonPrimary>
+              <ButtonPrimary>Buy Now</ButtonPrimary>
             </div>
           </div>
         </div>

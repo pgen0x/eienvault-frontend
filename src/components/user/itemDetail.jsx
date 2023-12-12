@@ -17,13 +17,18 @@ import ButtonPrimary from '../button/buttonPrimary';
 
 const UserItemDetail = ({ user, followings, refresh }) => {
   const router = useRouter();
-  const { token } = useAuth();
+  const { token, hasSigned, handleSign } = useAuth();
   const { isConnected, address } = useAccount();
   const { open } = useWeb3Modal();
 
   const follow = async (wallletAddress) => {
     if (!isConnected) {
       open();
+      return;
+    }
+
+    if(isConnected && !hasSigned){
+      handleSign();
       return;
     }
 

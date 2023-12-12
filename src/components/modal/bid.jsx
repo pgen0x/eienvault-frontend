@@ -19,6 +19,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import { useWeb3Modal } from '@web3modal/react';
 import { useRouter } from 'next-nprogress-bar';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { useAuth } from '@/hooks/AuthContext';
 
 export default function ModalBid({
   isOpenModal,
@@ -36,6 +37,7 @@ export default function ModalBid({
     isError: false,
     message: '',
   });
+  const { hasSigned, handleSign } = useAuth();
 
   const [bidHash, setBidHash] = useState();
 
@@ -95,6 +97,11 @@ export default function ModalBid({
   const onSubmit = async (data) => {
     if (!isConnected) {
       open();
+      return;
+    }
+
+    if(isConnected && !hasSigned){
+      handleSign();
       return;
     }
 

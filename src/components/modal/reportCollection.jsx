@@ -35,7 +35,7 @@ export default function ModalReportCollection({
   onModalClose,
 }) {
   const collectionAddress = reportData.collectionAddress;
-  const { token } = useAuth();
+  const { token, hasSigned, handleSign } = useAuth();
   const [message, setMessage] = useState("");
   const { isConnected } = useAccount();
   const { open } = useWeb3Modal();
@@ -43,6 +43,12 @@ export default function ModalReportCollection({
   useEffect(() => {
     if (isOpenModal && !isConnected) {
       open();
+      return;
+    }
+
+    if(isOpenModal && isConnected && !hasSigned){
+      handleSign();
+      return;
     }
   }, [isOpenModal])
 
@@ -57,6 +63,12 @@ export default function ModalReportCollection({
       open();
       return
     }
+
+    if(isConnected && !hasSigned){
+      handleSign();
+      return;
+    }
+
     await axios
       .request({
         method: 'post',

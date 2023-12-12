@@ -35,7 +35,7 @@ export default function ModalCreateCollection({
   onModalClose,
 }) {
   const { open } = useWeb3Modal();
-  const { token } = useAuth();
+  const { token, hasSigned, handleSign } = useAuth();
   const [isSubmit, setIsSubmit] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isWait, setIsWait] = useState(false);
@@ -146,6 +146,12 @@ export default function ModalCreateCollection({
       open();
       return;
     }
+
+    if(isConnected && !hasSigned){
+      handleSign();
+      return;
+    }
+
     setIsSubmit(true);
     closeModal();
 

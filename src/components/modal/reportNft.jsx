@@ -36,7 +36,7 @@ export default function ModalReportNft({
 }) {
   const tokenId = reportData.tokenId;
   const collectionAddress = reportData.collectionAddress;
-  const { token } = useAuth();
+  const { token, hasSigned, handleSign } = useAuth();
   const [message, setMessage] = useState("");
   const { isConnected } = useAccount();
   const { open } = useWeb3Modal();
@@ -44,7 +44,14 @@ export default function ModalReportNft({
   useEffect(() => {
     if (isOpenModal && !isConnected) {
       open();
+      return;
     }
+
+    if(isOpenModal && isConnected && !hasSigned){
+      handleSign();
+      return;
+    }
+
   }, [isOpenModal])
 
   function closeModal() {
@@ -58,6 +65,12 @@ export default function ModalReportNft({
       open();
       return
     }
+
+    if(isConnected && !hasSigned){
+      handleSign();
+      return;
+    }
+    
     await axios
       .request({
         method: 'post',

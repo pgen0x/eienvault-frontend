@@ -360,7 +360,7 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
 
   return (
     <div className="min-h-full w-full ">
-      <div className="mt-5 flex flex-col gap-4 rounded-lg bg-white/60 p-3 text-gray-900 dark:bg-neutral-950 dark:text-white">
+      <div className="mt-5 flex flex-col gap-4 rounded-lg bg-white/60 p-3 text-gray-900 dark:bg-neutral-900 dark:text-white">
         {isLoading ? (
           <>
             {[...Array(5)].map((nft, index) => (
@@ -453,7 +453,7 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
                   </div>
                   <div className="flex w-full flex-col items-center justify-start gap-2">
                     <span className="font-bold">Status</span>
-                    <div className="flex items-center gap-2 text-primary-500">
+                    <div className="flex items-center gap-2 text-primary-500 dark:text-white">
                       <FontAwesomeIcon
                         size="xs"
                         icon={data?.isAuctioned ? faGavel : faTags}
@@ -472,7 +472,7 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
                     <div className="h-4 w-4 text-center text-base font-black leading-none">
                       <FontAwesomeIcon icon={faXmark} />
                     </div>
-                    <span className="text-base font-bold leading-norma">
+                    <span className="leading-norma text-base font-bold">
                       Remove Listing
                     </span>
                   </ButtonSecondary>
@@ -497,7 +497,7 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
   return (
     <>
       <div className="min-h-full w-full ">
-        <div className="mt-5 flex flex-col gap-4 rounded-lg bg-white/60 p-3 text-gray-900 dark:bg-neutral-950 dark:text-white">
+        <div className="mt-5 flex flex-col gap-4 rounded-lg bg-white/60 p-3 text-gray-900 dark:bg-neutral-900 dark:text-white">
           {isLoadingBidMade ? (
             <>
               {[...Array(5)].map((nft, index) => (
@@ -582,7 +582,7 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
                     </div>
                     <div className="flex w-full flex-col items-center justify-start gap-2">
                       <span className="font-bold">Status</span>
-                      <div className="flex items-center gap-2 text-primary-500">
+                      <div className="flex items-center gap-2 text-primary-500 dark:text-white">
                         <FontAwesomeIcon
                           size="xs"
                           icon={data?.isAuctioned ? faGavel : faTags}
@@ -595,26 +595,26 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
                   </div>
                   <div className="flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 lg:w-1/2">
                     {data?.itemsDetails !== null ? (
-                      <ButtonSecondary
+                      <ButtonPrimary
                         onClick={() => cancelBid(data.ItemId)}
                         className="flex !w-fit items-center justify-center gap-2 lg:w-full"
                       >
-                        <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
+                        <div className="h-4 w-4 text-center text-base font-black leading-none">
                           <FontAwesomeIcon icon={faXmark} />
                         </div>
-                        <span className="text-base font-bold leading-normal text-primary-500">
+                        <span className="text-base font-bold leading-normal">
                           Cancel Bid
                         </span>
-                      </ButtonSecondary>
+                      </ButtonPrimary>
                     ) : (
-                      <ButtonPrimary className="flex !w-fit items-center justify-center gap-2 lg:w-full">
-                        <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
+                      <ButtonSecondary className="flex !w-fit items-center justify-center gap-2 lg:w-full">
+                        <div className="h-4 w-4 text-center text-base font-black leading-none">
                           <FontAwesomeIcon icon={faHourglass} />
                         </div>
-                        <span className="text-base font-bold leading-normal text-white">
+                        <span className="text-base font-bold leading-normal">
                           Expired
                         </span>
-                      </ButtonPrimary>
+                      </ButtonSecondary>
                     )}
                   </div>
                 </div>
@@ -638,7 +638,7 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
   return (
     <>
       <div className="min-h-full w-full">
-        <div className="mt-5 flex flex-col gap-4 rounded-lg bg-white/60 p-3 text-gray-900 dark:bg-neutral-950 dark:text-white">
+        <div className="mt-5 flex flex-col gap-4 rounded-lg bg-white/60 p-3 text-gray-900 dark:bg-neutral-900 dark:text-white">
           {isLoadingReceived ? (
             <>
               {[...Array(5)].map((nft, index) => (
@@ -715,7 +715,7 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
                           <div className="flex w-full flex-col items-center justify-start gap-2">
                             <span className="font-bold">From</span>
                             <button
-                              className="flex items-center gap-2 font-bold text-primary-500"
+                              className="flex items-center gap-2 font-bold text-primary-500 dark:text-white"
                               onClick={() =>
                                 router.push(
                                   `/profile/${dataBids.BidderAddress}`,
@@ -731,9 +731,9 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
                             <span className="font-bold">Expiration</span>
                             <div className="text-center">
                               {data?.itemsEndDate === '' ? (
-                                <div className="whitespace-nowrap rounded-full bg-primary-500 px-3 py-2 text-sm font-bold leading-normal text-white">
+                                <ButtonSecondary>
                                   Expired or Closed
-                                </div>
+                                </ButtonSecondary>
                               ) : (
                                 <>
                                   {moment
@@ -749,7 +749,7 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
                           </div>
                           <div className="flex w-full flex-col items-center justify-start gap-2">
                             <span className="font-bold">Status</span>
-                            <div className="flex items-center gap-2 text-primary-500">
+                            <div className="flex items-center gap-2 text-primary-500 dark:text-white">
                               <FontAwesomeIcon
                                 size="xs"
                                 icon={data?.isAuctioned ? faGavel : faTags}
@@ -762,19 +762,15 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
                         </div>
                         {isEndDateInFuture ? (
                           <div className="flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 lg:w-1/2">
-                            <ButtonSecondary
+                            <ButtonPrimary
                               className="flex !w-fit items-center justify-center gap-2"
                               onClick={() =>
                                 approveBid(data.ItemId, dataBids.BidderAddress)
                               }
                             >
-                              <div className="h-4 w-4 text-center text-base font-black leading-none text-primary-500">
-                                <FontAwesomeIcon icon={faCheck} />
-                              </div>
-                              <span className="whitespace-nowrap text-base font-bold leading-normal text-primary-500">
-                                Approve Bid
-                              </span>
-                            </ButtonSecondary>
+                              <FontAwesomeIcon icon={faCheck} />
+                              <span>Approve Bid</span>
+                            </ButtonPrimary>
                           </div>
                         ) : (
                           <></>

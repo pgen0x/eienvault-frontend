@@ -93,7 +93,7 @@ const filters = [
 export default function ProfilePage({ params }) {
   const { address, isConnected } = useAccount();
   const router = useRouter();
-  const { token } = useAuth();
+  const { token, hasSigned, handleSign } = useAuth();
   const [selectedServer, setSelectedServer] = useState(servers[0]);
   const [limitCollection, setLimitCollection] = useState(5);
   const [activePage, setActivePage] = useState('Owned');
@@ -263,6 +263,16 @@ export default function ProfilePage({ params }) {
     followTab,
     follow,
   ) => {
+    if (!isConnected) {
+      open();
+      return;
+    }
+
+    if(isConnected && !hasSigned){
+      handleSign();
+      return;
+    }
+
     setFollowData({
       walletAddress,
       followers,
@@ -348,8 +358,13 @@ export default function ProfilePage({ params }) {
   };
 
   const follow = async (wallletAddress) => {
-    if (!token) {
+    if (!isConnected) {
       open();
+      return;
+    }
+
+    if(isConnected && !hasSigned){
+      handleSign();
       return;
     }
 

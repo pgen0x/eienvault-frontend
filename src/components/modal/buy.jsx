@@ -33,6 +33,7 @@ import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { getApprovedAddress } from '@/utils/getApprovedAddress';
 import { useRouter } from 'next-nprogress-bar';
 import ButtonPrimary from '../button/buttonPrimary';
+import { useAuth } from '@/hooks/AuthContext';
 
 export default function ModalBuy({
   isOpenModal,
@@ -49,6 +50,7 @@ export default function ModalBuy({
     },
   });
   const { address, isConnected } = useAccount();
+  const { hasSigned, handleSign } = useAuth();
 
   const [buyNativeHash, setBuyNativeHash] = useState();
   const [isLoadingBuyNativeModal, setIsloadingBuyNativeModal] = useState(false);
@@ -104,6 +106,12 @@ export default function ModalBuy({
       open();
       return;
     }
+
+    if(isConnected && !hasSigned){
+      handleSign();
+      return;
+    }
+
     setIsloadingBuyNativeModal(true);
     setErrorBuyNative({
       isError: false,

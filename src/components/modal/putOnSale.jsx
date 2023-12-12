@@ -30,6 +30,7 @@ import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
 import moment from 'moment';
 import ButtonPrimary from '../button/buttonPrimary';
+import { useAuth } from '@/hooks/AuthContext';
 
 export default function ModalPutOnSale({
   isOpenModal,
@@ -39,6 +40,7 @@ export default function ModalPutOnSale({
   refreshData,
 }) {
   const { address, isConnected } = useAccount();
+  const { hasSigned, handleSign } = useAuth();
   const [isSubmit, setIsSubmit] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const publicClient = usePublicClient();
@@ -241,6 +243,11 @@ export default function ModalPutOnSale({
   const onSubmit = async () => {
     if (!isConnected) {
       open();
+      return;
+    }
+
+    if(isConnected && !hasSigned){
+      handleSign();
       return;
     }
 

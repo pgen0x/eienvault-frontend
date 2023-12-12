@@ -912,7 +912,7 @@ const Nft = ({
                   </>
                 )}
                 <ButtonSecondary
-                  className="duration-800 !py-0 h-0 overflow-hidden opacity-0 group-hover:ease-in-out group-hover:duration-300 group-hover:h-auto group-hover:!py-2 group-hover:opacity-100 group-hover:transition-all"
+                  className={`duration-800 !py-0 h-0 overflow-hidden opacity-0 group-hover:ease-in-out group-hover:duration-300 group-hover:h-auto group-hover:!py-2 group-hover:opacity-100 group-hover:transition-all ${showButton ? "" : "mt-2"}`}
                   onClick={() =>
                     router.push(`/nft/${nft.collectionAddress}/${nft.tokenId}`)
                   }

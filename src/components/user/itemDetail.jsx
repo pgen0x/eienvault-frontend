@@ -18,7 +18,7 @@ import ButtonPrimary from '../button/buttonPrimary';
 const UserItemDetail = ({ user, followings, refresh }) => {
   const router = useRouter();
   const { token } = useAuth();
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const { open } = useWeb3Modal();
 
   const follow = async (wallletAddress) => {
@@ -148,6 +148,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
         <div className="flex flex-row lg:flex-col xl:flex-row w-full items-center justify-between gap-2 font-bold">
           <ButtonPrimary
             className="flex w-full items-center justify-center gap-2"
+            disabled={user?.walletAddress == address}
             onClick={() => {
               follow(user?.walletAddress);
             }}

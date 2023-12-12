@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import ButtonPrimary from '../button/buttonPrimary';
+import { useRouter } from 'next-nprogress-bar';
 
 export default function ModalUploadDFile({
   isOpenModal,
@@ -24,10 +25,19 @@ export default function ModalUploadDFile({
   isCompletedPutonsale,
   isProcessing,
   onModalClose,
+  tokenId,
+  collectionAddress
 }) {
+  const router = useRouter();
+
   function closeModal() {
     onClose(false);
     onModalClose();
+    redirectingToNft()
+  }
+
+  function redirectingToNft(){
+    router.push(`/nft/${collectionAddress}/${tokenId}`);
   }
 
   return (

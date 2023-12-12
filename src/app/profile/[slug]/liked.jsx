@@ -566,6 +566,7 @@ const Liked = ({
                       gridList={gridList}
                       openFilter={openFilter}
                       nft={nft.nftDetails}
+                      showButton={false}
                       collection={nft.collectionData}
                       itemDetails={nft}
                       handleOpenModalBuy={handleOpenModalBuy}

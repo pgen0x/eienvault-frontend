@@ -267,7 +267,7 @@ export const SlideshowDiscover = ({ dataDiscover, refreshData }) => {
           );
         })}
       </Swiper>
-      <ButtonPrimary className="swiper-next-discover absolute -left-5 z-10 mr-2 hidden !w-fit sm:hidden md:block lg:block xl:block 2xl:block">
+      <ButtonPrimary className="swiper-next-discover absolute -right-5 z-10 mr-2 hidden !w-fit sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronRight} />
       </ButtonPrimary>
       <ModalBid

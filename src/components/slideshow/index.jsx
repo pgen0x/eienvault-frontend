@@ -650,13 +650,13 @@ export const SlideshowMobile = ({
                             />
                             <div className="flex items-start justify-start gap-2">
                               <div className="text-xs font-medium leading-none text-neutral-900">
-                                {auction.collectionData?.User.username
-                                  ? auction.collectionData?.User.username
+                                {auction.collectionData?.User?.username
+                                  ? auction.collectionData?.User?.username
                                   : truncateAddress4char(
                                       auction.collectionData?.userAddress,
                                     )}
                               </div>
-                              {auction.collectionData?.User.isVerified && (
+                              {auction.collectionData?.User?.isVerified && (
                                 <div className="text-xs font-black leading-none text-primary-500">
                                   <FontAwesomeIcon icon={faCircleCheck} />
                                 </div>

@@ -862,7 +862,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                               {dataNFTs?.collectionData?.User?.username
                                 ? dataNFTs?.collectionData?.User?.username
                                 : truncateAddress4char(
-                                  dataNFTs?.collectionData?.User?.walletAddress,
+                                  dataNFTs?.collectionData?.userAddress,
                                   )}
                             </div>
 

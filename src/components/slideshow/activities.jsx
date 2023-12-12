@@ -262,7 +262,7 @@ export const SlideshowActivities = ({ dataActivities, refreshData }) => {
 
   return (
     <>
-      <ButtonPrimary className="swiper-prev-discover absolute -left-5 top-1/2 z-10 mr-2 hidden !w-fit sm:hidden md:block lg:block xl:block 2xl:block">
+      <ButtonPrimary className="swiper-prev-activities absolute -left-5 top-1/2 z-10 mr-2 hidden !w-fit sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronLeft} />
       </ButtonPrimary>
       <Swiper
@@ -315,7 +315,7 @@ export const SlideshowActivities = ({ dataActivities, refreshData }) => {
             );
           })}
       </Swiper>
-      <ButtonPrimary className="swiper-next-discover absolute -right-5 top-1/2 z-10 ml-2 hidden !w-fit sm:hidden md:block lg:block xl:block 2xl:block">
+      <ButtonPrimary className="swiper-next-activities absolute -right-5 top-1/2 z-10 ml-2 hidden !w-fit sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronRight} />
       </ButtonPrimary>
       <ModalBuy

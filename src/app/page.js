@@ -507,7 +507,7 @@ export default function Home() {
                   auto-liquidations! 0% borrower fees!
                 </p>
                 <div className="my-5 flex flex-col gap-3 sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
-                  <ButtonPrimary className="!w-fit">Get loan now</ButtonPrimary>
+                  <ButtonPrimary className="!w-fit">Coming soon</ButtonPrimary>
                   <ButtonSecondary className="!w-fit">
                     I want to lend
                   </ButtonSecondary>

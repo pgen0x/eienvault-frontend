@@ -600,9 +600,9 @@ export default function Create({ chains }) {
       setIsProcessing(true);
 
       const fileResponse = await pinFileToIPFS(selectedImage[0], data.name);
-      console.log('Success pin file', fileResponse);
-      setImageUri(fileResponse.IpfsHash);
-
+      const imageLink = `https://ipfs.io/ipfs/${fileResponse.IpfsHash}`;
+      setImageUri(imageLink);
+      
       const jsonResponse = await pinJSONToIPFS(
         data,
         fileResponse.IpfsHash,
@@ -1429,6 +1429,8 @@ export default function Create({ chains }) {
         isCompletedPutonsale={isCompleted.putonsale}
         onModalClose={closeModal}
         isProcessing={isProcessing}
+        tokenId={tokenId}
+        collectionAddress={selectedOptionCollection}
       />
       <ModalCreateCollection
         chains={chains}

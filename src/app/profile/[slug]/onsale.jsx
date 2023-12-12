@@ -1,5 +1,8 @@
 import ButtonPrimary from '@/components/button/buttonPrimary';
 import ButtonTertiary from '@/components/button/buttonTertiary';
+import ModalBid from '@/components/modal/bid';
+import ModalBuy from '@/components/modal/buy';
+import ModalPutOnSale from '@/components/modal/putOnSale';
 import ModalRemove from '@/components/modal/remove';
 import {
   NftItemDetail,
@@ -40,7 +43,6 @@ const Onsale = ({
   const [sortFilter, setSortFilter] = useState(filters[0]);
   const [isLoading, setIsLoading] = useState(false);
   const [nfts, setNfts] = useState([]);
-  const [sortedNFTs, setSortedNFTs] = useState([]);
   const [onsalePage, setOnsalePage] = useState(1);
   const [LastOnsale, setLastOnsale] = useState(false);
   const filterQuery = useSearchParams();
@@ -58,12 +60,20 @@ const Onsale = ({
   const [openFilter, setOpenFilter] = useState(false);
   const [gridList, setGridList] = useState('grid');
 
+  const [sortedNFTs, setSortedNFTs] = useState([]);
   const [filterStatus, setFilterStatus] = useState(null);
   const [startPrice, setStartPrice] = useState('');
   const [endPrice, setEndPrice] = useState('');
   const [priceFilter, setPriceFilter] = useState({ start: '', end: '' });
 
+  const [auctionData, setAcutionData] = useState({});
+  const [buyData, setBuyData] = useState({});
+  const [putOnSaleData, setPutonsaleData] = useState({});
   const [removeData, setRemoveData] = useState({});
+
+  const [isOpenModalBid, setisOpenModalBid] = useState(false);
+  const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
+  const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
   const [isOpenModalRemove, setisOpenModalRemove] = useState(false);
 
   const handleFilterCollapse = (filter) => {
@@ -301,6 +311,108 @@ const Onsale = ({
 
   const handleApplyPriceFilter = (start, end) => {
     setPriceFilter({ start, end });
+  };
+
+  const handleOpenModalBuy = async (
+    marketId,
+    price,
+    imageUri,
+    name,
+    tokenId,
+    collectionAddress,
+    ChainSymbol,
+    ChainName,
+  ) => {
+    setBuyData({
+      marketId,
+      price,
+      imageUri,
+      name,
+      tokenId,
+      collectionAddress,
+      ChainSymbol,
+      ChainName,
+    });
+    setisOpenModalBuy(true);
+  };
+
+  const handleOpenModalBid = async (
+    marketId,
+    listingPrice,
+    imageUri,
+    tokenId,
+    price,
+    name,
+    collectionData,
+    highestBid,
+    lowestBid,
+  ) => {
+    setAcutionData({
+      marketId,
+      listingPrice,
+      imageUri,
+      tokenId,
+      price,
+      name,
+      collectionData,
+      highestBid,
+      lowestBid,
+    });
+    setisOpenModalBid(true);
+  };
+
+  const handleOpenModalPutonsale = async (tokenId, collectionAddress) => {
+    setPutonsaleData({
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalPutonsale(true);
+  };
+
+  function closeModalBid() {
+    setisOpenModalBid(false);
+  }
+
+  function closeModalBuy() {
+    setisOpenModalBuy(false);
+  }
+
+  function closeModalRemove() {
+    setisOpenModalRemove(false);
+  }
+
+  function closeModalPutonsale() {
+    setisOpenModalPutonsale(false);
+  }
+
+  const placeBid = async (marketId, price) => {
+    try {
+      const hash = await walletClient.writeContract({
+        ...marketplaceABI,
+        functionName: 'makeAnOfferNative',
+        args: [marketId, price],
+        account: address,
+        value: price,
+      });
+      return hash;
+    } catch (error) {
+      console.error('Error Make an Offer', error);
+    }
+  };
+
+  const buyAction = async (marketId, price) => {
+    try {
+      const hash = await walletClient.writeContract({
+        ...marketplaceABI,
+        functionName: 'makeAnOfferNative',
+        args: [marketId, price],
+        account: address,
+        value: price,
+      });
+      return hash;
+    } catch (error) {
+      console.error('Error Make an Offer', error);
+    }
   };
 
   const handleOpenModalRemove = async (
@@ -579,6 +691,9 @@ const Onsale = ({
                       releaseDate={nft?.releaseDate}
                       endDate={nft?.endDate}
                       handleOpenModalRemove={handleOpenModalRemove}
+                      handleOpenModalBid={handleOpenModalBid}
+                      handleOpenModalBuy={handleOpenModalBuy}
+                      handleOpenModalPutonsale={handleOpenModalPutonsale}
                       handleOpenModalShare={handleOpenModalShare}
                       handleOpenModalReport={handleOpenModalReport}
                     />
@@ -588,10 +703,33 @@ const Onsale = ({
           </div>
         </div>
       </section>
+      <ModalBid
+        isOpenModal={isOpenModalBid}
+        onClose={closeModalBid}
+        auction={auctionData}
+        placeBid={placeBid}
+        onModalClose={closeModalBid}
+        refreshData={refreshData}
+      />
+      <ModalBuy
+        isOpenModal={isOpenModalBuy}
+        onClose={closeModalBuy}
+        dataBuy={buyData}
+        buyAction={buyAction}
+        onModalClose={closeModalBuy}
+        refreshData={refreshData}
+      />
       <ModalRemove
         isOpenModal={isOpenModalRemove}
         onClose={closeModalRemove}
         removeData={removeData}
+        refreshData={refreshData}
+      />
+      <ModalPutOnSale
+        isOpenModal={isOpenModalPutonsale}
+        onClose={closeModalPutonsale}
+        onModalClose={closeModalPutonsale}
+        putonsaledata={putOnSaleData}
         refreshData={refreshData}
       />
     </>

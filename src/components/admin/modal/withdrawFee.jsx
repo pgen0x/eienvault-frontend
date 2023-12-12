@@ -1,10 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from 'react';
-import { formatEther, parseEther, zeroAddress } from 'viem';
+import { formatEther, parseEther, parseUnits, zeroAddress } from 'viem';
 import { useForm } from 'react-hook-form';
 
 import {
+  erc20ABI,
   useAccount,
   useBalance,
   useNetwork,
@@ -18,6 +19,9 @@ import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
 import { toast } from 'react-toastify';
 import { roles } from '@/utils/listRoles';
+import { useCopyToClipboard } from 'react-use';
+import ButtonSecondary from '@/components/button/buttonSecondary';
+import { faCheck, faCopy } from '@fortawesome/free-solid-svg-icons';
 
 export default function ModalWithdrawFee({
   isOpenModal,
@@ -33,6 +37,8 @@ export default function ModalWithdrawFee({
     isError: false,
     message: '',
   });
+  const [copyButtonStatus, setCopyButtonStatus] = useState(false);
+  const [_, copyToClipboard] = useCopyToClipboard();
 
   const { open } = useWeb3Modal();
 
@@ -61,11 +67,19 @@ export default function ModalWithdrawFee({
     try {
       const isAdmin = await checkRoles('DEFAULT_ADMIN_ROLE');
       if (isAdmin) {
+        let amount;
+        if (data.tokenAddress === zeroAddress) {
+          amount = parseEther(data.amount);
+        } else {
+          const decimal = await getDecimals(data.tokenAddress);
+          console.log(decimal);
+          amount = parseUnits(data.amount, decimal);
+        }
         await walletClient.writeContract({
           abi: vaultABI.abi,
           address: vaultABI.address,
           functionName: 'withdrawFeeCommission',
-          args: [data.amount, data.tokenAddress],
+          args: [amount, data.tokenAddress],
           account: address,
         });
       } else {
@@ -104,6 +118,29 @@ export default function ModalWithdrawFee({
       toast.error('Error hasRole');
     }
   };
+
+  const getDecimals = async (tokenAddress) => {
+    try {
+      const decimal = await publicClient.readContract({
+        abi: erc20ABI,
+        address: tokenAddress,
+        functionName: 'decimals',
+        args: [],
+        account: address,
+      });
+      return decimal;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  function handleCopyToClipboard(address) {
+    copyToClipboard(address);
+    setCopyButtonStatus(true);
+    setTimeout(() => {
+      setCopyButtonStatus(copyButtonStatus);
+    }, 2500);
+  }
 
   return (
     <>
@@ -147,7 +184,34 @@ export default function ModalWithdrawFee({
                           <form>
                             <div className="w-full">
                               <div className="mt-2 w-full">
-                                <p>Please input amount and token address</p>
+                                <p>
+                                  For HLUSD withdrawals, kindly specify the
+                                  withdrawal destination as the zero address
+                                </p>
+                                {zeroAddress}
+                                <ButtonSecondary
+                                  className="!h-8 !w-8 !p-0"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    handleCopyToClipboard(zeroAddress);
+                                  }}
+                                >
+                                  {copyButtonStatus ? (
+                                    <FontAwesomeIcon
+                                      icon={faCheck}
+                                      fontSize={16}
+                                    />
+                                  ) : (
+                                    <FontAwesomeIcon
+                                      icon={faCopy}
+                                      fontSize={16}
+                                    />
+                                  )}
+                                </ButtonSecondary>
+                                <p className="pt-4">
+                                  For ERC-20 withdrawals, please provide the
+                                  token address.
+                                </p>
                               </div>
                               <div className="mt-4 w-full">
                                 <label className="mt-2 font-semibold">
@@ -183,7 +247,7 @@ export default function ModalWithdrawFee({
                                   <input
                                     type="text"
                                     className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
-                                    placeholder="0x5EF0396ee2EacFD1923a1975da3aFB925fE36814"
+                                    placeholder={zeroAddress}
                                     {...register('tokenAddress', {
                                       required: 'Token address is required.',
                                     })}

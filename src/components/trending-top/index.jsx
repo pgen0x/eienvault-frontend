@@ -200,9 +200,9 @@ export const TrendingTop = ({ dataCollections }) => {
                       <p className="w-full">
                         $
                         {collection.floorPrice
-                          ? Number(
-                              formatEther(Number(collection.floorPrice)),
-                            ).toFixed(2)
+                          ? Number(formatEther(collection.floorPrice)).toFixed(
+                              2,
+                            )
                           : '0.00'}
                       </p>
                       <p
@@ -218,9 +218,7 @@ export const TrendingTop = ({ dataCollections }) => {
                       <p className="w-full">
                         $
                         {collection.floorPrice
-                          ? Number(
-                              formatEther(Number(collection.volume)),
-                            ).toFixed(0)
+                          ? Number(formatEther(collection.volume)).toFixed(0)
                           : '0'}
                       </p>
                       <p
@@ -444,9 +442,7 @@ export const TrendingTopMobile = ({ dataCollections }) => {
                 <span>
                   $
                   {collection.floorPrice
-                    ? Number(
-                        formatEther(Number(collection.floorPrice)),
-                      ).toFixed(2)
+                    ? Number(formatEther(collection.floorPrice)).toFixed(2)
                     : '0.00'}
                 </span>
                 <span
@@ -460,7 +456,7 @@ export const TrendingTopMobile = ({ dataCollections }) => {
                 <span>
                   $
                   {collection.floorPrice
-                    ? Number(formatEther(Number(collection.volume))).toFixed(0)
+                    ? Number(formatEther(collection.volume)).toFixed(0)
                     : '0'}
                 </span>
                 <span

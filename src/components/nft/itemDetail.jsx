@@ -323,7 +323,7 @@ const Nft = ({
       >
         {nft?.imageUri !== null ? (
           <Image
-            className="z-10 h-[290px] w-full rounded-2xl bg-white dark:bg-zinc-900 object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all"
+            className="z-10 h-[290px] w-full rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all dark:bg-zinc-900"
             width={600}
             height={600}
             placeholder="blur"
@@ -338,7 +338,7 @@ const Nft = ({
             }
           />
         ) : (
-          <div className="z-10 flex h-[290px] w-full items-center justify-center rounded-2xl bg-white dark:bg-zinc-900 object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all">
+          <div className="z-10 flex h-[290px] w-full items-center justify-center rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all dark:bg-zinc-900">
             <ButtonTertiary
               className="!w-fit"
               onClick={() =>
@@ -661,7 +661,7 @@ const Nft = ({
                   </div>
                 </div>
                 <Menu as="div" className="relative inline-block text-left">
-                  <Menu.Button className="inline-flex w-full justify-center font-semibold text-gray-900 hover:text-primary-500 dark:hover:text-zinc-300 dark:text-white">
+                  <Menu.Button className="inline-flex w-full justify-center font-semibold text-gray-900 hover:text-primary-500 dark:text-white dark:hover:text-zinc-300">
                     <FontAwesomeIcon
                       icon={faEllipsis}
                       aria-hidden="true"
@@ -770,9 +770,7 @@ const Nft = ({
                     <>
                       <p>Highest bid</p>
                       <p className="font-bold">
-                        {formatEther(
-                          Number(getHighestBid(itemDetails).highestBid),
-                        )}{' '}
+                        {formatEther(getHighestBid(itemDetails).highestBid)}{' '}
                         {collection?.Chain?.symbol
                           ? collection.Chain.symbol
                           : '-'}
@@ -783,7 +781,7 @@ const Nft = ({
                       <p>Floor Price</p>
                       <p className="font-bold">
                         {collection?.floorPrice
-                          ? formatEther(Number(collection.floorPrice))
+                          ? formatEther(collection.floorPrice)
                           : '0.00'}{' '}
                         {collection?.Chain.symbol
                           ? collection.Chain.symbol
@@ -794,7 +792,7 @@ const Nft = ({
                 </div>
               </div>
 
-              <div className="flex flex-col w-full items-center group-hover:gap-2">
+              <div className="flex w-full flex-col items-center group-hover:gap-2">
                 {showButton && (
                   <>
                     {itemDetails ? (
@@ -816,11 +814,7 @@ const Nft = ({
                             itemDetails?.listOffers.some(
                               (offer) => offer.address === address,
                             ) ? (
-                            <ButtonPrimary
-                              disabled
-                            >
-                              Place Bid
-                            </ButtonPrimary>
+                            <ButtonPrimary disabled>Place Bid</ButtonPrimary>
                           ) : (
                             <ButtonPrimary
                               onClick={() =>
@@ -901,18 +895,16 @@ const Nft = ({
                             Put On Sale
                           </ButtonPrimary>
                         ) : (
-                          <ButtonPrimary
-                            disabled={true}
-                          >
-                            Buy Now
-                          </ButtonPrimary>
+                          <ButtonPrimary disabled={true}>Buy Now</ButtonPrimary>
                         )}
                       </div>
                     )}
                   </>
                 )}
                 <ButtonSecondary
-                  className={`duration-800 !py-0 h-0 overflow-hidden opacity-0 group-hover:ease-in-out group-hover:duration-300 group-hover:h-auto group-hover:!py-2 group-hover:opacity-100 group-hover:transition-all ${showButton ? "" : "mt-2"}`}
+                  className={`duration-800 h-0 overflow-hidden !py-0 opacity-0 group-hover:h-auto group-hover:!py-2 group-hover:opacity-100 group-hover:transition-all group-hover:duration-300 group-hover:ease-in-out ${
+                    showButton ? '' : 'mt-2'
+                  }`}
                   onClick={() =>
                     router.push(`/nft/${nft.collectionAddress}/${nft.tokenId}`)
                   }

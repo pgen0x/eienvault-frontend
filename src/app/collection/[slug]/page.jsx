@@ -89,7 +89,8 @@ export default function CollectionDetail({ params }) {
   const [isUpdateCollection, setIsUpdateCollection] = useState(false);
   const [IsOpenModalCover, setIsOpenModalCover] = useState(false);
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
-  const [isOpenModalReportCollection, setisOpenModalReportCollection] = useState(false);
+  const [isOpenModalReportCollection, setisOpenModalReportCollection] =
+    useState(false);
 
   const [shareData, setShareData] = useState({});
   const [reportDataCollection, setReportDataCollection] = useState({});
@@ -347,7 +348,7 @@ export default function CollectionDetail({ params }) {
                             truncateAddress(collection.User?.walletAddress)}
                         </button>
                       </div>
-                      <div className="flex gap-1 items-center">
+                      <div className="flex items-center gap-1">
                         Address{' '}
                         <span className="font-bold">
                           {truncateAddress(collection.tokenAddress)}
@@ -466,7 +467,14 @@ export default function CollectionDetail({ params }) {
                     >
                       <FontAwesomeIcon icon={faShare} />
                     </ButtonPrimary>
-                    <ButtonPrimary className="!h-[40px] !w-[40px] !px-0" onClick={() => handleOpenModalReportCollection(collection?.tokenAddress)}>
+                    <ButtonPrimary
+                      className="!h-[40px] !w-[40px] !px-0"
+                      onClick={() =>
+                        handleOpenModalReportCollection(
+                          collection?.tokenAddress,
+                        )
+                      }
+                    >
                       <FontAwesomeIcon icon={faFlag} />
                     </ButtonPrimary>
                   </div>
@@ -1397,7 +1405,8 @@ const Items = ({ params, collection }) => {
                         className="block h-8 w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-0 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                       />
                     </div>
-                    <ButtonPrimary className="text-sm"
+                    <ButtonPrimary
+                      className="text-sm"
                       onClick={() =>
                         handleApplyPriceFilter(startPrice, endPrice)
                       }

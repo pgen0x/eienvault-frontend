@@ -268,7 +268,7 @@ export default function ProfilePage({ params }) {
       return;
     }
 
-    if(isConnected && !hasSigned){
+    if (isConnected && !hasSigned) {
       handleSign();
       return;
     }
@@ -363,7 +363,7 @@ export default function ProfilePage({ params }) {
       return;
     }
 
-    if(isConnected && !hasSigned){
+    if (isConnected && !hasSigned) {
       handleSign();
       return;
     }
@@ -1133,20 +1133,18 @@ const ItemCollection = ({ collection, gridList }) => {
                 <p>Total Volume</p>
                 <p className="font-bold">
                   {collection.volume
-                    ? Number(formatEther(Number(collection.volume))).toFixed(2)
+                    ? Number(formatEther(collection.volume)).toFixed(2)
                     : '0.00'}{' '}
-                  ETH
+                  HLUSD
                 </p>
               </div>
               <div className="flex shrink-0 flex-col truncate text-sm leading-5 sm:items-start">
                 <p>Floor</p>
                 <p className="font-bold">
                   {collection.floorPrice
-                    ? Number(
-                        formatEther(Number(collection.floorPrice)),
-                      ).toFixed(2)
+                    ? Number(formatEther(collection.floorPrice)).toFixed(2)
                     : '0.00'}{' '}
-                  ETH
+                  HLUSD
                 </p>
               </div>
             </div>

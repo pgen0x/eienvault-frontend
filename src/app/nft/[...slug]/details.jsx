@@ -358,7 +358,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
 
       if (!res.ok) {
         const errorMessage = await res.json();
-        toast.error(errorMessage.error.messages);
+        // toast.error(errorMessage.error.messages);
       } else {
         const responseData = await res.json();
         toast.success(responseData.success.message);
@@ -406,7 +406,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
     const getRelatedNFTs = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/market/itemsbycollection/${dataNFTs?.collectionAddress}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/market/itemsbycollection/${dataNFTs.collectionAddress}`,
           {
             cache: 'no-store',
             headers: {
@@ -792,7 +792,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                     </li> */}
                   </ul>
                   <div className="w-full text-gray-900">
-                    {renderActiveTab()}
+                    {dataNFTs && renderActiveTab()}
                   </div>
                 </div>
               </div>
@@ -1057,10 +1057,8 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                               Highest bid at{' '}
                               <span className="text-sm font-bold md:text-lg">
                                 {formatEther(
-                                  Number(
-                                    getHighestBid(dataNFTs?.itemDetails)
-                                      .highestBid,
-                                  ),
+                                  getHighestBid(dataNFTs?.itemDetails)
+                                    .highestBid,
                                 )}{' '}
                                 {dataNFTs?.collectionData?.Chain?.symbol}
                               </span>
@@ -1281,7 +1279,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                       </li> */}
                     </ul>
                     <div className="flex w-full flex-col gap-4 rounded-lg bg-white/70 p-5 text-gray-900 dark:bg-neutral-900">
-                      {renderActiveTab()}
+                      {dataNFTs && renderActiveTab()}
                     </div>
                   </div>
                 </div>
@@ -1701,7 +1699,7 @@ const Collateral = ({ dataNFTs }) => {
       </div>
       <div>
         <h3 className="font-semibold md:text-lg">
-          Propose an ETH lend to the owner
+          Propose an HLUSD lend to the owner
         </h3>
         <p>No owner lender proposes the offer yet.</p>
       </div>
@@ -1967,8 +1965,7 @@ const History = ({ collection, tokenId }) => {
           </button>
           for
           <span className="font-bold text-primary-500">
-            {formatEther(Number(event?.price))}{' '}
-            {event?.collectionData?.Chain?.symbol}
+            {formatEther(event?.price)} {event?.collectionData?.Chain?.symbol}
           </span>
         </div>
       );
@@ -1991,8 +1988,7 @@ const History = ({ collection, tokenId }) => {
           </button>
           offered
           <span className="font-bold text-primary-500">
-            {formatEther(Number(event?.offer))}{' '}
-            {event?.collectionData?.Chain?.symbol}
+            {formatEther(event?.offer)} {event?.collectionData?.Chain?.symbol}
           </span>
         </div>
       );
@@ -2016,8 +2012,7 @@ const History = ({ collection, tokenId }) => {
           </button>
           for
           <span className="font-bold text-primary-500">
-            {formatEther(Number(event?.price))}{' '}
-            {event?.collectionData?.Chain?.symbol}
+            {formatEther(event?.price)} {event?.collectionData?.Chain?.symbol}
           </span>
           from
           <JazzIcon
@@ -2076,8 +2071,7 @@ const History = ({ collection, tokenId }) => {
           </button>
           accepted bid
           <span className="font-bold text-primary-500">
-            {formatEther(Number(event?.price))}{' '}
-            {event?.collectionData?.Chain?.symbol}
+            {formatEther(event?.price)} {event?.collectionData?.Chain?.symbol}
           </span>
           <JazzIcon
             diameter={16}
@@ -2100,7 +2094,7 @@ const History = ({ collection, tokenId }) => {
       event: type,
       description: description,
       tokenId: event?.tokenId,
-      price: `${event.price === '' ? 0 : formatEther(Number(event.price))} ${
+      price: `${event.price === '' ? 0 : formatEther(event.price)} ${
         event?.collectionData?.Chain?.symbol
       }`,
       from: event?.sellerData?.username

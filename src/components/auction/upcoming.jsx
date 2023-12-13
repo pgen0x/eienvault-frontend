@@ -104,16 +104,14 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                   <div className="flex flex-col">
                     <span className="text-sm">Price</span>
                     <span className="text-sm font-semibold">
-                      {formatEther(Number(dataUpcoming[0]?.price))}{' '}
+                      {formatEther(dataUpcoming[0]?.price)}{' '}
                       {dataUpcoming[0].collectionData?.Chain.symbol}
                     </span>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-sm">Highest bid</span>
                     <span className="text-sm font-semibold">
-                      {formatEther(
-                        Number(getHighestBid(dataUpcoming[0]).highestBid),
-                      )}{' '}
+                      {formatEther(getHighestBid(dataUpcoming[0]).highestBid)}{' '}
                       {dataUpcoming[0].collectionData?.Chain?.symbol}
                     </span>
                   </div>
@@ -202,7 +200,7 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                       <div className="flex flex-col">
                         <span className="text-sm">Price</span>
                         <span className="text-sm font-semibold">
-                          {formatEther(Number(dataUpcoming[0]?.price))}{' '}
+                          {formatEther(dataUpcoming[0]?.price)}{' '}
                           {dataUpcoming[0].collectionData?.Chain.symbol}
                         </span>
                       </div>
@@ -210,7 +208,7 @@ export const UpcomingAuction = ({ dataUpcoming }) => {
                         <span className="text-sm">Highest bid</span>
                         <span className="text-sm font-semibold">
                           {formatEther(
-                            Number(getHighestBid(dataUpcoming[0]).highestBid),
+                            getHighestBid(dataUpcoming[0]).highestBid,
                           )}{' '}
                           {dataUpcoming[0].collectionData?.Chain?.symbol}
                         </span>
@@ -462,7 +460,7 @@ export const UpcomingAuctionMobile = ({ dataUpcoming }) => {
                     <div className="flex flex-col">
                       <span className="text-sm">Price</span>
                       <span className="text-sm font-semibold">
-                        {formatEther(Number(dataUpcoming[0]?.price))}{' '}
+                        {formatEther(dataUpcoming[0]?.price)}{' '}
                         {dataUpcoming[0].collectionData?.Chain.symbol}
                       </span>
                     </div>

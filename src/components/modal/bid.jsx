@@ -2,7 +2,11 @@ import Ethereum from '@/assets/icon/ethereum';
 import HelaIcon from '@/assets/icon/hela';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { truncateAddress4char } from '@/utils/truncateAddress4char';
-import { faCheck, faXmark, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCheck,
+  faXmark,
+  faXmarkCircle,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
 import Image from 'next/legacy/image';
@@ -100,7 +104,7 @@ export default function ModalBid({
       return;
     }
 
-    if(isConnected && !hasSigned){
+    if (isConnected && !hasSigned) {
       handleSign();
       return;
     }
@@ -248,7 +252,7 @@ export default function ModalBid({
                           {auction?.name}
                         </div>
                       </div>
-                      <div className="flex flex-col gap-2 rounded-lg bg-neutral-50 dark:bg-neutral-900 p-3">
+                      <div className="flex flex-col gap-2 rounded-lg bg-neutral-50 p-3 dark:bg-neutral-900">
                         <div className="flex justify-between">
                           <div className="flex items-center gap-2">
                             <div className="rounded-lg  p-1 text-white">
@@ -300,9 +304,7 @@ export default function ModalBid({
                           <span>Highest bid</span>
                           <span className="flex flex-col items-end font-semibold">
                             <span>
-                              {formatEther(
-                                Number(auction?.highestBid?.highestBid),
-                              )}{' '}
+                              {formatEther(auction?.highestBid?.highestBid)}{' '}
                               {auction.collectionData?.Chain?.symbol}
                             </span>
                             <span className="flex w-full items-center gap-1">
@@ -347,7 +349,7 @@ export default function ModalBid({
                                     } else {
                                       if (
                                         parseFloat(value) <=
-                                        formatEther(Number(auction.price))
+                                        formatEther(auction.price)
                                       ) {
                                         return 'Price must be greater than floor price';
                                       }
@@ -443,7 +445,7 @@ export default function ModalBid({
                           <>
                             <div className="h-12 w-12 animate-ping rounded-lg bg-primary-100"></div>
                             <h3 className="text-center text-lg font-bold">
-                            Loading Your Bid
+                              Loading Your Bid
                             </h3>
                             <span>
                               Sign your wallet to continue the transaction

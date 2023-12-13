@@ -427,7 +427,7 @@ export default function Collection() {
                                         ? setFilterBlockchain('')
                                         : setFilterBlockchain(chain.chainId)
                                     }
-                                    className="!w-fit text-xs !px-3"
+                                    className="!w-fit !px-3 text-xs"
                                   >
                                     {chain.symbol}
                                   </ButtonPrimary>
@@ -439,7 +439,7 @@ export default function Collection() {
                                         ? setFilterBlockchain('')
                                         : setFilterBlockchain(chain.chainId)
                                     }
-                                    className="!w-fit text-xs !px-3"
+                                    className="!w-fit !px-3 text-xs"
                                   >
                                     {chain.symbol}
                                   </ButtonSecondary>
@@ -616,7 +616,7 @@ export default function Collection() {
                         <div className="col-span-2 flex items-center justify-center gap-2">
                           {collection.floorPrice
                             ? Number(
-                                formatEther(Number(collection.floorPrice)),
+                                formatEther(collection.floorPrice),
                               ).toFixed(2)
                             : '0.00'}
                           <p
@@ -633,9 +633,7 @@ export default function Collection() {
                         <div className="col-span-2 flex items-center justify-center">
                           $
                           {collection.floorPrice
-                            ? Number(
-                                formatEther(Number(collection.volume)),
-                              ).toFixed(0)
+                            ? Number(formatEther(collection.volume)).toFixed(0)
                             : '0'}
                           <p
                             className={classMovement(

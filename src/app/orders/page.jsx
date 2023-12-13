@@ -680,6 +680,18 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
               const endDate = moment.unix(data?.itemsEndDate); // Convert the end date from Unix timestamp
               const timeDifference = endDate.diff(currentDate);
               const isEndDateInFuture = timeDifference > 0;
+
+              if (data.NoBidsFound) {
+                return (
+                  <div
+                    key={index}
+                    className="shrink grow basis-0 py-4 text-center text-base font-bold leading-loose"
+                  >
+                    No offers received
+                  </div>
+                );
+              }
+
               return (
                 <>
                   <React.Fragment key={index}>
@@ -787,7 +799,7 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
             })
           ) : (
             <div className="shrink grow basis-0 py-4 text-center text-base font-bold leading-loose">
-              Data Not Found
+              You don&apos;t own any of the items being auctioned
             </div>
           )}
         </div>

@@ -284,9 +284,7 @@ export const Slideshow = ({
                           <div className="flex flex-col self-stretch text-sm font-normal leading-tight text-neutral-900 dark:text-white">
                             Highest Bid{' '}
                             <span className="text-sm font-bold leading-tight text-neutral-900 dark:text-white">
-                              {formatEther(
-                                Number(getHighestBid(auction).highestBid),
-                              )}{' '}
+                              {formatEther(getHighestBid(auction).highestBid)}{' '}
                               {auction.collectionData?.Chain?.symbol}
                             </span>
                           </div>
@@ -683,9 +681,7 @@ export const SlideshowMobile = ({
                           <div className="self-stretch text-sm font-normal leading-tight text-neutral-900">
                             Highest Bid{' '}
                             <span className="flex flex-col text-sm font-bold leading-tight text-neutral-900">
-                              {formatEther(
-                                Number(getHighestBid(auction).highestBid),
-                              )}{' '}
+                              {formatEther(getHighestBid(auction).highestBid)}{' '}
                               {auction.collectionData?.Chain?.symbol}
                             </span>
                           </div>
@@ -715,7 +711,7 @@ export const SlideshowMobile = ({
                             auction.nftDetails?.name,
                             auction.collectionData,
                             getHighestBid(auction),
-                            formatEther(Number(getLowestBid(auction))),
+                            formatEther(getLowestBid(auction)),
                           )
                         }
                         disabled={

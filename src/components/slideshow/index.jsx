@@ -143,7 +143,7 @@ export const Slideshow = ({
 
   return (
     <>
-      <ButtonPrimary className="swiper-prev absolute -left-5 z-10 mr-2 !w-fit hidden sm:hidden md:block lg:block xl:block 2xl:block">
+      <ButtonPrimary className="swiper-prev absolute -left-5 z-10 mr-2 hidden !w-fit sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronLeft} />
       </ButtonPrimary>
       <Swiper
@@ -230,9 +230,7 @@ export const Slideshow = ({
                         <div
                           className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2"
                           onClick={() =>
-                            router.push(
-                              `/profile/${auction?.seller}`,
-                            )
+                            router.push(`/profile/${auction?.seller}`)
                           }
                         >
                           <ImageWithFallback
@@ -248,9 +246,7 @@ export const Slideshow = ({
                             <div className="text-xs font-bold leading-none text-neutral-900">
                               {auction?.sellerData?.username
                                 ? auction?.sellerData?.username
-                                : truncateAddress4char(
-                                  auction?.seller,
-                                  )}
+                                : truncateAddress4char(auction?.seller)}
                             </div>
                             {auction?.sellerData?.isVerified && (
                               <div className="text-xs font-black leading-none text-primary-500">
@@ -431,7 +427,7 @@ export const Slideshow = ({
             </SwiperSlide>
           ))}
       </Swiper>
-      <ButtonPrimary className="swiper-next absolute -right-5 z-10 ml-2 !w-fit hidden sm:hidden md:block lg:block xl:block 2xl:block">
+      <ButtonPrimary className="swiper-next absolute -right-5 z-10 ml-2 hidden !w-fit sm:hidden md:block lg:block xl:block 2xl:block">
         <FontAwesomeIcon icon={faChevronRight} />
       </ButtonPrimary>
       <ModalBid
@@ -583,10 +579,10 @@ export const SlideshowMobile = ({
           return (
             <SwiperSlide key={index}>
               <div className="inline-flex w-[375px] flex-col items-center justify-center gap-2 p-2 lg:items-start lg:px-10 lg:pt-16">
-                <div className="mt-[6rem] flex flex-row self-start rounded-lg bg-[#fff1d4] px-2 py-2">
+                <div className="mt-[6rem] flex flex-row items-center self-start rounded-lg bg-[#fff1d4] px-2 py-2">
                   <span className="mr-2 h-1 w-1 animate-ping rounded-full bg-red-400 opacity-90"></span>
                   <div className="whitespace-nowrap text-xs font-semibold text-gray-900">
-                    Live mint and auction
+                    Live mint
                   </div>
                 </div>
                 <div className="relative flex w-[340px] flex-col">

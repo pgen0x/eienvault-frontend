@@ -128,7 +128,7 @@ const Auction = () => {
         <div className="absolute bottom-28 right-[12%] h-[532px] w-[532px] translate-y-1/3 items-center justify-center rounded-full bg-red-400 dark:bg-semantic-orange-400" />
 
         <div className="container m-auto">
-          <div className="md: relative mb-5 hidden w-full flex-initial items-center justify-center pt-24 sm:hidden md:flex lg:flex lg:pt-10 xl:flex 2xl:flex">
+          <div className="relative mb-5 hidden w-full flex-initial items-center justify-center pt-24 sm:hidden md:flex lg:flex lg:pt-10 xl:flex 2xl:flex">
             <Slideshow
               auctions={auctions}
               placeBid={placeBid}

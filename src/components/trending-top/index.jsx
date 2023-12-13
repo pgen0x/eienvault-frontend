@@ -112,26 +112,29 @@ export const TrendingTop = ({ dataCollections }) => {
   };
 
   const sortData = () => {
-    if(TrendingTop == "trending"){
+    if (TrendingTop == 'trending') {
       var dataSort = data.slice(0);
-      dataSort.sort(function(a,b) {
-          return Number(a["volumeChangePercentag" + Range]) - Number(b["volumeChangePercentag" + Range]);
+      dataSort.sort(function (a, b) {
+        return (
+          Number(a['volumeChangePercentag' + Range]) -
+          Number(b['volumeChangePercentag' + Range])
+        );
       });
       setData(dataSort);
     }
-    
-    if(TrendingTop == "top"){
+
+    if (TrendingTop == 'top') {
       var dataSort = data.slice(0);
-      dataSort.sort(function(a,b) {
-          return a.volume - b.volume;
+      dataSort.sort(function (a, b) {
+        return a.volume - b.volume;
       });
       setData(dataSort);
     }
-  }
+  };
 
   useEffect(() => {
     sortData();
-  }, [TrendingTop])
+  }, [TrendingTop]);
 
   useEffect(() => {
     sortData();
@@ -554,12 +557,12 @@ const MobileNft = ({ collection }) => {
                   <div className="h-full w-full bg-gray-300"></div>
                 )}
               </div>
-              <button className="-mt-5 flex w-20 rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md dark:text-white">
+              {/* <button className="-mt-5 flex w-20 rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md dark:text-white">
                 <Ethereum className="h-4 w-4" />{' '}
                 <span className="w-full">
                   5 {nft?.Collection?.Chain?.symbol}
                 </span>
-              </button>
+              </button> */}
             </div>
           </SwiperSlide>
         ))}

@@ -246,7 +246,7 @@ export default function ModalPutOnSale({
       return;
     }
 
-    if(isConnected && !hasSigned){
+    if (isConnected && !hasSigned) {
       handleSign();
       return;
     }
@@ -545,7 +545,7 @@ export default function ModalPutOnSale({
                                   Enter price to allow users instantly purchase
                                   your NFT
                                 </p>
-                                <div className="mt-2 flex w-full items-center rounded-full border border-gray-200 bg-white dark:text-gray-900">
+                                <div className="mt-2 flex w-full items-center rounded-full border-0 bg-white dark:bg-neutral-900">
                                   <input
                                     type="number"
                                     className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
@@ -611,7 +611,7 @@ export default function ModalPutOnSale({
                                       name="release_date"
                                       id="release_date"
                                       autoComplete="release_date"
-                                      className="flex-1 rounded-xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:text-sm sm:leading-6"
+                                      className="w-full rounded-full border-0 bg-gray-100 focus:outline-none focus:ring-0 dark:bg-neutral-900"
                                       value={customValueReleaseDate}
                                       disabled={
                                         selectedOptionReleaseDate !== 'Custom'
@@ -623,10 +623,11 @@ export default function ModalPutOnSale({
                                       }
                                     />
                                     <select
-                                      className="rounded-3xl border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:max-w-md sm:text-sm sm:leading-6"
+                                      className="w-fit rounded-full border-0 bg-gray-100 focus:outline-none focus:ring-0 dark:bg-neutral-900"
                                       onChange={handleReleaseDateSelectChange}
                                       value={selectedOptionReleaseDate}
                                     >
+                                      <option>Today</option>
                                       <option>1 Day</option>
                                       <option>1 Week</option>
                                       <option>1 Month</option>
@@ -651,7 +652,7 @@ export default function ModalPutOnSale({
                                   name="duration_date"
                                   id="duration_date"
                                   autoComplete="duration_date"
-                                  className="flex-1 rounded-full border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500  dark:ring-neutral-700 sm:text-sm sm:leading-6"
+                                  className="w-full rounded-full border-0 bg-gray-100 focus:outline-none focus:ring-0 dark:bg-neutral-900"
                                   value={customValueDate}
                                   disabled={selectedOptionDate !== 'Custom'}
                                   onChange={(e) =>
@@ -659,7 +660,7 @@ export default function ModalPutOnSale({
                                   }
                                 />
                                 <select
-                                  className="rounded-full border-0 bg-gray-50 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:max-w-md sm:text-sm sm:leading-6"
+                                  className="w-fit rounded-full border-0 bg-gray-100 focus:outline-none focus:ring-0 dark:bg-neutral-900"
                                   onChange={handleDateSelectChange}
                                   value={selectedOptionDate}
                                 >

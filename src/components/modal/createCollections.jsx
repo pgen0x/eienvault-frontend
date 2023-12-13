@@ -60,6 +60,7 @@ export default function ModalCreateCollection({
     setValue,
     getValues,
     reset,
+    setError,
   } = useForm();
   const selectedImage = watch('file');
   const name = watch('name');
@@ -147,9 +148,38 @@ export default function ModalCreateCollection({
       return;
     }
 
-    if(isConnected && !hasSigned){
+    if (isConnected && !hasSigned) {
       handleSign();
       return;
+    }
+
+    const file = dataForm.file[0];
+
+    if (file) {
+      if (!allowedFileTypes.includes(file.type)) {
+        setError(
+          'file',
+          {
+            type: 'manual',
+            message: 'Invalid file type',
+          },
+          true,
+        );
+        return;
+      }
+
+      if (file.size > maxFileSize) {
+        setValue('file', '');
+        setError(
+          'file',
+          {
+            type: 'manual',
+            message: 'File size exceeds the limit',
+          },
+          true,
+        );
+        return;
+      }
     }
 
     setIsSubmit(true);
@@ -209,31 +239,13 @@ export default function ModalCreateCollection({
 
   const allowedFileTypes = [
     'image/png',
+    'image/jpg',
     'image/jpeg',
+    'image/gif',
     'image/webp',
-    'video/mp4',
-    'audio/mp3',
   ];
-  const maxFileSize = 100 * 1024 * 1024; // 100MB
 
-  const validateFile = (value) => {
-    if (!value) {
-      setValue('file', '');
-      return 'File is required.';
-    }
-
-    if (!allowedFileTypes.includes(value.type)) {
-      setValue('file', '');
-      return 'Invalid file type';
-    }
-
-    if (value.size > maxFileSize) {
-      setValue('file', '');
-      return 'File size exceeds the limit';
-    }
-
-    return true; // Validation passed
-  };
+  const maxFileSize = 2 * 1024 * 1024; // 2MB
 
   useEffect(() => {
     if (isOpenModal === true) {
@@ -291,11 +303,11 @@ export default function ModalCreateCollection({
                               <span className="text-semantic-red-500">*</span>{' '}
                               Upload your item
                             </label>
-                            <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white dark:bg-neutral-900 py-3 text-center">
+                            <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-3 text-center dark:bg-neutral-900">
                               {selectedImage && selectedImage.length > 0 ? (
                                 <>
                                   <button
-                                    className="absolute right-1.5 top-1.5 z-30 h-10 w-10 rounded-full text-primary-500 dark:text-neutral-500 hover:bg-primary-50 dark:hover:text-neutral-50"
+                                    className="absolute right-1.5 top-1.5 z-30 h-10 w-10 rounded-full text-primary-500 hover:bg-primary-50 dark:text-neutral-500 dark:hover:text-neutral-50"
                                     onClick={(e) => {
                                       e.preventDefault();
                                       setValue('file', null);
@@ -323,18 +335,18 @@ export default function ModalCreateCollection({
                                   <div className="text-sm">
                                     400 x 400 pixel is recommended
                                   </div>
-                                  <label className="cursor-pointer rounded-full bg-primary-500 dark:bg-neutral-500 px-4 py-1 font-semibold text-white hover:bg-primary-300 dark:hover:bg-neutral-300">
+                                  <label className="cursor-pointer rounded-full bg-primary-500 px-4 py-1 font-semibold text-white hover:bg-primary-300 dark:bg-neutral-500 dark:hover:bg-neutral-300">
                                     Choose file
                                     <input
                                       type="file"
                                       className="hidden"
+                                      accept="image/png, image/gif, image/jpeg, image/jpg, image/webp"
                                       onChange={(e) => {
                                         const file = e.target.files[0];
                                         setValue('file', file); // Set the value of 'file' field using setValue
                                       }}
                                       {...register('file', {
                                         required: 'File is required.',
-                                        validate: validateFile,
                                       })}
                                     />
                                   </label>
@@ -355,7 +367,7 @@ export default function ModalCreateCollection({
                               className="mt-2"
                             >
                               <div className="relative z-20">
-                                <Listbox.Button className="relative w-full cursor-default rounded-full border-0 bg-white dark:bg-neutral-900 py-2 pl-3 pr-10 text-left focus:outline-none sm:text-sm">
+                                <Listbox.Button className="relative w-full cursor-default rounded-full border-0 bg-white py-2 pl-3 pr-10 text-left focus:outline-none dark:bg-neutral-900 sm:text-sm">
                                   <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                                     {selectedChain.chainId === 1 ||
                                     selectedChain.chainId === 11155111 ? (

@@ -601,7 +601,7 @@ export default function Create({ chains }) {
             'file',
             {
               type: 'manual',
-              message: 'Invalid File Type',
+              message: 'Invalid file type',
             },
             true,
           );
@@ -639,7 +639,7 @@ export default function Create({ chains }) {
       const fileResponse = await pinFileToIPFS(selectedImage[0], data.name);
       const imageLink = `https://ipfs.io/ipfs/${fileResponse.IpfsHash}`;
       setImageUri(imageLink);
-      
+
       const jsonResponse = await pinJSONToIPFS(
         data,
         fileResponse.IpfsHash,
@@ -905,7 +905,7 @@ export default function Create({ chains }) {
                         <input
                           type="file"
                           className="hidden"
-                          accept=".png,.jpg,.jpeg,.gif,.webp,.mp4,.mp3"
+                          accept="image/png, image/gif, image/jpeg, image/jpg, image/webp,.mp4,.mp3"
                           onChange={(e) => {
                             const file = e.target.files[0];
                             setValue('file', file); // Set the value of 'file' field using setValue

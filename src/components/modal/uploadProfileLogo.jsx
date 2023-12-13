@@ -43,6 +43,34 @@ export default function ModalUploadProfileLogo({
 
   const onUpload = async (data) => {
     const file = data.file[0];
+
+    if (file) {
+      if (!allowedFileTypes.includes(file.type)) {
+        setError(
+          'file',
+          {
+            type: 'manual',
+            message: 'Invalid file type',
+          },
+          true,
+        );
+        return;
+      }
+
+      if (file.size > maxFileSize) {
+        setValue('file', '');
+        setError(
+          'file',
+          {
+            type: 'manual',
+            message: 'File size exceeds the limit',
+          },
+          true,
+        );
+        return;
+      }
+    }
+
     try {
       // Create a new FormData object
       const formData = new FormData();
@@ -127,26 +155,7 @@ export default function ModalUploadProfileLogo({
     'image/jpg',
     'image/gif',
   ];
-  const maxFileSize = 15 * 1024 * 1024; // 15MB
-
-  const validateFile = (value) => {
-    if (!value) {
-      setValue('file', '');
-      return 'File is required.';
-    }
-
-    if (!allowedFileTypes.includes(value.type)) {
-      setValue('file', '');
-      return 'Invalid file type';
-    }
-
-    if (value.size > maxFileSize) {
-      setValue('file', '');
-      return 'File size exceeds the limit';
-    }
-
-    return true; // Validation passed
-  };
+  const maxFileSize = 2 * 1024 * 1024; // 2MB
 
   return (
     <>
@@ -175,11 +184,8 @@ export default function ModalUploadProfileLogo({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-950 text-gray-900 dark:text-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-xl font-bold"
-                  >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle text-gray-900 shadow-xl transition-all dark:bg-neutral-950 dark:text-white">
+                  <Dialog.Title as="h3" className="text-xl font-bold">
                     Update Logo
                   </Dialog.Title>
                   <div className="flex flex-col text-sm">
@@ -189,7 +195,7 @@ export default function ModalUploadProfileLogo({
                     </div>
                     <form>
                       <div className="w-full">
-                        <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white dark:bg-neutral-900 py-3 text-center">
+                        <div className="relative mt-2 flex flex-col items-center gap-3 border-2 border-dashed border-gray-200 bg-white py-3 text-center dark:bg-neutral-900">
                           {selectedImage && selectedImage.length > 0 ? (
                             <>
                               <button
@@ -219,19 +225,18 @@ export default function ModalUploadProfileLogo({
                               <div className="text-sm">
                                 100 x 100 pixel is recommended
                               </div>
-                              <label className="cursor-pointer rounded-full bg-primary-500 dark:bg-neutral-500 dark:hover:bg-neutral-300 px-4 py-1 font-semibold text-white hover:bg-primary-300">
+                              <label className="cursor-pointer rounded-full bg-primary-500 px-4 py-1 font-semibold text-white hover:bg-primary-300 dark:bg-neutral-500 dark:hover:bg-neutral-300">
                                 Choose file
                                 <input
                                   type="file"
                                   className="hidden"
-                                  accept="image/png, image/gif, image/jpeg, image/jpg"
+                                  accept="image/png, image/gif, image/jpeg, image/jpg, image/webp"
                                   onChange={(e) => {
                                     const file = e.target.files[0];
                                     setValue('file', file); // Set the value of 'file' field using setValue
                                   }}
                                   {...register('file', {
                                     required: 'File is required.',
-                                    validate: validateFile,
                                   })}
                                 />
                               </label>

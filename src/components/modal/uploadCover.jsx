@@ -36,11 +36,40 @@ export default function ModaluploadCover({
     setValue,
     getValues,
     reset,
+    setError,
   } = useForm();
   const selectedImage = watch('file');
 
   const onUpload = async (data) => {
     const file = data.file[0];
+
+    if (file) {
+      if (!allowedFileTypes.includes(file.type)) {
+        setError(
+          'file',
+          {
+            type: 'manual',
+            message: 'Invalid file type',
+          },
+          true,
+        );
+        return;
+      }
+
+      if (file.size > maxFileSize) {
+        setValue('file', '');
+        setError(
+          'file',
+          {
+            type: 'manual',
+            message: 'File size exceeds the limit',
+          },
+          true,
+        );
+        return;
+      }
+    }
+
     try {
       // Create a new FormData object
       const formData = new FormData();
@@ -85,31 +114,12 @@ export default function ModaluploadCover({
 
   const allowedFileTypes = [
     'image/png',
-    'image/jpeg',
     'image/jpg',
+    'image/jpeg',
     'image/gif',
     'image/webp',
   ];
   const maxFileSize = 15 * 1024 * 1024; // 15MB
-
-  const validateFile = (value) => {
-    if (!value) {
-      setValue('file', '');
-      return 'File is required.';
-    }
-
-    if (!allowedFileTypes.includes(value.type)) {
-      setValue('file', '');
-      return 'Invalid file type';
-    }
-
-    if (value.size > maxFileSize) {
-      setValue('file', '');
-      return 'File size exceeds the limit';
-    }
-
-    return true; // Validation passed
-  };
 
   useEffect(() => {
     if (isOpenModal === true) {
@@ -188,19 +198,18 @@ export default function ModaluploadCover({
                               <div className="text-sm">
                                 1920 x 266 pixel is recommended
                               </div>
-                              <label className="cursor-pointer rounded-full bg-primary-500 dark:bg-neutral-500 dark:hover:bg-neutral-300 px-4 py-1 font-semibold text-white hover:bg-primary-300">
+                              <label className="cursor-pointer rounded-full bg-primary-500 px-4 py-1 font-semibold text-white hover:bg-primary-300 dark:bg-neutral-500 dark:hover:bg-neutral-300">
                                 Choose file
                                 <input
                                   type="file"
                                   className="hidden"
-                                  accept="image/png, image/gif, image/jpeg, image/jpg"
+                                  accept="image/png, image/gif, image/jpeg, image/jpg, image/webp"
                                   onChange={(e) => {
                                     const file = e.target.files[0];
                                     setValue('file', file); // Set the value of 'file' field using setValue
                                   }}
                                   {...register('file', {
                                     required: 'File is required.',
-                                    validate: validateFile,
                                   })}
                                 />
                               </label>

@@ -221,7 +221,7 @@ const AdminUserPage = () => {
                     className="!w-fit !py-1 text-sm"
                     onClick={() => handleOpenUpdateModal(item?.collectionAddress, item?.tokenId)}
                   >
-                    Blacklist
+                    {item?.NFT?.isBlacklisted ? "Remove blacklist" : "Blacklist"}
                   </ButtonPrimary>
                 </Td>
               </tr>
@@ -478,7 +478,7 @@ const ModalUpdate = ({ isOpenModal, onClose, dataModal, refresh }) => {
                           </div>
                           <div className="text-center">
                             <h3 className="text-lg font-bold">
-                              NFTs is successfully blacklisted
+                              NFTs is successfully toggle blacklisted
                             </h3>
                             <span>
                               Please check the table for latest value.

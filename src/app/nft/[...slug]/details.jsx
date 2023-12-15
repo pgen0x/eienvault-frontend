@@ -157,6 +157,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
         <History
           collection={dataNFTs.collectionData}
           tokenId={dataNFTs.tokenId}
+          nft={dataNFTs}
         />
       ),
       // collateral: <Collateral dataNFTs={dataNFTs} />,
@@ -183,7 +184,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
 
     return {
       message: 'Highest bid found',
-      highestBid: highestBid.toString(),
+      highestBid: highestBid == null ? "0.00" : highestBid.toString(),
       highestBidder,
     };
   }
@@ -202,7 +203,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
       }
     }
 
-    return lowestBid.toString(); // Convert the lowestBid back to a string
+    return lowestBid == null ? "0.00" : lowestBid.toString(); // Convert the lowestBid back to a string
   }
 
   const handleOpenModalBid = async (
@@ -392,7 +393,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
       if (!res.ok) {
         console.error('Refresh metadata failed:', res);
         const errorMessage = await res.json();
-        toast.error(errorMessage.error.messages);
+        console.log(errorMessage.error.messages);
       } else {
         toast.success('Refresh metada successfully');
         window.location.reload();
@@ -1844,7 +1845,7 @@ const Bids = ({ dataBid }) => {
   );
 };
 
-const History = ({ collection, tokenId }) => {
+const History = ({ collection, tokenId, nft }) => {
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -1939,6 +1940,9 @@ const History = ({ collection, tokenId }) => {
       nft: event?.nftDetails,
       tokenAddress: event?.collectionAddress,
       txHash: event?.txHash,
+      nft: {
+        imageUri: nft?.imageUri
+      }
     };
   };
 
@@ -2108,6 +2112,9 @@ const History = ({ collection, tokenId }) => {
       nft: event?.nftDetails,
       tokenAddress: event?.collection,
       txHash: event?.txHash,
+      nft: {
+        imageUri: nft?.imageUri
+      }
     };
   };
 
@@ -2137,7 +2144,7 @@ const History = ({ collection, tokenId }) => {
           });
         })
         .catch((error) => {
-          toast.error(error.message);
+          console.log(error.message);
         });
     };
 
@@ -2170,7 +2177,7 @@ const History = ({ collection, tokenId }) => {
           setIsLoading(false);
         })
         .catch((error) => {
-          toast.error(error.message);
+          console.log(error.message);
           setIsLoading(false);
         });
     };

@@ -71,7 +71,7 @@ const AdminUserPage = () => {
       .request({
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/admin/allreportnft?query=${search}&page=${page}&limit=${perPage}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/admin/allreportcollections?query=${search}&page=${page}&limit=${perPage}`,
         headers: {
           accept: 'application/json',
           authorization: `Bearer ${token}`,
@@ -99,10 +99,10 @@ const AdminUserPage = () => {
     return false;
   };
 
-  const handleOpenUpdateModal = (collectionAddress, tokenId) => {
+  const handleOpenUpdateModal = (collectionAddress, isBlacklist) => {
     setDataUpdateModal({
       collectionAddress,
-      tokenId,
+      isBlacklist,
     });
     setIsModalUpdateOpen(true);
   };
@@ -145,7 +145,6 @@ const AdminUserPage = () => {
           <tr>
             <th>User Address</th>
             <th>Collection Address</th>
-            <th>Token ID</th>
             <th>Message</th>
             <th>Action</th>
           </tr>
@@ -198,30 +197,13 @@ const AdminUserPage = () => {
                     </ButtonPrimary>
                   </div>
                 </Td>
-                <Td>
-                  <div className="flex justify-center gap-2">
-                    {item.tokenId}
-                    <ButtonPrimary
-                      className="flex h-6 !w-6 items-center justify-center !p-0 text-xs"
-                      onClick={() =>
-                        window.open(
-                          `/nft/${item.collectionAddress}/${item.tokenId}`,
-                          'blank',
-                        )
-                      }
-                      target="_blank"
-                    >
-                      <FontAwesomeIcon icon={faShareFromSquare} />
-                    </ButtonPrimary>
-                  </div>
-                </Td>
                 <Td>{item.message}</Td>
                 <Td lastElement={true}>
                   <ButtonPrimary
                     className="!w-fit !py-1 text-sm"
-                    onClick={() => handleOpenUpdateModal(item?.collectionAddress, item?.tokenId)}
+                    onClick={() => handleOpenUpdateModal(item?.collectionAddress, !item?.Collection?.isBlacklisted)}
                   >
-                    Blacklist
+                    {item?.Collection?.isBlacklisted ? "Remove blacklist" : "Blacklist"}
                   </ButtonPrimary>
                 </Td>
               </tr>
@@ -304,7 +286,7 @@ const ModalUpdate = ({ isOpenModal, onClose, dataModal, refresh }) => {
       };
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/setnftblacklist`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/setcollectionblacklist`,
         options,
       );
 
@@ -478,7 +460,7 @@ const ModalUpdate = ({ isOpenModal, onClose, dataModal, refresh }) => {
                           </div>
                           <div className="text-center">
                             <h3 className="text-lg font-bold">
-                              Collections is successfully blacklisted
+                              Collections is successfully toggle blacklisted
                             </h3>
                             <span>
                               Please check the table for latest value.

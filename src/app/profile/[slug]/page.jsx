@@ -1086,7 +1086,20 @@ const ItemCollection = ({ collection, gridList }) => {
           className="relative z-10 h-[200px] w-full rounded-2xl object-cover duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all"
         />
       ) : (
-        <div className="relative z-10 h-[200px] w-full rounded-2xl bg-gray-300 object-cover duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all" />
+        <div className="relative z-10 h-[200px] w-full flex items-center justify-center rounded-2xl bg-gradient-to-t from-[#FFF1D4] via-[#FFF1D4] to-[#FFCFD1] bg-cover bg-bottom dark:from-[#C96E6E] dark:via-[#A68647] dark:to-black/40 object-cover duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all text-primary-200 dark:text-gray-900">
+          <svg
+            width="54"
+            height="48"
+            viewBox="0 0 54 48"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0 7.125C0 3.40195 3.02695 0.375 6.75 0.375H47.25C50.973 0.375 54 3.40195 54 7.125V40.875C54 44.598 50.973 47.625 47.25 47.625H6.75C3.02695 47.625 0 44.598 0 40.875V7.125ZM34.1508 18.3574C33.6762 17.6613 32.8957 17.25 32.0625 17.25C31.2293 17.25 30.4383 17.6613 29.9742 18.3574L20.7984 31.8152L18.0035 28.3242C17.5184 27.723 16.7906 27.375 16.0312 27.375C15.2719 27.375 14.5336 27.723 14.059 28.3242L7.30898 36.7617C6.69727 37.5211 6.58125 38.5652 7.00313 39.4406C7.425 40.316 8.31094 40.875 9.28125 40.875H19.4062H22.7812H44.7188C45.6574 40.875 46.5223 40.3582 46.9547 39.525C47.3871 38.6918 47.3344 37.6898 46.807 36.9199L34.1508 18.3574ZM11.8125 17.25C13.1552 17.25 14.4428 16.7166 15.3922 15.7672C16.3416 14.8178 16.875 13.5302 16.875 12.1875C16.875 10.8448 16.3416 9.55717 15.3922 8.60777C14.4428 7.65837 13.1552 7.125 11.8125 7.125C10.4698 7.125 9.18217 7.65837 8.23277 8.60777C7.28337 9.55717 6.75 10.8448 6.75 12.1875C6.75 13.5302 7.28337 14.8178 8.23277 15.7672C9.18217 16.7166 10.4698 17.25 11.8125 17.25Z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
       )}
 
       <div className="grid grid-cols-12 p-3">

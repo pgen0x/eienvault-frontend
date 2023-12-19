@@ -70,14 +70,14 @@ export default function ModalUploadDFile({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-950 text-gray-900 dark:text-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="text-xl font-bold text-gray-900"
+                    className="text-xl font-bold"
                   >
                     Just a few steps left
                   </Dialog.Title>
-                  <div className="mx-5 flex flex-col text-sm text-gray-900">
+                  <div className="mx-5 flex flex-col text-sm">
                     <div className="mt-4 flex max-w-full shrink-0 flex-row items-center gap-4">
                       <div className="flex max-w-full shrink-0 flex-col items-center">
                         {isLoadingModal.ipfs ? (

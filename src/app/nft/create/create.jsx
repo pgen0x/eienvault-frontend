@@ -45,14 +45,15 @@ import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import {
   formatEther,
-  getContract,
   hexToNumber,
+  hexToString,
   parseEther,
   zeroAddress,
 } from 'viem';
 import { ImageWithFallback } from '@/components/imagewithfallback';
 import { JazzIcon } from '@/components/jazzicon';
 import ButtonPrimary from '@/components/button/buttonPrimary';
+import { set } from 'js-cookie';
 
 export default function Create({ chains }) {
   const { token } = useAuth();
@@ -303,125 +304,6 @@ export default function Create({ chains }) {
     hash: putOnSaleHash,
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (mintHash) {
-        if (isLoading) {
-          setIsLoadingModal({
-            ipfs: false,
-            mint: true,
-            approve: false,
-            putonsale: false,
-          });
-        }
-        if (isError) {
-          setErrorMint({
-            isError: true,
-            message: isError,
-          });
-        }
-
-        if (data) {
-          setIsLoadingModal({
-            ipfs: false,
-            mint: false,
-            approve: true,
-            putonsale: false,
-          });
-          setTokenId(hexToNumber(data.logs[0].topics[3]));
-          setIsCompleted({
-            ipfs: true,
-            mint: true,
-            approve: false,
-            putonsale: false,
-          });
-          await approve(data.logs[0].topics[3]);
-        }
-      }
-    };
-
-    fetchData();
-  }, [mintHash, data, isLoading, isError]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (approveHash) {
-        if (isLoadingApprove) {
-          setIsLoadingModal({
-            ipfs: false,
-            mint: false,
-            approve: true,
-            putonsale: false,
-          });
-        }
-        if (isErrorApp) {
-          setErrorApprove({
-            isError: true,
-            message: isError,
-          });
-        }
-
-        if (dataApprove) {
-          setIsLoadingModal({
-            ipfs: false,
-            mint: false,
-            approve: false,
-            putonsale: true,
-          });
-          setIsCompleted({
-            ipfs: true,
-            mint: true,
-            approve: true,
-            putonsale: false,
-          });
-          await putOnSale();
-        }
-      }
-    };
-
-    fetchData();
-  }, [approveHash, dataApprove, isLoadingApprove, isErrorApp]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (putOnSaleHash) {
-        if (isLoadingPutonsale) {
-          setIsLoadingModal({
-            ipfs: false,
-            mint: false,
-            approve: false,
-            putonsale: true,
-          });
-        }
-        if (isErrorPutsale) {
-          setErrorPutonsale({
-            isError: true,
-            message: isErrorPutsale,
-          });
-        }
-
-        if (dataPutonsale) {
-          setIsLoadingModal({
-            ipfs: false,
-            mint: false,
-            approve: false,
-            putonsale: false,
-          });
-          setIsCompleted({
-            ipfs: true,
-            mint: true,
-            approve: true,
-            putonsale: true,
-          });
-          await onSave();
-          setIsProcessing(false);
-        }
-      }
-    };
-
-    fetchData();
-  }, [putOnSaleHash, dataPutonsale, isErrorPutsale, isLoadingPutonsale]);
-
   const pinFileToIPFS = async (file, data) => {
     const form = new FormData();
     form.append('file', file);
@@ -500,6 +382,25 @@ export default function Create({ chains }) {
       setApproveHash(hash);
       return hash;
     } catch (error) {
+      setIsProcessing(false);
+      setIsLoadingModal({
+        ipfs: false,
+        mint: false,
+        approve: false,
+        putonsale: false,
+      });
+      if (error.message.includes('User denied transaction signature')) {
+        setErrorApprove({
+          isError: true,
+          message: 'Transaction rejected by the user.',
+        });
+      } else {
+        setErrorApprove({
+          isError: true,
+          message: error,
+        });
+      }
+
       console.error('Error Approve', error);
     }
   };
@@ -532,6 +433,25 @@ export default function Create({ chains }) {
       setPutOnSaleHash(hash);
       return hash;
     } catch (error) {
+      console.log('error listing', error);
+      setIsProcessing(false);
+      setIsLoadingModal({
+        ipfs: false,
+        mint: false,
+        approve: false,
+        putonsale: false,
+      });
+      if (error.message.includes('User denied transaction signature')) {
+        setErrorPutonsale({
+          isError: true,
+          message: 'Transaction rejected by the user.',
+        });
+      } else {
+        setErrorPutonsale({
+          isError: true,
+          message: error,
+        });
+      }
       console.error('Error Listing', error);
     }
   };
@@ -548,7 +468,7 @@ export default function Create({ chains }) {
     return hash;
   };
 
-  const onSave = async () => {
+  const onSave = async (tokenId) => {
     try {
       const filteredInputFields = inputFields.filter(
         (field) => field.trait_type !== '' && field.value !== '',
@@ -582,9 +502,6 @@ export default function Create({ chains }) {
       if (response.ok) {
         // Data was saved successfully
         console.log('Data saved successfully.');
-      } else {
-        // Handle the error here
-        console.error('Data saved failed:', response.statusText);
       }
     } catch (error) {
       // Handle any unexpected errors
@@ -593,6 +510,22 @@ export default function Create({ chains }) {
   };
 
   const onSubmit = async (data) => {
+    setErrorIPFS({ isError: false, message: '' });
+    setErrorMint({ isError: false, message: '' });
+    setErrorApprove({ isError: false, message: '' });
+    setErrorPutonsale({ isError: false, message: '' });
+    setIsLoadingModal({
+      ipfs: false,
+      mint: false,
+      approve: false,
+      putonsale: false,
+    });
+    setIsCompleted({
+      ipfs: false,
+      mint: false,
+      approve: false,
+      putonsale: false,
+    });
     try {
       const file = data.file[0];
       if (file) {
@@ -645,7 +578,6 @@ export default function Create({ chains }) {
         fileResponse.IpfsHash,
         inputFields,
       );
-      console.log('Success pin json', jsonResponse);
 
       const bpValue = parseFloat(data.royalties) * 100;
       const ipfsLink = `https://ipfs.io/ipfs/${jsonResponse.IpfsHash}`;
@@ -668,7 +600,6 @@ export default function Create({ chains }) {
       const hash = await mintNFT(ipfsLink, bpValue);
       setMintHash(hash);
     } catch (e) {
-      // Handle errors here
       console.error(e);
       setIsLoadingModal({
         ipfs: false,
@@ -677,7 +608,14 @@ export default function Create({ chains }) {
         putonsale: false,
       });
       setErrorIPFS({ isError: false, message: e });
-      setErrorMint({ isError: true, message: e.message });
+      if (e.message.includes('User denied transaction signature')) {
+        setErrorMint({
+          isError: true,
+          message: 'Transaction rejected by the user.',
+        });
+      } else {
+        setErrorMint({ isError: true, message: e.message });
+      }
       setIsProcessing(false);
     }
   };
@@ -685,8 +623,7 @@ export default function Create({ chains }) {
   const closeModal = () => {
     setIsSubmit(false);
     setIsCreateCollection(false);
-    setErrorIPFS({ isError: false, message: '' });
-    setErrorMint({ isError: false, message: '' });
+
     setIsProcessing(false);
     reset();
   };
@@ -704,11 +641,134 @@ export default function Create({ chains }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const price = await getListingPrice();
+      await getListingPrice();
     };
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (mintHash) {
+        if (isLoading) {
+          setIsLoadingModal({
+            ipfs: false,
+            mint: true,
+            approve: false,
+            putonsale: false,
+          });
+        }
+        if (isError) {
+          setErrorMint({
+            isError: true,
+            message: isError,
+          });
+        }
+
+        if (data) {
+          setIsLoadingModal({
+            ipfs: false,
+            mint: false,
+            approve: true,
+            putonsale: false,
+          });
+          setTokenId(hexToNumber(data.logs[0].topics[3]));
+          console.log(data, 'data after mint');
+          setIsCompleted({
+            ipfs: true,
+            mint: true,
+            approve: false,
+            putonsale: false,
+          });
+          await onSave(hexToNumber(data.logs[0].topics[3]).toString());
+          await approve(data.logs[0].topics[3]);
+        }
+      }
+    };
+
+    fetchData();
+  }, [mintHash, data, isLoading, isError]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (approveHash) {
+        if (isLoadingApprove) {
+          setIsLoadingModal({
+            ipfs: false,
+            mint: false,
+            approve: true,
+            putonsale: false,
+          });
+        }
+        if (isErrorApp) {
+          setErrorApprove({
+            isError: true,
+            message: isErrorApp,
+          });
+          setIsProcessing(false);
+        }
+
+        if (dataApprove) {
+          setIsLoadingModal({
+            ipfs: false,
+            mint: false,
+            approve: false,
+            putonsale: true,
+          });
+          setIsCompleted({
+            ipfs: true,
+            mint: true,
+            approve: true,
+            putonsale: false,
+          });
+          await putOnSale();
+        }
+      }
+    };
+
+    fetchData();
+  }, [approveHash, dataApprove, isLoadingApprove, isErrorApp]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (putOnSaleHash) {
+        if (isLoadingPutonsale) {
+          setIsLoadingModal({
+            ipfs: false,
+            mint: false,
+            approve: false,
+            putonsale: true,
+          });
+        }
+        if (isErrorPutsale) {
+          console.log('error putting on sale', isErrorPutsale);
+          setErrorPutonsale({
+            isError: true,
+            message: isErrorPutsale,
+          });
+        }
+
+        if (dataPutonsale) {
+          setIsLoadingModal({
+            ipfs: false,
+            mint: false,
+            approve: false,
+            putonsale: false,
+          });
+          setIsCompleted({
+            ipfs: true,
+            mint: true,
+            approve: true,
+            putonsale: true,
+          });
+          console.log(dataPutonsale, 'dataPutonsale');
+          setIsProcessing(false);
+        }
+      }
+    };
+
+    fetchData();
+  }, [putOnSaleHash, dataPutonsale, isErrorPutsale, isLoadingPutonsale]);
 
   return (
     <>

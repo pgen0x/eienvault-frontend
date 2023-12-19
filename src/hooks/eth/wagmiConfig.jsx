@@ -14,7 +14,7 @@ import { configureChains, createConfig, sepolia } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/react';
 import { useAccount, useConnect } from 'wagmi';
 
-const helachain = {
+const helatestnet = {
   id: 666888,
   name: 'Helachain - Testnet',
   network: 'Helachain',
@@ -38,8 +38,35 @@ const helachain = {
     },
   },
 };
+
+const helamainnet = {
+  id: 666888,
+  name: 'Helachain',
+  network: 'Helachain',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'Helachain',
+    symbol: 'HLUSD',
+  },
+  rpcUrls: {
+    public: { http: ['https://mainnet-rpc.helachain.com'] },
+    default: { http: ['https://mainnet-rpc.helachain.com'] },
+  },
+  blockExplorers: {
+    etherscan: {
+      name: 'Helachain Explorer',
+      url: 'https://mainnet-blockexplorer.helachain.com',
+    },
+    default: {
+      name: 'Helachain Explorer',
+      url: 'https://mainnet-blockexplorer.helachain.com',
+    },
+  },
+};
+
 const chains = [
-  helachain,
+  helatestnet,
+  helamainnet,
   arbitrum,
   mainnet,
   polygon,
@@ -69,6 +96,7 @@ export function initializeApp() {
     publicClient,
     wagmiConfig,
     ethereumClient,
-    helachain,
+    helamainnet,
+    helatestnet,
   };
 }

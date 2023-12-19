@@ -15,7 +15,8 @@ export function Providers({ children }) {
   const { isDarkMode } = useIsDarkMode();
 
   useEffect(() => setMounted(true), []);
-  const { wagmiConfig, projectId, ethereumClient, helachain } = initializeApp();
+  const { wagmiConfig, projectId, ethereumClient, helamainnet } =
+    initializeApp();
   return (
     <WagmiConfig config={wagmiConfig}>
       {mounted && (
@@ -35,13 +36,12 @@ export function Providers({ children }) {
               {children}
               <Web3Modal
                 projectId={projectId}
-                defaultChain={helachain}
+                defaultChain={helamainnet}
                 ethereumClient={ethereumClient}
                 themeMode={isDarkMode ? 'dark' : 'light'}
                 chainImages={{
                   666888: '/helaicon.svg',
-                  42261:
-                    'https://cryptologos.cc/logos/oasis-network-rose-logo.png',
+                  8668: '/helaicon.svg',
                 }}
                 tokenImages={{ HLUSD: '/helaicon.svg' }}
                 themeVariables={{

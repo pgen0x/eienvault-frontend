@@ -10,6 +10,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import ButtonPrimary from '../button/buttonPrimary';
 import { useRouter } from 'next-nprogress-bar';
+import Link from 'next/link';
 
 export default function ModalUploadDFile({
   isOpenModal,
@@ -26,17 +27,19 @@ export default function ModalUploadDFile({
   isProcessing,
   onModalClose,
   tokenId,
-  collectionAddress
+  collectionAddress,
 }) {
   const router = useRouter();
 
   function closeModal() {
     onClose(false);
     onModalClose();
-    redirectingToNft()
+    if (isCompletedPutonsale) {
+      redirectingToNft();
+    }
   }
 
-  function redirectingToNft(){
+  function redirectingToNft() {
     router.push(`/nft/${collectionAddress}/${tokenId}`);
   }
 
@@ -219,7 +222,7 @@ export default function ModalUploadDFile({
                         <span>Confirming the transaction</span>
                         {isErrorApprove.isError && (
                           <div className="text-primary-500">
-                            {isErrorApprove.message.error}
+                            {isErrorApprove.message}
                           </div>
                         )}
                       </div>
@@ -277,7 +280,24 @@ export default function ModalUploadDFile({
                         )}
                       </div>
                     </div>
-                    <div className="mt-4 inline-flex ">
+                    <div className="mt-4 inline-flex flex-col gap-3">
+                      {!isProcessing &&
+                        isCompletedMint &&
+                        !isCompletedPutonsale && (
+                          <div>
+                            <span className="mr-1 text-primary-500">
+                              Your NFT has been created but the sale failed, if
+                              you want to sell the NFT you can visit
+                            </span>
+                            <Link
+                              href={`/nft/${collectionAddress}/${tokenId}`}
+                              className="cursor-pointer text-primary-500 underline"
+                              target="_blank"
+                            >
+                              this link
+                            </Link>
+                          </div>
+                        )}
                       <ButtonPrimary
                         onClick={closeModal}
                         disabled={isProcessing}

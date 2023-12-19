@@ -130,6 +130,11 @@ export default function ModalPutOnSale({
     closeModal();
   }
 
+  function closeModalComplete(){
+    refreshData();
+    closeModalProcessing();
+  }
+
   const {
     register,
     handleSubmit,
@@ -484,7 +489,7 @@ export default function ModalPutOnSale({
                                       htmlFor="fixed-method"
                                       className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-neutral-800 dark:border-neutral-900 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-neutral-900 dark:hover:text-gray-300 ${
                                         selectedOptionMarket === 'fixed'
-                                          ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
+                                          ? 'peer-checked:border-primary-500 peer-checked:text-primary-500 dark:peer-checked:border-white dark:peer-checked:text-white'
                                           : ''
                                       }`}
                                     >
@@ -517,7 +522,7 @@ export default function ModalPutOnSale({
                                       htmlFor="auction-method"
                                       className={`flex w-full cursor-pointer flex-col items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-gray-500 hover:bg-gray-100 hover:text-neutral-800 dark:border-neutral-900 dark:bg-zinc-800 dark:text-gray-400 dark:hover:bg-neutral-900 dark:hover:text-gray-300 ${
                                         selectedOptionMarket === 'auction'
-                                          ? 'peer-checked:border-primary-500 peer-checked:text-primary-500'
+                                          ? 'peer-checked:border-primary-500 peer-checked:text-primary-500 dark:peer-checked:border-white dark:peer-checked:text-white'
                                           : ''
                                       }`}
                                     >
@@ -545,7 +550,7 @@ export default function ModalPutOnSale({
                                   Enter price to allow users instantly purchase
                                   your NFT
                                 </p>
-                                <div className="mt-2 flex w-full items-center rounded-full border-0 bg-white dark:bg-neutral-900">
+                                <div className="mt-2 flex w-full items-center rounded-full border-0 bg-gray-100 dark:bg-neutral-900">
                                   <input
                                     type="number"
                                     className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
@@ -675,12 +680,12 @@ export default function ModalPutOnSale({
                               {!customValueDate && 'Duration date is required'}
                             </div>
 
-                            <button
+                            <ButtonPrimary
                               onClick={handleSubmit(onSubmit)}
-                              className="mt-4 w-full rounded-full bg-primary-500 py-2 font-semibold text-white hover:bg-primary-300 disabled:bg-primary-200"
+                              className="mt-2"
                             >
                               Put On Sale
-                            </button>
+                            </ButtonPrimary>
                           </form>
                         </section>
                       </div>
@@ -828,7 +833,7 @@ export default function ModalPutOnSale({
                     <div className="mt-4 inline-flex ">
                       <ButtonPrimary
                         type="button"
-                        onClick={closeModalProcessing}
+                        onClick={isProcessing ? closeModalProcessing : closeModalComplete}
                         disabled={isProcessing}
                       >
                         {isProcessing ? 'Please wait ...' : 'Completed'}

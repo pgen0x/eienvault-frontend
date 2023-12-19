@@ -24,6 +24,7 @@ import { useWeb3Modal } from '@web3modal/react';
 import { useRouter } from 'next-nprogress-bar';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { useAuth } from '@/hooks/AuthContext';
+import ButtonPrimary from '../button/buttonPrimary';
 
 export default function ModalBid({
   isOpenModal,
@@ -224,7 +225,7 @@ export default function ModalBid({
                       <div className="flex w-full justify-start">Bid</div>
                       <div className="flex w-full justify-end">
                         <button
-                          className="text-primary-500"
+                          className="text-primary-500 dark:text-white"
                           onClick={closeModal}
                         >
                           <FontAwesomeIcon icon={faXmark} />
@@ -322,13 +323,13 @@ export default function ModalBid({
                             Enter amount of your bid
                           </label>
                           <div className="mt-2">
-                            <div className="flex rounded-md bg-gray-50 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500">
+                            <div className="flex rounded-full bg-white dark:bg-neutral-900 shadow-sm ring-0 ring-inset focus-within:ring-0 text-gray-900 dark:text-white">
                               <input
                                 type="number"
                                 name="amount"
                                 id="amount"
                                 autoComplete="amount"
-                                className="flex-1 border-0 bg-transparent py-3 pr-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                className="flex-1 border-0 bg-transparent p-3 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                                 placeholder="0"
                                 {...register('amount', {
                                   required: 'Amount is required.',
@@ -358,7 +359,7 @@ export default function ModalBid({
                                   },
                                 })}
                               />
-                              <span className="flex select-none items-center pr-3 font-semibold text-gray-900">
+                              <span className="flex select-none items-center pr-3 font-semibold">
                                 {auction.collectionData?.Chain?.symbol}
                               </span>
                             </div>
@@ -369,12 +370,11 @@ export default function ModalBid({
                         </div>
                       </form>
 
-                      <button
-                        className="w-full rounded-full bg-primary-500 py-3 font-semibold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-300"
+                      <ButtonPrimary
                         onClick={handleSubmit(onSubmit)}
                       >
                         Place a bid
-                      </button>
+                      </ButtonPrimary>
                     </section>
                   </Dialog.Panel>
                 </Transition.Child>

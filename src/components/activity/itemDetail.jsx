@@ -46,7 +46,7 @@ export const ActivityItemDetail = ({ event }) => {
   };
   return (
     <div className="flex w-full items-center justify-between gap-2 rounded-lg bg-white p-3 hover:bg-primary-50 dark:bg-neutral-800 dark:hover:bg-neutral-700">
-      <div className="flex gap-3">
+      <div className="w-full flex gap-2">
         <div className="w-fit">
           {event?.nft?.imageUri ? (
             <button
@@ -94,7 +94,7 @@ export const ActivityItemDetail = ({ event }) => {
               : truncateAddress(event?.tokenAddress)}
             #{event?.tokenId}
           </button>
-          <div>{event?.description}</div>
+          {event?.description}
           <div>{timeAgo(event?.timestamp)}</div>
         </div>
       </div>

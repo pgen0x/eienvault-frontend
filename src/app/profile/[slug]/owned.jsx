@@ -101,12 +101,20 @@ export default function Owned({
         url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getbyowner/${userAccount}?query=${search}&page=${ownedPage}`,
       })
       .then((response) => {
-        setIsLoading(false);
         if (response.data.nfts.length > 0) {
-          setNfts((oldNfts) => [...oldNfts, ...response.data.nfts]);
+          if (ownedPage >= response.data.totalPages) {
+            setNftLast(true); // Set nftLast to true if the current page is the last page
+          }
+
+          if (ownedPage > 1) {
+            setNfts((oldNfts) => [...oldNfts, ...response.data.nfts]);
+          } else {
+            setNfts([...response.data.nfts]);
+          }
         } else {
           setNftLast(true);
         }
+        setIsLoading(false);
       })
       .catch((error) => {
         setIsLoading(false);
@@ -433,13 +441,12 @@ export default function Owned({
     }
   };
 
-  const refreshData = async () => {
+  const refreshData = () => {
     console.log('Trigger refreshData');
     setNfts([]);
     setOWnedPage(1);
     setNftLast(false);
-    setIsLoading(true);
-    await getNfts();
+    getNfts();
   };
 
   return (

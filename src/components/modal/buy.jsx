@@ -228,7 +228,7 @@ export default function ModalBuy({
                       <div className="flex w-full justify-start">Buy</div>
                       <div className="flex w-full justify-end">
                         <button
-                          className="text-primary-500"
+                          className="text-primary-500 dark:text-white"
                           onClick={closeModal}
                         >
                           <FontAwesomeIcon icon={faXmark} />
@@ -427,7 +427,7 @@ export default function ModalBuy({
                     <section className="step-2 flex flex-col gap-3 bg-gradient-to-b from-green-100 to-gray-100 p-5">
                       <div className="mt-5 flex flex-col items-center gap-5">
                         <span className="absolute -mt-4 ml-4 h-32 w-32 rounded-full border bg-green-200"></span>
-                        <span className="relative z-10 flex h-32 w-32 items-center justify-center rounded-full border border-[10px] border-green-400">
+                        <span className="relative z-10 flex h-32 w-32 items-center justify-center rounded-full border-[10px] border-green-400">
                           <FontAwesomeIcon
                             icon={faCheck}
                             className="text-6xl font-bold text-green-400"

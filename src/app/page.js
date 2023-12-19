@@ -240,11 +240,13 @@ export default function Home() {
     return null;
   }
 
-  const refreshDataActivities = async () => {
-    console.log('Trigger refreshDataActivities');
-    setIsLoadingActivities(true);
-    setDataDiscover([]);
-    await getNfts();
+  const refreshDataActivities = () => {
+    setTimeout(async () => {
+      console.log('Trigger refreshDataActivities');
+      setIsLoadingActivities(true);
+      setDataDiscover([]);
+      await getNfts();
+    }, 500)
   };
 
   const refreshDataDiscover = async () => {

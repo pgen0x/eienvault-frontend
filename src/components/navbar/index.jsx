@@ -64,7 +64,7 @@ export default function Navbar() {
       <div className="group sticky top-0 z-40 inline-flex w-full items-center justify-center transition-all md:px-10 lg:px-10 xl:px-10 2xl:px-10">
         <nav className="3xl:h-24 top-0 z-10 mt-4 h-16 w-full max-w-full bg-gradient-to-b from-white to-white/60 px-4 backdrop-blur transition-all duration-300 dark:from-black/50 dark:to-black/40 sm:h-20 md:rounded-2xl lg:rounded-2xl xl:rounded-2xl 2xl:rounded-2xl">
           <div className="flex h-full items-center justify-between px-4">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1 md:gap-4">
               <Logo />
               <Search />
               <NavMenu />

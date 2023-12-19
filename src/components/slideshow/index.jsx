@@ -160,10 +160,10 @@ export const Slideshow = ({
           dynamicBullets: true,
         }}
         modules={[Autoplay, Pagination, Navigation]}
-        autoplay={{
-          delay: 3000,
-          disableOnInteraction: false,
-        }}
+        // autoplay={{
+        //   delay: 3000,
+        //   disableOnInteraction: false,
+        // }}
       >
         {auctions.map((auction, index) => {
           const currentDate = moment();
@@ -270,7 +270,7 @@ export const Slideshow = ({
                           </div>
                         </div>
                       </div>
-                      <div className="line-clamp-5 w-72 text-sm font-light leading-tight text-neutral-900 dark:text-white">
+                      <div className="line-clamp-5 w-72 min-h-[88px] text-sm font-light leading-tight text-neutral-900 dark:text-white">
                         {auction.collectionData?.description
                           ? auction.collectionData?.description
                           : `Welcome to our ${auction.collectionData.name} collection! Explore a world of digital art and assets that represent unique and exclusive tokens on the blockchain. You'll find something special in our collection. Each NFT is a one-of-a-kind piece, verified and secured on the blockchain, making it a valuable addition to your digital asset portfolio. Join us on this journey of innovation and creativity in the world of non-fungible tokens. Start collecting, trading, and owning a piece of the digital future with our NFTs!`}

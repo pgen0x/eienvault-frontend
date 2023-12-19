@@ -91,17 +91,24 @@ const Liked = ({
         url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/getlikes/${userAccount}`,
       })
       .then((response) => {
-        setIsLoading(false);
         if (response.data.likes.length > 0) {
-          setNfts((oldNfts) => [...oldNfts, ...response.data.likes]);
-          setNftLast(true);
+          if (nftPage >= response.data.totalPages) {
+            setNftLast(true); // Set nftLast to true if the current page is the last page
+          }
+
+          if (nftPage > 1) {
+            setNfts((oldNfts) => [...oldNfts, ...response.data.likes]);
+          } else {
+            setNfts([...response.data.likes]);
+          }
         } else {
           setNftLast(true);
         }
+        setIsLoading(false);
       })
       .catch((error) => {
         setIsLoading(false);
-        toast.error(error.message);
+        console.log(error.message);
       });
   };
 

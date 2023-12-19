@@ -44,24 +44,6 @@ const servers = [
 const Main = ({ TrendingTop, setTrendingTop, Range, setRange }) => {
   const router = useRouter();
 
-  const handleTrendingTop = (event, target) => {
-    setTrendingTop(target);
-  };
-
-  const handleRange = (event, target) => {
-    setRange(target);
-  };
-
-  const classRadio = (params, value) => {
-    const defaultCssRadio =
-      'cursor-pointer w-full px-2.5 py-2 rounded-full text-sm font-bold leading-5 ';
-    return (
-      defaultCssRadio +
-      (params === value
-        ? 'text-white bg-primary-500'
-        : 'text-primary-500 hover:bg-primary-200')
-    );
-  };
   return (
     <>
       <div className="flex items-center justify-between">
@@ -113,7 +95,7 @@ export const TrendingTop = ({ dataCollections }) => {
 
   const sortData = () => {
     if (TrendingTop == 'trending') {
-      var dataSort = data.slice(0);
+      var dataSort = dataCollections.slice(0);
       dataSort.sort(function (a, b) {
         return (
           Number(a['volumeChangePercentag' + Range]) -
@@ -124,7 +106,7 @@ export const TrendingTop = ({ dataCollections }) => {
     }
 
     if (TrendingTop == 'top') {
-      var dataSort = data.slice(0);
+      var dataSort = dataCollections.slice(0);
       dataSort.sort(function (a, b) {
         return a.volume - b.volume;
       });
@@ -301,21 +283,6 @@ export const TrendingTopSkeleton = () => {
 };
 
 const MainMobile = ({ TrendingTop, setTrendingTop, Range, setRange }) => {
-  const [Coin, setCoin] = useState('ethereum');
-  const handleCoin = (event, target) => {
-    setCoin(target);
-  };
-
-  const classRadio = (params, value) => {
-    const defaultCssRadio =
-      'cursor-pointer w-full px-2.5 py-2 rounded-full text-sm font-bold leading-5 text-center flex items-center justify-center ';
-    return (
-      defaultCssRadio +
-      (params === value
-        ? 'text-white bg-primary-500 shadow'
-        : 'text-primary-500 hover:bg-primary-200')
-    );
-  };
   return (
     <>
       <div className="flex items-center justify-between">
@@ -376,9 +343,9 @@ const MainMobile = ({ TrendingTop, setTrendingTop, Range, setRange }) => {
 
 export const TrendingTopMobile = ({ dataCollections }) => {
   const router = useRouter();
-  const [nfts, setNfts] = useState({});
   const [TrendingTop, setTrendingTop] = useState('trending');
   const [Range, setRange] = useState('1h');
+  const [data, setData] = useState(dataCollections);
 
   const classFloor = (value) => {
     return Number(value) < 0
@@ -391,6 +358,31 @@ export const TrendingTopMobile = ({ dataCollections }) => {
       ? 'font-semibold text-red-500'
       : 'font-semibold text-green-500';
   };
+
+  const sortData = () => {
+    if (TrendingTop == 'trending') {
+      var dataSort = dataCollections.slice(0);
+      dataSort.sort(function (a, b) {
+        return (
+          Number(a['volumeChangePercentag' + Range]) -
+          Number(b['volumeChangePercentag' + Range])
+        );
+      });
+      setData(dataSort);
+    }
+
+    if (TrendingTop == 'top') {
+      var dataSort = dataCollections.slice(0);
+      dataSort.sort(function (a, b) {
+        return a.volume - b.volume;
+      });
+      setData(dataSort);
+    }
+  };
+
+  useEffect(() => {
+    sortData();
+  }, [TrendingTop, dataCollections]);
 
   const volumeChangePercentage = (collection) => {
     return collection['volumeChangePercentage' + Range];
@@ -409,7 +401,7 @@ export const TrendingTopMobile = ({ dataCollections }) => {
         setRange={setRange}
       />
       <div className="mt-5 flex flex-col gap-5">
-        {dataCollections.map((collection, index) => (
+        {data.map((collection, index) => (
           <div
             key={index}
             className="flex flex-col gap-3 rounded-xl bg-white p-5 dark:bg-neutral-900 dark:text-white"

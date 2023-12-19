@@ -333,7 +333,7 @@ export default function CollectionDetail({ params }) {
                           : ''}
                       </button>
                     </div>
-                    <div className="flex w-full justify-start gap-4 text-gray-900 dark:text-white">
+                    <div className="flex flex-wrap w-full justify-start gap-1 text-gray-900 dark:text-white">
                       <div className="flex items-center gap-1">
                         Created by{' '}
                         <button
@@ -1768,8 +1768,9 @@ const Activity = ({ collection }) => {
       isAddress(event?.item?.To)
     ) {
       description = (
-        <div className="flex gap-1">
-          transfer from
+        <div className="w-full flex flex-col sm:flex-row flex-wrap gap-1">
+          <div className="flex gap-1">
+          transferred from
           <JazzIcon
             diameter={16}
             seed={event?.item?.From}
@@ -1781,6 +1782,8 @@ const Activity = ({ collection }) => {
           >
             {truncateAddress4char(event?.item?.From)}
           </button>
+          </div>
+          <div className="flex gap-1">
           to
           <JazzIcon
             diameter={16}
@@ -1793,6 +1796,7 @@ const Activity = ({ collection }) => {
           >
             {truncateAddress4char(event?.item?.To)}
           </button>
+          </div>
         </div>
       );
       type = 'Transfer';
@@ -1820,7 +1824,8 @@ const Activity = ({ collection }) => {
     if (event.eventType == 'ItemListed') {
       type = 'Listings';
       description = (
-        <div className="flex gap-1">
+        <div className="w-full flex flex-col sm:flex-row flex-wrap gap-1">
+          <div className="flex gap-1">
           <span>listed by</span>{' '}
           <JazzIcon
             diameter={16}
@@ -1835,11 +1840,14 @@ const Activity = ({ collection }) => {
               ? event.sellerData.username
               : truncateAddress4char(event?.seller)}
           </button>
+          </div>
+          <div className="flex gap-1">
           for
           <span className="font-bold text-primary-500">
             {formatEther(Number(event?.price))}{' '}
             {event?.collectionData?.Chain?.symbol}
           </span>
+          </div>
         </div>
       );
     } else if (event.eventType == 'NewOffer') {
@@ -1869,7 +1877,8 @@ const Activity = ({ collection }) => {
     } else if (event.eventType == 'ItemSold') {
       type = 'Sales';
       description = (
-        <div className="flex gap-1">
+        <div className="flex gap-1 flex-col lg:flex-row">
+          <div className="flex gap-1">
           purchased by
           <JazzIcon
             diameter={16}
@@ -1884,11 +1893,15 @@ const Activity = ({ collection }) => {
               ? event.buyerData.username
               : truncateAddress4char(event?.buyer)}
           </button>
+          </div>
+          <div className="flex gap-1">
           for
           <span className="font-bold text-primary-500">
             {formatEther(Number(event?.price))}{' '}
             {event?.collectionData?.Chain?.symbol}
           </span>
+          </div>
+          <div className="flex gap-1">
           from
           <JazzIcon
             diameter={16}
@@ -1903,6 +1916,7 @@ const Activity = ({ collection }) => {
               ? event.sellerData.username
               : truncateAddress4char(event?.seller)}
           </button>
+          </div>
         </div>
       );
     } else if (event.eventType == 'RemoveOffer') {
@@ -1998,12 +2012,12 @@ const Activity = ({ collection }) => {
         <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
           <div className="flex flex-col gap-3 rounded-lg">
             <div className="grid grid-cols-12 gap-3">
-              <div className="col-span-9 flex flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900">
+              <div className="col-span-12 md:col-span-9 flex flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900">
                 {[...Array(5)].map((nft, index) => (
                   <ActivityItemDetailSkeleton key={index} />
                 ))}
               </div>
-              <div className="col-span-3 flex h-fit flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900">
+              <div className="col-span-12 md:col-span-3 flex h-fit flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900">
                 <h3 className="text-xl font-bold">Filter</h3>
                 <div className="flex flex-wrap gap-3 rounded-lg">
                   {[...Array(6)].map((nft, key) => (
@@ -2022,7 +2036,7 @@ const Activity = ({ collection }) => {
         <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
           <div className="flex flex-col gap-3 rounded-lg">
             <div className="grid grid-cols-12 gap-3">
-              <div className="col-span-9 flex flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900">
+              <div className="col-span-12 md:col-span-9 flex flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900">
                 {events
                   .filter((item) =>
                     activeFilter.length > 0
@@ -2033,7 +2047,7 @@ const Activity = ({ collection }) => {
                     return <ActivityItemDetail key={index} event={event} />;
                   })}
               </div>
-              <div className="col-span-3 flex h-fit flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900">
+              <div className="row-start-1 md:row-auto col-span-12 md:col-span-3 flex h-fit flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900">
                 <h3 className="text-xl font-bold">Filter</h3>
                 <div className="flex flex-wrap gap-3 rounded-lg">
                   {Object.keys(datafilters).map((key) => (

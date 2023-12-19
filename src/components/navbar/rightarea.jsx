@@ -139,8 +139,8 @@ export default function RightArea() {
           <label
             className={`flex h-6 w-6 cursor-pointer items-center justify-center rounded-full text-sm font-medium leading-5 md:h-8 md:w-8 ${
               enabled
-                ? 'bg-primary-500 text-white shadow dark:bg-white dark:text-gray-900'
-                : 'text-primary-500 hover:bg-primary-300 dark:bg-neutral-900 dark:text-neutral-200'
+                ? 'text-primary-500 hover:bg-primary-300 dark:bg-neutral-900 dark:text-neutral-200'
+                : 'bg-primary-500 text-white shadow dark:bg-white dark:text-gray-900'
             }`}
             htmlFor="themeLight"
           >
@@ -158,8 +158,8 @@ export default function RightArea() {
           <label
             className={`flex h-6 w-6 cursor-pointer items-center justify-center rounded-full text-sm font-medium leading-5 md:h-8 md:w-8 ${
               enabled
-                ? 'text-primary-500 hover:bg-primary-300 dark:bg-neutral-900 dark:text-neutral-200'
-                : 'bg-primary-500 text-white shadow dark:bg-white dark:text-gray-900'
+                ? 'bg-primary-500 text-white shadow dark:bg-white dark:text-gray-900'
+                : 'text-primary-500 hover:bg-primary-300 dark:bg-neutral-900 dark:text-neutral-200'
             }`}
             htmlFor="themeDark"
           >

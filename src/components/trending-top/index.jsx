@@ -98,8 +98,8 @@ export const TrendingTop = ({ dataCollections }) => {
       var dataSort = dataCollections.slice(0);
       dataSort.sort(function (a, b) {
         return (
-          Number(a['volumeChangePercentag' + Range]) -
-          Number(b['volumeChangePercentag' + Range])
+          Number(b['volumeChangePercentag' + Range]) -
+          Number(a['volumeChangePercentag' + Range])
         );
       });
       setData(dataSort);
@@ -108,7 +108,7 @@ export const TrendingTop = ({ dataCollections }) => {
     if (TrendingTop == 'top') {
       var dataSort = dataCollections.slice(0);
       dataSort.sort(function (a, b) {
-        return a.volume - b.volume;
+        return b.volume - a.volume;
       });
       setData(dataSort);
     }
@@ -364,8 +364,8 @@ export const TrendingTopMobile = ({ dataCollections }) => {
       var dataSort = dataCollections.slice(0);
       dataSort.sort(function (a, b) {
         return (
-          Number(a['volumeChangePercentag' + Range]) -
-          Number(b['volumeChangePercentag' + Range])
+          Number(b['volumeChangePercentag' + Range]) -
+          Number(a['volumeChangePercentag' + Range])
         );
       });
       setData(dataSort);
@@ -374,7 +374,7 @@ export const TrendingTopMobile = ({ dataCollections }) => {
     if (TrendingTop == 'top') {
       var dataSort = dataCollections.slice(0);
       dataSort.sort(function (a, b) {
-        return a.volume - b.volume;
+        return b.volume - a.volume;
       });
       setData(dataSort);
     }

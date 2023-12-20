@@ -32,7 +32,7 @@ export default async function Page() {
   return (
     <>
       <div className="container m-auto mb-5">
-        <section>
+        <section className="flex justify-center">
           <Create chains={dataChain} />
         </section>
       </div>

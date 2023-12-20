@@ -2,8 +2,10 @@
 import Ethereum from '@/assets/icon/ethereum';
 import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
 import {
+  faBan,
   faCartPlus,
   faChevronDown,
+  faCircleCheck,
   faClose,
   faEllipsis,
   faHourglass,
@@ -18,9 +20,9 @@ import {
   faZ,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Listbox, Switch } from '@headlessui/react';
+import { Listbox, Menu, Switch, Transition } from '@headlessui/react';
 import Image from 'next/legacy/image';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   erc721ABI,
@@ -54,6 +56,8 @@ import { ImageWithFallback } from '@/components/imagewithfallback';
 import { JazzIcon } from '@/components/jazzicon';
 import ButtonPrimary from '@/components/button/buttonPrimary';
 import { set } from 'js-cookie';
+import ButtonSecondary from '@/components/button/buttonSecondary';
+import { truncateAddress } from '@/utils/truncateAddress';
 
 export default function Create({ chains }) {
   const { token } = useAuth();
@@ -246,7 +250,6 @@ export default function Create({ chains }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/user/collections`,
@@ -260,16 +263,14 @@ export default function Create({ chains }) {
         );
 
         if (!res.ok) {
-          
           throw new Error('Network response was not ok');
         }
 
         const responseData = await res.json();
-        
+
         setDataCollections(responseData);
         setSelectedOptionCollection(responseData[0].tokenAddress);
       } catch (error) {
-        
       } finally {
         setIsLoadingCollection(false); // Set isLoading to false after fetching data
       }
@@ -400,8 +401,6 @@ export default function Create({ chains }) {
           message: error,
         });
       }
-
-      
     }
   };
 
@@ -433,7 +432,6 @@ export default function Create({ chains }) {
       setPutOnSaleHash(hash);
       return hash;
     } catch (error) {
-      
       setIsProcessing(false);
       setIsLoadingModal({
         ipfs: false,
@@ -452,7 +450,6 @@ export default function Create({ chains }) {
           message: error,
         });
       }
-      
     }
   };
 
@@ -501,11 +498,9 @@ export default function Create({ chains }) {
 
       if (response.ok) {
         // Data was saved successfully
-        
       }
     } catch (error) {
       // Handle any unexpected errors
-      
     }
   };
 
@@ -600,7 +595,6 @@ export default function Create({ chains }) {
       const hash = await mintNFT(ipfsLink, bpValue);
       setMintHash(hash);
     } catch (e) {
-      
       setIsLoadingModal({
         ipfs: false,
         mint: false,
@@ -673,7 +667,7 @@ export default function Create({ chains }) {
             putonsale: false,
           });
           setTokenId(hexToNumber(data.logs[0].topics[3]));
-          
+
           setIsCompleted({
             ipfs: true,
             mint: true,
@@ -741,7 +735,6 @@ export default function Create({ chains }) {
           });
         }
         if (isErrorPutsale) {
-          
           setErrorPutonsale({
             isError: true,
             message: isErrorPutsale,
@@ -761,7 +754,7 @@ export default function Create({ chains }) {
             approve: true,
             putonsale: true,
           });
-          
+
           setIsProcessing(false);
         }
       }
@@ -772,8 +765,8 @@ export default function Create({ chains }) {
 
   return (
     <>
-      <div className="my-5 flex flex-col justify-center gap-5 p-4 text-gray-900 dark:text-white sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
-        <div className="flex w-1/2 flex-col">
+      <div className="my-5 flex w-full lg:w-10/12 flex-col justify-center gap-5 p-4 text-gray-900 dark:text-white sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
+        <div className="flex w-full md:w-1/2 flex-col">
           <h2 className="text-2xl font-semibold">Create New NFT</h2>
           <p>
             <span className="text-semantic-red-500">*</span> requires to be
@@ -824,6 +817,10 @@ export default function Create({ chains }) {
                             }`
                           }
                           value={chain}
+                          disabled={
+                            !(chain.chainId === 666888 ||
+                            chain.chainId === 8668)
+                          }
                         >
                           {({ selectedChain }) => (
                             <>
@@ -901,6 +898,7 @@ export default function Create({ chains }) {
                       className="peer hidden"
                       onChange={(e) => setSelectedOptionEdition(e.target.value)}
                       checked={selectedOptionEdition === 'community'}
+                      disabled={true}
                     />
                     <label
                       htmlFor="community-edition"
@@ -1424,79 +1422,154 @@ export default function Create({ chains }) {
             </form>
           </div>
         </div>
-        <div className="sticky top-24 w-1/3 self-start pt-3">
+        <div className="sticky top-24 w-full md:w-1/3 self-start pt-3">
           <h3 className="text-xl font-semibold">Preview</h3>
           <p className="pb-5 pt-1">
             Input the NFT Data field to see the preview of how your NFT product
             looks like in the marketplace
           </p>
-          <div className="flex flex-col gap-3 rounded-xl bg-white p-5 dark:bg-neutral-900">
+          <div className="group h-[542px] w-full">
             {selectedImage && selectedImage.length > 0 ? (
               <Image
+                className="z-10 h-[290px] w-full rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all dark:bg-zinc-900"
+                width={600}
+                height={600}
+                placeholder="blur"
+                blurDataURL={`https://fakeimg.pl/600x600`}
                 src={URL.createObjectURL(getValues('file')[0])}
-                alt="Selected Preview"
-                width={375}
-                height={375}
-                className="self-center rounded-lg"
-                objectFit="contain"
+                alt={
+                  collection?.name
+                    ? collection?.name
+                    : nft.collectionAddress
+                      ? nft.collectionAddress
+                      : ''
+                }
               />
             ) : (
-              <div className="flex h-[375px] w-[375px] items-center justify-center self-center rounded-lg bg-gray-200">
+              <div className="z-10 flex h-[290px] w-full items-center justify-center rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all dark:bg-zinc-900">
                 <FontAwesomeIcon
                   icon={faImage}
-                  className="bg-gray-200 text-6xl text-gray-400"
+                  className="text-6xl text-gray-400"
                 />
               </div>
             )}
 
-            <div className="flex items-center justify-between">
-              <div className="flex w-1/3 items-center gap-2 rounded-lg bg-primary-50 p-2">
-                <img
-                  className="h-4 w-4 rounded-2xl"
-                  src="https://fakeimg.pl/16x16"
-                />
-                <div className="truncate text-xs font-medium leading-none text-neutral-900">
-                  {address}
+            <div className="group/discover inline-flex w-full flex-col items-center justify-center px-3 lg:items-start">
+              <div className="relative flex w-full flex-row">
+                <div className="text-md absolute -top-[80px] z-10 w-full">
+                  <div className="flex h-[72px] w-full flex-col justify-end gap-2">
+                    <div className="flex w-fit items-center justify-between gap-2 rounded-lg bg-gray-50 bg-opacity-80 px-3 py-2 text-xs font-bold text-primary-500 backdrop-blur dark:bg-zinc-800 dark:bg-opacity-80 dark:text-white">
+                      <div className="flex items-center gap-2">
+                        <FontAwesomeIcon size="xs" icon={faBan} />
+                        <span>Not for sale</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="inline-flex w-full flex-col items-start justify-start gap-4 rounded-bl-2xl rounded-br-2xl bg-white p-3 backdrop-blur-xl dark:bg-neutral-900">
+                  <div className="flex w-full flex-col items-start justify-start">
+                    <div className="inline-flex items-center justify-between self-stretch">
+                      <div className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary-50 bg-opacity-70 p-2 dark:bg-neutral-700">
+                        <JazzIcon
+                          diameter={16}
+                          seed={address}
+                          useGradientFallback={true}
+                          className="rounded-full"
+                        />
+                        <div className="flex items-start justify-start gap-2">
+                          <div className="text-xs font-medium leading-none text-neutral-900 dark:text-white">
+                            {truncateAddress(address)}
+                          </div>
+                          <div className="rounded-full text-xs font-black leading-none text-primary-500 dark:text-white">
+                            <FontAwesomeIcon icon={faCircleCheck} />
+                          </div>
+                        </div>
+                      </div>
+                      <Menu
+                        as="div"
+                        className="relative inline-block text-left"
+                      >
+                        <Menu.Button className="inline-flex w-full justify-center font-semibold text-gray-900 hover:text-primary-500 dark:text-white dark:hover:text-zinc-300">
+                          <FontAwesomeIcon
+                            icon={faEllipsis}
+                            aria-hidden="true"
+                            className="p-2"
+                          />
+                        </Menu.Button>
+                        <Transition
+                          as={Fragment}
+                          enter="transition ease-out duration-100"
+                          enterFrom="transform opacity-0 scale-95"
+                          enterTo="transform opacity-100 scale-100"
+                          leave="transition ease-in duration-75"
+                          leaveFrom="transform opacity-100 scale-100"
+                          leaveTo="transform opacity-0 scale-95"
+                        >
+                          <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white p-2 text-gray-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-800 dark:text-white">
+                            <div className="py-1">
+                              <Menu.Item>
+                                <button className="block w-full rounded-md px-4 py-2 text-left text-sm hover:bg-gray-50 hover:text-neutral-900">
+                                  Refresh Metadata
+                                </button>
+                              </Menu.Item>
+                              <Menu.Item>
+                                <button className="block w-full rounded-md px-4 py-2 text-left text-sm hover:bg-gray-50 hover:text-neutral-900">
+                                  Share
+                                </button>
+                              </Menu.Item>
+                              <Menu.Item>
+                                <button className="block w-full rounded-md px-4 py-2 text-left text-sm hover:bg-gray-50 hover:text-neutral-900">
+                                  Like
+                                </button>
+                              </Menu.Item>
+                              <Menu.Item>
+                                <button className="block w-full rounded-md px-4 py-2 text-left text-sm hover:bg-gray-50 hover:text-neutral-900">
+                                  Open Original
+                                </button>
+                              </Menu.Item>
+                              <Menu.Item>
+                                <button className="block w-full rounded-md px-4 py-2 text-left text-sm hover:bg-gray-50 hover:text-neutral-900">
+                                  Report
+                                </button>
+                              </Menu.Item>
+                            </div>
+                          </Menu.Items>
+                        </Transition>
+                      </Menu>
+                    </div>
+                    <div className="inline-flex w-full items-center justify-between gap-2 pt-1">
+                      <div className="line-clamp-2 flex h-[40px] items-center font-medium leading-[20px] text-gray-900 dark:text-white">
+                        {name === '' ? 'Untitled' : name}
+                      </div>
+                      <div className="text-sm font-normal leading-tight text-neutral-900">
+                        <HelaIcon className="h-6 w-6" />
+                      </div>
+                    </div>
+                    <div className="mt-5 flex w-full justify-between rounded-md bg-gray-100 px-2 py-2 dark:bg-neutral-700 dark:text-white">
+                      <div className="flex flex-col items-start truncate text-sm leading-5">
+                        <p>Price</p>
+                        <p className="font-bold">
+                          {price === '' ? '0.0' : price} {selectedChain.symbol}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-start truncate text-sm leading-5">
+                        <p>Highest bid</p>
+                        <p className="font-bold">No bids yet</p>
+                      </div>
+                    </div>
+                    <div className="flex w-full flex-col items-center group-hover:gap-2">
+                      <div className="mt-5 flex w-full items-center gap-4">
+                        <ButtonPrimary>Buy Now</ButtonPrimary>
+                      </div>
+                      <ButtonSecondary
+                        className={`duration-800 mt-2 h-0 overflow-hidden !py-0 opacity-0 group-hover:h-auto group-hover:!py-2 group-hover:opacity-100 group-hover:transition-all group-hover:duration-300 group-hover:ease-in-out`}
+                      >
+                        View Detail
+                      </ButtonSecondary>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <FontAwesomeIcon
-                icon={faEllipsis}
-                className="text-gray-900 dark:text-white"
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <h4 className="font-semibold">
-                {name === '' ? 'Untitled' : name}
-              </h4>
-              {selectedChain.chainId === 1 ||
-              selectedChain.chainId === 11155111 ? (
-                <Ethereum className="text-gray-500" />
-              ) : selectedChain.chainId === 8668 ||
-                selectedChain.chainId === 666888 ? (
-                <HelaIcon className="h-5 w-5" />
-              ) : (
-                ''
-              )}
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col">
-                <div className="font-semibold">Price</div>
-                <div className="font-semibold text-gray-900 dark:text-white">
-                  {price === '' ? '0.0' : price} {selectedChain.symbol}
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <div className="font-semibold">Highest bid</div>
-                <div className="text-gray-500">No bids yet</div>
-              </div>
-            </div>
-            <div className="mt-5 flex w-full items-center">
-              {/* <FontAwesomeIcon
-                className="mr-5 h-5 w-5 cursor-pointer rounded-full p-3 text-primary-500 hover:bg-primary-50 "
-                icon={faCartPlus}
-              /> */}
-              <ButtonPrimary>Buy Now</ButtonPrimary>
             </div>
           </div>
         </div>

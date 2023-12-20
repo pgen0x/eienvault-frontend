@@ -139,7 +139,6 @@ const Sidebar = () => {
         setChains(dataChain);
         // Continue with your code
       } catch (error) {
-        
         // Handle the error gracefully, e.g., show an error message to the user
       }
     };
@@ -149,18 +148,6 @@ const Sidebar = () => {
 
   const closeModal = () => {
     setIsCreateCollection(false);
-  };
-
-  const actionCopy = () => {
-    const textArea = document.createElement('textarea');
-    textArea.value = address;
-    document.body.appendChild(textArea);
-
-    textArea.select();
-    document.execCommand('copy');
-
-    document.body.removeChild(textArea);
-    toast.success('Address copied to clipboard');
   };
 
   return (
@@ -235,46 +222,51 @@ const Sidebar = () => {
                 </div> */}
                 <div className="flex h-full flex-col items-start justify-start gap-2 self-stretch">
                   <div
-                    className="inline-flex cursor-pointer items-center justify-start gap-3 self-stretch"
+                    className={`inline-flex cursor-pointer items-center justify-start gap-3 self-stretch text-gray-900 transition-all delay-75 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300 ${
+                      showDropdown ? 'mb-4' : 'mb-0'
+                    }`}
                     onClick={() => setShowDropdown(!showDropdown)}
                   >
                     <div className="flex items-start justify-start gap-4">
-                      <div className="text-center text-xl font-medium leading-8 text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300">
+                      <div className="text-center text-xl font-medium leading-8">
                         Create
                       </div>
                     </div>
                     <div className="flex h-6 w-6 items-center justify-center">
-                      <div className="text-md h-6 w-6 text-center font-black leading-normal text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300">
-                        {showDropdown ? (
-                          <FontAwesomeIcon icon={faChevronUp} />
-                        ) : (
-                          <FontAwesomeIcon icon={faChevronDown} />
-                        )}
+                      <div className="text-md h-6 w-6 font-black leading-normal">
+                        <FontAwesomeIcon
+                          icon={faChevronDown}
+                          className={`transition ease-in-out ${
+                            showDropdown ? '-rotate-180' : ''
+                          }`}
+                        />
                       </div>
                     </div>
                   </div>
-                  {showDropdown && (
-                    <div className="flex h-full flex-col items-start justify-start gap-2 self-stretch px-6">
-                      <div className="inline-flex items-center justify-start gap-2 self-stretch">
-                        <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
-                        <div
-                          className="shrink grow basis-0 cursor-pointer text-xl font-medium leading-normal text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300"
-                          onClick={() => handleNftCreate()}
-                        >
-                          NFT
-                        </div>
-                      </div>
-                      <div className="inline-flex items-center justify-start gap-2">
-                        <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
-                        <div
-                          className="w-48 cursor-pointer text-xl font-medium leading-normal text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300"
-                          onClick={() => handleCollectionCreate()}
-                        >
-                          Collections
-                        </div>
+                  <div
+                    className={`${
+                      showDropdown ? '-mt-4 flex' : 'hidden'
+                    } h-full flex-col items-start justify-start gap-2 self-stretch overflow-hidden px-6`}
+                  >
+                    <div className="inline-flex items-center justify-start gap-2 self-stretch">
+                      <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
+                      <div
+                        className="shrink grow basis-0 cursor-pointer text-xl font-medium leading-normal text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300"
+                        onClick={() => handleNftCreate()}
+                      >
+                        NFT
                       </div>
                     </div>
-                  )}
+                    <div className="inline-flex items-center justify-start gap-2">
+                      <div className="h-1.5 w-1.5 rounded-full bg-rose-600" />
+                      <div
+                        className="w-48 cursor-pointer text-xl font-medium leading-normal text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300"
+                        onClick={() => handleCollectionCreate()}
+                      >
+                        Collections
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div className="self-stretch text-xl font-medium leading-8 text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-neutral-300">
                   <button onClick={() => handleSetting()}>Setting</button>

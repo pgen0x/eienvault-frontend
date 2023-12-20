@@ -47,6 +47,7 @@ import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import ButtonPrimary from '@/components/button/buttonPrimary';
 import ButtonTertiary from '@/components/button/buttonTertiary';
 import SwitchGrid from '@/components/switch/grid';
+import ModalRemove from '@/components/modal/remove';
 
 const servers = [
   'All Mainnet',
@@ -100,12 +101,14 @@ export default function NftPage() {
   const [putOnSaleData, setPutonsaleData] = useState({});
   const [shareData, setShareData] = useState({});
   const [reportData, setReportData] = useState({});
+  const [removeData, setRemoveData] = useState({});
 
   const [isOpenModalBid, setisOpenModalBid] = useState(false);
   const [isOpenModalBuy, setisOpenModalBuy] = useState(false);
   const [isOpenModalPutonsale, setisOpenModalPutonsale] = useState(false);
   const [isOpenModalShare, setisOpenModalShare] = useState(false);
   const [isOpenModalReport, setisOpenModalReport] = useState(false);
+  const [isOpenModalRemove, setisOpenModalRemove] = useState(false);
 
   const { data: walletClient } = useWalletClient();
 
@@ -324,6 +327,19 @@ export default function NftPage() {
     setisOpenModalReport(true);
   };
 
+  const handleOpenModalRemove = async (
+    marketId,
+    tokenId,
+    collectionAddress,
+  ) => {
+    setRemoveData({
+      marketId,
+      tokenId,
+      collectionAddress,
+    });
+    setisOpenModalRemove(true);
+  };
+
   function closeModalBid() {
     setisOpenModalBid(false);
   }
@@ -342,6 +358,10 @@ export default function NftPage() {
 
   function closeModalReport() {
     setisOpenModalReport(false);
+  }
+
+  function closeModalRemove() {
+    setisOpenModalRemove(false);
   }
 
   const placeBid = async (marketId, price) => {
@@ -618,6 +638,7 @@ export default function NftPage() {
                         handleOpenModalPutonsale={handleOpenModalPutonsale}
                         handleOpenModalShare={handleOpenModalShare}
                         handleOpenModalReport={handleOpenModalReport}
+                        handleOpenModalRemove={handleOpenModalRemove}
                       />
                     );
                   })}
@@ -660,6 +681,12 @@ export default function NftPage() {
         onClose={closeModalReport}
         onModalClose={closeModalReport}
         reportData={reportData}
+      />
+      <ModalRemove
+        isOpenModal={isOpenModalRemove}
+        onClose={closeModalRemove}
+        removeData={removeData}
+        refreshData={refreshData}
       />
       <Footer />
     </>

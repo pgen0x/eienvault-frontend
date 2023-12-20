@@ -94,12 +94,12 @@ export default function ModalCreateCollection({
         // Handle the error here
         setErrorOnUpload(true);
         toast.error('File upload failed:', response.statusText);
-        console.error('File upload failed:', response);
+        
       }
     } catch (error) {
       // Handle any unexpected errors
       setErrorOnUpload(true);
-      console.error('Error during file upload:', error);
+      
     }
   };
 
@@ -134,11 +134,11 @@ export default function ModalCreateCollection({
         return response.json();
       } else {
         // Handle the error here
-        console.error('Data saved failed:', response.statusText);
+        
       }
     } catch (error) {
       // Handle any unexpected errors
-      console.error('Error during data save:', error);
+      
     }
   };
 
@@ -191,12 +191,12 @@ export default function ModalCreateCollection({
         address,
         args: [dataForm.name, dataForm.tokenSymbol, ''],
       });
-      console.log(hash);
+      
       setHash(hash);
     } catch (error) {
       closeModal();
       setIsSubmit(false);
-      console.error('Error deploying NFT contract:', error);
+      
     }
   };
 

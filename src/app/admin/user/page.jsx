@@ -44,7 +44,7 @@ const AdminUserPage = () => {
   function handleCopyToClipboard(address) {
     copyToClipboard(address);
     setCopyButtonStatus((oldCopy) => [...oldCopy, address]);
-    console.log(copyButtonStatus);
+    
     setTimeout(() => {
       setCopyButtonStatus((oldCopy) =>
         oldCopy.filter((item) => item != address),
@@ -334,7 +334,7 @@ const ModalUpdate = ({ isOpenModal, onClose, dataModal, refresh }) => {
 
   const handleChangeRoles = (value) => {
     setFormRoles((oldCopy) => {
-      console.log(oldCopy, "@@@");
+      
       if (oldCopy.includes(value)) {
         return oldCopy.filter((item) => item != value);
       }

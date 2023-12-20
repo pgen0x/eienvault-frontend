@@ -229,7 +229,7 @@ export const SlideshowActivities = ({ dataActivities, refreshData }) => {
       });
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      
     }
   };
 
@@ -244,7 +244,7 @@ export const SlideshowActivities = ({ dataActivities, refreshData }) => {
       });
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      
     }
   };
 

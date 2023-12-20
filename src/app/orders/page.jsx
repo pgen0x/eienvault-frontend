@@ -71,12 +71,12 @@ export default function OrdersPage() {
         args: [marketId],
         account: address,
       });
-      console.log(hash);
+      
       setRemoveListingHash(hash);
       toast.success('Bid successfully removed');
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      
       toast.error(error);
     }
   };
@@ -93,7 +93,7 @@ export default function OrdersPage() {
       toast.success('Bid successfully canceled');
       return hash;
     } catch (error) {
-      console.error('Error cancel an Offer', error);
+      
       toast.error(error);
     }
   };
@@ -110,7 +110,7 @@ export default function OrdersPage() {
       toast.success('Bid successfully accepted');
       return hash;
     } catch (error) {
-      console.error('Error Approve Bid', error);
+      
       toast.error(error);
     }
   };
@@ -132,7 +132,7 @@ export default function OrdersPage() {
         setDataListing([]);
       } else if (!res.ok) {
         setErrorBidandListing(true);
-        console.error('Fetch failed:', res);
+        
         throw new Error('Network response was not ok');
       } else {
         const responseData = await res.json();
@@ -140,7 +140,7 @@ export default function OrdersPage() {
       }
     } catch (error) {
       setErrorBidandListing(true);
-      console.error('Fetch failed:', error);
+      
     } finally {
       setIsLoading(false);
       setErrorBidandListing(false);
@@ -165,7 +165,7 @@ export default function OrdersPage() {
         setDataBidMade([]);
       } else if (!res.ok) {
         setErrorBidMade(true);
-        console.error('Fetch failed:', res);
+        
         throw new Error('Network response was not ok');
       } else {
         const responseData = await res.json();
@@ -173,7 +173,7 @@ export default function OrdersPage() {
       }
     } catch (error) {
       setErrorBidMade(true);
-      console.error('Fetch failed:', error);
+      
     } finally {
       setIsLoadingBidMade(false);
       setErrorBidMade(false);
@@ -198,7 +198,7 @@ export default function OrdersPage() {
         setDataReceived([]);
       } else if (!res.ok) {
         setErrorReceived(true);
-        console.error('Fetch failed:', res);
+        
         throw new Error('Network response was not ok');
       } else {
         const responseData = await res.json();
@@ -206,7 +206,7 @@ export default function OrdersPage() {
       }
     } catch (error) {
       setErrorReceived(true);
-      console.error('Fetch failed:', error);
+      
     } finally {
       setIsLoadingReceived(false);
       setErrorReceived(false);
@@ -637,7 +637,7 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
 const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
   const currentDate = moment();
   const router = useRouter();
-  console.log('Received', dataReceived);
+  
   return (
     <>
       <div className="min-h-full w-full">

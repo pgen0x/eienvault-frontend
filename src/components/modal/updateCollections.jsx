@@ -88,12 +88,12 @@ export default function ModalUpdateCollection({
         // Handle the error here
         setErrorOnUpload(true);
         toast.error('File upload failed:', response.statusText);
-        console.error('File upload failed:', response);
+        
       }
     } catch (error) {
       // Handle any unexpected errors
       setErrorOnUpload(true);
-      console.error('Error during file upload:', error);
+      
     }
   };
 
@@ -125,17 +125,17 @@ export default function ModalUpdateCollection({
         setIsSubmit(false);
         setIsCompleted(true);
         setErrorOnUpload(false);
-        console.log('Data saved successfully.');
+        
       } else {
         // Handle the error here
         setIsSubmit(false);
         setIsCompleted(true);
         setErrorOnUpload(true);
-        console.error('Data saved failed:', response.statusText);
+        
       }
     } catch (error) {
       // Handle any unexpected errors
-      console.error('Error during data save:', error);
+      
     }
   };
 
@@ -222,7 +222,7 @@ export default function ModalUpdateCollection({
           setValue('file', [file]);
         }
       } catch (error) {
-        console.error('Error fetching the image:', error);
+        
       }
     };
 

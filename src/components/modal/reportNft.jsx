@@ -87,7 +87,7 @@ export default function ModalReportNft({
         }),
       })
       .then((response) => {
-        console.log(response, "%%%%");
+        
         if (response.data.hasOwnProperty('success')) {
           toast.success(response.data.success.message);
         }
@@ -99,7 +99,7 @@ export default function ModalReportNft({
         if(error.response.data.hasOwnProperty("error")){
           toast.error(error.response.data.error.message);
         }else{
-          console.log("Report error:", JSON.stringify(error));
+          
         }
       });
   };

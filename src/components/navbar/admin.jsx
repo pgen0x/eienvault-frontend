@@ -54,7 +54,7 @@ export function SidebarAdmin() {
   const [openSubmenu, setOpenSubmenu] = useState(['']);
 
   useWeb3ModalEvents((event) => {
-    console.log(event);
+    
     if (event.name === 'ACCOUNT_CONNECTED') {
       setIsConnect(true);
     }

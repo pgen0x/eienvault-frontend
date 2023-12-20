@@ -89,8 +89,8 @@ const Onsale = ({
   }, [onsalePage]);
 
   const getNfts = async () => {
-    console.log(LastOnsale);
-    console.log(onsalePage);
+    
+    
 
     if (LastOnsale === true) return;
     setIsLoading(true);
@@ -396,7 +396,7 @@ const Onsale = ({
       });
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      
     }
   };
 
@@ -411,7 +411,7 @@ const Onsale = ({
       });
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      
     }
   };
 
@@ -433,7 +433,7 @@ const Onsale = ({
   }
 
   const refreshData = async () => {
-    console.log('Trigger refreshData');
+    
     setNfts([]);
     setOnsalePage(1);
     setLastOnsale(false);

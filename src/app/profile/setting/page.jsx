@@ -63,7 +63,7 @@ const ProfileSetting = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        
       });
   };
 
@@ -217,7 +217,7 @@ const Profile = ({
         setChains(dataChain);
         // Continue with your code
       } catch (error) {
-        console.error('Fetch failed:', error);
+        
         // Handle the error gracefully, e.g., show an error message to the user
       }
     };

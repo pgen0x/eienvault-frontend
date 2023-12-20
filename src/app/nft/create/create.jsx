@@ -246,7 +246,7 @@ export default function Create({ chains }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log('fetchDataCollections');
+      
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/user/collections`,
@@ -260,16 +260,16 @@ export default function Create({ chains }) {
         );
 
         if (!res.ok) {
-          console.error('Fetch failed:', res);
+          
           throw new Error('Network response was not ok');
         }
 
         const responseData = await res.json();
-        console.log(responseData);
+        
         setDataCollections(responseData);
         setSelectedOptionCollection(responseData[0].tokenAddress);
       } catch (error) {
-        console.error('Fetch failed:', error);
+        
       } finally {
         setIsLoadingCollection(false); // Set isLoading to false after fetching data
       }
@@ -401,7 +401,7 @@ export default function Create({ chains }) {
         });
       }
 
-      console.error('Error Approve', error);
+      
     }
   };
 
@@ -433,7 +433,7 @@ export default function Create({ chains }) {
       setPutOnSaleHash(hash);
       return hash;
     } catch (error) {
-      console.log('error listing', error);
+      
       setIsProcessing(false);
       setIsLoadingModal({
         ipfs: false,
@@ -452,7 +452,7 @@ export default function Create({ chains }) {
           message: error,
         });
       }
-      console.error('Error Listing', error);
+      
     }
   };
 
@@ -501,11 +501,11 @@ export default function Create({ chains }) {
 
       if (response.ok) {
         // Data was saved successfully
-        console.log('Data saved successfully.');
+        
       }
     } catch (error) {
       // Handle any unexpected errors
-      console.error('Error during data save:', error);
+      
     }
   };
 
@@ -600,7 +600,7 @@ export default function Create({ chains }) {
       const hash = await mintNFT(ipfsLink, bpValue);
       setMintHash(hash);
     } catch (e) {
-      console.error(e);
+      
       setIsLoadingModal({
         ipfs: false,
         mint: false,
@@ -673,7 +673,7 @@ export default function Create({ chains }) {
             putonsale: false,
           });
           setTokenId(hexToNumber(data.logs[0].topics[3]));
-          console.log(data, 'data after mint');
+          
           setIsCompleted({
             ipfs: true,
             mint: true,
@@ -741,7 +741,7 @@ export default function Create({ chains }) {
           });
         }
         if (isErrorPutsale) {
-          console.log('error putting on sale', isErrorPutsale);
+          
           setErrorPutonsale({
             isError: true,
             message: isErrorPutsale,
@@ -761,7 +761,7 @@ export default function Create({ chains }) {
             approve: true,
             putonsale: true,
           });
-          console.log(dataPutonsale, 'dataPutonsale');
+          
           setIsProcessing(false);
         }
       }

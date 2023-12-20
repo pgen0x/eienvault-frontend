@@ -166,14 +166,14 @@ export default function NftPage() {
         );
 
         if (!res.ok) {
-          console.error('Fetch failed:', res);
+          
           throw new Error('Network response was not ok');
         }
 
         const responseData = await res.json();
         setChains(responseData);
       } catch (error) {
-        console.error('Fetch failed:', error);
+        
       }
     };
     getChains();
@@ -355,7 +355,7 @@ export default function NftPage() {
       });
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      
     }
   };
 
@@ -370,12 +370,12 @@ export default function NftPage() {
       });
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      
     }
   };
 
   const refreshData = async () => {
-    console.log('Trigger refreshData');
+    
     setNfts([]);
     setNftPage(1);
     setNftLast(false);

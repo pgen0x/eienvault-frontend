@@ -43,7 +43,7 @@ const AdminUserPage = () => {
   function handleCopyToClipboard(address, key) {
     copyToClipboard(address);
     setCopyButtonStatus((oldCopy) => [...oldCopy, key]);
-    console.log(copyButtonStatus);
+    
     setTimeout(() => {
       setCopyButtonStatus((oldCopy) => oldCopy.filter((item) => item != key));
     }, 2500);

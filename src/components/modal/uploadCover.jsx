@@ -104,11 +104,11 @@ export default function ModaluploadCover({
       } else {
         // Handle the error here
         toast.error('File upload failed:', response.statusText);
-        console.error('File upload failed:', response.statusText);
+        
       }
     } catch (error) {
       // Handle any unexpected errors
-      console.error('Error during file upload:', error);
+      
     }
   };
 

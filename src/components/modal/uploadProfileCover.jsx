@@ -105,11 +105,11 @@ export default function ModalUploadProfileCover({
       } else {
         // Handle the error here
         toast.error('File upload failed:', response.statusText);
-        console.error('File upload failed:', response.statusText);
+        
       }
     } catch (error) {
       // Handle any unexpected errors
-      console.error('Error during file upload:', error);
+      
     }
   };
 
@@ -136,17 +136,17 @@ export default function ModalUploadProfileCover({
       );
 
       if (response.ok) {
-        console.log('Data saved successfully.');
+        
         return await response.json();
         // Data was saved successfully
       } else {
         // Handle the error here
-        console.error('Data saved failed:', response.statusText);
+        
         return await response.json();
       }
     } catch (error) {
       // Handle any unexpected errors
-      console.error('Error during data save:', error);
+      
     }
   };
 

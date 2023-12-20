@@ -79,7 +79,7 @@ export default function ModalRescueERC721({
       } else {
         toast.error('Something went wrong');
       }
-      console.error('Error Rescue ERC-721', error);
+      
     }
   };
 
@@ -101,7 +101,7 @@ export default function ModalRescueERC721({
       });
       return checkroles;
     } catch (error) {
-      console.error(error);
+      
       toast.error('Error hasRole');
     }
   };

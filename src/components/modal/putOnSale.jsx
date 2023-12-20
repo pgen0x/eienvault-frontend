@@ -198,13 +198,13 @@ export default function ModalPutOnSale({
     const isAuction = selectedOptionMarket === 'fixed' ? false : true;
     const parsePrice = parseEther(price);
 
-    console.log(listingPrice, 'listingPrice');
-    console.log(releaseTime, 'releaseTime');
-    console.log(isAuction, 'isAuction');
-    console.log(moment(customValueDate).unix(), 'customValueDate');
-    console.log(parsePrice, 'parsePrice');
-    console.log(collectionAddress, 'collectionAddress');
-    console.log(address, 'address');
+    
+    
+    
+    
+    
+    
+    
 
     try {
       const hash = await walletClient.writeContract({
@@ -225,7 +225,7 @@ export default function ModalPutOnSale({
       setPutOnSaleHash(hash);
       return hash;
     } catch (error) {
-      console.error('Error Listing', error);
+      
       setIsProcessing(false);
       setIsLoadingModal({
         approve: false,
@@ -270,7 +270,7 @@ export default function ModalPutOnSale({
       closeModal();
       setIsSubmit(false);
       setIsProcessing(false);
-      console.error('Error onSubmit:', error);
+      
     }
   };
 
@@ -406,21 +406,21 @@ export default function ModalPutOnSale({
 
       if (response.ok) {
         // Data was saved successfully
-        console.log('Data saved successfully.');
+        
       } else {
         // Handle the error here
-        console.error('Data saved failed:', response.statusText);
+        
       }
     } catch (error) {
       // Handle any unexpected errors
-      console.error('Error during data save:', error);
+      
     }
   };
 
   useEffect(() => {
     const fetchData = async () => {
       const price = await getListingPrice();
-      console.log(price); // This will log the updated listingFee
+      
     };
 
     fetchData();

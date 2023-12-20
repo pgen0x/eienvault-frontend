@@ -121,7 +121,7 @@ const Following = ({ followData }) => {
       setUsers(data);
       // Continue with your code
     } catch (error) {
-      console.error('Fetch failed:', error);
+      
       // Handle the error gracefully, e.g., show an error message to the user
     }
   };
@@ -269,7 +269,7 @@ const Followers = ({ followData }) => {
       setUsers(data);
       // Continue with your code
     } catch (error) {
-      console.error('Fetch failed:', error);
+      
       // Handle the error gracefully, e.g., show an error message to the user
     }
   };

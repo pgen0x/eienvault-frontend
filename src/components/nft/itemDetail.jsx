@@ -243,7 +243,7 @@ const Nft = ({
       toast.success('Refresh metada successfully');
       window.location.reload();
     } catch (error) {
-      console.error('error likes:', error);
+      
     }
   }
 
@@ -271,7 +271,7 @@ const Nft = ({
         setCountLikes(countLikes + 1);
       }
     } catch (error) {
-      console.error('error likes:', error);
+      
     }
   };
 
@@ -294,7 +294,7 @@ const Nft = ({
         },
       );
       if (!res.ok) {
-        console.error('Refresh metadata failed:', res);
+        
         const errorMessage = await res.json();
         toast.error(errorMessage.error.messages);
       }
@@ -302,7 +302,7 @@ const Nft = ({
       toast.success('Refresh metada successfully');
       window.location.reload();
     } catch (error) {
-      console.error('error likes:', error);
+      
     }
   }
 
@@ -311,7 +311,7 @@ const Nft = ({
   };
 
   useEffect(() => {
-    console.log('@@@', endDate, releaseDate);
+    
   }, [endDate, releaseDate]);
 
   return (

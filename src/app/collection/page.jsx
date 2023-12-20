@@ -177,14 +177,14 @@ export default function Collection() {
         );
 
         if (!res.ok) {
-          console.error('Fetch failed:', res);
+          
           throw new Error('Network response was not ok');
         }
 
         const responseData = await res.json();
         setChains(responseData);
       } catch (error) {
-        console.error('Fetch failed:', error);
+        
       }
     };
     getChains();

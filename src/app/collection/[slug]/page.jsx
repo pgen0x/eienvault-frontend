@@ -212,7 +212,7 @@ export default function CollectionDetail({ params }) {
         setChains(dataChain);
         // Continue with your code
       } catch (error) {
-        console.error('Fetch failed:', error);
+        
         // Handle the error gracefully, e.g., show an error message to the user
       }
     };
@@ -887,7 +887,7 @@ const Items = ({ params, collection }) => {
       });
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      
     }
   };
 
@@ -902,7 +902,7 @@ const Items = ({ params, collection }) => {
       });
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      
     }
   };
 
@@ -1171,7 +1171,7 @@ const Items = ({ params, collection }) => {
   }, [selectedValues]);
 
   const refreshData = async () => {
-    console.log('Trigger refreshData');
+    
     setNfts([]);
     setNftPage(1);
     setNftLast(false);
@@ -1682,7 +1682,7 @@ const Activity = ({ collection }) => {
         setIsLoading(false);
       })
       .catch((error) => {
-        console.log(error.message);
+        
         setIsLoading(false);
       });
   };

@@ -422,7 +422,7 @@ export default function Owned({
       });
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      
     }
   };
 
@@ -437,12 +437,12 @@ export default function Owned({
       });
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      
     }
   };
 
   const refreshData = () => {
-    console.log('Trigger refreshData');
+    
     setNfts([]);
     setOWnedPage(1);
     setNftLast(false);

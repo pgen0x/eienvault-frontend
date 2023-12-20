@@ -79,7 +79,7 @@ export default function ModalRescueERC20({
       } else {
         toast.error('Something went wrong');
       }
-      console.error('Error rescue_erc20', error);
+      
     }
   };
 
@@ -103,7 +103,7 @@ export default function ModalRescueERC20({
     } catch (error) {
       setIsSubmit(false);
       toast.error('Error hasRole');
-      console.error('Error hasRole', error);
+      
     }
   };
 

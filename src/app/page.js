@@ -89,7 +89,7 @@ export default function Home() {
 
       if (!res.ok) {
         setErrorCollections(true);
-        console.error('Fetch failed:', res);
+        
         throw new Error('Network response was not ok');
       }
 
@@ -97,7 +97,7 @@ export default function Home() {
       setDataCollections(responseData.collections);
     } catch (error) {
       setErrorCollections(true);
-      console.error('Fetch failed:', error);
+      
     } finally {
       setIsLoadingCollections(false);
       setErrorCollections(false);
@@ -118,7 +118,7 @@ export default function Home() {
 
       if (!res.ok) {
         setErrorActivities(true);
-        console.error('Fetch failed:', res);
+        
         throw new Error('Network response was not ok');
       }
 
@@ -126,7 +126,7 @@ export default function Home() {
       setDataActivities(responseData.nfts);
     } catch (error) {
       setErrorActivities(true);
-      console.error('Fetch failed:', error);
+      
     } finally {
       setIsLoadingActivities(false);
       setErrorActivities(false);
@@ -147,7 +147,7 @@ export default function Home() {
 
       if (!res.ok) {
         setErrorUpcoming(true);
-        console.error('Fetch failed:', res);
+        
         throw new Error('Network response was not ok');
       }
 
@@ -161,7 +161,7 @@ export default function Home() {
       setDataUpcoming(filteredData);
     } catch (error) {
       setErrorUpcoming(true);
-      console.error('Fetch failed:', error);
+      
     } finally {
       setIsLoadingUpcoming(false);
       setErrorUpcoming(false);
@@ -182,7 +182,7 @@ export default function Home() {
 
       if (!res.ok) {
         setIsLoadingDiscover(true);
-        console.error('Fetch failed:', res);
+        
         throw new Error('Network response was not ok');
       }
 
@@ -192,7 +192,7 @@ export default function Home() {
       setDataDiscover(filteredData);
     } catch (error) {
       setErrorDiscover(true);
-      console.error('Fetch failed:', error);
+      
     } finally {
       setIsLoadingDiscover(false);
       setErrorDiscover(false);
@@ -213,7 +213,7 @@ export default function Home() {
 
       if (!res.ok) {
         setErrorUsers(true);
-        console.error('Fetch failed:', res);
+        
         throw new Error('Network response was not ok');
       }
 
@@ -221,7 +221,7 @@ export default function Home() {
       setDataUsers(responseData.users);
     } catch (error) {
       setErrorUsers(true);
-      console.error('Fetch failed:', error);
+      
     } finally {
       setIsLoadingUsers(false);
       setErrorUsers(false);
@@ -242,7 +242,7 @@ export default function Home() {
 
   const refreshDataActivities = () => {
     setTimeout(async () => {
-      console.log('Trigger refreshDataActivities');
+      
       setIsLoadingActivities(true);
       setDataDiscover([]);
       await getNfts();
@@ -250,7 +250,7 @@ export default function Home() {
   };
 
   const refreshDataDiscover = async () => {
-    console.log('Trigger refreshDataDiscover');
+    
     setIsLoadingDiscover(true);
     setDataActivities([]);
     await getDiscover();

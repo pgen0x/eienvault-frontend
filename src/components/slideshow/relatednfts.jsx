@@ -193,7 +193,7 @@ export const RelatedNFTs = ({ dataRelatedNFTs, refreshData }) => {
       });
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      
     }
   };
 
@@ -208,7 +208,7 @@ export const RelatedNFTs = ({ dataRelatedNFTs, refreshData }) => {
       });
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      
     }
   };
 

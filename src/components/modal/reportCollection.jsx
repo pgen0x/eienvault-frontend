@@ -95,7 +95,7 @@ export default function ModalReportCollection({
         if(error.response.data.hasOwnProperty("error")){
           toast.error(error.response.data.error.message);
         }else{
-          console.log("Report error:", JSON.stringify(error));
+          
         }
       });
   };

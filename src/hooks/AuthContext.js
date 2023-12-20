@@ -80,7 +80,7 @@ export function AuthProvider({ children }) {
       setDataUser(data);
       return data;
     } catch (error) {
-      console.error('Get data failed:', error.message);
+      
     }
   };
 
@@ -137,7 +137,7 @@ export function AuthProvider({ children }) {
       setHasSigned(true);
       setAddressHasSigned(address);
     } catch (error) {
-      console.log('Error Occured', error);
+      
     }
   };
 

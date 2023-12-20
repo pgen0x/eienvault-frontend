@@ -54,7 +54,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
         refresh();
       }
     } catch (error) {
-      console.error('error likes:', error);
+      
     }
   };
 

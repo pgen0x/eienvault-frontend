@@ -46,7 +46,7 @@ export default function ModalBuy({
   const router = useRouter();
   const { data: walletClient } = useWalletClient({
     onError(error) {
-      console.log('Error', error);
+      
     },
   });
   const { address, isConnected } = useAccount();
@@ -184,14 +184,14 @@ export default function ModalBuy({
 
       if (response.ok) {
         // Data was saved successfully
-        console.log('Data saved successfully.');
+        
       } else {
         // Handle the error here
-        console.error('Data saved failed:', response.statusText);
+        
       }
     } catch (error) {
       // Handle any unexpected errors
-      console.error('Error during data save:', error);
+      
     }
   };
 

@@ -37,7 +37,7 @@ const Auction = () => {
 
       if (!res.ok) {
         setErrorAuctions(true);
-        console.error('Fetch failed:', res);
+        
         throw new Error('Network response was not ok');
       }
 
@@ -46,7 +46,7 @@ const Auction = () => {
       setAuctions(responseData);
     } catch (error) {
       setErrorAuctions(true);
-      console.error('Fetch failed:', error);
+      
     } finally {
       setErrorAuctions(false); // Set isLoading to false after fetching data
     }
@@ -67,7 +67,7 @@ const Auction = () => {
       });
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      
     }
   };
 
@@ -91,7 +91,7 @@ const Auction = () => {
       );
 
       if (!res.ok) {
-        console.error('Refresh metadata failed:', res);
+        
         throw new Error('Network response was not ok');
       }
 
@@ -99,13 +99,13 @@ const Auction = () => {
 
       setRefreshMetadata(true);
     } catch (error) {
-      console.log(error);
+      
       throw new Error('Refresh metadata failed:');
     }
   }
 
   const refreshData = async () => {
-    console.log('Trigger refreshData auction');
+    
     setAuctions([]);
     await fetchData();
   };

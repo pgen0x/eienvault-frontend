@@ -196,7 +196,7 @@ export const SlideshowDiscover = ({ dataDiscover, refreshData }) => {
       });
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      
     }
   };
 
@@ -211,7 +211,7 @@ export const SlideshowDiscover = ({ dataDiscover, refreshData }) => {
       });
       return hash;
     } catch (error) {
-      console.error('Error Make an Offer', error);
+      
     }
   };
 

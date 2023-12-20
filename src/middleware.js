@@ -37,7 +37,7 @@ export async function middleware(req, ev) {
 
       return NextResponse.next();
     } catch (error) {
-      console.error('Error decoding token:', error);
+      
 
       const response = NextResponse.redirect(new URL('/', req.url));
       response.cookies.delete('token');

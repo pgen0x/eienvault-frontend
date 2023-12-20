@@ -119,14 +119,14 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
       if (res.status === 404) {
         setDataNFTs([]);
       } else if (!res.ok) {
-        console.error('Fetch failed:', res);
+        
       } else {
         const responseData = await res.json();
         setDataNFTs(responseData);
       }
     } catch (error) {
       setDataNFTs([]);
-      console.error('Fetch failed:', error);
+      
     }
   };
 
@@ -340,7 +340,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
       });
       return hash;
     } catch (error) {
-      console.error('Error Buy Auction', error);
+      
     }
   };
 
@@ -369,7 +369,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
         setIsLiked(!isLiked);
       }
     } catch (error) {
-      console.error('error refresh metadata:', error);
+      
     }
   };
 
@@ -392,15 +392,15 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
         },
       );
       if (!res.ok) {
-        console.error('Refresh metadata failed:', res);
+        
         const errorMessage = await res.json();
-        console.log(errorMessage.error.messages);
+        
       } else {
         toast.success('Refresh metada successfully');
         window.location.reload();
       }
     } catch (error) {
-      console.error('error likes:', error);
+      
     }
   }
 
@@ -419,14 +419,14 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
 
         if (!res.ok) {
           setErrorActivities(true);
-          console.error('Fetch failed:', res);
+          
           throw new Error('Network response was not ok');
         }
 
         const responseData = await res.json();
         setDataRelatedNFTs(responseData);
       } catch (error) {
-        console.error('Fetch failed:', error);
+        
       } finally {
         setIsLoadingRelatedNFTs(false);
       }
@@ -2163,7 +2163,7 @@ const History = ({ collection, tokenId, nft }) => {
           });
         })
         .catch((error) => {
-          console.log(error.message);
+          
         });
     };
 
@@ -2198,7 +2198,7 @@ const History = ({ collection, tokenId, nft }) => {
           setIsLoading(false);
         })
         .catch((error) => {
-          console.log(error.message);
+          
           setIsLoading(false);
         });
     };

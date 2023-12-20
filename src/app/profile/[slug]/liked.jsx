@@ -108,7 +108,7 @@ const Liked = ({
       })
       .catch((error) => {
         setIsLoading(false);
-        console.log(error.message);
+        
       });
   };
 
@@ -321,7 +321,7 @@ const Liked = ({
   }
 
   const refreshData = async () => {
-    console.log('Trigger refreshData');
+    
     setNfts([]);
     setNftPage(1);
     setNftLast(false);

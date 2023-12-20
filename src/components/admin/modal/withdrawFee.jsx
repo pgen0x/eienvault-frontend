@@ -72,7 +72,7 @@ export default function ModalWithdrawFee({
           amount = parseEther(data.amount);
         } else {
           const decimal = await getDecimals(data.tokenAddress);
-          console.log(decimal);
+          
           amount = parseUnits(data.amount, decimal);
         }
         await walletClient.writeContract({
@@ -93,7 +93,7 @@ export default function ModalWithdrawFee({
       } else {
         toast.error('Something went wrong');
       }
-      console.error('Error withdrawFeeCommission', error);
+      
     }
   };
 
@@ -114,7 +114,7 @@ export default function ModalWithdrawFee({
       });
       return checkroles;
     } catch (error) {
-      console.error(error);
+      
       toast.error('Error hasRole');
     }
   };
@@ -130,7 +130,7 @@ export default function ModalWithdrawFee({
       });
       return decimal;
     } catch (error) {
-      console.error(error);
+      
     }
   };
 

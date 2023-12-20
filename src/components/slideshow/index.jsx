@@ -629,7 +629,7 @@ export const SlideshowMobile = ({
                       <div className="flex flex-col items-start justify-start gap-1">
                         <div className="inline-flex items-center justify-start gap-4">
                           <span className="text-gray-900">By</span>
-                          <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2">
+                          <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2" onClick={() => router.push(`/profile/${auction.collectionData?.userAddress}`)}>
                             <ImageWithFallback
                               className="h-full w-full rounded-2xl "
                               width={15}

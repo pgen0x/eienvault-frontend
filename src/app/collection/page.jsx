@@ -37,6 +37,7 @@ import ButtonTertiary from '@/components/button/buttonTertiary';
 import { SwitchTrenndingTop } from '@/components/switch/trendingTop';
 import { SwitchTrenndingTopTime } from '@/components/switch/trendingTopTime';
 import ButtonSecondary from '@/components/button/buttonSecondary';
+import { truncateAddress } from '@/utils/truncateAddress';
 
 const servers = [
   'All Mainnet',
@@ -220,10 +221,15 @@ export default function Collection() {
         })
         .then((response) => {
           if (response.data.collections.length > 0) {
-            setCollections((oldCollections) => [
-              ...oldCollections,
-              ...response.data.collections,
-            ]);
+            if (collectionPage >= response.data.totalPages) {
+              setCollectionLast(true); // Set nftLast to true if the current page is the last page
+            }
+  
+            if (collectionPage > 1) {
+              setCollections((oldCollections) => [...oldCollections, ...response.data.collections]);
+            } else {
+              setCollections([...response.data.collections]);
+            }
           } else {
             setCollectionLast(true);
           }
@@ -240,11 +246,12 @@ export default function Collection() {
         })
         .then((response) => {
           if (response.data.collections.length > 0) {
+            if (collectionPage >= response.data.totalPages) {
+              setCollectionLast(true); // Set nftLast to true if the current page is the last page
+            }
+  
             if (collectionPage > 1) {
-              setCollections((oldCollections) => [
-                ...oldCollections,
-                ...response.data.collections,
-              ]);
+              setCollections((oldCollections) => [...oldCollections, ...response.data.collections]);
             } else {
               setCollections([...response.data.collections]);
             }
@@ -260,7 +267,7 @@ export default function Collection() {
               setCollections([]);
             }
           } else {
-            toast.error(error.message);
+            
           }
         });
     }
@@ -307,6 +314,25 @@ export default function Collection() {
       }
 
       result.push(collection);
+    }
+
+    if (TrendingTop == 'trending') {
+      var dataSort = result.slice(0);
+      dataSort.sort(function (a, b) {
+        return (
+          Number(b['volumeChangePercentag' + Range]) -
+          Number(a['volumeChangePercentag' + Range])
+        );
+      });
+      result = dataSort;
+    }
+
+    if (TrendingTop == 'top') {
+      var dataSort = result.slice(0);
+      dataSort.sort(function (a, b) {
+        return b.volume - a.volume;
+      });
+      result = dataSort;
     }
 
     return result;
@@ -610,7 +636,7 @@ export default function Collection() {
                           <span className="flex w-full items-center">
                             {collection.name
                               ? collection.name
-                              : collection?.userAddress}
+                              : truncateAddress(collection?.userAddress)}
                           </span>
                         </div>
                         <div className="col-span-2 flex items-center justify-center gap-2">

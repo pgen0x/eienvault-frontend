@@ -432,7 +432,9 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
       }
     };
 
-    getRelatedNFTs();
+    if(dataNFTs?.collectionAddress != null){
+      getRelatedNFTs();
+    }
   }, [dataNFTs]);
 
   const currentDate = moment();
@@ -1282,7 +1284,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                         Collateral
                       </li> */}
                     </ul>
-                    <div className="flex w-full flex-col gap-4 rounded-lg bg-white/70 p-5 text-gray-900 dark:bg-neutral-900">
+                    <div className="flex w-full flex-col rounded-lg bg-white/70 text-gray-900 dark:bg-neutral-900">
                       {dataNFTs && renderActiveTab()}
                     </div>
                   </div>
@@ -1737,30 +1739,32 @@ const Overview = ({ dataOverview, onSeeAllClick }) => {
                 className="inline-flex w-full items-center justify-start gap-5 self-stretch rounded-lg bg-gray-100 p-2 hover:bg-gray-200 dark:bg-neutral-800 hover:dark:bg-neutral-700"
                 key={index}
               >
-                <div className="flex shrink grow basis-0 items-center justify-between text-center text-base font-bold leading-loose">
+                <div className="flex shrink grow basis-0 items-center justify-between text-base font-bold leading-loose">
                   <div className="inline-flex h-14 w-full items-center justify-center">
-                    <div className="text-md inline-flex shrink grow basis-0 flex-row gap-3 font-medium leading-loose">
-                      <div className="h-8 w-8 rounded-full bg-gray-300">
-                        <ImageWithFallback
-                          className="h-full w-full rounded-2xl "
-                          width={32}
-                          height={32}
-                          alt={
-                            offer?.userDetails?.username ||
-                            truncateAddress4char(
-                              offer?.userDetails?.walletAddress,
-                            )
-                          }
-                          diameter={32}
-                          address={offer?.userDetails?.walletAddress}
-                          src={`${process.env.NEXT_PUBLIC_CDN_URL}/${offer?.userDetails?.logo}`}
-                        />
+                    <div className="text-md inline-flex shrink grow basis-0 flex-row gap-3 font-medium leading-loose items-center justify-between">
+                      <div className="flex gap-2">
+                        <div className="h-8 w-8 rounded-full bg-gray-300">
+                          <ImageWithFallback
+                            className="h-full w-full rounded-2xl "
+                            width={32}
+                            height={32}
+                            alt={
+                              offer?.userDetails?.username ||
+                              truncateAddress4char(
+                                offer?.userDetails?.walletAddress,
+                              )
+                            }
+                            diameter={32}
+                            address={offer?.userDetails?.walletAddress}
+                            src={`${process.env.NEXT_PUBLIC_CDN_URL}/${offer?.userDetails?.logo}`}
+                          />
+                        </div>
+                        <div className="inline-flex cursor-pointer items-center justify-center">
+                          {offer?.userDetails?.username ||
+                            truncateAddress(offer?.userDetails?.walletAddress)}
+                        </div>
                       </div>
-                      <div className="inline-flex cursor-pointer items-center justify-center">
-                        {offer?.userDetails?.username ||
-                          truncateAddress(offer?.userDetails?.walletAddress)}
-                      </div>
-                      <div className="justify-start">
+                      <div className="justify-end text-right">
                         {'- '}Bid At {formatEther(offer?.value)}{' '}
                         {dataOverview?.collectionData.Chain.symbol}
                       </div>
@@ -1792,7 +1796,7 @@ const Bids = ({ dataBid }) => {
                 key={index}
               >
                 <div className="flex shrink grow basis-0 items-center justify-between text-center text-base font-bold leading-loose">
-                  <div className="inline-flex h-14 w-1/2 items-center justify-center">
+                  <div className="inline-flex h-14 items-center justify-center">
                     <div className="text-md inline-flex shrink grow basis-0 flex-row gap-3 font-medium leading-loose">
                       <div className="h-12 w-12 rounded-full bg-gray-300 dark:bg-neutral-800">
                         {offer?.userDetails?.logo ? (
@@ -1826,7 +1830,7 @@ const Bids = ({ dataBid }) => {
                     </div>
                   </div>
                   <div className="text-md flex shrink grow basis-0 flex-col items-end justify-end self-end font-medium leading-loose">
-                    <div className="justify-start">Bid At</div>
+                    <div className="justify-start font-normal">Bid At</div>
                     <div className="justify-start">
                       {formatEther(offer?.value)}{' '}
                       {dataBid?.collectionData.Chain.symbol}
@@ -1892,14 +1896,15 @@ const History = ({ collection, tokenId, nft }) => {
       );
       type = 'Burn';
     } else if (
-      event?.item?.From !== marketplaceABI &&
+      event?.item?.From !== vaultABI.address &&
       isAddress(event?.item?.From) &&
-      event?.item?.To !== marketplaceABI &&
+      event?.item?.To !== vaultABI.address &&
       isAddress(event?.item?.To)
     ) {
       description = (
-        <div className="flex flex-wrap gap-1">
-          transfer from
+        <div className="w-full flex flex-col sm:flex-row flex-wrap gap-1">
+          <div className="flex gap-1">
+            transferred from
           <JazzIcon
             diameter={16}
             seed={event?.item?.From}
@@ -1911,6 +1916,8 @@ const History = ({ collection, tokenId, nft }) => {
           >
             {truncateAddress4char(event?.item?.From)}
           </button>
+          </div>
+          <div className="flex gap-1">
           to
           <JazzIcon
             diameter={16}
@@ -1923,6 +1930,7 @@ const History = ({ collection, tokenId, nft }) => {
           >
             {truncateAddress4char(event?.item?.To)}
           </button>
+          </div>
         </div>
       );
       type = 'Transfer';
@@ -1953,7 +1961,8 @@ const History = ({ collection, tokenId, nft }) => {
     if (event.eventType == 'ItemListed') {
       type = 'Listings';
       description = (
-        <div className="flex flex-wrap gap-1">
+        <div className="w-full flex flex-col sm:flex-row flex-wrap gap-1">
+        <div className="flex gap-1">
           <span>listed by</span>{' '}
           <JazzIcon
             diameter={16}
@@ -1968,10 +1977,13 @@ const History = ({ collection, tokenId, nft }) => {
               ? event.sellerData.username
               : truncateAddress4char(event?.seller)}
           </button>
+          </div>
+          <div className="flex gap-1">
           for
           <span className="font-bold text-primary-500">
             {formatEther(event?.price)} {event?.collectionData?.Chain?.symbol}
           </span>
+          </div>
         </div>
       );
     } else if (event.eventType == 'NewOffer') {
@@ -2000,7 +2012,8 @@ const History = ({ collection, tokenId, nft }) => {
     } else if (event.eventType == 'ItemSold') {
       type = 'Sales';
       description = (
-        <div className="flex flex-wrap gap-1">
+        <div className="w-full flex flex-col sm:flex-row flex-wrap gap-1">
+          <div className="flex gap-1">
           purchased by
           <JazzIcon
             diameter={16}
@@ -2015,10 +2028,14 @@ const History = ({ collection, tokenId, nft }) => {
               ? event.buyerData.username
               : truncateAddress4char(event?.buyer)}
           </button>
+          </div>
+          <div className="flex gap-1">
           for
           <span className="font-bold text-primary-500">
             {formatEther(event?.price)} {event?.collectionData?.Chain?.symbol}
           </span>
+          </div>
+          <div className="flex gap-1">
           from
           <JazzIcon
             diameter={16}
@@ -2033,6 +2050,7 @@ const History = ({ collection, tokenId, nft }) => {
               ? event.sellerData.username
               : truncateAddress4char(event?.seller)}
           </button>
+          </div>
         </div>
       );
     } else if (event.eventType == 'RemoveOffer') {
@@ -2149,9 +2167,11 @@ const History = ({ collection, tokenId, nft }) => {
         });
     };
 
-    getHistoryMintTransfer().then(() => {
-      getHistoryBidsSalesListing();
-    });
+    if(collection?.tokenAddress != null && tokenId != null){
+      getHistoryMintTransfer().then(() => {
+        getHistoryBidsSalesListing();
+      });
+    }
 
     const getHistoryBidsSalesListing = async () => {
       await axios
@@ -2182,12 +2202,12 @@ const History = ({ collection, tokenId, nft }) => {
           setIsLoading(false);
         });
     };
-  }, [collection]);
+  }, [collection, tokenId]);
 
   return (
     <>
       {events.length == 0 && !isLoading && (
-        <div className="w-full items-center justify-center gap-5 self-stretch rounded-xl bg-white p-2 lg:inline-flex">
+        <div className="w-full items-center justify-center gap-5 self-stretch rounded-xl bg-white dark:bg-neutral-800 dark:text-white p-2 lg:inline-flex">
           No history
         </div>
       )}
@@ -2200,7 +2220,7 @@ const History = ({ collection, tokenId, nft }) => {
           </div>
         </div>
       )}
-      <div className="flex max-h-96 flex-col gap-3 overflow-y-auto text-sm text-black dark:text-white">
+      <div className="w-full flex max-h-96 flex-col gap-3 overflow-y-auto text-sm text-black dark:text-white">
         {events.map((event, index) => {
           return <ActivityItemDetail key={index} event={event} />;
         })}

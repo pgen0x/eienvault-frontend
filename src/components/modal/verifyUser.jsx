@@ -132,7 +132,6 @@ export default function ModalVerifyUser({
     }
   }, [isOpenModal]);
 
-  useEffect(() => {
   return (
     <>
       <Transition appear show={isOpenModal} as={Fragment}>

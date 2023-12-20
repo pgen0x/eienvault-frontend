@@ -160,10 +160,10 @@ export const Slideshow = ({
           dynamicBullets: true,
         }}
         modules={[Autoplay, Pagination, Navigation]}
-        // autoplay={{
-        //   delay: 3000,
-        //   disableOnInteraction: false,
-        // }}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
       >
         {auctions.map((auction, index) => {
           const currentDate = moment();
@@ -577,10 +577,10 @@ export const SlideshowMobile = ({
           return (
             <SwiperSlide key={index}>
               <div className="inline-flex w-[375px] flex-col items-center justify-center gap-2 p-2 lg:items-start lg:px-10 lg:pt-16">
-                <div className="mt-[6rem] flex flex-row items-center self-start rounded-lg bg-[#fff1d4] px-2 py-2">
+                <div className="mt-[6rem] ml-2 flex flex-row items-center self-start rounded-lg bg-[#fff1d4] px-2 py-2">
                   <span className="mr-2 h-1 w-1 animate-ping rounded-full bg-red-400 opacity-90"></span>
                   <div className="whitespace-nowrap text-xs font-semibold text-gray-900">
-                    Live mint
+                    Live auction
                   </div>
                 </div>
                 <div className="relative flex w-[340px] flex-col">

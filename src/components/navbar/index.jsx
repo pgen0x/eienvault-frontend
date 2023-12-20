@@ -89,7 +89,7 @@ export default function Navbar() {
           onClick={() => setOpenMenu(!openMenu)}
         />
         <div
-          className={`place-items-top fixed top-0 z-40 grid h-screen w-[418px] max-w-full transition-all duration-500 ${
+          className={`place-items-top fixed top-0 z-40 grid h-screen w-[500px] max-w-full transition-all duration-500 ${
             openMenu ? 'right-0' : '-right-[100%]'
           }`}
         >
@@ -100,7 +100,7 @@ export default function Navbar() {
             >
               <FontAwesomeIcon icon={faXmark} />
             </button>
-            <nav className="flex w-full max-w-[418px] flex-grow flex-col justify-start px-10 pb-4 text-2xl transition-all delay-1000 duration-500 md:pb-0">
+            <nav className="flex w-full max-w-[500px] flex-grow flex-col justify-start px-10 pb-4 text-2xl transition-all delay-1000 duration-500 md:pb-0">
               <span className="mt-2 py-2 font-semibold text-gray-900 hover:text-neutral-700 dark:text-white">
                 Home
               </span>

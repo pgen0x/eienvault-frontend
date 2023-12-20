@@ -507,7 +507,6 @@ const MobileNft = ({ collection }) => {
         [...Array(5)].map((nft, index) => {
           return (
             <SwiperSlide key={index}>
-              <span className="absolute ml-[45px] mt-[5px] rounded-lg bg-gray-500 px-3 py-2 text-xs backdrop-blur-md"></span>
               <div className="flex h-20 w-20 animate-pulse flex-col justify-end bg-gray-300 bg-cover bg-center px-2 text-right">
                 <span className="mb-1 flex w-full rounded-lg bg-gray-500 py-2 text-xs"></span>
               </div>
@@ -523,9 +522,6 @@ const MobileNft = ({ collection }) => {
             }
           >
             <div className="w-full px-1">
-              <button className="absolute ml-[45px] mt-[5px] rounded-lg bg-white/10 px-2 py-1 text-xs backdrop-blur-md dark:text-white">
-                <FontAwesomeIcon icon={faCartPlus} />
-              </button>
               <div className="h-20 w-20">
                 {nft?.imageUri !== null ? (
                   <Image

@@ -41,13 +41,18 @@ import Opensea from '@/assets/icon/opensea';
 import { Listbox } from '@headlessui/react';
 import DatePicker from 'tailwind-datepicker-react';
 import { useRouter } from 'next-nprogress-bar';
-import { useAccount, useWalletClient } from 'wagmi';
+import { useAccount, useBalance, useWalletClient } from 'wagmi';
 import Image from 'next/legacy/image';
 import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { ImageWithFallback } from '@/components/imagewithfallback';
 import HelaIcon from '@/assets/icon/hela';
-import { formatEther, isAddress, parseEther } from 'viem';
+import {
+  formatEther,
+  formatUnits,
+  isAddress,
+  zeroAddress,
+} from 'viem';
 const accounts = ['0x30756...Fb179', '0x30756...Zi57G', '0x30756...Gy352'];
 import { notFound } from 'next/navigation';
 import ModalBid from '@/components/modal/bid';
@@ -99,6 +104,12 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
   const [reportData, setReportData] = useState({});
   const [removeData, setRemoveData] = useState({});
   const [dataNFTs, setDataNFTs] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState(zeroAddress);
+  const { data: balanceToken } = useBalance({
+    address: address,
+    token: selectedAddress,
+    watch: true,
+  });
 
   const [errorActivities, setErrorActivities] = useState(false);
 
@@ -119,14 +130,15 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
       if (res.status === 404) {
         setDataNFTs([]);
       } else if (!res.ok) {
-        
+        console.error('Fetch failed:', res);
       } else {
         const responseData = await res.json();
+        setSelectedAddress(responseData?.itemDetails?.paidWith);
         setDataNFTs(responseData);
       }
     } catch (error) {
       setDataNFTs([]);
-      
+      console.error('Fetch failed:', error);
     }
   };
 
@@ -241,6 +253,9 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
     collectionAddress,
     ChainSymbol,
     ChainName,
+    ChainId,
+    TokenSymbol,
+    paidWith
   ) => {
     setBuyData({
       marketId,
@@ -251,6 +266,9 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
       collectionAddress,
       ChainSymbol,
       ChainName,
+      ChainId,
+      TokenSymbol,
+      paidWith
     });
     setisOpenModalBuy(true);
   };
@@ -1051,10 +1069,13 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                             <h5>
                               $
                               {dataNFTs?.itemDetails
-                                ? formatEther(dataNFTs?.itemDetails?.price)
-                                : formatEther(
-                                    dataNFTs?.collectionData.floorPrice,
-                                  )}
+                                ? selectedAddress == zeroAddress
+                                  ? formatEther(dataNFTs?.itemDetails?.price)
+                                  : formatUnits(
+                                      dataNFTs?.itemDetails?.price,
+                                      balanceToken?.decimals,
+                                    )
+                                : formatEther(dataNFTs?.collectionData.price)}
                             </h5>
                           </div>
                           <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5 dark:bg-neutral-800">
@@ -1107,13 +1128,25 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                               Listing price at{' '}
                               <span className="font-bold">
                                 {dataNFTs?.itemDetails
+                                  ? selectedAddress == zeroAddress
+                                    ? formatEther(
+                                        dataNFTs?.itemDetails?.price || 0,
+                                      )
+                                    : formatUnits(
+                                        dataNFTs?.itemDetails?.price || 0,
+                                        balanceToken?.decimals,
+                                      )
+                                  : selectedAddress == zeroAddress
                                   ? formatEther(
-                                      dataNFTs?.itemDetails?.price || 0,
-                                    )
-                                  : formatEther(
                                       dataNFTs?.collectionData?.floorPrice || 0,
+                                    )
+                                  : formatUnits(
+                                      dataNFTs?.collectionData?.floorPrice || 0,
+                                      balanceToken?.decimals,
                                     )}{' '}
-                                {dataNFTs?.collectionData?.Chain?.symbol}
+                                {selectedAddress == zeroAddress
+                                  ? dataNFTs?.collectionData?.Chain?.symbol
+                                  : balanceToken && balanceToken?.symbol}
                               </span>
                             </h4>
                             <div className="flex w-full flex-col gap-1 md:flex-row">
@@ -1209,9 +1242,13 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                   dataNFTs?.itemDetails?.price,
                                   dataNFTs?.imageUri,
                                   dataNFTs?.name,
-                                  dataNFTs.tokenId,
+                                  dataNFTs?.tokenId,
+                                  dataNFTs?.collectionAddress,
                                   dataNFTs?.collectionData?.Chain?.symbol,
                                   dataNFTs?.collectionData?.Chain?.name,
+                                  dataNFTs?.collectionData?.chainId,
+                                  balanceToken?.symbol,
+                                  dataNFTs?.itemDetails?.paidWith
                                 )
                               }
                               disabled={!isNotExpired}
@@ -1739,32 +1776,30 @@ const Overview = ({ dataOverview, onSeeAllClick }) => {
                 className="inline-flex w-full items-center justify-start gap-5 self-stretch rounded-lg bg-gray-100 p-2 hover:bg-gray-200 dark:bg-neutral-800 hover:dark:bg-neutral-700"
                 key={index}
               >
-                <div className="flex shrink grow basis-0 items-center justify-between text-base font-bold leading-loose">
+                <div className="flex shrink grow basis-0 items-center justify-between text-center text-base font-bold leading-loose">
                   <div className="inline-flex h-14 w-full items-center justify-center">
-                    <div className="text-md inline-flex shrink grow basis-0 flex-row gap-3 font-medium leading-loose items-center justify-between">
-                      <div className="flex gap-2">
-                        <div className="h-8 w-8 rounded-full bg-gray-300">
-                          <ImageWithFallback
-                            className="h-full w-full rounded-2xl "
-                            width={32}
-                            height={32}
-                            alt={
-                              offer?.userDetails?.username ||
-                              truncateAddress4char(
-                                offer?.userDetails?.walletAddress,
-                              )
-                            }
-                            diameter={32}
-                            address={offer?.userDetails?.walletAddress}
-                            src={`${process.env.NEXT_PUBLIC_CDN_URL}/${offer?.userDetails?.logo}`}
-                          />
-                        </div>
-                        <div className="inline-flex cursor-pointer items-center justify-center">
-                          {offer?.userDetails?.username ||
-                            truncateAddress(offer?.userDetails?.walletAddress)}
-                        </div>
+                    <div className="text-md inline-flex shrink grow basis-0 flex-row gap-3 font-medium leading-loose">
+                      <div className="h-8 w-8 rounded-full bg-gray-300">
+                        <ImageWithFallback
+                          className="h-full w-full rounded-2xl "
+                          width={32}
+                          height={32}
+                          alt={
+                            offer?.userDetails?.username ||
+                            truncateAddress4char(
+                              offer?.userDetails?.walletAddress,
+                            )
+                          }
+                          diameter={32}
+                          address={offer?.userDetails?.walletAddress}
+                          src={`${process.env.NEXT_PUBLIC_CDN_URL}/${offer?.userDetails?.logo}`}
+                        />
                       </div>
-                      <div className="justify-end text-right">
+                      <div className="inline-flex cursor-pointer items-center justify-center">
+                        {offer?.userDetails?.username ||
+                          truncateAddress(offer?.userDetails?.walletAddress)}
+                      </div>
+                      <div className="justify-start">
                         {'- '}Bid At {formatEther(offer?.value)}{' '}
                         {dataOverview?.collectionData.Chain.symbol}
                       </div>

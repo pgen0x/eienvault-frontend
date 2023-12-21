@@ -422,34 +422,35 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
     }
   }
 
-  useEffect(() => {
-    const getRelatedNFTs = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/market/itemsbycollection/${dataNFTs.collectionAddress}`,
-          {
-            cache: 'no-store',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+
+  const getRelatedNFTs = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/market/itemsbycollection/${dataNFTs.collectionAddress}`,
+        {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+        },
+      );
 
-        if (!res.ok) {
-          setErrorActivities(true);
-          
-          throw new Error('Network response was not ok');
-        }
-
-        const responseData = await res.json();
-        setDataRelatedNFTs(responseData);
-      } catch (error) {
+      if (!res.ok) {
+        setErrorActivities(true);
         
-      } finally {
-        setIsLoadingRelatedNFTs(false);
+        throw new Error('Network response was not ok');
       }
-    };
 
+      const responseData = await res.json();
+      setDataRelatedNFTs(responseData);
+    } catch (error) {
+      
+    } finally {
+      setIsLoadingRelatedNFTs(false);
+    }
+  };
+
+  useEffect(() => {
     if(dataNFTs?.collectionAddress != null){
       getRelatedNFTs();
     }
@@ -1366,7 +1367,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                 {isLoadingRelatedNFTs || dataRelatedNFTs.length <= 0 ? (
                   <RelatedNFTsSkeleton />
                 ) : (
-                  <RelatedNFTs dataRelatedNFTs={dataRelatedNFTs} />
+                  <RelatedNFTs dataRelatedNFTs={dataRelatedNFTs} refreshData={getRelatedNFTs} />
                 )}
               </div>
               <ButtonTertiary

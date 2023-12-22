@@ -1,5 +1,8 @@
 export const marketplaceABI = {
-  address: '0xe614733b89707fA4c9c1a0a7E4A41AF9745AC806',
+  address:
+    process.env.NEXT_PUBLIC_NODE_ENV === 'production'
+      ? '0xCb6C8A349bF669d94B323e9e2a7772E83F13C545'
+      : '0xe614733b89707fA4c9c1a0a7E4A41AF9745AC806',
   abi: [
     {
       inputs: [],
@@ -318,7 +321,7 @@ export const marketplaceABI = {
           type: 'uint256',
         },
         {
-          indexed: false,
+          indexed: true,
           internalType: 'address',
           name: 'OfferedBy',
           type: 'address',
@@ -454,6 +457,12 @@ export const marketplaceABI = {
     {
       anonymous: false,
       inputs: [
+        {
+          indexed: true,
+          internalType: 'address',
+          name: 'Collection',
+          type: 'address',
+        },
         {
           indexed: true,
           internalType: 'uint256',
@@ -938,6 +947,11 @@ export const marketplaceABI = {
         {
           internalType: 'address',
           name: '_vault',
+          type: 'address',
+        },
+        {
+          internalType: 'address',
+          name: '_admin',
           type: 'address',
         },
       ],

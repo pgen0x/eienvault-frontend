@@ -10,13 +10,14 @@ import { initializeApp } from '@/hooks/eth/wagmiConfig';
 import { Web3Modal } from '@web3modal/react';
 import { useIsDarkMode } from '@/hooks/use-is-dark-mode';
 import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
+
+const { wagmiConfig, projectId, ethereumClient, helamainnet } = initializeApp();
+
 export function Providers({ children }) {
   const [mounted, setMounted] = useState(false);
   const { isDarkMode } = useIsDarkMode();
 
   useEffect(() => setMounted(true), []);
-  const { wagmiConfig, projectId, ethereumClient, helamainnet } =
-    initializeApp();
   return (
     <WagmiConfig config={wagmiConfig}>
       {mounted && (
@@ -43,7 +44,9 @@ export function Providers({ children }) {
                   666888: '/helaicon.svg',
                   8668: '/helaicon.svg',
                 }}
-                tokenImages={{ HLUSD: '/helaicon.svg' }}
+                tokenImages={{
+                  HLUSD: '/helaicon.svg',
+                }}
                 themeVariables={{
                   '--w3m-accent-color': '#F34054',
                   '--w3m-overlay-backdrop-filter': 'blur(8px)',

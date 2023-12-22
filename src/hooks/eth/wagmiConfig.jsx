@@ -16,8 +16,8 @@ import { useAccount, useConnect } from 'wagmi';
 
 const helatestnet = {
   id: 666888,
-  name: 'Helachain - Testnet',
-  network: 'Helachain',
+  name: 'Testnet Helachain',
+  network: 'Testnet Helachain',
   nativeCurrency: {
     decimals: 18,
     name: 'Helachain',
@@ -40,9 +40,9 @@ const helatestnet = {
 };
 
 const helamainnet = {
-  id: 666888,
-  name: 'Helachain',
-  network: 'Helachain',
+  id: 8668,
+  name: 'Helachain Mainnet',
+  network: 'Helachain Mainnet',
   nativeCurrency: {
     decimals: 18,
     name: 'Helachain',
@@ -65,8 +65,8 @@ const helamainnet = {
 };
 
 const chains = [
-  helatestnet,
   helamainnet,
+  helatestnet,
   arbitrum,
   mainnet,
   polygon,
@@ -79,15 +79,15 @@ const { publicClient, webSocketPublicClient } = configureChains(chains, [
   w3mProvider({ projectId }),
 ]);
 
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors: w3mConnectors({ projectId, chains }),
+  publicClient,
+  webSocketPublicClient,
+});
+
 //Web3Modal Config
 export function initializeApp() {
-  const wagmiConfig = createConfig({
-    autoConnect: true,
-    connectors: w3mConnectors({ projectId, chains }),
-    publicClient,
-    webSocketPublicClient,
-  });
-
   const ethereumClient = new EthereumClient(wagmiConfig, chains);
 
   return {

@@ -40,7 +40,10 @@ const SidebarAdmin = () => {
   const { chain } = useNetwork();
 
   const [selectedBlockchain, setSelectedBlockchain] = useState({
-    chainId: chain?.id || 666888,
+    chainId:
+      chain?.id || process.env.NEXT_PUBLIC_NODE_ENV === 'production'
+        ? 8668
+        : 666888,
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
 
@@ -126,7 +129,6 @@ const SidebarAdmin = () => {
         setChains(dataChain);
         // Continue with your code
       } catch (error) {
-        
         // Handle the error gracefully, e.g., show an error message to the user
       }
     };

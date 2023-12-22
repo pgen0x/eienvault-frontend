@@ -389,9 +389,7 @@ export default function ProfilePage({ params }) {
         toast.success(responseData.success.message);
         getProfile();
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const copyAddressClipboard = () => {
@@ -856,7 +854,10 @@ const Collection = ({ userAccount }) => {
   const [isCreateCollection, setIsCreateCollection] = useState(false);
   const [chains, setChains] = useState([]);
   const [selectedBlockchain, setSelectedBlockchain] = useState({
-    chainId: chain?.id || 666888,
+    chainId:
+      chain?.id || process.env.NEXT_PUBLIC_NODE_ENV === 'production'
+        ? 8668
+        : 666888,
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
 
@@ -958,7 +959,6 @@ const Collection = ({ userAccount }) => {
         setChains(dataChain);
         // Continue with your code
       } catch (error) {
-        
         // Handle the error gracefully, e.g., show an error message to the user
       }
     };
@@ -1086,7 +1086,7 @@ const ItemCollection = ({ collection, gridList }) => {
           className="relative z-10 h-[200px] w-full rounded-2xl object-cover duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all"
         />
       ) : (
-        <div className="relative z-10 h-[200px] w-full flex items-center justify-center rounded-2xl bg-gradient-to-t from-[#FFF1D4] via-[#FFF1D4] to-[#FFCFD1] bg-cover bg-bottom dark:from-[#C96E6E] dark:via-[#A68647] dark:to-black/40 object-cover duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all text-primary-200 dark:text-gray-900">
+        <div className="relative z-10 flex h-[200px] w-full items-center justify-center rounded-2xl bg-gradient-to-t from-[#FFF1D4] via-[#FFF1D4] to-[#FFCFD1] bg-cover bg-bottom object-cover text-primary-200 duration-300 ease-in-out group-hover:h-[160px] group-hover:transition-all dark:from-[#C96E6E] dark:via-[#A68647] dark:to-black/40 dark:text-gray-900">
           <svg
             width="54"
             height="48"

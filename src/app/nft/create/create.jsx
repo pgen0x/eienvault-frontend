@@ -62,11 +62,17 @@ export default function Create({ chains }) {
   const { data: walletClient } = useWalletClient();
   const publicClient = usePublicClient();
   const [selectedChain, setSelectedChain] = useState({
-    chainId: chain?.id || 666888,
+    chainId:
+      chain?.id || process.env.NEXT_PUBLIC_NODE_ENV === 'production'
+        ? 8668
+        : 666888,
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
   const [selectedBlockchain, setSelectedBlockchain] = useState({
-    chainId: chain?.id || 666888,
+    chainId:
+      chain?.id || process.env.NEXT_PUBLIC_NODE_ENV === 'production'
+        ? 8668
+        : 666888,
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
   const [inputFields, setInputFields] = useState([
@@ -246,7 +252,6 @@ export default function Create({ chains }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/user/collections`,
@@ -260,16 +265,14 @@ export default function Create({ chains }) {
         );
 
         if (!res.ok) {
-          
           throw new Error('Network response was not ok');
         }
 
         const responseData = await res.json();
-        
+
         setDataCollections(responseData);
         setSelectedOptionCollection(responseData[0].tokenAddress);
       } catch (error) {
-        
       } finally {
         setIsLoadingCollection(false); // Set isLoading to false after fetching data
       }
@@ -400,8 +403,6 @@ export default function Create({ chains }) {
           message: error,
         });
       }
-
-      
     }
   };
 
@@ -433,7 +434,6 @@ export default function Create({ chains }) {
       setPutOnSaleHash(hash);
       return hash;
     } catch (error) {
-      
       setIsProcessing(false);
       setIsLoadingModal({
         ipfs: false,
@@ -452,7 +452,6 @@ export default function Create({ chains }) {
           message: error,
         });
       }
-      
     }
   };
 
@@ -501,11 +500,9 @@ export default function Create({ chains }) {
 
       if (response.ok) {
         // Data was saved successfully
-        
       }
     } catch (error) {
       // Handle any unexpected errors
-      
     }
   };
 
@@ -600,7 +597,6 @@ export default function Create({ chains }) {
       const hash = await mintNFT(ipfsLink, bpValue);
       setMintHash(hash);
     } catch (e) {
-      
       setIsLoadingModal({
         ipfs: false,
         mint: false,
@@ -673,7 +669,7 @@ export default function Create({ chains }) {
             putonsale: false,
           });
           setTokenId(hexToNumber(data.logs[0].topics[3]));
-          
+
           setIsCompleted({
             ipfs: true,
             mint: true,
@@ -741,7 +737,6 @@ export default function Create({ chains }) {
           });
         }
         if (isErrorPutsale) {
-          
           setErrorPutonsale({
             isError: true,
             message: isErrorPutsale,
@@ -761,7 +756,7 @@ export default function Create({ chains }) {
             approve: true,
             putonsale: true,
           });
-          
+
           setIsProcessing(false);
         }
       }

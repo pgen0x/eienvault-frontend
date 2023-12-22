@@ -1,5 +1,8 @@
 export const vaultABI = {
-  address: '0x1206c88F7A0c4dAEEe7f932C7bd2C337b9ee21fF',
+  address:
+    process.env.NEXT_PUBLIC_NODE_ENV === 'production'
+      ? '0xCb6C8A349bF669d94B323e9e2a7772E83F13C545'
+      : '0x1206c88F7A0c4dAEEe7f932C7bd2C337b9ee21fF',
   abi: [
     {
       inputs: [],
@@ -45,6 +48,11 @@ export const vaultABI = {
     },
     {
       inputs: [],
+      name: 'AlreadyWhitelisted',
+      type: 'error',
+    },
+    {
+      inputs: [],
       name: 'AmountNotEnough',
       type: 'error',
     },
@@ -56,6 +64,11 @@ export const vaultABI = {
     {
       inputs: [],
       name: 'BuyDirectly',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'CannotRemoveAddressZeroFromWhitelist',
       type: 'error',
     },
     {
@@ -126,6 +139,11 @@ export const vaultABI = {
     },
     {
       inputs: [],
+      name: 'NotWhitelisted',
+      type: 'error',
+    },
+    {
+      inputs: [],
       name: 'OnlyOneOfferPerUser',
       type: 'error',
     },
@@ -142,6 +160,11 @@ export const vaultABI = {
     {
       inputs: [],
       name: 'TimingError',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'TokenNotWhitelisted',
       type: 'error',
     },
     {
@@ -202,6 +225,19 @@ export const vaultABI = {
         },
       ],
       name: 'ReceivedFunds',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: false,
+          internalType: 'address',
+          name: 'removedToken',
+          type: 'address',
+        },
+      ],
+      name: 'RemovedFromWhitelist',
       type: 'event',
     },
     {
@@ -277,6 +313,19 @@ export const vaultABI = {
         },
       ],
       name: 'RoleRevoked',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: false,
+          internalType: 'address',
+          name: 'newToken',
+          type: 'address',
+        },
+      ],
+      name: 'TokenWhitelisted',
       type: 'event',
     },
     {
@@ -754,6 +803,19 @@ export const vaultABI = {
       type: 'function',
     },
     {
+      inputs: [],
+      name: 'getWhitelistedTokens',
+      outputs: [
+        {
+          internalType: 'address[]',
+          name: '',
+          type: 'address[]',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
       inputs: [
         {
           internalType: 'bytes32',
@@ -796,10 +858,35 @@ export const vaultABI = {
       type: 'function',
     },
     {
-      inputs: [],
+      inputs: [
+        {
+          internalType: 'address',
+          name: '_admin',
+          type: 'address',
+        },
+      ],
       name: 'initialize',
       outputs: [],
       stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'address',
+          name: '_token',
+          type: 'address',
+        },
+      ],
+      name: 'isTokenWhitelisted',
+      outputs: [
+        {
+          internalType: 'bool',
+          name: '',
+          type: 'bool',
+        },
+      ],
+      stateMutability: 'view',
       type: 'function',
     },
     {
@@ -956,6 +1043,25 @@ export const vaultABI = {
         },
       ],
       name: 'removeItem',
+      outputs: [
+        {
+          internalType: 'bool',
+          name: '',
+          type: 'bool',
+        },
+      ],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'address',
+          name: '_token',
+          type: 'address',
+        },
+      ],
+      name: 'removeWhitelistToken',
       outputs: [
         {
           internalType: 'bool',
@@ -1146,6 +1252,44 @@ export const vaultABI = {
       name: 'upgradeToAndCall',
       outputs: [],
       stateMutability: 'payable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'address',
+          name: '_token',
+          type: 'address',
+        },
+      ],
+      name: 'whitelistToken',
+      outputs: [
+        {
+          internalType: 'bool',
+          name: '',
+          type: 'bool',
+        },
+      ],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'uint256',
+          name: '',
+          type: 'uint256',
+        },
+      ],
+      name: 'whitelistedTokens',
+      outputs: [
+        {
+          internalType: 'address',
+          name: '',
+          type: 'address',
+        },
+      ],
+      stateMutability: 'view',
       type: 'function',
     },
     {

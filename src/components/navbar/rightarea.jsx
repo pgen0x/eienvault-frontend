@@ -49,15 +49,16 @@ export default function RightArea() {
         : 'text-primary-500 hover:bg-primary-300')
     );
   };
-
+  const chainId =
+    process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888;
   return (
     <>
       {isClient && (
         <div className="hidden h-8 w-full items-center justify-start gap-4 lg:inline-flex">
-          {isConnected && chain?.id !== 666888 && (
+          {isConnected && chain?.id !== chainId && (
             <div as="div" className="relative inline-block text-left">
               <button
-                onClick={() => switchNetwork?.(666888)}
+                onClick={() => switchNetwork?.(chainId)}
                 className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 hover:bg-primary-300"
               >
                 <div className="h-4 w-4 text-center text-base font-black leading-none text-white">

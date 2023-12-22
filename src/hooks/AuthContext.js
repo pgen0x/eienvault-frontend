@@ -79,9 +79,7 @@ export function AuthProvider({ children }) {
       const data = await response.json();
       setDataUser(data);
       return data;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const handleSign = async () => {
@@ -106,7 +104,8 @@ export function AuthProvider({ children }) {
         address: address,
         statement: process.env.NEXT_PUBLIC_SIGNIN_MESSAGE,
         nonce: nonceText,
-        chainId: 666888,
+        chainId:
+          process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
         expirationTime: isoDateString,
       });
 
@@ -136,9 +135,7 @@ export function AuthProvider({ children }) {
       Cookies.set('addressHasSigned', address);
       setHasSigned(true);
       setAddressHasSigned(address);
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   watchAccount(async (account) => {

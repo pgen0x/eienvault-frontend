@@ -3,6 +3,8 @@
 import ModalGrantRole from '@/components/admin/modal/grantRole';
 import ModalRescueERC20 from '@/components/admin/modal/rescueERC20';
 import ModalRescueERC721 from '@/components/admin/modal/rescueERC721';
+import ModalUpdateCommission from '@/components/admin/modal/updateCommission';
+import ModalUpdateVault from '@/components/admin/modal/updateVault';
 import { useState } from 'react';
 
 const MarketplacePage = () => {
@@ -177,19 +179,20 @@ const MarketplacePage = () => {
             </div>
             <div className="flex flex-grow flex-col justify-around p-4">
               <h5 className="mb-2 text-lg font-medium leading-tight text-neutral-800 dark:text-neutral-50">
-                Update Commission in Basis Points
+                Update Commission in Bases Points
               </h5>
               <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
                 The &quot;Update Commission&quot; function is designed to modify
-                the sale fee percentage denominated in basis points (bp). Basis
+                the sale fee percentage denominated in bases points (bp). Bases
                 points, ranging from 0 to 100, are scaled up to a representation
-                of 0 to 10,000. For instance, a 5% fee corresponds to 500 basis
+                of 0 to 10,000. For instance, a 5% fee corresponds to 500 bases
                 points.
               </p>
             </div>
             <div className="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
               <button
                 type="button"
+                onClick={UpdateCommission}
                 className="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
               >
                 Update Commission
@@ -214,6 +217,7 @@ const MarketplacePage = () => {
             <div className="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
               <button
                 type="button"
+                onClick={UpdateVault}
                 className="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
               >
                 Update Vault
@@ -312,6 +316,18 @@ const MarketplacePage = () => {
         isOpenModal={isOpenModalGranRole}
         onClose={closeModalGrantRole}
         onModalClose={closeModalGrantRole}
+        type="marketplace"
+      />
+      <ModalUpdateCommission
+        isOpenModal={isOpenModalupdateCommission}
+        onClose={closeModalUpdateCommission}
+        onModalClose={closeModalUpdateCommission}
+        type="marketplace"
+      />
+      <ModalUpdateVault
+        isOpenModal={isOpenModalupdateVault}
+        onClose={closeModalUpdateVault}
+        onModalClose={closeModalUpdateVault}
         type="marketplace"
       />
     </div>

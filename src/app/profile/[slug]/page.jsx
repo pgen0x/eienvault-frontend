@@ -30,7 +30,7 @@ import axios from 'axios';
 import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { useAccount, useNetwork } from 'wagmi';
-import { useParams, usePathname, useSearchParams } from 'next/navigation';
+import { notFound, useParams, usePathname, useSearchParams } from 'next/navigation';
 import { formatEther, isAddress } from 'viem';
 import { ImageWithFallback } from '@/components/imagewithfallback';
 import ModalCreateCollection from '@/components/modal/createCollections';
@@ -230,7 +230,7 @@ export default function ProfilePage({ params }) {
   };
 
   if (params?.slug === undefined && address === undefined) {
-    return <NotFound />;
+    notFound();
   }
 
   const handleOpenModalShare = async (tokenId, collectionAddress) => {

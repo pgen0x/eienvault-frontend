@@ -48,9 +48,7 @@ export default function ModalBuy({
 }) {
   const router = useRouter();
   const { data: walletClient } = useWalletClient({
-    onError(error) {
-      
-    },
+    onError(error) {},
   });
   const { address, isConnected } = useAccount();
   const { hasSigned, handleSign } = useAuth();
@@ -99,7 +97,6 @@ export default function ModalBuy({
     if (dataBuy != null) {
       setSelectedAddress(dataBuy?.paidWith);
     }
-
   }, [dataBuy]);
 
   const approve = async () => {
@@ -138,7 +135,12 @@ export default function ModalBuy({
   };
 
   function closeModal() {
-    if (isErrorBuyNative.isError || isErrorApprove.isError || isCompleted || !isLoadingBuyNativeModal) {
+    if (
+      isErrorBuyNative.isError ||
+      isErrorApprove.isError ||
+      isCompleted ||
+      !isLoadingBuyNativeModal
+    ) {
       if (isErrorBuyNative.isError || isErrorApprove.isError) {
         setIsloadingBuyNativeModal(false);
         setErrorBuyNative({
@@ -184,7 +186,7 @@ export default function ModalBuy({
     });
     try {
       let hash;
-      if(selectedAddress == zeroAddress){
+      if (selectedAddress == zeroAddress) {
         hash = await walletClient.writeContract({
           ...marketplaceABI,
           functionName: 'buyNative',
@@ -192,7 +194,7 @@ export default function ModalBuy({
           account: address,
           value: dataBuy?.price,
         });
-      }else{
+      } else {
         hash = await walletClient.writeContract({
           ...marketplaceABI,
           functionName: 'buyERC20',
@@ -207,7 +209,7 @@ export default function ModalBuy({
         approve: false,
         buy: false,
       });
-      
+
       if (error.message.includes('User rejected the request')) {
         setErrorBuyNative({
           isError: true,
@@ -294,10 +296,8 @@ export default function ModalBuy({
 
       if (response.ok) {
         // Data was saved successfully
-        
       } else {
         // Handle the error here
-        
       }
     } catch (error) {
       // Handle any unexpected errors
@@ -317,7 +317,7 @@ export default function ModalBuy({
     }
 
     setIsloadingBuyNativeModal(true);
-    if(selectedAddress != zeroAddress){
+    if (selectedAddress != zeroAddress) {
       setIsLoadingModal({
         approve: true,
         buy: false,
@@ -325,9 +325,9 @@ export default function ModalBuy({
     }
 
     try {
-      if(selectedAddress == zeroAddress){
+      if (selectedAddress == zeroAddress) {
         await BuyNative();
-      }else{
+      } else {
         const hash = await approve();
         setApproveHash(hash);
       }
@@ -428,7 +428,10 @@ export default function ModalBuy({
                         <div className="flex justify-between font-semibold">
                           <span>Your wallet balance</span>
                           <span>
-                            {balanceToken?.formatted} {balanceToken?.symbol}
+                            {balanceToken?.formatted}
+                            {selectedAddress == zeroAddress
+                              ? dataBuy.ChainSymbol
+                              : balanceToken && balanceToken?.symbol}
                           </span>
                         </div>
                       </div>
@@ -444,7 +447,7 @@ export default function ModalBuy({
                                 )}{' '}
                             {selectedAddress == zeroAddress
                               ? dataBuy.ChainSymbol
-                              : dataBuy?.TokenSymbol}
+                              : balanceToken && balanceToken?.symbol}
                           </span>
                         </div>
 
@@ -465,11 +468,7 @@ export default function ModalBuy({
                         </div>
                       </div>
 
-                      <ButtonPrimary
-                        onClick={() =>
-                          onSubmit()
-                        }
-                      >
+                      <ButtonPrimary onClick={() => onSubmit()}>
                         Buy Now
                       </ButtonPrimary>
                     </section>
@@ -633,7 +632,7 @@ export default function ModalBuy({
                               </div>
                               <div className="flex max-w-full flex-1 shrink-0 flex-col items-stretch">
                                 <span className="text-lg font-semibold">
-                                 Purchased
+                                  Purchased
                                 </span>
                                 <span>
                                   Authorize and sign a message to establish a

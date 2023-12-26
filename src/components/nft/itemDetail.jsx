@@ -179,7 +179,10 @@ const Nft = ({
   const [selectedAddress, setSelectedAddress] = useState(
     itemDetails?.paidWith || zeroAddress,
   );
-  const { data: balanceToken } = useBalance({
+  const { data: balanceToken } = useBalance(selectedAddress == zeroAddress ? {
+    address: address,
+    watch: true,
+  } : {
     address: address,
     token: selectedAddress,
     watch: true,
@@ -773,9 +776,7 @@ const Nft = ({
                           itemDetails?.price || 0,
                           balanceToken?.decimals,
                         )}{' '}
-                    {selectedAddress == zeroAddress
-                      ? collection?.Chain?.symbol
-                      : balanceToken && balanceToken?.symbol}
+                    {balanceToken?.symbol}
                   </p>
                 </div>
                 <div className="flex flex-col items-start truncate text-sm leading-5">
@@ -784,9 +785,7 @@ const Nft = ({
                       <p>Highest bid</p>
                       <p className="font-bold">
                         {formatEther(getHighestBid(itemDetails).highestBid)}{' '}
-                        {collection?.Chain?.symbol
-                          ? collection.Chain.symbol
-                          : '-'}
+                        {balanceToken?.symbol}
                       </p>
                     </>
                   ) : (
@@ -796,9 +795,7 @@ const Nft = ({
                         {collection?.floorPrice
                           ? formatEther(collection.floorPrice)
                           : '0.00'}{' '}
-                        {collection?.Chain.symbol
-                          ? collection.Chain.symbol
-                          : '-'}
+                        {balanceToken?.symbol}
                       </p>
                     </>
                   )}

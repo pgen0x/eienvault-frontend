@@ -32,6 +32,7 @@ import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
 import moment from 'moment';
 import ButtonPrimary from '../button/buttonPrimary';
 import { useAuth } from '@/hooks/AuthContext';
+import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
 
 export default function ModalPutOnSale({
   isOpenModal,
@@ -70,42 +71,59 @@ export default function ModalPutOnSale({
   const [isProcessing, setIsProcessing] = useState(false);
   const [isCompletedHash, setIsCompletedHash] = useState(false);
   const [listingFee, setListingFee] = useState();
-  const defultListToken = [
-    'HLUSD',
-  ];
   const convertToken = {
     'HLUSD': zeroAddress,
   };
-  const [listToken, setListToken] = useState(defultListToken);
-  const [selectedToken, setSelectedToken] = useState(listToken[0])
-  const [query, setQuery] = useState('')
+
+  const [convertAddress, setConvertAddress] = useState();
+  const [listConvertToken, setListConvertToken] = useState(convertToken)
+  const [selectedToken, setSelectedToken] = useState();
   const [selectedAddress, setSelectedAddress] = useState(0);
 
-  const filteredToken = query === '' ? listToken : listToken.filter((token) => {
-    return token.toLowerCase().includes(query.toLowerCase())
-  });
+  const { data: balanceToken } = useBalance(
+    selectedAddress == zeroAddress
+      ? {
+          address: address,
+          watch: true,
+        }
+      : {
+          address: address,
+          token: selectedAddress,
+          watch: true,
+        },
+  );
 
-  const { data: balanceToken } = useBalance({
+  const { data: symbolToken } = useBalance({
     address: address,
-    token: selectedAddress,
+    token: convertAddress,
     watch: true,
-  });
+    onSuccess: (e) => {
 
-  const handleChangeQuery = (event) => {
-    const text = event.target.value;
-    const cloneList = defultListToken;
+      console.log("###", listConvertToken);
 
-    setListToken(cloneList);
-    if(text != ""){
-      setListToken((token) => [text]);
+      // setListConvertToken((oldListConvertToken) => {
+      //   oldListConvertToken[e?.symbol] = convertAddress;
+
+      //   return oldListConvertToken;
+      // })
+      
+      if(convertAddress != undefined){
+        setListConvertToken((oldListConvertToken) => ({
+          ...oldListConvertToken,
+          [e?.symbol]: convertAddress
+        }))
+      }
+
+      console.log("###", listConvertToken);
     }
-    setQuery(text);
-  }
+  });
 
   useEffect(() => {
-    const convert = convertToken[selectedToken] ? convertToken[selectedToken] : selectedToken;
+    const convert = listConvertToken[selectedToken]
+      ? listConvertToken[selectedToken]
+      : selectedToken;
     setSelectedAddress(convert);
-  }, [selectedToken])
+  }, [selectedToken]);
 
   useEffect(() => {
     // Calculate the date 1 day from now using Moment.js
@@ -167,7 +185,7 @@ export default function ModalPutOnSale({
     closeModal();
   }
 
-  function closeModalComplete(){
+  function closeModalComplete() {
     refreshData();
     closeModalProcessing();
   }
@@ -233,7 +251,10 @@ export default function ModalPutOnSale({
         ? moment().unix()
         : moment(customValueReleaseDate).unix();
     const isAuction = selectedOptionMarket === 'fixed' ? false : true;
-    const parsePrice = selectedAddress == zeroAddress ? parseEther(price) : parseUnits(price, balanceToken?.decimals);
+    const parsePrice =
+      selectedAddress == zeroAddress
+        ? parseEther(price)
+        : parseUnits(price, balanceToken?.decimals);
 
     try {
       const hash = await walletClient.writeContract({
@@ -299,9 +320,25 @@ export default function ModalPutOnSale({
       closeModal();
       setIsSubmit(false);
       setIsProcessing(false);
-      
     }
   };
+
+  const getWhitelistToken = async () => {
+    const whitelistToken = await publicClient.readContract({
+      ...vaultABI,
+      functionName: 'getWhitelistedTokens',
+    });
+
+    whitelistToken.map((token) => {
+      setConvertAddress(token);
+    });
+
+    return whitelistToken;
+  };
+
+  useEffect(() => {
+    getWhitelistToken();
+  }, []);
 
   const handleReleaseDateSelectChange = (event) => {
     const selectedValue = event.target.value;
@@ -435,21 +472,17 @@ export default function ModalPutOnSale({
 
       if (response.ok) {
         // Data was saved successfully
-        
       } else {
         // Handle the error here
-        
       }
     } catch (error) {
       // Handle any unexpected errors
-      
     }
   };
 
   useEffect(() => {
     const fetchData = async () => {
       const price = await getListingPrice();
-      
     };
 
     fetchData();
@@ -575,9 +608,25 @@ export default function ModalPutOnSale({
                                   </span>{' '}
                                   Price
                                 </label>
-                                <p>Select the chain for the payment method on marketplace</p>
+                                <p>
+                                  Select the chain for the payment method on
+                                  marketplace
+                                </p>
                                 <div className="mb-5 w-full">
-                                  <Combobox value={selectedToken} onChange={setSelectedToken}>
+                                  <select
+                                    className="relative w-full rounded-full border-0 bg-white py-2 pl-3 pr-10 text-left text-gray-900 focus:outline-none focus:ring-0 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800 dark:hover:text-gray-300 sm:text-sm"
+                                    onChange={(event) =>
+                                      setSelectedToken(event.target.value)
+                                    }
+                                    value={selectedToken}
+                                  >
+                                    {Object.keys(listConvertToken).map((token, key) => (
+                                      <option key={key} value={token}>
+                                        {token}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  {/* <Combobox value={selectedToken} onChange={setSelectedToken}>
                                     <Combobox.Input
                                       onChange={(event) => handleChangeQuery(event)}
                                       className="relative w-full focus:ring-0 rounded-full border-0 bg-white py-2 pl-3 pr-10 text-left text-gray-900 focus:outline-none dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800 dark:hover:text-gray-300 sm:text-sm"
@@ -596,7 +645,7 @@ export default function ModalPutOnSale({
                                         </Combobox.Option>
                                       ))}
                                     </Combobox.Options>
-                                  </Combobox>
+                                  </Combobox> */}
                                 </div>
                                 <p>
                                   Enter price to allow users instantly purchase
@@ -640,7 +689,7 @@ export default function ModalPutOnSale({
                                   <span>Price</span>
                                   <span className="font-semibold">
                                     {watch('price')}{' '}
-                                    {selectedAddress == zeroAddress ? chain?.nativeCurrency.symbol : (balanceToken && balanceToken?.symbol)}
+                                    {balanceToken && balanceToken?.symbol}
                                   </span>
                                 </div>
 
@@ -648,7 +697,7 @@ export default function ModalPutOnSale({
                                   <span>You will receive</span>
                                   <span className="font-semibold">
                                     {watch('price')}{' '}
-                                    {selectedAddress == zeroAddress ? chain?.nativeCurrency.symbol : (balanceToken && balanceToken?.symbol)}
+                                    {balanceToken && balanceToken?.symbol}
                                   </span>
                                 </div>
                               </div>
@@ -885,7 +934,11 @@ export default function ModalPutOnSale({
                     <div className="mt-4 inline-flex ">
                       <ButtonPrimary
                         type="button"
-                        onClick={isProcessing ? closeModalProcessing : closeModalComplete}
+                        onClick={
+                          isProcessing
+                            ? closeModalProcessing
+                            : closeModalComplete
+                        }
                         disabled={isProcessing}
                       >
                         {isProcessing ? 'Please wait ...' : 'Completed'}

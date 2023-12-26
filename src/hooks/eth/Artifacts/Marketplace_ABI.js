@@ -318,7 +318,7 @@ export const marketplaceABI = {
           type: 'uint256',
         },
         {
-          indexed: false,
+          indexed: true,
           internalType: 'address',
           name: 'OfferedBy',
           type: 'address',
@@ -454,6 +454,12 @@ export const marketplaceABI = {
     {
       anonymous: false,
       inputs: [
+        {
+          indexed: true,
+          internalType: 'address',
+          name: 'Collection',
+          type: 'address',
+        },
         {
           indexed: true,
           internalType: 'uint256',
@@ -938,6 +944,11 @@ export const marketplaceABI = {
         {
           internalType: 'address',
           name: '_vault',
+          type: 'address',
+        },
+        {
+          internalType: 'address',
+          name: '_admin',
           type: 'address',
         },
       ],

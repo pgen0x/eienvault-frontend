@@ -47,12 +47,7 @@ import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { ImageWithFallback } from '@/components/imagewithfallback';
 import HelaIcon from '@/assets/icon/hela';
-import {
-  formatEther,
-  formatUnits,
-  isAddress,
-  zeroAddress,
-} from 'viem';
+import { formatEther, formatUnits, isAddress, zeroAddress } from 'viem';
 const accounts = ['0x30756...Fb179', '0x30756...Zi57G', '0x30756...Gy352'];
 import { notFound } from 'next/navigation';
 import ModalBid from '@/components/modal/bid';
@@ -105,7 +100,10 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
   const [removeData, setRemoveData] = useState({});
   const [dataNFTs, setDataNFTs] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(zeroAddress);
-  const { data: balanceToken } = useBalance({
+  const { data: balanceToken } = useBalance(selectedAddress == zeroAddress ? {
+    address: address,
+    watch: true,
+  } : {
     address: address,
     token: selectedAddress,
     watch: true,
@@ -133,6 +131,9 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
         console.error('Fetch failed:', res);
       } else {
         const responseData = await res.json();
+        if(responseData?.isBlacklisted){
+          notFound();
+        }
         setSelectedAddress(responseData?.itemDetails?.paidWith);
         setDataNFTs(responseData);
       }
@@ -229,6 +230,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
     collectionData,
     highestBid,
     lowestBid,
+    paidWith,
   ) => {
     setAcutionData({
       marketId,
@@ -240,6 +242,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
       collectionData,
       highestBid,
       lowestBid,
+      paidWith,
     });
     setisOpenModalBid(true);
   };
@@ -255,7 +258,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
     ChainName,
     ChainId,
     TokenSymbol,
-    paidWith
+    paidWith,
   ) => {
     setBuyData({
       marketId,
@@ -268,7 +271,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
       ChainName,
       ChainId,
       TokenSymbol,
-      paidWith
+      paidWith,
     });
     setisOpenModalBuy(true);
   };
@@ -357,9 +360,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
         value: price,
       });
       return hash;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const likes = async (collectionAddress, tokenId) => {
@@ -386,9 +387,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
         setCountLikes(isLiked ? countLikes - 1 : countLikes + 1);
         setIsLiked(!isLiked);
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   async function refreshMetadata(collectionAddress, tokenId) {
@@ -410,18 +409,13 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
         },
       );
       if (!res.ok) {
-        
         const errorMessage = await res.json();
-        
       } else {
         toast.success('Refresh metada successfully');
         window.location.reload();
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
-
 
   const getRelatedNFTs = async () => {
     try {
@@ -437,21 +431,20 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
 
       if (!res.ok) {
         setErrorActivities(true);
-        
+
         throw new Error('Network response was not ok');
       }
 
       const responseData = await res.json();
       setDataRelatedNFTs(responseData);
     } catch (error) {
-      
     } finally {
       setIsLoadingRelatedNFTs(false);
     }
   };
 
   useEffect(() => {
-    if(dataNFTs?.collectionAddress != null){
+    if (dataNFTs?.collectionAddress != null) {
       getRelatedNFTs();
     }
   }, [dataNFTs]);
@@ -1058,14 +1051,21 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                       {dataNFTs?.itemDetails?.isAuctioned ? (
                         <>
                           <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5 dark:bg-neutral-800">
-                            <h3 className="md:text-lg">Floor Price</h3>
+                            <h3 className="md:text-lg">
+                              {dataNFTs?.itemDetails ? 'Price' : 'Floor Price'}
+                            </h3>
                             <h4 className="text-sm font-bold md:text-lg">
                               {dataNFTs?.itemDetails
-                                ? formatEther(dataNFTs?.itemDetails?.price)
+                                ? selectedAddress == zeroAddress
+                                  ? formatEther(dataNFTs?.itemDetails?.price)
+                                  : formatUnits(
+                                    dataNFTs?.itemDetails?.price || 0,
+                                      balanceToken?.decimals,
+                                    )
                                 : formatEther(
                                     dataNFTs?.collectionData.floorPrice,
                                   )}{' '}
-                              {dataNFTs?.collectionData.Chain.symbol}
+                              {balanceToken?.symbol}
                             </h4>
                             <h5>
                               $
@@ -1088,7 +1088,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                   getHighestBid(dataNFTs?.itemDetails)
                                     .highestBid,
                                 )}{' '}
-                                {dataNFTs?.collectionData?.Chain?.symbol}
+                                {balanceToken?.symbol}
                               </span>
                             </h4>
                             <div className="flex w-full gap-1">
@@ -1112,7 +1112,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                 : formatEther(
                                     dataNFTs?.collectionData?.floorPrice || 0,
                                   )}{' '}
-                              {dataNFTs?.collectionData?.Chain?.symbol}
+                              {balanceToken?.symbol}
                             </h4>
                             <h5>
                               $
@@ -1145,9 +1145,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                       dataNFTs?.collectionData?.floorPrice || 0,
                                       balanceToken?.decimals,
                                     )}{' '}
-                                {selectedAddress == zeroAddress
-                                  ? dataNFTs?.collectionData?.Chain?.symbol
-                                  : balanceToken && balanceToken?.symbol}
+                                {balanceToken?.symbol}
                               </span>
                             </h4>
                             <div className="flex w-full flex-col gap-1 md:flex-row">
@@ -1203,6 +1201,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                   formatEther(
                                     getLowestBid(dataNFTs?.itemDetails),
                                   ),
+                                  dataNFTs?.itemDetails?.paidWith,
                                 )
                               }
                               disabled={
@@ -1249,7 +1248,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                   dataNFTs?.collectionData?.Chain?.name,
                                   dataNFTs?.collectionData?.chainId,
                                   balanceToken?.symbol,
-                                  dataNFTs?.itemDetails?.paidWith
+                                  dataNFTs?.itemDetails?.paidWith,
                                 )
                               }
                               disabled={!isNotExpired}
@@ -1367,7 +1366,10 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                 {isLoadingRelatedNFTs || dataRelatedNFTs.length <= 0 ? (
                   <RelatedNFTsSkeleton />
                 ) : (
-                  <RelatedNFTs dataRelatedNFTs={dataRelatedNFTs} refreshData={getRelatedNFTs} />
+                  <RelatedNFTs
+                    dataRelatedNFTs={dataRelatedNFTs}
+                    refreshData={getRelatedNFTs}
+                  />
                 )}
               </div>
               <ButtonTertiary
@@ -1938,34 +1940,34 @@ const History = ({ collection, tokenId, nft }) => {
       isAddress(event?.item?.To)
     ) {
       description = (
-        <div className="w-full flex flex-col sm:flex-row flex-wrap gap-1">
+        <div className="flex w-full flex-col flex-wrap gap-1 sm:flex-row">
           <div className="flex gap-1">
             transferred from
-          <JazzIcon
-            diameter={16}
-            seed={event?.item?.From}
-            useGradientFallback={true}
-          />
-          <button
-            className="font-bold text-primary-500"
-            onClick={() => router.push(`/profile/${event?.item?.From}`)}
-          >
-            {truncateAddress4char(event?.item?.From)}
-          </button>
+            <JazzIcon
+              diameter={16}
+              seed={event?.item?.From}
+              useGradientFallback={true}
+            />
+            <button
+              className="font-bold text-primary-500"
+              onClick={() => router.push(`/profile/${event?.item?.From}`)}
+            >
+              {truncateAddress4char(event?.item?.From)}
+            </button>
           </div>
           <div className="flex gap-1">
-          to
-          <JazzIcon
-            diameter={16}
-            seed={event?.item?.To}
-            useGradientFallback={true}
-          />
-          <button
-            className="font-bold text-primary-500"
-            onClick={() => router.push(`/profile/${event?.item?.To}`)}
-          >
-            {truncateAddress4char(event?.item?.To)}
-          </button>
+            to
+            <JazzIcon
+              diameter={16}
+              seed={event?.item?.To}
+              useGradientFallback={true}
+            />
+            <button
+              className="font-bold text-primary-500"
+              onClick={() => router.push(`/profile/${event?.item?.To}`)}
+            >
+              {truncateAddress4char(event?.item?.To)}
+            </button>
           </div>
         </div>
       );
@@ -1997,28 +1999,28 @@ const History = ({ collection, tokenId, nft }) => {
     if (event.eventType == 'ItemListed') {
       type = 'Listings';
       description = (
-        <div className="w-full flex flex-col sm:flex-row flex-wrap gap-1">
-        <div className="flex gap-1">
-          <span>listed by</span>{' '}
-          <JazzIcon
-            diameter={16}
-            seed={event?.seller}
-            useGradientFallback={true}
-          />
-          <button
-            className="font-bold text-primary-500"
-            onClick={() => router.push(`/profile/${event?.item?.Seller}`)}
-          >
-            {event?.sellerData?.username
-              ? event.sellerData.username
-              : truncateAddress4char(event?.seller)}
-          </button>
+        <div className="flex w-full flex-col flex-wrap gap-1 sm:flex-row">
+          <div className="flex gap-1">
+            <span>listed by</span>{' '}
+            <JazzIcon
+              diameter={16}
+              seed={event?.seller}
+              useGradientFallback={true}
+            />
+            <button
+              className="font-bold text-primary-500"
+              onClick={() => router.push(`/profile/${event?.item?.Seller}`)}
+            >
+              {event?.sellerData?.username
+                ? event.sellerData.username
+                : truncateAddress4char(event?.seller)}
+            </button>
           </div>
           <div className="flex gap-1">
-          for
-          <span className="font-bold text-primary-500">
-            {formatEther(event?.price)} {event?.collectionData?.Chain?.symbol}
-          </span>
+            for
+            <span className="font-bold text-primary-500">
+              {formatEther(event?.price)} {event?.collectionData?.Chain?.symbol}
+            </span>
           </div>
         </div>
       );
@@ -2048,44 +2050,44 @@ const History = ({ collection, tokenId, nft }) => {
     } else if (event.eventType == 'ItemSold') {
       type = 'Sales';
       description = (
-        <div className="w-full flex flex-col sm:flex-row flex-wrap gap-1">
+        <div className="flex w-full flex-col flex-wrap gap-1 sm:flex-row">
           <div className="flex gap-1">
-          purchased by
-          <JazzIcon
-            diameter={16}
-            seed={event?.buyer}
-            useGradientFallback={true}
-          />
-          <button
-            className="font-bold text-primary-500"
-            onClick={() => router.push(`/profile/${event?.buyer}`)}
-          >
-            {event?.buyerData?.username
-              ? event.buyerData.username
-              : truncateAddress4char(event?.buyer)}
-          </button>
+            purchased by
+            <JazzIcon
+              diameter={16}
+              seed={event?.buyer}
+              useGradientFallback={true}
+            />
+            <button
+              className="font-bold text-primary-500"
+              onClick={() => router.push(`/profile/${event?.buyer}`)}
+            >
+              {event?.buyerData?.username
+                ? event.buyerData.username
+                : truncateAddress4char(event?.buyer)}
+            </button>
           </div>
           <div className="flex gap-1">
-          for
-          <span className="font-bold text-primary-500">
-            {formatEther(event?.price)} {event?.collectionData?.Chain?.symbol}
-          </span>
+            for
+            <span className="font-bold text-primary-500">
+              {formatEther(event?.price)} {event?.collectionData?.Chain?.symbol}
+            </span>
           </div>
           <div className="flex gap-1">
-          from
-          <JazzIcon
-            diameter={16}
-            seed={event?.seller}
-            useGradientFallback={true}
-          />
-          <button
-            className="font-bold text-primary-500"
-            onClick={() => router.push(`/profile/${event?.seller}`)}
-          >
-            {event?.sellerData?.username
-              ? event.sellerData.username
-              : truncateAddress4char(event?.seller)}
-          </button>
+            from
+            <JazzIcon
+              diameter={16}
+              seed={event?.seller}
+              useGradientFallback={true}
+            />
+            <button
+              className="font-bold text-primary-500"
+              onClick={() => router.push(`/profile/${event?.seller}`)}
+            >
+              {event?.sellerData?.username
+                ? event.sellerData.username
+                : truncateAddress4char(event?.seller)}
+            </button>
           </div>
         </div>
       );
@@ -2198,12 +2200,10 @@ const History = ({ collection, tokenId, nft }) => {
             return [...oldEvent, ...result];
           });
         })
-        .catch((error) => {
-          
-        });
+        .catch((error) => {});
     };
 
-    if(collection?.tokenAddress != null && tokenId != null){
+    if (collection?.tokenAddress != null && tokenId != null) {
       getHistoryMintTransfer().then(() => {
         getHistoryBidsSalesListing();
       });
@@ -2234,7 +2234,6 @@ const History = ({ collection, tokenId, nft }) => {
           setIsLoading(false);
         })
         .catch((error) => {
-          
           setIsLoading(false);
         });
     };
@@ -2243,7 +2242,7 @@ const History = ({ collection, tokenId, nft }) => {
   return (
     <>
       {events.length == 0 && !isLoading && (
-        <div className="w-full items-center justify-center gap-5 self-stretch rounded-xl bg-white dark:bg-neutral-800 dark:text-white p-2 lg:inline-flex">
+        <div className="w-full items-center justify-center gap-5 self-stretch rounded-xl bg-white p-2 dark:bg-neutral-800 dark:text-white lg:inline-flex">
           No history
         </div>
       )}
@@ -2256,7 +2255,7 @@ const History = ({ collection, tokenId, nft }) => {
           </div>
         </div>
       )}
-      <div className="w-full flex max-h-96 flex-col gap-3 overflow-y-auto text-sm text-black dark:text-white">
+      <div className="flex max-h-96 w-full flex-col gap-3 overflow-y-auto text-sm text-black dark:text-white">
         {events.map((event, index) => {
           return <ActivityItemDetail key={index} event={event} />;
         })}

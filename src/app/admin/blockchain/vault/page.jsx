@@ -1,7 +1,10 @@
 'use client';
 
+import ModalPause from '@/components/admin/modal/pause';
 import ModalRescueERC20 from '@/components/admin/modal/rescueERC20';
 import ModalRescueERC721 from '@/components/admin/modal/rescueERC721';
+import ModalUnpause from '@/components/admin/modal/unpause';
+import ModalUpdateMarketplace from '@/components/admin/modal/updateMarketplace';
 import ModalWithdrawFee from '@/components/admin/modal/withdrawFee';
 import { useState } from 'react';
 
@@ -9,6 +12,10 @@ const VaultPage = () => {
   const [isOpenModalERC721, setIsOpenModalERC721] = useState(false);
   const [isOpenModalERC20, setIsOpenModalERC20] = useState(false);
   const [isOpenModalWithdraw, setIsOpenModalWithdraw] = useState(false);
+  const [isOpenModalPause, setIsOpenModalPause] = useState(false);
+  const [isOpenModalUnpause, setIsOpenModalUnpause] = useState(false);
+  const [isOpenModalMarketplace, setIsOpenModalUpdateMarketplace] =
+    useState(false);
 
   const rescueERC721 = () => {
     setIsOpenModalERC721(true);
@@ -32,6 +39,30 @@ const VaultPage = () => {
 
   function closeModalWithdraw() {
     setIsOpenModalWithdraw(false);
+  }
+
+  const Pause = () => {
+    setIsOpenModalPause(true);
+  };
+
+  function closeModalPause() {
+    setIsOpenModalPause(false);
+  }
+
+  const Unpause = () => {
+    setIsOpenModalUnpause(true);
+  };
+
+  function closeModalUnPause() {
+    setIsOpenModalUnpause(false);
+  }
+
+  const UpdateMarketplace = () => {
+    setIsOpenModalUpdateMarketplace(true);
+  };
+
+  function closeModalUpdateMarketplace() {
+    setIsOpenModalUpdateMarketplace(false);
   }
 
   return (
@@ -142,6 +173,7 @@ const VaultPage = () => {
             <div className="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
               <button
                 type="button"
+                onClick={Pause}
                 className="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
               >
                 Pause
@@ -166,6 +198,7 @@ const VaultPage = () => {
             <div className="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
               <button
                 type="button"
+                onClick={Unpause}
                 className="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
               >
                 Unpause
@@ -190,6 +223,7 @@ const VaultPage = () => {
             <div className="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
               <button
                 type="button"
+                onClick={UpdateMarketplace}
                 className="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
               >
                 Update Market Contract Address
@@ -214,6 +248,24 @@ const VaultPage = () => {
         isOpenModal={isOpenModalWithdraw}
         onClose={closeModalWithdraw}
         onModalClose={closeModalWithdraw}
+      />
+      <ModalPause
+        isOpenModal={isOpenModalPause}
+        onClose={closeModalPause}
+        onModalClose={closeModalPause}
+        type="vault"
+      />
+      <ModalUnpause
+        isOpenModal={isOpenModalUnpause}
+        onClose={closeModalUnPause}
+        onModalClose={closeModalUnPause}
+        type={'vault'}
+      />
+      <ModalUpdateMarketplace
+        isOpenModal={isOpenModalMarketplace}
+        onClose={closeModalUpdateMarketplace}
+        onModalClose={closeModalUpdateMarketplace}
+        type="vault"
       />
     </div>
   );

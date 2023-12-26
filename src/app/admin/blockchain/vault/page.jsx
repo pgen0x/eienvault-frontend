@@ -124,6 +124,80 @@ const VaultPage = () => {
           </div>
         </div>
       </div>
+      <div className="mt-4 flex items-stretch justify-evenly gap-4">
+        <div className="block flex-1 rounded-lg bg-white text-center dark:bg-neutral-900">
+          <div className="flex h-full flex-col rounded-lg bg-white text-center dark:bg-neutral-900">
+            <div className="border-b-2 border-neutral-100 px-6 py-3 text-xl font-medium text-neutral-700 dark:border-neutral-600 dark:text-neutral-50">
+              Pause
+            </div>
+            <div className="flex flex-grow flex-col justify-around p-4">
+              <h5 className="mb-2 text-lg font-medium leading-tight text-neutral-800 dark:text-neutral-50">
+                Pause Smart Contract
+              </h5>
+              <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
+                The &quot;Pause&quot; feature enables the temporary suspension
+                of smart contract functionality.
+              </p>
+            </div>
+            <div className="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
+              <button
+                type="button"
+                className="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
+              >
+                Pause
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="block flex-1 rounded-lg bg-white text-center dark:bg-neutral-900">
+          <div className="flex h-full flex-col rounded-lg bg-white text-center dark:bg-neutral-900">
+            <div className="border-b-2 border-neutral-100 px-6 py-3 text-xl font-medium text-neutral-700 dark:border-neutral-600 dark:text-neutral-50">
+              Unpause
+            </div>
+            <div className="flex flex-grow flex-col justify-around p-4">
+              <h5 className="mb-2 text-lg font-medium leading-tight text-neutral-800 dark:text-neutral-50">
+                Unpause Smart Contract
+              </h5>
+              <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
+                The &quot;Unpause&quot; function is dedicated to resuming normal
+                operations after a pause.
+              </p>
+            </div>
+            <div className="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
+              <button
+                type="button"
+                className="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
+              >
+                Unpause
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="block flex-1 rounded-lg bg-white text-center dark:bg-neutral-900">
+          <div className="flex h-full flex-col rounded-lg bg-white text-center dark:bg-neutral-900">
+            <div className="border-b-2 border-neutral-100 px-6 py-3 text-xl font-medium text-neutral-700 dark:border-neutral-600 dark:text-neutral-50">
+              Update Market Contract Address
+            </div>
+            <div className="flex flex-grow flex-col justify-around p-4">
+              <h5 className="mb-2 text-lg font-medium leading-tight text-neutral-800 dark:text-neutral-50">
+                Set New Marketplace Contract Address
+              </h5>
+              <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
+                This services is dedicated to update marketplace contract
+                address
+              </p>
+            </div>
+            <div className="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
+              <button
+                type="button"
+                className="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
+              >
+                Update Market Contract Address
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <ModalRescueERC721
         isOpenModal={isOpenModalERC721}
         onClose={closeModalERC721}

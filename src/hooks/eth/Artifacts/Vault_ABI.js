@@ -1,5 +1,8 @@
 export const vaultABI = {
-  address: '0x1206c88F7A0c4dAEEe7f932C7bd2C337b9ee21fF',
+  address:
+    process.env.NEXT_PUBLIC_NODE_ENV === 'production'
+      ? '0xCb6C8A349bF669d94B323e9e2a7772E83F13C545'
+      : '0x1206c88F7A0c4dAEEe7f932C7bd2C337b9ee21fF',
   abi: [
     {
       inputs: [],

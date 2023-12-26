@@ -44,7 +44,7 @@ const AdminUserPage = () => {
   function handleCopyToClipboard(address) {
     copyToClipboard(address);
     setCopyButtonStatus((oldCopy) => [...oldCopy, address]);
-    
+
     setTimeout(() => {
       setCopyButtonStatus((oldCopy) =>
         oldCopy.filter((item) => item != address),
@@ -243,14 +243,7 @@ const ModalUpdate = ({ isOpenModal, onClose, dataModal, refresh }) => {
   });
   const [hash, setHash] = useState();
   const [formRoles, setFormRoles] = useState(dataModal.roles);
-  const listRoles = [
-    'PAUSER_ROLE',
-    'UPGRADER_ROLE',
-    'DEFAULT_ADMIN_ROLE',
-    'WEB_ADMIN',
-    'SUPER_WEBADMIN',
-    'USER',
-  ];
+  const listRoles = ['WEB_ADMIN', 'SUPER_WEBADMIN', 'USER'];
 
   const {
     register,
@@ -334,7 +327,6 @@ const ModalUpdate = ({ isOpenModal, onClose, dataModal, refresh }) => {
 
   const handleChangeRoles = (value) => {
     setFormRoles((oldCopy) => {
-      
       if (oldCopy.includes(value)) {
         return oldCopy.filter((item) => item != value);
       }
@@ -400,7 +392,10 @@ const ModalUpdate = ({ isOpenModal, onClose, dataModal, refresh }) => {
                               <div className="flex w-full flex-col gap-3 rounded-full">
                                 {listRoles.map((role, key) => {
                                   return (
-                                    <label key={key} className="flex items-center gap-2 text-sm font-medium">
+                                    <label
+                                      key={key}
+                                      className="flex items-center gap-2 text-sm font-medium"
+                                    >
                                       <input
                                         type="checkbox"
                                         value={role}
@@ -409,7 +404,11 @@ const ModalUpdate = ({ isOpenModal, onClose, dataModal, refresh }) => {
                                         onChange={(e) =>
                                           handleChangeRoles(e.target.value)
                                         }
-                                        checked={formRoles ? formRoles.includes(role) : false}
+                                        checked={
+                                          formRoles
+                                            ? formRoles.includes(role)
+                                            : false
+                                        }
                                       />
                                       <span>{role}</span>
                                     </label>

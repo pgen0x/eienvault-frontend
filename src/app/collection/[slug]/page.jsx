@@ -102,7 +102,10 @@ export default function CollectionDetail({ params }) {
 
   const [chains, setChains] = useState([]);
   const [selectedBlockchain, setSelectedBlockchain] = useState({
-    chainId: chain?.id || 666888,
+    chainId:
+      chain?.id || process.env.NEXT_PUBLIC_NODE_ENV === 'production'
+        ? 8668
+        : 666888,
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
   const [copyButtonStatus, setCopyButtonStatus] = useState(false);
@@ -212,7 +215,6 @@ export default function CollectionDetail({ params }) {
         setChains(dataChain);
         // Continue with your code
       } catch (error) {
-        
         // Handle the error gracefully, e.g., show an error message to the user
       }
     };
@@ -333,7 +335,7 @@ export default function CollectionDetail({ params }) {
                           : ''}
                       </button>
                     </div>
-                    <div className="flex flex-wrap w-full justify-start gap-1 text-gray-900 dark:text-white">
+                    <div className="flex w-full flex-wrap justify-start gap-1 text-gray-900 dark:text-white">
                       <div className="flex items-center gap-1">
                         Created by{' '}
                         <button
@@ -892,9 +894,7 @@ const Items = ({ params, collection }) => {
         value: price,
       });
       return hash;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const buyAction = async (marketId, price) => {
@@ -907,9 +907,7 @@ const Items = ({ params, collection }) => {
         value: price,
       });
       return hash;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const getProperties = async (collectionAddress) => {
@@ -1177,7 +1175,6 @@ const Items = ({ params, collection }) => {
   }, [selectedValues]);
 
   const refreshData = async () => {
-    
     setNfts([]);
     setNftPage(1);
     setNftLast(false);
@@ -1688,7 +1685,6 @@ const Activity = ({ collection }) => {
         setIsLoading(false);
       })
       .catch((error) => {
-        
         setIsLoading(false);
       });
   };
@@ -1774,34 +1770,34 @@ const Activity = ({ collection }) => {
       isAddress(event?.item?.To)
     ) {
       description = (
-        <div className="w-full flex flex-col sm:flex-row flex-wrap gap-1">
+        <div className="flex w-full flex-col flex-wrap gap-1 sm:flex-row">
           <div className="flex gap-1">
-          transferred from
-          <JazzIcon
-            diameter={16}
-            seed={event?.item?.From}
-            useGradientFallback={true}
-          />
-          <button
-            className="font-bold text-primary-500"
-            onClick={() => router.push(`/profile/${event?.item?.From}`)}
-          >
-            {truncateAddress4char(event?.item?.From)}
-          </button>
+            transferred from
+            <JazzIcon
+              diameter={16}
+              seed={event?.item?.From}
+              useGradientFallback={true}
+            />
+            <button
+              className="font-bold text-primary-500"
+              onClick={() => router.push(`/profile/${event?.item?.From}`)}
+            >
+              {truncateAddress4char(event?.item?.From)}
+            </button>
           </div>
           <div className="flex gap-1">
-          to
-          <JazzIcon
-            diameter={16}
-            seed={event?.item?.To}
-            useGradientFallback={true}
-          />
-          <button
-            className="font-bold text-primary-500"
-            onClick={() => router.push(`/profile/${event?.item?.To}`)}
-          >
-            {truncateAddress4char(event?.item?.To)}
-          </button>
+            to
+            <JazzIcon
+              diameter={16}
+              seed={event?.item?.To}
+              useGradientFallback={true}
+            />
+            <button
+              className="font-bold text-primary-500"
+              onClick={() => router.push(`/profile/${event?.item?.To}`)}
+            >
+              {truncateAddress4char(event?.item?.To)}
+            </button>
           </div>
         </div>
       );
@@ -1830,29 +1826,29 @@ const Activity = ({ collection }) => {
     if (event.eventType == 'ItemListed') {
       type = 'Listings';
       description = (
-        <div className="w-full flex flex-col sm:flex-row flex-wrap gap-1">
+        <div className="flex w-full flex-col flex-wrap gap-1 sm:flex-row">
           <div className="flex gap-1">
-          <span>listed by</span>{' '}
-          <JazzIcon
-            diameter={16}
-            seed={event?.seller}
-            useGradientFallback={true}
-          />
-          <button
-            className="font-bold text-primary-500"
-            onClick={() => router.push(`/profile/${event?.item?.Seller}`)}
-          >
-            {event?.sellerData?.username
-              ? event.sellerData.username
-              : truncateAddress4char(event?.seller)}
-          </button>
+            <span>listed by</span>{' '}
+            <JazzIcon
+              diameter={16}
+              seed={event?.seller}
+              useGradientFallback={true}
+            />
+            <button
+              className="font-bold text-primary-500"
+              onClick={() => router.push(`/profile/${event?.item?.Seller}`)}
+            >
+              {event?.sellerData?.username
+                ? event.sellerData.username
+                : truncateAddress4char(event?.seller)}
+            </button>
           </div>
           <div className="flex gap-1">
-          for
-          <span className="font-bold text-primary-500">
-            {formatEther(Number(event?.price))}{' '}
-            {event?.collectionData?.Chain?.symbol}
-          </span>
+            for
+            <span className="font-bold text-primary-500">
+              {formatEther(Number(event?.price))}{' '}
+              {event?.collectionData?.Chain?.symbol}
+            </span>
           </div>
         </div>
       );
@@ -1883,45 +1879,45 @@ const Activity = ({ collection }) => {
     } else if (event.eventType == 'ItemSold') {
       type = 'Sales';
       description = (
-        <div className="flex gap-1 flex-col lg:flex-row">
+        <div className="flex flex-col gap-1 lg:flex-row">
           <div className="flex gap-1">
-          purchased by
-          <JazzIcon
-            diameter={16}
-            seed={event?.buyer}
-            useGradientFallback={true}
-          />
-          <button
-            className="font-bold text-primary-500"
-            onClick={() => router.push(`/profile/${event?.buyer}`)}
-          >
-            {event?.buyerData?.username
-              ? event.buyerData.username
-              : truncateAddress4char(event?.buyer)}
-          </button>
+            purchased by
+            <JazzIcon
+              diameter={16}
+              seed={event?.buyer}
+              useGradientFallback={true}
+            />
+            <button
+              className="font-bold text-primary-500"
+              onClick={() => router.push(`/profile/${event?.buyer}`)}
+            >
+              {event?.buyerData?.username
+                ? event.buyerData.username
+                : truncateAddress4char(event?.buyer)}
+            </button>
           </div>
           <div className="flex gap-1">
-          for
-          <span className="font-bold text-primary-500">
-            {formatEther(Number(event?.price))}{' '}
-            {event?.collectionData?.Chain?.symbol}
-          </span>
+            for
+            <span className="font-bold text-primary-500">
+              {formatEther(Number(event?.price))}{' '}
+              {event?.collectionData?.Chain?.symbol}
+            </span>
           </div>
           <div className="flex gap-1">
-          from
-          <JazzIcon
-            diameter={16}
-            seed={event?.seller}
-            useGradientFallback={true}
-          />
-          <button
-            className="font-bold text-primary-500"
-            onClick={() => router.push(`/profile/${event?.seller}`)}
-          >
-            {event?.sellerData?.username
-              ? event.sellerData.username
-              : truncateAddress4char(event?.seller)}
-          </button>
+            from
+            <JazzIcon
+              diameter={16}
+              seed={event?.seller}
+              useGradientFallback={true}
+            />
+            <button
+              className="font-bold text-primary-500"
+              onClick={() => router.push(`/profile/${event?.seller}`)}
+            >
+              {event?.sellerData?.username
+                ? event.sellerData.username
+                : truncateAddress4char(event?.seller)}
+            </button>
           </div>
         </div>
       );
@@ -2018,12 +2014,12 @@ const Activity = ({ collection }) => {
         <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
           <div className="flex flex-col gap-3 rounded-lg">
             <div className="grid grid-cols-12 gap-3">
-              <div className="col-span-12 md:col-span-9 flex flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900">
+              <div className="col-span-12 flex flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900 md:col-span-9">
                 {[...Array(5)].map((nft, index) => (
                   <ActivityItemDetailSkeleton key={index} />
                 ))}
               </div>
-              <div className="col-span-12 md:col-span-3 flex h-fit flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900">
+              <div className="col-span-12 flex h-fit flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900 md:col-span-3">
                 <h3 className="text-xl font-bold">Filter</h3>
                 <div className="flex flex-wrap gap-3 rounded-lg">
                   {[...Array(6)].map((nft, key) => (
@@ -2042,7 +2038,7 @@ const Activity = ({ collection }) => {
         <div className="flex flex-col gap-5 text-sm text-black dark:text-white">
           <div className="flex flex-col gap-3 rounded-lg">
             <div className="grid grid-cols-12 gap-3">
-              <div className="col-span-12 md:col-span-9 flex flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900">
+              <div className="col-span-12 flex flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900 md:col-span-9">
                 {events
                   .filter((item) =>
                     activeFilter.length > 0
@@ -2053,7 +2049,7 @@ const Activity = ({ collection }) => {
                     return <ActivityItemDetail key={index} event={event} />;
                   })}
               </div>
-              <div className="row-start-1 md:row-auto col-span-12 md:col-span-3 flex h-fit flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900">
+              <div className="col-span-12 row-start-1 flex h-fit flex-col gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900 md:col-span-3 md:row-auto">
                 <h3 className="text-xl font-bold">Filter</h3>
                 <div className="flex flex-wrap gap-3 rounded-lg">
                   {Object.keys(datafilters).map((key) => (

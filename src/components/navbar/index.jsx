@@ -59,6 +59,9 @@ export default function Navbar() {
     }
   }
 
+  const chainId =
+    process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888;
+
   return (
     <>
       <div className="group sticky top-0 z-40 inline-flex w-full items-center justify-center transition-all md:px-10 lg:px-10 xl:px-10 2xl:px-10">
@@ -163,12 +166,12 @@ export default function Navbar() {
               </div> */}
               {isClient && (
                 <>
-                  {isConnected && chain?.id !== 666888 && (
+                  {isConnected && chain?.id !== chainId && (
                     <div className="mt-2 flex flex-row items-center justify-between border-t-2 py-2 text-xl font-semibold text-gray-900 hover:text-neutral-700">
                       <span className="text-md text-xl">Wrong network!</span>
                       <span
                         className="text-md cursor-pointer px-3 py-2"
-                        onClick={() => switchNetwork?.(666888)}
+                        onClick={() => switchNetwork?.(chainId)}
                       >
                         Switch
                       </span>

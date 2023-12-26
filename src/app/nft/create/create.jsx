@@ -66,11 +66,17 @@ export default function Create({ chains }) {
   const { data: walletClient } = useWalletClient();
   const publicClient = usePublicClient();
   const [selectedChain, setSelectedChain] = useState({
-    chainId: chain?.id || 666888,
+    chainId:
+      chain?.id || process.env.NEXT_PUBLIC_NODE_ENV === 'production'
+        ? 8668
+        : 666888,
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
   const [selectedBlockchain, setSelectedBlockchain] = useState({
-    chainId: chain?.id || 666888,
+    chainId:
+      chain?.id || process.env.NEXT_PUBLIC_NODE_ENV === 'production'
+        ? 8668
+        : 666888,
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
   const [inputFields, setInputFields] = useState([

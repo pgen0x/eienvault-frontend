@@ -53,6 +53,16 @@ const nextConfig = {
         hostname: 'cdeien.codermatter.com',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'testnet-cdn.eienvault.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.eienvault.com',
+        port: '',
+      },
     ],
   },
 };

@@ -13,7 +13,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
 import Image from 'next/legacy/image';
 import { Fragment, useEffect, useState } from 'react';
-import { formatEther, parseEther, parseUnits, zeroAddress } from 'viem';
+import {
+  formatEther,
+  formatUnits,
+  parseEther,
+  parseUnits,
+  zeroAddress,
+} from 'viem';
 import {
   erc20ABI,
   useAccount,
@@ -96,7 +102,12 @@ export default function ModalBid({
     // setIsCompleted(false);
     // onClose(false);
     // onModalClose();
-    if (isErrorBid.isError || isErrorApprove.isError || isCompleted || !isSubmit) {
+    if (
+      isErrorBid.isError ||
+      isErrorApprove.isError ||
+      isCompleted ||
+      !isSubmit
+    ) {
       if (isErrorBid.isError || isErrorApprove.isError) {
         setIsSubmit(false);
         setErrorBid({
@@ -147,7 +158,10 @@ export default function ModalBid({
         address: auction?.paidWith,
         abi: erc20ABI,
         functionName: 'approve',
-        args: [marketplaceABI.address, parseUnits(watch('amount'), data.decimals)],
+        args: [
+          marketplaceABI.address,
+          parseUnits(watch('amount'), data.decimals),
+        ],
         account: address,
       });
 
@@ -387,6 +401,7 @@ export default function ModalBid({
                             placeholder="blur"
                             blurDataURL={auction?.imageUri}
                             src={auction?.imageUri}
+                            alt=""
                           />
                         ) : (
                           <div className="h-96 w-[192px] animate-pulse rounded-2xl bg-gray-300" />
@@ -439,8 +454,12 @@ export default function ModalBid({
                           </span>
                           <span className="font-semibold">
                             {auction.lowestBid !== '0'
-                              ? auction.lowestBid
-                              : formatEther(auction.price)}{' '}
+                              ? selectedAddress === zeroAddress
+                                ? formatEther(auction.lowestBid)
+                                : formatUnits(auction.price, data.decimals)
+                              : selectedAddress === zeroAddress
+                              ? formatEther(auction.price)
+                              : formatUnits(auction.price, data.decimals)}{' '}
                             {data?.symbol}
                           </span>
                         </div>
@@ -449,7 +468,12 @@ export default function ModalBid({
                           <span>Highest bid</span>
                           <span className="flex flex-col items-end font-semibold">
                             <span>
-                              {formatEther(auction?.highestBid?.highestBid)}{' '}
+                              {selectedAddress === zeroAddress
+                                ? formatEther(auction?.highestBid?.highestBid)
+                                : formatUnits(
+                                    auction?.highestBid?.highestBid,
+                                    data.decimals,
+                                  )}{' '}
                               {data?.symbol}
                             </span>
                             {auction?.highestBid?.highestBidder && (
@@ -483,21 +507,27 @@ export default function ModalBid({
                                     if (
                                       auction?.highestBid?.highestBid !== '0'
                                     ) {
-                                      if (
-                                        parseFloat(value) <=
-                                        formatEther(
-                                          Number(
-                                            auction?.highestBid?.highestBid,
-                                          ),
-                                        )
-                                      ) {
+                                      const price =
+                                        selectedAddress === zeroAddress
+                                          ? formatEther(
+                                              auction?.highestBid?.highestBid,
+                                            )
+                                          : formatUnits(
+                                              auction?.highestBid?.highestBid,
+                                              data.decimals,
+                                            );
+                                      if (parseFloat(value) <= price) {
                                         return 'Price must be greater than highest bid';
                                       }
                                     } else {
-                                      if (
-                                        parseFloat(value) <=
-                                        formatEther(auction.price)
-                                      ) {
+                                      const price =
+                                        selectedAddress === zeroAddress
+                                          ? formatEther(auction.price)
+                                          : formatUnits(
+                                              auction.price,
+                                              data.decimals,
+                                            );
+                                      if (parseFloat(value) <= price) {
                                         return 'Price must be greater than floor price';
                                       }
                                     }

@@ -2,15 +2,12 @@ import { useRouter } from 'next-nprogress-bar';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import Cat from '@/assets/images/cat.png';
-import Hos from '@/assets/images/hos.jpg';
 import { Autoplay, Pagination } from 'swiper/modules';
 import { truncateAddress } from '@/utils/truncateAddress';
 import UpcomingCountdown from '../slideshow/upcomingcountdown';
 import { ImageWithFallback } from '../imagewithfallback';
 import { formatEther } from 'viem';
 import ButtonTertiary from '../button/buttonTertiary';
-const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
 const getHighestBid = (auctionData) => {
   if (!auctionData.listOffers || auctionData.listOffers.length === 0) {

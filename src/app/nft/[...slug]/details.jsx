@@ -100,14 +100,18 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
   const [removeData, setRemoveData] = useState({});
   const [dataNFTs, setDataNFTs] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(zeroAddress);
-  const { data: balanceToken } = useBalance(selectedAddress == zeroAddress ? {
-    address: address,
-    watch: true,
-  } : {
-    address: address,
-    token: selectedAddress,
-    watch: true,
-  });
+  const { data: balanceToken } = useBalance(
+    selectedAddress == zeroAddress
+      ? {
+          address: address,
+          watch: true,
+        }
+      : {
+          address: address,
+          token: selectedAddress,
+          watch: true,
+        },
+  );
 
   const [errorActivities, setErrorActivities] = useState(false);
 
@@ -131,7 +135,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
         console.error('Fetch failed:', res);
       } else {
         const responseData = await res.json();
-        if(responseData?.isBlacklisted){
+        if (responseData?.isBlacklisted) {
           notFound();
         }
         setSelectedAddress(responseData?.itemDetails?.paidWith);
@@ -1059,7 +1063,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                 ? selectedAddress == zeroAddress
                                   ? formatEther(dataNFTs?.itemDetails?.price)
                                   : formatUnits(
-                                    dataNFTs?.itemDetails?.price || 0,
+                                      dataNFTs?.itemDetails?.price || 0,
                                       balanceToken?.decimals,
                                     )
                                 : formatEther(
@@ -1084,10 +1088,16 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                             <h4 className="md:text-lg">
                               Highest bid at{' '}
                               <span className="text-sm font-bold md:text-lg">
-                                {formatEther(
-                                  getHighestBid(dataNFTs?.itemDetails)
-                                    .highestBid,
-                                )}{' '}
+                                {selectedAddress == zeroAddress
+                                  ? formatEther(
+                                      getHighestBid(dataNFTs?.itemDetails)
+                                        .highestBid,
+                                    )
+                                  : formatUnits(
+                                      getHighestBid(dataNFTs?.itemDetails)
+                                        .highestBid,
+                                      balanceToken?.decimals,
+                                    )}{' '}
                                 {balanceToken?.symbol}
                               </span>
                             </h4>
@@ -1198,9 +1208,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                   dataNFTs?.nftDetails?.name,
                                   dataNFTs?.collectionData,
                                   getHighestBid(dataNFTs?.itemDetails),
-                                  formatEther(
-                                    getLowestBid(dataNFTs?.itemDetails),
-                                  ),
+                                  getLowestBid(dataNFTs?.itemDetails),
                                   dataNFTs?.itemDetails?.paidWith,
                                 )
                               }

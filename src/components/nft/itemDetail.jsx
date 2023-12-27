@@ -179,14 +179,18 @@ const Nft = ({
   const [selectedAddress, setSelectedAddress] = useState(
     itemDetails?.paidWith || zeroAddress,
   );
-  const { data: balanceToken } = useBalance(selectedAddress == zeroAddress ? {
-    address: address,
-    watch: true,
-  } : {
-    address: address,
-    token: selectedAddress,
-    watch: true,
-  });
+  const { data: balanceToken } = useBalance(
+    selectedAddress == zeroAddress
+      ? {
+          address: address,
+          watch: true,
+        }
+      : {
+          address: address,
+          token: selectedAddress,
+          watch: true,
+        },
+  );
 
   function getHighestBid(auctionData) {
     if (!auctionData.listOffers || auctionData.listOffers.length === 0) {
@@ -312,18 +316,14 @@ const Nft = ({
       const responseData = await res.json();
       toast.success('Refresh metada successfully');
       window.location.reload();
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
 
   const openOriginal = (url) => {
     window.open(url, '_blank');
   };
 
-  useEffect(() => {
-    
-  }, [endDate, releaseDate]);
+  useEffect(() => {}, [endDate, releaseDate]);
 
   return (
     <div className="group h-[542px] w-full">
@@ -784,7 +784,12 @@ const Nft = ({
                     <>
                       <p>Highest bid</p>
                       <p className="font-bold">
-                        {formatEther(getHighestBid(itemDetails).highestBid)}{' '}
+                        {selectedAddress == zeroAddress
+                          ? formatEther(getHighestBid(itemDetails).highestBid)
+                          : formatUnits(
+                              getHighestBid(itemDetails).highestBid,
+                              balanceToken?.decimals,
+                            )}{' '}
                         {balanceToken?.symbol}
                       </p>
                     </>

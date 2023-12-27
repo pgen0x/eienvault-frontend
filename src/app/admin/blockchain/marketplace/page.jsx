@@ -1,8 +1,13 @@
 'use client';
 
 import ModalGrantRole from '@/components/admin/modal/grantRole';
+import ModalPause from '@/components/admin/modal/pause';
 import ModalRescueERC20 from '@/components/admin/modal/rescueERC20';
 import ModalRescueERC721 from '@/components/admin/modal/rescueERC721';
+import ModalUnpause from '@/components/admin/modal/unpause';
+import ModalUpdateCommission from '@/components/admin/modal/updateCommission';
+import ModalUpdateListingPrice from '@/components/admin/modal/updateListingPrice';
+import ModalUpdateVault from '@/components/admin/modal/updateVault';
 import { useState } from 'react';
 
 const MarketplacePage = () => {
@@ -12,6 +17,9 @@ const MarketplacePage = () => {
   const [isOpenModalupdateCommission, setIsOpenModalupdateCommission] =
     useState(false);
   const [isOpenModalupdateVault, setIsOpenModalupdateVault] = useState(false);
+  const [isOpenModalupdateListingPrice, setIsOpenModalupdateListingPrice] =
+    useState(false);
+
   const [isOpenModalPause, setIsOpenModalPause] = useState(false);
   const [isOpenModalUnpause, setIsOpenModalUnpause] = useState(false);
   const [isOpenModalupdateMarketAddress, setIsOpenModalupdateMarketAddress] =
@@ -57,6 +65,14 @@ const MarketplacePage = () => {
     setIsOpenModalupdateVault(false);
   }
 
+  const UpdateListingPrice = () => {
+    setIsOpenModalupdateListingPrice(true);
+  };
+
+  function closeModalUpdateListingPrice() {
+    setIsOpenModalupdateListingPrice(false);
+  }
+
   const Pause = () => {
     setIsOpenModalPause(true);
   };
@@ -73,13 +89,6 @@ const MarketplacePage = () => {
     setIsOpenModalUnpause(false);
   }
 
-  const UpdateMarketAddress = () => {
-    setIsOpenModalupdateMarketAddress(true);
-  };
-
-  function closeModalUpdateMarketAddress() {
-    setIsOpenModalupdateMarketAddress(false);
-  }
   return (
     <div>
       <div className="flex items-center justify-between py-5">
@@ -177,19 +186,20 @@ const MarketplacePage = () => {
             </div>
             <div className="flex flex-grow flex-col justify-around p-4">
               <h5 className="mb-2 text-lg font-medium leading-tight text-neutral-800 dark:text-neutral-50">
-                Update Commission in Basis Points
+                Update Commission in Bases Points
               </h5>
               <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
                 The &quot;Update Commission&quot; function is designed to modify
-                the sale fee percentage denominated in basis points (bp). Basis
+                the sale fee percentage denominated in bases points (bp). Bases
                 points, ranging from 0 to 100, are scaled up to a representation
-                of 0 to 10,000. For instance, a 5% fee corresponds to 500 basis
+                of 0 to 10,000. For instance, a 5% fee corresponds to 500 bases
                 points.
               </p>
             </div>
             <div className="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
               <button
                 type="button"
+                onClick={UpdateCommission}
                 className="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
               >
                 Update Commission
@@ -214,6 +224,7 @@ const MarketplacePage = () => {
             <div className="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
               <button
                 type="button"
+                onClick={UpdateVault}
                 className="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
               >
                 Update Vault
@@ -238,6 +249,7 @@ const MarketplacePage = () => {
             <div className="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
               <button
                 type="button"
+                onClick={UpdateListingPrice}
                 className="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
               >
                 Update Listing Price
@@ -264,6 +276,7 @@ const MarketplacePage = () => {
             <div className="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
               <button
                 type="button"
+                onClick={Pause}
                 className="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
               >
                 Pause
@@ -288,6 +301,7 @@ const MarketplacePage = () => {
             <div className="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
               <button
                 type="button"
+                onClick={Unpause}
                 className="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
               >
                 Unpause
@@ -313,6 +327,36 @@ const MarketplacePage = () => {
         onClose={closeModalGrantRole}
         onModalClose={closeModalGrantRole}
         type="marketplace"
+      />
+      <ModalUpdateCommission
+        isOpenModal={isOpenModalupdateCommission}
+        onClose={closeModalUpdateCommission}
+        onModalClose={closeModalUpdateCommission}
+        type="marketplace"
+      />
+      <ModalUpdateVault
+        isOpenModal={isOpenModalupdateVault}
+        onClose={closeModalUpdateVault}
+        onModalClose={closeModalUpdateVault}
+        type="marketplace"
+      />
+      <ModalUpdateListingPrice
+        isOpenModal={isOpenModalupdateListingPrice}
+        onClose={closeModalUpdateListingPrice}
+        onModalClose={closeModalUpdateListingPrice}
+        type="marketplace"
+      />
+      <ModalPause
+        isOpenModal={isOpenModalPause}
+        onClose={closeModalPause}
+        onModalClose={closeModalPause}
+        type={'marketplace'}
+      />
+      <ModalUnpause
+        isOpenModal={isOpenModalUnpause}
+        onClose={closeModalUnPause}
+        onModalClose={closeModalUnPause}
+        type={'marketplace'}
       />
     </div>
   );

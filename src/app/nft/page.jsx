@@ -264,6 +264,9 @@ export default function NftPage() {
     collectionAddress,
     ChainSymbol,
     ChainName,
+    ChainId,
+    TokenSymbol,
+    paidWith
   ) => {
     setBuyData({
       marketId,
@@ -274,6 +277,9 @@ export default function NftPage() {
       collectionAddress,
       ChainSymbol,
       ChainName,
+      ChainId,
+      TokenSymbol,
+      paidWith
     });
     setisOpenModalBuy(true);
   };

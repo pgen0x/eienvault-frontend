@@ -118,6 +118,9 @@ export const SlideshowActivities = ({ dataActivities, refreshData }) => {
     collectionAddress,
     ChainSymbol,
     ChainName,
+    ChainId,
+    TokenSymbol,
+    paidWith
   ) => {
     setBuyData({
       marketId,
@@ -128,6 +131,9 @@ export const SlideshowActivities = ({ dataActivities, refreshData }) => {
       collectionAddress,
       ChainSymbol,
       ChainName,
+      ChainId,
+      TokenSymbol,
+      paidWith
     });
     setisOpenModalBuy(true);
   };

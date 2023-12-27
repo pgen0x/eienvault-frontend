@@ -97,6 +97,9 @@ export const SlideshowDiscover = ({ dataDiscover, refreshData }) => {
     collectionAddress,
     ChainSymbol,
     ChainName,
+    ChainId,
+    TokenSymbol,
+    paidWith
   ) => {
     setBuyData({
       marketId,
@@ -107,6 +110,9 @@ export const SlideshowDiscover = ({ dataDiscover, refreshData }) => {
       collectionAddress,
       ChainSymbol,
       ChainName,
+      ChainId,
+      TokenSymbol,
+      paidWith
     });
     setisOpenModalBuy(true);
   };

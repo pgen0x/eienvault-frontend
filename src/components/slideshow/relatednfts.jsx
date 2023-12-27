@@ -94,6 +94,9 @@ export const RelatedNFTs = ({ dataRelatedNFTs, refreshData }) => {
     collectionAddress,
     ChainSymbol,
     ChainName,
+    ChainId,
+    TokenSymbol,
+    paidWith
   ) => {
     setBuyData({
       marketId,
@@ -104,6 +107,9 @@ export const RelatedNFTs = ({ dataRelatedNFTs, refreshData }) => {
       collectionAddress,
       ChainSymbol,
       ChainName,
+      ChainId,
+      TokenSymbol,
+      paidWith
     });
     setisOpenModalBuy(true);
   };
@@ -274,6 +280,7 @@ export const RelatedNFTs = ({ dataRelatedNFTs, refreshData }) => {
         dataBuy={buyData}
         buyAction={buyAction}
         onModalClose={closeModalBuy}
+        refreshData={refreshData}
       />
       <ModalBid
         isOpenModal={isOpenModalBid}

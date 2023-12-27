@@ -778,6 +778,9 @@ const Items = ({ params, collection }) => {
     collectionAddress,
     ChainSymbol,
     ChainName,
+    ChainId,
+    TokenSymbol,
+    paidWith
   ) => {
     setBuyData({
       marketId,
@@ -788,6 +791,9 @@ const Items = ({ params, collection }) => {
       collectionAddress,
       ChainSymbol,
       ChainName,
+      ChainId,
+      TokenSymbol,
+      paidWith
     });
     setisOpenModalBuy(true);
   };

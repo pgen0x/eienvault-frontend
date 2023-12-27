@@ -19,8 +19,8 @@ import Image from 'next/image';
 import { useEffect } from 'react';
 import { Fragment, Suspense, useState } from 'react';
 import { toast } from 'react-toastify';
-import { formatEther } from 'viem';
-import { useAccount, useNetwork } from 'wagmi';
+import { formatEther, formatUnits, zeroAddress } from 'viem';
+import { useAccount, useBalance, useNetwork } from 'wagmi';
 import { ImageWithFallback } from '../imagewithfallback';
 import LiveCountdown from '../slideshow/countdown';
 import ButtonPrimary from '../button/buttonPrimary';
@@ -176,6 +176,17 @@ const Nft = ({
   const router = useRouter();
   const { address } = useAccount();
   const { token } = useAuth();
+  const [selectedAddress, setSelectedAddress] = useState(
+    itemDetails?.paidWith || zeroAddress,
+  );
+  const { data: balanceToken } = useBalance(selectedAddress == zeroAddress ? {
+    address: address,
+    watch: true,
+  } : {
+    address: address,
+    token: selectedAddress,
+    watch: true,
+  });
 
   function getHighestBid(auctionData) {
     if (!auctionData.listOffers || auctionData.listOffers.length === 0) {
@@ -243,7 +254,7 @@ const Nft = ({
       toast.success('Refresh metada successfully');
       window.location.reload();
     } catch (error) {
-      
+      console.error('error likes:', error);
     }
   }
 
@@ -271,7 +282,7 @@ const Nft = ({
         setCountLikes(countLikes + 1);
       }
     } catch (error) {
-      
+      console.error('error likes:', error);
     }
   };
 
@@ -294,7 +305,7 @@ const Nft = ({
         },
       );
       if (!res.ok) {
-        
+        console.error('Refresh metadata failed:', res);
         const errorMessage = await res.json();
         toast.error(errorMessage.error.messages);
       }
@@ -759,10 +770,13 @@ const Nft = ({
                 <div className="flex flex-col items-start truncate text-sm leading-5">
                   <p>Price</p>
                   <p className="font-bold">
-                    {itemDetails?.price
-                      ? formatEther(itemDetails?.price)
-                      : '0.00'}{' '}
-                    {collection?.Chain?.symbol ? collection.Chain.symbol : '-'}
+                    {selectedAddress == zeroAddress
+                      ? formatEther(itemDetails?.price || 0)
+                      : formatUnits(
+                          itemDetails?.price || 0,
+                          balanceToken?.decimals,
+                        )}{' '}
+                    {balanceToken?.symbol}
                   </p>
                 </div>
                 <div className="flex flex-col items-start truncate text-sm leading-5">
@@ -771,9 +785,7 @@ const Nft = ({
                       <p>Highest bid</p>
                       <p className="font-bold">
                         {formatEther(getHighestBid(itemDetails).highestBid)}{' '}
-                        {collection?.Chain?.symbol
-                          ? collection.Chain.symbol
-                          : '-'}
+                        {balanceToken?.symbol}
                       </p>
                     </>
                   ) : (
@@ -783,9 +795,7 @@ const Nft = ({
                         {collection?.floorPrice
                           ? formatEther(collection.floorPrice)
                           : '0.00'}{' '}
-                        {collection?.Chain.symbol
-                          ? collection.Chain.symbol
-                          : '-'}
+                        {balanceToken?.symbol}
                       </p>
                     </>
                   )}
@@ -872,6 +882,9 @@ const Nft = ({
                                   collection?.tokenAddress,
                                   collection?.Chain?.symbol,
                                   collection?.Chain?.name,
+                                  collection?.chainId,
+                                  balanceToken?.symbol,
+                                  itemDetails?.paidWith,
                                 )
                               }
                               disabled={!isNotExpired}

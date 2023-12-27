@@ -1100,6 +1100,7 @@ export default function Create({ chains }) {
                 <div className="mt-2 flex w-full items-center rounded-full border-0 bg-white dark:bg-neutral-900">
                   <input
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
                     placeholder="0"
                     min="0"

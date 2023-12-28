@@ -1,29 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import Ethereum from '@/assets/icon/ethereum';
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import Image from 'next/legacy/image';
-import {
-  faCircleCheck,
-  faChevronRight,
-  faChevronLeft,
-  faMinus,
-  faPlus,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useAuth } from '@/hooks/AuthContext';
-import { useAccount, usePublicClient } from 'wagmi';
 import HelaIcon from '@/assets/icon/hela';
 import { truncateAddress4char } from '@/utils/truncateAddress4char';
-import Countdown from './countdown';
-import ModalBid from '../modal/bid';
-import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import { formatEther } from 'viem';
-import { useRouter } from 'next-nprogress-bar';
-import { ImageWithFallback } from '../imagewithfallback';
+import {
+  faChevronLeft,
+  faChevronRight,
+  faCircleCheck,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
+import { useRouter } from 'next-nprogress-bar';
+import Image from 'next/legacy/image';
+import { useEffect, useState } from 'react';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { formatEther, formatUnits, zeroAddress } from 'viem';
+import { useAccount, useBalance } from 'wagmi';
 import ButtonPrimary from '../button/buttonPrimary';
-import { NftItemDetailSkeleton } from '../nft/itemDetail';
+import { ImageWithFallback } from '../imagewithfallback';
+import ModalBid from '../modal/bid';
+import Countdown from './countdown';
 
 const images = [1, 2, 3, 4];
 
@@ -37,6 +31,13 @@ export const Slideshow = ({
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [auctionData, setAcutionData] = useState({});
   const { address } = useAccount();
+  const [selectedAddress, setSelectedAddress] = useState(zeroAddress);
+  const { data: balanceToken } = useBalance({
+    address: address,
+    token: selectedAddress,
+    chainId: process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
+    watch: true,
+  });
 
   const sliderBreakPoints = {
     640: {
@@ -49,8 +50,8 @@ export const Slideshow = ({
       spaceBetween: 5,
     },
     1024: {
-      spaceBetween: 24,
-      width: 545,
+      spaceBetween: 5,
+      width: 530,
     },
     1280: {
       spaceBetween: 24,
@@ -69,8 +70,6 @@ export const Slideshow = ({
       width: 200,
     },
   };
-
-  const publicClient = usePublicClient();
 
   function getHighestBid(auctionData) {
     if (!auctionData.listOffers || auctionData.listOffers.length === 0) {
@@ -141,6 +140,15 @@ export const Slideshow = ({
     setIsOpenModal(false);
   }
 
+  useEffect(() => {
+    // Set selectedAddress based on auction.paidWith
+    auctions.forEach((auction) => {
+      if (auction.paidWith !== zeroAddress) {
+        setSelectedAddress(auction.paidWith);
+      }
+    });
+  }, [auctions]);
+
   return (
     <>
       <ButtonPrimary className="swiper-prev absolute -left-5 z-10 mr-2 hidden !w-fit sm:hidden md:block lg:block xl:block 2xl:block">
@@ -172,6 +180,13 @@ export const Slideshow = ({
           const isNotExpired = endDate.isAfter(currentDate);
           const isNotRelease = currentDate.isBefore(releaseDate);
 
+          const bidAmount =
+            auction.paidWith === zeroAddress
+              ? formatEther(getHighestBid(auction).highestBid)
+              : formatUnits(
+                  getHighestBid(auction).highestBid,
+                  balanceToken?.decimals,
+                );
           return (
             <SwiperSlide key={index}>
               <div className="inline-flex w-full flex-col justify-center gap-2 p-2 lg:items-start lg:pt-16">
@@ -270,7 +285,7 @@ export const Slideshow = ({
                           </div>
                         </div>
                       </div>
-                      <div className="line-clamp-5 w-72 min-h-[88px] text-sm font-light leading-tight text-neutral-900 dark:text-white">
+                      <div className="line-clamp-5 min-h-[88px] w-72 text-sm font-light leading-tight text-neutral-900 dark:text-white">
                         {auction.collectionData?.description
                           ? auction.collectionData?.description
                           : `Welcome to our ${auction.collectionData.name} collection! Explore a world of digital art and assets that represent unique and exclusive tokens on the blockchain. You'll find something special in our collection. Each NFT is a one-of-a-kind piece, verified and secured on the blockchain, making it a valuable addition to your digital asset portfolio. Join us on this journey of innovation and creativity in the world of non-fungible tokens. Start collecting, trading, and owning a piece of the digital future with our NFTs!`}
@@ -284,8 +299,10 @@ export const Slideshow = ({
                           <div className="flex flex-col self-stretch text-sm font-normal leading-tight text-neutral-900 dark:text-white">
                             Highest Bid{' '}
                             <span className="text-sm font-bold leading-tight text-neutral-900 dark:text-white">
-                              {formatEther(getHighestBid(auction).highestBid)}{' '}
-                              {auction.collectionData?.Chain?.symbol}
+                              {bidAmount}{' '}
+                              {auction.paidWith !== zeroAddress
+                                ? balanceToken?.symbol
+                                : 'HLUSD'}
                             </span>
                           </div>
                         </div>
@@ -450,6 +467,14 @@ export const SlideshowMobile = ({
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [auctionData, setAcutionData] = useState({});
   const { address } = useAccount();
+  const [selectedAddress, setSelectedAddress] = useState(zeroAddress);
+  const { data: balanceToken } = useBalance({
+    address: address,
+    token: selectedAddress,
+    chainId: process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
+    watch: true,
+  });
+
   const sliderBreakPoints = {
     640: {
       slidesPerView: 1,
@@ -477,7 +502,6 @@ export const SlideshowMobile = ({
       width: 400,
     },
   };
-  const publicClient = usePublicClient();
 
   function getHighestBid(auctionData) {
     if (!auctionData.listOffers || auctionData.listOffers.length === 0) {
@@ -547,6 +571,15 @@ export const SlideshowMobile = ({
   function closeModal() {
     setIsOpenModal(false);
   }
+
+  useEffect(() => {
+    // Set selectedAddress based on auction.paidWith
+    auctions.forEach((auction) => {
+      if (auction.paidWith !== zeroAddress) {
+        setSelectedAddress(auction.paidWith);
+      }
+    });
+  }, [auctions]);
   return (
     <>
       <Swiper
@@ -574,13 +607,22 @@ export const SlideshowMobile = ({
           const releaseDate = moment.unix(auction.releaseDate);
           const isNotExpired = endDate.isAfter(currentDate);
           const isNotRelease = currentDate.isBefore(releaseDate);
+          const bidAmount =
+            auction.paidWith === zeroAddress
+              ? formatEther(getHighestBid(auction).highestBid)
+              : formatUnits(
+                  getHighestBid(auction).highestBid,
+                  balanceToken?.decimals,
+                );
           return (
             <SwiperSlide key={index}>
-              <div className="inline-flex w-[375px] flex-col items-center justify-center gap-2 p-2 lg:items-start lg:px-10 lg:pt-16">
-                <div className="mt-[6rem] ml-2 flex flex-row items-center self-start rounded-lg bg-[#fff1d4] px-2 py-2">
-                  <span className="mr-2 h-1 w-1 animate-ping rounded-full bg-red-400 opacity-90"></span>
-                  <div className="whitespace-nowrap text-xs font-semibold text-gray-900">
-                    Live auction
+              <div className="flex flex-col items-center justify-center gap-4 py-4 lg:flex-row lg:items-start lg:px-10 lg:pt-16">
+                <div className="relative flex w-[340px] flex-col">
+                  <div className="mt-[6rem] flex flex-row items-center self-start rounded-lg bg-[#fff1d4] px-2 py-2">
+                    <span className="mr-2 h-1 w-1 animate-ping rounded-full bg-red-400 opacity-90"></span>
+                    <div className="whitespace-nowrap text-xs font-semibold text-gray-900">
+                      Live auction
+                    </div>
                   </div>
                 </div>
                 <div className="relative flex w-[340px] flex-col">
@@ -629,7 +671,14 @@ export const SlideshowMobile = ({
                       <div className="flex flex-col items-start justify-start gap-1">
                         <div className="inline-flex items-center justify-start gap-4">
                           <span className="text-gray-900">By</span>
-                          <div className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2" onClick={() => router.push(`/profile/${auction.collectionData?.userAddress}`)}>
+                          <div
+                            className="flex items-center justify-center gap-2 rounded-lg bg-white bg-opacity-70 p-2"
+                            onClick={() =>
+                              router.push(
+                                `/profile/${auction.collectionData?.userAddress}`,
+                              )
+                            }
+                          >
                             <ImageWithFallback
                               className="h-full w-full rounded-2xl "
                               width={15}
@@ -681,8 +730,10 @@ export const SlideshowMobile = ({
                           <div className="self-stretch text-sm font-normal leading-tight text-neutral-900">
                             Highest Bid{' '}
                             <span className="flex flex-col text-sm font-bold leading-tight text-neutral-900">
-                              {formatEther(getHighestBid(auction).highestBid)}{' '}
-                              {auction.collectionData?.Chain?.symbol}
+                              {bidAmount}{' '}
+                              {auction.paidWith !== zeroAddress
+                                ? balanceToken?.symbol
+                                : 'HLUSD'}
                             </span>
                           </div>
                         </div>

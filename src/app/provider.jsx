@@ -10,7 +10,8 @@ import { useEffect, useState } from 'react';
 import { WagmiConfig } from 'wagmi';
 import { SidebarProvider } from '../hooks/SidebarContext';
 
-const { wagmiConfig, projectId, ethereumClient, helamainnet } = initializeApp();
+const { wagmiConfig, projectId, ethereumClient, helamainnet, helatestnet } =
+  initializeApp();
 
 export function Providers({ children }) {
   const [mounted, setMounted] = useState(false);
@@ -36,7 +37,11 @@ export function Providers({ children }) {
               {children}
               <Web3Modal
                 projectId={projectId}
-                defaultChain={helamainnet}
+                defaultChain={
+                  process.env.NEXT_PUBLIC_NODE_ENV === 'production'
+                    ? helamainnet
+                    : helatestnet
+                }
                 ethereumClient={ethereumClient}
                 themeMode={isDarkMode ? 'dark' : 'light'}
                 chainImages={{

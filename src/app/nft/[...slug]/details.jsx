@@ -2262,7 +2262,7 @@ const History = ({ collection, tokenId, nft }) => {
           No history
         </div>
       )}
-      {events.length == 0 && isLoading && (
+      {events.length == 0 && isLoading ? (
         <div className="flex flex-col gap-5 px-3 text-sm text-black dark:text-white">
           <div className="flex flex-col gap-3 rounded-lg">
             {[...Array(5)].map((nft, index) => (
@@ -2270,12 +2270,13 @@ const History = ({ collection, tokenId, nft }) => {
             ))}
           </div>
         </div>
+      ) : (
+        <div className="flex max-h-96 w-full flex-col gap-3 overflow-y-auto text-sm text-black dark:text-white">
+          {events.map((event, index) => {
+            return <ActivityItemDetail key={index} event={event} />;
+          })}
+        </div>
       )}
-      <div className="flex max-h-96 w-full flex-col gap-3 overflow-y-auto text-sm text-black dark:text-white">
-        {events.map((event, index) => {
-          return <ActivityItemDetail key={index} event={event} />;
-        })}
-      </div>
     </>
   );
 };

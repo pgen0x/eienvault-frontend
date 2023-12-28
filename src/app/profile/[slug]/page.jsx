@@ -839,10 +839,7 @@ const Collection = ({ userAccount }) => {
   const [isCreateCollection, setIsCreateCollection] = useState(false);
   const [chains, setChains] = useState([]);
   const [selectedBlockchain, setSelectedBlockchain] = useState({
-    chainId:
-      chain?.id || process.env.NEXT_PUBLIC_NODE_ENV === 'production'
-        ? 8668
-        : 666888,
+    chainId: chain?.id,
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
 

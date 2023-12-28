@@ -113,6 +113,7 @@ export const SlideshowDiscover = ({ dataDiscover, refreshData }) => {
     collectionData,
     highestBid,
     lowestBid,
+    paidWith,
   ) => {
     setAcutionData({
       marketId,

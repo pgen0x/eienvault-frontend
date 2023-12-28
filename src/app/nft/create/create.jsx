@@ -51,6 +51,7 @@ import {
   useWalletClient,
 } from 'wagmi';
 import LoadingCollections from './loadingCollections';
+import { toast } from 'react-toastify';
 
 export default function Create({ chains }) {
   const { token } = useAuth();
@@ -58,8 +59,10 @@ export default function Create({ chains }) {
   const { chain } = useNetwork();
   const { data: walletClient } = useWalletClient();
   const publicClient = usePublicClient();
+  const chainId =
+    process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888;
   const [selectedChain, setSelectedChain] = useState({
-    chainId: chain?.id,
+    chainId: chain?.id ? chain?.id : chainId,
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
   const [selectedBlockchain, setSelectedBlockchain] = useState({
@@ -90,7 +93,7 @@ export default function Create({ chains }) {
   const [selectedOptionEdition, setSelectedOptionEdition] = useState('single');
   const [selectedOptionCollection, setSelectedOptionCollection] =
     useState('snap');
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const [selectedOptionDate, setSelectedOptionDate] = useState('1 Day');
   const [selectedOptionReleaseDate, setSelectedOptionReleaseDate] =
     useState('1 Day');
@@ -302,6 +305,7 @@ export default function Create({ chains }) {
     const ListingPrice = await publicClient.readContract({
       ...marketplaceABI,
       functionName: 'listingPrice',
+      chainId: chainId,
     });
     setListingFee(ListingPrice);
     return ListingPrice;
@@ -339,8 +343,8 @@ export default function Create({ chains }) {
   }, [token, address]);
 
   const handleModalCreate = () => {
-    if (!token) {
-      open();
+    if (!token && isConnected) {
+      toast.error('Please sign message to login');
     } else {
       setIsCreateCollection(true);
     }
@@ -582,6 +586,9 @@ export default function Create({ chains }) {
       approve: false,
       putonsale: false,
     });
+    if (!token && isConnected) {
+      toast.error('Please sign message to login');
+    }
     try {
       const file = data.file[0];
       if (file) {
@@ -693,14 +700,6 @@ export default function Create({ chains }) {
     'audio/mp3',
   ];
   const maxFileSize = 100 * 1024 * 1024; // 100MB
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await getListingPrice();
-    };
-
-    fetchData();
-  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -824,18 +823,18 @@ export default function Create({ chains }) {
     fetchData();
   }, [putOnSaleHash, dataPutonsale, isErrorPutsale, isLoadingPutonsale]);
 
-  const chainId =
-    process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888;
   useEffect(() => {
     const fetchData = async () => {
-      if (chainId === chain?.id) {
+      if (isConnected && chainId === chain?.id) {
         await getListingPrice();
         await getWhitelistToken();
+      } else {
+        open();
       }
     };
 
     fetchData();
-  }, [chainId, chain]);
+  }, [chainId, chain, isConnected]);
 
   return (
     <>
@@ -1210,7 +1209,7 @@ export default function Create({ chains }) {
                   <span>Listing Fee</span>
                   <span className="font-semibold">
                     {listingFee && formatEther(listingFee)}{' '}
-                    {chain?.nativeCurrency.symbol}
+                    {chain?.nativeCurrency.symbol || 'HLUSD'}
                   </span>
                 </div>
                 <div className="flex w-full justify-between">

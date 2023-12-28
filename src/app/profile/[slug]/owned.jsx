@@ -375,6 +375,7 @@ export default function Owned({
     collectionData,
     highestBid,
     lowestBid,
+    paidWith,
   ) => {
     setAcutionData({
       marketId,

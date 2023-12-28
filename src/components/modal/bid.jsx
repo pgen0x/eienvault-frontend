@@ -29,6 +29,7 @@ import {
   erc20ABI,
   useAccount,
   useBalance,
+  useToken,
   useWaitForTransaction,
   useWalletClient,
 } from 'wagmi';
@@ -54,14 +55,21 @@ export default function ModalBid({
 
   const [bidHash, setBidHash] = useState();
   const [approveHash, setApproveHash] = useState();
-  const [selectedAddress, setSelectedAddress] = useState(zeroAddress);
+  const [selectedAddress, setSelectedAddress] = useState(auction?.paidWith);
 
   const { data } = useBalance({
     address: address,
-    token: selectedAddress,
+    token: auction?.paidWith,
     chainId: process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
     watch: true,
   });
+
+  const { data: token } = useToken({
+    chainId: process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
+    enabled: true,
+    address: auction?.paidWith,
+  });
+
   const { data: walletClient } = useWalletClient({
     onError(error) {},
   });
@@ -92,9 +100,8 @@ export default function ModalBid({
   });
 
   useEffect(() => {
-    console.log(auction);
     setSelectedAddress(auction?.paidWith);
-  }, [auction]);
+  }, []);
 
   function closeModal() {
     // reset();
@@ -160,7 +167,7 @@ export default function ModalBid({
         functionName: 'approve',
         args: [
           marketplaceABI.address,
-          parseUnits(watch('amount'), data.decimals),
+          parseUnits(watch('amount'), token.decimals),
         ],
         account: address,
       });
@@ -205,7 +212,10 @@ export default function ModalBid({
         hash = await walletClient.writeContract({
           ...marketplaceABI,
           functionName: 'makeAnOfferERC20',
-          args: [auction?.marketId, parseUnits(watch('amount'), data.decimals)],
+          args: [
+            auction?.marketId,
+            parseUnits(watch('amount'), token.decimals),
+          ],
           account: address,
         });
       }
@@ -456,11 +466,16 @@ export default function ModalBid({
                             {auction.lowestBid !== '0'
                               ? selectedAddress === zeroAddress
                                 ? formatEther(auction.lowestBid)
-                                : formatUnits(auction.price, data.decimals)
+                                : formatUnits(auction.price, token?.decimals)
                               : selectedAddress === zeroAddress
                               ? formatEther(auction.price)
-                              : formatUnits(auction.price, data.decimals)}{' '}
-                            {data?.symbol}
+                              : formatUnits(
+                                  auction.price,
+                                  token?.decimals,
+                                )}{' '}
+                            {auction.paidWith === zeroAddress
+                              ? 'HLUSD'
+                              : token?.symbol}
                           </span>
                         </div>
                         <hr />
@@ -472,9 +487,9 @@ export default function ModalBid({
                                 ? formatEther(auction?.highestBid?.highestBid)
                                 : formatUnits(
                                     auction?.highestBid?.highestBid,
-                                    data.decimals,
+                                    token?.decimals,
                                   )}{' '}
-                              {data?.symbol}
+                              {token?.symbol}
                             </span>
                             {auction?.highestBid?.highestBidder && (
                               <span className="flex w-full items-center gap-1">
@@ -514,7 +529,7 @@ export default function ModalBid({
                                             )
                                           : formatUnits(
                                               auction?.highestBid?.highestBid,
-                                              data.decimals,
+                                              token?.decimals,
                                             );
                                       if (parseFloat(value) <= price) {
                                         return 'Price must be greater than highest bid';
@@ -525,7 +540,7 @@ export default function ModalBid({
                                           ? formatEther(auction.price)
                                           : formatUnits(
                                               auction.price,
-                                              data.decimals,
+                                              token?.decimals,
                                             );
                                       if (parseFloat(value) <= price) {
                                         return 'Price must be greater than floor price';
@@ -536,7 +551,9 @@ export default function ModalBid({
                                 })}
                               />
                               <span className="flex select-none items-center pr-3 font-semibold">
-                                {data?.symbol}
+                                {auction.paidWith === zeroAddress
+                                  ? 'HLUSD'
+                                  : token?.symbol}
                               </span>
                             </div>
                           </div>

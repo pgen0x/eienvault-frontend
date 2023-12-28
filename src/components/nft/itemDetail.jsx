@@ -13,10 +13,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Menu, Transition } from '@headlessui/react';
 import { useRouter } from 'next-nprogress-bar';
 import Image from 'next/image';
-import { Fragment, Suspense, useEffect, useState } from 'react';
+import { Fragment, Suspense } from 'react';
 import { toast } from 'react-toastify';
 import { formatEther, formatUnits, zeroAddress } from 'viem';
-import { useAccount, useBalance } from 'wagmi';
+import { useAccount, useToken } from 'wagmi';
 import ButtonPrimary from '../button/buttonPrimary';
 import ButtonSecondary from '../button/buttonSecondary';
 import ButtonTertiary from '../button/buttonTertiary';
@@ -172,23 +172,12 @@ const Nft = ({
   const router = useRouter();
   const { address } = useAccount();
   const { token } = useAuth();
-  const [selectedAddress, setSelectedAddress] = useState(
-    itemDetails?.paidWith || zeroAddress,
-  );
-  const { data: balanceToken } = useBalance(
-    selectedAddress == zeroAddress
-      ? {
-          address: address,
-          watch: true,
-        }
-      : {
-          address: address,
-          token: selectedAddress,
-          chainId:
-            process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
-          watch: true,
-        },
-  );
+
+  const { data: balanceToken } = useToken({
+    address: itemDetails?.paidWith,
+    chainId: process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
+    enabled: true,
+  });
 
   function getHighestBid(auctionData) {
     if (!auctionData.listOffers || auctionData.listOffers.length === 0) {
@@ -766,13 +755,15 @@ const Nft = ({
                 <div className="flex flex-col items-start truncate text-sm leading-5">
                   <p>Price</p>
                   <p className="font-bold">
-                    {selectedAddress == zeroAddress
+                    {itemDetails?.paidWith == zeroAddress
                       ? formatEther(itemDetails?.price || 0)
                       : formatUnits(
                           itemDetails?.price || 0,
                           balanceToken?.decimals,
                         )}{' '}
-                    {balanceToken?.symbol}
+                    {itemDetails?.paidWith !== zeroAddress
+                      ? balanceToken?.symbol
+                      : 'HLUSD'}
                   </p>
                 </div>
                 <div className="flex flex-col items-start truncate text-sm leading-5">
@@ -780,13 +771,15 @@ const Nft = ({
                     <>
                       <p>Highest bid</p>
                       <p className="font-bold">
-                        {selectedAddress == zeroAddress
+                        {itemDetails?.paidWith == zeroAddress
                           ? formatEther(getHighestBid(itemDetails).highestBid)
                           : formatUnits(
                               getHighestBid(itemDetails).highestBid,
                               balanceToken?.decimals,
                             )}{' '}
-                        {balanceToken?.symbol}
+                        {itemDetails?.paidWith !== zeroAddress
+                          ? balanceToken?.symbol
+                          : 'HLUSD'}
                       </p>
                     </>
                   ) : (
@@ -839,6 +832,7 @@ const Nft = ({
                                   collection,
                                   getHighestBid(itemDetails),
                                   formatEther(getLowestBid(itemDetails)),
+                                  itemDetails?.paidWith,
                                 )
                               }
                               disabled={
@@ -884,7 +878,9 @@ const Nft = ({
                                   collection?.Chain?.symbol,
                                   collection?.Chain?.name,
                                   collection?.chainId,
-                                  balanceToken?.symbol,
+                                  itemDetails?.paidWith !== zeroAddress
+                                    ? balanceToken?.symbol
+                                    : 'HLUSD',
                                   itemDetails?.paidWith,
                                 )
                               }

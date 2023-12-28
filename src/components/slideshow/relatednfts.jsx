@@ -107,6 +107,7 @@ export const RelatedNFTs = ({ dataRelatedNFTs, refreshData }) => {
     collectionData,
     highestBid,
     lowestBid,
+    paidWith,
   ) => {
     setAcutionData({
       marketId,
@@ -118,6 +119,7 @@ export const RelatedNFTs = ({ dataRelatedNFTs, refreshData }) => {
       collectionData,
       highestBid,
       lowestBid,
+      paidWith,
     });
     setisOpenModalBid(true);
   };

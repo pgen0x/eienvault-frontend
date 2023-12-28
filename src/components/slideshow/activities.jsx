@@ -134,6 +134,7 @@ export const SlideshowActivities = ({ dataActivities, refreshData }) => {
     collectionData,
     highestBid,
     lowestBid,
+    paidWith,
   ) => {
     setAcutionData({
       marketId,
@@ -145,6 +146,7 @@ export const SlideshowActivities = ({ dataActivities, refreshData }) => {
       collectionData,
       highestBid,
       lowestBid,
+      paidWith,
     });
     setisOpenModalBid(true);
   };

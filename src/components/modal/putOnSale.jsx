@@ -313,6 +313,8 @@ export default function ModalPutOnSale({
       setIsProcessing(false);
     }
   };
+  const chainId =
+    process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888;
 
   const getWhitelistToken = async () => {
     const whitelistToken = await publicClient.readContract({
@@ -467,8 +469,6 @@ export default function ModalPutOnSale({
     }
   };
 
-  const chainId =
-    process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888;
   useEffect(() => {
     const fetchData = async () => {
       if (chainId === chain?.id) {

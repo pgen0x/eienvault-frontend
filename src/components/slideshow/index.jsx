@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { formatEther, formatUnits, zeroAddress } from 'viem';
-import { useAccount, useBalance } from 'wagmi';
+import { useAccount, useBalance, useToken } from 'wagmi';
 import ButtonPrimary from '../button/buttonPrimary';
 import { ImageWithFallback } from '../imagewithfallback';
 import ModalBid from '../modal/bid';
@@ -32,11 +32,10 @@ export const Slideshow = ({
   const [auctionData, setAcutionData] = useState({});
   const { address } = useAccount();
   const [selectedAddress, setSelectedAddress] = useState(zeroAddress);
-  const { data: balanceToken } = useBalance({
-    address: address,
-    token: selectedAddress,
+  const { data: balanceToken } = useToken({
+    address: selectedAddress,
     chainId: process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
-    watch: true,
+    enabled: true,
   });
 
   const sliderBreakPoints = {
@@ -121,6 +120,7 @@ export const Slideshow = ({
     collectionData,
     highestBid,
     lowestBid,
+    paidWith,
   ) => {
     setAcutionData({
       marketId,
@@ -132,6 +132,7 @@ export const Slideshow = ({
       collectionData,
       highestBid,
       lowestBid,
+      paidWith,
     });
     setIsOpenModal(true);
   };
@@ -333,6 +334,7 @@ export const Slideshow = ({
                           auction.collectionData,
                           getHighestBid(auction),
                           formatEther(getLowestBid(auction)),
+                          auction.paidWith,
                         )
                       }
                       disabled={
@@ -553,6 +555,7 @@ export const SlideshowMobile = ({
     collectionData,
     highestBid,
     lowestBid,
+    paidWith,
   ) => {
     setAcutionData({
       marketId,
@@ -564,6 +567,7 @@ export const SlideshowMobile = ({
       collectionData,
       highestBid,
       lowestBid,
+      paidWith,
     });
     setIsOpenModal(true);
   };
@@ -763,6 +767,7 @@ export const SlideshowMobile = ({
                             auction.collectionData,
                             getHighestBid(auction),
                             formatEther(getLowestBid(auction)),
+                            auction.paidWith,
                           )
                         }
                         disabled={

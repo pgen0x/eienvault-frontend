@@ -53,7 +53,7 @@ import { notFound } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { formatEther, formatUnits, isAddress, zeroAddress } from 'viem';
-import { useAccount, useBalance, useWalletClient } from 'wagmi';
+import { useAccount, useToken, useWalletClient } from 'wagmi';
 import Loading from './loading';
 const accounts = ['0x30756...Fb179', '0x30756...Zi57G', '0x30756...Gy352'];
 
@@ -82,20 +82,11 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
   const [removeData, setRemoveData] = useState({});
   const [dataNFTs, setDataNFTs] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(zeroAddress);
-  const { data: balanceToken } = useBalance(
-    selectedAddress == zeroAddress
-      ? {
-          address: address,
-          watch: true,
-        }
-      : {
-          address: address,
-          token: selectedAddress,
-          chainId:
-            process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
-          watch: true,
-        },
-  );
+  const { data: balanceToken } = useToken({
+    chainId: process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
+    enabled: true,
+    address: selectedAddress,
+  });
 
   const [errorActivities, setErrorActivities] = useState(false);
 
@@ -1053,7 +1044,9 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                 : formatEther(
                                     dataNFTs?.collectionData.floorPrice,
                                   )}{' '}
-                              {balanceToken?.symbol}
+                              {selectedAddress !== zeroAddress
+                                ? balanceToken?.symbol
+                                : 'HLUSD'}
                             </h4>
                             <h5>
                               {dataNFTs?.itemDetails
@@ -1092,7 +1085,9 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                         .highestBid,
                                       balanceToken?.decimals,
                                     )}{' '}
-                                {balanceToken?.symbol}
+                                {selectedAddress !== zeroAddress
+                                  ? balanceToken?.symbol
+                                  : 'HLUSD'}
                               </span>
                             </h4>
                             <div className="flex w-full gap-1">
@@ -1123,7 +1118,9 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                 : formatEther(
                                     dataNFTs?.collectionData?.floorPrice || 0,
                                   )}{' '}
-                              {balanceToken?.symbol}
+                              {selectedAddress !== zeroAddress
+                                ? balanceToken?.symbol
+                                : 'HLUSD'}
                             </h4>
                             <h5>
                               {dataNFTs?.itemDetails
@@ -1163,7 +1160,9 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                         balanceToken?.decimals,
                                       )
                                   : ' - '}{' '}
-                                {balanceToken?.symbol}
+                                {selectedAddress !== zeroAddress
+                                  ? balanceToken?.symbol
+                                  : 'HLUSD'}
                               </span>
                             </h4>
                             <div className="flex w-full flex-col gap-1 md:flex-row">
@@ -1263,7 +1262,9 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                   dataNFTs?.collectionData?.Chain?.symbol,
                                   dataNFTs?.collectionData?.Chain?.name,
                                   dataNFTs?.collectionData?.chainId,
-                                  balanceToken?.symbol,
+                                  selectedAddress !== zeroAddress
+                                    ? balanceToken?.symbol
+                                    : 'HLUSD',
                                   dataNFTs?.itemDetails?.paidWith,
                                 )
                               }

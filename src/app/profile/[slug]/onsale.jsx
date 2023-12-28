@@ -346,6 +346,7 @@ const Onsale = ({
     collectionData,
     highestBid,
     lowestBid,
+    paidWith,
   ) => {
     setAcutionData({
       marketId,
@@ -357,6 +358,7 @@ const Onsale = ({
       collectionData,
       highestBid,
       lowestBid,
+      paidWith,
     });
     setisOpenModalBid(true);
   };

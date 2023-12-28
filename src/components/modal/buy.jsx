@@ -20,9 +20,9 @@ import { formatEther, formatUnits, zeroAddress } from 'viem';
 import {
   erc20ABI,
   useAccount,
-  useBalance,
+  useToken,
   useWaitForTransaction,
-  useWalletClient,
+  useWalletClient
 } from 'wagmi';
 import ButtonPrimary from '../button/buttonPrimary';
 
@@ -50,11 +50,10 @@ export default function ModalBuy({
   const [isCompleted, setIsCompleted] = useState(false);
   const { open } = useWeb3Modal();
   const [selectedAddress, setSelectedAddress] = useState(zeroAddress);
-  const { data: balanceToken } = useBalance({
-    address: address,
-    token: selectedAddress,
+  const { data: balanceToken } = useToken({
     chainId: process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
-    watch: true,
+    enabled: true,
+    address: selectedAddress,
   });
   const [isLoadingModal, setIsLoadingModal] = useState({
     approve: false,

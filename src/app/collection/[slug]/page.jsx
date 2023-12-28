@@ -793,6 +793,7 @@ const Items = ({ params, collection }) => {
     collectionData,
     highestBid,
     lowestBid,
+    paidWith
   ) => {
     setAcutionData({
       marketId,
@@ -804,6 +805,7 @@ const Items = ({ params, collection }) => {
       collectionData,
       highestBid,
       lowestBid,
+      paidWith,
     });
     setisOpenModalBid(true);
   };

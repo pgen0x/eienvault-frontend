@@ -2030,6 +2030,14 @@ const Activity = ({ collection }) => {
                       ? activeFilter.includes(item.event)
                       : allDataFilters.includes(item.event),
                   )
+                  .sort((a, b) => {
+                    const timestampA =
+                      a.timestamp || (a.item && a.item.Timestamp) || 0;
+                    const timestampB =
+                      b.timestamp || (b.item && b.item.Timestamp) || 0;
+
+                    return timestampB - timestampA;
+                  })
                   .map((event, index) => {
                     return <ActivityItemDetail key={index} event={event} />;
                   })}

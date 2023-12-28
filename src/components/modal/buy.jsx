@@ -65,6 +65,7 @@ export default function ModalBuy({
   const { data: balanceToken } = useBalance({
     address: address,
     token: selectedAddress,
+    chainId: process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
     watch: true,
   });
   const [isLoadingModal, setIsLoadingModal] = useState({

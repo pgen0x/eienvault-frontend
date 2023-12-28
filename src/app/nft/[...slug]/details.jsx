@@ -109,6 +109,8 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
       : {
           address: address,
           token: selectedAddress,
+          chainId:
+            process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
           watch: true,
         },
   );

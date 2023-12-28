@@ -72,11 +72,11 @@ export default function ModalPutOnSale({
   const [isCompletedHash, setIsCompletedHash] = useState(false);
   const [listingFee, setListingFee] = useState();
   const convertToken = {
-    'HLUSD': zeroAddress,
+    HLUSD: zeroAddress,
   };
 
   const [convertAddress, setConvertAddress] = useState();
-  const [listConvertToken, setListConvertToken] = useState(convertToken)
+  const [listConvertToken, setListConvertToken] = useState(convertToken);
   const [selectedToken, setSelectedToken] = useState();
   const [selectedAddress, setSelectedAddress] = useState(0);
 
@@ -89,6 +89,8 @@ export default function ModalPutOnSale({
       : {
           address: address,
           token: selectedAddress,
+          chainId:
+            process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
           watch: true,
         },
   );
@@ -98,24 +100,19 @@ export default function ModalPutOnSale({
     token: convertAddress,
     watch: true,
     onSuccess: (e) => {
-
-      console.log("###", listConvertToken);
-
       // setListConvertToken((oldListConvertToken) => {
       //   oldListConvertToken[e?.symbol] = convertAddress;
 
       //   return oldListConvertToken;
       // })
-      
-      if(convertAddress != undefined){
+
+      if (convertAddress != undefined) {
         setListConvertToken((oldListConvertToken) => ({
           ...oldListConvertToken,
-          [e?.symbol]: convertAddress
-        }))
+          [e?.symbol]: convertAddress,
+        }));
       }
-
-      console.log("###", listConvertToken);
-    }
+    },
   });
 
   useEffect(() => {
@@ -336,10 +333,6 @@ export default function ModalPutOnSale({
     return whitelistToken;
   };
 
-  useEffect(() => {
-    getWhitelistToken();
-  }, []);
-
   const handleReleaseDateSelectChange = (event) => {
     const selectedValue = event.target.value;
     setSelectedOptionReleaseDate(selectedValue);
@@ -480,13 +473,18 @@ export default function ModalPutOnSale({
     }
   };
 
+  const chainId =
+    process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888;
   useEffect(() => {
     const fetchData = async () => {
-      const price = await getListingPrice();
+      if (chainId === chain?.id) {
+        await getListingPrice();
+        await getWhitelistToken();
+      }
     };
 
     fetchData();
-  }, []);
+  }, [chainId, chain]);
 
   return (
     <>
@@ -620,11 +618,13 @@ export default function ModalPutOnSale({
                                     }
                                     value={selectedToken}
                                   >
-                                    {Object.keys(listConvertToken).map((token, key) => (
-                                      <option key={key} value={token}>
-                                        {token}
-                                      </option>
-                                    ))}
+                                    {Object.keys(listConvertToken).map(
+                                      (token, key) => (
+                                        <option key={key} value={token}>
+                                          {token}
+                                        </option>
+                                      ),
+                                    )}
                                   </select>
                                   {/* <Combobox value={selectedToken} onChange={setSelectedToken}>
                                     <Combobox.Input

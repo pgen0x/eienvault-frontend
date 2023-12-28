@@ -236,18 +236,18 @@ export default function ModalPutOnSale({
   const price = watch('price');
 
   const putOnSale = async () => {
-    const listingPrice = await getListingPrice();
-    const releaseTime =
-      selectedOptionMarket === 'fixed'
-        ? moment().unix()
-        : moment(customValueReleaseDate).unix();
-    const isAuction = selectedOptionMarket === 'fixed' ? false : true;
-    const parsePrice =
-      selectedAddress == zeroAddress
-        ? parseEther(price)
-        : parseUnits(price, balanceToken?.decimals);
-
     try {
+      const listingPrice = await getListingPrice();
+      const releaseTime =
+        selectedOptionMarket === 'fixed'
+          ? moment().unix()
+          : moment(customValueReleaseDate).unix();
+      const isAuction = selectedOptionMarket === 'fixed' ? false : true;
+      const parsePrice =
+        selectedAddress == zeroAddress
+          ? parseEther(price)
+          : parseUnits(price, balanceToken?.decimals);
+
       const hash = await walletClient.writeContract({
         ...marketplaceABI,
         functionName: 'list',

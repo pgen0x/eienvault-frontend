@@ -3,6 +3,7 @@ import {
   w3mConnectors,
   w3mProvider,
 } from '@web3modal/ethereum';
+import { configureChains, createConfig, sepolia } from 'wagmi';
 import {
   arbitrum,
   goerli,
@@ -10,9 +11,6 @@ import {
   polygon,
   polygonMumbai,
 } from 'wagmi/chains';
-import { configureChains, createConfig, sepolia } from 'wagmi';
-import { useWeb3Modal } from '@web3modal/react';
-import { useAccount, useConnect } from 'wagmi';
 
 const helatestnet = {
   id: 666888,

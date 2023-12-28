@@ -1,68 +1,25 @@
 'use client';
-import { useIsMounted } from '@/hooks/use-is-mounted';
-import Image from 'next/image';
-import { useRef, useState } from 'react';
-import Footer from '../../components/footer/main';
-import { Listbox } from '@headlessui/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCartPlus,
-  faChevronDown,
-  faCircleCheck,
-  faEllipsis,
-  faEllipsisVertical,
-  faGrip,
-  faGripVertical,
-  faPenToSquare,
-  faSearch,
-  faShare,
-  faSliders,
-} from '@fortawesome/free-solid-svg-icons';
-import { Trykker } from 'next/font/google';
-import Search from '../../components/navbar/search';
-import Ethereum from '@/assets/icon/ethereum';
-import { filter } from '@metamask/jazzicon/colors';
-import { useEffect } from 'react';
-import { useRouter } from 'next-nprogress-bar';
-import { useRouter as useNextRouter } from 'next/navigation';
-import { formatEther } from 'viem';
-import { ImageWithFallback } from '@/components/imagewithfallback';
-import formatter from '@/utils/shortNumberFormatter';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { useSearchParams } from 'next/navigation';
-import { JazzIcon } from '@/components/jazzicon';
 import ButtonPrimary from '@/components/button/buttonPrimary';
+import ButtonSecondary from '@/components/button/buttonSecondary';
 import ButtonTertiary from '@/components/button/buttonTertiary';
+import { ImageWithFallback } from '@/components/imagewithfallback';
+import { JazzIcon } from '@/components/jazzicon';
 import { SwitchTrenndingTop } from '@/components/switch/trendingTop';
 import { SwitchTrenndingTopTime } from '@/components/switch/trendingTopTime';
-import ButtonSecondary from '@/components/button/buttonSecondary';
 import { truncateAddress } from '@/utils/truncateAddress';
-
-const servers = [
-  'All Mainnet',
-  'Testnet',
-  'Durward Reynolds',
-  'Kenton Towne',
-  'Therese Wunsch',
-  'Benedict Kessler',
-  'Katelyn Rohan',
-];
-
-const filters = [
-  'Price low to high',
-  'Price high to low',
-  'Recently listed',
-  'Best offer',
-  'Highest last sale',
-  'Recently sold',
-  'Recently created',
-  'Most viewed',
-  'Oldest',
-  'Most favorited',
-  'Ending soon',
-  'Recently received',
-];
+import {
+  faChevronDown,
+  faSearch,
+  faSliders,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
+import { useRouter } from 'next-nprogress-bar';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { formatEther } from 'viem';
+import Footer from '../../components/footer/main';
 
 export default function Collection() {
   const router = useRouter();
@@ -177,15 +134,12 @@ export default function Collection() {
         );
 
         if (!res.ok) {
-          
           throw new Error('Network response was not ok');
         }
 
         const responseData = await res.json();
         setChains(responseData);
-      } catch (error) {
-        
-      }
+      } catch (error) {}
     };
     getChains();
   }, []);
@@ -224,9 +178,12 @@ export default function Collection() {
             if (collectionPage >= response.data.totalPages) {
               setCollectionLast(true); // Set nftLast to true if the current page is the last page
             }
-  
+
             if (collectionPage > 1) {
-              setCollections((oldCollections) => [...oldCollections, ...response.data.collections]);
+              setCollections((oldCollections) => [
+                ...oldCollections,
+                ...response.data.collections,
+              ]);
             } else {
               setCollections([...response.data.collections]);
             }
@@ -249,9 +206,12 @@ export default function Collection() {
             if (collectionPage >= response.data.totalPages) {
               setCollectionLast(true); // Set nftLast to true if the current page is the last page
             }
-  
+
             if (collectionPage > 1) {
-              setCollections((oldCollections) => [...oldCollections, ...response.data.collections]);
+              setCollections((oldCollections) => [
+                ...oldCollections,
+                ...response.data.collections,
+              ]);
             } else {
               setCollections([...response.data.collections]);
             }
@@ -267,7 +227,6 @@ export default function Collection() {
               setCollections([]);
             }
           } else {
-            
           }
         });
     }

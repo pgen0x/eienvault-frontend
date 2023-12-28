@@ -7,8 +7,6 @@ import {
 import SwitchGrid from '@/components/switch/grid';
 import {
   faChevronDown,
-  faGrip,
-  faGripVertical,
   faSearch,
   faSliders,
 } from '@fortawesome/free-solid-svg-icons';

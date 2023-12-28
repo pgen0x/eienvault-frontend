@@ -1,6 +1,16 @@
 'use client';
+import Awan4 from '@/assets/icon/awan4';
+import Castle from '@/assets/icon/castle';
+import Castle2 from '@/assets/icon/castle2';
+import Ethereum from '@/assets/icon/ethereum';
+import Flower from '@/assets/icon/flower';
 import Footer from '@/components/footer/main';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import SlideshowActivities from '@/components/slideshow/activities';
+import {
+  faFlag,
+  faHeart,
+  faShareFromSquare,
+} from '@fortawesome/free-regular-svg-icons';
 import {
   faEllipsisVertical,
   faEye,
@@ -10,18 +20,7 @@ import {
   faRotate,
   faUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons';
-import {
-  faFlag,
-  faHeart,
-  faShareFromSquare,
-} from '@fortawesome/free-regular-svg-icons';
-import Ethereum from '@/assets/icon/ethereum';
-import SlideshowActivities from '@/components/slideshow/activities';
-import Castle from '@/assets/icon/castle';
-import Castle2 from '@/assets/icon/castle2';
-import Awan3 from '@/assets/icon/awan3';
-import Awan4 from '@/assets/icon/awan4';
-import Flower from '@/assets/icon/flower';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next-nprogress-bar';
 
 export default function NftDetail() {

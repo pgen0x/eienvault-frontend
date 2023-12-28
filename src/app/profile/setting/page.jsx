@@ -1,27 +1,26 @@
 'use client';
-import { useState } from 'react';
-import Footer from '@/components/footer/main';
+import Bitcoin from '@/assets/icon/bitcoin';
 import Ethereum from '@/assets/icon/ethereum';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Ggtoken from '@/assets/icon/ggtoken';
+import ButtonPrimary from '@/components/button/buttonPrimary';
+import ButtonTertiary from '@/components/button/buttonTertiary';
+import Footer from '@/components/footer/main';
+import ModalUploadProfileCover from '@/components/modal/uploadProfileCover';
+import ModalUploadProfileLogo from '@/components/modal/uploadProfileLogo';
+import ModalVerifyUser from '@/components/modal/verifyUser';
+import { useAuth } from '@/hooks/AuthContext';
 import {
   faCopy,
   faEllipsisVertical,
   faPenToSquare,
 } from '@fortawesome/free-solid-svg-icons';
-import Bitcoin from '@/assets/icon/bitcoin';
-import Ggtoken from '@/assets/icon/ggtoken';
-import { useAuth } from '@/hooks/AuthContext';
-import { useEffect } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import ModalUploadProfileCover from '@/components/modal/uploadProfileCover';
-import Image from 'next/image';
-import ModalUploadProfileLogo from '@/components/modal/uploadProfileLogo';
-import ButtonPrimary from '@/components/button/buttonPrimary';
-import ButtonTertiary from '@/components/button/buttonTertiary';
-import ModalVerifyUser from '@/components/modal/verifyUser';
-import { useForm } from 'react-hook-form';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ErrorMessage } from '@hookform/error-message';
+import axios from 'axios';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 const ProfileSetting = () => {
   const { token } = useAuth();
@@ -62,9 +61,7 @@ const ProfileSetting = () => {
           );
         }
       })
-      .catch((error) => {
-        
-      });
+      .catch((error) => {});
   };
 
   return (
@@ -141,10 +138,10 @@ const Profile = ({
   } = useForm();
 
   useEffect(() => {
-    for(const data in profile){
+    for (const data in profile) {
       setValue(data, profile[data]);
     }
-  }, [profile])
+  }, [profile]);
 
   const onSave = async (data) => {
     await axios
@@ -217,7 +214,6 @@ const Profile = ({
         setChains(dataChain);
         // Continue with your code
       } catch (error) {
-        
         // Handle the error gracefully, e.g., show an error message to the user
       }
     };
@@ -242,7 +238,7 @@ const Profile = ({
         />
         <ButtonPrimary
           onClick={editBanner}
-          className="absolute right-0 top-0 m-4 rounded-full opacity-0 group-hover:opacity-100 !w-fit"
+          className="absolute right-0 top-0 m-4 !w-fit rounded-full opacity-0 group-hover:opacity-100"
         >
           <FontAwesomeIcon className="mr-2" icon={faPenToSquare} />
           Edit Cover
@@ -335,7 +331,8 @@ const Profile = ({
                   {...register('websiteUrl', {
                     required: false,
                     pattern: {
-                      value: /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi,
+                      value:
+                        /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi,
                       message: 'Entered value does not match url format',
                     },
                   })}

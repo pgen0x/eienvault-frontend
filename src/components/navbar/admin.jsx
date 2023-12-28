@@ -1,16 +1,10 @@
 'use client';
-import { useWindowScroll } from '@/hooks/use-window-scroll';
-import { useIsDarkMode } from '@/hooks/use-is-dark-mode';
-import cn from 'classnames';
-import Logo from '@/components/navbar/logoicon';
-import Search from '@/components/navbar/search';
-import NavMenu from './navmenu';
-import RightArea from './rightarea';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import LogoAdmin from '@/assets/icon/logoadmin';
+import { useAuth } from '@/hooks/AuthContext';
+import { useSidebar } from '@/hooks/SidebarContext';
 import {
   faAnglesLeft,
   faAnglesRight,
-  faBars,
   faChain,
   faChevronDown,
   faChevronRight,
@@ -19,25 +13,18 @@ import {
   faDice,
   faDisplay,
   faFlag,
-  faHome,
   faShop,
   faStore,
   faUser,
   faUserCheck,
   faVault,
-  faWallet,
 } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useWeb3Modal, useWeb3ModalEvents } from '@web3modal/react';
-import { useSidebar } from '@/hooks/SidebarContext';
-import { useAccount, useDisconnect } from 'wagmi';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
-import { useState, useEffect, Fragment } from 'react';
-import { Switch } from '@headlessui/react';
 import { useRouter } from 'next-nprogress-bar';
-import { useAuth } from '@/hooks/AuthContext';
-import Image from 'next/image';
-import { faXTwitter } from '@fortawesome/free-brands-svg-icons';
-import LogoAdmin from '@/assets/icon/logoadmin';
+import { useEffect, useState } from 'react';
+import { useAccount, useDisconnect, useNetwork, useSwitchNetwork } from 'wagmi';
+import RightArea from './rightarea';
 
 export function SidebarAdmin() {
   const router = useRouter();
@@ -54,7 +41,6 @@ export function SidebarAdmin() {
   const [openSubmenu, setOpenSubmenu] = useState(['']);
 
   useWeb3ModalEvents((event) => {
-    
     if (event.name === 'ACCOUNT_CONNECTED') {
       setIsConnect(true);
     }
@@ -90,11 +76,14 @@ export function SidebarAdmin() {
           <div className="flex justify-center">
             <div
               alt="Logo"
-              className={`h-12 object-cover object-left duration-500 ease-in-out transition-all overflow-x-hidden ${
+              className={`h-12 overflow-x-hidden object-cover object-left transition-all duration-500 ease-in-out ${
                 openMenu ? 'w-36' : 'w-12'
               }`}
             >
-              <LogoAdmin src={'/logo-admin.svg'} className="w-36 h-12 text-gray-900 dark:text-white" />
+              <LogoAdmin
+                src={'/logo-admin.svg'}
+                className="h-12 w-36 text-gray-900 dark:text-white"
+              />
             </div>
           </div>
           <ul className="mt-[20px] space-y-2">

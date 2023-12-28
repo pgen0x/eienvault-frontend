@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import { useEffect, useState } from 'react';
 
 function LiveCountdown({ endDate }) {
   const [countdown, setCountdown] = useState(calculateCountdown());

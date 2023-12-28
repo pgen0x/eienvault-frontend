@@ -1,9 +1,18 @@
 'use client';
 import Ethereum from '@/assets/icon/ethereum';
-import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
+import HelaIcon from '@/assets/icon/hela';
+import ButtonPrimary from '@/components/button/buttonPrimary';
+import ButtonSecondary from '@/components/button/buttonSecondary';
+import { ImageWithFallback } from '@/components/imagewithfallback';
+import { JazzIcon } from '@/components/jazzicon';
+import ModalCreateCollection from '@/components/modal/createCollections';
+import ModalUploadDFile from '@/components/modal/uploadFile';
+import { useAuth } from '@/hooks/AuthContext';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
+import { truncateAddress } from '@/utils/truncateAddress';
 import {
   faBan,
-  faCartPlus,
   faChevronDown,
   faCircleCheck,
   faClose,
@@ -12,52 +21,28 @@ import {
   faImage,
   faMoneyBill,
   faPercent,
-  faPiggyBank,
   faPlusCircle,
   faRemove,
   faUser,
   faUsers,
-  faZ,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Listbox, Menu, Switch, Transition } from '@headlessui/react';
+import { Listbox, Menu, Transition } from '@headlessui/react';
+import { ErrorMessage } from '@hookform/error-message';
+import { useWeb3Modal } from '@web3modal/react';
+import moment from 'moment';
 import Image from 'next/legacy/image';
 import { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { formatEther, hexToNumber, parseEther, zeroAddress } from 'viem';
 import {
-  erc721ABI,
-  readContracts,
   useAccount,
-  useContractWrite,
   useNetwork,
-  usePrepareContractWrite,
   usePublicClient,
   useWaitForTransaction,
   useWalletClient,
 } from 'wagmi';
-import moment from 'moment';
-import { ErrorMessage } from '@hookform/error-message';
-import HelaIcon from '@/assets/icon/hela';
-import ModalUploadDFile from '@/components/modal/uploadFile';
-import ModalCreateCollection from '@/components/modal/createCollections';
-import { useWeb3Modal } from '@web3modal/react';
-import { useAuth } from '@/hooks/AuthContext';
 import LoadingCollections from './loadingCollections';
-import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
-import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import {
-  formatEther,
-  hexToNumber,
-  hexToString,
-  parseEther,
-  zeroAddress,
-} from 'viem';
-import { ImageWithFallback } from '@/components/imagewithfallback';
-import { JazzIcon } from '@/components/jazzicon';
-import ButtonPrimary from '@/components/button/buttonPrimary';
-import { set } from 'js-cookie';
-import ButtonSecondary from '@/components/button/buttonSecondary';
-import { truncateAddress } from '@/utils/truncateAddress';
 
 export default function Create({ chains }) {
   const { token } = useAuth();
@@ -771,8 +756,8 @@ export default function Create({ chains }) {
 
   return (
     <>
-      <div className="my-5 flex w-full lg:w-10/12 flex-col justify-center gap-5 p-4 text-gray-900 dark:text-white sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
-        <div className="flex w-full md:w-1/2 flex-col">
+      <div className="my-5 flex w-full flex-col justify-center gap-5 p-4 text-gray-900 dark:text-white sm:flex-col md:flex-row lg:w-10/12 lg:flex-row xl:flex-row 2xl:flex-row">
+        <div className="flex w-full flex-col md:w-1/2">
           <h2 className="text-2xl font-semibold">Create New NFT</h2>
           <p>
             <span className="text-semantic-red-500">*</span> requires to be
@@ -824,8 +809,9 @@ export default function Create({ chains }) {
                           }
                           value={chain}
                           disabled={
-                            !(chain.chainId === 666888 ||
-                            chain.chainId === 8668)
+                            !(
+                              chain.chainId === 666888 || chain.chainId === 8668
+                            )
                           }
                         >
                           {({ selectedChain }) => (
@@ -1429,7 +1415,7 @@ export default function Create({ chains }) {
             </form>
           </div>
         </div>
-        <div className="sticky top-24 w-full md:w-1/3 self-start pt-3">
+        <div className="sticky top-24 w-full self-start pt-3 md:w-1/3">
           <h3 className="text-xl font-semibold">Preview</h3>
           <p className="pb-5 pt-1">
             Input the NFT Data field to see the preview of how your NFT product
@@ -1448,8 +1434,8 @@ export default function Create({ chains }) {
                   collection?.name
                     ? collection?.name
                     : nft.collectionAddress
-                      ? nft.collectionAddress
-                      : ''
+                    ? nft.collectionAddress
+                    : ''
                 }
               />
             ) : (

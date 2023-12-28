@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { jwtDecode } from 'jwt-decode';
+import { NextResponse } from 'next/server';
 
 export async function middleware(req, ev) {
   const token = req.cookies.get('token')?.value;
@@ -37,8 +37,6 @@ export async function middleware(req, ev) {
 
       return NextResponse.next();
     } catch (error) {
-      
-
       const response = NextResponse.redirect(new URL('/', req.url));
       response.cookies.delete('token');
       response.cookies.delete('hasSigned');

@@ -1,32 +1,26 @@
 'use client';
 import Table, { Td } from '@/components/admin/table/table';
-import AdminTable from '@/components/admin/table/table';
 import ButtonPrimary from '@/components/button/buttonPrimary';
-import ButtonSecondary from '@/components/button/buttonSecondary';
 import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
-import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import {
   faAnglesLeft,
   faAnglesRight,
   faCheck,
   faCopy,
-  faSearch,
   faShareFromSquare,
   faXmark,
   faXmarkCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
-import { ErrorMessage } from '@hookform/error-message';
 import axios from 'axios';
 import { useRouter } from 'next-nprogress-bar';
-import React, { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import ReactPaginate from 'react-paginate';
 import { toast } from 'react-toastify';
 import { useCopyToClipboard } from 'react-use';
-import { formatEther } from 'viem';
 
 const AdminUserPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +39,7 @@ const AdminUserPage = () => {
   function handleCopyToClipboard(address, key) {
     copyToClipboard(address);
     setCopyButtonStatus((oldCopy) => [...oldCopy, key]);
-    
+
     setTimeout(() => {
       setCopyButtonStatus((oldCopy) => oldCopy.filter((item) => item != key));
     }, 2500);
@@ -219,9 +213,16 @@ const AdminUserPage = () => {
                 <Td lastElement={true}>
                   <ButtonPrimary
                     className="!w-fit !py-1 text-sm"
-                    onClick={() => handleOpenUpdateModal(item?.collectionAddress, item?.tokenId)}
+                    onClick={() =>
+                      handleOpenUpdateModal(
+                        item?.collectionAddress,
+                        item?.tokenId,
+                      )
+                    }
                   >
-                    {item?.NFT?.isBlacklisted ? "Remove blacklist" : "Blacklist"}
+                    {item?.NFT?.isBlacklisted
+                      ? 'Remove blacklist'
+                      : 'Blacklist'}
                   </ButtonPrimary>
                 </Td>
               </tr>

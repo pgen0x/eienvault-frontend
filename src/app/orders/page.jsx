@@ -1,26 +1,25 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import Footer from '../../components/footer/main';
-import { useAccount, useWaitForTransaction, useWalletClient } from 'wagmi';
-import Image from 'next/legacy/image';
-import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ButtonPrimary from '@/components/button/buttonPrimary';
+import ButtonSecondary from '@/components/button/buttonSecondary';
+import { useAuth } from '@/hooks/AuthContext';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { truncateAddress } from '@/utils/truncateAddress';
 import {
   faCheck,
   faGavel,
-  faHourglass,
   faTags,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { formatEther } from 'viem';
-import { useSearchParams } from 'next/navigation';
-import { useAuth } from '@/hooks/AuthContext';
-import { truncateAddress } from '@/utils/truncateAddress';
-import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import moment from 'moment';
 import { useRouter } from 'next-nprogress-bar';
-import ButtonSecondary from '@/components/button/buttonSecondary';
+import Image from 'next/legacy/image';
+import { useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import ButtonPrimary from '@/components/button/buttonPrimary';
+import { formatEther } from 'viem';
+import { useAccount, useWaitForTransaction, useWalletClient } from 'wagmi';
+import Footer from '../../components/footer/main';
 
 export default function OrdersPage() {
   const searchParams = useSearchParams();
@@ -71,12 +70,11 @@ export default function OrdersPage() {
         args: [marketId],
         account: address,
       });
-      
+
       setRemoveListingHash(hash);
       toast.success('Bid successfully removed');
       return hash;
     } catch (error) {
-      
       toast.error(error);
     }
   };
@@ -93,7 +91,6 @@ export default function OrdersPage() {
       toast.success('Bid successfully canceled');
       return hash;
     } catch (error) {
-      
       toast.error(error);
     }
   };
@@ -110,7 +107,6 @@ export default function OrdersPage() {
       toast.success('Bid successfully accepted');
       return hash;
     } catch (error) {
-      
       toast.error(error);
     }
   };
@@ -132,7 +128,7 @@ export default function OrdersPage() {
         setDataListing([]);
       } else if (!res.ok) {
         setErrorBidandListing(true);
-        
+
         throw new Error('Network response was not ok');
       } else {
         const responseData = await res.json();
@@ -140,7 +136,6 @@ export default function OrdersPage() {
       }
     } catch (error) {
       setErrorBidandListing(true);
-      
     } finally {
       setIsLoading(false);
       setErrorBidandListing(false);
@@ -165,7 +160,7 @@ export default function OrdersPage() {
         setDataBidMade([]);
       } else if (!res.ok) {
         setErrorBidMade(true);
-        
+
         throw new Error('Network response was not ok');
       } else {
         const responseData = await res.json();
@@ -173,7 +168,6 @@ export default function OrdersPage() {
       }
     } catch (error) {
       setErrorBidMade(true);
-      
     } finally {
       setIsLoadingBidMade(false);
       setErrorBidMade(false);
@@ -198,7 +192,7 @@ export default function OrdersPage() {
         setDataReceived([]);
       } else if (!res.ok) {
         setErrorReceived(true);
-        
+
         throw new Error('Network response was not ok');
       } else {
         const responseData = await res.json();
@@ -206,7 +200,6 @@ export default function OrdersPage() {
       }
     } catch (error) {
       setErrorReceived(true);
-      
     } finally {
       setIsLoadingReceived(false);
       setErrorReceived(false);
@@ -637,7 +630,7 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
 const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
   const currentDate = moment();
   const router = useRouter();
-  
+
   return (
     <>
       <div className="min-h-full w-full">

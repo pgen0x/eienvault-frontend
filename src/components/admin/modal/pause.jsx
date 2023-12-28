@@ -1,27 +1,17 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from 'react';
-import { formatEther, parseEther, parseUnits, zeroAddress } from 'viem';
-import { useForm } from 'react-hook-form';
 
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
+import { roles } from '@/utils/listRoles';
+import { useWeb3Modal } from '@web3modal/react';
+import { toast } from 'react-toastify';
 import {
-  erc20ABI,
   useAccount,
-  useBalance,
-  useNetwork,
   usePublicClient,
   useWaitForTransaction,
   useWalletClient,
 } from 'wagmi';
-import { useWeb3Modal } from '@web3modal/react';
-import { ErrorMessage } from '@hookform/error-message';
-import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
-import { toast } from 'react-toastify';
-import { roles } from '@/utils/listRoles';
-import { useCopyToClipboard } from 'react-use';
-import ButtonSecondary from '@/components/button/buttonSecondary';
-import { faCheck, faCopy } from '@fortawesome/free-solid-svg-icons';
 
 export default function ModalPause({
   isOpenModal,

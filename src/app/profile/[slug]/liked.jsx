@@ -8,8 +8,6 @@ import {
 import SwitchGrid from '@/components/switch/grid';
 import {
   faChevronDown,
-  faGrip,
-  faGripVertical,
   faSearch,
   faSliders,
 } from '@fortawesome/free-solid-svg-icons';
@@ -20,7 +18,6 @@ import moment from 'moment';
 import { useRouter } from 'next-nprogress-bar';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import { formatEther } from 'viem';
 
 const filters = [
@@ -108,7 +105,6 @@ const Liked = ({
       })
       .catch((error) => {
         setIsLoading(false);
-        
       });
   };
 
@@ -321,7 +317,6 @@ const Liked = ({
   }
 
   const refreshData = async () => {
-    
     setNfts([]);
     setNftPage(1);
     setNftLast(false);

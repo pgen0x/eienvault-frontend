@@ -1,42 +1,30 @@
-import Ethereum from '@/assets/icon/ethereum';
 import HelaIcon from '@/assets/icon/hela';
+import { useAuth } from '@/hooks/AuthContext';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { truncateAddress } from '@/utils/truncateAddress';
-import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import {
   faCheck,
   faCheckCircle,
-  faChevronDown,
   faCircleXmark,
   faXmark,
   faXmarkCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
+import { useWeb3Modal } from '@web3modal/react';
+import { useRouter } from 'next-nprogress-bar';
 import Image from 'next/legacy/image';
 import { Fragment, useEffect, useState } from 'react';
-import { formatEther, formatUnits, parseEther, zeroAddress } from 'viem';
+import { useForm } from 'react-hook-form';
+import { formatEther, formatUnits, zeroAddress } from 'viem';
 import {
   erc20ABI,
   useAccount,
   useBalance,
-  usePublicClient,
   useWaitForTransaction,
   useWalletClient,
 } from 'wagmi';
-import { useForm } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message';
-import { useWeb3Modal } from '@web3modal/react';
-import Opensea from '@/assets/icon/opensea';
-import LogoIcon from '@/assets/icon/logoicon';
-import Logo from '../navbar/logoicon';
-import LogoFooter from '@/assets/icon/logofooter';
-import LogoIconMobile from '@/assets/icon/logoiconmobile';
-import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
-import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import { getApprovedAddress } from '@/utils/getApprovedAddress';
-import { useRouter } from 'next-nprogress-bar';
 import ButtonPrimary from '../button/buttonPrimary';
-import { useAuth } from '@/hooks/AuthContext';
 
 export default function ModalBuy({
   isOpenModal,

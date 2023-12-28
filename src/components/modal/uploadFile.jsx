@@ -2,15 +2,13 @@
 import {
   faCheckCircle,
   faCircleXmark,
-  faClose,
-  faCross,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
-import ButtonPrimary from '../button/buttonPrimary';
 import { useRouter } from 'next-nprogress-bar';
 import Link from 'next/link';
+import { Fragment } from 'react';
+import ButtonPrimary from '../button/buttonPrimary';
 
 export default function ModalUploadDFile({
   isOpenModal,
@@ -70,11 +68,8 @@ export default function ModalUploadDFile({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-950 text-gray-900 dark:text-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-xl font-bold"
-                  >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle text-gray-900 shadow-xl transition-all dark:bg-neutral-950 dark:text-white">
+                  <Dialog.Title as="h3" className="text-xl font-bold">
                     Just a few steps left
                   </Dialog.Title>
                   <div className="mx-5 flex flex-col text-sm">

@@ -1,6 +1,8 @@
 'use client';
 import Ethereum from '@/assets/icon/ethereum';
 import HelaIcon from '@/assets/icon/hela';
+import { useAuth } from '@/hooks/AuthContext';
+import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
 import {
   faCheck,
   faChevronDown,
@@ -10,20 +12,18 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Listbox, Transition } from '@headlessui/react';
 import { ErrorMessage } from '@hookform/error-message';
+import { useWeb3Modal } from '@web3modal/react';
 import Image from 'next/legacy/image';
+import { useRouter } from 'next/navigation';
 import { Fragment, useEffect, useState } from 'react';
-import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import {
   useAccount,
   useNetwork,
   useWaitForTransaction,
   useWalletClient,
 } from 'wagmi';
-import { useWeb3Modal } from '@web3modal/react';
-import { useForm } from 'react-hook-form';
-import { useAuth } from '@/hooks/AuthContext';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
 import ButtonPrimary from '../button/buttonPrimary';
 
 export default function ModalCreateCollection({
@@ -94,12 +94,10 @@ export default function ModalCreateCollection({
         // Handle the error here
         setErrorOnUpload(true);
         toast.error('File upload failed:', response.statusText);
-        
       }
     } catch (error) {
       // Handle any unexpected errors
       setErrorOnUpload(true);
-      
     }
   };
 
@@ -134,11 +132,9 @@ export default function ModalCreateCollection({
         return response.json();
       } else {
         // Handle the error here
-        
       }
     } catch (error) {
       // Handle any unexpected errors
-      
     }
   };
 
@@ -191,12 +187,11 @@ export default function ModalCreateCollection({
         address,
         args: [dataForm.name, dataForm.tokenSymbol, ''],
       });
-      
+
       setHash(hash);
     } catch (error) {
       closeModal();
       setIsSubmit(false);
-      
     }
   };
 

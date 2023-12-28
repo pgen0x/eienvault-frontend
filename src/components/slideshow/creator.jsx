@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import {
-  faChevronRight,
   faChevronLeft,
+  faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import UserItemDetail, { UserItemDetailSkeleton } from '../user/itemDetail';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { useAccount } from 'wagmi';
 import ButtonPrimary from '../button/buttonPrimary';
+import UserItemDetail, { UserItemDetailSkeleton } from '../user/itemDetail';
 
 const sliderBreakPoints = {
   640: {

@@ -1,6 +1,7 @@
 'use client';
 import Ethereum from '@/assets/icon/ethereum';
 import HelaIcon from '@/assets/icon/hela';
+import { useAuth } from '@/hooks/AuthContext';
 import {
   faCheck,
   faChevronDown,
@@ -11,19 +12,12 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Listbox, Transition } from '@headlessui/react';
 import { ErrorMessage } from '@hookform/error-message';
+import { useWeb3Modal } from '@web3modal/react';
 import Image from 'next/legacy/image';
 import { Fragment, useEffect, useState } from 'react';
-import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
-import {
-  useAccount,
-  useNetwork,
-  useWaitForTransaction,
-  useWalletClient,
-} from 'wagmi';
-import { useWeb3Modal } from '@web3modal/react';
 import { useForm } from 'react-hook-form';
-import { useAuth } from '@/hooks/AuthContext';
 import { toast } from 'react-toastify';
+import { useAccount, useNetwork } from 'wagmi';
 import ButtonPrimary from '../button/buttonPrimary';
 
 export default function ModalUpdateCollection({
@@ -88,12 +82,10 @@ export default function ModalUpdateCollection({
         // Handle the error here
         setErrorOnUpload(true);
         toast.error('File upload failed:', response.statusText);
-        
       }
     } catch (error) {
       // Handle any unexpected errors
       setErrorOnUpload(true);
-      
     }
   };
 
@@ -125,17 +117,14 @@ export default function ModalUpdateCollection({
         setIsSubmit(false);
         setIsCompleted(true);
         setErrorOnUpload(false);
-        
       } else {
         // Handle the error here
         setIsSubmit(false);
         setIsCompleted(true);
         setErrorOnUpload(true);
-        
       }
     } catch (error) {
       // Handle any unexpected errors
-      
     }
   };
 
@@ -221,9 +210,7 @@ export default function ModalUpdateCollection({
           // Set the value of the 'file' field using setValue
           setValue('file', [file]);
         }
-      } catch (error) {
-        
-      }
+      } catch (error) {}
     };
 
     const fetchCollection = () => {

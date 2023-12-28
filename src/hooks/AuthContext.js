@@ -1,12 +1,11 @@
+import { watchAccount } from '@wagmi/core';
+import Cookies from 'js-cookie';
+import moment from 'moment';
+import { usePathname, useRouter } from 'next/navigation';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { SiweMessage } from 'siwe';
-import { useAccount, useSignMessage } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { signMessage } from 'wagmi/actions';
-import { watchAccount } from '@wagmi/core';
-import moment from 'moment';
-import Cookies from 'js-cookie';
-import { usePathname, useRouter } from 'next/navigation';
-import { jwtDecode } from 'jwt-decode';
 
 const AuthContext = createContext();
 

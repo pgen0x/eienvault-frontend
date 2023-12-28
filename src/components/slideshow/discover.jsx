@@ -1,40 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { Slide } from 'react-slideshow-image';
-import Rightarrow from '@/assets/icon/rightarrow';
-import LeftArrow from '@/assets/icon/lefarrow';
-import Ethereum from '@/assets/icon/ethereum';
 import Cat from '@/assets/images/cat.png';
 import Hos from '@/assets/images/hos.jpg';
-import Avatar from '@/assets/images/avatar.jpg';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import { useRouter } from 'next-nprogress-bar';
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import Image from 'next/image';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import {
-  faCircleCheck,
-  faChevronRight,
   faChevronLeft,
-  faMinus,
-  faPlus,
-  faEllipsis,
-  faCartPlus,
+  faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ImageWithFallback } from '../imagewithfallback';
-import HelaIcon from '@/assets/icon/hela';
-import { formatEther } from 'viem';
 import moment from 'moment';
+import { useRouter } from 'next-nprogress-bar';
+import { useState } from 'react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { useAccount, useWalletClient } from 'wagmi';
+import ButtonPrimary from '../button/buttonPrimary';
 import ModalBid from '../modal/bid';
 import ModalBuy from '../modal/buy';
-import { useAccount, useWalletClient } from 'wagmi';
-import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import { NftItemDetail, NftItemDetailSkeleton } from '../nft/itemDetail';
-import ModalShareSocialMedia from '../modal/shareSocialMedia';
-import ModalReportNft from '../modal/reportNft';
 import ModalRemove from '../modal/remove';
-import ButtonPrimary from '../button/buttonPrimary';
+import ModalReportNft from '../modal/reportNft';
+import ModalShareSocialMedia from '../modal/shareSocialMedia';
+import { NftItemDetail, NftItemDetailSkeleton } from '../nft/itemDetail';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 const sliderBreakPoints = {
@@ -99,7 +85,7 @@ export const SlideshowDiscover = ({ dataDiscover, refreshData }) => {
     ChainName,
     ChainId,
     TokenSymbol,
-    paidWith
+    paidWith,
   ) => {
     setBuyData({
       marketId,
@@ -112,7 +98,7 @@ export const SlideshowDiscover = ({ dataDiscover, refreshData }) => {
       ChainName,
       ChainId,
       TokenSymbol,
-      paidWith
+      paidWith,
     });
     setisOpenModalBuy(true);
   };
@@ -202,7 +188,7 @@ export const SlideshowDiscover = ({ dataDiscover, refreshData }) => {
       });
       return hash;
     } catch (error) {
-      
+      console.error(error);
     }
   };
 
@@ -217,7 +203,7 @@ export const SlideshowDiscover = ({ dataDiscover, refreshData }) => {
       });
       return hash;
     } catch (error) {
-      
+      console.error(error);
     }
   };
 

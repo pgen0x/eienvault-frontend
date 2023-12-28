@@ -1,11 +1,9 @@
 'use client';
 import Table, { Td } from '@/components/admin/table/table';
-import AdminTable from '@/components/admin/table/table';
 import ButtonPrimary from '@/components/button/buttonPrimary';
 import ButtonSecondary from '@/components/button/buttonSecondary';
 import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
-import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import {
   faAnglesLeft,
   faAnglesRight,
@@ -20,7 +18,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import axios from 'axios';
 import { useRouter } from 'next-nprogress-bar';
-import React, { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import ReactPaginate from 'react-paginate';
 import { toast } from 'react-toastify';

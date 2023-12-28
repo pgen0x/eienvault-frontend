@@ -1,43 +1,26 @@
 'use client';
 import Table, { Td } from '@/components/admin/table/table';
 import ButtonPrimary from '@/components/button/buttonPrimary';
-import ButtonSecondary from '@/components/button/buttonSecondary';
 import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
 import {
   faAnglesLeft,
   faAnglesRight,
-  faCopy,
-  faSearch,
   faCheck,
-  faChevronDown,
-  faClose,
-  faImage,
+  faCopy,
   faXmark,
   faXmarkCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { Fragment, useEffect, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { ErrorMessage } from '@hookform/error-message';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { Fragment, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import ReactPaginate from 'react-paginate';
 import { toast } from 'react-toastify';
 import { useCopyToClipboard } from 'react-use';
-import { formatEther } from 'viem';
-import Ethereum from '@/assets/icon/ethereum';
-import HelaIcon from '@/assets/icon/hela';
-import { Dialog, Listbox, Transition } from '@headlessui/react';
-import { ErrorMessage } from '@hookform/error-message';
-import Image from 'next/legacy/image';
-import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
-import {
-  useAccount,
-  useNetwork,
-  useWaitForTransaction,
-  useWalletClient,
-} from 'wagmi';
-import { useWeb3Modal } from '@web3modal/react';
-import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
 
 const AdminVerificationPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +39,7 @@ const AdminVerificationPage = () => {
   function handleCopyToClipboard(address, key) {
     copyToClipboard(address);
     setCopyButtonStatus((oldCopy) => [...oldCopy, key]);
-    
+
     setTimeout(() => {
       setCopyButtonStatus((oldCopy) => oldCopy.filter((item) => item != key));
     }, 2500);
@@ -172,7 +155,7 @@ const AdminVerificationPage = () => {
                 <Td>{item.email}</Td>
                 <Td>{item.isCreator ? 'Creator' : 'Collector'}</Td>
                 <Td>
-                  <div className="flex gap-2 justify-center">
+                  <div className="flex justify-center gap-2">
                     <span>{truncateAddress(item.userAddress)}</span>
                     {item.userAddress && (
                       <ButtonPrimary

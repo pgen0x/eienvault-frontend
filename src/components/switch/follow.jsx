@@ -14,7 +14,11 @@ const SwitchFollow = ({ followTab, setFollowTab }) => {
           onChange={(event) => handleFollowTab(event, 'followers')}
         />
         <label
-          className={`cursor-pointer flex w-fit px-5 h-9 justify-center items-center rounded-full text-sm font-medium leading-5 ${followTab == "followers" ? 'text-white bg-primary-500 dark:bg-white dark:text-gray-900 shadow' : 'text-primary-500 hover:bg-primary-300 dark:text-white dark:hover:bg-neutral-500'}`}
+          className={`flex h-9 w-fit cursor-pointer items-center justify-center rounded-full px-5 text-sm font-medium leading-5 ${
+            followTab == 'followers'
+              ? 'bg-primary-500 text-white shadow dark:bg-white dark:text-gray-900'
+              : 'text-primary-500 hover:bg-primary-300 dark:text-white dark:hover:bg-neutral-500'
+          }`}
           htmlFor="optionFollowers"
         >
           Followers
@@ -29,7 +33,11 @@ const SwitchFollow = ({ followTab, setFollowTab }) => {
           onChange={(event) => handleFollowTab(event, 'following')}
         />
         <label
-          className={`cursor-pointer flex w-fit px-5 h-9 justify-center items-center rounded-full text-sm font-medium leading-5 ${followTab == "following" ? 'text-white bg-primary-500 dark:bg-white dark:text-gray-900 shadow' : 'text-primary-500 hover:bg-primary-300 dark:text-white dark:hover:bg-neutral-500'}`}
+          className={`flex h-9 w-fit cursor-pointer items-center justify-center rounded-full px-5 text-sm font-medium leading-5 ${
+            followTab == 'following'
+              ? 'bg-primary-500 text-white shadow dark:bg-white dark:text-gray-900'
+              : 'text-primary-500 hover:bg-primary-300 dark:text-white dark:hover:bg-neutral-500'
+          }`}
           htmlFor="optionFollowing"
         >
           Following

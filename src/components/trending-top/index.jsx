@@ -1,27 +1,17 @@
-import { useState, useEffect } from 'react';
-import { Listbox } from '@headlessui/react';
-import trading from './trading.json';
-import tradingMobile from './trading-mobile.json';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faCartPlus } from '@fortawesome/free-solid-svg-icons';
-import Ethereum from '@/assets/icon/ethereum';
 import { useRouter } from 'next-nprogress-bar';
-import Bitcoin from '@/assets/icon/bitcoin';
-import Ggtoken from '@/assets/icon/ggtoken';
-import Monero from '@/assets/icon/monero';
-import { useAuth } from '@/hooks/AuthContext';
-import { useAccount } from 'wagmi';
-import { formatEther, parseEther } from 'viem';
+import { useEffect, useState } from 'react';
+import { formatEther } from 'viem';
 import { ImageWithFallback } from '../imagewithfallback';
 // import dataCollections from '../../app/collection/MOCK_DATA.json';
-import formatter from '@/utils/shortNumberFormatter';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import Image from 'next/image';
-import ButtonPrimary from '../button/buttonPrimary';
+import { toast } from 'react-toastify';
+import { Scrollbar } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import ButtonLink from '../button/buttonLink';
+import ButtonPrimary from '../button/buttonPrimary';
 import {
   SwitchTrenndingTop,
   SwitchTrenndingTopMobile,

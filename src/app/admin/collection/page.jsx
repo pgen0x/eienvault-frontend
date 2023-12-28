@@ -1,10 +1,8 @@
 'use client';
 import Table, { Td } from '@/components/admin/table/table';
-import AdminTable from '@/components/admin/table/table';
 import ButtonPrimary from '@/components/button/buttonPrimary';
 import ButtonSecondary from '@/components/button/buttonSecondary';
 import { truncateAddress } from '@/utils/truncateAddress';
-import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import {
   faAnglesLeft,
   faAnglesRight,
@@ -13,7 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { toast } from 'react-toastify';
 import { useCopyToClipboard } from 'react-use';
@@ -76,11 +74,9 @@ const AdminUserPage = () => {
   function handleCopyToClipboard(address, key) {
     copyToClipboard(address);
     setCopyButtonStatus((oldCopy) => [...oldCopy, key]);
-    
+
     setTimeout(() => {
-      setCopyButtonStatus((oldCopy) =>
-        oldCopy.filter((item) => item != key),
-      );
+      setCopyButtonStatus((oldCopy) => oldCopy.filter((item) => item != key));
     }, 2500);
   }
 
@@ -147,7 +143,9 @@ const AdminUserPage = () => {
                       <span>{truncateAddress(item.userAddress)}</span>
                       <ButtonSecondary
                         className="h-6 !w-6 !p-0 text-xs"
-                        onClick={() => handleCopyToClipboard(item.userAddress, `user${id}`)}
+                        onClick={() =>
+                          handleCopyToClipboard(item.userAddress, `user${id}`)
+                        }
                       >
                         <FontAwesomeIcon icon={faCopy} />
                       </ButtonSecondary>
@@ -162,7 +160,9 @@ const AdminUserPage = () => {
                   <span>{truncateAddress(item.tokenAddress)}</span>
                   <ButtonSecondary
                     className="h-6 !w-6 !p-0 text-xs"
-                    onClick={() => handleCopyToClipboard(item.tokenAddress, `token${id}`)}
+                    onClick={() =>
+                      handleCopyToClipboard(item.tokenAddress, `token${id}`)
+                    }
                   >
                     <FontAwesomeIcon icon={faCopy} />
                   </ButtonSecondary>

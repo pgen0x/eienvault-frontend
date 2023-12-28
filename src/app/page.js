@@ -1,9 +1,20 @@
 'use client';
-import { useIsMounted } from '@/hooks/use-is-mounted';
+import CastleDiscover from '@/assets/icon/castlediscover';
+import CastleDiscover2 from '@/assets/icon/castlediscover2';
+import CloudDiscover from '@/assets/icon/cloud-discover';
+import CloudDiscover1 from '@/assets/icon/cloud-discover1';
+import CloudSubscribe from '@/assets/icon/cloudsubscribe';
+import LineL from '@/assets/icon/linel';
+import Wave from '@/assets/icon/wave';
+import Auction from '@/components/auction';
 import {
-  SlideshowDiscover,
-  SlideshowDiscoverSkeleton,
-} from '@/components/slideshow/discover';
+  UpcomingAuction,
+  UpcomingAuctionMobile,
+  UpcomingAuctionMobileSkeleton,
+  UpcomingAuctionSkeleton,
+} from '@/components/auction/upcoming';
+import ButtonPrimary from '@/components/button/buttonPrimary';
+import ButtonSecondary from '@/components/button/buttonSecondary';
 import {
   SlideshowActivities,
   SlideshowActivitiesSkeleton,
@@ -12,43 +23,30 @@ import {
   SlideshowCreator,
   SlideshowCreatorSkeleton,
 } from '@/components/slideshow/creator';
-import Image from 'next/image';
+import {
+  SlideshowDiscover,
+  SlideshowDiscoverSkeleton,
+} from '@/components/slideshow/discover';
+import TopTooltip from '@/components/tooltip/topTooltip';
 import {
   TrendingTop,
-  TrendingTopSkeleton,
   TrendingTopMobile,
+  TrendingTopSkeleton,
 } from '@/components/trending-top';
-import Auction from '@/components/auction';
-import {
-  UpcomingAuction,
-  UpcomingAuctionMobile,
-  UpcomingAuctionMobileSkeleton,
-  UpcomingAuctionSkeleton,
-} from '@/components/auction/upcoming';
-import { Tab } from '@headlessui/react';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from '@/hooks/AuthContext';
+import { useIsMounted } from '@/hooks/use-is-mounted';
 import {
   faDiscord,
   faMedium,
   faTwitter,
 } from '@fortawesome/free-brands-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
-import { useAuth } from '@/hooks/AuthContext';
-import { useAccount } from 'wagmi';
+import { Tab } from '@headlessui/react';
 import { useRouter } from 'next-nprogress-bar';
-import ButtonPrimary from '@/components/button/buttonPrimary';
-import ButtonTertiary from '@/components/button/buttonTertiary';
-import CloudDiscover from '@/assets/icon/cloud-discover';
-import CloudDiscover1 from '@/assets/icon/cloud-discover1';
-import CloudSubscribe from '@/assets/icon/cloudsubscribe';
-import Wave from '@/assets/icon/wave';
-import LineL from '@/assets/icon/linel';
-import CastleDiscover from '@/assets/icon/castlediscover';
-import CastleDiscover2 from '@/assets/icon/castlediscover2';
-import ButtonSecondary from '@/components/button/buttonSecondary';
-import TooltipTriangle from '@/assets/icon/tooltipTriangle';
-import TopTooltip from '@/components/tooltip/topTooltip';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
 import ButtonLink from '../components/button/buttonLink';
 
 export default function Home() {

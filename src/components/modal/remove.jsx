@@ -1,39 +1,18 @@
-import Ethereum from '@/assets/icon/ethereum';
-import HelaIcon from '@/assets/icon/hela';
-import { truncateAddress } from '@/utils/truncateAddress';
-import { truncateAddress4char } from '@/utils/truncateAddress4char';
+import { useAuth } from '@/hooks/AuthContext';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import {
   faCheck,
-  faChevronDown,
   faXmark,
   faXmarkCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
-import Image from 'next/legacy/image';
-import { Fragment, useEffect, useState } from 'react';
-import { formatEther, parseEther } from 'viem';
-import {
-  useAccount,
-  useBalance,
-  usePublicClient,
-  useWaitForTransaction,
-  useWalletClient,
-} from 'wagmi';
-import { useForm } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message';
 import { useWeb3Modal } from '@web3modal/react';
-import Opensea from '@/assets/icon/opensea';
-import LogoIcon from '@/assets/icon/logoicon';
-import Logo from '../navbar/logoicon';
-import LogoFooter from '@/assets/icon/logofooter';
-import LogoIconMobile from '@/assets/icon/logoiconmobile';
-import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
-import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import { getApprovedAddress } from '@/utils/getApprovedAddress';
 import { useRouter } from 'next-nprogress-bar';
+import { Fragment, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useAccount, useWaitForTransaction, useWalletClient } from 'wagmi';
 import ButtonPrimary from '../button/buttonPrimary';
-import { useAuth } from '@/hooks/AuthContext';
 
 export default function ModalRemove({
   isOpenModal,
@@ -43,9 +22,7 @@ export default function ModalRemove({
 }) {
   const router = useRouter();
   const { data: walletClient } = useWalletClient({
-    onError(error) {
-      
-    },
+    onError(error) {},
   });
   const { address, isConnected } = useAccount();
   const { hasSigned, handleSign } = useAuth();
@@ -92,11 +69,11 @@ export default function ModalRemove({
       return;
     }
 
-    if(isConnected && !hasSigned){
+    if (isConnected && !hasSigned) {
       handleSign();
       return;
     }
-    
+
     setIsloadingBuyNativeModal(true);
     setErrorBuyNative({
       isError: false,
@@ -169,14 +146,11 @@ export default function ModalRemove({
 
       if (response.ok) {
         // Data was saved successfully
-        
       } else {
         // Handle the error here
-        
       }
     } catch (error) {
       // Handle any unexpected errors
-      
     }
   };
 
@@ -208,7 +182,7 @@ export default function ModalRemove({
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-gray-900 dark:bg-neutral-950 dark:text-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle text-gray-900 shadow-xl transition-all dark:bg-neutral-950 dark:text-white">
                     <Dialog.Title className="flex justify-between text-xl font-bold">
                       <div className="flex w-full justify-start">
                         Remove Listing
@@ -224,7 +198,7 @@ export default function ModalRemove({
                     </Dialog.Title>
 
                     <section className="step-1 flex flex-col gap-3 pt-5">
-                      <div className="flex flex-col justify-between gap-1 rounded-lg bg-gray-50 dark:bg-neutral-900 p-3">
+                      <div className="flex flex-col justify-between gap-1 rounded-lg bg-gray-50 p-3 dark:bg-neutral-900">
                         Check your wallet and do an approvement to continue
                         remove your listing
                       </div>
@@ -349,7 +323,9 @@ export default function ModalRemove({
                         </span>
                         <div className="flex flex-col gap-1 text-center">
                           <h3 className="text-xl font-bold">Congratulations</h3>
-                          <span>The asset success to removed from sale listing!</span>
+                          <span>
+                            The asset success to removed from sale listing!
+                          </span>
                           <span>check your profile to see the asset</span>
                         </div>
                         <button

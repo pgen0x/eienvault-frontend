@@ -3,17 +3,14 @@ import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import { faAdd, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useWeb3Modal } from '@web3modal/react';
-import axios from 'axios';
 import { useRouter } from 'next-nprogress-bar';
 import Image from 'next/image';
-import { useEffect } from 'react';
-import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAccount } from 'wagmi';
+import ButtonPrimary from '../button/buttonPrimary';
+import ButtonSecondary from '../button/buttonSecondary';
 import { ImageWithFallback } from '../imagewithfallback';
 import { JazzIcon } from '../jazzicon';
-import ButtonSecondary from '../button/buttonSecondary';
-import ButtonPrimary from '../button/buttonPrimary';
 
 const UserItemDetail = ({ user, followings, refresh }) => {
   const router = useRouter();
@@ -27,7 +24,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
       return;
     }
 
-    if(isConnected && !hasSigned){
+    if (isConnected && !hasSigned) {
       handleSign();
       return;
     }
@@ -53,9 +50,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
         toast.success(responseData.success.message);
         refresh();
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const checkFollowing = (walletAddress) => {
@@ -63,7 +58,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
   };
 
   return (
-    <div className="col-span-12 md:col-span-6 lg:col-span-3 flex w-full flex-col items-end justify-center gap-2 rounded-lg bg-gray-50 shadow backdrop-blur-xl dark:bg-neutral-900">
+    <div className="col-span-12 flex w-full flex-col items-end justify-center gap-2 rounded-lg bg-gray-50 shadow backdrop-blur-xl dark:bg-neutral-900 md:col-span-6 lg:col-span-3">
       {user?.banner ? (
         <Image
           src={
@@ -150,7 +145,7 @@ const UserItemDetail = ({ user, followings, refresh }) => {
             </div>
           </div>
         </div>
-        <div className="flex flex-row lg:flex-col xl:flex-row w-full items-center justify-between gap-2 font-bold">
+        <div className="flex w-full flex-row items-center justify-between gap-2 font-bold lg:flex-col xl:flex-row">
           <ButtonPrimary
             className="flex w-full items-center justify-center gap-2"
             disabled={user?.walletAddress == address}

@@ -1,17 +1,13 @@
 // src/Slideshow.js
-import React, { useState, useEffect } from 'react';
-import Line from '@/assets/icon/line';
-import Awan from '@/assets/icon/awan';
-import Awan2 from '@/assets/icon/awan2';
-import { Slideshow, SlideshowMobile } from '../slideshow';
-import { useAccount, useWalletClient } from 'wagmi';
-import { useAuth } from '@/hooks/AuthContext';
-import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import Image from 'next/image';
-import Wave from '@/assets/icon/wave';
 import Cloud1 from '@/assets/icon/cloud1';
 import Cloud2 from '@/assets/icon/cloud2';
 import Cloud3 from '@/assets/icon/cloud3';
+import Wave from '@/assets/icon/wave';
+import { useAuth } from '@/hooks/AuthContext';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { useEffect, useState } from 'react';
+import { useAccount, useWalletClient } from 'wagmi';
+import { Slideshow, SlideshowMobile } from '../slideshow';
 
 const Auction = () => {
   const { token } = useAuth();
@@ -37,7 +33,7 @@ const Auction = () => {
 
       if (!res.ok) {
         setErrorAuctions(true);
-        
+
         throw new Error('Network response was not ok');
       }
 
@@ -46,7 +42,6 @@ const Auction = () => {
       setAuctions(responseData);
     } catch (error) {
       setErrorAuctions(true);
-      
     } finally {
       setErrorAuctions(false); // Set isLoading to false after fetching data
     }
@@ -66,9 +61,7 @@ const Auction = () => {
         value: price,
       });
       return hash;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   async function refreshMetadata(collectionAddress, tokenId) {
@@ -91,7 +84,6 @@ const Auction = () => {
       );
 
       if (!res.ok) {
-        
         throw new Error('Network response was not ok');
       }
 
@@ -99,13 +91,11 @@ const Auction = () => {
 
       setRefreshMetadata(true);
     } catch (error) {
-      
       throw new Error('Refresh metadata failed:');
     }
   }
 
   const refreshData = async () => {
-    
     setAuctions([]);
     await fetchData();
   };

@@ -1,53 +1,32 @@
 'use client';
-import { useIsMounted } from '@/hooks/use-is-mounted';
-import Image from 'next/image';
-import { useRef, useState } from 'react';
-import Footer from '../../components/footer/main';
-import { Listbox } from '@headlessui/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCartPlus,
-  faChevronDown,
-  faCircleCheck,
-  faEllipsis,
-  faEllipsisVertical,
-  faGrip,
-  faGripVertical,
-  faPenToSquare,
-  faSearch,
-  faShare,
-  faSliders,
-} from '@fortawesome/free-solid-svg-icons';
-import { Trykker } from 'next/font/google';
-import Search from '../../components/navbar/search';
-import Ethereum from '@/assets/icon/ethereum';
-import { filter } from '@metamask/jazzicon/colors';
-import { useEffect } from 'react';
-import { useRouter } from 'next-nprogress-bar';
-import { useRouter as useNextRouter } from 'next/navigation';
-import { formatEther } from 'viem';
-import { ImageWithFallback } from '@/components/imagewithfallback';
-import formatter from '@/utils/shortNumberFormatter';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { useSearchParams } from 'next/navigation';
-import { truncateAddress } from '@/utils/truncateAddress';
-import moment from 'moment';
+import ButtonPrimary from '@/components/button/buttonPrimary';
+import ButtonTertiary from '@/components/button/buttonTertiary';
+import ModalBid from '@/components/modal/bid';
+import ModalBuy from '@/components/modal/buy';
+import ModalPutOnSale from '@/components/modal/putOnSale';
+import ModalRemove from '@/components/modal/remove';
+import ModalReportNft from '@/components/modal/reportNft';
+import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
 import {
   NftItemDetail,
   NftItemDetailSkeleton,
 } from '@/components/nft/itemDetail';
-import ModalBid from '@/components/modal/bid';
-import ModalBuy from '@/components/modal/buy';
-import ModalPutOnSale from '@/components/modal/putOnSale';
-import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
-import ModalReportNft from '@/components/modal/reportNft';
-import { useAccount, useWalletClient } from 'wagmi';
-import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import ButtonPrimary from '@/components/button/buttonPrimary';
-import ButtonTertiary from '@/components/button/buttonTertiary';
 import SwitchGrid from '@/components/switch/grid';
-import ModalRemove from '@/components/modal/remove';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import {
+  faChevronDown,
+  faSearch,
+  faSliders,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
+import moment from 'moment';
+import { useRouter } from 'next-nprogress-bar';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { useAccount, useWalletClient } from 'wagmi';
+import Footer from '../../components/footer/main';
 
 const servers = [
   'All Mainnet',
@@ -169,15 +148,12 @@ export default function NftPage() {
         );
 
         if (!res.ok) {
-          
           throw new Error('Network response was not ok');
         }
 
         const responseData = await res.json();
         setChains(responseData);
-      } catch (error) {
-        
-      }
+      } catch (error) {}
     };
     getChains();
   }, []);
@@ -266,7 +242,7 @@ export default function NftPage() {
     ChainName,
     ChainId,
     TokenSymbol,
-    paidWith
+    paidWith,
   ) => {
     setBuyData({
       marketId,
@@ -279,7 +255,7 @@ export default function NftPage() {
       ChainName,
       ChainId,
       TokenSymbol,
-      paidWith
+      paidWith,
     });
     setisOpenModalBuy(true);
   };
@@ -380,9 +356,7 @@ export default function NftPage() {
         value: price,
       });
       return hash;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const buyAction = async (marketId, price) => {
@@ -395,13 +369,10 @@ export default function NftPage() {
         value: price,
       });
       return hash;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const refreshData = async () => {
-    
     setNfts([]);
     setNftPage(1);
     setNftLast(false);

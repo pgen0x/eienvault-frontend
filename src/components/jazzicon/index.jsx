@@ -1,5 +1,5 @@
 import jazzicon from '@metamask/jazzicon';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import color from 'tinycolor2';
 
 export function JazzIcon({ diameter, seed, useGradientFallback, ...props }) {

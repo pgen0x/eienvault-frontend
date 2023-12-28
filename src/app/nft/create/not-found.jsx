@@ -1,4 +1,3 @@
-import Footer from '@/components/footer/main';
 
 export default function NotFound() {
   return (

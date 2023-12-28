@@ -1,31 +1,17 @@
 'use client';
-import Ethereum from '@/assets/icon/ethereum';
-import HelaIcon from '@/assets/icon/hela';
+import { useAuth } from '@/hooks/AuthContext';
 import {
   faCheck,
-  faChevronDown,
-  faClose,
-  faImage,
   faXmark,
   faXmarkCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Dialog, Listbox, Transition } from '@headlessui/react';
+import { Dialog, Transition } from '@headlessui/react';
 import { ErrorMessage } from '@hookform/error-message';
-import Image from 'next/legacy/image';
-import { Fragment, useEffect, useState } from 'react';
-import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
-import {
-  useAccount,
-  useNetwork,
-  useWaitForTransaction,
-  useWalletClient,
-} from 'wagmi';
-import { useWeb3Modal } from '@web3modal/react';
-import { useForm } from 'react-hook-form';
-import { useAuth } from '@/hooks/AuthContext';
-import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import { Fragment, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useAccount } from 'wagmi';
 import ButtonPrimary from '../button/buttonPrimary';
 
 export default function ModalVerifyUser({

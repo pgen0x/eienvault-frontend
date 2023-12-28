@@ -1,35 +1,16 @@
 'use client';
-import { useAuth } from '@/hooks/AuthContext';
 import {
-  faDiscord,
   faFacebook,
   faTelegram,
-  faTwitter,
   faWhatsapp,
   faXTwitter,
 } from '@fortawesome/free-brands-svg-icons';
-import {
-  faCheck,
-  faCheckCircle,
-  faCircleXmark,
-  faClose,
-  faCopy,
-  faCross,
-  faEnvelope,
-  faImage,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faCopy, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
-import { ErrorMessage } from '@hookform/error-message';
-import Image from 'next/legacy/image';
-import { Fragment, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import ButtonSecondary from '../button/buttonSecondary';
-import ButtonTertiary from '../button/buttonTertiary';
-import ButtonPrimary from '../button/buttonPrimary';
+import { Fragment, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 export default function ModalShareSocialMedia({
   isOpenModal,

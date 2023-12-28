@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Collection from '../collection/page';
 import NftPage from '../nft/page';
 import UserPage from '../user/page';

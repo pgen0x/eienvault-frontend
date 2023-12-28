@@ -1,22 +1,21 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import HelaIcon from '@/assets/icon/hela';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
+import { roles } from '@/utils/listRoles';
+import { ErrorMessage } from '@hookform/error-message';
+import { useWeb3Modal } from '@web3modal/react';
+import { toast } from 'react-toastify';
+import { parseEther } from 'viem';
 import {
   useAccount,
   usePublicClient,
   useWaitForTransaction,
   useWalletClient,
 } from 'wagmi';
-import { useWeb3Modal } from '@web3modal/react';
-import { ErrorMessage } from '@hookform/error-message';
-import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
-import { toast } from 'react-toastify';
-import { roles } from '@/utils/listRoles';
-import HelaIcon from '@/assets/icon/hela';
-import { formatEther, parseEther } from 'viem';
 
 export default function ModalUpdateListingPrice({
   isOpenModal,

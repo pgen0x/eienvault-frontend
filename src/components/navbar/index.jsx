@@ -1,32 +1,25 @@
 'use client';
-import { useWindowScroll } from '@/hooks/use-window-scroll';
-import { useIsDarkMode } from '@/hooks/use-is-dark-mode';
-import cn from 'classnames';
 import Logo from '@/components/navbar/logoicon';
 import Search from '@/components/navbar/search';
-import NavMenu from './navmenu';
-import RightArea from './rightarea';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useAuth } from '@/hooks/AuthContext';
 import {
   faBars,
   faChevronDown,
   faChevronRight,
-  faUserAlt,
   faWallet,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { useWeb3Modal, useWeb3ModalEvents } from '@web3modal/react';
-import { useSidebar } from '../../hooks/SidebarContext';
-import { useAccount, useDisconnect } from 'wagmi';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
-import { useState, useEffect, Fragment } from 'react';
-import { Switch } from '@headlessui/react';
-import { useRouter } from 'next-nprogress-bar';
-import { useAuth } from '@/hooks/AuthContext';
-import NavbarAdmin from './admin';
-import { usePathname } from 'next/navigation';
-import { jwtDecode } from 'jwt-decode';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useWeb3Modal } from '@web3modal/react';
 import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
+import { useRouter } from 'next-nprogress-bar';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
+import { useSidebar } from '../../hooks/SidebarContext';
+import NavMenu from './navmenu';
+import RightArea from './rightarea';
 
 export default function Navbar() {
   const router = useRouter();
@@ -166,17 +159,6 @@ export default function Navbar() {
               </div> */}
               {isClient && (
                 <>
-                  {isConnected && chain?.id !== chainId && (
-                    <div className="mt-2 flex flex-row items-center justify-between border-t-2 py-2 text-xl font-semibold text-gray-900 hover:text-neutral-700">
-                      <span className="text-md text-xl">Wrong network!</span>
-                      <span
-                        className="text-md cursor-pointer px-3 py-2"
-                        onClick={() => switchNetwork?.(chainId)}
-                      >
-                        Switch
-                      </span>
-                    </div>
-                  )}
                   {isConnected ? (
                     <span
                       className="mt-2 py-2 font-semibold text-gray-900 hover:text-neutral-700 dark:text-white"
@@ -194,6 +176,17 @@ export default function Navbar() {
                     >
                       <FontAwesomeIcon icon={faWallet} /> Connect your wallet
                     </span>
+                  )}
+                  {isConnected && chain?.id !== chainId && (
+                    <div className="mt-2 flex flex-row items-center justify-between py-2 text-xl font-semibold text-gray-900 hover:text-neutral-700 dark:text-white">
+                      <span className="text-md text-xl">Wrong network!</span>
+                      <span
+                        className="text-md cursor-pointer px-3 py-2"
+                        onClick={() => switchNetwork?.(chainId)}
+                      >
+                        Switch
+                      </span>
+                    </div>
                   )}
                 </>
               )}

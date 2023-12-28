@@ -1,15 +1,14 @@
 'use client';
 
-import { ThemeProvider } from 'next-themes';
 import { AuthProvider } from '@/hooks/AuthContext';
-import { SidebarProvider } from '../hooks/SidebarContext';
+import { initializeApp } from '@/hooks/eth/wagmiConfig';
+import { useIsDarkMode } from '@/hooks/use-is-dark-mode';
+import { Web3Modal } from '@web3modal/react';
+import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
+import { ThemeProvider } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { WagmiConfig } from 'wagmi';
-import { config } from '@/hooks/eth/wagmiConfig';
-import { initializeApp } from '@/hooks/eth/wagmiConfig';
-import { Web3Modal } from '@web3modal/react';
-import { useIsDarkMode } from '@/hooks/use-is-dark-mode';
-import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
+import { SidebarProvider } from '../hooks/SidebarContext';
 
 const { wagmiConfig, projectId, ethereumClient, helamainnet } = initializeApp();
 

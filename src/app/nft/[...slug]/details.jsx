@@ -1,79 +1,61 @@
 'use client';
-import Footer from '@/components/footer/main';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faBan,
-  faBell,
-  faCartPlus,
-  faCheck,
-  faChevronDown,
-  faChevronLeft,
-  faChevronRight,
-  faCircle,
-  faCircleCheck,
-  faEllipsisVertical,
-  faEye,
-  faFingerprint,
-  faGavel,
-  faList,
-  faPenToSquare,
-  faRotate,
-  faTags,
-  faUpRightFromSquare,
-  faXmark,
-  faHeart as faHeartSolid,
-} from '@fortawesome/free-solid-svg-icons';
-import {
-  faCalendar,
-  faFlag,
-  faHeart,
-  faShareFromSquare,
-} from '@fortawesome/free-regular-svg-icons';
-import Ethereum from '@/assets/icon/ethereum';
-import SlideshowActivities from '@/components/slideshow/activities';
+import Awan4 from '@/assets/icon/awan4';
 import Castle from '@/assets/icon/castle';
 import Castle2 from '@/assets/icon/castle2';
-import Awan3 from '@/assets/icon/awan3';
-import Awan4 from '@/assets/icon/awan4';
 import Flower from '@/assets/icon/flower';
-import { useEffect, useState } from 'react';
-import Opensea from '@/assets/icon/opensea';
-import { Listbox } from '@headlessui/react';
-import DatePicker from 'tailwind-datepicker-react';
-import { useRouter } from 'next-nprogress-bar';
-import { useAccount, useBalance, useWalletClient } from 'wagmi';
-import Image from 'next/legacy/image';
-import { truncateAddress4char } from '@/utils/truncateAddress4char';
-import { truncateAddress } from '@/utils/truncateAddress';
-import { ImageWithFallback } from '@/components/imagewithfallback';
 import HelaIcon from '@/assets/icon/hela';
-import { formatEther, formatUnits, isAddress, zeroAddress } from 'viem';
-const accounts = ['0x30756...Fb179', '0x30756...Zi57G', '0x30756...Gy352'];
-import { notFound } from 'next/navigation';
-import ModalBid from '@/components/modal/bid';
-import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import ModalBuy from '@/components/modal/buy';
-import LiveCountdown from '@/components/slideshow/countdown';
-import { useAuth } from '@/hooks/AuthContext';
-import { toast } from 'react-toastify';
-import RelatedNFTs, {
-  RelatedNFTsSkeleton,
-} from '@/components/slideshow/relatednfts';
-import moment from 'moment';
-import ModalPutOnSale from '@/components/modal/putOnSale';
-import axios from 'axios';
 import {
   ActivityItemDetail,
   ActivityItemDetailSkeleton,
 } from '@/components/activity/itemDetail';
-import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
-import { JazzIcon } from '@/components/jazzicon';
-import ModalReportNft from '@/components/modal/reportNft';
-import ModalRemove from '@/components/modal/remove';
 import ButtonPrimary from '@/components/button/buttonPrimary';
-import NftMarker from '@/components/marker/nftMarker';
 import ButtonTertiary from '@/components/button/buttonTertiary';
+import { ImageWithFallback } from '@/components/imagewithfallback';
+import { JazzIcon } from '@/components/jazzicon';
+import NftMarker from '@/components/marker/nftMarker';
+import ModalBid from '@/components/modal/bid';
+import ModalBuy from '@/components/modal/buy';
+import ModalPutOnSale from '@/components/modal/putOnSale';
+import ModalRemove from '@/components/modal/remove';
+import ModalReportNft from '@/components/modal/reportNft';
+import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
+import LiveCountdown from '@/components/slideshow/countdown';
+import RelatedNFTs, {
+  RelatedNFTsSkeleton,
+} from '@/components/slideshow/relatednfts';
+import { useAuth } from '@/hooks/AuthContext';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { truncateAddress } from '@/utils/truncateAddress';
+import { truncateAddress4char } from '@/utils/truncateAddress4char';
+import {
+  faFlag,
+  faHeart,
+  faShareFromSquare,
+} from '@fortawesome/free-regular-svg-icons';
+import {
+  faBan,
+  faCircle,
+  faCircleCheck,
+  faEye,
+  faFingerprint,
+  faGavel,
+  faHeart as faHeartSolid,
+  faRotate,
+  faTags,
+  faUpRightFromSquare,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
+import moment from 'moment';
+import { useRouter } from 'next-nprogress-bar';
+import Image from 'next/legacy/image';
+import { notFound } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { formatEther, formatUnits, isAddress, zeroAddress } from 'viem';
+import { useAccount, useBalance, useWalletClient } from 'wagmi';
 import Loading from './loading';
+const accounts = ['0x30756...Fb179', '0x30756...Zi57G', '0x30756...Gy352'];
 
 export default function NFTDetails({ collectionAddress, tokenId }) {
   const router = useRouter();

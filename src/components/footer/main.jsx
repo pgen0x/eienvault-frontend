@@ -1,5 +1,3 @@
-import LogoFooter from '@/assets/icon/logofooter';
-import TooltipTriangle from '@/assets/icon/tooltipTriangle';
 import {
   faDiscord,
   faMedium,

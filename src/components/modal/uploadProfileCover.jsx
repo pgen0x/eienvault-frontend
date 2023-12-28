@@ -1,12 +1,6 @@
 'use client';
 import { useAuth } from '@/hooks/AuthContext';
-import {
-  faCheckCircle,
-  faCircleXmark,
-  faClose,
-  faCross,
-  faImage,
-} from '@fortawesome/free-solid-svg-icons';
+import { faClose, faImage } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
 import { ErrorMessage } from '@hookform/error-message';
@@ -105,11 +99,9 @@ export default function ModalUploadProfileCover({
       } else {
         // Handle the error here
         toast.error('File upload failed:', response.statusText);
-        
       }
     } catch (error) {
       // Handle any unexpected errors
-      
     }
   };
 
@@ -136,17 +128,15 @@ export default function ModalUploadProfileCover({
       );
 
       if (response.ok) {
-        
         return await response.json();
         // Data was saved successfully
       } else {
         // Handle the error here
-        
+
         return await response.json();
       }
     } catch (error) {
       // Handle any unexpected errors
-      
     }
   };
 

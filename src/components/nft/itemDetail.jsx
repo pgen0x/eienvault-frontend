@@ -1,13 +1,10 @@
-import Ethereum from '@/assets/icon/ethereum';
 import HelaIcon from '@/assets/icon/hela';
 import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
 import {
   faBan,
-  faChevronDown,
   faCircle,
   faCircleCheck,
-  faDotCircle,
   faEllipsis,
   faGavel,
   faTags,
@@ -16,17 +13,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Menu, Transition } from '@headlessui/react';
 import { useRouter } from 'next-nprogress-bar';
 import Image from 'next/image';
-import { useEffect } from 'react';
-import { Fragment, Suspense, useState } from 'react';
+import { Fragment, Suspense, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { formatEther, formatUnits, zeroAddress } from 'viem';
-import { useAccount, useBalance, useNetwork } from 'wagmi';
-import { ImageWithFallback } from '../imagewithfallback';
-import LiveCountdown from '../slideshow/countdown';
+import { useAccount, useBalance } from 'wagmi';
 import ButtonPrimary from '../button/buttonPrimary';
-import ButtonTertiary from '../button/buttonTertiary';
 import ButtonSecondary from '../button/buttonSecondary';
+import ButtonTertiary from '../button/buttonTertiary';
+import { ImageWithFallback } from '../imagewithfallback';
 import NftMarker from '../marker/nftMarker';
+import LiveCountdown from '../slideshow/countdown';
 
 export const NftItemDetail = ({
   gridList,

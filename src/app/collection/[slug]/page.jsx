@@ -1,25 +1,41 @@
 'use client';
-import { useIsMounted } from '@/hooks/use-is-mounted';
-import Image from 'next/image';
-import { useRef, useState } from 'react';
-import Footer from '@/components/footer/main';
-import { Listbox } from '@headlessui/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCartPlus,
+  ActivityItemDetail,
+  ActivityItemDetailSkeleton,
+} from '@/components/activity/itemDetail';
+import ButtonPrimary from '@/components/button/buttonPrimary';
+import ButtonSecondary from '@/components/button/buttonSecondary';
+import ButtonTertiary from '@/components/button/buttonTertiary';
+import Footer from '@/components/footer/main';
+import { ImageWithFallback } from '@/components/imagewithfallback';
+import { JazzIcon } from '@/components/jazzicon';
+import ModalBid from '@/components/modal/bid';
+import ModalBuy from '@/components/modal/buy';
+import ModalPutOnSale from '@/components/modal/putOnSale';
+import ModalRemove from '@/components/modal/remove';
+import ModalReportCollection from '@/components/modal/reportCollection';
+import ModalReportNft from '@/components/modal/reportNft';
+import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
+import ModalUpdateCollection from '@/components/modal/updateCollections';
+import ModaluploadCover from '@/components/modal/uploadCover';
+import {
+  NftItemDetail,
+  NftItemDetailSkeleton,
+} from '@/components/nft/itemDetail';
+import SwitchGrid from '@/components/switch/grid';
+import { useAuth } from '@/hooks/AuthContext';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { truncateAddress } from '@/utils/truncateAddress';
+import { truncateAddress4char } from '@/utils/truncateAddress4char';
+import {
   faCheck,
   faChevronDown,
   faChevronUp,
-  faCircleCheck,
   faClone,
   faCopy,
-  faEllipsis,
-  faEllipsisVertical,
   faFire,
   faFlag,
   faGavel,
-  faGrip,
-  faGripVertical,
   faPaperPlane,
   faPenToSquare,
   faPercent,
@@ -28,46 +44,18 @@ import {
   faSliders,
   faTags,
 } from '@fortawesome/free-solid-svg-icons';
-import Search from '@/components/navbar/search';
-import Ethereum from '@/assets/icon/ethereum';
-import { useEffect } from 'react';
-import { useRouter } from 'next-nprogress-bar';
-import { useAuth } from '@/hooks/AuthContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Listbox } from '@headlessui/react';
 import axios from 'axios';
-import { truncateAddress } from '@/utils/truncateAddress';
-import { formatEther, getAddress, isAddress } from 'viem';
-import { toast } from 'react-toastify';
-import { useSearchParams } from 'next/navigation';
-import { ImageWithFallback } from '@/components/imagewithfallback';
 import moment from 'moment';
-import ModalBid from '@/components/modal/bid';
-import ModalBuy from '@/components/modal/buy';
-import HelaIcon from '@/assets/icon/hela';
-import { useAccount, useNetwork, useWalletClient } from 'wagmi';
-import ModalPutOnSale from '@/components/modal/putOnSale';
-import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import {
-  NftItemDetail,
-  NftItemDetailSkeleton,
-} from '@/components/nft/itemDetail';
-import ModaluploadCover from '@/components/modal/uploadCover';
-import ModalUpdateCollection from '@/components/modal/updateCollections';
-import { truncateAddress4char } from '@/utils/truncateAddress4char';
-import { JazzIcon } from '@/components/jazzicon';
-import {
-  ActivityItemDetail,
-  ActivityItemDetailSkeleton,
-} from '@/components/activity/itemDetail';
-import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
-import formatter from '@/utils/shortNumberFormatter';
-import ModalReportNft from '@/components/modal/reportNft';
-import ModalRemove from '@/components/modal/remove';
-import ButtonPrimary from '@/components/button/buttonPrimary';
-import ButtonTertiary from '@/components/button/buttonTertiary';
-import SwitchGrid from '@/components/switch/grid';
-import ButtonSecondary from '@/components/button/buttonSecondary';
+import { useRouter } from 'next-nprogress-bar';
+import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useCopyToClipboard } from 'react-use';
-import ModalReportCollection from '@/components/modal/reportCollection';
+import { formatEther, getAddress, isAddress } from 'viem';
+import { useAccount, useNetwork, useWalletClient } from 'wagmi';
 
 const filters = [
   'All',
@@ -780,7 +768,7 @@ const Items = ({ params, collection }) => {
     ChainName,
     ChainId,
     TokenSymbol,
-    paidWith
+    paidWith,
   ) => {
     setBuyData({
       marketId,
@@ -793,7 +781,7 @@ const Items = ({ params, collection }) => {
       ChainName,
       ChainId,
       TokenSymbol,
-      paidWith
+      paidWith,
     });
     setisOpenModalBuy(true);
   };

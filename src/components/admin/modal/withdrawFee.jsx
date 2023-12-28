@@ -1,27 +1,18 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useEffect, useState } from 'react';
-import { formatEther, parseEther, parseUnits, zeroAddress } from 'viem';
+import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { parseEther, parseUnits, zeroAddress } from 'viem';
 
-import {
-  erc20ABI,
-  useAccount,
-  useBalance,
-  useNetwork,
-  usePublicClient,
-  useWaitForTransaction,
-  useWalletClient,
-} from 'wagmi';
-import { useWeb3Modal } from '@web3modal/react';
-import { ErrorMessage } from '@hookform/error-message';
-import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
-import { toast } from 'react-toastify';
-import { roles } from '@/utils/listRoles';
-import { useCopyToClipboard } from 'react-use';
 import ButtonSecondary from '@/components/button/buttonSecondary';
+import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
+import { roles } from '@/utils/listRoles';
 import { faCheck, faCopy } from '@fortawesome/free-solid-svg-icons';
+import { ErrorMessage } from '@hookform/error-message';
+import { useWeb3Modal } from '@web3modal/react';
+import { toast } from 'react-toastify';
+import { useCopyToClipboard } from 'react-use';
+import { erc20ABI, useAccount, usePublicClient, useWalletClient } from 'wagmi';
 
 export default function ModalWithdrawFee({
   isOpenModal,
@@ -72,7 +63,7 @@ export default function ModalWithdrawFee({
           amount = parseEther(data.amount);
         } else {
           const decimal = await getDecimals(data.tokenAddress);
-          
+
           amount = parseUnits(data.amount, decimal);
         }
         await walletClient.writeContract({
@@ -93,7 +84,6 @@ export default function ModalWithdrawFee({
       } else {
         toast.error('Something went wrong');
       }
-      
     }
   };
 
@@ -114,7 +104,6 @@ export default function ModalWithdrawFee({
       });
       return checkroles;
     } catch (error) {
-      
       toast.error('Error hasRole');
     }
   };
@@ -129,9 +118,7 @@ export default function ModalWithdrawFee({
         account: address,
       });
       return decimal;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   function handleCopyToClipboard(address) {

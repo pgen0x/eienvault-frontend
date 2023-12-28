@@ -11,8 +11,6 @@ import {
 import SwitchGrid from '@/components/switch/grid';
 import {
   faChevronDown,
-  faGrip,
-  faGripVertical,
   faSearch,
   faSliders,
 } from '@fortawesome/free-solid-svg-icons';
@@ -23,7 +21,6 @@ import moment from 'moment';
 import { useRouter } from 'next-nprogress-bar';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import { formatEther } from 'viem';
 
 const filters = [
@@ -89,9 +86,6 @@ const Onsale = ({
   }, [onsalePage]);
 
   const getNfts = async () => {
-    
-    
-
     if (LastOnsale === true) return;
     setIsLoading(true);
     await axios
@@ -324,7 +318,7 @@ const Onsale = ({
     ChainName,
     ChainId,
     TokenSymbol,
-    paidWith
+    paidWith,
   ) => {
     setBuyData({
       marketId,
@@ -337,7 +331,7 @@ const Onsale = ({
       ChainName,
       ChainId,
       TokenSymbol,
-      paidWith
+      paidWith,
     });
     setisOpenModalBuy(true);
   };
@@ -401,9 +395,7 @@ const Onsale = ({
         value: price,
       });
       return hash;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const buyAction = async (marketId, price) => {
@@ -416,9 +408,7 @@ const Onsale = ({
         value: price,
       });
       return hash;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const handleOpenModalRemove = async (
@@ -439,7 +429,6 @@ const Onsale = ({
   }
 
   const refreshData = async () => {
-    
     setNfts([]);
     setOnsalePage(1);
     setLastOnsale(false);

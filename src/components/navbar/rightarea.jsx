@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useAuth } from '@/hooks/AuthContext';
 import {
   faMoon,
   faSignIn,
@@ -7,15 +7,17 @@ import {
   faWallet,
   faWifi,
 } from '@fortawesome/free-solid-svg-icons';
-import { useState, useEffect, Fragment } from 'react';
-import { Switch } from '@headlessui/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useWeb3Modal } from '@web3modal/react';
 import { useTheme } from 'next-themes';
-import { useWeb3Modal, useWeb3ModalEvents } from '@web3modal/react';
-import { useDisconnect, useSignMessage } from 'wagmi';
+import { useEffect, useState } from 'react';
+import {
+  useAccount,
+  useNetwork,
+  useSignMessage,
+  useSwitchNetwork,
+} from 'wagmi';
 import { useSidebar } from '../../hooks/SidebarContext';
-import { useAccount } from 'wagmi';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
-import { useAuth } from '@/hooks/AuthContext';
 import ButtonPrimary from '../button/buttonPrimary';
 
 export default function RightArea() {
@@ -59,13 +61,15 @@ export default function RightArea() {
             <div as="div" className="relative inline-block text-left">
               <button
                 onClick={() => switchNetwork?.(chainId)}
-                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 hover:bg-primary-300"
+                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-2 hover:bg-primary-300"
               >
                 <div className="h-4 w-4 text-center text-base font-black leading-none text-white">
                   <FontAwesomeIcon icon={faWifi} />
                 </div>
-                <div className="text-base font-bold leading-normal text-white">
-                  Wrong network! <span className="text-md">Switch</span>
+                <div className="w-[180px] overflow-hidden">
+                  <div className="text-base font-bold leading-normal text-white">
+                    Wrong network! <span className="text-md">Switch</span>
+                  </div>
                 </div>
               </button>
             </div>

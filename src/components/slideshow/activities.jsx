@@ -1,41 +1,27 @@
-import React, { useState, useEffect, Suspense } from 'react';
-import { Slide } from 'react-slideshow-image';
-import Rightarrow from '@/assets/icon/rightarrow';
-import LeftArrow from '@/assets/icon/lefarrow';
-import Ethereum from '@/assets/icon/ethereum';
 import Cat from '@/assets/images/cat.png';
 import Hos from '@/assets/images/hos.jpg';
-import Avatar from '@/assets/images/avatar.jpg';
-import { useRouter } from 'next-nprogress-bar';
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import Image from 'next/image';
+import ModalBid from '@/components/modal/bid';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import {
-  faCircleCheck,
-  faChevronRight,
   faChevronLeft,
-  faMinus,
-  faPlus,
-  faEllipsis,
-  faCartPlus,
+  faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import { toast } from 'react-toastify';
-import ModalBid from '@/components/modal/bid';
-import { formatEther } from 'viem';
-import { useAccount, useWalletClient } from 'wagmi';
-import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import HelaIcon from '@/assets/icon/hela';
-import { ImageWithFallback } from '../imagewithfallback';
-import ModalBuy from '../modal/buy';
 import moment from 'moment';
-import { NftItemDetail, NftItemDetailSkeleton } from '../nft/itemDetail';
-import ModalPutOnSale from '../modal/putOnSale';
-import ModalShareSocialMedia from '../modal/shareSocialMedia';
-import ModalReportNft from '../modal/reportNft';
-import ModalRemove from '../modal/remove';
+import { useRouter } from 'next-nprogress-bar';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { useAccount, useWalletClient } from 'wagmi';
 import ButtonPrimary from '../button/buttonPrimary';
+import ModalBuy from '../modal/buy';
+import ModalPutOnSale from '../modal/putOnSale';
+import ModalRemove from '../modal/remove';
+import ModalReportNft from '../modal/reportNft';
+import ModalShareSocialMedia from '../modal/shareSocialMedia';
+import { NftItemDetail, NftItemDetailSkeleton } from '../nft/itemDetail';
 
 const images = [Hos, Cat, Hos, Cat, Hos, Cat, Cat]; // Add the image URLs here
 
@@ -120,7 +106,7 @@ export const SlideshowActivities = ({ dataActivities, refreshData }) => {
     ChainName,
     ChainId,
     TokenSymbol,
-    paidWith
+    paidWith,
   ) => {
     setBuyData({
       marketId,
@@ -133,7 +119,7 @@ export const SlideshowActivities = ({ dataActivities, refreshData }) => {
       ChainName,
       ChainId,
       TokenSymbol,
-      paidWith
+      paidWith,
     });
     setisOpenModalBuy(true);
   };
@@ -234,9 +220,7 @@ export const SlideshowActivities = ({ dataActivities, refreshData }) => {
         value: price,
       });
       return hash;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const buyAction = async (marketId, price) => {
@@ -249,9 +233,7 @@ export const SlideshowActivities = ({ dataActivities, refreshData }) => {
         value: price,
       });
       return hash;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   let slidesPerView = 1;

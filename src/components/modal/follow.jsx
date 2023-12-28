@@ -1,20 +1,19 @@
 'use client';
-import { Dialog, Listbox, Transition } from '@headlessui/react';
-import { Fragment, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import {
   faCheckCircle,
-  faSearch,
   faUsers,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import ButtonPrimary from '../button/buttonPrimary';
-import { truncateAddress4char } from '@/utils/truncateAddress4char';
-import { JazzIcon } from '../jazzicon';
-import { ImageWithFallback } from '../imagewithfallback';
-import SwitchFollow from '../switch/follow';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Dialog, Transition } from '@headlessui/react';
+import { useRouter } from 'next/navigation';
+import { Fragment, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
+import ButtonPrimary from '../button/buttonPrimary';
+import { ImageWithFallback } from '../imagewithfallback';
+import { JazzIcon } from '../jazzicon';
+import SwitchFollow from '../switch/follow';
 
 export default function ModalFollow({ isOpenModal, onModalClose, followData }) {
   const router = useRouter();
@@ -121,7 +120,6 @@ const Following = ({ followData }) => {
       setUsers(data);
       // Continue with your code
     } catch (error) {
-      
       // Handle the error gracefully, e.g., show an error message to the user
     }
   };
@@ -167,7 +165,7 @@ const Following = ({ followData }) => {
                 className="flex w-full items-center justify-start gap-5 rounded-2xl bg-neutral-700 p-4 backdrop-blur-xl"
               >
                 <div className="flex w-full items-start justify-end">
-                  <div className="w-full flex items-start justify-between gap-2">
+                  <div className="flex w-full items-start justify-between gap-2">
                     <div className="relative h-16 w-16">
                       {user?.following?.logo ? (
                         <ImageWithFallback
@@ -269,7 +267,6 @@ const Followers = ({ followData }) => {
       setUsers(data);
       // Continue with your code
     } catch (error) {
-      
       // Handle the error gracefully, e.g., show an error message to the user
     }
   };
@@ -315,7 +312,7 @@ const Followers = ({ followData }) => {
                 className="flex w-full items-center justify-start gap-5 rounded-2xl bg-neutral-700 p-4 backdrop-blur-xl"
               >
                 <div className="flex w-full items-start justify-end">
-                  <div className="w-full flex items-start justify-between gap-2">
+                  <div className="flex w-full items-start justify-between gap-2">
                     <div className="relative h-16 w-16">
                       {user?.follower?.logo ? (
                         <ImageWithFallback
@@ -372,7 +369,7 @@ const Followers = ({ followData }) => {
                       <div className="flex flex-col items-start justify-center self-stretch">
                         <h3>Bio</h3>
                         <p className="line-clamp-2">
-                        {user?.follower?.bio == null
+                          {user?.follower?.bio == null
                             ? `A digital art enthusiast exploring the world of NFTs on EienVault. I enjoy sharing and collecting unique digital artworks on this platform. Let's explore the world of creativity together at EienVault`
                             : user?.follower?.bio}
                         </p>

@@ -1,22 +1,24 @@
 import Ethereum from '@/assets/icon/ethereum';
 import HelaIcon from '@/assets/icon/hela';
-import { truncateAddress } from '@/utils/truncateAddress';
-import { truncateAddress4char } from '@/utils/truncateAddress4char';
+import { useAuth } from '@/hooks/AuthContext';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
+import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
 import {
-  faCheck,
   faCheckCircle,
   faCircleXmark,
   faHourglass,
   faMoneyBill,
-  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Combobox, Dialog, Transition } from '@headlessui/react';
-import Image from 'next/legacy/image';
+import { Dialog, Transition } from '@headlessui/react';
+import { ErrorMessage } from '@hookform/error-message';
+import { useWeb3Modal } from '@web3modal/react';
+import moment from 'moment';
 import { Fragment, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { formatEther, parseEther, parseUnits, zeroAddress } from 'viem';
 import {
-  erc20ABI,
   useAccount,
   useBalance,
   useNetwork,
@@ -24,15 +26,7 @@ import {
   useWaitForTransaction,
   useWalletClient,
 } from 'wagmi';
-import { useForm } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message';
-import { useWeb3Modal } from '@web3modal/react';
-import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
-import moment from 'moment';
 import ButtonPrimary from '../button/buttonPrimary';
-import { useAuth } from '@/hooks/AuthContext';
-import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
 
 export default function ModalPutOnSale({
   isOpenModal,

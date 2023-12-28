@@ -1,14 +1,17 @@
+import ButtonPrimary from '@/components/button/buttonPrimary';
+import ButtonTertiary from '@/components/button/buttonTertiary';
 import ModalBid from '@/components/modal/bid';
 import ModalBuy from '@/components/modal/buy';
 import ModalPutOnSale from '@/components/modal/putOnSale';
+import ModalRemove from '@/components/modal/remove';
 import {
   NftItemDetail,
   NftItemDetailSkeleton,
 } from '@/components/nft/itemDetail';
+import SwitchGrid from '@/components/switch/grid';
+import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import {
   faChevronDown,
-  faGrip,
-  faGripVertical,
   faSearch,
   faSliders,
 } from '@fortawesome/free-solid-svg-icons';
@@ -18,16 +21,10 @@ import axios from 'axios';
 import moment from 'moment';
 import { useRouter } from 'next-nprogress-bar';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { formatEther } from 'viem';
 import { useAccount, useWalletClient } from 'wagmi';
-import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
-import ModalRemove from '@/components/modal/remove';
-import SwitchGrid from '@/components/switch/grid';
-import ButtonPrimary from '@/components/button/buttonPrimary';
-import ButtonSecondary from '@/components/button/buttonSecondary';
-import ButtonTertiary from '@/components/button/buttonTertiary';
 
 const filters = [
   'All',
@@ -337,7 +334,7 @@ export default function Owned({
     ChainName,
     ChainId,
     TokenSymbol,
-    paidWith
+    paidWith,
   ) => {
     setBuyData({
       marketId,
@@ -350,7 +347,7 @@ export default function Owned({
       ChainName,
       ChainId,
       TokenSymbol,
-      paidWith
+      paidWith,
     });
     setisOpenModalBuy(true);
   };
@@ -427,9 +424,7 @@ export default function Owned({
         value: price,
       });
       return hash;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const buyAction = async (marketId, price) => {
@@ -442,13 +437,10 @@ export default function Owned({
         value: price,
       });
       return hash;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const refreshData = () => {
-    
     setNfts([]);
     setOWnedPage(1);
     setNftLast(false);

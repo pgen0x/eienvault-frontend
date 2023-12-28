@@ -1,17 +1,13 @@
 'use client';
 import Table, { Td } from '@/components/admin/table/table';
-import AdminTable from '@/components/admin/table/table';
 import ButtonPrimary from '@/components/button/buttonPrimary';
-import ButtonSecondary from '@/components/button/buttonSecondary';
 import { useAuth } from '@/hooks/AuthContext';
 import { truncateAddress } from '@/utils/truncateAddress';
-import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import {
   faAnglesLeft,
   faAnglesRight,
   faCheck,
   faCopy,
-  faSearch,
   faXmark,
   faXmarkCircle,
 } from '@fortawesome/free-solid-svg-icons';
@@ -19,12 +15,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
 import axios from 'axios';
 import { useRouter } from 'next-nprogress-bar';
-import React, { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import ReactPaginate from 'react-paginate';
 import { toast } from 'react-toastify';
 import { useCopyToClipboard } from 'react-use';
-import { formatEther } from 'viem';
 
 const AdminUserPage = () => {
   const { token } = useAuth();
@@ -43,7 +38,7 @@ const AdminUserPage = () => {
   function handleCopyToClipboard(address, key) {
     copyToClipboard(address);
     setCopyButtonStatus((oldCopy) => [...oldCopy, key]);
-    
+
     setTimeout(() => {
       setCopyButtonStatus((oldCopy) => oldCopy.filter((item) => item != key));
     }, 2500);
@@ -128,7 +123,7 @@ const AdminUserPage = () => {
             return (
               <tr className="text-center" key={index}>
                 <Td firstElement={true}>
-                  <div className="flex gap-2 justify-center">
+                  <div className="flex justify-center gap-2">
                     <span>
                       {truncateAddress(item?.collection)} #{item?.tokenId}
                     </span>
@@ -153,7 +148,7 @@ const AdminUserPage = () => {
                 </Td>
                 <Td>{item?.nftDetails?.name}</Td>
                 <Td>
-                  <div className="flex gap-2 justify-center">
+                  <div className="flex justify-center gap-2">
                     <span>{truncateAddress(item?.seller)}</span>
                     <ButtonPrimary
                       className="h-6 !w-6 !p-0 text-xs"
@@ -180,7 +175,12 @@ const AdminUserPage = () => {
                 <Td>{item?.nftDetails?.isBlacklisted ? 'Yes' : 'No'}</Td>
                 <Td>{item?.collectionData?.Chain?.symbol}</Td>
                 <Td lastElement={true}>
-                  <ButtonPrimary className="!w-fit !py-1 text-sm" onClick={() => handleOpenUpdateModal(item?.collection, item?.tokenId)}>
+                  <ButtonPrimary
+                    className="!w-fit !py-1 text-sm"
+                    onClick={() =>
+                      handleOpenUpdateModal(item?.collection, item?.tokenId)
+                    }
+                  >
                     Discover
                   </ButtonPrimary>
                 </Td>

@@ -1,6 +1,6 @@
 import Footer from '@/components/footer/main';
-import Create from './create';
 import { notFound } from 'next/navigation';
+import Create from './create';
 
 export default async function Page() {
   let dataChain = [];
@@ -21,7 +21,6 @@ export default async function Page() {
 
     // Continue with your code
   } catch (error) {
-    
     // Handle the error gracefully, e.g., show an error message to the user
   }
 

@@ -1,24 +1,8 @@
 'use client';
-import Table, { Td } from '@/components/admin/table/table';
-import AdminTable from '@/components/admin/table/table';
-import ButtonPrimary from '@/components/button/buttonPrimary';
-import ButtonSecondary from '@/components/button/buttonSecondary';
-import { truncateAddress } from '@/utils/truncateAddress';
-import { truncateAddress4char } from '@/utils/truncateAddress4char';
-import {
-  faAnglesLeft,
-  faAnglesRight,
-  faCheck,
-  faCopy,
-  faSearch,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import ReactPaginate from 'react-paginate';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useCopyToClipboard } from 'react-use';
-import { formatEther } from 'viem';
 
 const AdminUserPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +18,7 @@ const AdminUserPage = () => {
   function handleCopyToClipboard(address) {
     copyToClipboard(address);
     setCopyButtonStatus((oldCopy) => [...oldCopy, address]);
-    
+
     setTimeout(() => {
       setCopyButtonStatus((oldCopy) =>
         oldCopy.filter((item) => item != address),

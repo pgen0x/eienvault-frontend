@@ -1,13 +1,13 @@
-import { useRouter } from 'next-nprogress-bar';
+import { truncateAddress } from '@/utils/truncateAddress';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { useRouter } from 'next-nprogress-bar';
 import { Autoplay, Pagination } from 'swiper/modules';
-import { truncateAddress } from '@/utils/truncateAddress';
-import UpcomingCountdown from '../slideshow/upcomingcountdown';
-import { ImageWithFallback } from '../imagewithfallback';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { formatEther } from 'viem';
 import ButtonTertiary from '../button/buttonTertiary';
+import { ImageWithFallback } from '../imagewithfallback';
+import UpcomingCountdown from '../slideshow/upcomingcountdown';
 
 const getHighestBid = (auctionData) => {
   if (!auctionData.listOffers || auctionData.listOffers.length === 0) {

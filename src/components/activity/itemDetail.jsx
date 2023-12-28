@@ -1,23 +1,10 @@
 import { truncateAddress } from '@/utils/truncateAddress';
-import { truncateAddress4char } from '@/utils/truncateAddress4char';
-import {
-  faArrowUpRightFromSquare,
-  faClone,
-  faFire,
-  faGavel,
-  faPaperPlane,
-  faPercent,
-  faTags,
-} from '@fortawesome/free-solid-svg-icons';
+import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next-nprogress-bar';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { formatEther } from 'viem';
-import { ImageWithFallback } from '../imagewithfallback';
-import { JazzIcon } from '../jazzicon';
-import ButtonTertiary from '../button/buttonTertiary';
 import ButtonSecondary from '../button/buttonSecondary';
+import { JazzIcon } from '../jazzicon';
 
 export const ActivityItemDetail = ({ event }) => {
   const router = useRouter();
@@ -46,7 +33,7 @@ export const ActivityItemDetail = ({ event }) => {
   };
   return (
     <div className="flex w-full items-center justify-between gap-2 rounded-lg bg-white p-3 hover:bg-primary-50 dark:bg-neutral-800 dark:hover:bg-neutral-700">
-      <div className="w-full flex gap-2">
+      <div className="flex w-full gap-2">
         <div className="w-fit">
           {event?.nft?.imageUri ? (
             <button
@@ -99,7 +86,7 @@ export const ActivityItemDetail = ({ event }) => {
         </div>
       </div>
       <ButtonSecondary
-      className="!w-[40px] !h-[40px] !p-0"
+        className="!h-[40px] !w-[40px] !p-0"
         onClick={() =>
           window
             .open(

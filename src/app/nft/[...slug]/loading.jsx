@@ -1,19 +1,3 @@
-import HelaIcon from '@/assets/icon/hela';
-import {
-  faCircleCheck,
-  faEllipsisVertical,
-  faEye,
-  faFingerprint,
-  faFlag,
-  faHeart,
-  faList,
-  faPenToSquare,
-  faRotate,
-  faShareFromSquare,
-  faUpRightFromSquare,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 export default function Loading() {
   return (
     <div className="container m-auto mb-5 p-3">
@@ -131,10 +115,7 @@ export default function Loading() {
                     <div>
                       <h3 className="text-lg">Current Owner</h3>
                       <div className="flex w-fit items-center justify-center gap-2">
-                        <img
-                          className="h-7 w-7 rounded-2xl"
-                          src="https://via.placeholder.com/48x48"
-                        />
+                        <div className="h-7 w-7 rounded-2xl" />
                         <div className="font-medium leading-none text-neutral-900">
                           Ron31
                         </div>

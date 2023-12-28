@@ -1,26 +1,24 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import { useSidebar } from '../../hooks/SidebarContext';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import HelaIcon from '@/assets/icon/hela';
+import { useAuth } from '@/hooks/AuthContext';
+import { truncateAddress } from '@/utils/truncateAddress';
 import {
   faChevronDown,
   faChevronUp,
   faClose,
   faCopy,
   faPlugCircleXmark,
-  faUser,
   faUserAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import { faEthereum } from '@fortawesome/free-brands-svg-icons';
-import { useRouter } from 'next-nprogress-bar';
-import { useAccount, useBalance, useDisconnect, useNetwork } from 'wagmi';
-import { useAuth } from '@/hooks/AuthContext';
-import { truncateAddress } from '@/utils/truncateAddress';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useWeb3Modal } from '@web3modal/react';
-import HelaIcon from '@/assets/icon/hela';
-import ModalCreateCollection from '../modal/createCollections';
+import { useRouter } from 'next-nprogress-bar';
+import { useEffect, useRef, useState } from 'react';
+import { useAccount, useBalance, useDisconnect, useNetwork } from 'wagmi';
+import { useSidebar } from '../../hooks/SidebarContext';
 import ButtonPrimary from '../button/buttonPrimary';
 import ButtonSecondary from '../button/buttonSecondary';
+import ModalCreateCollection from '../modal/createCollections';
 
 const SidebarAdmin = () => {
   const { isSidebarOpen, closeSidebar } = useSidebar();

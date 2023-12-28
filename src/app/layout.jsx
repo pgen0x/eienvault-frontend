@@ -1,14 +1,13 @@
 import Navbar from '@/components/navbar';
 import './globals.css';
 // import { Inter } from 'next/font/google';
-import { Providers } from './provider';
 import 'react-slideshow-image/dist/styles.css';
-import 'swiper/css';
-import 'swiper/css/autoplay';
-import Footer from '../components/footer/main';
-import Sidebar from '../components/sidebar';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
+import 'swiper/css';
+import 'swiper/css/autoplay';
+import Sidebar from '../components/sidebar';
+import { Providers } from './provider';
 
 // const inter = Inter({ subsets: ['latin'] });
 
@@ -20,13 +19,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="bg-gray-100 dark:bg-neutral-950 min-h-screen">
+      <body className="min-h-screen bg-gray-100 dark:bg-neutral-950">
         <Providers>
           <Navbar />
           <Sidebar />
-          <main className="relative">
-            {children}
-          </main>
+          <main className="relative">{children}</main>
           <ToastContainer
             position="top-right"
             autoClose={5000}

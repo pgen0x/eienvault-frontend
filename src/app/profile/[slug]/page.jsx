@@ -1,56 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import ButtonPrimary from '@/components/button/buttonPrimary';
+import ButtonSecondary from '@/components/button/buttonSecondary';
 import Footer from '@/components/footer/main';
-import { Listbox } from '@headlessui/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCheck,
-  faChevronDown,
-  faChevronUp,
-  faCircleCheck,
-  faCopy,
-  faEllipsis,
-  faGlobe,
-  faGrip,
-  faGripVertical,
-  faPenToSquare,
-  faPlus,
-  faSearch,
-  faShare,
-  faSliders,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
-import Ethereum from '@/assets/icon/ethereum';
-import { useEffect } from 'react';
-import { faImage } from '@fortawesome/free-regular-svg-icons';
-import { useRouter } from 'next-nprogress-bar';
-import { toast } from 'react-toastify';
-import axios from 'axios';
-import { useAuth } from '@/hooks/AuthContext';
-import { truncateAddress } from '@/utils/truncateAddress';
-import { useAccount, useNetwork } from 'wagmi';
-import { notFound, useParams, usePathname, useSearchParams } from 'next/navigation';
-import { formatEther, isAddress } from 'viem';
 import { ImageWithFallback } from '@/components/imagewithfallback';
+import { JazzIcon } from '@/components/jazzicon';
 import ModalCreateCollection from '@/components/modal/createCollections';
-import Image from 'next/image';
-import NotFound from '@/app/not-found';
-import ModalBid from '@/components/modal/bid';
-import ModalBuy from '@/components/modal/buy';
-import ModalPutOnSale from '@/components/modal/putOnSale';
+import ModalFollow from '@/components/modal/follow';
+import ModalReportNft from '@/components/modal/reportNft';
+import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
 import ModalUploadProfileCover from '@/components/modal/uploadProfileCover';
 import ModalUploadProfileLogo from '@/components/modal/uploadProfileLogo';
-import Owned from './owned';
-import Onsale from './onsale';
-import Sold from './sold';
-import Liked from './liked';
-import ModalShareSocialMedia from '@/components/modal/shareSocialMedia';
-import ModalReportNft from '@/components/modal/reportNft';
-import { JazzIcon } from '@/components/jazzicon';
-import { useLocation } from 'react-use';
-import ButtonSecondary from '@/components/button/buttonSecondary';
-import ButtonPrimary from '@/components/button/buttonPrimary';
+import SwitchGrid from '@/components/switch/grid';
+import { useAuth } from '@/hooks/AuthContext';
+import { truncateAddress } from '@/utils/truncateAddress';
 import {
   faDiscord,
   faInstagram,
@@ -58,10 +21,32 @@ import {
   faTelegram,
   faTwitter,
 } from '@fortawesome/free-brands-svg-icons';
-import ModalFollow from '@/components/modal/follow';
+import {
+  faCheck,
+  faChevronDown,
+  faChevronUp,
+  faCircleCheck,
+  faCopy,
+  faGlobe,
+  faPenToSquare,
+  faSearch,
+  faShare,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useWeb3Modal } from '@web3modal/react';
-import SwitchGrid from '@/components/switch/grid';
-import { useCopyToClipboard } from 'react-use';
+import axios from 'axios';
+import { useRouter } from 'next-nprogress-bar';
+import Image from 'next/image';
+import { notFound, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { useCopyToClipboard, useLocation } from 'react-use';
+import { formatEther } from 'viem';
+import { useAccount, useNetwork } from 'wagmi';
+import Liked from './liked';
+import Onsale from './onsale';
+import Owned from './owned';
+import Sold from './sold';
 
 const servers = [
   'All Mainnet',

@@ -1,30 +1,13 @@
-import Ethereum from '@/assets/icon/ethereum';
-import HelaIcon from '@/assets/icon/hela';
-import {
-  faCheckCircle,
-  faCircleXmark,
-  faHourglass,
-  faMoneyBill,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useEffect, useState } from 'react';
-import { formatEther, parseEther, zeroAddress } from 'viem';
-import {
-  useAccount,
-  useBalance,
-  useNetwork,
-  usePublicClient,
-  useWaitForTransaction,
-  useWalletClient,
-} from 'wagmi';
-import { useForm } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message';
-import { useWeb3Modal } from '@web3modal/react';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
 import { roles } from '@/utils/listRoles';
+import { Dialog, Transition } from '@headlessui/react';
+import { ErrorMessage } from '@hookform/error-message';
+import { useWeb3Modal } from '@web3modal/react';
+import { Fragment, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 
 export default function ModalRescueERC20({
   isOpenModal,
@@ -79,7 +62,6 @@ export default function ModalRescueERC20({
       } else {
         toast.error('Something went wrong');
       }
-      
     }
   };
 
@@ -103,7 +85,6 @@ export default function ModalRescueERC20({
     } catch (error) {
       setIsSubmit(false);
       toast.error('Error hasRole');
-      
     }
   };
 

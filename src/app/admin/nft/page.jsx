@@ -1,10 +1,8 @@
 'use client';
 import Table, { Td } from '@/components/admin/table/table';
-import AdminTable from '@/components/admin/table/table';
 import ButtonPrimary from '@/components/button/buttonPrimary';
 import ButtonSecondary from '@/components/button/buttonSecondary';
 import { truncateAddress } from '@/utils/truncateAddress';
-import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import {
   faAnglesLeft,
   faAnglesRight,
@@ -14,11 +12,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { toast } from 'react-toastify';
 import { useCopyToClipboard } from 'react-use';
-import { formatEther } from 'viem';
 
 const AdminUserPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -28,17 +25,15 @@ const AdminUserPage = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [totalPage, setTotalPage] = useState(1);
-  const [copyButtonStatus, setCopyButtonStatus] = useState([""]);
+  const [copyButtonStatus, setCopyButtonStatus] = useState(['']);
   const [_, copyToClipboard] = useCopyToClipboard();
 
   function handleCopyToClipboard(address, key) {
     copyToClipboard(address);
     setCopyButtonStatus((oldCopy) => [...oldCopy, key]);
-    
+
     setTimeout(() => {
-      setCopyButtonStatus((oldCopy) =>
-        oldCopy.filter((item) => item != key),
-      );
+      setCopyButtonStatus((oldCopy) => oldCopy.filter((item) => item != key));
     }, 2500);
   }
   // Sample data for pagination
@@ -138,12 +133,21 @@ const AdminUserPage = () => {
             return (
               <tr className="text-center" key={index}>
                 <Td firstElement={true}>
-                  <span>{truncateAddress(item?.collectionAddress)} #${item?.tokenId}</span>
+                  <span>
+                    {truncateAddress(item?.collectionAddress)} #${item?.tokenId}
+                  </span>
                   <ButtonSecondary
                     className="h-6 !w-6 !p-0 text-xs"
-                    onClick={() => handleCopyToClipboard(item?.collectionAddress, `token${item?.collectionAddress}#${item?.tokenId}`)}
+                    onClick={() =>
+                      handleCopyToClipboard(
+                        item?.collectionAddress,
+                        `token${item?.collectionAddress}#${item?.tokenId}`,
+                      )
+                    }
                   >
-                    {copyButtonStatus.includes(`token${item?.collectionAddress}#${item?.tokenId}`) ? (
+                    {copyButtonStatus.includes(
+                      `token${item?.collectionAddress}#${item?.tokenId}`,
+                    ) ? (
                       <FontAwesomeIcon icon={faCheck} fontSize={16} />
                     ) : (
                       <FontAwesomeIcon icon={faCopy} fontSize={16} />
@@ -155,9 +159,16 @@ const AdminUserPage = () => {
                   <span>{truncateAddress(item?.owner)}</span>
                   <ButtonSecondary
                     className="h-6 !w-6 !p-0 text-xs"
-                    onClick={() => handleCopyToClipboard(item?.owner, `owner${item?.collectionAddress}#${item?.tokenId}`)}
+                    onClick={() =>
+                      handleCopyToClipboard(
+                        item?.owner,
+                        `owner${item?.collectionAddress}#${item?.tokenId}`,
+                      )
+                    }
                   >
-                    {copyButtonStatus.includes(`owner${item?.collectionAddress}#${item?.tokenId}`) ? (
+                    {copyButtonStatus.includes(
+                      `owner${item?.collectionAddress}#${item?.tokenId}`,
+                    ) ? (
                       <FontAwesomeIcon icon={faCheck} fontSize={16} />
                     ) : (
                       <FontAwesomeIcon icon={faCopy} fontSize={16} />

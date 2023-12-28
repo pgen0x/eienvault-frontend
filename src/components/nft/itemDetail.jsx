@@ -321,8 +321,6 @@ const Nft = ({
     window.open(url, '_blank');
   };
 
-  useEffect(() => {}, [endDate, releaseDate]);
-
   return (
     <div className="group h-[542px] w-full">
       <Suspense
@@ -798,7 +796,7 @@ const Nft = ({
                         {collection?.floorPrice
                           ? formatEther(collection.floorPrice)
                           : '0.00'}{' '}
-                        {balanceToken?.symbol}
+                        {collection?.Chain?.symbol}
                       </p>
                     </>
                   )}

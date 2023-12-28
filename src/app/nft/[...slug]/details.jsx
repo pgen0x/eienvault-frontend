@@ -1056,15 +1056,25 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                               {balanceToken?.symbol}
                             </h4>
                             <h5>
-                              $
                               {dataNFTs?.itemDetails
                                 ? selectedAddress == zeroAddress
-                                  ? formatEther(dataNFTs?.itemDetails?.price)
-                                  : formatUnits(
-                                      dataNFTs?.itemDetails?.price,
-                                      balanceToken?.decimals,
+                                  ? '$'
+                                  : ''
+                                : '$'}
+                              {dataNFTs?.itemDetails
+                                ? selectedAddress == zeroAddress
+                                  ? formatEther(
+                                      dataNFTs?.itemDetails?.price || 0,
                                     )
-                                : formatEther(dataNFTs?.collectionData.price)}
+                                  : formatUnits(
+                                      dataNFTs?.itemDetails?.price || 0,
+                                      balanceToken?.decimals,
+                                    ) +
+                                    ' ' +
+                                    balanceToken?.symbol
+                                : formatEther(
+                                    dataNFTs?.collectionData?.floorPrice || 0,
+                                  )}
                             </h5>
                           </div>
                           <div className="w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-5 dark:bg-neutral-800">
@@ -1102,16 +1112,37 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                             <h3 className="md:text-lg">Floor Price</h3>
                             <h4 className="text-sm font-bold md:text-lg">
                               {dataNFTs?.itemDetails
-                                ? formatEther(dataNFTs?.itemDetails?.price || 0)
+                                ? selectedAddress == zeroAddress
+                                  ? formatEther(
+                                      dataNFTs?.itemDetails?.price || 0,
+                                    )
+                                  : formatUnits(
+                                      dataNFTs?.itemDetails?.price || 0,
+                                      balanceToken?.decimals,
+                                    )
                                 : formatEther(
                                     dataNFTs?.collectionData?.floorPrice || 0,
                                   )}{' '}
                               {balanceToken?.symbol}
                             </h4>
                             <h5>
-                              $
                               {dataNFTs?.itemDetails
-                                ? formatEther(dataNFTs?.itemDetails?.price || 0)
+                                ? selectedAddress == zeroAddress
+                                  ? '$'
+                                  : ''
+                                : '$'}
+
+                              {dataNFTs?.itemDetails
+                                ? selectedAddress == zeroAddress
+                                  ? formatEther(
+                                      dataNFTs?.itemDetails?.price || 0,
+                                    )
+                                  : formatUnits(
+                                      dataNFTs?.itemDetails?.price || 0,
+                                      balanceToken?.decimals,
+                                    ) +
+                                    ' ' +
+                                    balanceToken?.symbol
                                 : formatEther(
                                     dataNFTs?.collectionData?.floorPrice || 0,
                                   )}
@@ -1131,14 +1162,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                         dataNFTs?.itemDetails?.price || 0,
                                         balanceToken?.decimals,
                                       )
-                                  : selectedAddress == zeroAddress
-                                  ? formatEther(
-                                      dataNFTs?.collectionData?.floorPrice || 0,
-                                    )
-                                  : formatUnits(
-                                      dataNFTs?.collectionData?.floorPrice || 0,
-                                      balanceToken?.decimals,
-                                    )}{' '}
+                                  : ' - '}{' '}
                                 {balanceToken?.symbol}
                               </span>
                             </h4>

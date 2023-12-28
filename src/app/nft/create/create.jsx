@@ -10,6 +10,7 @@ import ModalUploadDFile from '@/components/modal/uploadFile';
 import { useAuth } from '@/hooks/AuthContext';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
 import { NftContract } from '@/hooks/eth/Artifacts/NFT_Abi';
+import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
 import { truncateAddress } from '@/utils/truncateAddress';
 import {
   faBan,
@@ -34,9 +35,16 @@ import moment from 'moment';
 import Image from 'next/legacy/image';
 import { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { formatEther, hexToNumber, parseEther, zeroAddress } from 'viem';
+import {
+  formatEther,
+  hexToNumber,
+  parseEther,
+  parseUnits,
+  zeroAddress,
+} from 'viem';
 import {
   useAccount,
+  useBalance,
   useNetwork,
   usePublicClient,
   useWaitForTransaction,
@@ -51,22 +59,17 @@ export default function Create({ chains }) {
   const { data: walletClient } = useWalletClient();
   const publicClient = usePublicClient();
   const [selectedChain, setSelectedChain] = useState({
-    chainId:
-      chain?.id || process.env.NEXT_PUBLIC_NODE_ENV === 'production'
-        ? 8668
-        : 666888,
+    chainId: chain?.id,
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
   const [selectedBlockchain, setSelectedBlockchain] = useState({
-    chainId:
-      chain?.id || process.env.NEXT_PUBLIC_NODE_ENV === 'production'
-        ? 8668
-        : 666888,
+    chainId: chain?.id,
     symbol: chain?.nativeCurrency.symbol || 'HLUSD',
   });
   const [inputFields, setInputFields] = useState([
     { trait_type: '', value: '' },
   ]);
+
   const handleInputChange = (index, e) => {
     const { name, value } = e.target;
     const updatedInputFields = [...inputFields];
@@ -136,6 +139,7 @@ export default function Create({ chains }) {
     approve: false,
     putonsale: false,
   });
+
   const {
     register,
     handleSubmit,
@@ -151,6 +155,70 @@ export default function Create({ chains }) {
   const royalties = watch('royalties');
   const description = watch('description');
   const name = watch('name');
+
+  const convertToken = {
+    HLUSD: zeroAddress,
+  };
+
+  const [convertAddress, setConvertAddress] = useState();
+  const [selectedToken, setSelectedToken] = useState('HLUSD');
+  const [listConvertToken, setListConvertToken] = useState(convertToken);
+  const [selectedAddress, setSelectedAddress] = useState(0);
+
+  const { data: balanceToken } = useBalance(
+    selectedAddress == zeroAddress
+      ? {
+          address: address,
+          watch: true,
+        }
+      : {
+          address: address,
+          token: selectedAddress,
+          chainId:
+            process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
+          watch: true,
+        },
+  );
+
+  const getWhitelistToken = async () => {
+    const whitelistToken = await publicClient.readContract({
+      ...vaultABI,
+      functionName: 'getWhitelistedTokens',
+    });
+
+    whitelistToken.map((token) => {
+      setConvertAddress(token);
+    });
+
+    return whitelistToken;
+  };
+
+  const { data: symbolToken } = useBalance({
+    address: address,
+    token: convertAddress,
+    watch: true,
+    onSuccess: (e) => {
+      // setListConvertToken((oldListConvertToken) => {
+      //   oldListConvertToken[e?.symbol] = convertAddress;
+
+      //   return oldListConvertToken;
+      // })
+
+      if (convertAddress != undefined) {
+        setListConvertToken((oldListConvertToken) => ({
+          ...oldListConvertToken,
+          [e?.symbol]: convertAddress,
+        }));
+      }
+    },
+  });
+
+  useEffect(() => {
+    const convert = listConvertToken[selectedToken]
+      ? listConvertToken[selectedToken]
+      : selectedToken;
+    setSelectedAddress(convert);
+  }, [selectedToken]);
 
   useEffect(() => {
     // Calculate the date 1 day from now using Moment.js
@@ -396,22 +464,24 @@ export default function Create({ chains }) {
   };
 
   const putOnSale = async () => {
-    const listingPrice = await getListingPrice();
-    const releaseTime =
-      selectedOptionMarket === 'fixed'
-        ? moment().unix()
-        : moment(customValueReleaseDate).unix();
-    const isAuction = selectedOptionMarket === 'fixed' ? false : true;
-    const parsePrice = parseEther(price);
-
     try {
+      const listingPrice = await getListingPrice();
+      const releaseTime =
+        selectedOptionMarket === 'fixed'
+          ? moment().unix()
+          : moment(customValueReleaseDate).unix();
+      const isAuction = selectedOptionMarket === 'fixed' ? false : true;
+      const parsePrice =
+        selectedAddress == zeroAddress
+          ? parseEther(price)
+          : parseUnits(price, balanceToken?.decimals);
       const hash = await walletClient.writeContract({
         ...marketplaceABI,
         functionName: 'list',
         args: [
           isAuction,
           selectedOptionCollection,
-          zeroAddress,
+          selectedAddress,
           tokenId,
           parsePrice,
           releaseTime,
@@ -754,6 +824,19 @@ export default function Create({ chains }) {
     fetchData();
   }, [putOnSaleHash, dataPutonsale, isErrorPutsale, isLoadingPutonsale]);
 
+  const chainId =
+    process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888;
+  useEffect(() => {
+    const fetchData = async () => {
+      if (chainId === chain?.id) {
+        await getListingPrice();
+        await getWhitelistToken();
+      }
+    };
+
+    fetchData();
+  }, [chainId, chain]);
+
   return (
     <>
       <div className="my-5 flex w-full flex-col justify-center gap-5 p-4 text-gray-900 dark:text-white sm:flex-col md:flex-row lg:w-10/12 lg:flex-row xl:flex-row 2xl:flex-row">
@@ -1082,6 +1165,20 @@ export default function Create({ chains }) {
                 <label className="mt-2 font-semibold">
                   <span className="text-semantic-red-500">*</span> Price
                 </label>
+                <p>Select the chain for the payment method on marketplace</p>
+                <div className="mb-2 mt-2 w-full">
+                  <select
+                    className="relative w-full rounded-full border-0 bg-white py-2 pl-3 pr-10 text-left text-gray-900 focus:outline-none focus:ring-0 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800 dark:hover:text-gray-300 sm:text-sm"
+                    onChange={(event) => setSelectedToken(event.target.value)}
+                    value={selectedToken}
+                  >
+                    {Object.keys(listConvertToken).map((token, key) => (
+                      <option key={key} value={token} className="rounded-md">
+                        {token}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <p>Enter price to allow users instantly purchase your NFT</p>
                 <div className="mt-2 flex w-full items-center rounded-full border-0 bg-white dark:bg-neutral-900">
                   <input
@@ -1096,8 +1193,12 @@ export default function Create({ chains }) {
                         parseFloat(value) > 0 || 'Price must be greater than 0',
                     })}
                   />
-                  <span className="pr-3 text-gray-500">
-                    <HelaIcon className="h-6 w-6" />
+                  <span className="pr-3 text-gray-500 dark:text-white">
+                    {selectedToken === 'HLUSD' ? (
+                      <HelaIcon className="h-6 w-6" />
+                    ) : (
+                      selectedToken
+                    )}
                   </span>
                 </div>
                 <div className="mt-1 text-sm font-semibold text-primary-500">
@@ -1115,7 +1216,7 @@ export default function Create({ chains }) {
                 <div className="flex w-full justify-between">
                   <span>Price</span>
                   <span className="font-semibold">
-                    {watch('price')} {selectedChain.symbol}
+                    {watch('price')} {selectedToken}
                   </span>
                 </div>
 
@@ -1126,7 +1227,7 @@ export default function Create({ chains }) {
                 <div className="flex w-full justify-between">
                   <span>You will receive</span>
                   <span className="font-semibold">
-                    {watch('price')} {selectedChain.symbol}
+                    {watch('price')} {selectedToken}
                   </span>
                 </div>
               </div>
@@ -1254,7 +1355,7 @@ export default function Create({ chains }) {
                               height={54}
                               width={54}
                               className="rounded-full"
-                              alt={collection.name}
+                              alt=""
                               address={collection.tokenAddress}
                               diameter={54}
                             />
@@ -1430,13 +1531,7 @@ export default function Create({ chains }) {
                 placeholder="blur"
                 blurDataURL={`https://fakeimg.pl/600x600`}
                 src={URL.createObjectURL(getValues('file')[0])}
-                alt={
-                  collection?.name
-                    ? collection?.name
-                    : nft.collectionAddress
-                    ? nft.collectionAddress
-                    : ''
-                }
+                alt=""
               />
             ) : (
               <div className="z-10 flex h-[290px] w-full items-center justify-center rounded-2xl bg-white object-cover duration-300 ease-in-out group-hover:h-[250px] group-hover:transition-all dark:bg-zinc-900">

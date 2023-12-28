@@ -89,7 +89,7 @@ export default function Home() {
 
       if (!res.ok) {
         setErrorCollections(true);
-        
+
         throw new Error('Network response was not ok');
       }
 
@@ -97,7 +97,6 @@ export default function Home() {
       setDataCollections(responseData.collections);
     } catch (error) {
       setErrorCollections(true);
-      
     } finally {
       setIsLoadingCollections(false);
       setErrorCollections(false);
@@ -118,7 +117,7 @@ export default function Home() {
 
       if (!res.ok) {
         setErrorActivities(true);
-        
+
         throw new Error('Network response was not ok');
       }
 
@@ -126,7 +125,6 @@ export default function Home() {
       setDataActivities(responseData.nfts);
     } catch (error) {
       setErrorActivities(true);
-      
     } finally {
       setIsLoadingActivities(false);
       setErrorActivities(false);
@@ -147,7 +145,7 @@ export default function Home() {
 
       if (!res.ok) {
         setErrorUpcoming(true);
-        
+
         throw new Error('Network response was not ok');
       }
 
@@ -161,7 +159,6 @@ export default function Home() {
       setDataUpcoming(filteredData);
     } catch (error) {
       setErrorUpcoming(true);
-      
     } finally {
       setIsLoadingUpcoming(false);
       setErrorUpcoming(false);
@@ -182,7 +179,7 @@ export default function Home() {
 
       if (!res.ok) {
         setIsLoadingDiscover(true);
-        
+
         throw new Error('Network response was not ok');
       }
 
@@ -192,7 +189,6 @@ export default function Home() {
       setDataDiscover(filteredData);
     } catch (error) {
       setErrorDiscover(true);
-      
     } finally {
       setIsLoadingDiscover(false);
       setErrorDiscover(false);
@@ -213,7 +209,7 @@ export default function Home() {
 
       if (!res.ok) {
         setErrorUsers(true);
-        
+
         throw new Error('Network response was not ok');
       }
 
@@ -221,7 +217,6 @@ export default function Home() {
       setDataUsers(responseData.users);
     } catch (error) {
       setErrorUsers(true);
-      
     } finally {
       setIsLoadingUsers(false);
       setErrorUsers(false);
@@ -242,15 +237,13 @@ export default function Home() {
 
   const refreshDataActivities = () => {
     setTimeout(async () => {
-      
       setIsLoadingActivities(true);
       setDataDiscover([]);
       await getNfts();
-    }, 500)
+    }, 500);
   };
 
   const refreshDataDiscover = async () => {
-    
     setIsLoadingDiscover(true);
     setDataActivities([]);
     await getDiscover();
@@ -322,7 +315,10 @@ export default function Home() {
                   Eien vault is a marketplace for nft, a one of a kind digital
                   asset that you can truly own.
                 </p>
-                <ButtonPrimary className="mt-5 !w-fit">
+                <ButtonPrimary
+                  className="mt-5 !w-fit"
+                  onClick={() => router.push('/nft')}
+                >
                   Discover more
                 </ButtonPrimary>
               </div>

@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { parseEther, parseUnits, zeroAddress } from 'viem';
 
@@ -28,8 +28,13 @@ export default function ModalWithdrawFee({
     isError: false,
     message: '',
   });
-  const [copyButtonStatus, setCopyButtonStatus] = useState(false);
-  const [_, copyToClipboard] = useCopyToClipboard();
+  const [whitelistedTokens, setWhitelistedTokens] = useState([
+    {
+      address: zeroAddress,
+      symbol: 'HLUSD',
+    },
+  ]);
+  const [selectedToken, setSelectedToken] = useState(zeroAddress);
 
   const { open } = useWeb3Modal();
 
@@ -59,18 +64,18 @@ export default function ModalWithdrawFee({
       const isAdmin = await checkRoles('DEFAULT_ADMIN_ROLE');
       if (isAdmin) {
         let amount;
-        if (data.tokenAddress === zeroAddress) {
+
+        if (selectedToken === zeroAddress) {
           amount = parseEther(data.amount);
         } else {
-          const decimal = await getDecimals(data.tokenAddress);
-
+          const decimal = await getDecimals(selectedToken);
           amount = parseUnits(data.amount, decimal);
         }
         await walletClient.writeContract({
           abi: vaultABI.abi,
           address: vaultABI.address,
           functionName: 'withdrawFeeCommission',
-          args: [amount, data.tokenAddress],
+          args: [amount, selectedToken],
           account: address,
         });
       } else {
@@ -121,13 +126,60 @@ export default function ModalWithdrawFee({
     } catch (error) {}
   };
 
-  function handleCopyToClipboard(address) {
-    copyToClipboard(address);
-    setCopyButtonStatus(true);
-    setTimeout(() => {
-      setCopyButtonStatus(copyButtonStatus);
-    }, 2500);
-  }
+  const getSymbol = async (tokenAddress) => {
+    try {
+      const decimal = await publicClient.readContract({
+        abi: erc20ABI,
+        address: tokenAddress,
+        functionName: 'symbol',
+        args: [],
+        account: address,
+      });
+      return decimal;
+    } catch (error) {}
+  };
+
+  const getWhitelistToken = async () => {
+    try {
+      const whitelistTokens = await publicClient.readContract({
+        ...vaultABI,
+        functionName: 'getWhitelistedTokens',
+      });
+
+      const tokensWithSymbols = await Promise.all(
+        whitelistTokens.map(async (tokenAddress) => {
+          const symbol = await getSymbol(tokenAddress);
+          return { address: tokenAddress, symbol };
+        }),
+      );
+
+      setWhitelistedTokens((prevTokens) => [
+        ...prevTokens,
+        ...tokensWithSymbols,
+      ]);
+    } catch (error) {
+      // Handle error
+      console.error('Error fetching whitelisted tokens:', error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await getWhitelistToken();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (isOpenModal) {
+      reset();
+    }
+  }, [isOpenModal]);
 
   return (
     <>
@@ -171,33 +223,9 @@ export default function ModalWithdrawFee({
                           <form>
                             <div className="w-full">
                               <div className="mt-2 w-full">
-                                <p>
-                                  For HLUSD withdrawals, kindly specify the
-                                  withdrawal destination as the zero address
-                                </p>
-                                {zeroAddress}
-                                <ButtonSecondary
-                                  className="!h-8 !w-8 !p-0"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    handleCopyToClipboard(zeroAddress);
-                                  }}
-                                >
-                                  {copyButtonStatus ? (
-                                    <FontAwesomeIcon
-                                      icon={faCheck}
-                                      fontSize={16}
-                                    />
-                                  ) : (
-                                    <FontAwesomeIcon
-                                      icon={faCopy}
-                                      fontSize={16}
-                                    />
-                                  )}
-                                </ButtonSecondary>
-                                <p className="pt-4">
-                                  For ERC-20 withdrawals, please provide the
-                                  token address.
+                                <p className="pt-2">
+                                  Plase input amount and select token ERC-20 or
+                                  HLUSD
                                 </p>
                               </div>
                               <div className="mt-4 w-full">
@@ -231,20 +259,23 @@ export default function ModalWithdrawFee({
                                 </label>
 
                                 <div className="mt-2 flex w-full items-center rounded-full border border-gray-200 bg-white dark:text-gray-900">
-                                  <input
-                                    type="text"
-                                    className="w-full border-0 bg-transparent focus:outline-none focus:ring-0"
-                                    placeholder={zeroAddress}
-                                    {...register('tokenAddress', {
-                                      required: 'Token address is required.',
-                                    })}
-                                  />
-                                </div>
-                                <div className="mt-1 text-sm font-semibold text-primary-500">
-                                  <ErrorMessage
-                                    errors={errors}
-                                    name="tokenAddress"
-                                  />
+                                  <select
+                                    className="relative w-full rounded-full border-0 bg-white py-2 pl-3 pr-10 text-left text-gray-900 focus:outline-none focus:ring-0 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800 dark:hover:text-gray-300 sm:text-sm"
+                                    onChange={(event) =>
+                                      setSelectedToken(event.target.value)
+                                    }
+                                    value={selectedToken}
+                                  >
+                                    {whitelistedTokens.map((token, key) => (
+                                      <option
+                                        key={key}
+                                        value={token.address} // Assuming 'address' is a unique identifier for each token
+                                        className="rounded-md"
+                                      >
+                                        {token.symbol}
+                                      </option>
+                                    ))}
+                                  </select>
                                 </div>
                               </div>
                             </div>

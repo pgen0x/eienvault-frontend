@@ -25,6 +25,7 @@ import RelatedNFTs, {
 } from '@/components/slideshow/relatednfts';
 import { useAuth } from '@/hooks/AuthContext';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { vaultABI } from '@/hooks/eth/Artifacts/Vault_ABI';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { truncateAddress4char } from '@/utils/truncateAddress4char';
 import {
@@ -50,7 +51,7 @@ import moment from 'moment';
 import { useRouter } from 'next-nprogress-bar';
 import Image from 'next/legacy/image';
 import { notFound } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { formatEther, formatUnits, isAddress, zeroAddress } from 'viem';
 import { useAccount, useToken, useWalletClient } from 'wagmi';
@@ -72,7 +73,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
   const [countLikes, setCountLikes] = useState();
   const [dataRelatedNFTs, setDataRelatedNFTs] = useState([]);
   const [isLoadingRelatedNFTs, setIsLoadingRelatedNFTs] = useState(true);
-  const [activeTab, setActiveTab] = useState('history');
+  const [activeTab, setActiveTab] = useState('overview');
 
   const [auctionData, setAcutionData] = useState({});
   const [buyData, setBuyData] = useState({});
@@ -442,7 +443,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
   const refreshData = async () => {
     router.refresh();
   };
-
+  console.log(dataNFTs);
   return (
     <>
       {/* <section className="hidden sm:hidden md:block lg:block xl:block 2xl:block">
@@ -822,17 +823,7 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                                 className="h-full w-full rounded-2xl "
                                 width={28}
                                 height={28}
-                                alt={
-                                  dataNFTs?.collectionData?.User?.username ||
-                                  truncateAddress4char(
-                                    dataNFTs?.collectionData?.User
-                                      ?.walletAddress,
-                                  ) ||
-                                  truncateAddress4char(
-                                    dataNFTs?.collectionData?.User
-                                      ?.walletAddress,
-                                  )
-                                }
+                                alt={dataNFTs?.collectionData?.name || ''}
                                 diameter={28}
                                 address={
                                   dataNFTs?.collectionData?.User
@@ -845,7 +836,8 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                             <JazzIcon
                               diameter={28}
                               seed={
-                                dataNFTs?.collectionData?.User?.walletAddress
+                                dataNFTs?.collectionData?.User?.walletAddress ||
+                                dataNFTs?.collectionData?.userAddress
                               }
                               useGradientFallback={true}
                               className="h-[28px] w-[280px] rounded-full"
@@ -892,7 +884,8 @@ export default function NFTDetails({ collectionAddress, tokenId }) {
                               truncateAddress4char(
                                 dataNFTs?.ownerData?.walletAddress,
                               ) ||
-                              truncateAddress4char(dataNFTs?.owner)
+                              truncateAddress4char(dataNFTs?.owner) ||
+                              ''
                             }
                             diameter={28}
                             address={
@@ -1773,6 +1766,14 @@ const Collateral = ({ dataNFTs }) => {
 
 const Overview = ({ dataOverview, onSeeAllClick }) => {
   const limitedOffers = dataOverview.itemDetails?.listOffers?.slice(0, 3);
+  const { data: token } = useToken(
+    dataOverview?.itemDetails?.paidWith !== zeroAddress && {
+      chainId:
+        process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
+      enabled: true,
+      address: dataOverview?.itemDetails?.paidWith,
+    },
+  );
   return (
     <div className="rounded-lg bg-gray-50 p-3 dark:bg-neutral-900 dark:text-white">
       <h1 className="text-xl font-semibold">Description</h1>
@@ -1811,17 +1812,23 @@ const Overview = ({ dataOverview, onSeeAllClick }) => {
                             )
                           }
                           diameter={32}
-                          address={offer?.userDetails?.walletAddress}
+                          address={offer?.address}
                           src={`${process.env.NEXT_PUBLIC_CDN_URL}/${offer?.userDetails?.logo}`}
                         />
                       </div>
                       <div className="inline-flex cursor-pointer items-center justify-center">
                         {offer?.userDetails?.username ||
-                          truncateAddress(offer?.userDetails?.walletAddress)}
+                          truncateAddress(offer?.userDetails?.walletAddress) ||
+                          truncateAddress(offer?.address)}
                       </div>
                       <div className="justify-start">
-                        {'- '}Bid At {formatEther(offer?.value)}{' '}
-                        {dataOverview?.collectionData.Chain.symbol}
+                        {'- '}Bid At{' '}
+                        {dataOverview.itemDetails.paidWith !== zeroAddress
+                          ? formatUnits(offer?.value, token.decimals)
+                          : formatEther(offer?.value)}{' '}
+                        {dataOverview.itemDetails.paidWith !== zeroAddress
+                          ? token.symbol
+                          : dataOverview?.collectionData.Chain.symbol}
                       </div>
                     </div>
                   </div>
@@ -1840,6 +1847,15 @@ const Overview = ({ dataOverview, onSeeAllClick }) => {
 };
 
 const Bids = ({ dataBid }) => {
+  const { data: token } = useToken(
+    dataBid?.itemDetails?.paidWith !== zeroAddress && {
+      chainId:
+        process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888,
+      enabled: true,
+      address: dataBid?.itemDetails?.paidWith,
+    },
+  );
+
   return (
     <div className="flex flex-col gap-3 rounded-lg bg-white p-3 dark:bg-neutral-900">
       {dataBid.itemDetails?.listOffers?.length > 0 ? (
@@ -1872,7 +1888,7 @@ const Bids = ({ dataBid }) => {
                         ) : (
                           <JazzIcon
                             diameter={48}
-                            seed={offer?.userDetails?.walletAddress}
+                            seed={offer?.address}
                             useGradientFallback={true}
                             className="h-[48px] w-[48px] rounded-full"
                           />
@@ -1880,15 +1896,20 @@ const Bids = ({ dataBid }) => {
                       </div>
                       <div className="inline-flex cursor-pointer items-center justify-center ">
                         {offer?.userDetails?.username ||
-                          truncateAddress(offer?.userDetails?.walletAddress)}
+                          truncateAddress(offer?.userDetails?.walletAddress) ||
+                          truncateAddress(offer?.address)}
                       </div>
                     </div>
                   </div>
                   <div className="text-md flex shrink grow basis-0 flex-col items-end justify-end self-end font-medium leading-loose">
                     <div className="justify-start font-normal">Bid At</div>
                     <div className="justify-start">
-                      {formatEther(offer?.value)}{' '}
-                      {dataBid?.collectionData.Chain.symbol}
+                      {dataBid?.itemDetails.paidWith !== zeroAddress
+                        ? formatUnits(offer?.value, token.decimals)
+                        : formatEther(offer?.value)}{' '}
+                      {dataBid?.itemDetails.paidWith !== zeroAddress
+                        ? token.symbol
+                        : dataBid?.collectionData.Chain.symbol}
                     </div>
                   </div>
                 </div>
@@ -2036,7 +2057,12 @@ const History = ({ collection, tokenId, nft }) => {
           <div className="flex gap-1">
             for
             <span className="font-bold text-primary-500">
-              {formatEther(event?.price)} {event?.collectionData?.Chain?.symbol}
+              {event.paidWith && event.paidWith !== zeroAddress
+                ? formatUnits(event?.price, event?.paidWith?.decimal)
+                : formatEther(event?.price)}{' '}
+              {event.paidWith && event.paidWith !== zeroAddress
+                ? event?.paidWith?.symbol
+                : event?.collectionData?.Chain?.symbol}
             </span>
           </div>
         </div>
@@ -2060,7 +2086,12 @@ const History = ({ collection, tokenId, nft }) => {
           </button>
           offered
           <span className="font-bold text-primary-500">
-            {formatEther(event?.offer)} {event?.collectionData?.Chain?.symbol}
+            {event.paidWith && event.paidWith !== zeroAddress
+              ? formatUnits(event?.offer, event?.paidWith?.decimal)
+              : formatEther(event?.offer)}{' '}
+            {event.paidWith && event.paidWith !== zeroAddress
+              ? event?.paidWith?.symbol
+              : event?.collectionData?.Chain?.symbol}
           </span>
         </div>
       );
@@ -2087,7 +2118,12 @@ const History = ({ collection, tokenId, nft }) => {
           <div className="flex gap-1">
             for
             <span className="font-bold text-primary-500">
-              {formatEther(event?.price)} {event?.collectionData?.Chain?.symbol}
+              {event.paidWith && event.paidWith !== zeroAddress
+                ? formatUnits(event?.price, event?.paidWith?.decimal)
+                : formatEther(event?.price)}{' '}
+              {event.paidWith && event.paidWith !== zeroAddress
+                ? event?.paidWith?.symbol
+                : event?.collectionData?.Chain?.symbol}
             </span>
           </div>
           <div className="flex gap-1">
@@ -2149,7 +2185,12 @@ const History = ({ collection, tokenId, nft }) => {
           </button>
           accepted bid
           <span className="font-bold text-primary-500">
-            {formatEther(event?.price)} {event?.collectionData?.Chain?.symbol}
+            {event.paidWith && event.paidWith !== zeroAddress
+              ? formatUnits(event?.price, event?.paidWith?.decimal)
+              : formatEther(event?.price)}{' '}
+            {event.paidWith && event.paidWith !== zeroAddress
+              ? event?.paidWith?.symbol
+              : event?.collectionData?.Chain?.symbol}
           </span>
           <JazzIcon
             diameter={16}
@@ -2172,9 +2213,6 @@ const History = ({ collection, tokenId, nft }) => {
       event: type,
       description: description,
       tokenId: event?.tokenId,
-      price: `${event.price === '' ? 0 : formatEther(event.price)} ${
-        event?.collectionData?.Chain?.symbol
-      }`,
       from: event?.sellerData?.username
         ? event.sellerData.username
         : truncateAddress4char(event.seller),
@@ -2192,68 +2230,48 @@ const History = ({ collection, tokenId, nft }) => {
     };
   };
 
-  useEffect(() => {
-    const getHistoryMintTransfer = async () => {
-      setIsLoading(true);
-      await axios
-        .request({
-          method: 'get',
-          maxBodyLength: Infinity,
-          url: `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/geteventsbycollectionid/${collection?.tokenAddress}/${tokenId}`,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        .then((response) => {
-          let result = [];
-          response.data.events.map((event, index) => {
-            const activity = parsingMintTransferEvents(event);
-            if (activity) {
-              result.unshift(activity);
-            }
-          });
-
-          setEvents((oldEvent) => {
-            return [...oldEvent, ...result];
-          });
-        })
-        .catch((error) => {});
-    };
-
-    if (collection?.tokenAddress != null && tokenId != null) {
-      getHistoryMintTransfer().then(() => {
-        getHistoryBidsSalesListing();
-      });
+  const parseEvent = (event, parsingFunction) => {
+    const activity = parsingFunction(event);
+    if (activity) {
+      return [activity];
     }
+    return [];
+  };
 
-    const getHistoryBidsSalesListing = async () => {
-      await axios
-        .request({
-          method: 'get',
-          maxBodyLength: Infinity,
-          url: `${process.env.NEXT_PUBLIC_API_URL}/api/market/eventbycollectiontokenId/${collection?.tokenAddress}/${tokenId}`,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        .then((response) => {
-          let result = [];
-          response.data.map((event, index) => {
-            const activity = parsingBidsSalesListing(event);
-            if (activity) {
-              result.unshift(activity);
-            }
-          });
+  const getHistoryData = async (url, parsingFunction) => {
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response.data.events
+        .map((event) => parseEvent(event, parsingFunction))
+        .flat();
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return [];
+    }
+  };
 
-          setEvents((oldEvent) => {
-            return [...result, ...oldEvent];
-          });
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          setIsLoading(false);
-        });
-    };
+  const getHistoryMintTransfer = async () => {
+    setIsLoading(true);
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/nfts/geteventsbycollectionid/${collection?.tokenAddress}/${tokenId}`;
+    const result = await getHistoryData(url, parsingMintTransferEvents);
+    setEvents((oldEvents) => [...result, ...oldEvents]);
+  };
+
+  const getHistoryBidsSalesListing = async () => {
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/market/eventbycollectiontokenId/${collection?.tokenAddress}/${tokenId}`;
+    const result = await getHistoryData(url, parsingBidsSalesListing);
+    setEvents((oldEvents) => [...result, ...oldEvents]);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    if (collection?.tokenAddress != null && tokenId != null) {
+      getHistoryMintTransfer().then(getHistoryBidsSalesListing);
+    }
   }, [collection, tokenId]);
 
   return (
@@ -2263,7 +2281,7 @@ const History = ({ collection, tokenId, nft }) => {
           No history
         </div>
       )}
-      {events.length == 0 && isLoading ? (
+      {events.length == 0 && isLoading && (
         <div className="flex flex-col gap-5 px-3 text-sm text-black dark:text-white">
           <div className="flex flex-col gap-3 rounded-lg">
             {[...Array(5)].map((nft, index) => (
@@ -2271,13 +2289,21 @@ const History = ({ collection, tokenId, nft }) => {
             ))}
           </div>
         </div>
-      ) : (
-        <div className="flex max-h-96 w-full flex-col gap-3 overflow-y-auto text-sm text-black dark:text-white">
-          {events.map((event, index) => {
-            return <ActivityItemDetail key={index} event={event} />;
-          })}
-        </div>
       )}
+      <div className="flex max-h-96 w-full flex-col gap-3 overflow-y-auto text-sm text-black dark:text-white">
+        {events
+          .sort((a, b) => {
+            const timestampA = a.timestamp || (a.item && a.item.Timestamp) || 0;
+            const timestampB = b.timestamp || (b.item && b.item.Timestamp) || 0;
+
+            return timestampB - timestampA;
+          })
+          .map((event, index) => {
+            if (event) {
+              return <ActivityItemDetail key={index} event={event} />;
+            }
+          })}
+      </div>
     </>
   );
 };

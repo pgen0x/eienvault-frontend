@@ -54,7 +54,13 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useCopyToClipboard } from 'react-use';
-import { formatEther, getAddress, isAddress } from 'viem';
+import {
+  formatEther,
+  formatUnits,
+  getAddress,
+  isAddress,
+  zeroAddress,
+} from 'viem';
 import { useAccount, useNetwork, useWalletClient } from 'wagmi';
 
 const filters = [
@@ -793,7 +799,7 @@ const Items = ({ params, collection }) => {
     collectionData,
     highestBid,
     lowestBid,
-    paidWith
+    paidWith,
   ) => {
     setAcutionData({
       marketId,
@@ -1833,8 +1839,16 @@ const Activity = ({ collection }) => {
           <div className="flex gap-1">
             for
             <span className="font-bold text-primary-500">
-              {formatEther(Number(event?.price))}{' '}
-              {event?.collectionData?.Chain?.symbol}
+              {event.paidWith
+                ? event.paidWith === zeroAddress
+                  ? formatEther(event?.price)
+                  : formatUnits(event?.price, event.paidWith?.decimal)
+                : formatEther(event?.price)}{' '}
+              {event.paidWith
+                ? event.paidWith === zeroAddress
+                  ? event?.collectionData?.Chain?.symbol
+                  : event.paidWith?.symbol
+                : event?.collectionData?.Chain?.symbol}
             </span>
           </div>
         </div>
@@ -1858,8 +1872,16 @@ const Activity = ({ collection }) => {
           </button>
           offered
           <span className="font-bold text-primary-500">
-            {formatEther(Number(event?.offer))}{' '}
-            {event?.collectionData?.Chain?.symbol}
+            {event.paidWith
+              ? event.paidWith === zeroAddress
+                ? formatEther(event?.offer)
+                : formatUnits(event?.offer, event.paidWith?.decimal)
+              : formatEther(event?.offer)}{' '}
+            {event.paidWith
+              ? event.paidWith === zeroAddress
+                ? event?.collectionData?.Chain?.symbol
+                : event.paidWith?.symbol
+              : event?.collectionData?.Chain?.symbol}
           </span>
         </div>
       );

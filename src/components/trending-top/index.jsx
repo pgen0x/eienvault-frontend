@@ -84,29 +84,28 @@ export const TrendingTop = ({ dataCollections }) => {
   };
 
   const sortData = () => {
-    if (TrendingTop == 'trending') {
+    if (TrendingTop === 'trending' || TrendingTop === 'top') {
       var dataSort = dataCollections.slice(0);
-      dataSort.sort(function (a, b) {
-        return (
-          Number(b['volumeChangePercentag' + Range]) -
-          Number(a['volumeChangePercentag' + Range])
-        );
-      });
-      setData(dataSort);
-    }
 
-    if (TrendingTop == 'top') {
-      var dataSort = dataCollections.slice(0);
-      dataSort.sort(function (a, b) {
-        return b.volume - a.volume;
-      });
+      if (TrendingTop === 'trending') {
+        dataSort.sort(function (a, b) {
+          return b.volume - a.volume;
+        });
+      }
+
+      if (TrendingTop === 'top') {
+        dataSort.sort(function (a, b) {
+          return b.floorPrice - a.floorPrice;
+        });
+      }
+
       setData(dataSort);
     }
   };
 
   useEffect(() => {
     sortData();
-  }, [TrendingTop]);
+  }, [TrendingTop, Range]);
 
   useEffect(() => {
     sortData();
@@ -350,29 +349,28 @@ export const TrendingTopMobile = ({ dataCollections }) => {
   };
 
   const sortData = () => {
-    if (TrendingTop == 'trending') {
+    if (TrendingTop === 'trending' || TrendingTop === 'top') {
       var dataSort = dataCollections.slice(0);
-      dataSort.sort(function (a, b) {
-        return (
-          Number(b['volumeChangePercentag' + Range]) -
-          Number(a['volumeChangePercentag' + Range])
-        );
-      });
-      setData(dataSort);
-    }
 
-    if (TrendingTop == 'top') {
-      var dataSort = dataCollections.slice(0);
-      dataSort.sort(function (a, b) {
-        return b.volume - a.volume;
-      });
+      if (TrendingTop === 'trending') {
+        dataSort.sort(function (a, b) {
+          return b.volume - a.volume;
+        });
+      }
+
+      if (TrendingTop === 'top') {
+        dataSort.sort(function (a, b) {
+          return b.floorPrice - a.floorPrice;
+        });
+      }
+
       setData(dataSort);
     }
   };
 
   useEffect(() => {
     sortData();
-  }, [TrendingTop, dataCollections]);
+  }, [TrendingTop, Range]);
 
   const volumeChangePercentage = (collection) => {
     return collection['volumeChangePercentage' + Range];

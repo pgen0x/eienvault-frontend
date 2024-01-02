@@ -49,7 +49,7 @@ export const ActivityItemDetail = ({ event }) => {
                 placeholder="blur"
                 blurDataURL={`https://fakeimg.pl/70x70`}
                 src={event?.nft?.imageUri}
-                alt={event?.nft?.name || event?.nft?.collectionAddress}
+                alt={event?.nft?.name || event?.nft?.collectionAddress || ''}
               />
             </button>
           ) : (
@@ -78,7 +78,7 @@ export const ActivityItemDetail = ({ event }) => {
               ? event.nft.name
               : event?.collection?.name
               ? event?.collection.name
-              : truncateAddress(event?.tokenAddress)}
+              : truncateAddress(event?.tokenAddress)}{' '}
             #{event?.tokenId}
           </button>
           {event?.description}

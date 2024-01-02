@@ -1,10 +1,12 @@
 'use client';
 
 import ModalPause from '@/components/admin/modal/pause';
+import ModalRemoveWhitelistToken from '@/components/admin/modal/removeWhitelistToken';
 import ModalRescueERC20 from '@/components/admin/modal/rescueERC20';
 import ModalRescueERC721 from '@/components/admin/modal/rescueERC721';
 import ModalUnpause from '@/components/admin/modal/unpause';
 import ModalUpdateMarketplace from '@/components/admin/modal/updateMarketplace';
+import ModalWhitelistToken from '@/components/admin/modal/whitelistedToken';
 import ModalWithdrawFee from '@/components/admin/modal/withdrawFee';
 import { useState } from 'react';
 
@@ -15,6 +17,9 @@ const VaultPage = () => {
   const [isOpenModalPause, setIsOpenModalPause] = useState(false);
   const [isOpenModalUnpause, setIsOpenModalUnpause] = useState(false);
   const [isOpenModalMarketplace, setIsOpenModalUpdateMarketplace] =
+    useState(false);
+  const [isOpenWhitelistToken, setIsOpenWhitelistToken] = useState(false);
+  const [isOpenRemoveWhitelistToken, setIsOpenRemoveWhitelistToken] =
     useState(false);
 
   const rescueERC721 = () => {
@@ -63,6 +68,22 @@ const VaultPage = () => {
 
   function closeModalUpdateMarketplace() {
     setIsOpenModalUpdateMarketplace(false);
+  }
+
+  const WhitelistToken = () => {
+    setIsOpenWhitelistToken(true);
+  };
+
+  function closeModalWhitelistToken() {
+    setIsOpenWhitelistToken(false);
+  }
+
+  const RemoveWhitelistToken = () => {
+    setIsOpenRemoveWhitelistToken(true);
+  };
+
+  function closeModalRemoveWhitelistToken() {
+    setIsOpenRemoveWhitelistToken(false);
   }
 
   return (
@@ -232,6 +253,56 @@ const VaultPage = () => {
           </div>
         </div>
       </div>
+      <div className="mt-4 flex items-stretch justify-evenly gap-4">
+        <div className="block flex-1 rounded-lg bg-white text-center dark:bg-neutral-900">
+          <div className="flex h-full flex-col rounded-lg bg-white text-center dark:bg-neutral-900">
+            <div className="border-b-2 border-neutral-100 px-6 py-3 text-xl font-medium text-neutral-700 dark:border-neutral-600 dark:text-neutral-50">
+              Whitelist Token
+            </div>
+            <div className="flex flex-grow flex-col justify-around p-4">
+              <h5 className="mb-2 text-lg font-medium leading-tight text-neutral-800 dark:text-neutral-50">
+                Set New Whitelisted ERC-20
+              </h5>
+              <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
+                This services is dedicated to whitelist ERC-20
+              </p>
+            </div>
+            <div className="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
+              <button
+                type="button"
+                onClick={WhitelistToken}
+                className="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
+              >
+                Whitelist
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="block flex-1 rounded-lg bg-white text-center dark:bg-neutral-900">
+          <div className="flex h-full flex-col rounded-lg bg-white text-center dark:bg-neutral-900">
+            <div className="border-b-2 border-neutral-100 px-6 py-3 text-xl font-medium text-neutral-700 dark:border-neutral-600 dark:text-neutral-50">
+              Remove Whitelist Token
+            </div>
+            <div className="flex flex-grow flex-col justify-around p-4">
+              <h5 className="mb-2 text-lg font-medium leading-tight text-neutral-800 dark:text-neutral-50">
+                Set New Whitelisted ERC-20
+              </h5>
+              <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
+                This services is dedicated to remove whitelist ERC-20
+              </p>
+            </div>
+            <div className="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
+              <button
+                type="button"
+                onClick={RemoveWhitelistToken}
+                className="mt-auto w-full rounded-full bg-primary-500 px-4 py-2 text-center text-sm font-bold text-white hover:bg-primary-300 disabled:cursor-not-allowed disabled:bg-primary-200 disabled:hover:bg-primary-200 dark:bg-white dark:text-neutral-700 dark:hover:bg-neutral-300 dark:disabled:bg-neutral-200 dark:disabled:text-neutral-100"
+              >
+                Remove Whitelist
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <ModalRescueERC721
         isOpenModal={isOpenModalERC721}
         onClose={closeModalERC721}
@@ -266,6 +337,16 @@ const VaultPage = () => {
         onClose={closeModalUpdateMarketplace}
         onModalClose={closeModalUpdateMarketplace}
         type="vault"
+      />
+      <ModalWhitelistToken
+        isOpenModal={isOpenWhitelistToken}
+        onClose={closeModalWhitelistToken}
+        onModalClose={closeModalWhitelistToken}
+      />
+      <ModalRemoveWhitelistToken
+        isOpenModal={isOpenRemoveWhitelistToken}
+        onClose={closeModalRemoveWhitelistToken}
+        onModalClose={closeModalRemoveWhitelistToken}
       />
     </div>
   );

@@ -63,6 +63,11 @@ const nextConfig = {
         hostname: 'cdn.eienvault.com',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: '**.amazonaws.com',
+        port: '',
+      },
     ],
   },
 };

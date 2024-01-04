@@ -17,8 +17,13 @@ import Image from 'next/legacy/image';
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { formatEther } from 'viem';
-import { useAccount, useWaitForTransaction, useWalletClient } from 'wagmi';
+import { formatEther, formatUnits, zeroAddress } from 'viem';
+import {
+  useAccount,
+  useToken,
+  useWaitForTransaction,
+  useWalletClient,
+} from 'wagmi';
 import Footer from '../../components/footer/main';
 
 export default function OrdersPage() {
@@ -196,6 +201,7 @@ export default function OrdersPage() {
         throw new Error('Network response was not ok');
       } else {
         const responseData = await res.json();
+        console.log(responseData);
         setDataReceived(responseData);
       }
     } catch (error) {
@@ -424,8 +430,12 @@ const Listings = ({ dataListing, isLoading, removeListing }) => {
                   <div className="flex flex-col items-end justify-center gap-2">
                     <div className="font-bold">Bid Listings</div>
                     <div>
-                      {formatEther(data.price)}{' '}
-                      {data.collectionData.Chain.symbol}
+                      {data.paidWith === zeroAddress
+                        ? formatEther(data.price)
+                        : formatUnits(data.price, data.paidWith?.decimal)}{' '}
+                      {data.paidWith === zeroAddress
+                        ? data.collectionData.Chain.symbol
+                        : data.paidWith?.symbol}
                     </div>
                   </div>
                 </div>
@@ -556,7 +566,17 @@ const Made = ({ dataBidMade, isLoadingBidMade, cancelBid }) => {
                     </div>
                     <div className="flex flex-col items-end justify-center gap-2">
                       <div className="font-bold">Bid Amount</div>
-                      <div>{formatEther(data.BidAmount)} HLUSD</div>
+                      <div>
+                        {data?.PaidWith === zeroAddress
+                          ? formatEther(data.BidAmount)
+                          : formatUnits(
+                              data.BidAmount,
+                              data?.PaidWith?.decimal,
+                            )}{' '}
+                        {data?.PaidWith === zeroAddress
+                          ? 'HLUSD'
+                          : data?.PaidWith?.symbol}
+                      </div>
                     </div>
                   </div>
                   <div className="flex w-full items-center justify-around gap-4 rounded-lg bg-neutral-50 py-2 dark:bg-neutral-800 lg:bg-white dark:lg:bg-neutral-900">
@@ -674,17 +694,6 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
               const timeDifference = endDate.diff(currentDate);
               const isEndDateInFuture = timeDifference > 0;
 
-              if (data.NoBidsFound) {
-                return (
-                  <div
-                    key={index}
-                    className="shrink grow basis-0 py-4 text-center text-base font-bold leading-loose"
-                  >
-                    No offers received
-                  </div>
-                );
-              }
-
               return (
                 <>
                   <React.Fragment key={index}>
@@ -717,7 +726,17 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
                           </div>
                           <div className="flex flex-col items-end justify-center gap-2">
                             <div className="font-bold">Bid Amount</div>
-                            <div>{formatEther(dataBids.BidAmount)} HLUSD</div>
+                            <div>
+                              {data?.PaidWith === zeroAddress
+                                ? formatEther(dataBids.BidAmount)
+                                : formatUnits(
+                                    dataBids.BidAmount,
+                                    data?.PaidWith?.decimal,
+                                  )}{' '}
+                              {data?.PaidWith === zeroAddress
+                                ? 'HLUSD'
+                                : data?.PaidWith?.symbol}
+                            </div>
                           </div>
                         </div>
                         <div className="flex w-full items-center justify-between gap-4">
@@ -769,21 +788,18 @@ const Received = ({ dataReceived, isLoadingReceived, approveBid }) => {
                             </div>
                           </div>
                         </div>
-                        {isEndDateInFuture ? (
-                          <div className="flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 lg:w-1/2">
-                            <ButtonPrimary
-                              className="flex !w-fit items-center justify-center gap-2"
-                              onClick={() =>
-                                approveBid(data.ItemId, dataBids.BidderAddress)
-                              }
-                            >
-                              <FontAwesomeIcon icon={faCheck} />
-                              <span>Approve Bid</span>
-                            </ButtonPrimary>
-                          </div>
-                        ) : (
-                          <></>
-                        )}
+
+                        <div className="flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 lg:w-1/2">
+                          <ButtonPrimary
+                            className="flex !w-fit items-center justify-center gap-2"
+                            onClick={() =>
+                              approveBid(data.ItemId, dataBids.BidderAddress)
+                            }
+                          >
+                            <FontAwesomeIcon icon={faCheck} />
+                            <span>Approve Bid</span>
+                          </ButtonPrimary>
+                        </div>
                       </div>
                     ))}
                   </React.Fragment>

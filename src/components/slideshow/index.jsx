@@ -799,7 +799,29 @@ export const SlideshowMobile = ({
                       <div className="flex w-full flex-col">
                         <div className="inline-flex w-full items-center justify-center gap-2">
                           <div className="text-sm font-medium leading-tight text-gray-600">
-                            <Countdown endDate={auction.endDate} />
+                            {isNotRelease ? (
+                              <>
+                                {' '}
+                                <span className="mr-2 text-sm font-normal leading-tight text-neutral-900 dark:text-white">
+                                  Starts in
+                                </span>
+                                <span className="text-neutral-900 dark:text-white">
+                                  <Countdown endDate={auction.releaseDate} />
+                                </span>
+                              </>
+                            ) : isNotExpired ? (
+                              <>
+                                {' '}
+                                <span className="mr-2 text-sm font-normal leading-tight text-neutral-900 dark:text-white">
+                                  Ends in
+                                </span>
+                                <span className="text-neutral-900 dark:text-white">
+                                  <Countdown endDate={auction.endDate} />
+                                </span>
+                              </>
+                            ) : (
+                              'Expired'
+                            )}
                           </div>
                         </div>
                       </div>

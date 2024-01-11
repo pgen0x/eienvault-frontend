@@ -5,6 +5,7 @@ import Cloud3 from '@/assets/icon/cloud3';
 import Wave from '@/assets/icon/wave';
 import { useAuth } from '@/hooks/AuthContext';
 import { marketplaceABI } from '@/hooks/eth/Artifacts/Marketplace_ABI';
+import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { useAccount, useWalletClient } from 'wagmi';
 import { Slideshow, SlideshowMobile } from '../slideshow';
@@ -15,6 +16,7 @@ const Auction = () => {
   const [auctions, setAuctions] = useState([]);
   const [isErrorAuctions, setErrorAuctions] = useState(false);
   const [refreshMetada, setRefreshMetadata] = useState();
+  const { theme } = useTheme();
 
   const { data: walletClient } = useWalletClient();
 
@@ -104,18 +106,31 @@ const Auction = () => {
     <>
       <section className="relative -top-24 flex h-auto w-full items-center justify-center bg-gradient-to-t from-[#FFF1D4] via-[#FFF1D4] to-[#FFCFD1] bg-cover bg-bottom dark:from-[#C96E6E] dark:via-[#A68647] dark:to-black/40 md:h-[600px]">
         <div className="absolute bottom-0 w-full text-center">
-          <Wave className="fill-primary-500 dark:fill-primary-200" />
+          <Wave className="fill-primary-500 transition-colors duration-500 dark:fill-primary-200" />
         </div>
         <div className="absolute left-0 top-36">
-          <Cloud1 className="text-primary-500 dark:text-primary-200" />
+          <Cloud1 className="text-primary-500 transition-colors duration-500 dark:text-primary-200" />
         </div>
         <div className="absolute bottom-32 right-[45vw]">
-          <Cloud2 className="text-primary-500 dark:text-primary-200" />
+          <Cloud2 className="text-primary-500 transition-colors duration-500 dark:text-primary-200" />
         </div>
         <div className="absolute right-[-3vw] top-32 hidden -translate-x-16 translate-y-4 md:block">
-          <Cloud3 className="text-primary-500 dark:text-primary-200" />
+          <Cloud3 className="text-primary-500 transition-colors duration-500 dark:text-primary-200" />
         </div>
-        <div className="absolute bottom-28 right-[12%] h-[532px] w-[532px] translate-y-1/3 items-center justify-center rounded-full bg-red-400 dark:bg-semantic-orange-400" />
+        <div
+          className={`absolute h-[532px] w-[532px] items-center justify-center rounded-full transition-transform ${
+            theme === 'dark'
+              ? 'translate-y-[100vh] transform duration-1000'
+              : 'translate-y-0 transform duration-1000'
+          } bottom-32 right-[12%] bg-red-400 md:top-28`}
+        />
+        <div
+          className={`absolute h-[532px] w-[532px] items-center justify-center rounded-full transition-transform ${
+            theme === 'light'
+              ? '-translate-y-[100vh] transform duration-1000 '
+              : 'translate-y-0 transform duration-1000'
+          } -bottom-2 right-[12%] bg-semantic-orange-400 md:top-40`}
+        />
 
         <div className="container m-auto">
           <div className="relative mb-5 hidden w-full flex-initial items-center justify-center pt-24 sm:hidden md:flex lg:flex lg:pt-10 xl:flex 2xl:flex">

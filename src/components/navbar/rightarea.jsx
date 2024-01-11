@@ -55,6 +55,36 @@ export default function RightArea() {
     process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 8668 : 666888;
   return (
     <>
+      <div className="relative ml-3 inline-flex w-fit select-none align-middle transition duration-300 ease-in">
+        <input
+          type="checkbox"
+          id="themeToggle"
+          className="hidden"
+          onChange={() => toggleTheme()}
+          checked={enabled}
+        />
+        <label
+          htmlFor="themeToggle"
+          className={`flex h-10 cursor-pointer items-center justify-between rounded-full px-1 transition-colors duration-200 ${
+            enabled ? 'bg-neutral-900' : 'bg-white'
+          }`}
+        >
+          <div
+            className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors duration-200 ${
+              enabled ? 'text-white/40' : 'bg-primary-500 text-white'
+            }`}
+          >
+            <FontAwesomeIcon className="h-4 w-4" icon={faSun} />
+          </div>
+          <div
+            className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors duration-200 ${
+              enabled ? 'bg-white text-neutral-900' : 'text-neutral-900/40'
+            }`}
+          >
+            <FontAwesomeIcon className="h-4 w-4" icon={faMoon} />
+          </div>
+        </label>
+      </div>
       {isClient && (
         <div className="hidden h-8 w-full items-center justify-start gap-4 lg:inline-flex">
           {isConnected && chain?.id !== chainId && (
@@ -84,9 +114,8 @@ export default function RightArea() {
                 <div className="text-center text-base font-black leading-none">
                   <FontAwesomeIcon icon={faSignIn} />
                 </div>
-                <div className="text-base font-bold leading-normal">
-                  Sign Message to Login
-                </div>
+                <div className="hidden lg:block 2xl:hidden">Login</div>
+                <div className="hidden 2xl:block">Sign message to login</div>
               </ButtonPrimary>
             </div>
           )}
@@ -107,7 +136,8 @@ export default function RightArea() {
               <div className="h-4 w-4">
                 <FontAwesomeIcon icon={faWallet} />
               </div>
-              <div>Connect your wallet</div>
+              <div className="hidden lg:block xl:hidden">Connect</div>
+              <div className="hidden xl:block">Connect your wallet</div>
             </ButtonPrimary>
           )}
 
@@ -132,46 +162,6 @@ export default function RightArea() {
           </Switch> */}
         </div>
       )}
-      <div className="flex space-x-1 rounded-full bg-white px-1 py-1 dark:bg-neutral-900">
-        <div>
-          <input
-            className="hidden"
-            type="radio"
-            name="themeOptions"
-            id="themeLight"
-            onChange={() => toggleTheme()}
-          />
-          <label
-            className={`flex h-6 w-6 cursor-pointer items-center justify-center rounded-full text-sm font-medium leading-5 md:h-8 md:w-8 ${
-              enabled
-                ? 'text-primary-500 hover:bg-primary-300 dark:bg-neutral-900 dark:text-neutral-200'
-                : 'bg-primary-500 text-white shadow dark:bg-white dark:text-gray-900'
-            }`}
-            htmlFor="themeLight"
-          >
-            <FontAwesomeIcon icon={faSun} />
-          </label>
-        </div>
-        <div>
-          <input
-            className="hidden"
-            type="radio"
-            name="themeOptions"
-            id="themeDark"
-            onChange={() => toggleTheme()}
-          />
-          <label
-            className={`flex h-6 w-6 cursor-pointer items-center justify-center rounded-full text-sm font-medium leading-5 md:h-8 md:w-8 ${
-              enabled
-                ? 'bg-primary-500 text-white shadow dark:bg-white dark:text-gray-900'
-                : 'text-primary-500 hover:bg-primary-300 dark:bg-neutral-900 dark:text-neutral-200'
-            }`}
-            htmlFor="themeDark"
-          >
-            <FontAwesomeIcon icon={faMoon} />
-          </label>
-        </div>
-      </div>
     </>
   );
 }

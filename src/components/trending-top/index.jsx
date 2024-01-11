@@ -370,7 +370,7 @@ export const TrendingTopMobile = ({ dataCollections }) => {
 
   useEffect(() => {
     sortData();
-  }, [TrendingTop, Range]);
+  }, [dataCollections, TrendingTop, Range]);
 
   const volumeChangePercentage = (collection) => {
     return collection['volumeChangePercentage' + Range];
